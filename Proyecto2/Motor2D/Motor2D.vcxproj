@@ -76,15 +76,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="j1Main.cpp" />
-    <ClCompile Include="j1App.cpp" />
-    <ClCompile Include="j1Audio.cpp" />
-    <ClCompile Include="j1Input.cpp" />
-    <ClCompile Include="j1Map.cpp" />
-    <ClCompile Include="j1Render.cpp" />
-    <ClCompile Include="j1Textures.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Render.cpp" />
+    <ClCompile Include="Textures.cpp" />
     <ClCompile Include="p2Log.cpp" />
-    <ClCompile Include="j1Window.cpp" />
+    <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="SimpleTimer.cpp" />
@@ -93,16 +93,16 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Brofiler\Brofiler\Brofiler.h" />
     <ClInclude Include="Frame.h" />
-    <ClInclude Include="j1Audio.h" />
-    <ClInclude Include="j1Input.h" />
-    <ClInclude Include="j1Map.h" />
-    <ClInclude Include="j1Render.h" />
-    <ClInclude Include="j1Textures.h" />
+    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Render.h" />
+    <ClInclude Include="Textures.h" />
     <ClInclude Include="p2Log.h" />
-    <ClInclude Include="j1App.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="p2Defs.h" />
-    <ClInclude Include="j1Module.h" />
-    <ClInclude Include="j1Window.h" />
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="Window.h" />
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PerfectTimer.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />

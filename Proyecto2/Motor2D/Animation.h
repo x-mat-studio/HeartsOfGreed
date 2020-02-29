@@ -3,7 +3,7 @@
 
 #include "Frame.h"
 #include "SDL/include/SDL_rect.h"
-#include "j1App.h"
+#include "App.h"
 
 #define MAX_FRAMES 55
 
@@ -14,24 +14,29 @@ public:
 	Frame frames[MAX_FRAMES];
 
 private:
-	float frames_passed = 0;
-	int current_frame = 0;
-	int last_frame = 0;
+	float framesPassed = 0;
+	int currentFrame = 0;
+	int lastFrame = 0;
 	int loops = 0;
 
 public:
 
-	Animation PushAnimation(pugi::xml_node node, p2SString name) {
+	Animation PushAnimation(pugi::xml_node node, P2SString name) {
 		
 		Animation aux;
 
 		pugi::xml_node iterator = node.child("Animations").first_child();
 	
+
 		for (iterator; iterator; iterator = iterator.next_sibling())
 		{
+
+
 			if (name == iterator.attribute("name").as_string())
 			{
 				pugi::xml_node iteratorFrames = iterator.first_child();
+				
+				
 				for (int y = 0; y < iterator.attribute("frames").as_int(); y++)
 				{
 					SDL_Rect rect;
@@ -44,65 +49,82 @@ public:
 					
 					iteratorFrames = iteratorFrames.next_sibling();
 				}
+
+
 				break;
 			}
+
+
 		}
-		aux.current_frame = 0;
+
+
+		aux.currentFrame = 0;
 		return aux;
 	}
 
 	
 	void PushBack(const SDL_Rect& rect, const int maxFrames,int pivotPositionX, int pivotPositionY) {
 		
-		frames[last_frame].frame = rect;
-		frames[last_frame].maxFrames = maxFrames;
-		frames[last_frame].pivotPositionX = pivotPositionX;
-		frames[last_frame].pivotPositionY = pivotPositionY;
+		frames[lastFrame].frame = rect;
+		frames[lastFrame].maxFrames = maxFrames;
+		frames[lastFrame].pivotPositionX = pivotPositionX;
+		frames[lastFrame].pivotPositionY = pivotPositionY;
 
 
-		last_frame++;
+		lastFrame++;
 	}
+
 
 	Frame& GetCurrentFrame(float dt)
 	{
-		if (frames_passed * dt < frames[current_frame].maxFrames * dt) {
-			frames_passed += dt;
-		}
-		else {
-			frames_passed = 0;
-			current_frame ++;
+
+
+		if (framesPassed * dt < frames[currentFrame].maxFrames * dt) 
+			framesPassed += dt;
+		else 
+		{
+			framesPassed = 0;
+			currentFrame ++;
 		}
 
-		if (current_frame >= last_frame)
+
+		if (currentFrame >= lastFrame)
 		{
-			current_frame = (loop) ? 0.0f : last_frame - 1;
+			currentFrame = (loop) ? 0.0f : lastFrame - 1;
 			loops++;
 		}
 
-		return frames[current_frame];
+
+		return frames[currentFrame];
 	}
+
 
 	SDL_Rect& GetCurrentFrameBox(float dt)
 	{
 		return GetCurrentFrame(dt).frame;
 	}
 
+
 	SDL_Rect& GetRect()
 	{
 		return this->frames[0].frame;
 	}
+
 
 	bool Finished() const
 	{
 		return loops > 0;
 	}
 
+
 	void ResetAnimation()
 	{
-		frames_passed = 0;
-		last_frame = 0;
-		current_frame = 0;
+		framesPassed = 0;
+		lastFrame = 0;
+		currentFrame = 0;
 	}
+
+
 };
 
 #endif

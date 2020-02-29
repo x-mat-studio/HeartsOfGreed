@@ -1,17 +1,17 @@
-#ifndef __j1RENDER_H__
-#define __j1RENDER_H__
+#ifndef __RENDER_H__
+#define __RENDER_H__
 
 #include "SDL/include/SDL.h"
-#include "j1Module.h"
+#include "Module.h"
 
-class j1Render : public j1Module
+class ModuleRender : public Module
 {
 public:
 
-	j1Render();
+	ModuleRender();
 
 	// Destructor
-	virtual ~j1Render();
+	virtual ~ModuleRender();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -50,9 +50,9 @@ public:
 
 	SDL_Color background;
 
-	float currentcamX;//buffer for the camera movement(otherwise when converting to int behaves wrong)
-	float currentcamY;//buffer for the camera movement(otherwise when converting to int behaves wrong)
-	
+	float currentCamX;//buffer for the camera movement(otherwise when converting to int behaves wrong)
+	float currentCamY;//buffer for the camera movement(otherwise when converting to int behaves wrong)
+
 };
 
-#endif // __j1RENDER_H__
+#endif // __RENDER_H__

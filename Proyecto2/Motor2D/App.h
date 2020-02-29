@@ -1,10 +1,10 @@
-#ifndef __j1APP_H__
-#define __j1APP_H__
+#ifndef __APP_H__
+#define __APP_H__
 
 #define TIME_CONST 50
 #define MAX_DT 3
 
-#include "j1Module.h"
+#include "Module.h"
 #include "PerfectTimer.h"
 #include "SimpleTimer.h"
 #include "vector"
@@ -13,22 +13,22 @@
 typedef unsigned int uint;
 
 // Modules
-class j1Window;
-class j1Input;
-class j1Audio;
-class j1Render;
-class j1Textures;
-class j1Map;
+class ModuleWindow;
+class ModuleInput;
+class ModuleAudio;
+class ModuleRender;
+class ModuleTextures;
+class ModuleMap;
 
-class j1App
+class App
 {
 public:
 
 	// Constructor
-	j1App(int argc, char* args[]);
+	App(int argc, char* args[]);
 
 	// Destructor
-	virtual ~j1App();
+	virtual ~App();
 
 	// Called before render is available
 	bool Awake();
@@ -43,7 +43,7 @@ public:
 	bool CleanUp();
 
 	// Add a new module to handle
-	void AddModule(j1Module* module);
+	void AddModule(Module* module);
 
 	// Exposing some properties for reading
 	int GetArgc() const;
@@ -82,12 +82,12 @@ private:
 public:
 
 	// Modules
-	j1Window*			win;
-	j1Input*			input;
-	j1Audio*			audio;
-	j1Render*			render;
-	j1Textures*			tex;
-	j1Map*				map;
+	ModuleWindow*			win;
+	ModuleInput*			input;
+	ModuleAudio*			audio;
+	ModuleRender*			render;
+	ModuleTextures*			tex;
+	ModuleMap*				map;
 
 	uint32_t			frames;
 	
@@ -96,17 +96,17 @@ public:
 	bool				vSyncActivated;
 
 private:
-	std::vector<j1Module*>	modules;
+	std::vector<Module*>	modules;
 
 	int					argc;
 	char**				args;
 
-	p2SString			title;
-	p2SString			organization;
-	p2SString			load_game;
-	mutable p2SString	save_game;
+	P2SString			title;
+	P2SString			organization;
+	P2SString			loadGame;
+	mutable P2SString	saveGame;
 
-	PerfectTimer		ptimer;
+	PerfectTimer		pTimer;
 	
 	SimpleTimer			startupTime;
 	SimpleTimer			frameTime;
@@ -118,12 +118,12 @@ private:
 	uint32				prevLastSecFrameCount = 0;
 
 	bool				capFrames;
-	bool				want_to_load;
-	mutable bool		want_to_save;
+	bool				wantToLoad;
+	mutable bool		wantToSave;
 
 	float				dt;
 };
 
-extern j1App* App; 
+extern App* app; 
 
 #endif

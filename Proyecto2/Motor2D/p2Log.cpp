@@ -1,5 +1,5 @@
 #include "p2Log.h"
-#include "j1App.h"
+#include "App.h"
 #include "p2SString.h"
 
 void log(const char file[], int line, const char* format, ...)

@@ -1,25 +1,25 @@
-#ifndef __j1MAP_H__
-#define __j1MAP_H__
+#ifndef __MAP_H__
+#define __MAP_H__
 
 #include "PugiXml/src/pugixml.hpp"
 
-#include "j1Module.h"
+#include "Module.h"
 #include "SDL/include/SDL.h"
 #include <vector>
 
 // ----------------------------------------------------
 struct Properties
 {
-	p2SString name;
+	P2SString name;
 	float value;
 
 };
 struct MapLayer
 {
-	p2SString name = "";
+	P2SString name = "";
 	uint width = 0u;
 	uint height = 0u;
-	uint*  gid = nullptr;
+	uint* gid = nullptr;
 	std::vector<Properties*> layerPropVector;
 	~MapLayer();
 };
@@ -36,7 +36,7 @@ struct Object
 struct ObjectGroup
 {
 	uint id;
-	p2SString name;
+	P2SString name;
 	std::vector<Object*> objectVector;
 	std::vector<Properties*> propVector;
 };
@@ -45,60 +45,60 @@ struct ObjectGroup
 struct TileSet
 {
 
-	p2SString			name;
+	P2SString			name;
 
-	SDL_Texture*		texture;
+	SDL_Texture* texture;
 
-	int					firstgid;
+	int					firstGid;
 	int					margin;
 	int					spacing;
-	int					tile_width;
-	int					tile_height;
-	int					tex_width;
-	int					tex_height;
-	int					num_tiles_width;
-	int					num_tiles_height;
-	int					offset_x;
-	int					offset_y;
+	int					tileWidth;
+	int					tileHeight;
+	int					texWidth;
+	int					texHeight;
+	int					numTilesWidth;
+	int					numTilesHeight;
+	int					offsetX;
+	int					offsetY;
 	int					columns;
-	
+
 	~TileSet();
 };
 
-enum MapTypes
+enum class MAP_TYPES
 {
-	MAPTYPE_UNKNOWN = 0,
-	MAPTYPE_ORTHOGONAL,
-	MAPTYPE_ISOMETRIC,
-	MAPTYPE_STAGGERED
+	MAP_TYPE_UNKNOWN = 0,
+	MAP_TYPE_ORTHOGONAL,
+	MAP_TYPE_ISOMETRIC,
+	MAP_TYPE_STAGGERED
 };
 // ----------------------------------------------------
 struct MapData
 {
 	int					width;
 	int					height;
-	int					tile_width;
-	int					tile_height;
-	SDL_Color			background_color;
-	MapTypes			type;
+	int					tileWidth;
+	int					tileHeight;
+	SDL_Color			backgroundColor;
+	MAP_TYPES			type;
 	std::vector<TileSet*>	tilesets;
 	std::vector<MapLayer*>   layers;
 	std::vector<ObjectGroup*> objGroups;
-	p2SString           name;
-	p2SString           path;
-	p2SString			music_path;
-	
+	P2SString           name;
+	P2SString           path;
+	P2SString			musicPath;
+
 };
 
 // ----------------------------------------------------
-class j1Map : public j1Module
+class ModuleMap : public Module
 {
 public:
 
-	j1Map();
+	ModuleMap();
 
 	// Destructor
-	virtual ~j1Map();
+	virtual ~ModuleMap();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
@@ -108,20 +108,20 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
-	
+
 	//Save/Load
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
 	// Load new map
 	bool LoadNew(const char* path);
-	bool ReloadMap(p2SString newmap);
-	inline uint Get(int x, int y, MapLayer*currentlayer) const;
-	void MapToWorldCoordinates(int posX,int posY, MapData& dat, float& outX, float& outY);
+	bool ReloadMap(P2SString newmap);
+	inline uint Get(int x, int y, MapLayer* currentlayer) const;
+	void MapToWorldCoordinates(int posX, int posY, MapData& dat, float& outX, float& outY);
 	void WorldToMap(int x, int y, MapData& dat, int& outX, int& outY) const;
 private:
 
-	bool LoadMap(p2SString path, p2SString name);
+	bool LoadMap(P2SString path, P2SString name);
 
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
@@ -136,14 +136,15 @@ private:
 public:
 
 	MapData data;
-	p2SString			map_name;
+
+	P2SString mapName;
 private:
 
-	pugi::xml_document	map_file;
-	p2SString			folder;
+	pugi::xml_document mapFile;
+	P2SString folder;
 
-	bool				map_loaded;
+	bool mapLoaded;
 
 };
 
-#endif // __j1MAP_H__
+#endif // __MAP_H__

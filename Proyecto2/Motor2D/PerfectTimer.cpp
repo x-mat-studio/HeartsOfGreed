@@ -8,6 +8,7 @@
 
 uint64 PerfectTimer::frequency = 0;
 
+
 // ---------------------------------------------
 PerfectTimer::PerfectTimer()
 {
@@ -19,11 +20,13 @@ PerfectTimer::PerfectTimer()
 	Start();
 }
 
+
 // ---------------------------------------------
 void PerfectTimer::Start()
 {
 	started_at = SDL_GetPerformanceCounter();
 }
+
 
 // ---------------------------------------------
 double PerfectTimer::ReadMs() const
@@ -31,10 +34,9 @@ double PerfectTimer::ReadMs() const
 	return 1000.0 * (double(SDL_GetPerformanceCounter() - started_at) / double(frequency));
 }
 
+
 // ---------------------------------------------
 uint64 PerfectTimer::ReadTicks() const
 {
 	return SDL_GetPerformanceCounter() - started_at;
 }
-
-

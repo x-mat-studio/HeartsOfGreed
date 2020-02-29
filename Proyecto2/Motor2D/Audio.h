@@ -1,7 +1,7 @@
-#ifndef __j1AUDIO_H__
-#define __j1AUDIO_H__
+#ifndef __AUDIO_H__
+#define __AUDIO_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "SDL_mixer\include\SDL_mixer.h"
 #include "vector"
 
@@ -11,14 +11,14 @@
 struct _Mix_Music;
 struct Mix_Chunk;
 
-class j1Audio : public j1Module
+class ModuleAudio : public Module
 {
 public:
 
-	j1Audio();
+	ModuleAudio();
 
 	// Destructor
-	virtual ~j1Audio();
+	virtual ~ModuleAudio();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -37,10 +37,11 @@ public:
 
 
 private:
-	p2SString			fxFolder;
+	P2SString fxFolder;
 
-	_Mix_Music*			music;
+	_Mix_Music* music;
+
 	std::vector<Mix_Chunk*>	fx;
 };
 
-#endif // __j1AUDIO_H__
+#endif // __AUDIO_H__
