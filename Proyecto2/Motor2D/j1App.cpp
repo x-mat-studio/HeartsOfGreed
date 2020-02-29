@@ -3,9 +3,10 @@
 #include "p2Log.h"
 #include "j1Window.h"
 #include "j1Input.h"
-
+#include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Render.h"
+#include "j1Map.h"
 
 #include "j1App.h"
 
@@ -23,14 +24,16 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	win = new j1Window();
 	audio = new j1Audio();
 	render = new j1Render();
+	map = new j1Map();
+	tex = new j1Textures();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
 	AddModule(win);
-	
 	AddModule(audio);
-
+	AddModule(tex);
+	AddModule(map);
 	// render last to swap buffer
 	AddModule(render);
 	

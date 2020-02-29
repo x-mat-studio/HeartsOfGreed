@@ -17,7 +17,8 @@ class j1Window;
 class j1Input;
 class j1Audio;
 class j1Render;
-
+class j1Textures;
+class j1Map;
 
 class j1App
 {
@@ -82,13 +83,12 @@ public:
 
 	// Modules
 	j1Window*			win;
-	
 	j1Input*			input;
-	
 	j1Audio*			audio;
-	
 	j1Render*			render;
-	
+	j1Textures*			tex;
+	j1Map*				map;
+
 	uint32_t			frames;
 	
 	uint				frameRate = 0;
