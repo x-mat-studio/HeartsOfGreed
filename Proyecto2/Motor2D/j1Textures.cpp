@@ -46,11 +46,11 @@ bool j1Textures::Start()
 bool j1Textures::CleanUp()
 {
 	LOG("Freeing textures and Image library");
-	p2List_item<SDL_Texture*>* item;
+	int numTextures = textures.size();
 
-	for(item = textures.start; item != NULL; item = item->next)
+	for(int i = 0; i < numTextures; i++)
 	{
-		SDL_DestroyTexture(item->data);
+		SDL_DestroyTexture(textures[i]);
 	}
 
 	textures.clear();
@@ -80,14 +80,14 @@ SDL_Texture* const j1Textures::Load(const char* path)
 // Unload texture
 bool j1Textures::UnLoad(SDL_Texture* texture)
 {
-	p2List_item<SDL_Texture*>* item;
+	int numTextures = textures.size();
 
-	for(item = textures.start; item != NULL; item = item->next)
+	for (int i = 0; i < numTextures; i++)
 	{
-		if(texture == item->data)
+		if(texture == textures[i])
 		{
-			SDL_DestroyTexture(item->data);
-			textures.erase(item);
+			SDL_DestroyTexture(textures[i]);
+			textures.erase(textures.begin() + i);
 			return true;
 		}
 	}
@@ -102,7 +102,7 @@ SDL_Texture* const j1Textures::LoadSurface(SDL_Surface* surface)
 
 	if(texture == NULL)
 	{
-		//LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError()); //TODO solve this
+		LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError()); //TODO solve this
 	}
 	else
 	{

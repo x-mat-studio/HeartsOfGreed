@@ -19,14 +19,14 @@ struct MapLayer
 	p2SString name = "";
 	uint width = 0u;
 	uint height = 0u;
-	uint* gid = nullptr;
-	std::vector<Properties*> lproplist;
+	uint*  gid = nullptr;
+	std::vector<Properties*> layerPropVector;
 	~MapLayer();
 };
 
 struct Object
 {
-	SDL_Rect boundingbox;
+	SDL_Rect boundingBox;
 	int type = -1;
 	uint id;
 };
@@ -37,8 +37,8 @@ struct ObjectGroup
 {
 	uint id;
 	p2SString name;
-	std::vector<Object*> objlist;
-	std::vector<Properties*> proplist;
+	std::vector<Object*> objectVector;
+	std::vector<Properties*> propVector;
 };
 
 // ----------------------------------------------------
@@ -83,11 +83,11 @@ struct MapData
 	MapTypes			type;
 	std::vector<TileSet*>	tilesets;
 	std::vector<MapLayer*>   layers;
-	std::vector<ObjectGroup*> objgroups;
+	std::vector<ObjectGroup*> objGroups;
 	p2SString           name;
 	p2SString           path;
 	p2SString			music_path;
-	~MapData();
+	
 };
 
 // ----------------------------------------------------

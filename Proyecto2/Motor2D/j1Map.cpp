@@ -84,18 +84,18 @@ void j1Map::Draw()
 
 TileSet* j1Map::GetTilesetFromTileId(int id) const
 {
-	p2List_item<TileSet*>* item = data.tilesets.start;
-	TileSet* set = item->data;
+	TileSet* set = nullptr;
 
-	while (item)
+	int numTilesets = data.tilesets.size();
+	for(int i = 0; i < numTilesets; i++)
 	{
-		if (id < item->data->firstgid)
+		if (id < data.tilesets[i]->firstgid)
 		{
-			set = item->prev->data;
+			set = data.tilesets[i-1];
 			break;
 		}
-		set = item->data;
-		item = item->next;
+
+		set = data.tilesets[i];
 	}
 	return set;
 }
@@ -106,70 +106,58 @@ bool j1Map::CleanUp()
 	LOG("Unloading map");
 
 	// Remove all tilesets
-	p2List_item<TileSet*>* item;
-	item = data.tilesets.start;
+	int numTilesets = data.tilesets.size();
 
-	while (item != NULL)
+	for (int i = 0; i < numTilesets; i++)
 	{
-		App->tex->UnLoad(item->data->texture);
-		RELEASE(item->data);
-		item = item->next;
+		App->tex->UnLoad(data.tilesets[i]->texture);
+		RELEASE(data.tilesets[i]);
 	}
 	data.tilesets.clear();
 
 	// Remove all layers
-	p2List_item<MapLayer*>* iteml;
-	iteml = data.layers.start;
+	int numLayers = data.layers.size();
 
-	while (iteml != NULL)
+	for(int i = 0; i < numLayers; i++)
 	{
+		int numProperties = data.layers[i]->layerPropVector.size();
 
-
-		p2List_item<Properties*>* itemP;
-		itemP = iteml->data->lproplist.start;
-		while (itemP != NULL)
+		for(int j = 0; j < numProperties; j++)
 		{
-
-			RELEASE(itemP->data);
-			itemP = itemP->next;
+			RELEASE(data.layers[i]->layerPropVector[j]);
 		}
-		iteml->data->lproplist.clear();
-		RELEASE(iteml->data);
-		iteml = iteml->next;
+		data.layers[i]->layerPropVector.clear();
+
+		RELEASE(data.layers[i]);
 	}
 	data.layers.clear();
 
 	//Remove all the objectlayers
-	p2List_item<ObjectGroup*>* itemOG;
-	itemOG = data.objgroups.start;
-	while (itemOG != NULL)
+	int numObjectGroups = data.objGroups.size();
+
+	for(int i = 0; i < numObjectGroups; i++)
 	{
 		//remove all the objects
-		p2List_item<Object*>* itemO;
-		itemO = itemOG->data->objlist.start;
-		while (itemO != NULL)
+		int numObjects = data.objGroups[i]->objectVector.size();
+		
+		for(int j = 0; j < numObjects; j++)
 		{
-
-			RELEASE(itemO->data);
-			itemO = itemO->next;
+			RELEASE(data.objGroups[i]->objectVector[j]);
 		}
-		itemOG->data->objlist.clear();
+		data.objGroups[i]->objectVector.clear();
 
 		//remove all the properties
-		p2List_item<Properties*>* itemP;
-		itemP = itemOG->data->proplist.start;
-		while (itemP != NULL)
+		int numProperties = data.objGroups[i]->propVector.size();
+
+		for(int j = 0; j < numProperties; j++)
 		{
-
-			RELEASE(itemP->data);
-			itemP = itemP->next;
+			RELEASE(data.objGroups[i]->propVector[j]);
 		}
-		itemOG->data->proplist.clear();
+		data.objGroups[i]->propVector.clear();
 
-		RELEASE(itemOG->data);
-		itemOG = itemOG->next;
+		RELEASE(data.objGroups[i]);
 	}
-	data.objgroups.clear();
+	data.objGroups.clear();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -245,42 +233,7 @@ bool j1Map::LoadNew(const char* file_name)
 			ret = LoadObjGroup(currentobjgroup, set);
 		}
 
-		data.objgroups.push_back(set);
-	}
-
-	//Loaded Info ---------------------------------------------------
-	if (ret == true)
-	{
-		LOG("Successfully parsed map XML file: %s", file_name);
-		//LOG("width: %d height: %d", data.width, data.height); //TODO delete LOG
-		//LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height); //TODO delete LOG
-
-		p2List_item<TileSet*>* item = data.tilesets.start;
-		while (item != NULL)
-		{
-			TileSet* s = item->data;
-			//LOG("Tileset ----");//TODO delete LOG
-			//LOG("name: %s firstgid: %d", s->name.GetString(), s->firstgid);//TODO delete LOG
-			//LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);//TODO delete LOG
-			//LOG("spacing: %d margin: %d", s->spacing, s->margin);//TODO delete LOG
-			item = item->next;
-		}
-
-		// Adapt this code with your own variables
-
-		p2List_item<MapLayer*>* item_layer = data.layers.start;
-		while (item_layer != NULL)
-		{
-			MapLayer* l = item_layer->data;
-			//LOG("Layer ----"); //TODO delete LOG
-			//LOG("name: %s", l->name.GetString()); //TODO delete LOG
-			//LOG("tile width: %d tile height: %d", l->width, l->height); //TODO delete LOG
-			for (int i = 0; i < l->width * l->height; i++)
-			{
-				//LOG("gid(%i): %u", i, l->gid[i]); //TODO deleted LOG
-			}
-			item_layer = item_layer->next;
-		}
+		data.objGroups.push_back(set);
 	}
 
 	map_loaded = ret;
@@ -419,11 +372,6 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-bool j1Map::UnloadTilesetImage(SDL_Texture* texture)
-{
-	bool ret = App->tex->UnLoad(texture);
-	return ret;
-}
 //Loads a single layer
 bool j1Map::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 {
@@ -440,7 +388,7 @@ bool j1Map::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		Properties* set = new Properties;
 		set->name = currentprop.attribute("name").as_string();
 		set->value = currentprop.attribute("value").as_float();
-		layer->lproplist.push_back(set);
+		layer->layerPropVector.push_back(set);
 	}
 
 	pugi::xml_node* gid_iterator = &layer_node.child("data").child("tile");
@@ -471,7 +419,7 @@ bool j1Map::LoadObjGroup(pugi::xml_node& objgroupnode, ObjectGroup* group)
 		Properties* set = new Properties;
 		set->name = currentprop.attribute("name").as_string();
 		set->value = currentprop.attribute("value").as_bool();
-		group->proplist.push_back(set);
+		group->propVector.push_back(set);
 	}
 
 	//Load objects-----------------------------------------------
@@ -480,12 +428,12 @@ bool j1Map::LoadObjGroup(pugi::xml_node& objgroupnode, ObjectGroup* group)
 		Object* set = new Object;
 		set->id = currentobj.attribute("id").as_uint();
 		set->type = currentobj.attribute("type").as_int();
-		set->boundingbox.x = currentobj.attribute("x").as_int();
-		set->boundingbox.y = currentobj.attribute("y").as_int();
-		set->boundingbox.h = currentobj.attribute("height").as_int();
-		set->boundingbox.w = currentobj.attribute("width").as_int();
+		set->boundingBox.x = currentobj.attribute("x").as_int();
+		set->boundingBox.y = currentobj.attribute("y").as_int();
+		set->boundingBox.h = currentobj.attribute("height").as_int();
+		set->boundingBox.w = currentobj.attribute("width").as_int();
 
-		group->objlist.push_back(set);
+		group->objectVector.push_back(set);
 	}
 
 	return ret;
@@ -538,13 +486,6 @@ void j1Map::WorldToMap(int x, int y, MapData& dat,int& outX, int& outY) const
 
 bool j1Map::ReloadMap(p2SString newmap)
 {
-	p2List_item<TileSet*>* item = data.tilesets.start;
-	while (item != NULL)
-	{
-		UnloadTilesetImage(item->data->texture);
-		item = item->next;
-	}
-
 	CleanUp();//clears the map
 
 	LOG("Loading Map Parser");
@@ -567,32 +508,12 @@ MapLayer::~MapLayer()
 		delete this->gid;
 }
 
-MapData::~MapData()
-{
-	/*p2List_item<TileSet*>* item = tilesets.start;
-	while (item != NULL)
-	{
-		TileSet* s = item->data;
-		s->~TileSet();
-		item = item->next;
-	}
-	p2List_item<MapLayer*>* item_layer = layers.start;
-	while (item_layer != NULL)
-	{
-		MapLayer* l = item_layer->data;
-		l->~MapLayer();
-		item_layer = item_layer->next;
-	}*/
-
-}
-
-
 bool j1Map::Load(pugi::xml_node& ldata)
 {
-	p2SString newmapname = ldata.attribute("name").as_string("first_level.tmx");//loads the map name from the saves doc, if gets errror, replaces it with "first_level.tmx"
-	if (newmapname != data.name)//if the map that you request to load isn't the same as the one you are currently in, load it, else do nothing 
+	p2SString newMapname = ldata.attribute("name").as_string("first_level.tmx");//loads the map name from the saves doc, if gets errror, replaces it with "first_level.tmx"
+	if (newMapname != data.name)//if the map that you request to load isn't the same as the one you are currently in, load it, else do nothing 
 	{
-		ReloadMap(newmapname);
+		ReloadMap(newMapname);
 	}
 	return true;
 
