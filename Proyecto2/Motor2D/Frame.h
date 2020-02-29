@@ -1,7 +1,6 @@
 #ifndef __FRAME_H__
 #define __FRAME_H__
 
-#include "p2Point.h"
 #include "j1Module.h"
 #include "SDL/include/SDL_rect.h"
 
@@ -11,8 +10,11 @@ class Frame
 {
 public:
 	float maxFrames;
+
 	SDL_Rect frame;
-	p2Point <int> pivotPosition;
+
+	int pivotPositionX;
+	int pivotPositionY;
 
 private:
 	int last_collider = 0;

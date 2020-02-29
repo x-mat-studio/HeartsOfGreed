@@ -5,6 +5,7 @@
 #include "j1Input.h"
 
 #include "j1Audio.h"
+#include "j1Render.h"
 
 #include "j1App.h"
 
@@ -21,6 +22,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	input = new j1Input();
 	win = new j1Window();
 	audio = new j1Audio();
+	render = new j1Render();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -30,7 +32,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 
 	// render last to swap buffer
-
+	AddModule(render);
 	
 	PERF_PEEK(ptimer);
 }

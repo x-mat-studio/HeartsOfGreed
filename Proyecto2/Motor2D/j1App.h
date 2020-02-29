@@ -16,6 +16,7 @@ typedef unsigned int uint;
 class j1Window;
 class j1Input;
 class j1Audio;
+class j1Render;
 
 
 class j1App
@@ -81,11 +82,18 @@ public:
 
 	// Modules
 	j1Window*			win;
+	
 	j1Input*			input;
+	
 	j1Audio*			audio;
 	
+	j1Render*			render;
+	
 	uint32_t			frames;
+	
 	uint				frameRate = 0;
+
+	bool				vSyncActivated;
 
 private:
 	std::vector<j1Module*>	modules;
@@ -95,22 +103,24 @@ private:
 
 	p2SString			title;
 	p2SString			organization;
-
-	mutable bool		want_to_save;
-	bool				want_to_load;
-
 	p2SString			load_game;
 	mutable p2SString	save_game;
 
 	PerfectTimer		ptimer;
-	uint64				frameCount = 0;
+	
 	SimpleTimer			startupTime;
 	SimpleTimer			frameTime;
 	SimpleTimer			lastSecFrameTime;
+	
+	uint64				frameCount = 0;
+	
 	uint32				lastSecFrameCount = 0;
 	uint32				prevLastSecFrameCount = 0;
 
 	bool				capFrames;
+	bool				want_to_load;
+	mutable bool		want_to_save;
+
 	float				dt;
 };
 

@@ -40,7 +40,7 @@ public:
 					rect.w = iteratorFrames.attribute("rwidth").as_int();
 					rect.h = iteratorFrames.attribute("rheight").as_int();
 
-					aux.PushBack(rect, iteratorFrames.attribute("time").as_int(), { iteratorFrames.attribute("pivotX").as_int(), iteratorFrames.attribute("pivotY").as_int() });
+					aux.PushBack(rect, iteratorFrames.attribute("time").as_int(),  iteratorFrames.attribute("pivotX").as_int(), iteratorFrames.attribute("pivotY").as_int());
 					
 					iteratorFrames = iteratorFrames.next_sibling();
 				}
@@ -52,11 +52,13 @@ public:
 	}
 
 	
-	void PushBack(const SDL_Rect& rect, const int maxFrames, p2Point <int> pivotPosition) {
+	void PushBack(const SDL_Rect& rect, const int maxFrames,int pivotPositionX, int pivotPositionY) {
 		
 		frames[last_frame].frame = rect;
 		frames[last_frame].maxFrames = maxFrames;
-		frames[last_frame].pivotPosition = pivotPosition;
+		frames[last_frame].pivotPositionX = pivotPositionX;
+		frames[last_frame].pivotPositionY = pivotPositionY;
+
 
 		last_frame++;
 	}
