@@ -37,6 +37,9 @@
     <ClCompile Include="Window.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -93,6 +96,9 @@
     <ClInclude Include="Window.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Desenvolupament  ========\Scenes\header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -133,6 +139,12 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Core\cpp files">
       <UniqueIdentifier>{b0d88eee-a52a-4609-9bc0-8e5e8912dd6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Scenes\cpp files">
+      <UniqueIdentifier>{aae35377-7bf7-4106-82fa-8db85430e0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Scenes\header files">
+      <UniqueIdentifier>{9a20f83b-de96-49a3-b451-b810bca4246d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

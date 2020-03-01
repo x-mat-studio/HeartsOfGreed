@@ -44,10 +44,10 @@ void ModuleMap::Draw()
 	uint windowH;
 	app->win->GetWindowSize(windowW, windowH);
 
-	int i = 0;
+	int f = 0;
 
 
-	while (i < data.layers.size())
+	while (f < data.layers.size())
 	{
 		int scale = app->win->GetScale();
 
@@ -60,21 +60,31 @@ void ModuleMap::Draw()
 		WorldToMap((app->render->camera.x * -1) + windowW, (app->render->camera.y * -1) + windowH, data, down_right_cam_cornerX, down_right_cam_cornerY);
 
 
-		for (int i = 0; i < data.layers[i]->height; i++)//number of rows
+		for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 		{
 
 
-			for (int j = 0; j < data.layers[i]->width; j++)//number of columns
+			for (int j = 0; j < data.layers[f]->width; j++)//number of columns
 			{
+				int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
+				//without camera culling
+				/*if (id > 0)
+				{
+					float worldX;
+					float worldY;
+					MapToWorldCoordinates(j, i, data, worldX, worldY);
+					app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+				}*/
 
+				//whith camera culling
 				if (i<down_right_cam_cornerY + 1 && i>up_left_cam_cornerY - 1)//These are a camera culling implementation the game just draws what's seen in the camera
 				{
 
 
 					if (j<down_right_cam_cornerX + 1 && j>up_left_cam_cornerX - 1)
 					{
-						int id = data.layers[i]->gid[Get(j, i, data.layers[i])];
+						int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
 
 						if (id > 0)
@@ -98,10 +108,10 @@ void ModuleMap::Draw()
 		}
 
 
+		f++;
 	}
 
-
-	i++;
+	
 }
 
 

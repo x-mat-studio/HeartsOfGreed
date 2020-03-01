@@ -19,6 +19,7 @@ class ModuleAudio;
 class ModuleRender;
 class ModuleTextures;
 class ModuleMap;
+class ModuleTestScene;
 
 class App
 {
@@ -88,6 +89,7 @@ public:
 	ModuleRender*			render;
 	ModuleTextures*			tex;
 	ModuleMap*				map;
+	ModuleTestScene*		testScene;
 
 	uint32_t			frames;
 	

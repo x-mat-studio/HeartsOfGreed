@@ -63,6 +63,10 @@ bool ModuleRender::Start()
 	SDL_RenderGetViewport(renderer, &viewport);
 	app->render->currentCamX = app->render->camera.x;
 	app->render->currentCamY = app->render->camera.y;
+
+	//these 2 lines are here to test the 1st map TODO delete
+	/*app->render->currentCamX = 500;
+	app->render->currentCamY = -1300;*/
 	return true;
 }
 
