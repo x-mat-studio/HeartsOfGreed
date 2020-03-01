@@ -84,9 +84,6 @@ void ModuleMap::Draw()
 
 						if (id > 0)
 						{
-							float worldX;
-							float worldY;
-							MapToWorldCoordinates(j, i, data, worldX, worldY);
 							app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
 						}
 
@@ -524,7 +521,7 @@ SDL_Rect ModuleMap::RectFromTileId(uint tile_id, TileSet* currenttileset)
 
 	SDL_Rect rect;
 	rect.h = currenttileset->tileHeight;
-	rect.w = currenttileset->tileHeight;
+	rect.w = currenttileset->tileWidth;
 
 	int tileX = (tile_id - firstGid) % columns;//number of tiles full in a row
 	int tileY = (tile_id - firstGid) / columns;//number of rows full
