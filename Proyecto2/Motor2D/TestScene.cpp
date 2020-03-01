@@ -26,7 +26,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 bool ModuleTestScene::Start()
 {
 	//app->map->LoadNew("map_prototype.tmx");
-	app->map->LoadNew("isometric_grass_and_water.tmx");
+	app->map->LoadNew("map_prototype.tmx");
 
 	return true;
 }

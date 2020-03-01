@@ -34,7 +34,10 @@ bool ModuleMap::Awake(pugi::xml_node& config)
 
 void ModuleMap::Draw()
 {
-
+	float up_left_cam_cornerX= -app->render->currentCamX;
+	float up_left_cam_cornerY= -app->render->currentCamY;
+	float down_right_cam_cornerX=-app->render->currentCamX+ app->render->camera.w;
+	float down_right_cam_cornerY=-app->render->currentCamY + app->render->camera.h;
 
 	if (mapLoaded == false)
 		return;
@@ -50,14 +53,6 @@ void ModuleMap::Draw()
 	while (f < data.layers.size())
 	{
 		int scale = app->win->GetScale();
-
-		int up_left_cam_cornerX;
-		int up_left_cam_cornerY;
-		int down_right_cam_cornerX;
-		int down_right_cam_cornerY;
-
-		WorldToMap(app->render->camera.x * -1, app->render->camera.y * -1, data, up_left_cam_cornerX, up_left_cam_cornerY);
-		WorldToMap((app->render->camera.x * -1) + windowW, (app->render->camera.y * -1) + windowH, data, down_right_cam_cornerX, down_right_cam_cornerY);
 
 
 		for (int i = 0; i < data.layers[f]->height; i++)//number of rows
@@ -76,13 +71,13 @@ void ModuleMap::Draw()
 					MapToWorldCoordinates(j, i, data, worldX, worldY);
 					app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
 				}*/
+				float worldX;
+				float worldY;
+				MapToWorldCoordinates(j, i, data, worldX, worldY);
 
 				//whith camera culling
-				if (i<down_right_cam_cornerY + 1 && i>up_left_cam_cornerY - 1)//These are a camera culling implementation the game just draws what's seen in the camera
-				{
-
-
-					if (j<down_right_cam_cornerX + 1 && j>up_left_cam_cornerX - 1)
+				
+					if ((worldX >(up_left_cam_cornerX-data.tileWidth)&& worldX <down_right_cam_cornerX)&& ((worldY > up_left_cam_cornerY-data.tileWidth) && worldY < down_right_cam_cornerY))
 					{
 						int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
@@ -99,7 +94,6 @@ void ModuleMap::Draw()
 					}
 
 
-				}
 
 
 			}
