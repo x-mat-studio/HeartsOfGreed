@@ -43,8 +43,14 @@ bool  ModuleTestScene::PreUpdate()
 // Called each loop iteration
 bool  ModuleTestScene::Update(float dt)
 {
-	float scale = app->win->scale;
+	float scale = app->win->GetScale();
 	float camVel = 10 * scale;
+	int mousePosX;
+	int mousePosY;
+	app->input->GetMousePosition(mousePosX, mousePosY);
+	int mouseRawX;
+	int mouseRawY;
+	app->input->GetMousePositionRaw(mouseRawX, mouseRawY);
 
 
 	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT)
@@ -67,18 +73,26 @@ bool  ModuleTestScene::Update(float dt)
 	{
 		app->render->currentCamX -= camVel * dt;
 	}
+	
+	
+
+	//mouse drag / mouse zoom
+	int scrollWheelX;
+	int scrollWheelY;
+	app->input->GetScrollWheelMotion(scrollWheelX, scrollWheelY);
+
 
 	if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
 	{
-		app->input->GetMousePosition(prevMousePosX, prevmousePosY);
+		prevMousePosX = mousePosX;
+		prevmousePosY = mousePosY;
 	}
 	else if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_REPEAT)
 	{
 		int auxX = 0;
 		int auxY = 0;
-		int x = 0;
-		int y = 0;
-		app->input->GetMousePosition(x, y);
+		int x = mousePosX;
+		int y = mousePosY;
 		auxX = x;
 		auxY = y;
 		x -= prevMousePosX;
@@ -90,21 +104,16 @@ bool  ModuleTestScene::Update(float dt)
 		prevmousePosY = auxY;
 
 	}
-
-	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN)
+	else if (scrollWheelY != 0)
 	{
-		app->win->scale -= 0.25f;
-		if (app->win->scale < 0.5f)
-			app->win->scale = 0.5f;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_STATE::KEY_DOWN)
-	{
-		app->win->scale += 0.25f;
-		if (app->win->scale > 5.0f)
-			app->win->scale = 5.0f;
+		//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+		Zoom(0.25f * scrollWheelY, mouseRawX, mouseRawY, scale);
 	}
 
-	app->map->Draw();
+	
+
+
+
 	return true;
 }
 
@@ -112,6 +121,7 @@ bool  ModuleTestScene::Update(float dt)
 // Called each loop iteration
 bool  ModuleTestScene::PostUpdate()
 {
+	app->map->Draw();
 	return true;
 }
 
@@ -132,4 +142,20 @@ bool  ModuleTestScene::Load(pugi::xml_node&)
 bool  ModuleTestScene::Save(pugi::xml_node&) const
 {
 	return true;
+}
+
+
+void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int windowTargetCenterY, float currentScale)
+{
+	float newScale = app->win->AddScale(addZoomAmount);
+	float increment = newScale - currentScale;
+	float offsetX = windowTargetCenterX;
+	float offsetY = windowTargetCenterY;
+
+	//does not change the camera if there is no scaling
+	if (increment != 0.0f)
+	{
+		app->render->currentCamX = (((app->render->currentCamX - offsetX) * newScale) / currentScale) + offsetX;
+		app->render->currentCamY = (((app->render->currentCamY - offsetY) * newScale) / currentScale) + offsetY;
+	}
 }

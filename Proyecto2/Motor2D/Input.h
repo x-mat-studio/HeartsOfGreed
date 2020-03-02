@@ -67,6 +67,11 @@ public:
 	// Get mouse / axis position
 	void GetMousePosition(int& x, int& y);
 	void GetMouseMotion(int& x, int& y);
+	//Same as GetMousePosition but without the scaling factor
+	void GetMousePositionRaw(int& x, int& y);
+	//Get motion of the scrollwheel in both x (left[negative]/right[positive]) and y (up[positive]/down[negative])axis
+	void GetScrollWheelMotion(int& x, int& y);
+
 
 	void ActivateTextInput(SDL_Rect& rect);
 	void DesactivateTextInput();
@@ -88,6 +93,12 @@ private:
 	int			mouseMotionY;
 	int			mouseX;
 	int			mouseY;
+	int			mouseXRaw;
+	int			mouseYRaw;
+
+	int			mouseWheelMotionX;
+	int			mouseWheelMotionY;
+
 
 	P2SString	text;
 	int			cursorPos;

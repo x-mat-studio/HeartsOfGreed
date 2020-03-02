@@ -36,6 +36,9 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
+	void Zoom(float addZoomAmount, int windowTargetCenterX, int windowTargetCenterY, float currentScale);
+
+
 public:
 	
 

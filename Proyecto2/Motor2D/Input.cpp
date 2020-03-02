@@ -58,6 +58,8 @@ bool ModuleInput::PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+	mouseWheelMotionX = 0;
+	mouseWheelMotionY = 0;
 
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
@@ -159,13 +161,24 @@ bool ModuleInput::PreUpdate()
 			mouseButtons[event.button.button - 1] = KEY_STATE::KEY_UP;
 			break;
 
+		case SDL_MOUSEWHEEL:
+
+			mouseWheelMotionX = event.wheel.x;
+			mouseWheelMotionY = event.wheel.y;
+			break;
+
 		case SDL_MOUSEMOTION:
 			float scale = app->win->GetScale();
 			mouseMotionX = event.motion.xrel / scale;
 			mouseMotionY = event.motion.yrel / scale;
 			mouseX = event.motion.x / scale;
 			mouseY = event.motion.y / scale;
+			mouseXRaw = event.motion.x;
+			mouseYRaw = event.motion.y;
+
 			break;
+
+
 		}
 
 
@@ -199,10 +212,24 @@ void ModuleInput::GetMousePosition(int& x, int& y)
 }
 
 
+void ModuleInput::GetMousePositionRaw(int& x, int& y)
+{
+	x = mouseXRaw;
+	y = mouseYRaw;
+}
+
+
 void ModuleInput::GetMouseMotion(int& x, int& y)
 {
 	x = mouseMotionX;
 	y = mouseMotionY;
+}
+
+
+void ModuleInput::GetScrollWheelMotion(int& x, int& y)
+{
+	x = mouseWheelMotionX;
+	y = mouseWheelMotionY;
 }
 
 

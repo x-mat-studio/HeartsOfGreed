@@ -6,10 +6,8 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleWindow::ModuleWindow() : Module()
+ModuleWindow::ModuleWindow() : Module(), scale(.0f),minScaleValue(.0f),maxScaleValue(.0f),height(0u),width(0u),window(NULL),screenSurface(NULL)
 {
-	window = NULL;
-	screenSurface = NULL;
 	name.create("window");
 }
 
@@ -41,8 +39,9 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 		width = config.child("resolution").attribute("width").as_int(640);
 		height = config.child("resolution").attribute("height").as_int(480);
 		scale = config.child("resolution").attribute("scale").as_float(1.0);
-
-
+		minScaleValue = config.child("resolution").attribute("minScaleValue").as_float(1.0);
+		maxScaleValue = config.child("resolution").attribute("maxScaleValue").as_float(1.0);
+		
 		if(fullscreen == true)
 			flags |= SDL_WINDOW_FULLSCREEN;
 
@@ -112,5 +111,35 @@ void ModuleWindow::GetWindowSize(uint& width, uint& height) const
 
 float ModuleWindow::GetScale() const
 {
+	return scale;
+}
+
+
+float ModuleWindow::SetScale(float newScale)
+{
+	scale = newScale;
+	
+	
+	if (scale < minScaleValue)
+		scale = minScaleValue;
+	else if (scale > maxScaleValue)
+		scale = maxScaleValue;
+
+	
+	return scale;
+}
+
+
+float  ModuleWindow::AddScale(float addedScale)
+{
+	scale += addedScale;
+
+
+	if (scale < minScaleValue)
+		scale = minScaleValue;
+	else if (scale > maxScaleValue)
+		scale = maxScaleValue;
+
+
 	return scale;
 }

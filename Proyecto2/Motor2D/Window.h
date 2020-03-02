@@ -30,6 +30,10 @@ public:
 	// Retrieve window scale
 	float GetScale() const;
 
+	float SetScale(float newScale);
+
+	float  AddScale(float addedScale);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;
@@ -39,10 +43,13 @@ public:
 
 	uint		width;
 	uint		height;
-	float		scale;
+	
 
 private:
 	P2SString	title;
+	float		scale;
+	float minScaleValue;
+	float maxScaleValue;
 
 };
 
