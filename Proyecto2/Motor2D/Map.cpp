@@ -47,12 +47,13 @@ void ModuleMap::Draw()
 	uint windowH;
 	app->win->GetWindowSize(windowW, windowH);
 
+
 	int f = 0;
 
 
 	while (f < data.layers.size())
 	{
-		int scale = app->win->GetScale();
+		float scale = app->win->GetScale();
 
 
 		for (int i = 0; i < data.layers[f]->height; i++)//number of rows
@@ -77,7 +78,7 @@ void ModuleMap::Draw()
 
 				//whith camera culling
 				
-					if ((worldX >(up_left_cam_cornerX-data.tileWidth)&& worldX <down_right_cam_cornerX)&& ((worldY > up_left_cam_cornerY-data.tileWidth) && worldY < down_right_cam_cornerY))
+					if ((worldX >(up_left_cam_cornerX-(data.tileWidth*scale))/scale && worldX <down_right_cam_cornerX/scale)&& ((worldY > (up_left_cam_cornerY-(data.tileWidth*scale))/scale) && worldY < down_right_cam_cornerY/scale))
 					{
 						int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 

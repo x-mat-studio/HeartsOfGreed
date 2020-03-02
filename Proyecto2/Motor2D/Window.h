@@ -28,7 +28,7 @@ public:
 	void GetWindowSize(uint& width, uint& height) const;
 
 	// Retrieve window scale
-	uint GetScale() const;
+	float GetScale() const;
 
 public:
 	//The window we'll be rendering to
@@ -39,7 +39,7 @@ public:
 
 	uint		width;
 	uint		height;
-	uint		scale;
+	float		scale;
 
 private:
 	P2SString	title;
