@@ -40,6 +40,8 @@ public:
 	
 
 private:
+	int prevMousePosX;
+	int prevmousePosY;
 
 };
 
