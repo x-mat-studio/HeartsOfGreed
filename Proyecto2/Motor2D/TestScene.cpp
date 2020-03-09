@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
+#include "Audio.h"
 #include "Map.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
@@ -26,9 +27,13 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	
+	
 	//app->map->LoadNew("map_prototype.tmx");
 	app->map->LoadNew("map_prototype.tmx");
-
+	
+	app->audio->PlayMusic("audio/music/TheBrotherhoodofSteel.mp3", 10.0F, 50);
+	
 	return true;
 }
 
@@ -36,6 +41,7 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate()
 {
+
 	return true;
 }
 

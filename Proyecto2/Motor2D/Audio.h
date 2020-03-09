@@ -10,6 +10,21 @@
 
 struct _Mix_Music;
 struct Mix_Chunk;
+enum class Direction {
+	Front,
+	FrontRight,
+	Right,
+	BackRight,
+	Back,
+	BackLeft,
+	Left,
+	FrontLeft
+};
+enum class Loudness {
+	Quiet,
+	Normal,
+	Loud
+};
 
 class ModuleAudio : public Module
 {
@@ -27,13 +42,17 @@ public:
 	bool CleanUp();
 
 	// Play a music file
-	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
+	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 180);
 
 	// Load a WAV in memory
 	unsigned int LoadFx(const char* path);
 
 	// Play a previously loaded WAV
-	bool PlayFx(unsigned int fx, int repeat = 0);
+	bool PlayFx(unsigned int fx, int repeat = 0, int channel = 1, Loudness loudness = Loudness::Loud, Direction direction = Direction::Front);
+
+	//Configure Channel
+	bool ConfigureChannel(unsigned int channel, int volume, float angle);
+	bool ConfigureChannel(unsigned int channel,Loudness loudness, Direction direction);
 
 
 private:
@@ -41,7 +60,7 @@ private:
 
 	_Mix_Music* music;
 
-	std::vector<Mix_Chunk*>	fx;
+	std::vector<Mix_Chunk*>	fx;  //We need a Array of Numbers: sfx are stored as unsigned int
 };
 
 #endif // __AUDIO_H__
