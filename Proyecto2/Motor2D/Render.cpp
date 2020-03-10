@@ -61,8 +61,8 @@ bool ModuleRender::Start()
 	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
-	app->render->currentCamX = app->render->camera.x;
-	app->render->currentCamY = app->render->camera.y;
+	currentCamX = camera.x;
+	currentCamY = camera.y;
 
 	//these 2 lines are here to test the 1st map TODO delete
 	/*app->render->currentCamX = 1027;
@@ -87,9 +87,6 @@ bool ModuleRender::Update(float dt)
 
 bool ModuleRender::PostUpdate()
 {
-	app->render->camera.x = app->render->currentCamX;
-	app->render->camera.y = app->render->currentCamY;
-
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
@@ -146,8 +143,10 @@ void ModuleRender::ResetViewPort()
 
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y) const
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
 	float scale = app->win->GetScale();
 
@@ -214,8 +213,10 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 }
 
 
-bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
+bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera)
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
 	float scale = app->win->GetScale();
 
@@ -248,8 +249,10 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 }
 
 
-bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) 
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
 	float scale = app->win->GetScale();
 
@@ -276,8 +279,10 @@ bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Ui
 }
 
 
-bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
 	float scale = app->win->GetScale();
 
@@ -308,4 +313,10 @@ bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 
 
 
 	return ret;
+}
+
+void ModuleRender::GetCameraMeasures(int& w, int& h)
+{
+	w = camera.w;
+	h = camera.h;
 }

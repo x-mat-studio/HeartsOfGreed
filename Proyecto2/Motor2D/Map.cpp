@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Window.h"
 #include <math.h>
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
 ModuleMap::ModuleMap() : Module(), mapLoaded(false)
@@ -34,10 +35,15 @@ bool ModuleMap::Awake(pugi::xml_node& config)
 
 void ModuleMap::Draw()
 {
+	BROFILER_CATEGORY("DRAW", Profiler::Color::Aquamarine);
+	int camW;
+	int camH;
+	app->render->GetCameraMeasures(camW, camH);
+	
 	float up_left_cam_cornerX= -app->render->currentCamX;
 	float up_left_cam_cornerY= -app->render->currentCamY;
-	float down_right_cam_cornerX=-app->render->currentCamX+ app->render->camera.w;
-	float down_right_cam_cornerY=-app->render->currentCamY + app->render->camera.h;
+	float down_right_cam_cornerX= up_left_cam_cornerX + camW;
+	float down_right_cam_cornerY= up_left_cam_cornerY +camH;
 
 	if (mapLoaded == false)
 		return;
@@ -64,14 +70,6 @@ void ModuleMap::Draw()
 			{
 				int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
-				//without camera culling
-				/*if (id > 0)
-				{
-					float worldX;
-					float worldY;
-					MapToWorldCoordinates(j, i, data, worldX, worldY);
-					app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
-				}*/
 				float worldX;
 				float worldY;
 				MapToWorldCoordinates(j, i, data, worldX, worldY);
@@ -80,9 +78,6 @@ void ModuleMap::Draw()
 				
 					if ((worldX >(up_left_cam_cornerX-(data.tileWidth*scale))/scale && worldX <down_right_cam_cornerX/scale)&& ((worldY > (up_left_cam_cornerY-(data.tileWidth*scale))/scale) && worldY < down_right_cam_cornerY/scale))
 					{
-						int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
-
-
 						if (id > 0)
 						{
 							app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
