@@ -157,7 +157,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 
 
 // Play WAV
-bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, Loudness loudness, Direction direction)
+bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loudness, DIRECTION direction)
 {
 	ConfigureChannel(channel, loudness, direction);
 
@@ -178,6 +178,7 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, Loudness loud
 	return ret;
 }
 
+
 // Configure Audio Channel
 bool ModuleAudio::ConfigureChannel(unsigned int channel, int volume, float angle)
 {
@@ -190,8 +191,9 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, int volume, float angle
 	return false;
 }
 
+
 // Configure Audio Channel for dummies
-bool ModuleAudio::ConfigureChannel(unsigned int channel, Loudness loudness, Direction direction)
+bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRECTION direction)
 {
 	float angle;
 	int volume;
@@ -199,13 +201,13 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, Loudness loudness, Dire
 
 	switch (loudness)
 	{
-	case Loudness::Quiet:
+	case LOUDNESS::QUIET:
 		volume = 254;
 		break;
-	case Loudness::Normal:
+	case LOUDNESS::NORMAL:
 		volume = 120;
 		break;
-	case Loudness::Loud:
+	case LOUDNESS::LOUD:
 		volume = 1;
 		break;
 	default:
@@ -218,28 +220,28 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, Loudness loudness, Dire
 	
 	switch (direction)
 	{
-	case Direction::Front:
+	case DIRECTION::FRONT:
 		angle = 0;
 		break;
-	case Direction::FrontRight:
+	case DIRECTION::FRONT_RIGHT:
 		angle = 45;
 		break;
-	case Direction::Right:
+	case DIRECTION::RIGHT:
 		angle = 90;
 		break;
-	case Direction::BackRight:
+	case DIRECTION::BACK_RIGHT:
 		angle = 135;
 		break;
-	case Direction::Back:
+	case DIRECTION::BACK:
 		angle = 180;
 		break;
-	case Direction::BackLeft:
+	case DIRECTION::BACK_LEFT:
 		angle = 225;
 		break;
-	case Direction::Left:
+	case DIRECTION::LEFT:
 		angle = 270;
 		break;
-	case Direction::FrontLeft:
+	case DIRECTION::FRONT_LEFT:
 		angle = 315;
 		break;
 	default:
