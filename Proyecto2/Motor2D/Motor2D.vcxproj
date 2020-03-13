@@ -78,7 +78,6 @@
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
-    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Audio.cpp" />
@@ -100,7 +99,6 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="Audio.h" />
-    <ClInclude Include="Hero.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Render.h" />

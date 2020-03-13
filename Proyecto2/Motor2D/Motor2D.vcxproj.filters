@@ -46,9 +46,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Desenvolupament  ========\Entitys</Filter>
     </ClCompile>
-    <ClCompile Include="Hero.cpp">
-      <Filter>Desenvolupament  ========\Entitys\Heroes</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -114,9 +111,6 @@
     <ClInclude Include="Entity.h">
       <Filter>Desenvolupament  ========\Entitys</Filter>
     </ClInclude>
-    <ClInclude Include="Hero.h">
-      <Filter>Desenvolupament  ========\Entitys\Heroes</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -166,9 +160,6 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entitys">
       <UniqueIdentifier>{eefc1b5b-94de-4759-826b-4e3adc8fadbc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Desenvolupament  ========\Entitys\Heroes">
-      <UniqueIdentifier>{d4d84244-88a8-4b68-b35e-8d82a54531db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
