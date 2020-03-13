@@ -17,7 +17,7 @@ ModuleEntityManager::~ModuleEntityManager()
 // Called before render is available
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
-	//BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
+	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
 
 	bool ret = true;
 
@@ -56,7 +56,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 // Called each loop iteration
 bool ModuleEntityManager::Update(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Post-Update", Profiler::Color::Blue)
 
 	bool ret = true;
 

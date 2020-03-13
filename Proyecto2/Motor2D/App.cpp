@@ -8,6 +8,8 @@
 #include "Render.h"
 #include "Map.h"
 #include "TestScene.h"
+#include "Player.h"
+#include "EntityManager.h"
 
 #include "App.h"
 
@@ -28,6 +30,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	map = new ModuleMap();
 	tex = new ModuleTextures();
 	testScene = new ModuleTestScene();
+	player = new ModulePlayer();
+	entityManager = new ModuleEntityManager();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -36,6 +40,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(map);
 	AddModule(testScene);
+	AddModule(player);
+	AddModule(entityManager);
 
 	// render last to swap buffer
 	AddModule(render);

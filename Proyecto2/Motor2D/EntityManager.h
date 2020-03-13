@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef __ENTITYMANAGER_H__
 #define __ENTITYMANAGER_H__
 
