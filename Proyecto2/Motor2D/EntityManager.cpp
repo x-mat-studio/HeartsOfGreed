@@ -1,5 +1,6 @@
 #include "App.h"
 #include "EntityManager.h"
+#include "Entity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -17,7 +18,7 @@ ModuleEntityManager::~ModuleEntityManager()
 // Called before render is available
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
-	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
+	//BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
 
 	bool ret = true;
 
@@ -56,7 +57,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 // Called each loop iteration
 bool ModuleEntityManager::Update(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Post-Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
 	bool ret = true;
 
@@ -85,66 +86,5 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	{
 		entityVector[i].PostUpdate(dt);
 	}
-
-	// Remove all entities scheduled for deletion
-	for (int i = 0; i < numEntities; i++)
-	{
-		if (entityVector[i].toDelete)
-		{
-			entityVector.erase(entityVector.begin() + i);
-		}
-	}
-
-
-	return ret;
-}
-
-//// Called before quitting
-bool ModuleEntityManager::CleanUp()
-{
-	entityVector.clear();
-
-	return true;
-}
-
-//Add an entity
-bool ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
-{
-	bool ret = false;
-
-	switch (type)
-	{
-	case ENTITY_TYPE::PARTICLE:
-		ret = true;
-		break;
-	case ENTITY_TYPE::EMITER:
-		ret = true;
-		break;	
-	case ENTITY_TYPE::PARTICLE_SYSTEM:
-		ret = true;
-		break;
-	case ENTITY_TYPE::HERO_MELEE:
-		ret = true;
-		break;
-	case ENTITY_TYPE::HERO_RANGED:
-		ret = true;
-		break;
-	case ENTITY_TYPE::HERO_GATHERER:
-		ret = true;
-		break;
-	case ENTITY_TYPE::BLDG_TURRET:
-		ret = true;
-		break;
-	case ENTITY_TYPE::BLDG_UPGRADE:
-		ret = true;
-		break;
-	case ENTITY_TYPE::BLDG_BASE:
-		ret = true;
-		break;
-	case ENTITY_TYPE::BLDG_BARRICADE:
-		ret = true;
-		break;
-	}
-
 	return ret;
 }
