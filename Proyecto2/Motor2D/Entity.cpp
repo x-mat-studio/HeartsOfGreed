@@ -4,7 +4,7 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(std::vector<int>& position, ENTITY_TYPES type, SDL_Texture* texture, Animation& animation) :
+Entity::Entity(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* texture, Animation& animation) :
 	position(position),
 	type(type),
 	texture(texture),

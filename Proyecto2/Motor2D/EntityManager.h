@@ -4,9 +4,8 @@
 #include "SDL/include/SDL.h"
 #include "Module.h"
 #include "vector"
+#include "Entity.h"
 
-
-class Entity;
 
 class ModuleEntityManager : public Module
 {
@@ -29,11 +28,15 @@ public:
 	bool PostUpdate(float dt);
 
 	//// Called before quitting
-	//bool CleanUp();
+	bool CleanUp();
 
 	//// Load / Save
-	//bool Load(pugi::xml_node&);
-	//bool Save(pugi::xml_node&) const;
+	bool Load(pugi::xml_node&) { return true; };
+	bool Save(pugi::xml_node&) const { return true; };
+
+
+	//Adds
+	bool AddEntity(ENTITY_TYPE type, int x, int y);
 
 private:
 
