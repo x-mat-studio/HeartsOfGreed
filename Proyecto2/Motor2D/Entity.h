@@ -8,7 +8,7 @@
 struct Collider;
 struct SDL_Texture;
 
-enum class ENTITY_TYPES
+enum class ENTITY_TYPE
 {
 	UNKNOWN,
 	PARTICLE,
@@ -18,7 +18,7 @@ enum class ENTITY_TYPES
 	HERO_RANGED,
 	HERO_GATHERER,
 	ENEMY,
-	BLDG,
+	BLDG_TURRET,
 	BLDG_UPGRADE,
 	BLDG_BASE,
 	BLDG_BARRICADE,
@@ -42,6 +42,9 @@ public:
 	virtual void OnCollision(Collider* collider);
 	virtual Collider* GetCollider() const;
 
+	bool started;
+	bool toDelete;
+
 protected:
 	virtual void Draw(float dt);
 
@@ -52,7 +55,7 @@ public:
 protected:
 	std::vector<int> position;
 	
-	ENTITY_TYPES type;
+	ENTITY_TYPE type;
 
 	SDL_Texture* texture;
 

@@ -20,6 +20,8 @@ class ModuleRender;
 class ModuleTextures;
 class ModuleMap;
 class ModuleTestScene;
+class ModulePlayer;
+class ModuleEntityManager;
 
 class App
 {
@@ -90,6 +92,8 @@ public:
 	ModuleTextures*			tex;
 	ModuleMap*				map;
 	ModuleTestScene*		testScene;
+	ModulePlayer*			player;
+	ModuleEntityManager*	entityManager;
 
 	uint32_t			frames;
 	
