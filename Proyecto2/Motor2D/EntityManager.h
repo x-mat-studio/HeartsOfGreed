@@ -4,6 +4,7 @@
 #include "SDL/include/SDL.h"
 #include "Module.h"
 #include "vector"
+#include "Entity.h"
 
 enum  class ENTITY_TYPES
 {
@@ -41,12 +42,12 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
-	//bool Update(float dt);
-	//bool PostUpdate();
+	bool PreUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
 
 	//// Called before quitting
-	//bool CleanUp();
+	bool CleanUp();
 
 	//// Load / Save
 	//bool Load(pugi::xml_node&);
@@ -55,7 +56,7 @@ public:
 private:
 
 	//The list where we will store all the entities
-	//std::vector <Entity> entityVector;
+	std::vector <Entity> entityVector;
 
 
 };

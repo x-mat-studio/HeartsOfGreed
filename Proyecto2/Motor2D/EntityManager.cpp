@@ -34,19 +34,56 @@ bool ModuleEntityManager::Start()
 }
 
 // Called each loop iteration
-bool ModuleEntityManager::PreUpdate()
+bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
 	bool ret = true;
 
 
-	//int numEntities = entityVector.size();
+	int numEntities = entityVector.size();
 
-	//Iterate though all the entitie's PreUpdate()
-	//for (int i = 0; i < numEntities; i++)
-	//{
-	//	entityVector[i];
-	//}
+	
+	//Iterate though all the entitie's PreUpdates
+	for (int i = 0; i < numEntities; i++)
+	{
+		entityVector[i].PreUpdate(dt);
+	}
+	return ret;
+}
+
+
+// Called each loop iteration
+bool ModuleEntityManager::Update(float dt)
+{
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+
+	bool ret = true;
+
+
+	int numEntities = entityVector.size();
+
+	//Iterate though all the entitie's PreUpdates
+	for (int i = 0; i < numEntities; i++)
+	{
+		entityVector[i].Update(dt);
+	}
+	return ret;
+}
+
+// Called each loop iteration
+bool ModuleEntityManager::PostUpdate(float dt)
+{
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+
+	bool ret = true;
+
+	int numEntities = entityVector.size();
+
+	//Iterate though all the entitie's PreUpdates
+	for (int i = 0; i < numEntities; i++)
+	{
+		entityVector[i].PostUpdate(dt);
+	}
 	return ret;
 }
