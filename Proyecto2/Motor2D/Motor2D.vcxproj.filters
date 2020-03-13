@@ -40,6 +40,9 @@
     <ClCompile Include="TestScene.cpp">
       <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Desenvolupament  ========\Entitys</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -99,6 +102,9 @@
     <ClInclude Include="TestScene.h">
       <Filter>Desenvolupament  ========\Scenes\header files</Filter>
     </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Desenvolupament  ========\Entitys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -145,6 +151,9 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Scenes\header files">
       <UniqueIdentifier>{9a20f83b-de96-49a3-b451-b810bca4246d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entitys">
+      <UniqueIdentifier>{9c150c81-1b22-4529-af5e-de1451d70073}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
