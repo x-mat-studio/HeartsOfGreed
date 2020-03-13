@@ -4,7 +4,6 @@
 #define __ENTITY_H__
 
 #include "vector"
-#include "Animation.h"
 
 struct Collider;
 struct SDL_Texture;
@@ -30,8 +29,9 @@ enum class ENTITY_TYPES
 class Entity
 {
 public:
+
 	Entity();
-	Entity(std::vector<int>& position, ENTITY_TYPES type, SDL_Texture* texture, Animation& animation);
+	Entity(std::vector<int>& position, ENTITY_TYPES type, SDL_Texture* texture);
 	virtual ~Entity();
 
 	virtual bool Start();
@@ -45,17 +45,18 @@ public:
 protected:
 	virtual void Draw(float dt);
 
-protected:
+public:
+	bool started;
+	bool toDelete;
 
+protected:
 	std::vector<int> position;
 	
 	ENTITY_TYPES type;
 
 	SDL_Texture* texture;
-	Animation animation;
 
-	bool started;
-	bool toDelete;
+
 };
 
 
