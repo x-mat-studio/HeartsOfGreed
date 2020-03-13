@@ -9,6 +9,24 @@
 struct Collider;
 struct SDL_Texture;
 
+enum class ENTITY_TYPES
+{
+	UNKNOWN,
+	PARTICLE,
+	EMITER,
+	PARTICLE_SYSTEM,
+	HERO_MELEE,
+	HERO_RANGED,
+	HERO_GATHERER,
+	ENEMY,
+	BLDG,
+	BLDG_UPGRADE,
+	BLDG_BASE,
+	BLDG_BARRICADE,
+
+	MAX_TYPE
+};
+
 class Entity
 {
 public:
@@ -30,7 +48,7 @@ protected:
 protected:
 
 	std::vector<int> position;
-
+	
 	ENTITY_TYPES type;
 
 	SDL_Texture* texture;

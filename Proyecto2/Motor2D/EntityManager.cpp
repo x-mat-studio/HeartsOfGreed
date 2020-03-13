@@ -1,5 +1,6 @@
 #include "App.h"
 #include "EntityManager.h"
+#include "Entity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 

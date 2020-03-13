@@ -4,25 +4,7 @@
 #include "SDL/include/SDL.h"
 #include "Module.h"
 #include "vector"
-#include "Entity.h"
 
-enum  class ENTITY_TYPES
-{
-	UNKNOWN,
-	PARTICLE,
-	EMITER,
-	PARTICLE_SYSTEM,
-	HERO_MELEE,
-	HERO_RANGED,
-	HERO_GATHERER,
-	ENEMY,
-	BLDG,
-	BLDG_UPGRADE,
-	BLDG_BASE,
-	BLDG_BARRICADE,
-
-	MAX_TYPE
-};
 
 class Entity;
 
@@ -47,7 +29,7 @@ public:
 	bool PostUpdate(float dt);
 
 	//// Called before quitting
-	bool CleanUp();
+	//bool CleanUp();
 
 	//// Load / Save
 	//bool Load(pugi::xml_node&);
