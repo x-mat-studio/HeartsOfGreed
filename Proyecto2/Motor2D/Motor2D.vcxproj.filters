@@ -40,6 +40,9 @@
     <ClCompile Include="TestScene.cpp">
       <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Desenvolupament  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
