@@ -51,7 +51,7 @@ void Entity::OnCollision(Collider* collider)
 
 Collider* Entity::GetCollider() const
 {
-	return nullptr;
+	return collider;
 }
 
 

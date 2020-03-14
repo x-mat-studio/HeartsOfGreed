@@ -26,7 +26,6 @@ public:
 	bool PostUpdate(float dt);
 
 	void OnCollision(Collider* collider);
-	Collider* GetCollider() const;
 
 	virtual bool UseHability1();
 	virtual bool UseHability2();
@@ -70,7 +69,6 @@ private:
 
 	Animation animation;
 
-	Collider* collider;
 };
 
 

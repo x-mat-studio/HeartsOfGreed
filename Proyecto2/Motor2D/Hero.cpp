@@ -101,12 +101,6 @@ void Hero::OnCollision(Collider* collider)
 }
 
 
-Collider* Hero::GetCollider() const
-{
-	return collider;
-}
-
-
 void Hero::LevelUp()
 {
 	level++;

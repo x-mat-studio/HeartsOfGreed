@@ -59,6 +59,8 @@ protected:
 
 	SDL_Texture* texture;
 
+	Collider* collider;
+
 };
 
 

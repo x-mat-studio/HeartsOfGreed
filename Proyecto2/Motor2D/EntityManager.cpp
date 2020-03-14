@@ -159,9 +159,12 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 	//Iterate though all the entitiies
 	for (int i = 0; i < numEntities; i++)
 	{
+		if (entityVector[i]->GetCollider())
 		if (SDL_PointInRect(&mousePos, &entityVector[i]->GetCollider()->rect))
 		{
 			return entityVector[i];
 		}
 	}
+
+	return nullptr;
 }

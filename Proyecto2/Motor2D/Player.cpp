@@ -40,6 +40,8 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	bool ret = true;
 
+	HandleInput();
+
 	return ret;
 }
 
@@ -88,7 +90,7 @@ bool ModulePlayer::Click()
 	app->input->GetMousePosition(mouse.x, mouse.y);
 
 	focusedEntity = app->entityManager->CheckEntityOnClick(mouse);
-	if (focusedEntity)
+	if (focusedEntity != nullptr)
 	{
 
 		ret = true;
