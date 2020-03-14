@@ -36,7 +36,7 @@ private:
 	void LevelUp();
 
 	void Draw(float dt);
-	
+
 	void Move();
 	bool CheckRange(int maxDistance);
 	void Attack();

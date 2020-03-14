@@ -41,7 +41,7 @@ bool ModuleEntityManager::Start()
 
 	Animation animation;
 	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-	Hero test(pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+	Hero* test = new Hero(pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
 	entityVector.push_back(test);
 
 	return ret;
@@ -59,7 +59,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 	//Iterate though all the entitie's PreUpdates
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i].PreUpdate(dt);
+		entityVector[i]->PreUpdate(dt);
 	}
 	return ret;
 }
@@ -78,7 +78,7 @@ bool ModuleEntityManager::Update(float dt)
 	//Iterate though all the entitie's PreUpdates
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i].Update(dt);
+		entityVector[i]->Update(dt);
 	}
 	return ret;
 }
@@ -95,7 +95,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	//Iterate though all the entitie's PreUpdates
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i].PostUpdate(dt);
+		entityVector[i]->PostUpdate(dt);
 	}
 	return ret;
 }
@@ -159,9 +159,9 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 	//Iterate though all the entitiies
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (SDL_PointInRect(&mousePos, &entityVector[i].GetCollider()->rect))
+		if (SDL_PointInRect(&mousePos, &entityVector[i]->GetCollider()->rect))
 		{
-			return &entityVector[i];
+			return entityVector[i];
 		}
 	}
 }

@@ -47,7 +47,7 @@ public:
 private:
 
 	//The list where we will store all the entities
-	std::vector <Entity> entityVector;
+	std::vector <Entity*> entityVector;
 
 };
 
