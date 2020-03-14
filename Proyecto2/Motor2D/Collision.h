@@ -12,6 +12,7 @@ class Entity{
 
 }; // Provisional DEBUG
 
+
 enum COLLIDER_TYPE
 {
 	COLLIDER_NONE = -1,
@@ -21,8 +22,8 @@ enum COLLIDER_TYPE
 	COLLIDER_ENEMY,
 	COLLIDER_DEATH,
 	COLLIDER_MAX,
-
 };
+
 
 struct Collider
 {
@@ -38,19 +39,23 @@ struct Collider
 		callback(callback)
 	{} 
 
+
 	void SetPos(int x, int y)
 	{
 		rect.x = x;
 		rect.y = y;
 	}
 
+
 	void setType(COLLIDER_TYPE type1)
 	{
 		type = type1;
 	}
 
+
 	bool CheckCollision(const SDL_Rect& r) const;
 };
+
 
 class ModuleCollision : public Module
 {
@@ -68,8 +73,6 @@ public:
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback = nullptr);
 	void AddColliderEntity(Collider* collider);
 	void DebugDraw();
-
-
 
 private:
 

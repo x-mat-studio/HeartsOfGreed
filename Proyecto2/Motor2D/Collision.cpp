@@ -6,26 +6,25 @@
 
 ModuleCollision::ModuleCollision()
 {
-
 	name.create("colliders");
 
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i) {
 		colliders[i] = nullptr;
+	}
 
 	matrix[COLLIDER_PLAYER][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_ENEMY] = true;
-
 }
+
 
 // Destructor
 ModuleCollision::~ModuleCollision()
 {}
 
+
 bool ModuleCollision::PreUpdate()
 {
-
-
 	// Remove all colliders scheduled for deletion
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
@@ -39,10 +38,10 @@ bool ModuleCollision::PreUpdate()
 	return true;
 }
 
+
 // Called before render is available
 bool ModuleCollision::Update(float dt)
 {
-
 	// Calculate collisions
 	Collider* c1;
 	Collider* c2;
@@ -50,9 +49,9 @@ bool ModuleCollision::Update(float dt)
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		// skip empty colliders
-		if (colliders[i] == nullptr)
+		if (colliders[i] == nullptr) {
 			continue;
-
+		}
 		c1 = colliders[i];
 
 		// avoid checking collisions already checked
@@ -63,7 +62,6 @@ bool ModuleCollision::Update(float dt)
 				continue;
 
 			c2 = colliders[k];
-
 
 			if (c1->CheckCollision(c2->rect) == true)
 			{
@@ -77,22 +75,20 @@ bool ModuleCollision::Update(float dt)
 			}
 		}
 	}
-
 	return true;
 }
 
+
 bool ModuleCollision::PostUpdate()
 {
-
-
 	DebugDraw();
 	return true;
 }
 
+
 void ModuleCollision::DebugDraw()
 {
-
-	/* if (App->scene->debug == false)
+	/* if (App->scene->debug == false)  //Needs debug functionality
 		return; */
 
 	Uint8 alpha = 80;
@@ -127,10 +123,10 @@ void ModuleCollision::DebugDraw()
 	}
 }
 
+
 // Called before quitting
 bool ModuleCollision::CleanUp()
 {
-	// Limpiando todos los Colliders
 	LOG("Freeing all colliders");
 
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
@@ -144,6 +140,7 @@ bool ModuleCollision::CleanUp()
 
 	return true;
 }
+
 
 Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback)
 {
@@ -161,6 +158,7 @@ Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity
 	return ret;
 }
 
+
 void ModuleCollision::AddColliderEntity(Collider* collider)
 {
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
@@ -171,9 +169,8 @@ void ModuleCollision::AddColliderEntity(Collider* collider)
 			break;
 		}
 	}
-
 }
-// -----------------------------------------------------
+
 
 bool Collider::CheckCollision(const SDL_Rect& r) const
 {
