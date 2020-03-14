@@ -9,9 +9,10 @@
 #include "Render.h"
 #include "Map.h"
 #include "TestScene.h"
+#include "Player.h"
+#include "EntityManager.h"
 
 #include "App.h"
-
 
 
 // Constructor
@@ -30,6 +31,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new ModuleTextures();
 	testScene = new ModuleTestScene();
 	coll = new ModuleCollision();
+	entityManager = new ModuleEntityManager();
+	player = new ModulePlayer();
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -39,6 +43,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(testScene);
 	AddModule(coll);
+	AddModule(entityManager);
+	AddModule(player);
 	// render last to swap buffer
 	AddModule(render);
 

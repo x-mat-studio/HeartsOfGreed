@@ -21,12 +21,15 @@ ModuleEntityManager::~ModuleEntityManager()
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
 	//BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
-	std::vector<int> pos{ 100, 200 };
+	SDL_Point pos{ 100, 200 };
+
+	SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
 
 	Animation animation;
 	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-	test = new Hero(pos, ENTITY_TYPE::HERO_MELEE, app->tex->Load("/textures/POINTERS/pngs/left_right_up_down/circle.png"), animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
-
+	Hero test (pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+	entityVector.push_back(test);
+	
 	bool ret = true;
 
 	return ret;
@@ -91,5 +94,56 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	{
 		entityVector[i].PostUpdate(dt);
 	}
+	return ret;
+}
+
+//// Called before quitting
+bool ModuleEntityManager::CleanUp()
+{
+	entityVector.clear();
+
+	return true;
+}
+
+
+//Add an entity
+bool ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
+{
+	bool ret = false;
+
+	switch (type)
+	{
+	case ENTITY_TYPE::PARTICLE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::EMITER:
+		ret = true;
+		break;
+	case ENTITY_TYPE::PARTICLE_SYSTEM:
+		ret = true;
+		break;
+	case ENTITY_TYPE::HERO_MELEE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		ret = true;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_TURRET:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_UPGRADE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_BASE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_BARRICADE:
+		ret = true;
+		break;
+	}
+
 	return ret;
 }

@@ -82,19 +82,9 @@ void ModuleMap::Draw()
 						{
 							app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
 						}
-
-
 					}
-
-
-
-
 			}
-
-
 		}
-
-
 		f++;
 	}
 

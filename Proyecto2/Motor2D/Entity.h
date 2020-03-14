@@ -4,6 +4,7 @@
 #define __ENTITY_H__
 
 #include "vector"
+#include "SDL/include/SDL_rect.h"
 
 struct Collider;
 struct SDL_Texture;
@@ -31,7 +32,7 @@ class Entity
 public:
 
 	Entity();
-	Entity(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* texture);
+	Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture);
 	virtual ~Entity();
 
 	virtual bool Start();
@@ -50,7 +51,7 @@ public:
 	bool toDelete;
 
 protected:
-	std::vector<int> position;
+	SDL_Point position;
 
 	ENTITY_TYPE type;
 

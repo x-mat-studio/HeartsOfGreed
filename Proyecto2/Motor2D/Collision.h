@@ -6,12 +6,7 @@
 #include "SDL/include/SDL.h"
 #include "Module.h"
 
-class Entity{
-
-	// NEEDS ENTITY SYSTEM
-
-}; // Provisional DEBUG
-
+class Entity;
 
 enum COLLIDER_TYPE
 {
