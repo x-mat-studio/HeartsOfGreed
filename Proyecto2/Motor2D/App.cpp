@@ -29,7 +29,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	map = new ModuleMap();
 	tex = new ModuleTextures();
 	testScene = new ModuleTestScene();
-	coll = new Collision();
+	coll = new ModuleCollision();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);

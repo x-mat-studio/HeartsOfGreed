@@ -18,7 +18,7 @@ class ModuleInput;
 class ModuleAudio;
 class ModuleRender;
 class ModuleTextures;
-class Collision;
+class ModuleCollision;
 class ModuleMap;
 class ModuleTestScene;
 
@@ -91,7 +91,7 @@ public:
 	ModuleTextures*			tex;
 	ModuleMap*				map;
 	ModuleTestScene*		testScene;
-	Collision*		coll;
+	ModuleCollision*		coll;
 
 	uint32_t			frames;
 	

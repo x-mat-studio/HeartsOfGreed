@@ -52,13 +52,13 @@ struct Collider
 	bool CheckCollision(const SDL_Rect& r) const;
 };
 
-class Collision : public Module
+class ModuleCollision : public Module
 {
 
 public:
 
-	Collision();
-	 ~Collision();
+	ModuleCollision();
+	 ~ModuleCollision();
 
 	bool PreUpdate();
 	bool Update(float dt);

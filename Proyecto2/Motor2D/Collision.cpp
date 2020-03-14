@@ -4,7 +4,7 @@
 #include "Collision.h"
 
 
-Collision::Collision()
+ModuleCollision::ModuleCollision()
 {
 
 	name.create("colliders");
@@ -19,10 +19,10 @@ Collision::Collision()
 }
 
 // Destructor
-Collision::~Collision()
+ModuleCollision::~ModuleCollision()
 {}
 
-bool Collision::PreUpdate()
+bool ModuleCollision::PreUpdate()
 {
 
 
@@ -40,7 +40,7 @@ bool Collision::PreUpdate()
 }
 
 // Called before render is available
-bool Collision::Update(float dt)
+bool ModuleCollision::Update(float dt)
 {
 
 	// Calculate collisions
@@ -81,7 +81,7 @@ bool Collision::Update(float dt)
 	return true;
 }
 
-bool Collision::PostUpdate()
+bool ModuleCollision::PostUpdate()
 {
 
 
@@ -89,7 +89,7 @@ bool Collision::PostUpdate()
 	return true;
 }
 
-void Collision::DebugDraw()
+void ModuleCollision::DebugDraw()
 {
 
 	/* if (App->scene->debug == false)
@@ -128,7 +128,7 @@ void Collision::DebugDraw()
 }
 
 // Called before quitting
-bool Collision::CleanUp()
+bool ModuleCollision::CleanUp()
 {
 	// Limpiando todos los Colliders
 	LOG("Freeing all colliders");
@@ -145,7 +145,7 @@ bool Collision::CleanUp()
 	return true;
 }
 
-Collider* Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback)
+Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback)
 {
 	Collider* ret = nullptr;
 
@@ -161,7 +161,7 @@ Collider* Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* call
 	return ret;
 }
 
-void Collision::AddColliderEntity(Collider* collider)
+void ModuleCollision::AddColliderEntity(Collider* collider)
 {
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
