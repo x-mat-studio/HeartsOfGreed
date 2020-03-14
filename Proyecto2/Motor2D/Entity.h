@@ -43,6 +43,8 @@ public:
 	virtual void OnCollision(Collider* collider);
 	virtual Collider* GetCollider() const;
 
+	SDL_Point GetPosition();
+
 protected:
 	virtual void Draw(float dt);
 
@@ -56,7 +58,6 @@ protected:
 	ENTITY_TYPE type;
 
 	SDL_Texture* texture;
-
 
 };
 

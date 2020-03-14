@@ -1,6 +1,7 @@
 #include "App.h"
 #include "EntityManager.h"
 #include "Entity.h"
+#include "Collision.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -136,4 +137,19 @@ bool ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 	}
 
 	return ret;
+}
+
+// Checks if there is an entity in the mouse Click position 
+Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
+{
+	int numEntities = entityVector.size();
+
+	//Iterate though all the entitiies
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (SDL_PointInRect(&mousePos, &entityVector[i].GetCollider()->rect))
+		{
+			return &entityVector[i];
+		}
+	}
 }

@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "App.h"
 #include "Input.h"
+#include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr)
@@ -71,24 +72,28 @@ bool ModulePlayer::HandleInput()
 {
 	bool ret = true;
 
-
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
 	ret = Click();
-
+	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 	ret = Select();
-
-
 
 	return ret;
 }
 
-
-
-
 bool ModulePlayer::Click()
 {
+	bool ret = false;
+
 	SDL_Point mouse;
 	app->input->GetMousePosition(mouse.x, mouse.y);
 
+	focusedEntity = app->entityManager->CheckEntityOnClick(mouse);
+	if (focusedEntity)
+	{
 
-	return true;
+		ret = true;
+	}
+
+	
+	return ret;
 }

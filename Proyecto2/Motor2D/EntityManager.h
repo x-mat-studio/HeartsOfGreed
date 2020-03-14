@@ -37,6 +37,9 @@ public:
 	//Adds an Entity
 	bool AddEntity(ENTITY_TYPE type, int x, int y);
 
+	// Checks if there is an entity in the mouse position on Click
+	Entity* CheckEntityOnClick(SDL_Point mousePos);
+
 private:
 
 	//The list where we will store all the entities
