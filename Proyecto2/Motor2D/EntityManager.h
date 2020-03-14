@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "vector"
 
+class Hero;
 
 class Entity;
 
@@ -40,6 +41,7 @@ private:
 	//The list where we will store all the entities
 	std::vector <Entity> entityVector;
 
+	Hero* test;
 
 };
 

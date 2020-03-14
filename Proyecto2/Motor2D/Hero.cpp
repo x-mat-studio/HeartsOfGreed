@@ -1,4 +1,5 @@
 #include "Hero.h"
+#include "App.h"
 #include "Textures.h"
 #include "Render.h"
 
@@ -62,7 +63,6 @@ bool Hero::Start()
 
 bool Hero::PreUpdate(float dt)
 {
-
 	return true;
 }
 
@@ -76,6 +76,7 @@ bool Hero::Update(float dt)
 
 bool Hero::PostUpdate(float dt)
 {
+	Draw(dt);
 	return true;
 }
 
@@ -131,6 +132,12 @@ void Hero::LevelUp()
 }
 
 
+void Hero::Draw(float dt) 
+{
+	app->render->Blit(texture, position[0], position[1], &animation.GetCurrentFrameBox(dt));
+}
+
+
 void Hero::Move()
 {
 	//Put logic to move the unit to the desired destination
@@ -151,3 +158,37 @@ void Hero::Attack()
 }
 
 
+void Hero::Die()
+{
+	toDelete = true;
+}
+
+
+void Hero::RecoverHealth()
+{
+
+}
+
+
+void Hero::RecoverEnergy()
+{
+
+}
+
+
+bool Hero::UseHability1()
+{
+	return true;
+}
+
+
+bool Hero::UseHability2()
+{
+	return true;
+}
+
+
+bool Hero::UseHability3()
+{
+	return true;
+}
