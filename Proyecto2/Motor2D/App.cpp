@@ -298,7 +298,7 @@ bool App::PreUpdate()
 			continue;
 
 
-		ret = modules[i]->PreUpdate();
+		ret = modules[i]->PreUpdate(dt);
 	}
 
 
@@ -341,7 +341,7 @@ bool App::PostUpdate()
 			continue;
 		}
 
-		ret = modules[i]->PostUpdate();
+		ret = modules[i]->PostUpdate(dt);
 	}
 
 	frames++;		//NOT SURE

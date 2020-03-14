@@ -21,13 +21,13 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
+	bool PreUpdate(float dt);
 
 	// Called each loop iteration
 	bool Update(float dt);
 
 	// Called each loop iteration
-	bool PostUpdate();
+	bool PostUpdate(float dt);
 
 	// Called before quitting
 	bool CleanUp();

@@ -44,7 +44,7 @@
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Desenvolupament  ========\Entitys</Filter>
+      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
@@ -53,7 +53,7 @@
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
     <ClCompile Include="Hero.cpp">
-      <Filter>Desenvolupament  ========\Entitys</Filter>
+      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +118,7 @@
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Desenvolupament  ========\Entitys</Filter>
+      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
@@ -127,7 +127,7 @@
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
     <ClInclude Include="Hero.h">
-      <Filter>Desenvolupament  ========\Entitys</Filter>
+      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,7 +176,7 @@
     <Filter Include="Desenvolupament  ========\Scenes\header files">
       <UniqueIdentifier>{9a20f83b-de96-49a3-b451-b810bca4246d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Desenvolupament  ========\Entitys">
+    <Filter Include="Desenvolupament  ========\Entities">
       <UniqueIdentifier>{eefc1b5b-94de-4759-826b-4e3adc8fadbc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

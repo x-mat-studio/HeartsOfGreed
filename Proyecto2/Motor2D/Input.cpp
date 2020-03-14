@@ -50,7 +50,7 @@ bool ModuleInput::Start()
 }
 
 // Called each loop iteration
-bool ModuleInput::PreUpdate()
+bool ModuleInput::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Input pre-update", Profiler::Color::Blue);
 

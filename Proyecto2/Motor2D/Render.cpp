@@ -72,7 +72,7 @@ bool ModuleRender::Start()
 
 
 // Called each loop iteration
-bool ModuleRender::PreUpdate()
+bool ModuleRender::PreUpdate(float dt)
 {
 	SDL_RenderClear(renderer);
 	return true;
@@ -85,7 +85,7 @@ bool ModuleRender::Update(float dt)
 }
 
 
-bool ModuleRender::PostUpdate()
+bool ModuleRender::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);

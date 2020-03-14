@@ -23,7 +23,7 @@ ModuleCollision::~ModuleCollision()
 {}
 
 
-bool ModuleCollision::PreUpdate()
+bool ModuleCollision::PreUpdate(float dt)
 {
 	// Remove all colliders scheduled for deletion
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
@@ -79,7 +79,7 @@ bool ModuleCollision::Update(float dt)
 }
 
 
-bool ModuleCollision::PostUpdate()
+bool ModuleCollision::PostUpdate(float dt)
 {
 	DebugDraw();
 	return true;

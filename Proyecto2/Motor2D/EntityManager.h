@@ -49,8 +49,6 @@ private:
 	//The list where we will store all the entities
 	std::vector <Entity> entityVector;
 
-	//Entity* test;
-
 };
 
 #endif //__ENTITYMANAGER_H__

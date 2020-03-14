@@ -39,7 +39,7 @@ bool ModuleTestScene::Start()
 
 
 // Called each loop iteration
-bool  ModuleTestScene::PreUpdate()
+bool  ModuleTestScene::PreUpdate(float dt)
 {
 
 	return true;
@@ -125,7 +125,7 @@ bool  ModuleTestScene::Update(float dt)
 
 
 // Called each loop iteration
-bool  ModuleTestScene::PostUpdate()
+bool  ModuleTestScene::PostUpdate(float dt)
 {
 	app->map->Draw();
 	return true;

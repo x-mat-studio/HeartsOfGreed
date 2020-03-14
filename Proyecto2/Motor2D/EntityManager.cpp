@@ -21,7 +21,7 @@ ModuleEntityManager::~ModuleEntityManager()
 // Called before render is available
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
-	//BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
+	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
 	
 	
 	bool ret = true;

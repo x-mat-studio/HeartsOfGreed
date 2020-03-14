@@ -60,9 +60,9 @@ public:
 	ModuleCollision();
 	 ~ModuleCollision();
 
-	bool PreUpdate();
+	bool PreUpdate(float dt);
 	bool Update(float dt);
-	bool PostUpdate();
+	bool PostUpdate(float dt);
 	bool CleanUp();
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback = nullptr);
