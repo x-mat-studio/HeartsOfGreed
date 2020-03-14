@@ -46,6 +46,7 @@ public:
 	virtual Collider* GetCollider() const;
 
 	SDL_Point GetPosition();
+	ENTITY_TYPE GetType();
 
 protected:
 	virtual void Draw(float dt);
@@ -64,7 +65,5 @@ protected:
 	Collider* collider;
 
 };
-
-
 
 #endif//__ENTITY_H__

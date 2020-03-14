@@ -10,6 +10,7 @@ ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr)
 	name.create("player");
 }
 
+
 ModulePlayer::~ModulePlayer()
 {}
 
@@ -32,6 +33,7 @@ bool ModulePlayer::Start()
 
 	return ret;
 }
+
 
 // Called each loop iteration
 bool ModulePlayer::PreUpdate(float dt)
@@ -61,11 +63,12 @@ bool ModulePlayer::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	
 
 
 
-	return ret;
+
+	return true;
 }
 
 
@@ -74,28 +77,69 @@ bool ModulePlayer::HandleInput()
 {
 	bool ret = true;
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
-	ret = Click();
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) 
+	{
+		ret = Click();
+	}
+	
 	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
-	ret = Select();
-
+	{
+		Select();
+	}
+	
 	return ret;
 }
+
 
 bool ModulePlayer::Click()
 {
 	bool ret = false;
 
-	SDL_Point mouse;
-	app->input->GetMousePosition(mouse.x, mouse.y);
+	app->input->GetMousePosition(clickPosition.x, clickPosition.y);
 
-	focusedEntity = app->entityManager->CheckEntityOnClick(mouse);
+	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
+
 	if (focusedEntity != nullptr)
 	{
-
 		ret = true;
 	}
 
-	
 	return ret;
+}
+
+
+void ModulePlayer::Select()
+{
+	SDL_Point mousePosition;
+	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
+
+	int rectX;
+	int rectY;
+	int rectW;
+	int rectH;
+
+	if (mousePosition.x > clickPosition.x)
+	{
+		rectX = clickPosition.x;
+	}
+	else
+	{
+		rectX = mousePosition.x;
+	}
+
+	rectW = abs(mousePosition.x - clickPosition.x);
+
+	if (mousePosition.y > clickPosition.y)
+	{
+		rectY = clickPosition.y;
+	}
+	else
+	{
+		rectY = mousePosition.y;
+	}
+
+	rectH = abs(mousePosition.y - clickPosition.y);
+
+	app->entityManager->CheckEntityOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
+
 }

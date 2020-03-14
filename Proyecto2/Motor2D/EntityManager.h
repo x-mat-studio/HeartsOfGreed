@@ -45,11 +45,12 @@ public:
 
 	// Checks if there is an entity in the mouse position on Click
 	Entity* CheckEntityOnClick(SDL_Point mousePos);
-
+	void CheckEntityOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 private:
 
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
+	std::vector <Hero*> heroVector;
 
 };
 
