@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "App.h"
 
 Entity::Entity()
 {}
@@ -13,6 +14,19 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture) :
 	toDelete(false)
 {}
 
+
+Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback) :
+
+	position(position),
+	type(type),
+	texture(texture),
+	started(false),
+	toDelete(false)
+{
+	collider = new Collider(collRect, collType, callback);
+	app->coll->AddColliderEntity(collider);
+
+}
 
 Entity::~Entity()
 {

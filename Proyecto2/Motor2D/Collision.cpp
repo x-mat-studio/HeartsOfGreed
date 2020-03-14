@@ -12,9 +12,17 @@ ModuleCollision::ModuleCollision()
 		colliders[i] = nullptr;
 	}
 
-	matrix[COLLIDER_PLAYER][COLLIDER_FLOOR] = true;
-	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
-	matrix[COLLIDER_PLAYER][COLLIDER_ENEMY] = true;
+	matrix[COLLIDER_HERO][COLLIDER_WALL] = true;
+	matrix[COLLIDER_HERO][COLLIDER_HERO] = true;
+	matrix[COLLIDER_HERO][COLLIDER_ENEMY] = true;
+
+	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
+	matrix[COLLIDER_WALL][COLLIDER_HERO] = true;
+	matrix[COLLIDER_WALL][COLLIDER_ENEMY] = true;
+
+	matrix[COLLIDER_ENEMY][COLLIDER_WALL] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_WALL] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = true;
 }
 
 
@@ -49,7 +57,8 @@ bool ModuleCollision::Update(float dt)
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		// skip empty colliders
-		if (colliders[i] == nullptr) {
+		if (colliders[i] == nullptr)
+		{
 			continue;
 		}
 		c1 = colliders[i];
@@ -59,19 +68,19 @@ bool ModuleCollision::Update(float dt)
 		{
 			// skip empty colliders
 			if (colliders[k] == nullptr)
+			{
 				continue;
+			}
 
 			c2 = colliders[k];
 
 			if (c1->CheckCollision(c2->rect) == true)
 			{
-				// NEEDS ENTITY SYSTEM
-
-			/*	if (matrix[c1->type][c2->type] && c1->callback)
+				if (matrix[c1->type][c2->type] && c1->callback)
 					c1->callback->OnCollision(c1, c2);
 
 				if (matrix[c2->type][c1->type] && c2->callback)
-					c2->callback->OnCollision(c2, c1);  */
+					c2->callback->OnCollision(c2, c1);
 			}
 		}
 	}
@@ -103,11 +112,11 @@ void ModuleCollision::DebugDraw()
 			app->render->DrawQuad(colliders[i]->rect, 255, 255, 255, alpha);
 			break;
 
-		case COLLIDER_FLOOR: // blue
+		case COLLIDER_WALL: // blue
 			app->render->DrawQuad(colliders[i]->rect, 0, 0, 255, alpha);
 			break;
 
-		case COLLIDER_PLAYER: // green
+		case COLLIDER_HERO: // green
 			app->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha);
 			break;
 
@@ -142,7 +151,7 @@ bool ModuleCollision::CleanUp()
 }
 
 
-Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback)
+Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback)
 {
 	Collider* ret = nullptr;
 

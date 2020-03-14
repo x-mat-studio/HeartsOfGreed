@@ -33,10 +33,12 @@ public:
 	//// Called before quitting
 	bool CleanUp();
 
-	//// Load / Save
+	// Load / Save
 	bool Load(pugi::xml_node&) { return true; };
 	bool Save(pugi::xml_node&) { return true; };
 
+	// Manages Collision
+	void OnCollision(Collider*, Collider*);
 
 	//Adds an Entity
 	bool AddEntity(ENTITY_TYPE type, int x, int y);

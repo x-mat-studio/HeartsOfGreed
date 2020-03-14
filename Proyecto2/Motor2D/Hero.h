@@ -10,9 +10,10 @@
 class Hero : public Entity
 {
 public:
-	Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Animation& animation, int level, int hitPoints, int recoveryHitPointsRate,
-		int energyPoints, int recoveryEnergyRate, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision,
-		float attackCooldown, float coolDownHability1, float coolDownHability2, float coolDownHability3);
+	Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+		Animation& animation, int level, int hitPoints, int recoveryHitPointsRate,int energyPoints, int recoveryEnergyRate,
+		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision,float attackCooldown, float coolDownHability1,
+		float coolDownHability2, float coolDownHability3);
 
 	Hero(SDL_Point position, Hero* copy);
 	~Hero();

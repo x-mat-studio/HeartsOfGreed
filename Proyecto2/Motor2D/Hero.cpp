@@ -3,11 +3,12 @@
 #include "Textures.h"
 #include "Render.h"
 
-Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Animation& animation, int level, int hitPoints, 
-	int recoveryHitPointsRate, int energyPoints, int recoveryHitpointsRate, int attackDamage, int attackSpeed, int attackRange, 
-	int movementSpeed, int vision, float attackCooldown, float coolDownHability1, float coolDownHability2, float coolDownHability3) :
+Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+	Animation& animation, int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float coolDownHability1,
+	float coolDownHability2, float coolDownHability3) :
 
-	Entity(position, type, texture),
+	Entity(position, type, texture, collRect, collType, callback),
 	animation(animation),
 	level(level),
 	hitPoints(hitPoints),
