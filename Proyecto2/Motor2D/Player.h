@@ -33,7 +33,7 @@ public:
 
 private:
 	//Handles Player Input
-	bool Select();
+	void Select();
 	bool Click();
 	bool HandleInput();
 

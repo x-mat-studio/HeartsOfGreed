@@ -63,11 +63,12 @@ bool ModulePlayer::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	
 
 
 
-	return ret;
+
+	return true;
 }
 
 
@@ -76,11 +77,16 @@ bool ModulePlayer::HandleInput()
 {
 	bool ret = true;
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
-	ret = Click();
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) 
+	{
+		ret = Click();
+	}
+	
 	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
-	ret = Select();
-
+	{
+		Select();
+	}
+	
 	return ret;
 }
 
@@ -102,7 +108,7 @@ bool ModulePlayer::Click()
 }
 
 
-bool ModulePlayer::Select()
+void ModulePlayer::Select()
 {
 	SDL_Point mousePosition;
 	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
@@ -136,5 +142,4 @@ bool ModulePlayer::Select()
 
 	app->entityManager->CheckEntityOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
 
-	return true;
 }
