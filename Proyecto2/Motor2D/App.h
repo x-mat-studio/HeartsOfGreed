@@ -21,6 +21,8 @@ class ModuleTextures;
 class ModuleCollision;
 class ModuleMap;
 class ModuleTestScene;
+class ModulePlayer;
+class ModuleEntityManager;
 
 class App
 {
@@ -92,6 +94,8 @@ public:
 	ModuleMap*				map;
 	ModuleTestScene*		testScene;
 	ModuleCollision*		coll;
+	ModulePlayer*			player;
+	ModuleEntityManager*	entityManager;
 
 	uint32_t			frames;
 	

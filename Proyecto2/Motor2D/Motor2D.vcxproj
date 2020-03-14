@@ -84,6 +84,7 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Textures.h" />

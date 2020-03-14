@@ -49,6 +49,9 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -115,6 +118,9 @@
       <Filter>Desenvolupament  ========\Entitys</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
