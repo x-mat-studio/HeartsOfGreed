@@ -2,7 +2,7 @@
 #include "Textures.h"
 #include "Render.h"
 
-Hero::Hero(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* texture, Animation& animation, int level, int hitPoints, 
+Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Animation& animation, int level, int hitPoints, 
 	int recoveryHitPointsRate, int energyPoints, int recoveryHitpointsRate, int attackDamage, int attackSpeed, int attackRange, 
 	int movementSpeed, int vision, float attackCooldown, float coolDownHability1, float coolDownHability2, float coolDownHability3) :
 
@@ -25,7 +25,7 @@ Hero::Hero(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* texture, A
 {}
 
 
-Hero::Hero(std::vector<int>& position, Hero* copy) :
+Hero::Hero(SDL_Point position, Hero* copy) :
 
 	Entity(position, copy->type, copy->texture),
 	animation(copy->animation),

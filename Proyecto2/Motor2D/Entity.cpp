@@ -4,7 +4,7 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* texture) :
+Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture) :
 
 	position(position),
 	type(type),
@@ -16,8 +16,6 @@ Entity::Entity(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* textur
 
 Entity::~Entity()
 {
-	position.clear();
-
 	texture = nullptr;
 }
 
