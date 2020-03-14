@@ -58,3 +58,9 @@ Collider* Entity::GetCollider() const
 void Entity::Draw(float dt)
 {
 }
+
+
+SDL_Point Entity::GetPosition()
+{
+	return position;
+}
