@@ -46,6 +46,9 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Desenvolupament  ========\Entitys</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -110,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Desenvolupament  ========\Entitys</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
