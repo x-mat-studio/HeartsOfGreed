@@ -6,6 +6,10 @@
 #include "vector"
 #include "Entity.h"
 
+class Hero;
+
+class Entity;
+
 class ModuleEntityManager : public Module
 {
 public:
@@ -45,6 +49,7 @@ private:
 	//The list where we will store all the entities
 	std::vector <Entity> entityVector;
 
+	//Entity* test;
 
 };
 

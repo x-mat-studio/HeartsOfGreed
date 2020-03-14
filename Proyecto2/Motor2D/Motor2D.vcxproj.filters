@@ -52,6 +52,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Desenvolupament  ========\Entitys</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Desenvolupament  ========\Entitys</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

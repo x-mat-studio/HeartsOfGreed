@@ -28,12 +28,14 @@ public:
 	void OnCollision(Collider* collider);
 	Collider* GetCollider() const;
 
-	//virtual bool UseHability1();
-	//virtual bool UseHability2();
-	//virtual bool UseHability3();
+	virtual bool UseHability1();
+	virtual bool UseHability2();
+	virtual bool UseHability3();
 
 private:
 	void LevelUp();
+
+	void Draw(float dt);
 	
 	void Move();
 	bool CheckRange(int maxDistance);
