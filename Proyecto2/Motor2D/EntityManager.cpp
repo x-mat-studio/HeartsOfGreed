@@ -21,14 +21,7 @@ ModuleEntityManager::~ModuleEntityManager()
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
 	//BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
-	SDL_Point pos{ 100, 200 };
-
-	SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
-
-	Animation animation;
-	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-	Hero test (pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
-	entityVector.push_back(test);
+	
 	
 	bool ret = true;
 
@@ -40,6 +33,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 bool ModuleEntityManager::Start()
 {
 	bool ret = true;
+
+	SDL_Point pos{ 100, 200 };
+
+	SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
+
+	Animation animation;
+	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
+	Hero test(pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+	entityVector.push_back(test);
 
 	return ret;
 }
