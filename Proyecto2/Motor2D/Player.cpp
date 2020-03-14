@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Entity.h"
+#include "App.h"
+#include "Input.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr)
@@ -69,10 +71,24 @@ bool ModulePlayer::HandleInput()
 {
 	bool ret = true;
 
+
+	ret = Click();
+
 	ret = Select();
 
-	ret = Check();
 
 
 	return ret;
+}
+
+
+
+
+bool ModulePlayer::Click()
+{
+	SDL_Point mouse;
+	app->input->GetMousePosition(mouse.x, mouse.y);
+
+
+	return true;
 }

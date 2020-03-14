@@ -4,6 +4,8 @@
 #define __PLAYER_H__
 
 #include "SDL/include/SDL.h"
+#include "SDL/include/SDL_rect.h"
+#include "SDL/include/SDL_mouse.h"
 #include "Module.h"
 #include "vector"
 
@@ -32,7 +34,7 @@ public:
 private:
 	//Handles Player Input
 	bool Select() { return true; };
-	bool Check() { return true; };
+	bool Click();
 	bool HandleInput();
 
 private:

@@ -86,3 +86,54 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	}
 	return ret;
 }
+
+//// Called before quitting
+bool ModuleEntityManager::CleanUp()
+{
+	entityVector.clear();
+
+	return true;
+}
+
+
+//Add an entity
+bool ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
+{
+	bool ret = false;
+
+	switch (type)
+	{
+	case ENTITY_TYPE::PARTICLE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::EMITER:
+		ret = true;
+		break;
+	case ENTITY_TYPE::PARTICLE_SYSTEM:
+		ret = true;
+		break;
+	case ENTITY_TYPE::HERO_MELEE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		ret = true;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_TURRET:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_UPGRADE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_BASE:
+		ret = true;
+		break;
+	case ENTITY_TYPE::BLDG_BARRICADE:
+		ret = true;
+		break;
+	}
+
+	return ret;
+}

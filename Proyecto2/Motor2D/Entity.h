@@ -6,7 +6,6 @@
 #include "vector"
 #include "SDL/include/SDL_rect.h"
 
-
 struct Collider;
 struct SDL_Texture;
 
