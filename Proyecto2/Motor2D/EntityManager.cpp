@@ -43,6 +43,7 @@ bool ModuleEntityManager::Start()
 	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
 	Hero* test = new Hero(pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
 	entityVector.push_back(test);
+	heroVector.push_back(test);
 
 	return ret;
 }
@@ -151,20 +152,47 @@ bool ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 	return ret;
 }
 
+
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 {
 	int numEntities = entityVector.size();
 
+	Collider* col;
 	//Iterate though all the entitiies
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (entityVector[i]->GetCollider())
-		if (SDL_PointInRect(&mousePos, &entityVector[i]->GetCollider()->rect))
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr) 
 		{
-			return entityVector[i];
+			if (SDL_PointInRect(&mousePos, &col->rect))
+			{
+				return entityVector[i];
+			}
 		}
 	}
 
 	return nullptr;
+}
+
+
+void ModuleEntityManager::CheckEntityOnSelection(SDL_Rect &selection, std::vector<Hero*>* heroPlayerVector)
+{
+	int numEntities = heroVector.size();
+
+	Collider* col;
+	//Iterate though all the entitiies
+	for (int i = 0; i < numEntities; i++)
+	{
+		col = heroVector[i]->GetCollider();
+
+		if (col != nullptr)
+		{
+			if (col->CheckCollision(selection))
+			{
+				heroPlayerVector->push_back(heroVector[i]);
+			}
+		}
+	}
 }

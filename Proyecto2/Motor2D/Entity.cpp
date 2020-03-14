@@ -64,3 +64,9 @@ SDL_Point Entity::GetPosition()
 {
 	return position;
 }
+
+
+ENTITY_TYPE Entity::GetType()
+{
+	return type;
+}

@@ -33,13 +33,15 @@ public:
 
 private:
 	//Handles Player Input
-	bool Select() { return true; };
+	bool Select();
 	bool Click();
 	bool HandleInput();
 
 private:
 	std::vector <Hero*> heroesVector;
 	Entity* focusedEntity;
+
+	SDL_Point clickPosition;
 };
 
 
