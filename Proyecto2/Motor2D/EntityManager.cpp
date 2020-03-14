@@ -41,10 +41,8 @@ bool ModuleEntityManager::PreUpdate(float dt)
 
 	bool ret = true;
 
-
 	int numEntities = entityVector.size();
 
-	
 	//Iterate though all the entitie's PreUpdates
 	for (int i = 0; i < numEntities; i++)
 	{

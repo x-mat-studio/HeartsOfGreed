@@ -1,14 +1,14 @@
 #include "Entity.h"
 
-Entity::Entity() 
+Entity::Entity()
 {}
 
 
-Entity::Entity(std::vector<int>& position, ENTITY_TYPES type, SDL_Texture* texture, Animation& animation) :
+Entity::Entity(std::vector<int>& position, ENTITY_TYPE type, SDL_Texture* texture) :
+
 	position(position),
 	type(type),
 	texture(texture),
-	animation(animation),
 	started(false),
 	toDelete(false)
 {}
@@ -19,7 +19,6 @@ Entity::~Entity()
 	position.clear();
 
 	texture = nullptr;
-	animation = Animation();
 }
 
 
@@ -29,7 +28,7 @@ bool Entity::Start()
 }
 
 
-bool Entity::PreUpdate(float dt) 
+bool Entity::PreUpdate(float dt)
 {
 	return true;
 }
