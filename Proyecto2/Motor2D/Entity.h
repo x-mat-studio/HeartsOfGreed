@@ -20,8 +20,9 @@ enum class ENTITY_TYPE
 	HERO_RANGED,
 	HERO_GATHERER,
 	ENEMY,
+	BASE,
 	BLDG_TURRET,
-	BLDG_UPGRADE,
+	BLDG_UPGRADE_CENTER,
 	BLDG_BASE,
 	BLDG_BARRICADE,
 
@@ -48,12 +49,15 @@ public:
 	SDL_Point GetPosition();
 	ENTITY_TYPE GetType();
 
+	void SetToDelete(bool toDelete);
+
 protected:
 	virtual void Draw(float dt);
 
 public:
 	bool started;
 	bool toDelete;
+	int vectorPosition;
 
 protected:
 	SDL_Point position;

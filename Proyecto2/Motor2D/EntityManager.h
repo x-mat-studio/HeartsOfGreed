@@ -41,7 +41,10 @@ public:
 	void OnCollision(Collider*, Collider*);
 
 	//Adds an Entity
-	bool AddEntity(ENTITY_TYPE type, int x, int y);
+	Entity* AddEntity(ENTITY_TYPE type, int x, int y);
+
+	//Deletes an Entity
+	bool DeleteEntity(Entity* toDelete);
 
 	// Checks if there is an entity in the mouse position on Click
 	Entity* CheckEntityOnClick(SDL_Point mousePos);

@@ -33,17 +33,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 bool ModuleEntityManager::Start()
 {
 	bool ret = true;
-
 	SDL_Point pos{ 100, 200 };
 
-	SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
 
-	Animation animation;
-	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-	Hero* test = new Hero(pos, ENTITY_TYPE::HERO_MELEE, texture, {0,0,100,100}, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
-	//Collider* heroColl = new Collider({ 0,0,50,50 }, COLLIDER_HERO, test);
-	entityVector.push_back(test);
-	heroVector.push_back(test);
+	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+
 
 	return ret;
 }
@@ -73,7 +67,6 @@ bool ModuleEntityManager::Update(float dt)
 
 	bool ret = true;
 
-
 	int numEntities = entityVector.size();
 
 	//Iterate though all the entitie's PreUpdates
@@ -98,12 +91,23 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	{
 		entityVector[i]->PostUpdate(dt);
 	}
+
 	return ret;
 }
 
 //// Called before quitting
 bool ModuleEntityManager::CleanUp()
 {
+	int numEntities = entityVector.size();
+
+	//Iterate though all the entitie's PreUpdates
+	for (int i = 0; i < numEntities; i++)
+	{
+		RELEASE(entityVector[i]);
+		entityVector[i] = nullptr;
+		entityVector.erase(entityVector.begin() + i);
+	}
+
 	entityVector.clear();
 
 	return true;
@@ -117,44 +121,50 @@ void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 	}
 }
 
-
 //Add an entity
-bool ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
+Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 {
-	bool ret = false;
+	Entity* ret = nullptr;
 
 	switch (type)
 	{
 	case ENTITY_TYPE::PARTICLE:
-		ret = true;
 		break;
 	case ENTITY_TYPE::EMITER:
-		ret = true;
 		break;
 	case ENTITY_TYPE::PARTICLE_SYSTEM:
-		ret = true;
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
-		ret = true;
+	{
+		//Test Things :)
+		Animation animation;
+		animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
+		SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
+
+
+		Hero* tmpHero = new Hero(SDL_Point{ x,y }, ENTITY_TYPE::HERO_MELEE, texture, { 0,0,100,100 }, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+		heroVector.push_back(tmpHero);
+		ret = tmpHero;
+	}
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
-		ret = true;
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
-		ret = true;
 		break;
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = true;
 		break;
-	case ENTITY_TYPE::BLDG_UPGRADE:
-		ret = true;
+	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 		break;
 	case ENTITY_TYPE::BLDG_BASE:
-		ret = true;
 		break;
 	case ENTITY_TYPE::BLDG_BARRICADE:
-		ret = true;
 		break;
+	}
+
+	if (ret != nullptr)
+	{
+		ret->vectorPosition = entityVector.size();
+		entityVector.push_back(ret);
 	}
 
 	return ret;
@@ -203,4 +213,16 @@ void ModuleEntityManager::CheckEntityOnSelection(SDL_Rect &selection, std::vecto
 			}
 		}
 	}
+}
+
+bool ModuleEntityManager::DeleteEntity(Entity* toDelete)
+{
+	if (toDelete == nullptr || toDelete->vectorPosition == NULL)
+		return false;
+
+	int vectorIndex = toDelete->vectorPosition;
+
+	RELEASE(entityVector[vectorIndex]);
+	entityVector[vectorIndex] = nullptr;
+	entityVector.erase(entityVector.begin() + vectorIndex);
 }

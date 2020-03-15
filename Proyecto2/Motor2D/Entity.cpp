@@ -11,7 +11,8 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture) :
 	type(type),
 	texture(texture),
 	started(false),
-	toDelete(false)
+	toDelete(false),
+	vectorPosition(NULL)
 {}
 
 
@@ -31,6 +32,8 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_R
 Entity::~Entity()
 {
 	texture = nullptr;
+	collider->to_delete = true;
+	collider = nullptr;
 }
 
 
@@ -83,4 +86,12 @@ SDL_Point Entity::GetPosition()
 ENTITY_TYPE Entity::GetType()
 {
 	return type;
+}
+
+void Entity::SetToDelete(bool toDel)
+{
+	if (toDel != toDelete)
+	{
+		toDelete = !toDelete;
+	}
 }

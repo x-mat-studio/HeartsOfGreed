@@ -2,6 +2,7 @@
 #include "App.h"
 #include "Textures.h"
 #include "Render.h"
+#include "EntityManager.h"
 
 Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
 	Animation& animation, int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
