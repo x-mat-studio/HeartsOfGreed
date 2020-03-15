@@ -5,6 +5,7 @@
 
 #include "vector"
 #include "SDL/include/SDL_rect.h"
+#include "Collision.h"
 
 struct Collider;
 struct SDL_Texture;
@@ -33,6 +34,7 @@ public:
 
 	Entity();
 	Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture);
+	Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback);
 	virtual ~Entity();
 
 	virtual bool Start();

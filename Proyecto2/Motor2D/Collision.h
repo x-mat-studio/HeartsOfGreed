@@ -12,8 +12,8 @@ enum COLLIDER_TYPE
 {
 	COLLIDER_NONE = -1,
 
-	COLLIDER_FLOOR,
-	COLLIDER_PLAYER,
+	COLLIDER_WALL,
+	COLLIDER_HERO,
 	COLLIDER_ENEMY,
 	COLLIDER_DEATH,
 	COLLIDER_MAX,
@@ -25,14 +25,15 @@ struct Collider
 	SDL_Rect		rect;
 	bool			to_delete = false;
 	COLLIDER_TYPE	type;
-	Entity*			callback = nullptr;
+	Module*			callback = nullptr;
+	Entity*			entCallback = nullptr;
 
-
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Entity* callback = nullptr) :
+	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Module* callback = nullptr, Entity* entCallback = nullptr) :
 		rect(rectangle),
 		type(type),
-		callback(callback)
-	{} 
+		callback(callback),
+		entCallback(entCallback)
+	{}
 
 
 	void SetPos(int x, int y)
@@ -65,7 +66,7 @@ public:
 	bool PostUpdate(float dt);
 	bool CleanUp();
 
-	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Entity* callback = nullptr);
+	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = nullptr);
 	void AddColliderEntity(Collider* collider);
 	void DebugDraw();
 

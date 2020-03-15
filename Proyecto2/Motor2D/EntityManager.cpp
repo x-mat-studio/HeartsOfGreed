@@ -23,7 +23,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
 	
-	
 	bool ret = true;
 
 	return ret;
@@ -41,7 +40,8 @@ bool ModuleEntityManager::Start()
 
 	Animation animation;
 	animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-	Hero* test = new Hero(pos, ENTITY_TYPE::HERO_MELEE, texture, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+	Hero* test = new Hero(pos, ENTITY_TYPE::HERO_MELEE, texture, {0,0,100,100}, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+	//Collider* heroColl = new Collider({ 0,0,50,50 }, COLLIDER_HERO, test);
 	entityVector.push_back(test);
 	heroVector.push_back(test);
 
@@ -107,6 +107,14 @@ bool ModuleEntityManager::CleanUp()
 	entityVector.clear();
 
 	return true;
+}
+
+void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c1->entCallback != nullptr)
+	{
+		c1->entCallback->OnCollision(c2);
+	}
 }
 
 

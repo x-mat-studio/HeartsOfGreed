@@ -64,10 +64,6 @@ bool ModulePlayer::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
 
-	
-
-
-
 
 	return true;
 }
