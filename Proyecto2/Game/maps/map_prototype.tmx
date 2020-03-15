@@ -3,16 +3,13 @@
  <tileset firstgid="1" name="floors1" tilewidth="64" tileheight="32" tilecount="32" columns="4">
   <image source="floors1.png" width="258" height="257"/>
  </tileset>
- <tileset firstgid="33" name="edificio1" tilewidth="64" tileheight="32" tilecount="121" columns="11">
+ <tileset firstgid="33" name="Building01" tilewidth="64" tileheight="32" tilecount="121" columns="11">
   <image source="building01.png" width="704" height="353"/>
  </tileset>
- <tileset firstgid="154" name="building03" tilewidth="64" tileheight="32" tilecount="0" columns="6">
-  <image source="../building03.png" width="400" height="391"/>
- </tileset>
- <tileset firstgid="154" name="building01" tilewidth="64" tileheight="32" tilecount="91" columns="7">
+ <tileset firstgid="154" name="Base01" tilewidth="64" tileheight="32" tilecount="91" columns="7">
   <image source="base01.png" width="450" height="419"/>
  </tileset>
- <tileset firstgid="245" name="building02" tilewidth="64" tileheight="32" tilecount="105" columns="7">
+ <tileset firstgid="245" name="Base02" tilewidth="64" tileheight="32" tilecount="105" columns="7">
   <image source="base02.png" width="500" height="488"/>
  </tileset>
  <tileset firstgid="350" name="assets" tilewidth="64" tileheight="32" tilecount="40" columns="4">
