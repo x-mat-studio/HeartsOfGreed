@@ -37,7 +37,7 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 
 
 	// load support 
-	int flags = MIX_INIT_MP3;
+	int flags = MIX_INIT_OGG;
 	int init = Mix_Init(flags);
 
 
