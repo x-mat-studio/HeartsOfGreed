@@ -264,6 +264,8 @@ HERO_STATES Hero::process_fsm(std::vector<HERO_INPUTS>& inputs) {
 	while (inputs.empty() == false)
 	{
 		lastInput = inputs.back();
+		inputs.pop_back();
+
 		switch (state)
 		{
 

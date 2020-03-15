@@ -82,7 +82,7 @@ bool ModulePlayer::HandleInput()
 		Click();
 	}
 	
-	else if (app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_REPEAT)
+	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 	{
 		Select();
 	}
@@ -111,12 +111,12 @@ bool ModulePlayer::Click()
 void ModulePlayer::Select()
 {
 	//reset the vector
-	int numHeroes = heroesVector.size();
+/*	int numHeroes = heroesVector.size();
 
 	for (int i = 0; i < numHeroes; i++)
 	{
 		heroesVector[i] = nullptr;
-	}
+	}*/
 
 	SDL_Point mousePosition;
 	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
@@ -149,11 +149,14 @@ void ModulePlayer::Select()
 	rectH = abs(mousePosition.y - clickPosition.y);
 
 	app->entityManager->CheckEntityOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
+
+	heroesVector;
 }
 
 
 void ModulePlayer::RightClick()
 {
+	
 	if (heroesVector.empty())
 		return;
 	

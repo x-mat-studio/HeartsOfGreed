@@ -88,7 +88,7 @@ bool  ModuleTestScene::Update(float dt)
 	app->input->GetScrollWheelMotion(scrollWheelX, scrollWheelY);
 
 
-	if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
+	/*if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
 	{
 		prevMousePosX = mousePosX;
 		prevmousePosY = mousePosY;
@@ -114,7 +114,7 @@ bool  ModuleTestScene::Update(float dt)
 	{
 		//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
 		Zoom(0.25f * scrollWheelY, mouseRawX, mouseRawY, scale);
-	}
+	}*/
 
 	
 
