@@ -32,7 +32,7 @@ bool ModuleTestScene::Start()
 	//app->map->LoadNew("map_prototype.tmx");
 	app->map->LoadNew("map_prototype.tmx");
 	
-	app->audio->PlayMusic("audio/music/TheBrotherhoodofSteel.mp3", 10.0F, 50);
+	app->audio->PlayMusic("audio/music/Raiders.ogg", 0.0F, 50);
 	
 	return true;
 }
@@ -41,7 +41,6 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
-
 	return true;
 }
 
