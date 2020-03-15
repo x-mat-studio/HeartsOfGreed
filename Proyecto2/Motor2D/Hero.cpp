@@ -24,7 +24,8 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect 
 	attackCooldown(attackCooldown),
 	coolDownHability1(coolDownHability1),
 	coolDownHability2(coolDownHability2),
-	coolDownHability3(coolDownHability3)
+	coolDownHability3(coolDownHability3),
+	skillFromAttacking(false)
 {}
 
 
@@ -45,7 +46,8 @@ Hero::Hero(SDL_Point position, Hero* copy) :
 	attackCooldown(copy->attackCooldown),
 	coolDownHability1(copy->coolDownHability1),
 	coolDownHability2(copy->coolDownHability2),
-	coolDownHability3(copy->coolDownHability3)
+	coolDownHability3(copy->coolDownHability3),
+	skillFromAttacking(false)
 {}
 
 
@@ -65,12 +67,57 @@ bool Hero::Start()
 
 bool Hero::PreUpdate(float dt)
 {
+
 	return true;
 }
 
 
 bool Hero::Update(float dt)
 {
+	HERO_STATES current_state = HERO_STATES::UNKNOWN;
+	//current_animation = &idle;
+
+	//check inputs to traverse state matrix
+	external_input(inputs, dt);
+	internal_input(inputs, dt);
+	state = process_fsm(inputs);
+
+	if (state != current_state)
+	{
+		switch (state)
+		{
+		case HERO_STATES::IDLE:
+			
+			break;
+
+		case HERO_STATES::MOVE:
+			Move();
+			break;
+
+		case HERO_STATES::ATTACK:
+			Attack();
+			break;
+
+		case HERO_STATES::SKILL1:
+			break;
+
+		case HERO_STATES::SKILL2:
+			break;
+
+		case HERO_STATES::SKILL3:
+			break;
+
+		case HERO_STATES::REPAIR:
+			break;
+
+		case HERO_STATES::DEAD:
+			Die();
+			break;
+
+
+		}
+	}
+	current_state = state;
 
 	return true;
 }
@@ -86,6 +133,9 @@ bool Hero::PostUpdate(float dt)
 bool Hero::MoveTo(int x, int y)
 {
 	//do pathfinding, if it works return true
+
+	inputs.push_back(HERO_INPUTS::IN_MOVE);
+
 	return true;
 }
 
@@ -137,6 +187,7 @@ void Hero::Draw(float dt)
 void Hero::Move()
 {
 	//Put logic to move the unit to the desired destination
+	Die();
 }
 
 
@@ -187,4 +238,183 @@ bool Hero::UseHability2()
 bool Hero::UseHability3()
 {
 	return true;
+}
+
+
+//Capture all the inputs, dont exactly know how, but ill figure something out
+bool Hero::external_input(std::vector<HERO_INPUTS>& inputs, float dt) 
+{
+
+	
+	return true;
+}
+
+
+//Here goes all timers
+void Hero::internal_input(std::vector<HERO_INPUTS>& inputs, float dt)
+{
+
+
+}
+
+
+HERO_STATES Hero::process_fsm(std::vector<HERO_INPUTS>& inputs) {
+	static HERO_STATES state = HERO_STATES::IDLE;
+	HERO_INPUTS lastInput;
+
+	while (inputs.empty() == false)
+	{
+		lastInput = inputs.back();
+		inputs.pop_back();
+
+		switch (state)
+		{
+
+		case HERO_STATES::IDLE:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
+
+			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
+
+			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::SKILL1;	break;
+			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::SKILL2;	break;
+			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::SKILL3;	break;
+
+			case HERO_INPUTS::IN_REPAIR: state = HERO_STATES::REPAIR;	break;
+
+			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;		break;
+			}
+		}	break;
+
+
+		case HERO_STATES::MOVE:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_IDLE:   state = HERO_STATES::MOVE;		break;
+
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
+
+			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
+
+			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::SKILL1;	break;
+			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::SKILL2;	break;
+			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::SKILL3;	break;
+
+			case HERO_INPUTS::IN_REPAIR: state = HERO_STATES::REPAIR;	break;
+
+			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;		break;
+			}
+		}	break;
+		
+
+		case HERO_STATES::ATTACK:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
+
+			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
+
+			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::SKILL1; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::SKILL2; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::SKILL3; skillFromAttacking = true; break;
+
+			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
+			}
+		}	break;
+		
+
+		case HERO_STATES::SKILL1:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_SKILL_FINISHED: 
+			{
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+				
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+																			break;
+			}
+			
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+		}	break;
+
+
+		case HERO_STATES::SKILL2:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_SKILL_FINISHED:
+			{
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+																			break;
+			}
+
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+		}	break;
+
+
+		case HERO_STATES::SKILL3:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_SKILL_FINISHED:
+			{
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+																			break;
+			}
+
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+		}	break;
+
+
+		case HERO_STATES::REPAIR:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_ATTACKED: state = HERO_STATES::IDLE; break;
+
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+		}	break;
+
+
+		case HERO_STATES::DEAD:
+		{
+		}	break;
+		}
+
+	}
+
+	return state;
 }

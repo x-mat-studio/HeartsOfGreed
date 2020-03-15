@@ -199,6 +199,8 @@ void ModuleEntityManager::CheckEntityOnSelection(SDL_Rect &selection, std::vecto
 {
 	int numEntities = heroVector.size();
 
+	heroPlayerVector->clear();
+
 	Collider* col;
 	//Iterate though all the entitiies
 	for (int i = 0; i < numEntities; i++)

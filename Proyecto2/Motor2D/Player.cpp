@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Entity.h"
+#include "Hero.h"
 #include "App.h"
 #include "Input.h"
 #include "EntityManager.h"
@@ -71,11 +72,14 @@ bool ModulePlayer::PostUpdate(float dt)
 //Handles Player Input
 bool ModulePlayer::HandleInput()
 {
-	bool ret = true;
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN)
+	{
+		RightClick();
+	}
 
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) 
 	{
-		ret = Click();
+		Click();
 	}
 	
 	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
@@ -83,13 +87,13 @@ bool ModulePlayer::HandleInput()
 		Select();
 	}
 	
-	return ret;
+	return true;
 }
 
 
 bool ModulePlayer::Click()
 {
-	bool ret = false;
+	focusedEntity = nullptr;
 
 	app->input->GetMousePosition(clickPosition.x, clickPosition.y);
 
@@ -97,15 +101,23 @@ bool ModulePlayer::Click()
 
 	if (focusedEntity != nullptr)
 	{
-		ret = true;
+		return true;
 	}
 
-	return ret;
+	return false;
 }
 
 
 void ModulePlayer::Select()
 {
+	//reset the vector
+/*	int numHeroes = heroesVector.size();
+
+	for (int i = 0; i < numHeroes; i++)
+	{
+		heroesVector[i] = nullptr;
+	}*/
+
 	SDL_Point mousePosition;
 	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
 
@@ -138,4 +150,34 @@ void ModulePlayer::Select()
 
 	app->entityManager->CheckEntityOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
 
+	heroesVector;
+}
+
+
+void ModulePlayer::RightClick()
+{
+	
+	if (heroesVector.empty())
+		return;
+	
+
+	if (Click())
+	{
+		int numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->LockOn(focusedEntity);
+		}
+	}
+
+	else
+	{
+		int numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y);
+		}
+	}
 }
