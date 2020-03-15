@@ -26,13 +26,14 @@ struct Collider
 	bool			to_delete = false;
 	COLLIDER_TYPE	type;
 	Module*			callback = nullptr;
+	Entity*			entCallback = nullptr;
 
-
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Module* callback = nullptr) :
+	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Module* callback = nullptr, Entity* entCallback = nullptr) :
 		rect(rectangle),
 		type(type),
-		callback(callback)
-	{} 
+		callback(callback),
+		entCallback(entCallback)
+	{}
 
 
 	void SetPos(int x, int y)

@@ -111,19 +111,9 @@ bool ModuleEntityManager::CleanUp()
 
 void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 {
-	int numEntities = entityVector.size();
-
-	for (int i = 0; i < numEntities; i++)
+	if (c1->entCallback != nullptr)
 	{
-		Collider* col = entityVector[i]->GetCollider();
-		if (col != nullptr)
-		{
-			if (col == c1)
-			{
-				entityVector[i]->OnCollision(c2);
-				break;
-			}
-		}
+		c1->entCallback->OnCollision(c2);
 	}
 }
 
