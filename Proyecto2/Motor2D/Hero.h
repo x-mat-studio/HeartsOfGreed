@@ -6,6 +6,44 @@
 #include "Entity.h"
 #include "Animation.h"
 
+enum class HERO_STATES
+{
+	UNKNOWN,
+	IDLE,
+
+	MOVE,
+	ATTACK,
+	SKILL1,
+	SKILL2,
+	SKILL3,
+
+	REPAIR,
+
+	DEAD,
+
+	MAX
+};
+
+
+enum HERO_INPUTS
+{
+	IN_IDLE,
+	IN_MOVE,
+	IN_REPAIR,
+	IN_ATTACK,
+	IN_SKILL1,
+	IN_SKILL2,
+	IN_SKILL3,
+	
+	IN_SKILL_FINISHED,
+
+	IN_OUT_OF_RANGE,
+	
+	IN_OBJECTIVE_DONE,
+
+	IN_ATTACKED,
+	IN_DEAD
+};
 
 class Hero : public Entity
 {
@@ -44,6 +82,10 @@ private:
 	void RecoverHealth();
 	void RecoverEnergy();
 
+	void internal_input(std::vector<HERO_INPUTS>& inputs, float dt);
+	bool external_input(std::vector<HERO_INPUTS>& inputs, float dt);
+	HERO_STATES process_fsm(std::vector<HERO_INPUTS>& inputs);
+
 private:
 	int level;
 
@@ -69,6 +111,9 @@ private:
 
 	Animation animation;
 
+	bool skillFromAttacking;
+	HERO_STATES state;
+	std::vector<HERO_INPUTS> inputs;
 };
 
 

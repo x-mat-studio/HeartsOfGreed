@@ -35,6 +35,7 @@ private:
 	//Handles Player Input
 	void Select();
 	bool Click();
+	void RightClick();
 	bool HandleInput();
 
 private:
