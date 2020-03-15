@@ -22,7 +22,7 @@ public:
 
 	Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
 		Animation& animation, int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange,
-		int movementSpeed, float attackCooldown);
+		int movementSpeed, int xpOnDeath, float attackCooldown);
 
 	Enemy(SDL_Point position, Enemy* copy);
 
@@ -70,7 +70,7 @@ private:
 	int attackRange;
 
 	int movementSpeed;
-	int vision;
+	int xpOnDeath;
 
 	float attackCooldown;
 
