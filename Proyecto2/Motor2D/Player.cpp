@@ -3,6 +3,7 @@
 #include "Hero.h"
 #include "App.h"
 #include "Input.h"
+#include "Render.h"
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -110,13 +111,6 @@ bool ModulePlayer::Click()
 
 void ModulePlayer::Select()
 {
-	//reset the vector
-/*	int numHeroes = heroesVector.size();
-
-	for (int i = 0; i < numHeroes; i++)
-	{
-		heroesVector[i] = nullptr;
-	}*/
 
 	SDL_Point mousePosition;
 	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
@@ -128,27 +122,27 @@ void ModulePlayer::Select()
 
 	if (mousePosition.x > clickPosition.x)
 	{
-		rectX = clickPosition.x;
+		rectX = clickPosition.x + app->render->currentCamX;
 	}
 	else
 	{
-		rectX = mousePosition.x;
+		rectX = mousePosition.x + app->render->currentCamX;
 	}
 
 	rectW = abs(mousePosition.x - clickPosition.x);
 
 	if (mousePosition.y > clickPosition.y)
 	{
-		rectY = clickPosition.y;
+		rectY = clickPosition.y + app->render->currentCamY;
 	}
 	else
 	{
-		rectY = mousePosition.y;
+		rectY = mousePosition.y + app->render->currentCamY;
 	}
 
 	rectH = abs(mousePosition.y - clickPosition.y);
 
-	app->entityManager->CheckEntityOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
+	app->entityManager->CheckHeroOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
 
 	heroesVector;
 }

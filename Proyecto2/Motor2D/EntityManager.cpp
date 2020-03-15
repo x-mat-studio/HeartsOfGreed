@@ -35,9 +35,7 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 	SDL_Point pos{ 100, 200 };
 
-
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-
 
 	return ret;
 }
@@ -51,7 +49,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 
 	int numEntities = entityVector.size();
 
-	//Iterate though all the entitie's PreUpdates
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PreUpdate(dt);
@@ -69,7 +67,7 @@ bool ModuleEntityManager::Update(float dt)
 
 	int numEntities = entityVector.size();
 
-	//Iterate though all the entitie's PreUpdates
+	
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->Update(dt);
@@ -86,11 +84,13 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 	int numEntities = entityVector.size();
 
-	//Iterate though all the entitie's PreUpdates
+	
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PostUpdate(dt);
 	}
+
+	RemoveDeletedEntitys();
 
 	return ret;
 }
@@ -100,7 +100,7 @@ bool ModuleEntityManager::CleanUp()
 {
 	int numEntities = entityVector.size();
 
-	//Iterate though all the entitie's PreUpdates
+	
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
@@ -174,11 +174,11 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 {
-	int numEntities = entityVector.size();
+	int numEntitys = entityVector.size();
 
 	Collider* col;
-	//Iterate though all the entitiies
-	for (int i = 0; i < numEntities; i++)
+	
+	for (int i = 0; i < numEntitys; i++)
 	{
 		col = entityVector[i]->GetCollider();
 
@@ -195,15 +195,15 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 }
 
 
-void ModuleEntityManager::CheckEntityOnSelection(SDL_Rect &selection, std::vector<Hero*>* heroPlayerVector)
+void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*>* heroPlayerVector)
 {
-	int numEntities = heroVector.size();
+	int numHeroes = heroVector.size();
 
 	heroPlayerVector->clear();
 
 	Collider* col;
-	//Iterate though all the entitiies
-	for (int i = 0; i < numEntities; i++)
+	
+	for (int i = 0; i < numHeroes; i++)
 	{
 		col = heroVector[i]->GetCollider();
 
@@ -217,6 +217,23 @@ void ModuleEntityManager::CheckEntityOnSelection(SDL_Rect &selection, std::vecto
 	}
 }
 
+
+bool ModuleEntityManager::CheckEntityExists(Entity* entity)
+{
+	int numEntitys = entityVector.size();
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (entityVector[i] == entity)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 bool ModuleEntityManager::DeleteEntity(Entity* toDelete)
 {
 	if (toDelete == nullptr || toDelete->vectorPosition == NULL)
@@ -227,4 +244,20 @@ bool ModuleEntityManager::DeleteEntity(Entity* toDelete)
 	RELEASE(entityVector[vectorIndex]);
 	entityVector[vectorIndex] = nullptr;
 	entityVector.erase(entityVector.begin() + vectorIndex);
+}
+
+
+void ModuleEntityManager::RemoveDeletedEntitys()
+{
+	int numEntitys = entityVector.size();
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (entityVector[i]->toDelete == true)
+		{
+			delete entityVector[i];
+			entityVector.erase(entityVector.begin() + i);
+		}
+	}
+
 }

@@ -37,13 +37,6 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	// Called before quitting
-	bool CleanUp();
-
-	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
-	//Called to save the game
-	bool Save(pugi::xml_node&) const { return true; }
 
 	void OnCollision(Collider* collider);
 

@@ -194,6 +194,9 @@ void Hero::Move()
 bool Hero::CheckRange(int maxDistance) 
 {
 	//check if the maxDistance is equal or bigger than the actual distance between the objective and the unit 
+
+
+
 	return true;
 }
 
@@ -201,6 +204,7 @@ bool Hero::CheckRange(int maxDistance)
 void Hero::Attack()
 {
 	//i have to think about this one
+
 
 }
 

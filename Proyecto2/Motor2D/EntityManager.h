@@ -15,40 +15,39 @@ class ModuleEntityManager : public Module
 public:
 
 	ModuleEntityManager();
-
-	// Destructor
 	virtual ~ModuleEntityManager();
 
-	// Called before render is available
-	bool Awake(pugi::xml_node&);
 
-	// Called before the first frame
+	bool Awake(pugi::xml_node&);
 	bool Start();
 
-	// Called each loop iteration
+
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	//// Called before quitting
+	
 	bool CleanUp();
 
-	// Load / Save
+	
 	bool Load(pugi::xml_node&) { return true; };
 	bool Save(pugi::xml_node&) { return true; };
 
-	// Manages Collision
+
 	void OnCollision(Collider*, Collider*);
 
-	//Adds an Entity
+
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y);
 
-	//Deletes an Entity
-	bool DeleteEntity(Entity* toDelete);
 
-	// Checks if there is an entity in the mouse position on Click
+	bool DeleteEntity(Entity* toDelete);
+	void RemoveDeletedEntitys();
+
+
 	Entity* CheckEntityOnClick(SDL_Point mousePos);
-	void CheckEntityOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
+	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
+	bool CheckEntityExists(Entity* entity);
+
 private:
 
 	//The list where we will store all the entities
