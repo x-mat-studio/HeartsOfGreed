@@ -5,26 +5,28 @@
 #include "EntityManager.h"
 
 Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
-	Animation& animation1, Animation& animation2, Animation& animation3, Animation& animation4,
-	Animation& animation5, Animation& animation6, Animation& animation7, Animation& animation8,
-	Animation& animation9, Animation& animation10, Animation& animation11, Animation& animation12,
+	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
+	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
+	Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float coolDownHability1,
-	float coolDownHability2, float coolDownHability3) :
+	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
+	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
 	Entity(position, type, collRect, collType, callback),
-	walkLeft(animation1),
-	walkLeftUp(animation2),
-	walkLeftDown(animation3),
-	walkRightUp(animation4),
-	walkRightDown(animation5),
-	walkRight(animation6),
-	idleRight(animation7),
-	idleRightDown(animation8),
-	idleRightUp(animation9), 
-	idleLeft(animation10),
-	idleLeftUp(animation11),
-	idleLeftDown(animation12),	
+
+	walkLeft(walkLeft),
+	walkLeftUp(walkLeftUp),
+	walkLeftDown(walkLeftDown),
+	walkRightUp(walkRightUp),
+	walkRightDown(walkRightDown),
+	walkRight(walkRight),
+	idleRight(idleRight),
+	idleRightDown(idleRightDown),
+	idleRightUp(idleRightUp),
+	idleLeft(idleLeft),
+	idleLeftUp(idleLeftUp),
+	idleLeftDown(idleLeftDown),
+
 	level(level),
 	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
@@ -35,11 +37,29 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYP
 	attackRange(attackRange),
 	movementSpeed(movementSpeed),
 	vision(vision),
+
 	attackCooldown(attackCooldown),
-	cooldownHability1(cooldownHability1),
-	cooldownHability2(cooldownHability2),
-	cooldownHability3(cooldownHability3),
-	skillFromAttacking(false)
+	skill1ExecutionTime(skill1ExecutionTime),
+	skill2ExecutionTime(skill2ExecutionTime),
+	skill3ExecutionTime(skill3ExecutionTime),
+	skill1RecoverTime(skill1RecoverTime),
+	skill2RecoverTime(skill2RecoverTime),
+	skill3RecoverTime(skill3RecoverTime),
+
+	cooldownHability1(0),
+	cooldownHability2(0),
+	cooldownHability3(0),
+	skill1TimePassed(0),
+	skill2TimePassed(0),
+	skill3TimePassed(0),
+
+	skill1Charged(true),
+	skill2Charged(true),
+	skill3Charged(true),
+	skillFromAttacking(false),
+	selected(false),
+
+	objective(nullptr)
 {}
 
 

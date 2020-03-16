@@ -23,18 +23,18 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-	bool ret = true;
+	
 
-	return ret;
+	return true;
 }
 
 
 // Called before the first frame
 bool ModulePlayer::Start()
 {
-	bool ret = true;
+	
 
-	return ret;
+	return true;
 }
 
 
@@ -43,11 +43,11 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	
 
 	HandleInput();
 
-	return ret;
+	return true;
 }
 
 
@@ -56,9 +56,9 @@ bool ModulePlayer::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	
 
-	return ret;
+	return true;
 }
 
 // Called each loop iteration
@@ -152,7 +152,6 @@ void ModulePlayer::Select()
 
 	app->entityManager->CheckHeroOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
 
-	heroesVector;
 }
 
 

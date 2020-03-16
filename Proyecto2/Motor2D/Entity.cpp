@@ -23,7 +23,7 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER
 	toDelete(false)
 {
 	collider = new Collider(collRect, collType, callback, this);
-	app->coll->AddColliderEntity(collider);
+	
 
 }
 
@@ -38,6 +38,9 @@ Entity::~Entity()
 bool Entity::Start(SDL_Texture* texture)
 {
 	this->texture = texture;
+
+	app->coll->AddColliderEntity(collider);
+
 	started = true;
 
 	return true;

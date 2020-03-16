@@ -39,13 +39,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeft = idleLeft.PushAnimation(config.child("suitmale"), "idle_left");
 	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
-	
+
+
 	tmpHero = new Hero(SDL_Point{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, { 0,0,100,100 }, COLLIDER_HERO, this, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-	
+
 	return ret;
 }
 
@@ -54,8 +55,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 bool ModuleEntityManager::Start()
 {
 	bool ret = true;
-	
-	texture = app->tex->Load("spritesheets/characters/suitmale.png");	
+
+	texture = app->tex->Load("spritesheets/characters/suitmale.png");
 
 	return ret;
 }
@@ -65,18 +66,16 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	CheckIfStarted();
 
 	int numEntities = entityVector.size();
-
-	CheckIfStarted();
 
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PreUpdate(dt);
 	}
 
-	return ret;
+	return true;
 }
 
 void ModuleEntityManager::CheckIfStarted() {
@@ -85,7 +84,7 @@ void ModuleEntityManager::CheckIfStarted() {
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		if(entityVector[i]->started==false)
+		if (entityVector[i]->started == false)
 			entityVector[i]->Start(texture);
 	}
 }
@@ -96,11 +95,11 @@ bool ModuleEntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	bool ret = true;
+		bool ret = true;
 
 	int numEntities = entityVector.size();
 
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->Update(dt);
@@ -113,11 +112,11 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	bool ret = true;
+		bool ret = true;
 
 	int numEntities = entityVector.size();
 
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PostUpdate(dt);
@@ -133,7 +132,7 @@ bool ModuleEntityManager::CleanUp()
 {
 	int numEntities = entityVector.size();
 
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
@@ -175,7 +174,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		heroVector.push_back(tmpHero);
 		ret = tmpHero;*/
 	}
-		break;
+	break;
 	case ENTITY_TYPE::HERO_RANGED:
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
@@ -206,12 +205,12 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 	int numEntitys = entityVector.size();
 
 	Collider* col;
-	
+
 	for (int i = 0; i < numEntitys; i++)
 	{
 		col = entityVector[i]->GetCollider();
 
-		if (col != nullptr) 
+		if (col != nullptr)
 		{
 			if (SDL_PointInRect(&mousePos, &col->rect))
 			{
@@ -224,14 +223,14 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 }
 
 
-void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*>* heroPlayerVector)
+void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroPlayerVector)
 {
 	int numHeroes = heroVector.size();
 
 	heroPlayerVector->clear();
 
 	Collider* col;
-	
+
 	for (int i = 0; i < numHeroes; i++)
 	{
 		col = heroVector[i]->GetCollider();
