@@ -2,6 +2,22 @@
 
 
 
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range) :
+
+	turretLvl(turretLvl),
+	attackDmg(attackDmg),
+	attackSpeed(attackSpeed),
+	range(range)
+{}
+
+Turret::Turret(SDL_Point position, Turret * copy)
+
+{}
+
+Turret::~Turret()
+{
+}
+
 bool Turret::Start()
 {
 	return true;
@@ -23,4 +39,12 @@ bool Turret::Update(float dt)
 bool Turret::PostUpdate(float dt)
 {
 	return true;
+}
+
+void Turret::Target()
+{
+}
+
+void Turret::Attack()
+{
 }

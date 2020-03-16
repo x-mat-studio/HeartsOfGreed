@@ -2,6 +2,19 @@
 
 
 
+Core::Core(int resourceProductionRate) :
+
+	resourceProductionRate(resourceProductionRate)
+{}
+
+Core::Core(SDL_Point position, Core * copy)
+
+{}
+
+Core::~Core()
+{
+}
+
 bool Core::Start()
 {
 	return true;
@@ -23,4 +36,12 @@ bool Core::Update(float dt)
 bool Core::PostUpdate(float dt)
 {
 	return true;
+}
+
+void Core::RessurectHero(Hero * hero)
+{
+}
+
+void Core::GainResources()
+{
 }

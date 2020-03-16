@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Building.h"
 #include "Collision.h"
+#include "Hero.h"
 
 
 class Core : public Building 
@@ -11,7 +12,7 @@ class Core : public Building
 
 public:
 
-	Core();
+	Core(int resourceProductionRate);
 	Core(SDL_Point position, Core* copy);
 	~Core();
 
@@ -21,9 +22,12 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
+	void RessurectHero(Hero* hero);
+	void GainResources();
 
 private: 
 
+	int resourceProductionRate;
 };
 
 

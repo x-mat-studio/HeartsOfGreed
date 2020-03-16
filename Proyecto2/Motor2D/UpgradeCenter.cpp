@@ -2,6 +2,19 @@
 
 
 
+UpgradeCenter::UpgradeCenter(int turretLvl, int barricadeLvl) :
+	turretLvl(turretLvl),
+	barricadeLvl(barricadeLvl)
+{}
+
+UpgradeCenter::UpgradeCenter(SDL_Point position, UpgradeCenter * copy)
+
+{}
+
+UpgradeCenter::~UpgradeCenter()
+{
+}
+
 bool UpgradeCenter::Start()
 {
 	return true;
@@ -23,4 +36,12 @@ bool UpgradeCenter::Update(float dt)
 bool UpgradeCenter::PostUpdate(float dt)
 {
 	return true;
+}
+
+void UpgradeCenter::UpgradeTurrets()
+{
+}
+
+void UpgradeCenter::UpgradeBarricades()
+{
 }

@@ -11,7 +11,7 @@ class Turret : public Building
 
 public:
 
-	Turret();
+	Turret(int turretLvl, int attackDmg, int attackSpeed, int range);
 	Turret(SDL_Point position, Turret* copy);
 	~Turret();
 
@@ -21,9 +21,14 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
+	void Target();
+	void Attack();
 
 private:
-
+	int turretLvl;
+	int attackDmg;
+	int attackSpeed;
+	int range;
 };
 
 

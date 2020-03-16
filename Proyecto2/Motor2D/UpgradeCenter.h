@@ -11,7 +11,7 @@ class UpgradeCenter : public Building
 
 public:
 
-	UpgradeCenter();
+	UpgradeCenter(int turretLvl, int barricadeLvl);
 	UpgradeCenter(SDL_Point position, UpgradeCenter* copy);
 	~UpgradeCenter();
 
@@ -21,8 +21,14 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
+	void UpgradeTurrets();
+	void UpgradeBarricades();
+
 
 private:
+
+	int turretLvl;
+	int barricadeLvl;
 
 };
 

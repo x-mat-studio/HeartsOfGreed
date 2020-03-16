@@ -11,7 +11,7 @@ class Barricade : public Building
 
 public:
 
-	Barricade();
+	Barricade(int barricadeLvl);
 	Barricade(SDL_Point position, Barricade* copy);
 	~Barricade();
 
@@ -23,7 +23,7 @@ public:
 
 
 private:
-
+	int barricadeLvl;
 };
 
 

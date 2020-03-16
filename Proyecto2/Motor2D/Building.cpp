@@ -1,11 +1,12 @@
 #include "Building.h"
 
-Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath) :
+Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost) :
 
 	hitPointsMax(hitPoints),
 	hitPointsCurrent(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
-	xpOnDeath(xpOnDeath)
+	xpOnDeath(xpOnDeath),
+	buildingCost(buildingCost)
 {}
 
 
@@ -15,8 +16,16 @@ Building::Building(SDL_Point position, Building* copy) :
 	hitPointsMax(copy->hitPointsMax),
 	hitPointsCurrent(copy->hitPointsMax),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
-	xpOnDeath(copy->xpOnDeath)
+	xpOnDeath(copy->xpOnDeath),
+	buildingCost(copy->buildingCost)
 {}
+
+Building::Building()
+{}
+
+void Building::Destroy()
+{
+}
 
 
 Building::~Building()
