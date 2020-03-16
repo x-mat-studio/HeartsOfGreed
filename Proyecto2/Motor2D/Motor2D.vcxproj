@@ -76,7 +76,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Barricade.cpp" />
+    <ClCompile Include="Base.cpp" />
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -91,6 +95,8 @@
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="p2Log.cpp" />
+    <ClCompile Include="Turret.cpp" />
+    <ClCompile Include="UpgradeCenter.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
@@ -98,8 +104,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Barricade.h" />
+    <ClInclude Include="Base.h" />
     <ClInclude Include="Brofiler\Brofiler\Brofiler.h" />
+    <ClInclude Include="Building.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
@@ -116,6 +126,8 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="Module.h" />
+    <ClInclude Include="Turret.h" />
+    <ClInclude Include="UpgradeCenter.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PerfectTimer.h" />
