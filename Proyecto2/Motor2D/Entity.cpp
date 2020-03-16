@@ -5,22 +5,20 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture) :
+Entity::Entity(SDL_Point position, ENTITY_TYPE type) :
 
 	position(position),
-	type(type),
-	texture(texture),
+	type(type),	
 	started(false),
 	toDelete(false),
 	vectorPosition(NULL)
 {}
 
 
-Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback) :
+Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback) :
 
 	position(position),
-	type(type),
-	texture(texture),
+	type(type),	
 	started(false),
 	toDelete(false)
 {
@@ -37,8 +35,11 @@ Entity::~Entity()
 }
 
 
-bool Entity::Start()
+bool Entity::Start(SDL_Texture* texture)
 {
+	this->texture = texture;
+	started = true;
+
 	return true;
 }
 

@@ -25,6 +25,27 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
+	SDL_Point pos{ 100, 200 };
+
+	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
+	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
+	Animation walkLeftDown = walkLeftDown.PushAnimation(config.child("suitmale"), "walk_left_down");
+	Animation walkRightUp = walkRightUp.PushAnimation(config.child("suitmale"), "walk_right_up");
+	Animation walkRightDown = walkRightDown.PushAnimation(config.child("suitmale"), "walk_right_down");
+	Animation walkRight = walkRight.PushAnimation(config.child("suitmale"), "walk_right");
+	Animation idleRight = idleRight.PushAnimation(config.child("suitmale"), "idle_right");
+	Animation idleRightUp = idleRightUp.PushAnimation(config.child("suitmale"), "idle_right_up");
+	Animation idleRightDown = idleRightDown.PushAnimation(config.child("suitmale"), "idle_right_down");
+	Animation idleLeft = idleLeft.PushAnimation(config.child("suitmale"), "idle_left");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
+	
+	tmpHero = new Hero(SDL_Point{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, { 0,0,100,100 }, COLLIDER_HERO, this, walkLeft, walkLeftUp,
+		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+
+	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+	
 	return ret;
 }
 
@@ -33,9 +54,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 bool ModuleEntityManager::Start()
 {
 	bool ret = true;
-	SDL_Point pos{ 100, 200 };
-
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+	
+	texture = app->tex->Load("spritesheets/characters/suitmale.png");	
 
 	return ret;
 }
@@ -49,12 +69,25 @@ bool ModuleEntityManager::PreUpdate(float dt)
 
 	int numEntities = entityVector.size();
 
+	CheckIfStarted();
 
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PreUpdate(dt);
 	}
+
 	return ret;
+}
+
+void ModuleEntityManager::CheckIfStarted() {
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if(entityVector[i]->started==false)
+			entityVector[i]->Start(texture);
+	}
 }
 
 
@@ -137,14 +170,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 	case ENTITY_TYPE::HERO_MELEE:
 	{
 		//Test Things :)
-		Animation animation;
-		animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-		SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
 
-
-		Hero* tmpHero = new Hero(SDL_Point{ x,y }, ENTITY_TYPE::HERO_MELEE, texture, { 0,0,100,100 }, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+		/*Hero* tmpHero = new Hero(SDL_Point{ x,y }, ENTITY_TYPE::HERO_MELEE, { 0,0,100,100 }, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
 		heroVector.push_back(tmpHero);
-		ret = tmpHero;
+		ret = tmpHero;*/
 	}
 		break;
 	case ENTITY_TYPE::HERO_RANGED:

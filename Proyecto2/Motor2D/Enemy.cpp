@@ -7,7 +7,7 @@ Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rec
 	Animation& animation, int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
 	int xpOnDeath, float attackCooldown) :
 
-	Entity(position, type, texture, collRect, collType, callback),
+	Entity(position, type, collRect, collType, callback),
 	animation(animation),
 	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
@@ -22,7 +22,7 @@ Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rec
 
 Enemy::Enemy(SDL_Point position, Enemy* copy) :
 
-	Entity(position, copy->type, copy->texture),
+	Entity(position, copy->type),
 	animation(copy->animation),
 	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),

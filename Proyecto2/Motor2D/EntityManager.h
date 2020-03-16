@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "vector"
 #include "Entity.h"
+#include "Animation.h"
 
 class Hero;
 
@@ -51,9 +52,17 @@ public:
 
 private:
 
+	void CheckIfStarted();
+
+private:
+
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
 	std::vector <Hero*> heroVector;
+
+	SDL_Texture* texture;
+
+	Hero* tmpHero;
 
 };
 
