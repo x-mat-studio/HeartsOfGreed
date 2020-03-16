@@ -10,6 +10,7 @@ class Core;
 class UpgradeCenter;
 class Turret;
 class Barricade;
+class Base;
 
 enum class BUILDING_STATE : int
 {
@@ -26,7 +27,7 @@ class Building : public Entity
 {
 public:
 
-	Building(int hitPoints, int recoveryHitPointsRate, int maxTurrets, int maxBarricades, int turretsLevel, int resourceOutput, int xpOnDeath);
+	Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath);
 
 	Building(SDL_Point position, Building* copy);
 
@@ -45,46 +46,36 @@ public:
 	bool CleanUp();
 
 	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
+	bool Load(pugi::xml_node&);
 	//Called to save the game
-	bool Save(pugi::xml_node&) const { return true; }
+	bool Save(pugi::xml_node&) const;
 
-private:
 
-	//void ChangeToNeutral();
-	//void DisableTurrets();
-
-	//void BeingRepaired();
-
-	//void RecoverHealth();
-
-	//void AddTurret();
-	//void AddBarricade();
-
-	//void InConstruction();
-
-private:
-
-	int hitPoints;
-	int recoveryHitPointsRate;
-
-	int maxTurrets;
-	int maxBarricades;
-	int turretsLevel;
-
-	int resourceOutput;
-	int xpOnDeath;
+public:
 
 	BUILDING_STATE currentState;
 
+	Base* myBase;
+
+
+private:
+
+	void ChangeBuildingState(BUILDING_STATE state);
+
+	void BeingRepaired();
+	void RecoverHealth();
+
+	void Contruct();
+
+
+private:
+
+	int hitPointsMax;
+	int hitPointsCurrent;
+	int recoveryHitPointsRate;
+	int xpOnDeath;
+
 	bool selected;
-
-	//Childs---
-	Core* baseCore;
-	UpgradeCenter* upgrCenterBase;
-	std::vector<Turret*> baseTurrets;
-	std::vector <Barricade*> baseBarr;
-
 };
 
 

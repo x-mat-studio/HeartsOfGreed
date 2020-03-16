@@ -1,13 +1,10 @@
 #include "Building.h"
 
-Building::Building(int hitPoints, int recoveryHitPointsRate, int maxTurrets, int maxBarricades, int turretsLevel, int resourceOutput, int xpOnDeath) :
+Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath) :
 
-	hitPoints(hitPoints),
+	hitPointsMax(hitPoints),
+	hitPointsCurrent(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
-	maxTurrets(maxTurrets),
-	maxBarricades(maxBarricades),
-	turretsLevel(turretsLevel),
-	resourceOutput(resourceOutput),
 	xpOnDeath(xpOnDeath)
 {}
 
@@ -15,13 +12,10 @@ Building::Building(int hitPoints, int recoveryHitPointsRate, int maxTurrets, int
 Building::Building(SDL_Point position, Building* copy) :
 
 	Entity(position, copy->type, copy->texture),
-	hitPoints(copy->hitPoints),
+	hitPointsMax(copy->hitPointsMax),
+	hitPointsCurrent(copy->hitPointsMax),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
-	xpOnDeath(copy->xpOnDeath),
-	maxTurrets(copy->maxTurrets),
-	maxBarricades(copy->maxBarricades),
-	turretsLevel(copy->turretsLevel),
-	resourceOutput(copy->resourceOutput)
+	xpOnDeath(copy->xpOnDeath)
 {}
 
 
@@ -61,4 +55,36 @@ bool Building::CleanUp()
 	bool ret = true;
 
 	return ret;
+}
+
+bool Building::Load(pugi::xml_node &)
+{
+	bool ret = true;
+
+	return ret;
+}
+
+bool Building::Save(pugi::xml_node &) const
+{
+	bool ret = true;
+
+	return ret;
+}
+
+void Building::ChangeBuildingState(BUILDING_STATE state)
+{
+	this->currentState = state;
+}
+
+void Building::BeingRepaired()
+{
+}
+
+void Building::RecoverHealth()
+{
+	this->hitPointsCurrent += this->recoveryHitPointsRate;
+}
+
+void Building::Contruct()
+{
 }
