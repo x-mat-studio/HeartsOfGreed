@@ -22,7 +22,7 @@ ModuleEntityManager::~ModuleEntityManager()
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
-	
+
 	bool ret = true;
 
 	return ret;
@@ -257,6 +257,7 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 		{
 			delete entityVector[i];
 			entityVector.erase(entityVector.begin() + i);
+			entityVector[i] = nullptr;
 		}
 	}
 

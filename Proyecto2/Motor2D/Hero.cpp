@@ -6,8 +6,8 @@
 
 Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
 	Animation& animation, int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float coolDownHability1,
-	float coolDownHability2, float coolDownHability3) :
+	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float cooldownHability1,
+	float cooldownHability2, float cooldownHability3) :
 
 	Entity(position, type, texture, collRect, collType, callback),
 	animation(animation),
@@ -22,9 +22,9 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect 
 	movementSpeed(movementSpeed),
 	vision(vision),
 	attackCooldown(attackCooldown),
-	coolDownHability1(coolDownHability1),
-	coolDownHability2(coolDownHability2),
-	coolDownHability3(coolDownHability3),
+	cooldownHability1(cooldownHability1),
+	cooldownHability2(cooldownHability2),
+	cooldownHability3(cooldownHability3),
 	skillFromAttacking(false)
 {}
 
@@ -44,9 +44,9 @@ Hero::Hero(SDL_Point position, Hero* copy) :
 	movementSpeed(copy->movementSpeed),
 	vision(copy->vision),
 	attackCooldown(copy->attackCooldown),
-	coolDownHability1(copy->coolDownHability1),
-	coolDownHability2(copy->coolDownHability2),
-	coolDownHability3(copy->coolDownHability3),
+	cooldownHability1(copy->cooldownHability1),
+	cooldownHability2(copy->cooldownHability2),
+	cooldownHability3(copy->cooldownHability3),
 	skillFromAttacking(false)
 {}
 
@@ -78,16 +78,16 @@ bool Hero::Update(float dt)
 	//current_animation = &idle;
 
 	//check inputs to traverse state matrix
-	external_input(inputs, dt);
-	internal_input(inputs, dt);
-	state = process_fsm(inputs);
+	externalInput(inputs, dt);
+	internalInput(inputs, dt);
+	state = processFsm(inputs);
 
 	if (state != current_state)
 	{
 		switch (state)
 		{
 		case HERO_STATES::IDLE:
-			
+
 			break;
 
 		case HERO_STATES::MOVE:
@@ -96,15 +96,22 @@ bool Hero::Update(float dt)
 
 		case HERO_STATES::ATTACK:
 			Attack();
+			attackCooldown += dt;
 			break;
 
 		case HERO_STATES::SKILL1:
+			UseHability1();
+			cooldownHability1 += dt;
 			break;
 
 		case HERO_STATES::SKILL2:
+			UseHability2();
+			cooldownHability2 += dt;
 			break;
 
 		case HERO_STATES::SKILL3:
+			UseHability3();
+			cooldownHability3 += dt;
 			break;
 
 		case HERO_STATES::REPAIR:
@@ -170,15 +177,10 @@ void Hero::LevelUp()
 
 	movementSpeed;
 	vision;
-
-	attackCooldown;
-	coolDownHability1;
-	coolDownHability2;
-	coolDownHability3;
 }
 
 
-void Hero::Draw(float dt) 
+void Hero::Draw(float dt)
 {
 	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
 }
@@ -191,7 +193,7 @@ void Hero::Move()
 }
 
 
-bool Hero::CheckRange(int maxDistance) 
+bool Hero::CheckRange(int maxDistance)
 {
 	//check if the maxDistance is equal or bigger than the actual distance between the objective and the unit 
 
@@ -246,23 +248,96 @@ bool Hero::UseHability3()
 
 
 //Capture all the inputs, dont exactly know how, but ill figure something out
-bool Hero::external_input(std::vector<HERO_INPUTS>& inputs, float dt) 
+bool Hero::externalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
 
-	
+
 	return true;
 }
 
 
 //Here goes all timers
-void Hero::internal_input(std::vector<HERO_INPUTS>& inputs, float dt)
+void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
+	if (attackCooldown > 0)
+	{
+		if (attackCooldown >= attackSpeed)
+		{
+			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+			attackCooldown = 0;
+		}
+
+		attackCooldown += dt;
+	}
 
 
+	if (skill1TimePassed > 0)
+	{
+		if (skill1TimePassed >= skill1ExecutionTime)
+		{
+			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
+			skill1TimePassed = 0;
+		}
+
+		skill1TimePassed += dt;
+	}
+
+
+	if (cooldownHability1 > 0)
+	{
+		if (cooldownHability1 >= skill1RecoverTime)
+		{
+			skill1Charged = true;
+		}
+		
+		cooldownHability1 += dt;
+	}
+
+	if (skill2TimePassed > 0)
+	{
+		if (skill2TimePassed >= skill2ExecutionTime)
+		{
+			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
+			skill2TimePassed = 0;
+		}
+
+		skill2TimePassed += dt;
+	}
+
+	if (cooldownHability2 > 0)
+	{
+		if (cooldownHability2 >= skill2RecoverTime)
+		{
+			skill2Charged = true;
+		}
+
+		cooldownHability2 += dt;
+	}
+
+	if (skill3TimePassed > 0)
+	{
+		if (skill3TimePassed >= skill3ExecutionTime)
+		{
+			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
+			skill3TimePassed = 0;
+		}
+
+		skill3TimePassed += dt;
+	}
+
+	if (cooldownHability3 > 0)
+	{
+		if (cooldownHability3 >= skill3RecoverTime)
+		{
+			skill3Charged = true;
+		}
+
+		cooldownHability3 += dt;
+	}
 }
 
 
-HERO_STATES Hero::process_fsm(std::vector<HERO_INPUTS>& inputs) {
+HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
 	static HERO_STATES state = HERO_STATES::IDLE;
 	HERO_INPUTS lastInput;
 
@@ -312,12 +387,14 @@ HERO_STATES Hero::process_fsm(std::vector<HERO_INPUTS>& inputs) {
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;		break;
 			}
 		}	break;
-		
+
 
 		case HERO_STATES::ATTACK:
 		{
 			switch (lastInput)
 			{
+			case HERO_INPUTS::IN_CHARGING_ATTACK:state = HERO_STATES::CHARGING_ATTACK;			 break;
+
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
@@ -329,24 +406,39 @@ HERO_STATES Hero::process_fsm(std::vector<HERO_INPUTS>& inputs) {
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
 			}
 		}	break;
-		
+
+
+		case HERO_STATES::CHARGING_ATTACK:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_ATTACK_CHARGED: state = HERO_STATES::ATTACK;					 break;
+
+			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::SKILL1; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::SKILL2; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::SKILL3; skillFromAttacking = true; break;
+
+			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
+			}
+		}	break;
+
 
 		case HERO_STATES::SKILL1:
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_FINISHED: 
+			case HERO_INPUTS::IN_SKILL_FINISHED:
 			{
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
-				
+
 				else
 					state = HERO_STATES::IDLE;
 
 				skillFromAttacking = false;
 																			break;
 			}
-			
+
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	break;
 
 			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
@@ -404,7 +496,7 @@ HERO_STATES Hero::process_fsm(std::vector<HERO_INPUTS>& inputs) {
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_ATTACKED: state = HERO_STATES::IDLE; break;
+			case HERO_INPUTS::IN_ATTACKED: state = HERO_STATES::IDLE;		break;
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	break;
 

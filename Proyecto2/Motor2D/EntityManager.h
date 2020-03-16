@@ -48,6 +48,7 @@ public:
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
 
+
 private:
 
 	//The list where we will store all the entities

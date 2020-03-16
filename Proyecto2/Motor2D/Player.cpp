@@ -4,6 +4,7 @@
 #include "App.h"
 #include "Input.h"
 #include "Render.h"
+#include "Window.h"
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -96,8 +97,11 @@ bool ModulePlayer::Click()
 {
 	focusedEntity = nullptr;
 
-	app->input->GetMousePosition(clickPosition.x, clickPosition.y);
+	app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
 
+	clickPosition.x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
+	clickPosition.y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+		
 	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
 
 	if (focusedEntity != nullptr)
@@ -113,31 +117,35 @@ void ModulePlayer::Select()
 {
 
 	SDL_Point mousePosition;
-	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
+
+	app->input->GetMousePositionRaw(mousePosition.x, mousePosition.y);
 
 	int rectX;
 	int rectY;
 	int rectW;
 	int rectH;
+	
+	mousePosition.x = (-app->render->currentCamX + mousePosition.x) / app->win->GetScale();
+	mousePosition.y = (-app->render->currentCamY + mousePosition.y) / app->win->GetScale();
 
 	if (mousePosition.x > clickPosition.x)
 	{
-		rectX = clickPosition.x + app->render->currentCamX;
+		rectX = clickPosition.x;
 	}
 	else
 	{
-		rectX = mousePosition.x + app->render->currentCamX;
+		rectX = mousePosition.x;
 	}
 
 	rectW = abs(mousePosition.x - clickPosition.x);
 
 	if (mousePosition.y > clickPosition.y)
 	{
-		rectY = clickPosition.y + app->render->currentCamY;
+		rectY = clickPosition.y;
 	}
 	else
 	{
-		rectY = mousePosition.y + app->render->currentCamY;
+		rectY = mousePosition.y;
 	}
 
 	rectH = abs(mousePosition.y - clickPosition.y);
