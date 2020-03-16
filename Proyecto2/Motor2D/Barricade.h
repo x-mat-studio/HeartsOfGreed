@@ -12,7 +12,6 @@ class Barricade : public Building
 public:
 
 	Barricade(int barricadeLvl);
-	Barricade(SDL_Point position, Barricade* copy);
 	~Barricade();
 
 

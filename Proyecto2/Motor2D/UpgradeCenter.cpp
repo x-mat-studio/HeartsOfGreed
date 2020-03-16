@@ -7,9 +7,6 @@ UpgradeCenter::UpgradeCenter(int turretLvl, int barricadeLvl) :
 	barricadeLvl(barricadeLvl)
 {}
 
-UpgradeCenter::UpgradeCenter(SDL_Point position, UpgradeCenter * copy)
-
-{}
 
 UpgradeCenter::~UpgradeCenter()
 {

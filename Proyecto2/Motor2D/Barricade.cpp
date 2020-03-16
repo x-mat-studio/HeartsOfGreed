@@ -9,9 +9,6 @@ Barricade::Barricade(int barricadeLvl) :
 	barricadeLvl(barricadeLvl)
 {}
 
-Barricade::Barricade(SDL_Point position, Barricade * copy) 
-
-{}
 
 Barricade::~Barricade()
 {

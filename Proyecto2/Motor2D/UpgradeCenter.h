@@ -12,7 +12,6 @@ class UpgradeCenter : public Building
 public:
 
 	UpgradeCenter(int turretLvl, int barricadeLvl);
-	UpgradeCenter(SDL_Point position, UpgradeCenter* copy);
 	~UpgradeCenter();
 
 

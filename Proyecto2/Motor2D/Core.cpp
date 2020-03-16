@@ -7,9 +7,6 @@ Core::Core(int resourceProductionRate) :
 	resourceProductionRate(resourceProductionRate)
 {}
 
-Core::Core(SDL_Point position, Core * copy)
-
-{}
 
 Core::~Core()
 {

@@ -13,7 +13,6 @@ class Core : public Building
 public:
 
 	Core(int resourceProductionRate);
-	Core(SDL_Point position, Core* copy);
 	~Core();
 
 

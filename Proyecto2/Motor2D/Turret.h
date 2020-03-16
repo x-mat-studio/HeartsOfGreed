@@ -12,7 +12,6 @@ class Turret : public Building
 public:
 
 	Turret(int turretLvl, int attackDmg, int attackSpeed, int range);
-	Turret(SDL_Point position, Turret* copy);
 	~Turret();
 
 

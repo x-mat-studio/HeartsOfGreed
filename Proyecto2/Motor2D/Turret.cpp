@@ -10,9 +10,6 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range) :
 	range(range)
 {}
 
-Turret::Turret(SDL_Point position, Turret * copy)
-
-{}
 
 Turret::~Turret()
 {
