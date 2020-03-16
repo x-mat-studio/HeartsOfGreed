@@ -4,13 +4,27 @@
 #include "Render.h"
 #include "EntityManager.h"
 
-Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
-	Animation& animation, int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+	Animation& animation1, Animation& animation2, Animation& animation3, Animation& animation4,
+	Animation& animation5, Animation& animation6, Animation& animation7, Animation& animation8,
+	Animation& animation9, Animation& animation10, Animation& animation11, Animation& animation12,
+	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float coolDownHability1,
 	float coolDownHability2, float coolDownHability3) :
 
-	Entity(position, type, texture, collRect, collType, callback),
-	animation(animation),
+	Entity(position, type, collRect, collType, callback),
+	walkLeft(animation1),
+	walkLeftUp(animation2),
+	walkLeftDown(animation3),
+	walkRightUp(animation4),
+	walkRightDown(animation5),
+	walkRight(animation6),
+	idleRight(animation7),
+	idleRightDown(animation8),
+	idleRightUp(animation9), 
+	idleLeft(animation10),
+	idleLeftUp(animation11),
+	idleLeftDown(animation12),	
 	level(level),
 	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
@@ -31,8 +45,19 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect 
 
 Hero::Hero(SDL_Point position, Hero* copy) :
 
-	Entity(position, copy->type, copy->texture),
-	animation(copy->animation),
+	Entity(position, copy->type),
+	walkLeft(copy->walkLeft),
+	walkLeftUp(copy->walkLeftUp),
+	walkLeftDown(copy->walkLeftDown),
+	walkRightUp(copy->walkRightUp),
+	walkRightDown(copy->walkRightDown),
+	walkRight(copy->walkRight),
+	idleRight(copy->idleRight),
+	idleRightDown(copy->idleRightDown),
+	idleRightUp(copy->idleRightUp),
+	idleLeft(copy->idleLeft),
+	idleLeftUp(copy->idleLeftUp),
+	idleLeftDown(copy->idleLeftDown),
 	level(copy->level),
 	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
@@ -55,7 +80,18 @@ Hero::~Hero()
 {
 	objective = nullptr;
 
-	animation = Animation();
+	walkLeft = Animation();
+	walkLeftUp = Animation();
+	walkLeftDown = Animation();
+	walkRightUp = Animation();
+	walkRightDown = Animation();
+	walkRight = Animation();
+	idleRight = Animation();
+	idleRightDown = Animation();
+	idleRightUp = Animation();
+	idleLeft = Animation();
+	idleLeftUp = Animation();
+	idleLeftDown = Animation();
 }
 
 
@@ -125,6 +161,7 @@ bool Hero::Update(float dt)
 
 bool Hero::PostUpdate(float dt)
 {
+	texture;
 	Draw(dt);
 	return true;
 }
@@ -180,7 +217,7 @@ void Hero::LevelUp()
 
 void Hero::Draw(float dt) 
 {
-	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x, position.y, &walkLeft.GetCurrentFrameBox(dt));
 }
 
 

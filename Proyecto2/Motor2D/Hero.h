@@ -48,10 +48,13 @@ enum HERO_INPUTS
 class Hero : public Entity
 {
 public:
-	Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
-		Animation& animation, int level, int hitPoints, int recoveryHitPointsRate,int energyPoints, int recoveryEnergyRate,
-		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision,float attackCooldown, float coolDownHability1,
-		float coolDownHability2, float coolDownHability3);
+	Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+		Animation& animation1, Animation& animation2, Animation& animation3, Animation& animation4, 
+		Animation& animation5, Animation& animation6, Animation& animation7, Animation& animation8, 
+		Animation& animation9, Animation& animation10, Animation& animation11, Animation& animation12,
+		int level, int hitPoints,int recoveryHitPointsRate,int energyPoints, int recoveryEnergyRate,
+		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision,float attackCooldown, 
+		float coolDownHability1, float coolDownHability2, float coolDownHability3);
 
 	Hero(SDL_Point position, Hero* copy);
 	~Hero();
@@ -111,7 +114,19 @@ private:
 	Entity* objective;
 	bool selected;
 
-	Animation animation;
+	Animation walkLeft;
+	Animation walkLeftUp;
+	Animation walkLeftDown;
+	Animation walkRightUp;
+	Animation walkRightDown;
+	Animation walkRight;
+	Animation idleRight;
+	Animation idleRightUp;
+	Animation idleRightDown;
+	Animation idleLeft;
+	Animation idleLeftUp;
+	Animation idleLeftDown;
+	
 
 	bool skillFromAttacking;
 	HERO_STATES state;

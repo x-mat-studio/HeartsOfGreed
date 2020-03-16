@@ -12,7 +12,7 @@ Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int 
 
 Building::Building(SDL_Point position, Building* copy) :
 
-	Entity(position, copy->type, copy->texture),
+	Entity(position, copy->type),
 	hitPointsMax(copy->hitPointsMax),
 	hitPointsCurrent(copy->hitPointsMax),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
