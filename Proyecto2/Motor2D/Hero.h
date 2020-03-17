@@ -8,7 +8,7 @@
 
 enum class HERO_STATES
 {
-	UNKNOWN,
+	UNKNOWN = -1,
 	IDLE,
 
 	MOVE,
@@ -36,7 +36,7 @@ enum HERO_INPUTS
 	IN_ATTACK_CHARGED,
 
 	IN_SKILL1,
-	IN_SKILL2,
+	IN_SKILL2, 
 	IN_SKILL3,
 	
 	IN_SKILL_FINISHED,
@@ -52,7 +52,7 @@ enum HERO_INPUTS
 class Hero : public Entity
 {
 public:
-	Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+	Hero::Hero(SDL_Point position, ENTITY_TYPE type, Collider* col,
 		Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 		Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -66,7 +66,6 @@ public:
 	bool MoveTo(int x, int y);
 	bool LockOn(Entity*);
 
-	bool Start();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);

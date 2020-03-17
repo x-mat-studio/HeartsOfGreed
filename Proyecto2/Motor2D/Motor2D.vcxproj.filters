@@ -52,29 +52,29 @@
     <ClCompile Include="Player.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
-    <ClCompile Include="Hero.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Barricade.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Base.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Building.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Turret.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="UpgradeCenter.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,29 +147,29 @@
     <ClInclude Include="Player.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
-    <ClInclude Include="Hero.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Barricade.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Base.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Turret.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="UpgradeCenter.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
+      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +220,12 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities">
       <UniqueIdentifier>{eefc1b5b-94de-4759-826b-4e3adc8fadbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Buildings">
+      <UniqueIdentifier>{39ba80c6-ebc3-4f9e-b929-7276afc06973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Heroes">
+      <UniqueIdentifier>{ab66f34b-6781-46cc-baa8-40e288426340}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

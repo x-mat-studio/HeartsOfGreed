@@ -4,7 +4,7 @@
 #include "Render.h"
 #include "EntityManager.h"
 
-Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+Hero::Hero(SDL_Point position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 	Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -12,7 +12,7 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYP
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
-	Entity(position, type, collRect, collType, callback),
+	Entity(position, type, collider),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -65,7 +65,7 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, SDL_Rect collRect, COLLIDER_TYP
 
 Hero::Hero(SDL_Point position, Hero* copy) :
 
-	Entity(position, copy->type),
+	Entity(position, copy->type, copy->GetCollider()),
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
 	walkLeftDown(copy->walkLeftDown),
@@ -112,12 +112,6 @@ Hero::~Hero()
 	idleLeft = Animation();
 	idleLeftUp = Animation();
 	idleLeftDown = Animation();
-}
-
-
-bool Hero::Start()
-{
-	return true;
 }
 
 
@@ -470,6 +464,8 @@ HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
 			switch (lastInput)
 			{
 			case HERO_INPUTS::IN_ATTACK_CHARGED: state = HERO_STATES::ATTACK;					 break;
+
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;						 break;
 
 			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::SKILL1; skillFromAttacking = true; break;
 			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::SKILL2; skillFromAttacking = true; break;

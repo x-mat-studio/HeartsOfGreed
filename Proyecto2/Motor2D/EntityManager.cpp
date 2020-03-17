@@ -40,8 +40,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
 
+	Collider* collider = new Collider({ 0,0,100,100 }, COLLIDER_HERO, nullptr);
 
-	tmpHero = new Hero(SDL_Point{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, { 0,0,100,100 }, COLLIDER_HERO, this, walkLeft, walkLeftUp,
+	tmpHero = new Hero(SDL_Point{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
@@ -147,9 +148,9 @@ bool ModuleEntityManager::CleanUp()
 
 void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c1->entCallback != nullptr)
+	if (c1->thisEntity != nullptr)
 	{
-		c1->entCallback->OnCollision(c2);
+		c1->thisEntity->OnCollision(c2);
 	}
 }
 
@@ -191,7 +192,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 
 	if (ret != nullptr)
 	{
-		ret->vectorPosition = entityVector.size();
 		entityVector.push_back(ret);
 	}
 
@@ -259,19 +259,6 @@ bool ModuleEntityManager::CheckEntityExists(Entity* entity)
 	}
 
 	return false;
-}
-
-
-bool ModuleEntityManager::DeleteEntity(Entity* toDelete)
-{
-	if (toDelete == nullptr || toDelete->vectorPosition == NULL)
-		return false;
-
-	int vectorIndex = toDelete->vectorPosition;
-
-	RELEASE(entityVector[vectorIndex]);
-	entityVector[vectorIndex] = nullptr;
-	entityVector.erase(entityVector.begin() + vectorIndex);
 }
 
 

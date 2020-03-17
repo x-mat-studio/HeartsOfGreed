@@ -3,11 +3,11 @@
 #include "Textures.h"
 #include "Render.h"
 
-Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Collider* collider,
 	Animation& animation, int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
-	int xpOnDeath, float attackCooldown) :
+	int xpOnDeath) :
 
-	Entity(position, type, collRect, collType, callback),
+	Entity(position, type, collider),
 	animation(animation),
 	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
@@ -22,7 +22,7 @@ Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rec
 
 Enemy::Enemy(SDL_Point position, Enemy* copy) :
 
-	Entity(position, copy->type),
+	Entity(position, copy->type, copy->GetCollider()), 
 	animation(copy->animation),
 	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
@@ -40,12 +40,6 @@ Enemy::~Enemy()
 	objective = nullptr;
 
 	animation = Animation();
-}
-
-
-bool Enemy::Start()
-{
-	return true;
 }
 
 
@@ -88,6 +82,7 @@ void Enemy::OnCollision(Collider* collider)
 
 }
 
+
 void Enemy::Draw(float dt)
 {
 	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
@@ -99,18 +94,127 @@ void Enemy::Move()
 	//Put logic to move the unit to the desired destination
 }
 
+
 void Enemy::Attack()
 {
 	//i have to think about this one
 
 }
 
+
 void Enemy::Die()
 {
 	toDelete = true;
 }
 
+
 void Enemy::RecoverHealth()
 {
 
+}
+
+
+
+void Enemy::internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
+{
+	if (attackCooldown > 0)
+	{
+		if (attackCooldown >= attackSpeed)
+		{
+			inputs.push_back(ENEMY_INPUTS::IN_ATTACK_CHARGED);
+			attackCooldown = 0;
+		}
+
+		attackCooldown += dt;
+	}
+
+}
+
+
+bool Enemy::externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
+{
+
+	return true;
+}
+
+
+ENEMY_STATES Enemy::processFsm(std::vector<ENEMY_INPUTS>& inputs)
+{
+	static ENEMY_STATES state = ENEMY_STATES::IDLE;
+	ENEMY_INPUTS lastInput;
+
+	while (inputs.empty() == false)
+	{
+		lastInput = inputs.back();
+		inputs.pop_back();
+
+		switch (state)
+		{
+
+		case ENEMY_STATES::IDLE:
+		{
+			switch (lastInput)
+			{
+			case ENEMY_INPUTS::IN_MOVE:   state = ENEMY_STATES::MOVE;		break;
+
+			case ENEMY_INPUTS::IN_ATTACK: state = ENEMY_STATES::ATTACK;		break;
+
+			case ENEMY_INPUTS::IN_DEAD:   state = ENEMY_STATES::DEAD;		break;
+			}
+		}	break;
+
+
+		case ENEMY_STATES::MOVE:
+		{
+			switch (lastInput)
+			{
+			case ENEMY_INPUTS::IN_IDLE:   state = ENEMY_STATES::IDLE;		break;
+
+			case ENEMY_INPUTS::IN_ATTACK: state = ENEMY_STATES::ATTACK;		break;
+
+			case ENEMY_INPUTS::IN_DEAD:   state = ENEMY_STATES::DEAD;		break;
+			}
+		}	break;
+
+
+		case ENEMY_STATES::ATTACK:
+		{
+			switch (lastInput)
+			{
+			case ENEMY_INPUTS::IN_CHARGING_ATTACK: state = ENEMY_STATES::CHARGING_ATTACK;	break;
+
+			case ENEMY_INPUTS::IN_OBJECTIVE_DONE:  state = ENEMY_STATES::IDLE;				break;
+
+			case ENEMY_INPUTS::IN_OUT_OF_RANGE:    state = ENEMY_STATES::MOVE;				break;
+
+			case ENEMY_INPUTS::IN_DEAD:			   state = ENEMY_STATES::DEAD;				break;
+			}
+		}	break;
+
+
+		case ENEMY_STATES::CHARGING_ATTACK:
+		{
+			switch (lastInput)
+			{
+			case ENEMY_INPUTS::IN_CHARGING_ATTACK: state = ENEMY_STATES::CHARGING_ATTACK;	break;
+
+			case ENEMY_INPUTS::IN_OBJECTIVE_DONE:  state = ENEMY_STATES::IDLE;				break;
+
+			case ENEMY_INPUTS::IN_OUT_OF_RANGE:    state = ENEMY_STATES::MOVE;				break;
+
+			case ENEMY_INPUTS::IN_DEAD:			   state = ENEMY_STATES::DEAD;				break;
+			}
+		}	break;
+
+
+		case ENEMY_STATES::DEAD:
+		{
+		}	break;
+
+		}
+
+	}
+
+	return state;
+	
 }

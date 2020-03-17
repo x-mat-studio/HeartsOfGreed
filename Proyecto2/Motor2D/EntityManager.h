@@ -41,7 +41,6 @@ public:
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y);
 
 
-	bool DeleteEntity(Entity* toDelete);
 	void RemoveDeletedEntitys();
 
 
