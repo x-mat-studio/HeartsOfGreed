@@ -36,22 +36,9 @@ bool ModuleMap::Awake(pugi::xml_node& config)
 void ModuleMap::Draw()
 {
 	BROFILER_CATEGORY("DRAW", Profiler::Color::Aquamarine);
-	int camW;
-	int camH;
-	app->render->GetCameraMeasures(camW, camH);
-	
-	float up_left_cam_cornerX= -app->render->currentCamX;
-	float up_left_cam_cornerY= -app->render->currentCamY;
-	float down_right_cam_cornerX= up_left_cam_cornerX + camW;
-	float down_right_cam_cornerY= up_left_cam_cornerY +camH;
 
 	if (mapLoaded == false)
 		return;
-
-
-	uint windowW;
-	uint windowH;
-	app->win->GetWindowSize(windowW, windowH);
 
 
 	int f = 0;
@@ -59,8 +46,6 @@ void ModuleMap::Draw()
 
 	while (f < data.layers.size())
 	{
-		float scale = app->win->GetScale();
-
 
 		for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 		{
@@ -76,7 +61,7 @@ void ModuleMap::Draw()
 
 				//whith camera culling
 				
-					if ((worldX >(up_left_cam_cornerX-(data.tileWidth*scale))/scale && worldX <down_right_cam_cornerX/scale)&& ((worldY > (up_left_cam_cornerY-(data.tileWidth*scale))/scale) && worldY < down_right_cam_cornerY/scale))
+					if (InsideCamera(worldX, worldY) == true)
 					{
 						if (id > 0)
 						{
@@ -579,4 +564,22 @@ bool ModuleMap::Save(pugi::xml_node& ldata) const
 {
 	ldata.append_attribute("name") = data.name.GetString();
 	return true;
+}
+
+bool ModuleMap::InsideCamera(float& posX, float& posY) const {
+
+	int camW;
+	int camH;
+	app->render->GetCameraMeasures(camW, camH);
+	float scale = app->win->GetScale();
+
+	float up_left_cam_cornerX = -app->render->currentCamX;
+	float up_left_cam_cornerY = -app->render->currentCamY;
+	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
+	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
+
+	if ((posX > (up_left_cam_cornerX - (data.tileWidth * scale)) / scale && posX < down_right_cam_cornerX / scale) &&
+		((posY > (up_left_cam_cornerY - (data.tileWidth * scale)) / scale) && posY < down_right_cam_cornerY / scale)) {
+		return true;
+	}
 }

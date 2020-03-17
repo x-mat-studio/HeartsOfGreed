@@ -47,12 +47,14 @@ public:
 	Entity* CheckEntityOnClick(SDL_Point mousePos);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
+	void AddEntityToRenderVector();
 
 private:
 
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
 	std::vector <Hero*> heroVector;
+	std::vector <Entity*> renderVector;
 
 };
 
