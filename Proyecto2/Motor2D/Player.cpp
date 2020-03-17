@@ -4,6 +4,7 @@
 #include "App.h"
 #include "Input.h"
 #include "Render.h"
+#include "Window.h"
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -22,18 +23,18 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-	bool ret = true;
+	
 
-	return ret;
+	return true;
 }
 
 
 // Called before the first frame
 bool ModulePlayer::Start()
 {
-	bool ret = true;
+	
 
-	return ret;
+	return true;
 }
 
 
@@ -42,11 +43,11 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	
 
 	HandleInput();
 
-	return ret;
+	return true;
 }
 
 
@@ -55,9 +56,9 @@ bool ModulePlayer::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	
 
-	return ret;
+	return true;
 }
 
 // Called each loop iteration
@@ -96,8 +97,11 @@ bool ModulePlayer::Click()
 {
 	focusedEntity = nullptr;
 
-	app->input->GetMousePosition(clickPosition.x, clickPosition.y);
+	app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
 
+	clickPosition.x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
+	clickPosition.y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+		
 	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
 
 	if (focusedEntity != nullptr)
@@ -113,38 +117,41 @@ void ModulePlayer::Select()
 {
 
 	SDL_Point mousePosition;
-	app->input->GetMousePosition(mousePosition.x, mousePosition.y);
+
+	app->input->GetMousePositionRaw(mousePosition.x, mousePosition.y);
 
 	int rectX;
 	int rectY;
 	int rectW;
 	int rectH;
+	
+	mousePosition.x = (-app->render->currentCamX + mousePosition.x) / app->win->GetScale();
+	mousePosition.y = (-app->render->currentCamY + mousePosition.y) / app->win->GetScale();
 
 	if (mousePosition.x > clickPosition.x)
 	{
-		rectX = clickPosition.x + app->render->currentCamX;
+		rectX = clickPosition.x;
 	}
 	else
 	{
-		rectX = mousePosition.x + app->render->currentCamX;
+		rectX = mousePosition.x;
 	}
 
 	rectW = abs(mousePosition.x - clickPosition.x);
 
 	if (mousePosition.y > clickPosition.y)
 	{
-		rectY = clickPosition.y + app->render->currentCamY;
+		rectY = clickPosition.y;
 	}
 	else
 	{
-		rectY = mousePosition.y + app->render->currentCamY;
+		rectY = mousePosition.y;
 	}
 
 	rectH = abs(mousePosition.y - clickPosition.y);
 
 	app->entityManager->CheckHeroOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
 
-	heroesVector;
 }
 
 

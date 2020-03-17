@@ -6,33 +6,53 @@
 #include "Entity.h"
 #include "Animation.h"
 
-enum class ENEMY_STATE : int
+enum class ENEMY_STATES
 {
-	ST_UNKNOWN = -1,
+	UNKNOWN = -1,
+	IDLE,
 
-	ST_IDLE,
-	ST_CHASING,
+	MOVE,
+	ATTACK,
+	CHARGING_ATTACK,
 
-	ST_ALL,
+	DEAD,
+
+	MAX
 };
+
+
+enum class ENEMY_INPUTS
+{
+	IN_IDLE,
+	IN_MOVE,
+	
+	IN_ATTACK,
+	IN_CHARGING_ATTACK,
+	IN_ATTACK_CHARGED,
+
+	IN_OUT_OF_RANGE,
+
+	IN_OBJECTIVE_DONE,
+
+	IN_DEAD
+};
+
 
 class Enemy : public Entity
 {
 public:
 
-	Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
+	Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Collider* col,
 		Animation& animation, int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange,
-		int movementSpeed, int xpOnDeath, float attackCooldown);
+		int movementSpeed, int xpOnDeath);
+
 
 	Enemy(SDL_Point position, Enemy* copy);
 
-	//Destructor
+
 	~Enemy();
 
-	// Called before the first frame
-	bool Start();
 
-	// Called each loop iteration
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
@@ -41,7 +61,7 @@ public:
 	void OnCollision(Collider* collider);
 
 	bool MoveTo(int x, int y);
-	bool LockOn(Entity*);
+	bool Enemy::LockOn(Entity* entity);
 
 private:
 
@@ -52,6 +72,10 @@ private:
 	void Die();
 
 	void RecoverHealth();
+
+	void internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
+	bool externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
+	ENEMY_STATES processFsm(std::vector<ENEMY_INPUTS>& inputs);
 
 private:
 
@@ -68,11 +92,13 @@ private:
 	float attackCooldown;
 
 	Entity* objective;
-	bool selected;
 
 	Animation animation;
+
+	ENEMY_STATES state;
+	std::vector<ENEMY_INPUTS> inputs;
 
 };
 
 
-#endif // !
+#endif //__ENEMY_H__

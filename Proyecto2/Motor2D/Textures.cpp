@@ -35,7 +35,6 @@ bool ModuleTextures::Awake(pugi::xml_node& config)
 		ret = false;
 	}
 
-
 	return ret;
 }
 

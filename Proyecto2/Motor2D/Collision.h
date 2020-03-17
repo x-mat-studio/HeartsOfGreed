@@ -26,13 +26,21 @@ struct Collider
 	bool			to_delete = false;
 	COLLIDER_TYPE	type;
 	Module*			callback = nullptr;
-	Entity*			entCallback = nullptr;
+	Entity*			thisEntity = nullptr;
 
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Module* callback = nullptr, Entity* entCallback = nullptr) :
+	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Module* callback = nullptr, Entity* thisEntity = nullptr) :
 		rect(rectangle),
 		type(type),
 		callback(callback),
-		entCallback(entCallback)
+		thisEntity(thisEntity)
+	{}
+
+	Collider(Collider* collider, Entity* thisEntity = nullptr) :
+		rect(collider->rect),
+		type(collider->type),
+		callback(collider->callback),
+		thisEntity(thisEntity)
+
 	{}
 
 

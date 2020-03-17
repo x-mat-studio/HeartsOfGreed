@@ -5,28 +5,24 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture) :
+Entity::Entity(SDL_Point position, ENTITY_TYPE type) :
 
 	position(position),
-	type(type),
-	texture(texture),
+	type(type),	
 	started(false),
 	toDelete(false),
-	vectorPosition(NULL)
+	collider(nullptr)
 {}
 
 
-Entity::Entity(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback) :
+Entity::Entity(SDL_Point position, ENTITY_TYPE type, Collider* collider) :
 
 	position(position),
-	type(type),
-	texture(texture),
+	type(type),	
 	started(false),
-	toDelete(false)
+	toDelete(false),
+	collider(collider)
 {
-	collider = new Collider(collRect, collType, callback, this);
-	app->coll->AddColliderEntity(collider);
-
 }
 
 Entity::~Entity()
@@ -37,8 +33,15 @@ Entity::~Entity()
 }
 
 
-bool Entity::Start()
+bool Entity::Start(SDL_Texture* texture)
 {
+	this->texture = texture;
+
+	collider->thisEntity = this;
+	app->coll->AddColliderEntity(collider);
+
+	started = true;
+
 	return true;
 }
 

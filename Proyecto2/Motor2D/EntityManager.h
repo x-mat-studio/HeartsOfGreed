@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "vector"
 #include "Entity.h"
+#include "Animation.h"
 
 class Hero;
 
@@ -40,7 +41,6 @@ public:
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y);
 
 
-	bool DeleteEntity(Entity* toDelete);
 	void RemoveDeletedEntitys();
 
 
@@ -49,12 +49,21 @@ public:
 	bool CheckEntityExists(Entity* entity);
 	void AddEntityToRenderVector();
 
+
+private:
+
+	void CheckIfStarted();
+
 private:
 
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
 	std::vector <Hero*> heroVector;
 	std::vector <Entity*> renderVector;
+
+	SDL_Texture* texture;
+
+	Hero* tmpHero;
 
 };
 

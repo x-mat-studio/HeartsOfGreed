@@ -23,8 +23,31 @@ ModuleEntityManager::~ModuleEntityManager()
 bool ModuleEntityManager::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
-	
+
 	bool ret = true;
+
+	SDL_Point pos{ 100, 200 };
+
+	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
+	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
+	Animation walkLeftDown = walkLeftDown.PushAnimation(config.child("suitmale"), "walk_left_down");
+	Animation walkRightUp = walkRightUp.PushAnimation(config.child("suitmale"), "walk_right_up");
+	Animation walkRightDown = walkRightDown.PushAnimation(config.child("suitmale"), "walk_right_down");
+	Animation walkRight = walkRight.PushAnimation(config.child("suitmale"), "walk_right");
+	Animation idleRight = idleRight.PushAnimation(config.child("suitmale"), "idle_right");
+	Animation idleRightUp = idleRightUp.PushAnimation(config.child("suitmale"), "idle_right_up");
+	Animation idleRightDown = idleRightDown.PushAnimation(config.child("suitmale"), "idle_right_down");
+	Animation idleLeft = idleLeft.PushAnimation(config.child("suitmale"), "idle_left");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
+
+	Collider* collider = new Collider({ 0,0,100,100 }, COLLIDER_HERO, nullptr);
+
+	tmpHero = new Hero(SDL_Point{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
+		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
+
+	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 
 	return ret;
 }
@@ -34,9 +57,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 bool ModuleEntityManager::Start()
 {
 	bool ret = true;
-	SDL_Point pos{ 100, 200 };
 
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+	texture = app->tex->Load("spritesheets/characters/suitmale.png");
 
 	return ret;
 }
@@ -46,16 +68,27 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	bool ret = true;
+	CheckIfStarted();
 
 	int numEntities = entityVector.size();
-
 
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PreUpdate(dt);
 	}
-	return ret;
+
+	return true;
+}
+
+void ModuleEntityManager::CheckIfStarted() {
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->started == false)
+			entityVector[i]->Start(texture);
+	}
 }
 
 
@@ -64,11 +97,11 @@ bool ModuleEntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	bool ret = true;
+		bool ret = true;
 
 	int numEntities = entityVector.size();
 
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->Update(dt);
@@ -81,7 +114,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	bool ret = true;
+		bool ret = true;
 
 	int numEntities = entityVector.size();
 	float posX;
@@ -119,7 +152,7 @@ bool ModuleEntityManager::CleanUp()
 {
 	int numEntities = entityVector.size();
 
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
@@ -134,9 +167,9 @@ bool ModuleEntityManager::CleanUp()
 
 void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c1->entCallback != nullptr)
+	if (c1->thisEntity != nullptr)
 	{
-		c1->entCallback->OnCollision(c2);
+		c1->thisEntity->OnCollision(c2);
 	}
 }
 
@@ -156,16 +189,12 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 	case ENTITY_TYPE::HERO_MELEE:
 	{
 		//Test Things :)
-		Animation animation;
-		animation.PushBack(SDL_Rect{ 100, 100, 100, 100 }, 50, 0, 0);
-		SDL_Texture* texture = app->tex->Load("spritesheets/characters/suitmale.png");
 
-
-		Hero* tmpHero = new Hero(SDL_Point{ x,y }, ENTITY_TYPE::HERO_MELEE, texture, { 0,0,100,100 }, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
+		/*Hero* tmpHero = new Hero(SDL_Point{ x,y }, ENTITY_TYPE::HERO_MELEE, { 0,0,100,100 }, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
 		heroVector.push_back(tmpHero);
-		ret = tmpHero;
+		ret = tmpHero;*/
 	}
-		break;
+	break;
 	case ENTITY_TYPE::HERO_RANGED:
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
@@ -182,7 +211,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 
 	if (ret != nullptr)
 	{
-		ret->vectorPosition = entityVector.size();
 		entityVector.push_back(ret);
 	}
 
@@ -196,12 +224,12 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 	int numEntitys = entityVector.size();
 
 	Collider* col;
-	
+
 	for (int i = 0; i < numEntitys; i++)
 	{
 		col = entityVector[i]->GetCollider();
 
-		if (col != nullptr) 
+		if (col != nullptr)
 		{
 			if (SDL_PointInRect(&mousePos, &col->rect))
 			{
@@ -214,14 +242,14 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 }
 
 
-void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*>* heroPlayerVector)
+void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroPlayerVector)
 {
 	int numHeroes = heroVector.size();
 
 	heroPlayerVector->clear();
 
 	Collider* col;
-	
+
 	for (int i = 0; i < numHeroes; i++)
 	{
 		col = heroVector[i]->GetCollider();
@@ -253,19 +281,6 @@ bool ModuleEntityManager::CheckEntityExists(Entity* entity)
 }
 
 
-bool ModuleEntityManager::DeleteEntity(Entity* toDelete)
-{
-	if (toDelete == nullptr || toDelete->vectorPosition == NULL)
-		return false;
-
-	int vectorIndex = toDelete->vectorPosition;
-
-	RELEASE(entityVector[vectorIndex]);
-	entityVector[vectorIndex] = nullptr;
-	entityVector.erase(entityVector.begin() + vectorIndex);
-}
-
-
 void ModuleEntityManager::RemoveDeletedEntitys()
 {
 	int numEntitys = entityVector.size();
@@ -276,6 +291,7 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 		{
 			delete entityVector[i];
 			entityVector.erase(entityVector.begin() + i);
+			entityVector[i] = nullptr;
 		}
 	}
 

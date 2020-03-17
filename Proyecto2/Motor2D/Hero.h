@@ -8,11 +8,12 @@
 
 enum class HERO_STATES
 {
-	UNKNOWN,
+	UNKNOWN = -1,
 	IDLE,
 
 	MOVE,
 	ATTACK,
+	CHARGING_ATTACK,
 	SKILL1,
 	SKILL2,
 	SKILL3,
@@ -31,8 +32,11 @@ enum HERO_INPUTS
 	IN_MOVE,
 	IN_REPAIR,
 	IN_ATTACK,
+	IN_CHARGING_ATTACK,
+	IN_ATTACK_CHARGED,
+
 	IN_SKILL1,
-	IN_SKILL2,
+	IN_SKILL2, 
 	IN_SKILL3,
 	
 	IN_SKILL_FINISHED,
@@ -48,10 +52,13 @@ enum HERO_INPUTS
 class Hero : public Entity
 {
 public:
-	Hero(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, SDL_Rect collRect, COLLIDER_TYPE collType, Module* callback,
-		Animation& animation, int level, int hitPoints, int recoveryHitPointsRate,int energyPoints, int recoveryEnergyRate,
-		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision,float attackCooldown, float coolDownHability1,
-		float coolDownHability2, float coolDownHability3);
+	Hero::Hero(SDL_Point position, ENTITY_TYPE type, Collider* col,
+		Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
+		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
+		Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
+		int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
+		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime);
 
 	Hero(SDL_Point position, Hero* copy);
 	~Hero();
@@ -59,7 +66,6 @@ public:
 	bool MoveTo(int x, int y);
 	bool LockOn(Entity*);
 
-	bool Start();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
@@ -84,9 +90,9 @@ private:
 	void RecoverHealth();
 	void RecoverEnergy();
 
-	void internal_input(std::vector<HERO_INPUTS>& inputs, float dt);
-	bool external_input(std::vector<HERO_INPUTS>& inputs, float dt);
-	HERO_STATES process_fsm(std::vector<HERO_INPUTS>& inputs);
+	void internalInput(std::vector<HERO_INPUTS>& inputs, float dt);
+	bool externalInput(std::vector<HERO_INPUTS>& inputs, float dt);
+	HERO_STATES processFsm(std::vector<HERO_INPUTS>& inputs);
 
 private:
 	int level;
@@ -97,21 +103,51 @@ private:
 	int recoveryEnergyRate;
 
 	int attackDamage;
-	int attackSpeed;
 	int attackRange;
+
+	float attackSpeed;
+	float skill1RecoverTime;
+	float skill2RecoverTime;
+	float skill3RecoverTime;
+
+
+	float skill1ExecutionTime;
+	float skill2ExecutionTime;
+	float skill3ExecutionTime;
+
+	float skill1TimePassed;
+	float skill2TimePassed;
+	float skill3TimePassed;
+
+
+	bool skill1Charged;
+	bool skill2Charged;
+	bool skill3Charged;
 
 	int movementSpeed;
 	int vision;
 
 	float attackCooldown;
-	float coolDownHability1;
-	float coolDownHability2;
-	float coolDownHability3;
+	float cooldownHability1;
+	float cooldownHability2;
+	float cooldownHability3;
 
 	Entity* objective;
 	bool selected;
 
-	Animation animation;
+	Animation walkLeft;
+	Animation walkLeftUp;
+	Animation walkLeftDown;
+	Animation walkRightUp;
+	Animation walkRightDown;
+	Animation walkRight;
+	Animation idleRight;
+	Animation idleRightUp;
+	Animation idleRightDown;
+	Animation idleLeft;
+	Animation idleLeftUp;
+	Animation idleLeftDown;
+	
 
 	bool skillFromAttacking;
 	HERO_STATES state;

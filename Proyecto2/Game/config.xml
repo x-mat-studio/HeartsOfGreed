@@ -278,8 +278,413 @@
 
   </player>
 
-  <entity_manager>
-	<entity_doc>entityInfo.xml</entity_doc>
-  </entity_manager>
+  <entityManager>
+    <suitmale>
+      <Animations>
+
+        <idle_right_up name="idle_right_up" frames="1">
+
+          <frame
+				    rposX="9" rposY="4" rwidth="33" rheight="66"
+			    	time="20"
+			    	pivotX="0" pivotY="0">
+          </frame>
+
+        </idle_right_up>
+
+
+        <idle_right name="idle_right" frames="1">
+
+          <frame
+           rposX="17" rposY="74" rwidth="17" rheight="69"
+           time="20"
+           pivotX="0" pivotY="0">
+          </frame>
+
+        </idle_right>
+
+        <idle_right_down name="idle_right_down" frames="1">
+
+          <frame
+            rposX="7" rposY="144" rwidth="34" rheight="69"
+            time="20"
+            pivotX="0" pivotY="0">
+          </frame>
+
+        </idle_right_down>
+
+        <idle_left_down name="idle_left_down" frames="1">
+
+          <frame
+             rposX="7" rposY="214" rwidth="34" rheight="69"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+        </idle_left_down>
+
+        <idle_left name="idle_left" frames="1">
+
+          <frame
+           rposX="16" rposY="284" rwidth="17" rheight="69"
+           time="20"
+           pivotX="0" pivotY="0">
+          </frame>
+
+        </idle_left>
+
+        <idle_left_up name="idle_left_up" frames="1">
+
+          <frame
+            rposX="8" rposY="356" rwidth="34" rheight="67"
+            time="20"
+            pivotX="0" pivotY="0">
+          </frame>
+
+        </idle_left_up>
+
+        <walk_right_up name="walk_right_up" frames="8">
+
+          <frame
+             rposX="355" rposY="4" rwidth="36" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="89" rposY="4" rwidth="33" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="127" rposY="3" rwidth="32" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="165" rposY="3" rwidth="33" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="201" rposY="4" rwidth="35" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="238" rposY="3" rwidth="36" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="277" rposY="1" rwidth="36" rheight="70"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="315" rposY="1" rwidth="37" rheight="70"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+        </walk_right_up>
+
+        <walk_right name="walk_right" frames="9">
+
+          <frame
+            rposX="56" rposY="78" rwidth="20" rheight="65"
+            time="20"
+            pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="94" rposY="76" rwidth="23" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="130" rposY="75" rwidth="27" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="170" rposY="75" rwidth="26" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="208" rposY="75" rwidth="25" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="245" rposY="76" rwidth="25" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="283" rposY="76" rwidth="26" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="319" rposY="76" rwidth="29" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="358" rposY="77" rwidth="27" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+        </walk_right>
+
+        <walk_right_down name="walk_right_down" frames="9">
+
+          <frame
+             rposX="48" rposY="152" rwidth="36" rheight="61"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="87" rposY="148" rwidth="37" rheight="65"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="126" rposY="146" rwidth="36" rheight="64"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="165" rposY="150" rwidth="36" rheight="63"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="203" rposY="150" rwidth="36" rheight="63"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="241" rposY="150" rwidth="33" rheight="63"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="280" rposY="150" rwidth="32" rheight="63"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="317" rposY="151" rwidth="33" rheight="62"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="355" rposY="152" rwidth="33" rheight="61"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+        </walk_right_down>
+
+        <walk_right_left name="walk_right_left" frames="9">
+
+          <frame
+             rposX="47" rposY="217" rwidth="37" rheight="64"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="89" rposY="219" rwidth="34" rheight="62"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="127" rposY="218" rwidth="34" rheight="63"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="165" rposY="220" rwidth="35" rheight="61"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="203" rposY="221" rwidth="35" rheight="60"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="240" rposY="216" rwidth="36" rheight="65"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="277" rposY="215" rwidth="37" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="315" rposY="215" rwidth="37" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="353" rposY="216" rwidth="37" rheight="65"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+        </walk_right_left>
+
+        <walk_left name="walk_left" frames="9">
+
+          <frame
+              rposX="55" rposY="286" rwidth="20" rheight="66"
+              time="20"
+              pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="94" rposY="286" rwidth="23" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="130" rposY="286" rwidth="27" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="169" rposY="286" rwidth="27" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="208" rposY="287" rwidth="25" rheight="65"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="245" rposY="285" rwidth="26" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="282" rposY="285" rwidth="28" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="319" rposY="285" rwidth="29" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="358" rposY="286" rwidth="27" rheight="66"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+        </walk_left>
+
+        <walk_left_up name="walk_left_up" frames="9">
+
+          <frame
+              rposX="48" rposY="356" rwidth="36" rheight="67"
+              time="20"
+              pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="87" rposY="353" rwidth="37" rheight="70"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="126" rposY="353" rwidth="36" rheight="70"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="165" rposY="355" rwidth="36" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="203" rposY="356" rwidth="36" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="241" rposY="355" rwidth="33" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="280" rposY="355" rwidth="32" rheight="68"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="318" rposY="356" rwidth="32" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+
+          <frame
+             rposX="355" rposY="356" rwidth="33" rheight="67"
+             time="20"
+             pivotX="0" pivotY="0">
+          </frame>
+        </walk_left_up>
+
+      </Animations>
+    </suitmale>
+  </entityManager>
 
 </config>
