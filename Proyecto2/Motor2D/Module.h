@@ -141,7 +141,7 @@ public:
 
 	virtual ~Listener() {}
 
-	virtual void onNotify(const Module& module, Event event) = 0;
+	virtual void onNotify(const Module& module, Event event) {};
 
 private:
 
@@ -194,7 +194,7 @@ private:
 			}
 		
 		}
-	
+
 		return false;
 	}
 

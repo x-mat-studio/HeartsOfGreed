@@ -102,6 +102,23 @@ private:
 
 	P2SString	text;
 	int			cursorPos;
+
 };
 
+class InputListener : public Listener
+{
+private:
+
+	void onNotify(const Module& module, Event event);
+
+};
+
+class InputSpeaker : public Speaker
+{
+private:
+	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
+
+	int numListeners;
+
+};
 #endif // __INPUT_H__

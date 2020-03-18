@@ -139,3 +139,7 @@ void ModuleTextures::GetSize(const SDL_Texture* texture, uint& width, uint& heig
 {
 	SDL_QueryTexture((SDL_Texture*)texture, NULL, NULL, (int*)& width, (int*)& height);
 }
+
+void TexturesListener::onNotify(const Module & module, Event event)
+{
+}

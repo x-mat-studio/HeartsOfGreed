@@ -318,3 +318,7 @@ void ModuleRender::GetCameraMeasures(int& w, int& h)
 	w = camera.w;
 	h = camera.h;
 }
+
+void RenderListener::onNotify(const Module & module, Event event)
+{
+}

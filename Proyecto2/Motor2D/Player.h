@@ -43,7 +43,24 @@ private:
 	Entity* focusedEntity;
 
 	SDL_Point clickPosition;
+
 };
 
+class PlayerListener : public Listener
+{
+private:
+
+	void onNotify(const Module& module, Event event);
+
+};
+
+class PlayerSpeaker : public Speaker
+{
+private:
+	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
+
+	int numListeners;
+
+};
 
 #endif __PLAYER_H__

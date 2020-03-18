@@ -583,3 +583,7 @@ bool ModuleMap::InsideCamera(float& posX, float& posY) const {
 		return true;
 	}
 }
+
+void MapListener::onNotify(const Module & module, Event event)
+{
+}
