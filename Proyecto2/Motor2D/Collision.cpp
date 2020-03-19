@@ -100,7 +100,7 @@ void ModuleCollision::DebugDraw()
 	/* if (App->scene->debug == false)  //Needs debug functionality
 		return; */
 
-	Uint8 alpha = 80;
+	Uint8 alpha = 250;
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] == nullptr)

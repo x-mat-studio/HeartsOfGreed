@@ -45,6 +45,9 @@ public:
 	//Returns the width & height of the camera
 	void GetCameraMeasures(int& w, int& h);
 
+	const int GetCameraX();
+	const int GetCameraY();
+
 public:
 	SDL_Renderer* renderer;
 

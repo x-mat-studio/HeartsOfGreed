@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "Collision.h"
 
 
 ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 })
@@ -87,8 +88,12 @@ bool ModuleRender::Update(float dt)
 
 bool ModuleRender::PostUpdate(float dt)
 {
+	
+	
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+	
 	SDL_RenderPresent(renderer);
+	
 	return true;
 }
 
@@ -317,6 +322,16 @@ void ModuleRender::GetCameraMeasures(int& w, int& h)
 {
 	w = camera.w;
 	h = camera.h;
+}
+
+const int ModuleRender::GetCameraX()
+{
+	return camera.x;
+}
+
+const int ModuleRender::GetCameraY()
+{
+	return camera.y;
 }
 
 void RenderListener::onNotify(const Module & module, Event event)

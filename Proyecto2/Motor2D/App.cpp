@@ -222,7 +222,10 @@ void App::FinishUpdate()
 	uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
 	static char title[256];
+	sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  ",
+		app->render->GetCameraX(), app->render->GetCameraY());
 
+	app->win->SetTitle(title);
 
 	if (capFrames == false)
 	{
@@ -257,10 +260,6 @@ void App::FinishUpdate()
 		}*/
 
 	}
-
-
-	app->win->SetTitle(title);
-
 
 	//actuvate / deactivate framrate cap
 	/*if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
