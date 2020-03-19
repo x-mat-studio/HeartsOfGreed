@@ -47,6 +47,7 @@ public:
 	Entity* CheckEntityOnClick(SDL_Point mousePos);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
+	void AddEntityToRenderVector();
 
 
 private:
@@ -58,10 +59,28 @@ private:
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
 	std::vector <Hero*> heroVector;
+	std::vector <Entity*> renderVector;
 
 	SDL_Texture* texture;
 
 	Hero* tmpHero;
+
+};
+
+class EntityManagerListener : public Listener
+{
+private:
+
+	void onNotify(const Module& module, Event event);
+
+};
+
+class EntityManagerSpeaker : public Speaker
+{
+private:
+	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
+
+	int numListeners;
 
 };
 

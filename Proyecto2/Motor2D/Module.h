@@ -7,6 +7,7 @@
 #define __MODULE_H__
 
 #define MAX_COLLIDERS_PER_FRAME 50
+#define MAX_LISTENERS 10
 
 #include "p2SString.h"
 #include "PugiXml\src\pugixml.hpp"
@@ -131,5 +132,85 @@ public:
 private:
 	bool enabled = true;
 };
+
+class Event {}; //PLACEHOLDER juan pls
+
+class Listener
+{
+public:
+
+	virtual ~Listener() {}
+
+	virtual void onNotify(const Module& module, Event event) {};
+
+private:
+
+	//We do not need to remove listeners from speakers: we never delete modules on runtime
+
+};
+
+class Speaker 
+{
+private:
+
+	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
+
+
+	int numListeners;
+
+
+	bool AddListener(Listener* listener) {
+
+		if (numListeners < MAX_LISTENERS) {
+
+			numListeners++;
+
+			for (int i = 0; i < MAX_LISTENERS; i++) {
+
+				if (listeners_[i] == nullptr) {
+
+					listeners_[i] = listener;
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	bool RemoveListener(Listener* listener) {
+		
+		for (int i = 0; i < numListeners; i++) {
+		
+			if (listeners_[i] == listener)
+			{
+				listeners_[i] = nullptr;
+
+				numListeners--;
+
+				return true;
+			}
+		
+		}
+
+		return false;
+	}
+
+
+protected:
+
+	void Speak(const Module& module, Event event)
+	{
+		for (int i = 0; i < numListeners; i++)
+		{
+			listeners_[i]->onNotify(module, event);
+		}
+	}
+};
+
+
+
 
 #endif // __MODULE_H__

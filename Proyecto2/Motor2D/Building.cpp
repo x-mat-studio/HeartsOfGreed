@@ -97,3 +97,5 @@ void Building::RecoverHealth()
 void Building::Contruct()
 {
 }
+
+

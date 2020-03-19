@@ -2,6 +2,7 @@
 #include "EntityManager.h"
 #include "Textures.h"
 #include "Entity.h"
+#include "Map.h"
 #include "Collision.h"
 #include "Hero.h"
 #include "Enemy.h"
@@ -117,12 +118,30 @@ bool ModuleEntityManager::PostUpdate(float dt)
 		bool ret = true;
 
 	int numEntities = entityVector.size();
-
+	float posX;
+	float posY;
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i]->PostUpdate(dt);
+		posX = entityVector[i]->GetPosition().x;
+		posY = entityVector[i]->GetPosition().y;
+
+		if (app->map->InsideCamera(posX, posY) == true)
+		{
+			renderVector.push_back(entityVector[i]);
+		}
 	}
+
+	numEntities = renderVector.size();
+
+	// SORTING
+	
+	for (int i = 0; i < numEntities; i++)
+	{
+		renderVector[i]->PostUpdate(dt);
+	}
+
+	renderVector.clear();
 
 	RemoveDeletedEntitys();
 
@@ -277,4 +296,8 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 		}
 	}
 
+}
+
+void EntityManagerListener::onNotify(const Module & module, Event event)
+{
 }

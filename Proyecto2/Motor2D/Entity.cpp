@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "Render.h"
 #include "App.h"
 
 Entity::Entity()
@@ -11,7 +12,10 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type) :
 	type(type),	
 	started(false),
 	toDelete(false),
-	collider(nullptr)
+	collider(nullptr),
+	flip(false),
+	current_animation(nullptr),
+	texture(nullptr)
 {}
 
 
@@ -21,9 +25,11 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type, Collider* collider) :
 	type(type),	
 	started(false),
 	toDelete(false),
-	collider(collider)
-{
-}
+	collider(collider),
+	flip(false),
+	current_animation(nullptr),
+	texture(nullptr)
+{}
 
 Entity::~Entity()
 {
@@ -68,6 +74,11 @@ void Entity::OnCollision(Collider* collider)
 {
 }
 
+void Entity::CollisionPosUpdate()
+{
+	collider->SetPos(position.x, position.y);
+}
+
 
 Collider* Entity::GetCollider() const
 {
@@ -77,6 +88,7 @@ Collider* Entity::GetCollider() const
 
 void Entity::Draw(float dt)
 {
+	app->render->Blit(texture, position.x, position.y, &current_animation->GetCurrentFrameBox(dt));
 }
 
 

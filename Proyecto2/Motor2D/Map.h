@@ -119,6 +119,8 @@ public:
 	inline uint Get(int x, int y, MapLayer* currentlayer) const;
 	void MapToWorldCoordinates(int posX, int posY, MapData& dat, float& outX, float& outY);
 	void WorldToMap(int x, int y, MapData& dat, int& outX, int& outY) const;
+	bool InsideCamera(float& posX, float& posY) const;
+
 private:
 
 	bool LoadMap(P2SString path, P2SString name);
@@ -144,7 +146,23 @@ private:
 	P2SString folder;
 
 	bool mapLoaded;
+	
+};
+
+class MapListener : public Listener
+{
+private:
+
+	void onNotify(const Module& module, Event event);
 
 };
 
+class MapSpeaker : public Speaker
+{
+private:
+	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
+
+	int numListeners;
+
+};
 #endif // __MAP_H__

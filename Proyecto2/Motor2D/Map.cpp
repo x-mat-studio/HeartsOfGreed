@@ -5,6 +5,7 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Window.h"
+#include "Collision.h"
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -36,22 +37,9 @@ bool ModuleMap::Awake(pugi::xml_node& config)
 void ModuleMap::Draw()
 {
 	BROFILER_CATEGORY("DRAW", Profiler::Color::Aquamarine);
-	int camW;
-	int camH;
-	app->render->GetCameraMeasures(camW, camH);
-	
-	float up_left_cam_cornerX= -app->render->currentCamX;
-	float up_left_cam_cornerY= -app->render->currentCamY;
-	float down_right_cam_cornerX= up_left_cam_cornerX + camW;
-	float down_right_cam_cornerY= up_left_cam_cornerY +camH;
 
 	if (mapLoaded == false)
 		return;
-
-
-	uint windowW;
-	uint windowH;
-	app->win->GetWindowSize(windowW, windowH);
 
 
 	int f = 0;
@@ -59,36 +47,33 @@ void ModuleMap::Draw()
 
 	while (f < data.layers.size())
 	{
-		float scale = app->win->GetScale();
+		if (data.layers[f]->name != "Collision") {
 
-
-		for (int i = 0; i < data.layers[f]->height; i++)//number of rows
-		{
-
-
-			for (int j = 0; j < data.layers[f]->width; j++)//number of columns
+			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
-				int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
-				float worldX;
-				float worldY;
-				MapToWorldCoordinates(j, i, data, worldX, worldY);
+				for (int j = 0; j < data.layers[f]->width; j++)//number of columns
+				{
+					int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
-				//whith camera culling
-				
-					if ((worldX >(up_left_cam_cornerX-(data.tileWidth*scale))/scale && worldX <down_right_cam_cornerX/scale)&& ((worldY > (up_left_cam_cornerY-(data.tileWidth*scale))/scale) && worldY < down_right_cam_cornerY/scale))
+					float worldX;
+					float worldY;
+					MapToWorldCoordinates(j, i, data, worldX, worldY);
+
+					//whith camera culling
+
+					if (InsideCamera(worldX, worldY) == true)
 					{
 						if (id > 0)
 						{
 							app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
 						}
 					}
+				}
 			}
 		}
 		f++;
 	}
-
-	
 }
 
 
@@ -446,6 +431,23 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
 
+	if (layer->name == "Collision") {
+
+		for (int i = 0; i < layer->width * layer->height; i++)
+		{
+
+			if (layer->gid[i] > 0) {
+			
+				SDL_Rect shitngiggles = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
+				
+				app->coll->AddCollider(shitngiggles,COLLIDER_WALL);
+
+				LOG("Yoink");
+
+			}
+		}
+	}
+
 
 	return ret;
 }
@@ -487,6 +489,7 @@ bool ModuleMap::LoadObjGroup(pugi::xml_node& objgroupnode, ObjectGroup* group)
 }
 
 
+//gets the position in a 1 row vector
 //gets the position in a 1 row vector
 //X horizontal, Y vertical, data.layers.(currentLayer)
 inline uint ModuleMap::Get(int x, int y, MapLayer* currentlayer) const
@@ -579,4 +582,26 @@ bool ModuleMap::Save(pugi::xml_node& ldata) const
 {
 	ldata.append_attribute("name") = data.name.GetString();
 	return true;
+}
+
+bool ModuleMap::InsideCamera(float& posX, float& posY) const {
+
+	int camW;
+	int camH;
+	app->render->GetCameraMeasures(camW, camH);
+	float scale = app->win->GetScale();
+
+	float up_left_cam_cornerX = -app->render->currentCamX;
+	float up_left_cam_cornerY = -app->render->currentCamY;
+	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
+	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
+
+	if ((posX > (up_left_cam_cornerX - (data.tileWidth * scale)) / scale && posX < down_right_cam_cornerX / scale) &&
+		((posY > (up_left_cam_cornerY - (data.tileWidth * scale)) / scale) && posY < down_right_cam_cornerY / scale)) {
+		return true;
+	}
+}
+
+void MapListener::onNotify(const Module & module, Event event)
+{
 }

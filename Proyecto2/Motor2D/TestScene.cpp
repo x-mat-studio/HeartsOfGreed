@@ -126,8 +126,16 @@ bool  ModuleTestScene::Update(float dt)
 // Called each loop iteration
 bool  ModuleTestScene::PostUpdate(float dt)
 {
-	app->map->Draw();
-	return true;
+	bool ret = true;
+	
+	//app->map->Draw();
+	
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
+
+		ret = false;
+	}
+
+	return ret;
 }
 
 

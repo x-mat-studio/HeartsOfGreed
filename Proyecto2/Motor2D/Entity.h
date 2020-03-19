@@ -6,6 +6,7 @@
 #include "vector"
 #include "SDL/include/SDL_rect.h"
 #include "Collision.h"
+#include "Animation.h"
 
 struct Collider;
 struct SDL_Texture;
@@ -44,6 +45,7 @@ public:
 	virtual bool PostUpdate(float dt);
 
 	virtual void OnCollision(Collider* collider);
+	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
 	SDL_Point GetPosition();
@@ -58,6 +60,8 @@ public:
 	bool started;
 	bool toDelete;
 
+	bool flip;
+
 protected:
 	SDL_Point position;
 
@@ -67,6 +71,7 @@ protected:
 
 	Collider* collider;
 
+	Animation* current_animation;
 };
 
 #endif//__ENTITY_H__

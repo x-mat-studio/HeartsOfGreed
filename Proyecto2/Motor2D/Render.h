@@ -45,6 +45,9 @@ public:
 	//Returns the width & height of the camera
 	void GetCameraMeasures(int& w, int& h);
 
+	const int GetCameraX();
+	const int GetCameraY();
+
 public:
 	SDL_Renderer* renderer;
 
@@ -56,6 +59,23 @@ public:
 	float currentCamY;//buffer for the camera movement(otherwise when converting to int behaves wrong)
 private:
 	SDL_Rect camera;
+
 };
 
+class RenderListener : public Listener
+{
+private:
+
+	void onNotify(const Module& module, Event event);
+
+};
+
+class RenderSpeaker : public Speaker
+{
+private:
+	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
+
+	int numListeners;
+
+};
 #endif // __RENDER_H__

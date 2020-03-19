@@ -118,7 +118,7 @@ void ModuleCollision::DebugDraw()
 	/* if (App->scene->debug == false)  //Needs debug functionality
 		return; */
 
-	Uint8 alpha = 80;
+	Uint8 alpha = 250;
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] == nullptr)
@@ -204,3 +204,6 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 	return !((this->rect.x + this->rect.w < r.x || r.x + r.w < this->rect.x) || (this->rect.y + this->rect.h < r.y || r.y + r.h < this->rect.y));
 }
 
+void CollisionListener::onNotify(const Module & module, Event event)
+{
+}
