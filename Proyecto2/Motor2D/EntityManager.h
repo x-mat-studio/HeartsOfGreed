@@ -4,12 +4,12 @@
 #include "SDL/include/SDL.h"
 #include "Module.h"
 #include "vector"
-#include "Entity.h"
 #include "Animation.h"
+#include "Entity.h"
 
 class Hero;
 
-class Entity;
+
 
 class ModuleEntityManager : public Module
 {

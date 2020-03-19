@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Collision.h"
 #include "Hero.h"
+#include "Enemy.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 

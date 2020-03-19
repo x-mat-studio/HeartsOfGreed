@@ -65,7 +65,8 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, Collider* collider,
 
 Hero::Hero(SDL_Point position, Hero* copy) :
 
-	Entity(position, copy->type, copy->GetCollider()),
+	Entity(position, copy->type, copy->collider),
+
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
 	walkLeftDown(copy->walkLeftDown),
@@ -78,6 +79,7 @@ Hero::Hero(SDL_Point position, Hero* copy) :
 	idleLeft(copy->idleLeft),
 	idleLeftUp(copy->idleLeftUp),
 	idleLeftDown(copy->idleLeftDown),
+
 	level(copy->level),
 	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
@@ -88,11 +90,29 @@ Hero::Hero(SDL_Point position, Hero* copy) :
 	attackRange(copy->attackRange),
 	movementSpeed(copy->movementSpeed),
 	vision(copy->vision),
+
 	attackCooldown(copy->attackCooldown),
-	cooldownHability1(copy->cooldownHability1),
-	cooldownHability2(copy->cooldownHability2),
-	cooldownHability3(copy->cooldownHability3),
-	skillFromAttacking(false)
+	skill1ExecutionTime(copy->skill1ExecutionTime),
+	skill2ExecutionTime(copy->skill2ExecutionTime),
+	skill3ExecutionTime(copy->skill3ExecutionTime),
+	skill1RecoverTime(copy->skill1RecoverTime),
+	skill2RecoverTime(copy->skill2RecoverTime),
+	skill3RecoverTime(copy->skill3RecoverTime),
+
+	cooldownHability1(0),
+	cooldownHability2(0),
+	cooldownHability3(0),
+	skill1TimePassed(0),
+	skill2TimePassed(0),
+	skill3TimePassed(0),
+
+	skill1Charged(true),
+	skill2Charged(true),
+	skill3Charged(true),
+	skillFromAttacking(false),
+	selected(false),
+
+	objective(nullptr)
 {}
 
 
