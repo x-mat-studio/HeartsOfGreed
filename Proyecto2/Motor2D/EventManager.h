@@ -37,6 +37,9 @@ public:
 	virtual ~ModuleEventManager();
 
 	bool EventRegister(EVENT_ENUM event, Module* mod);
+	bool EventUnRegister(EVENT_ENUM event, Module* mod);
+
+	void CleanListenerMap();
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
@@ -45,7 +48,9 @@ public:
 
 private:
 	void CreateEventOnMap(EVENT_ENUM event);
-	bool FindListener(EVENT_ENUM event,Module*mod);
+	int FindListener(EVENT_ENUM event,Module*mod);
+	std::vector<Module*>::iterator EraseListener(EVENT_ENUM event, Module* mod, int vecId);
+
 
 private:
 	std::map<EVENT_ENUM,std::vector<Module*>> eventListenersMap;
