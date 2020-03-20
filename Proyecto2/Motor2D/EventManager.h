@@ -47,7 +47,6 @@ public:
 
 private:
 	void CreateEventOnMap(EVENT_ENUM event);
-	bool FindListener(EVENT_ENUM event,Module*mod);
 	EVENT_ENUM CheckEventTrigger(EVENT_ENUM& eventTrigger);
 	int FindListener(EVENT_ENUM event,Module*mod);
 	std::vector<Module*>::iterator EraseListener(EVENT_ENUM event, Module* mod, int vecId);

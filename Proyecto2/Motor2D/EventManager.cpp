@@ -156,22 +156,6 @@ int ModuleEventManager::FindListener(EVENT_ENUM event, Module* mod)
 	return ret;
 }
 
-EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM& eventTrigger)
-{
-
-	int numElem = eventVector.size();
-	
-	for (int i = 0; i < numElem; i++)
-	{
-		if (eventVector[i].idTrigger == eventTrigger)
-		{
-			return eventVector[i].id;
-		}
-	}
-
-	return EVENT_ENUM::NULL_EVENT;
-}
-
 
 std::vector<Module*>::iterator ModuleEventManager::EraseListener(EVENT_ENUM event, Module* mod,int vecId)
 {
@@ -200,4 +184,21 @@ std::vector<Module*>::iterator ModuleEventManager::EraseListener(EVENT_ENUM even
 void  ModuleEventManager::CleanListenerMap()
 {
 	eventListenersMap.clear();
+}
+
+
+EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM& eventTrigger)
+{
+
+	int numElem = eventVector.size();
+
+	for (int i = 0; i < numElem; i++)
+	{
+		if (eventVector[i].idTrigger == eventTrigger)
+		{
+			return eventVector[i].id;
+		}
+	}
+
+	return EVENT_ENUM::NULL_EVENT;
 }
