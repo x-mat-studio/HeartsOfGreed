@@ -102,6 +102,7 @@ public:
 	uint				frameRate = 0;
 
 	bool				vSyncActivated;
+	bool				debugMode = false;
 
 private:
 	std::vector<Module*>	modules;
