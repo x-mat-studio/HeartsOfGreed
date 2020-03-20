@@ -101,11 +101,34 @@ bool ModuleEntityManager::Update(float dt)
 		bool ret = true;
 
 	int numEntities = entityVector.size();
-
+	float posX;
+	float posY;
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i]->Update(dt);
+		posX = entityVector[i]->GetPosition().x;
+		posY = entityVector[i]->GetPosition().y;
+
+		if (app->map->InsideCamera(posX, posY) == true){
+			
+			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
+			switch (entityVector[i]->GetType())
+			{
+			case ENTITY_TYPE::BUILDING:
+			case ENTITY_TYPE::BLDG_BARRICADE:
+			case ENTITY_TYPE::BLDG_BASE:
+			case ENTITY_TYPE::BLDG_TURRET:
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				buildingVector.push_back(entityVector[i]);
+				break;
+			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::HERO_GATHERER:
+			case ENTITY_TYPE::HERO_MELEE:
+			case ENTITY_TYPE::HERO_RANGED:
+				movableEntitiesVector.push_back(entityVector[i]);
+				break;
+			}
+		}
 	}
 	return ret;
 }
