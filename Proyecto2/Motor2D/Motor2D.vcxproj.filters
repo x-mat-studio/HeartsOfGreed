@@ -79,6 +79,9 @@
     <ClCompile Include="AI.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -175,6 +178,9 @@
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
     <ClInclude Include="AI.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>

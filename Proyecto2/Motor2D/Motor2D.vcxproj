@@ -85,6 +85,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="EventManager.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Hero.h" />
