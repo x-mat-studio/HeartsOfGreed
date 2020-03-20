@@ -73,7 +73,7 @@ class EntityManagerListener : public Listener
 {
 private:
 
-	void onNotify(const Module& module, Event event);
+	void onNotify(const Module& module, Evento event);
 
 };
 

@@ -183,6 +183,6 @@ void ModulePlayer::RightClick()
 	}
 }
 
-void PlayerListener::onNotify(const Module & module, Event event)
+void PlayerListener::onNotify(const Module & module, Evento event)
 {
 }

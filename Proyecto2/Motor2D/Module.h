@@ -133,7 +133,7 @@ private:
 	bool enabled = true;
 };
 
-class Event {}; //PLACEHOLDER juan pls
+class Evento {};	// PLACEHOLDER JUAN PLS. OH WAIT...
 
 class Listener
 {
@@ -141,7 +141,7 @@ public:
 
 	virtual ~Listener() {}
 
-	virtual void onNotify(const Module& module, Event event) {};
+	virtual void onNotify(const Module& module, Evento event) {};
 
 private:
 
@@ -201,7 +201,7 @@ private:
 
 protected:
 
-	void Speak(const Module& module, Event event)
+	void Speak(const Module& module, Evento event)
 	{
 		for (int i = 0; i < numListeners; i++)
 		{

@@ -263,6 +263,6 @@ const char* ModuleInput::GetInputText()
 	return text.GetString();
 }
 
-void InputListener::onNotify(const Module & module, Event event)
+void InputListener::onNotify(const Module & module, Evento event)
 {
 }
