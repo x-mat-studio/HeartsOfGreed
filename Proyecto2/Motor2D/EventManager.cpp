@@ -51,7 +51,7 @@ bool ModuleEventManager::Start()
 //// Called before quitting
 bool ModuleEventManager::CleanUp()
 {
-
+	CleanListenerMap();
 	return true;
 }
 
@@ -91,13 +91,36 @@ bool ModuleEventManager::EventRegister(EVENT_ENUM event, Module* mod)
 	}
 	//if listener has already been added don't add
 	//else add a new listener
-	else if (!FindListener(event, mod))
+	else if (FindListener(event, mod)==-1)
 	{
 		eventListenersMap[event].push_back(mod);
 		ret = true;
 	}
 
 
+	return ret;
+}
+
+
+//returns true if an element has been erased from the listeners map
+bool ModuleEventManager::EventUnRegister(EVENT_ENUM event, Module* mod)
+{
+	bool ret = false;
+
+	//if event does exist
+	if (eventListenersMap.count(event))
+	{	
+		//then if listener does exist erase the element
+		int i = FindListener(event, mod);
+		if (i!=-1)
+		{
+			EraseListener(event, mod, i);
+			ret = true;
+		}
+
+	}
+
+	
 	return ret;
 }
 
@@ -110,10 +133,10 @@ void ModuleEventManager::CreateEventOnMap(EVENT_ENUM event)
 }
 
 
-//returns true if a listener is already in the vector
-bool ModuleEventManager::FindListener(EVENT_ENUM event, Module* mod)
+//returns a positive number if a listener is already in the vector else returns -1
+int ModuleEventManager::FindListener(EVENT_ENUM event, Module* mod)
 {
-	bool ret = false;
+	int ret = -1;
 
 
 	for (int i = 0; i < eventListenersMap[event].size(); i++)
@@ -122,7 +145,8 @@ bool ModuleEventManager::FindListener(EVENT_ENUM event, Module* mod)
 
 		if (eventListenersMap[event].at(i) == mod)
 		{
-			ret = true;
+			ret = i;
+			break;
 		}
 
 
@@ -146,4 +170,34 @@ EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM& eventTrigger)
 	}
 
 	return EVENT_ENUM::NULL_EVENT;
+}
+
+
+std::vector<Module*>::iterator ModuleEventManager::EraseListener(EVENT_ENUM event, Module* mod,int vecId)
+{
+	std::vector<Module*>::iterator iter=eventListenersMap[event].begin();
+	
+	//generate the iterator for the given ID
+	for (int i = 0; i < vecId; i++)
+	{
+		iter++;
+	}
+
+	//delete the listener
+	eventListenersMap[event].erase(iter);
+	
+	//if there are no more listeners delete the map event entry
+	if (eventListenersMap[event].size() <= 0)
+	{
+		eventListenersMap.erase(event);
+	}
+
+
+	return iter;
+}
+
+
+void  ModuleEventManager::CleanListenerMap()
+{
+	eventListenersMap.clear();
 }
