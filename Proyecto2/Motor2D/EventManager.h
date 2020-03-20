@@ -23,8 +23,6 @@ public:
 	Event(EVENT_ENUM& idValue, EVENT_ENUM& idTriggerValue);
 	~Event();
 
-private:
-
 	EVENT_ENUM id;
 	EVENT_ENUM idTrigger;
 };
@@ -36,6 +34,7 @@ public:
 	ModuleEventManager();
 	virtual ~ModuleEventManager();
 
+	void GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTriggerId);
 	bool EventRegister(EVENT_ENUM event, Module* mod);
 
 	bool Awake(pugi::xml_node&);
@@ -46,9 +45,11 @@ public:
 private:
 	void CreateEventOnMap(EVENT_ENUM event);
 	bool FindListener(EVENT_ENUM event,Module*mod);
+	EVENT_ENUM CheckEventTrigger(EVENT_ENUM& eventTrigger);
 
 private:
 	std::map<EVENT_ENUM,std::vector<Module*>> eventListenersMap;
+	std::vector<Event> eventVector;
 };
 
 #endif //__EVENTMANAGER_H__
