@@ -4,6 +4,7 @@
 #include "Collision.h"
 
 
+
 ModuleCollision::ModuleCollision()
 {
 	name.create("colliders");
@@ -115,10 +116,10 @@ bool ModuleCollision::PostUpdate(float dt)
 
 void ModuleCollision::DebugDraw()
 {
-	/* if (App->scene->debug == false)  //Needs debug functionality
-		return; */
+	 if (app->debugMode == false)  
+		return; 
 
-	Uint8 alpha = 250;
+	Uint8 alpha = 80;
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] == nullptr)

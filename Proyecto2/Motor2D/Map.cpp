@@ -430,7 +430,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
-
+	
 	if (layer->name == "Collision") {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
@@ -438,15 +438,25 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 			if (layer->gid[i] > 0) {
 			
-				SDL_Rect shitngiggles = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
+				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
 				
-				app->coll->AddCollider(shitngiggles,COLLIDER_WALL);
+				int tilePosAux_x, tilePosAux_y;
+				tilePosAux_x = (i % layer->width); 
+				tilePosAux_y = ( (i - (i % layer->width)) / layer->width);
+				
+				colliderRectAux.x = tilePosAux_x * colliderRectAux.w / 2 - tilePosAux_y * colliderRectAux.w / 2 ;
+				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2 ;
+				colliderRectAux.w /= 2;
+				
+				app->coll->AddCollider(colliderRectAux,COLLIDER_WALL);
 
 				LOG("Yoink");
 
 			}
 		}
 	}
+	
+	
 
 
 	return ret;
