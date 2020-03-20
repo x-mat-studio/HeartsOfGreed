@@ -128,7 +128,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
 	
-	//app->map->Draw();
+	app->map->Draw();
 	
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 

@@ -15,6 +15,20 @@ enum class EVENT_ENUM
 	NULL_EVENT
 };
 
+class Event {
+
+public:
+
+	Event();
+	Event(EVENT_ENUM& idValue, EVENT_ENUM& idTriggerValue);
+	~Event();
+
+private:
+
+	EVENT_ENUM id;
+	EVENT_ENUM idTrigger;
+};
+
 class ModuleEventManager : public Module
 {
 public:

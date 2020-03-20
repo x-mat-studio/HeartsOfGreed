@@ -11,6 +11,7 @@
 #include "TestScene.h"
 #include "Player.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 
 #include "App.h"
 
@@ -32,10 +33,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	testScene = new ModuleTestScene();
 	coll = new ModuleCollision();
 	entityManager = new ModuleEntityManager();
+	eventManager = new ModuleEventManager();
 	player = new ModulePlayer();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(eventManager);
 	AddModule(input);
 	AddModule(win);
 	AddModule(audio);

@@ -1,6 +1,22 @@
 #include "App.h"
 #include "EventManager.h"
 
+Event::Event()
+{
+	id;
+	idTrigger;
+}
+
+Event::Event(EVENT_ENUM& idValue, EVENT_ENUM& idTriggerValue)
+{
+	id = idValue;
+	idTrigger = idTriggerValue;
+}
+
+Event::~Event()
+{
+}
+
 ModuleEventManager::ModuleEventManager()
 {
 	name.create("EventyManager");

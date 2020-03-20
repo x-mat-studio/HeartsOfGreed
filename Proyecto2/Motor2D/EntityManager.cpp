@@ -321,6 +321,6 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 
 }
 
-void EntityManagerListener::onNotify(const Module & module, Event event)
+void EntityManagerListener::onNotify(const Module & module, Evento event)
 {
 }

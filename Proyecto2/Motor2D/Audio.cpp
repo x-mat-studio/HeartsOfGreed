@@ -256,7 +256,7 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	return ret;
 }
 
-void AudioListener::onNotify(const Module & module, Event event)
+void AudioListener::onNotify(const Module & module, Evento event)
 {
 	//check the event, do stuff
 }

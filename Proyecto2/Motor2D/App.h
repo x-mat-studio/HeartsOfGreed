@@ -23,6 +23,7 @@ class ModuleMap;
 class ModuleTestScene;
 class ModulePlayer;
 class ModuleEntityManager;
+class ModuleEventManager;
 
 class App
 {
@@ -96,6 +97,7 @@ public:
 	ModuleCollision*		coll;
 	ModulePlayer*			player;
 	ModuleEntityManager*	entityManager;
+	ModuleEventManager*		eventManager;
 
 	uint32_t			frames;
 	
