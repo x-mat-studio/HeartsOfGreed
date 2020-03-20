@@ -36,11 +36,16 @@ public:
 	ModuleEventManager();
 	virtual ~ModuleEventManager();
 
+	bool EventRegister(EVENT_ENUM event, Module* mod);
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
 
 	bool CleanUp();
+
+private:
+	void CreateEventOnMap(EVENT_ENUM event);
+	bool FindListener(EVENT_ENUM event,Module*mod);
 
 private:
 	std::map<EVENT_ENUM,std::vector<Module*>> eventListenersMap;

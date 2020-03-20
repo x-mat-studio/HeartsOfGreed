@@ -1,6 +1,7 @@
 #include "App.h"
 #include "EventManager.h"
 
+
 Event::Event()
 {
 	id;
@@ -46,9 +47,66 @@ bool ModuleEventManager::Start()
 	return ret;
 }
 
+
 //// Called before quitting
 bool ModuleEventManager::CleanUp()
 {
 
 	return true;
+}
+
+
+//returns true if the event has been registered or if the new listener has been added, else returns false
+bool ModuleEventManager::EventRegister(EVENT_ENUM event, Module* mod)
+{
+	bool ret = false;
+
+	//if event isn't on the map create a new entry on the map
+	if (!eventListenersMap.count(event))
+	{
+		CreateEventOnMap(event);
+		eventListenersMap[event].push_back(mod);
+		ret = true;
+	}
+	//if listener has already been added don't add
+	//else add a new listener
+	else if (!FindListener(event, mod))
+	{
+		eventListenersMap[event].push_back(mod);
+		ret = true;
+	}
+
+
+	return ret;
+}
+
+
+void ModuleEventManager::CreateEventOnMap(EVENT_ENUM event)
+{
+	//further testing in this function is needed TODO
+	std::vector<Module*> vec;
+	eventListenersMap[event] = vec;
+}
+
+
+//returns true if a listener is already in the vector
+bool ModuleEventManager::FindListener(EVENT_ENUM event, Module* mod)
+{
+	bool ret = false;
+
+
+	for (int i = 0; i < eventListenersMap[event].size(); i++)
+	{
+
+
+		if (eventListenersMap[event].at(i) == mod)
+		{
+			ret = true;
+		}
+
+
+	}
+
+
+	return ret;
 }
