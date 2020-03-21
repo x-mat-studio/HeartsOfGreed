@@ -69,6 +69,8 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
+	CheckListener();
+
 	CheckIfStarted();
 
 	int numEntities = entityVector.size();
@@ -99,6 +101,8 @@ bool ModuleEntityManager::Update(float dt)
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
 		bool ret = true;
+
+	CheckListener();
 
 	int numEntities = entityVector.size();
 	float posX;
@@ -321,3 +325,5 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 
 }
 
+void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
+{}

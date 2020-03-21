@@ -51,6 +51,8 @@ private:
 
 	void CheckIfStarted();
 
+	void ExecuteEvent(EVENT_ENUM& eventId) const;
+
 private:
 
 	//The list where we will store all the entities

@@ -36,6 +36,7 @@ private:
 	bool Click();
 	void RightClick();
 	bool HandleInput();
+	void ExecuteEvent(EVENT_ENUM& eventId) const;
 
 private:
 	std::vector <Hero*> heroesVector;

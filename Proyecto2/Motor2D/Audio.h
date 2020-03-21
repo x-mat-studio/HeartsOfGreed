@@ -64,7 +64,6 @@ public:
 
 	bool ConfigureChannel(unsigned int channel,LOUDNESS loudness, DIRECTION direction);
 
-
 private:
 	P2SString fxFolder;
 
