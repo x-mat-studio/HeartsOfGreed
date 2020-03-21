@@ -59,22 +59,50 @@ void ModuleEventManager::GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTri
 
 	Event newEvent(eventId, eventTriggerId);
 
-	EVENT_ENUM eventCheck = CheckEventTrigger(eventTriggerId);
+	EVENT_ENUM eventCheck = CheckEventTrigger(eventId);
 
 	if(eventCheck != EVENT_ENUM::NULL_EVENT)
 	{
-		// TRIGGER EVENT (you call all module listeners' listening function using the event listed in the map)
+		FireEvent(eventCheck);
 	}
 
 	if (eventTriggerId != EVENT_ENUM::NULL_EVENT)
 	{
-		// TRIGGER EVENT
+		FireEvent(eventId);
 	}
 	else
 	{
 		eventVector.push_back(newEvent);
 	}
 
+}
+
+void ModuleEventManager::FireEvent(EVENT_ENUM& eventId) const
+{
+
+	std::vector<Module*> listeners = eventListenersMap.at(eventId);
+	int numElem = listeners.size();
+	for (int i = 0; i < numElem; i++)
+	{
+		listeners[i]->AddEvent(eventId);
+	}
+
+}
+
+EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM& eventTrigger) const
+{
+
+	int numElem = eventVector.size();
+
+	for (int i = 0; i < numElem; i++)
+	{
+		if (eventVector[i].idTrigger == eventTrigger)
+		{
+			return eventVector[i].id;
+		}
+	}
+
+	return EVENT_ENUM::NULL_EVENT;
 }
 
 //returns true if the event has been registered or if the new listener has been added, else returns false
@@ -186,19 +214,3 @@ void  ModuleEventManager::CleanListenerMap()
 	eventListenersMap.clear();
 }
 
-
-EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM& eventTrigger)
-{
-
-	int numElem = eventVector.size();
-
-	for (int i = 0; i < numElem; i++)
-	{
-		if (eventVector[i].idTrigger == eventTrigger)
-		{
-			return eventVector[i].id;
-		}
-	}
-
-	return EVENT_ENUM::NULL_EVENT;
-}

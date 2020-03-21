@@ -4,7 +4,6 @@
 #define __AI_H__
 
 #include "Module.h"
-#include "vector"
 
 class ModuleAI : public Module
 {

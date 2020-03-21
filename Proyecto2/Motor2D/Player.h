@@ -7,7 +7,6 @@
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_mouse.h"
 #include "Module.h"
-#include "vector"
 
 class Hero;
 class Entity;
@@ -43,23 +42,6 @@ private:
 	Entity* focusedEntity;
 
 	SDL_Point clickPosition;
-
-};
-
-class PlayerListener : public Listener
-{
-private:
-
-	void onNotify(const Module& module, Evento event);
-
-};
-
-class PlayerSpeaker : public Speaker
-{
-private:
-	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
-
-	int numListeners;
 
 };
 

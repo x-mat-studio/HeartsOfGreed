@@ -10,207 +10,77 @@
 #define MAX_LISTENERS 10
 
 #include "p2SString.h"
+#include <vector>
 #include "PugiXml\src\pugixml.hpp"
 
 struct Collider;
 
 class App;
 
-class UIElement;
+ enum class EVENT_ENUM
+{
+	AUDIO_INCOMES,
+	KEYBOARD_INPUT,
+	MOUSE_INPUT,
+	PAUSE_GAME,
+	NULL_EVENT
+};
 
 class Module
 {
+
 public:
 
-	Module() : active(false)
-	{}
+	Module();
 
-
-	void Init()
-	{
-		active = true;
-	}
-
+	void Init();
 
 	// Called before render is available
-	virtual bool Awake(pugi::xml_node&)
-	{
-		return true;
-	}
-
+	virtual bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
-	virtual bool Start()
-	{
-		return true;
-	}
-
+	virtual bool Start();
 
 	// Called each loop iteration
-	virtual bool PreUpdate(float dt)
-	{
-		return true;
-	}
-
+	virtual bool PreUpdate(float dt);
 
 	// Called each loop iteration
-	virtual bool Update(float dt)
-	{
-		return true;
-	}
-
+	virtual bool Update(float dt);
 
 	// Called each loop iteration
-	virtual bool PostUpdate(float dt)
-	{
-		return true;
-	}
-
+	virtual bool PostUpdate(float dt);
 
 	// Called before quitting
-	virtual bool CleanUp()
-	{
-		return true;
-	}
+	virtual bool CleanUp();
 
+	virtual bool Load(pugi::xml_node&);
 
-	virtual bool Load(pugi::xml_node&)
-	{
-		return true;
-	}
+	virtual bool Save(pugi::xml_node&) const;
 
+	// Module activation 
+	bool IsEnabled() const;
 
-	virtual bool Save(pugi::xml_node&) const
-	{
-		return true;
-	}
+	void Enable();
 
+	void Disable();
+
+	// Event managing: saves an event into the listener vector
+
+	bool AddEvent(EVENT_ENUM& eventId);
+
+	bool RemoveEvent(EVENT_ENUM& eventId);
 
 public:
 
 	virtual void OnCollision(Collider*, Collider*) {}
-	virtual void ListenerUI(UIElement* UI_element) {}
-	P2SString	name;
-	bool		active;
-
-
-	// Module activation 
-	bool IsEnabled() const
-	{
-		return enabled;
-	}
-
-
-	void Enable()
-	{
-
-
-		if (enabled == false)
-		{
-			enabled = true;
-			Start();
-		}
-
-
-	}
-
-	void Disable()
-	{
-
-
-		if (enabled == true)
-		{
-			enabled = false;
-			CleanUp();
-		}
-
-
-	}
-
-
+	P2SString				name;
+	bool					active;
+	std::vector<EVENT_ENUM>	listener;
 
 private:
+
 	bool enabled = true;
-};
-
-class Evento {};	// PLACEHOLDER JUAN PLS. OH WAIT...
-
-class Listener
-{
-public:
-
-	virtual ~Listener() {}
-
-	virtual void onNotify(const Module& module, Evento event) {};
-
-private:
-
-	//We do not need to remove listeners from speakers: we never delete modules on runtime
 
 };
-
-class Speaker 
-{
-private:
-
-	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
-
-
-	int numListeners;
-
-
-	bool AddListener(Listener* listener) {
-
-		if (numListeners < MAX_LISTENERS) {
-
-			numListeners++;
-
-			for (int i = 0; i < MAX_LISTENERS; i++) {
-
-				if (listeners_[i] == nullptr) {
-
-					listeners_[i] = listener;
-
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-
-	bool RemoveListener(Listener* listener) {
-		
-		for (int i = 0; i < numListeners; i++) {
-		
-			if (listeners_[i] == listener)
-			{
-				listeners_[i] = nullptr;
-
-				numListeners--;
-
-				return true;
-			}
-		
-		}
-
-		return false;
-	}
-
-
-protected:
-
-	void Speak(const Module& module, Evento event)
-	{
-		for (int i = 0; i < numListeners; i++)
-		{
-			listeners_[i]->onNotify(module, event);
-		}
-	}
-};
-
-
-
 
 #endif // __MODULE_H__

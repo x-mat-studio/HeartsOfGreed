@@ -3,17 +3,9 @@
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
-#include "vector"
 #include <map>
 
-enum class EVENT_ENUM
-{
-	AUDIO_INCOMES,
-	KEYBOARD_INPUT,
-	MOUSE_INPUT,
-	PAUSE_GAME,
-	NULL_EVENT
-};
+enum class EVENT_ENUM;
 
 class Event {
 
@@ -47,7 +39,8 @@ public:
 
 private:
 	void CreateEventOnMap(EVENT_ENUM event);
-	EVENT_ENUM CheckEventTrigger(EVENT_ENUM& eventTrigger);
+	void FireEvent(EVENT_ENUM& eventId) const;
+	EVENT_ENUM CheckEventTrigger(EVENT_ENUM& eventTrigger) const;
 	int FindListener(EVENT_ENUM event,Module*mod);
 	std::vector<Module*>::iterator EraseListener(EVENT_ENUM event, Module* mod, int vecId);
 

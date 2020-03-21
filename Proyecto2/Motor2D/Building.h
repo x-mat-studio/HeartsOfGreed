@@ -4,7 +4,6 @@
 #define __BUILDING_H__
 
 #include "Entity.h"
-#include "vector"
 
 class Core;
 class UpgradeCenter;

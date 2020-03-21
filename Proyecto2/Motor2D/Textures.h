@@ -2,7 +2,6 @@
 #define __TEXTURES_H__
 
 #include "Module.h"
-#include <vector>
 
 struct SDL_Texture;
 struct SDL_Surface;
@@ -35,23 +34,6 @@ public:
 
 	std::vector<SDL_Texture*>	textures;
 	
-};
-
-class TexturesListener : public Listener
-{
-private:
-
-	void onNotify(const Module& module, Evento event);
-
-};
-
-class TexturesSpeaker : public Speaker
-{
-private:
-	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
-
-	int numListeners;
-
 };
 
 #endif // __TEXTURES_H__

@@ -143,7 +143,3 @@ float  ModuleWindow::AddScale(float addedScale)
 
 	return scale;
 }
-
-void WindowListener::onNotify(const Module & module, Evento event)
-{
-}

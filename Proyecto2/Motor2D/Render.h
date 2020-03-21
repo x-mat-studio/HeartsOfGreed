@@ -62,20 +62,4 @@ private:
 
 };
 
-class RenderListener : public Listener
-{
-private:
-
-	void onNotify(const Module& module, Evento event);
-
-};
-
-class RenderSpeaker : public Speaker
-{
-private:
-	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
-
-	int numListeners;
-
-};
 #endif // __RENDER_H__

@@ -255,8 +255,3 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	Mix_SetPosition(channel, angle, volume);
 	return ret;
 }
-
-void AudioListener::onNotify(const Module & module, Evento event)
-{
-	//check the event, do stuff
-}

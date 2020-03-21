@@ -3,7 +3,6 @@
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
-#include "vector"
 #include "Animation.h"
 #include "Entity.h"
 
@@ -66,23 +65,6 @@ private:
 	SDL_Texture* texture;
 
 	Hero* tmpHero;
-
-};
-
-class EntityManagerListener : public Listener
-{
-private:
-
-	void onNotify(const Module& module, Evento event);
-
-};
-
-class EntityManagerSpeaker : public Speaker
-{
-private:
-	Listener* listeners_[MAX_LISTENERS]; //Array, we're not expecting to add/remove a lot
-
-	int numListeners;
 
 };
 

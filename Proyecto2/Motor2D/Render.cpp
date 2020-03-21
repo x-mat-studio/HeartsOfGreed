@@ -334,6 +334,3 @@ const int ModuleRender::GetCameraY()
 	return camera.y;
 }
 
-void RenderListener::onNotify(const Module & module, Evento event)
-{
-}

@@ -3,7 +3,6 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
 
-#include "vector"
 #include "SDL/include/SDL_rect.h"
 #include "Collision.h"
 #include "Animation.h"

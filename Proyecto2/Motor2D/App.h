@@ -7,7 +7,6 @@
 #include "Module.h"
 #include "PerfectTimer.h"
 #include "SimpleTimer.h"
-#include "vector"
 #include "PugiXml\src\pugixml.hpp"
 
 typedef unsigned int uint;

@@ -82,6 +82,9 @@
     <ClCompile Include="EventManager.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="Module.cpp">
+      <Filter>Desenvolupament  ========\Core\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">

@@ -204,7 +204,3 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 {
 	return !((this->rect.x + this->rect.w < r.x || r.x + r.w < this->rect.x) || (this->rect.y + this->rect.h < r.y || r.y + r.h < this->rect.y));
 }
-
-void CollisionListener::onNotify(const Module & module, Evento event)
-{
-}
