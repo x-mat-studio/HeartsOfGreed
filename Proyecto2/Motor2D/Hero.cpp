@@ -12,7 +12,7 @@ Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* collider,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
-	Entity(position, type, collider),
+	DynamicEntity(position, type, collider, 10, 20),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -69,7 +69,8 @@ Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* collider,
 
 Hero::Hero(iMPoint position, Hero* copy) :
 
-	Entity(position, copy->type, copy->collider),
+	DynamicEntity(position, copy->type, copy->collider, copy->moveRange1, copy->moveRange2),
+
 
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
@@ -207,14 +208,19 @@ bool Hero::Update(float dt)
 	}
 	current_state = state;
 
+
+	collider->SetPos((int)position.x, (int)position.y);
+
 	return true;
 }
 
 
 bool Hero::PostUpdate(float dt)
 {
-	texture;
 	Draw(dt);
+
+	if (app->debugMode)
+		DebugDraw();
 	return true;
 }
 
@@ -223,9 +229,13 @@ bool Hero::MoveTo(int x, int y)
 {
 	//do pathfinding, if it works return true
 
-	inputs.push_back(HERO_INPUTS::IN_MOVE);
+	if (GeneratePath(x, y))
+	{
+		inputs.push_back(HERO_INPUTS::IN_MOVE);
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 
@@ -265,13 +275,6 @@ void Hero::LevelUp()
 void Hero::Draw(float dt)
 {
 	app->render->Blit(texture, position.x, position.y, &walkLeft.GetCurrentFrameBox(dt));
-}
-
-
-void Hero::Move()
-{
-	//Put logic to move the unit to the desired destination
-	Die();
 }
 
 

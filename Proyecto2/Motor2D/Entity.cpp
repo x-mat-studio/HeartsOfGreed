@@ -6,7 +6,7 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(iMPoint position, ENTITY_TYPE type) :
+Entity::Entity(iMPoint position, ENTITY_TYPE type, bool dynamic) :
 
 	position(position),
 	type(type),	
@@ -15,11 +15,12 @@ Entity::Entity(iMPoint position, ENTITY_TYPE type) :
 	collider(nullptr),
 	flip(false),
 	current_animation(nullptr),
-	texture(nullptr)
+	texture(nullptr),
+	dynamic(dynamic)
 {}
 
 
-Entity::Entity(iMPoint position, ENTITY_TYPE type, Collider* collider) :
+Entity::Entity(iMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic) :
 
 	position(position),
 	type(type),	
@@ -28,7 +29,8 @@ Entity::Entity(iMPoint position, ENTITY_TYPE type, Collider* collider) :
 	collider(collider),
 	flip(false),
 	current_animation(nullptr),
-	texture(nullptr)
+	texture(nullptr),
+	dynamic(dynamic)
 {}
 
 Entity::~Entity()

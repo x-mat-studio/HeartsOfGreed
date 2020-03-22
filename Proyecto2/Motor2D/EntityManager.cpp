@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "Hero.h"
 #include "Enemy.h"
+#include "DynamicEntity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -28,7 +29,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	iMPoint pos;
-	pos.create(100, 200);
+	pos.create(100, 600);
 
 	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
 	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
@@ -49,6 +50,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
+
+	entityVector.push_back(tmpHero);
+	heroVector.push_back(tmpHero);
 	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 
 	return ret;
@@ -61,6 +65,7 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 
 	texture = app->tex->Load("spritesheets/characters/suitmale.png");
+	debugPathTexture = app->tex->Load("maps/path.png");
 
 	return ret;
 }
@@ -106,35 +111,13 @@ bool ModuleEntityManager::Update(float dt)
 	CheckListener();
 
 	int numEntities = entityVector.size();
-	float posX;
-	float posY;
+
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		posX = entityVector[i]->GetPosition().x;
-		posY = entityVector[i]->GetPosition().y;
-
-		if (app->map->InsideCamera(posX, posY) == true) {
-
-			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
-			switch (entityVector[i]->GetType())
-			{
-			case ENTITY_TYPE::BUILDING:
-			case ENTITY_TYPE::BLDG_BARRICADE:
-			case ENTITY_TYPE::BLDG_BASE:
-			case ENTITY_TYPE::BLDG_TURRET:
-			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
-				buildingVector.push_back(entityVector[i]);
-				break;
-			case ENTITY_TYPE::ENEMY:
-			case ENTITY_TYPE::HERO_GATHERER:
-			case ENTITY_TYPE::HERO_MELEE:
-			case ENTITY_TYPE::HERO_RANGED:
-				movableEntitiesVector.push_back(entityVector[i]);
-				break;
-			}
-		}
+		entityVector[i]->Update(dt);
 	}
+
 	return ret;
 }
 
@@ -145,31 +128,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 		bool ret = true;
 
-	int numEntities = entityVector.size();
-	float posX;
-	float posY;
-
-	for (int i = 0; i < numEntities; i++)
-	{
-		posX = entityVector[i]->GetPosition().x;
-		posY = entityVector[i]->GetPosition().y;
-
-		if (app->map->InsideCamera(posX, posY) == true)
-		{
-			renderVector.push_back(entityVector[i]);
-		}
-	}
-
-	numEntities = renderVector.size();
-
-	// SORTING
-
-	for (int i = 0; i < numEntities; i++)
-	{
-		renderVector[i]->PostUpdate(dt);
-	}
-
-	renderVector.clear();
+	SpriteOrdering(dt);
 
 	RemoveDeletedEntitys();
 
@@ -181,7 +140,6 @@ bool ModuleEntityManager::CleanUp()
 {
 	int numEntities = entityVector.size();
 
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
@@ -190,6 +148,8 @@ bool ModuleEntityManager::CleanUp()
 	}
 
 	entityVector.clear();
+	texture = nullptr;
+	debugPathTexture = nullptr;
 
 	return true;
 }
@@ -355,5 +315,157 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 
 }
 
+
+void ModuleEntityManager::SpriteOrdering(float dt)
+{
+	int numEntities = entityVector.size();
+	float posX;
+	float posY;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		posX = entityVector[i]->GetPosition().x;
+		posY = entityVector[i]->GetPosition().y;
+
+		if (app->map->InsideCamera(posX, posY) == true) {
+
+			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
+			switch (entityVector[i]->GetType())
+			{
+			case ENTITY_TYPE::BUILDING:
+			case ENTITY_TYPE::BLDG_BARRICADE:
+			case ENTITY_TYPE::BLDG_BASE:
+			case ENTITY_TYPE::BLDG_TURRET:
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				buildingVector.push_back(entityVector[i]);
+				break;
+			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::HERO_GATHERER:
+			case ENTITY_TYPE::HERO_MELEE:
+			case ENTITY_TYPE::HERO_RANGED:
+//				if (entityVector[i].POINTER == nullptr)
+//				{
+					frontEntitiesVector.push_back(entityVector[i]);
+/*				}
+				else
+				{
+					backEntitiesVector.push_back(entityVector[i]);
+				}*/
+				break;
+			}
+		}
+	}
+	
+	EntityQuickSort(backEntitiesVector, 0, backEntitiesVector.size());
+	EntityQuickSort(buildingVector, 0, buildingVector.size());
+	EntityQuickSort(frontEntitiesVector, 0, frontEntitiesVector.size());
+
+	while (backEntitiesVector.size() != 0 && buildingVector.size() != 0)
+	{
+		while (backEntitiesVector.front()/*.POINTER*/ == buildingVector.front())
+		{
+			renderVector.push_back(backEntitiesVector.front());
+			backEntitiesVector.erase(backEntitiesVector.cbegin());
+		}
+
+		renderVector.push_back(buildingVector.front());
+		buildingVector.erase(buildingVector.cbegin()); // CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE
+	}
+
+	while (frontEntitiesVector.size() != 0)
+	{
+		renderVector.push_back(frontEntitiesVector.front());
+		frontEntitiesVector.erase(frontEntitiesVector.cbegin());
+	}
+
+	numEntities = renderVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		renderVector[i]->PostUpdate(dt);
+	}
+
+	renderVector.clear();
+
+}
+
+
+void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
+{
+	if (low < high)
+	{
+		int numElem = vector.size();
+		int pivotLocation = EntityPartition(vector, low, high);
+		EntityQuickSort(vector, low, pivotLocation);
+		EntityQuickSort(vector, pivotLocation +1, high);
+	}
+}
+
+
+int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, int high)
+{
+	Entity* pivot = vector[low];
+	Entity* auxVec = nullptr;
+	int left = low;
+
+	for (int i = low + 1; i < high; i++)
+	{
+		if (vector[i] < pivot)	// HERE YOU COMPARE THEIR PIVOT POINT'S HEIGHT, NOT THE ELEMENT
+		{
+			auxVec = vector[i];
+			vector[i] = vector[left];
+			vector[left] = auxVec;
+			left++;
+		}
+	}
+
+	auxVec = pivot;
+	pivot = vector[left];
+	vector[left] = auxVec;
+	
+	return left;
+}
+
+
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
 {}
+
+
+void ModuleEntityManager::GetEntityNeighbours(std::list<DynamicEntity*>* close_entity_list, std::list<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit)
+{
+	close_entity_list->clear();
+	colliding_entity_list->clear();
+
+	std::vector<Entity*>::iterator iterator;
+	Entity* checkDynamism;
+	DynamicEntity* it;
+
+	for (iterator = entityVector.begin(); iterator != entityVector.end(); ++iterator) 
+	{
+		checkDynamism = *iterator;
+		if (!checkDynamism->dynamic)
+		{
+			continue;
+		}
+
+		it = (DynamicEntity*)checkDynamism;
+
+		//The GetType should be a "GetAlignment()", to see if is the player units or not
+		if (it != thisUnit && it->GetType() != thisUnit->GetType() )
+		{
+			iMPoint pos = it->GetPosition();
+
+			float distance = sqrt( pos.x * pos.x + pos.y * pos.y);
+			if (distance < it->moveRange2)
+			{
+				colliding_entity_list->push_back(it);
+
+			}
+			if (distance < thisUnit->moveRange1)
+			{
+				close_entity_list->push_back(it);
+			}
+		}
+	}
+
+}

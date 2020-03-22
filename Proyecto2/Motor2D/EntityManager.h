@@ -5,9 +5,10 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Entity.h"
+#include <list>
 
 class Hero;
-
+class DynamicEntity;
 
 
 class ModuleEntityManager : public Module
@@ -48,11 +49,18 @@ public:
 	bool CheckEntityExists(Entity* entity);
 	Entity* CheckEnemyObjective(SDL_Rect* rect);
 
+	void GetEntityNeighbours(std::list<DynamicEntity*>* close_entity_list, std::list<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
+
+public:
+	SDL_Texture* debugPathTexture;
+
 private:
 
 	void CheckIfStarted();
-
 	void ExecuteEvent(EVENT_ENUM& eventId) const;
+	void SpriteOrdering(float dt);
+	void EntityQuickSort(std::vector<Entity*>& vector, int low, int high);
+	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 
 private:
 
@@ -62,7 +70,8 @@ private:
 
 	// Sprite sorting vectors
 	std::vector <Entity*> renderVector;
-	std::vector <Entity*> movableEntitiesVector;
+	std::vector <Entity*> backEntitiesVector;
+	std::vector <Entity*> frontEntitiesVector;
 	std::vector <Entity*> buildingVector;
 
 	SDL_Texture* texture;

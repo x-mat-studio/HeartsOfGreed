@@ -3,8 +3,8 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
-#include "Entity.h"
 #include "Animation.h"
+#include "DynamicEntity.h"
 
 enum class HERO_STATES
 {
@@ -49,7 +49,7 @@ enum HERO_INPUTS
 	IN_DEAD
 };
 
-class Hero : public Entity
+class Hero : public DynamicEntity
 {
 public:
 	Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* col,
@@ -76,13 +76,11 @@ public:
 	virtual bool UseHability2();
 	virtual bool UseHability3();
 
-
 private:
 	void LevelUp();
 
 	void Draw(float dt);
 
-	void Move();
 	bool CheckRange(int maxDistance);
 	void Attack();
 	void Die();

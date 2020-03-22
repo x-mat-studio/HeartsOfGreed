@@ -90,7 +90,7 @@ public:
 
 	MAT_Point operator - (const TYPE& v) const
 	{
-		p2Point r;
+		MAT_Point r;
 
 		r.x = x - v;
 		r.y = y - v;
@@ -100,7 +100,7 @@ public:
 
 	MAT_Point operator + (const TYPE& v) const
 	{
-		p2Point r;
+		MAT_Point r;
 
 		r.x = x + v;
 		r.y = y + v;
@@ -110,10 +110,20 @@ public:
 
 	MAT_Point operator * (const TYPE& v) const
 	{
-		p2Point r;
+		MAT_Point r;
 
 		r.x = x * v;
 		r.y = y * v;
+
+		return(r);
+	}
+
+	MAT_Point operator / (const TYPE& v) const
+	{
+		MAT_Point r;
+
+		r.x = x / v;
+		r.y = y / v;
 
 		return(r);
 	}
