@@ -42,9 +42,9 @@ class Enemy : public Entity
 {
 public:
 
-	Enemy(iMPoint position, ENTITY_TYPE type, SDL_Texture* texture, Collider* col,
-		Animation& animation, int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange,
-		int movementSpeed, int xpOnDeath);
+	Enemy(iMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation,
+		int hitPoints, int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
+		int xpOnDeath);
 
 
 	Enemy(iMPoint position, Enemy* copy);

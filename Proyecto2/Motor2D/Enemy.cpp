@@ -5,43 +5,62 @@
 #include "Textures.h"
 #include "Render.h"
 
-Enemy::Enemy(iMPoint position, ENTITY_TYPE type, SDL_Texture* texture, Collider* collider, Animation& animation,
-	int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
-	int xpOnDeath) :
+Enemy::Enemy(iMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate, 
+	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
 	Entity(position, type, collider),
 	animation(animation),
+
 	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
+	vision(vision),
 	attackDamage(attackDamage),
 	attackSpeed(attackSpeed),
 	attackRange(attackRange),
+	attackCooldown(0),
+
 	movementSpeed(movementSpeed),
 	xpOnDeath(xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
-	attackCooldown(attackCooldown)
+	
+	attackCharged(true),
+	haveOrders(false),
+
+	state(ENEMY_STATES::IDLE)
 {}
 
 
 Enemy::Enemy(iMPoint position, Enemy* copy) :
 
-	Entity(position, copy->type, copy->GetCollider()),
+	Entity(position, copy->type, copy->collider),
 	animation(copy->animation),
+
 	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
+	vision(copy->vision),
 	attackDamage(copy->attackDamage),
 	attackSpeed(copy->attackSpeed),
 	attackRange(copy->attackRange),
+	attackCooldown(0),
+
 	movementSpeed(copy->movementSpeed),
 	xpOnDeath(copy->xpOnDeath),
-	attackCooldown(copy->attackCooldown)
+	longTermObjective{ NULL, NULL },
+	shortTermObjective(nullptr),
+
+	attackCharged(true),
+	haveOrders(false),
+
+	state(ENEMY_STATES::IDLE)
 {}
 
 
 Enemy::~Enemy()
 {
 	shortTermObjective = nullptr;
+
+	inputs.clear();
 
 	animation = Animation();
 }
