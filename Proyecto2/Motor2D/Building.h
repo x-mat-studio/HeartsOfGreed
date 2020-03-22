@@ -54,12 +54,13 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 private:
-	void		ChangeBuildingState(BUILDING_STATE state);
+	void ChangeBuildingState(BUILDING_STATE state);
 
-	void		BeingRepaired();
-	void		RecoverHealth();
+	void BeingRepaired();
+	void RecoverHealth();
 
-	void		Contruct();
+	void Contruct();
+	void Draw();
 
 
 public:

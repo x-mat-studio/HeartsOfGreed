@@ -99,3 +99,7 @@ void Building::Contruct()
 }
 
 
+void Building::Draw()
+{
+
+}

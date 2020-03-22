@@ -52,7 +52,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	entityVector.push_back(tmpHero);
-	heroVector.push_back(tmpHero);
 	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 
 	return ret;
@@ -233,7 +232,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 
 void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroPlayerVector)
 {
-	int numHeroes = heroVector.size();
+	int numHeroes = entityVector.size();
 
 	heroPlayerVector->clear();
 
@@ -241,13 +240,16 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 
 	for (int i = 0; i < numHeroes; i++)
 	{
-		col = heroVector[i]->GetCollider();
-
-		if (col != nullptr)
+		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 		{
-			if (col->CheckCollision(selection))
+			col = entityVector[i]->GetCollider();
+
+			if (col != nullptr)
 			{
-				heroPlayerVector->push_back(heroVector[i]);
+				if (col->CheckCollision(selection))
+				{
+					heroPlayerVector->push_back((Hero*)entityVector[i]);
+				}
 			}
 		}
 	}
