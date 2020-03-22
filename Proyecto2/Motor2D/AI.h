@@ -4,6 +4,7 @@
 #define __AI_H__
 
 #include "Module.h"
+#include "SDL/include/SDL_rect.h"
 
 class ModuleAI : public Module
 {
@@ -16,11 +17,14 @@ public:
 
 	void OnCollision(Collider*, Collider*);
 
+	iMPoint* GetObjective();
+	
+
 private:
 	void CreateSelectionCollider(Collider*);
 	
 private:
-
+	iMPoint objectivePos;
 };
 
 

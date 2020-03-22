@@ -24,6 +24,7 @@ class ModulePlayer;
 class ModuleEntityManager;
 class ModulePathfinding;
 class ModuleEventManager;
+class ModuleAI;
 
 class App
 {
@@ -99,6 +100,7 @@ public:
 	ModuleEntityManager*	entityManager;
 	ModulePathfinding*		pathfinding;
 	ModuleEventManager*		eventManager;
+	ModuleAI*				ai;
 
 	uint32_t			frames;
 	

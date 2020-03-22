@@ -146,6 +146,7 @@ bool ModuleEntityManager::Update(float dt)
 	{
 		entityVector[i]->Update(dt);
 	}
+
 	return ret;
 }
 
@@ -156,31 +157,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 		bool ret = true;
 
-	int numEntities = entityVector.size();
-	float posX;
-	float posY;
-
-	for (int i = 0; i < numEntities; i++)
-	{
-		posX = entityVector[i]->GetPosition().x;
-		posY = entityVector[i]->GetPosition().y;
-
-		if (app->map->InsideCamera(posX, posY) == true)
-		{
-			renderVector.push_back(entityVector[i]);
-		}
-	}
-
-	numEntities = renderVector.size();
-
-	// SORTING
-	
-	for (int i = 0; i < numEntities; i++)
-	{
-		renderVector[i]->PostUpdate(dt);
-	}
-
-	renderVector.clear();
+	SpriteOrdering(dt);
 
 	RemoveDeletedEntitys();
 
@@ -322,6 +299,35 @@ bool ModuleEntityManager::CheckEntityExists(Entity* entity)
 }
 
 
+Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
+{
+	int numEntitys = entityVector.size();
+
+	Collider* col;
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::PARTICLE || entityVector[i]->GetType() == ENTITY_TYPE::PARTICLE_SYSTEM ||
+			entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		{
+			continue;
+		}
+
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr)
+		{
+			if (col->CheckCollision(*rect))
+			{
+				return entityVector[i];
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+
 void ModuleEntityManager::RemoveDeletedEntitys()
 {
 	int numEntitys = entityVector.size();
@@ -337,6 +343,118 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 	}
 
 }
+
+
+void ModuleEntityManager::SpriteOrdering(float dt)
+{
+	int numEntities = entityVector.size();
+	float posX;
+	float posY;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		posX = entityVector[i]->GetPosition().x;
+		posY = entityVector[i]->GetPosition().y;
+
+		if (app->map->InsideCamera(posX, posY) == true) {
+
+			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
+			switch (entityVector[i]->GetType())
+			{
+			case ENTITY_TYPE::BUILDING:
+			case ENTITY_TYPE::BLDG_BARRICADE:
+			case ENTITY_TYPE::BLDG_BASE:
+			case ENTITY_TYPE::BLDG_TURRET:
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				buildingVector.push_back(entityVector[i]);
+				break;
+			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::HERO_GATHERER:
+			case ENTITY_TYPE::HERO_MELEE:
+			case ENTITY_TYPE::HERO_RANGED:
+//				if (entityVector[i].POINTER == nullptr)
+//				{
+					frontEntitiesVector.push_back(entityVector[i]);
+/*				}
+				else
+				{
+					backEntitiesVector.push_back(entityVector[i]);
+				}*/
+				break;
+			}
+		}
+	}
+	
+	EntityQuickSort(backEntitiesVector, 0, backEntitiesVector.size());
+	EntityQuickSort(buildingVector, 0, buildingVector.size());
+	EntityQuickSort(frontEntitiesVector, 0, frontEntitiesVector.size());
+
+	while (backEntitiesVector.size() != 0 && buildingVector.size() != 0)
+	{
+		while (backEntitiesVector.front()/*.POINTER*/ == buildingVector.front())
+		{
+			renderVector.push_back(backEntitiesVector.front());
+			backEntitiesVector.erase(backEntitiesVector.cbegin());
+		}
+
+		renderVector.push_back(buildingVector.front());
+		buildingVector.erase(buildingVector.cbegin()); // CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE
+	}
+
+	while (frontEntitiesVector.size() != 0)
+	{
+		renderVector.push_back(frontEntitiesVector.front());
+		frontEntitiesVector.erase(frontEntitiesVector.cbegin());
+	}
+
+	numEntities = renderVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		renderVector[i]->PostUpdate(dt);
+	}
+
+	renderVector.clear();
+
+}
+
+
+void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
+{
+	if (low < high)
+	{
+		int numElem = vector.size();
+		int pivotLocation = EntityPartition(vector, low, high);
+		EntityQuickSort(vector, low, pivotLocation);
+		EntityQuickSort(vector, pivotLocation +1, high);
+	}
+}
+
+
+int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, int high)
+{
+	Entity* pivot = vector[low];
+	Entity* auxVec = nullptr;
+	int left = low;
+
+	for (int i = low + 1; i < high; i++)
+	{
+		if (vector[i] < pivot)	// HERE YOU COMPARE THEIR PIVOT POINT'S HEIGHT, NOT THE ELEMENT
+		{
+			auxVec = vector[i];
+			vector[i] = vector[left];
+			vector[left] = auxVec;
+			left++;
+		}
+	}
+
+	auxVec = pivot;
+	pivot = vector[left];
+	vector[left] = auxVec;
+	
+	return left;
+}
+
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
 {}
