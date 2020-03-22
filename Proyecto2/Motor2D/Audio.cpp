@@ -255,3 +255,4 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	Mix_SetPosition(channel, angle, volume);
 	return ret;
 }
+

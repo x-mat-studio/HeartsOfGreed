@@ -43,7 +43,7 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue)
 
-	
+	CheckListener();
 
 	HandleInput();
 
@@ -56,7 +56,8 @@ bool ModulePlayer::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
 
-	
+	CheckListener();
+
 
 	return true;
 }
@@ -65,6 +66,8 @@ bool ModulePlayer::Update(float dt)
 bool ModulePlayer::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
+
+	CheckListener();
 
 
 	return true;
@@ -116,7 +119,7 @@ bool ModulePlayer::Click()
 void ModulePlayer::Select()
 {
 
-	SDL_Point mousePosition;
+	iMPoint mousePosition;
 
 	app->input->GetMousePositionRaw(mousePosition.x, mousePosition.y);
 
@@ -181,4 +184,9 @@ void ModulePlayer::RightClick()
 			heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y);
 		}
 	}
+}
+
+
+void ModulePlayer::ExecuteEvent(EVENT_ENUM& eventId) const
+{
 }

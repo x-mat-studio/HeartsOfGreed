@@ -39,8 +39,9 @@ public:
 	void Zoom(float addZoomAmount, int windowTargetCenterX, int windowTargetCenterY, float currentScale);
 
 
-public:
+private:
 	
+	void ExecuteEvent(EVENT_ENUM& eventId) const;
 
 private:
 	int prevMousePosX;

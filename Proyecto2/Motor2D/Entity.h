@@ -5,6 +5,7 @@
 
 #include "SDL/include/SDL_rect.h"
 #include "Collision.h"
+#include "p2Point.h"
 #include "Animation.h"
 
 struct Collider;
@@ -34,8 +35,8 @@ class Entity
 public:
 
 	Entity();
-	Entity(SDL_Point position, ENTITY_TYPE type);
-	Entity(SDL_Point position, ENTITY_TYPE type, Collider* collider);
+	Entity(iMPoint position, ENTITY_TYPE type);
+	Entity(iMPoint position, ENTITY_TYPE type, Collider* collider);
 	virtual ~Entity();
 
 	virtual bool Start(SDL_Texture* texture);
@@ -47,7 +48,7 @@ public:
 	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
-	SDL_Point GetPosition();
+	iMPoint GetPosition();
 	ENTITY_TYPE GetType();
 
 	void SetToDelete(bool toDelete);
@@ -62,7 +63,7 @@ public:
 	bool flip;
 
 protected:
-	SDL_Point position;
+	iMPoint position;
 
 	ENTITY_TYPE type;
 

@@ -87,35 +87,55 @@ void Module::Disable()
 }
 
 
-bool Module::AddEvent(EVENT_ENUM& eventId)
+void Module::OnCollision(Collider*, Collider*)
 {
-
-	for (int i = 0; i < MAX_LISTENERS; i++)
-	{
-		if (listener[i] == EVENT_ENUM::NULL_EVENT)
-		{
-			listener[i] = eventId;
-			return true;
-		}
-	}
-	return false;
 }
 
 
-bool Module::RemoveEvent(EVENT_ENUM& eventId)
+void Module::AddEvent(EVENT_ENUM& eventId)
 {
 
-	for (int i = 0; i < MAX_LISTENERS; i++)
+	listener.push_back(eventId);
+
+}
+
+
+void Module::RemoveEvent(EVENT_ENUM& eventId)
+{
+
+	int numElem = listener.size();
+
+	for (int i = 0; i < numElem; i++)
 	{
 
 		if (listener[i] == eventId)
 		{
-			listener[i] = EVENT_ENUM::NULL_EVENT;
-			return true;
+			listener.erase(listener.begin() + numElem);
 		}
 
 	}
 
-	return false;
 }
+
+
+bool Module::CheckListener()
+{
+	int numElem = listener.size();
+
+	if (listener.size() == 0)
+	{
+		return false;
+	}
+
+	for (int i = 0; i < numElem; i++)
+	{
+		ExecuteEvent(listener[i]);
+	}
+
+	return true;
+}
+
+
+void Module::ExecuteEvent(EVENT_ENUM& eventId) const
+{}
 

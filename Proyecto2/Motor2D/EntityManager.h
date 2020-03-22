@@ -43,7 +43,7 @@ public:
 	void RemoveDeletedEntitys();
 
 
-	Entity* CheckEntityOnClick(SDL_Point mousePos);
+	Entity* CheckEntityOnClick(iMPoint mousePos);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
 	Entity* CheckEnemyObjective(SDL_Rect* rect);
@@ -51,6 +51,8 @@ public:
 private:
 
 	void CheckIfStarted();
+
+	void ExecuteEvent(EVENT_ENUM& eventId) const;
 
 private:
 

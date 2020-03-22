@@ -22,6 +22,7 @@ class ModuleMap;
 class ModuleTestScene;
 class ModulePlayer;
 class ModuleEntityManager;
+class ModulePathfinding;
 class ModuleEventManager;
 class ModuleAI;
 
@@ -97,6 +98,7 @@ public:
 	ModuleCollision*		coll;
 	ModulePlayer*			player;
 	ModuleEntityManager*	entityManager;
+	ModulePathfinding*		pathfinding;
 	ModuleEventManager*		eventManager;
 	ModuleAI*				ai;
 

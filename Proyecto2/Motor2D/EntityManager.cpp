@@ -27,7 +27,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
-	SDL_Point pos{ 100, 200 };
+	iMPoint pos;
+	pos.create(100, 200);
 
 	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
 	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
@@ -44,7 +45,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Collider* collider = new Collider({ 0,0,100,100 }, COLLIDER_HERO, nullptr);
 
-	tmpHero = new Hero(SDL_Point{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
+	tmpHero = new Hero(iMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
@@ -69,7 +70,9 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-		CheckIfStarted();
+	CheckListener();
+
+	CheckIfStarted();
 
 	int numEntities = entityVector.size();
 
@@ -99,6 +102,8 @@ bool ModuleEntityManager::Update(float dt)
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
 		bool ret = true;
+
+	CheckListener();
 
 	int numEntities = entityVector.size();
 	float posX;
@@ -243,7 +248,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 
 
 // Checks if there is an entity in the mouse Click position 
-Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
+Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {
 	int numEntitys = entityVector.size();
 
@@ -255,7 +260,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(SDL_Point mousePos)
 
 		if (col != nullptr)
 		{
-			if (SDL_PointInRect(&mousePos, &col->rect))
+			if (mousePos.PointInRect(&col->rect))
 			{
 				return entityVector[i];
 			}
@@ -350,3 +355,5 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 
 }
 
+void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
+{}

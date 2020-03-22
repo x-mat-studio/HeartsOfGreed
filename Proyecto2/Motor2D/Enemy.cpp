@@ -24,7 +24,7 @@ Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Collide
 {}
 
 
-Enemy::Enemy(SDL_Point position, Enemy* copy) :
+Enemy::Enemy(iMPoint position, Enemy* copy) :
 
 	Entity(position, copy->type, copy->GetCollider()),
 	animation(copy->animation),

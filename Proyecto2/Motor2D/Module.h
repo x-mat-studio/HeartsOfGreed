@@ -7,11 +7,11 @@
 #define __MODULE_H__
 
 #define MAX_COLLIDERS_PER_FRAME 50
-#define MAX_LISTENERS 10
 
 #include "p2SString.h"
 #include <vector>
 #include "PugiXml\src\pugixml.hpp"
+#include "p2Point.h"
 
 struct Collider;
 
@@ -64,15 +64,21 @@ public:
 
 	void Disable();
 
+
+	virtual void OnCollision(Collider*, Collider*);
+
 	// Event managing: saves an event into the listener vector
 
-	bool AddEvent(EVENT_ENUM& eventId);
+	void AddEvent(EVENT_ENUM& eventId);
 
-	bool RemoveEvent(EVENT_ENUM& eventId);
+	void RemoveEvent(EVENT_ENUM& eventId);
+
+	bool CheckListener();
+
+	virtual void ExecuteEvent(EVENT_ENUM& eventId) const;
 
 public:
 
-	virtual void OnCollision(Collider*, Collider*) {}
 	P2SString				name;
 	bool					active;
 	std::vector<EVENT_ENUM>	listener;
