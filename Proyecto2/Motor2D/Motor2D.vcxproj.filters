@@ -76,6 +76,15 @@
     <ClCompile Include="Hero.cpp">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Module.cpp">
+      <Filter>Desenvolupament  ========\Core\cpp files</Filter>
+    </ClCompile>
     <ClCompile Include="Pathfinding.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
@@ -174,11 +183,14 @@
     <ClInclude Include="Hero.h">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
-    <ClInclude Include="Pathfinding.h">
+    <ClInclude Include="AI.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="EventManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinding.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
