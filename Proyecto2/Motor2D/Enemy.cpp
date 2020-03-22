@@ -5,7 +5,7 @@
 #include "Textures.h"
 #include "Render.h"
 
-Enemy::Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Collider* collider, Animation& animation,
+Enemy::Enemy(iMPoint position, ENTITY_TYPE type, SDL_Texture* texture, Collider* collider, Animation& animation,
 	int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
 	int xpOnDeath) :
 

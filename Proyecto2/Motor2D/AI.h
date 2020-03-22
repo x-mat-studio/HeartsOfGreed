@@ -17,14 +17,14 @@ public:
 
 	void OnCollision(Collider*, Collider*);
 
-	SDL_Point* GetObjective();
+	iMPoint* GetObjective();
 	
 
 private:
 	void CreateSelectionCollider(Collider*);
 	
 private:
-	SDL_Point objectivePos;
+	iMPoint objectivePos;
 };
 
 

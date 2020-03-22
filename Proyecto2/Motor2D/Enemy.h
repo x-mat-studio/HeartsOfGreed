@@ -97,7 +97,7 @@ private:
 
 	bool haveOrders;
 	Entity* shortTermObjective;
-	SDL_Point longTermObjective;
+	iMPoint longTermObjective;
 
 	Animation animation;
 

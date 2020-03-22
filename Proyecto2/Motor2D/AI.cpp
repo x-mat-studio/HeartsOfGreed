@@ -36,7 +36,7 @@ void ModuleAI::CreateSelectionCollider(Collider* collider)
 }
 
 
-SDL_Point* ModuleAI::GetObjective()
+iMPoint* ModuleAI::GetObjective()
 {
 	return &objectivePos;
 }
