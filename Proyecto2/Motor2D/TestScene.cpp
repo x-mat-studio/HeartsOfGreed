@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Audio.h"
 #include "Map.h"
+#include "Pathfinding.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
 {
@@ -30,9 +31,20 @@ bool ModuleTestScene::Start()
 	
 	
 	//app->map->LoadNew("map_prototype.tmx");
-	app->map->LoadNew("map_prototype.tmx");
+
 	
 	app->audio->PlayMusic("audio/music/Raiders.ogg", 0.0F, 50);
+
+	if (app->map->LoadNew("map_prototype.tmx") == true)
+	{
+		int w, h;
+		uchar* data = nullptr;
+		if (app->map->CreateWalkabilityMap(w, h, &data))
+		{
+			app->pathfinding->SetMap(w, h, data);
+			RELEASE_ARRAY(data);
+		}
+	}
 	
 	return true;
 }
@@ -119,7 +131,6 @@ bool  ModuleTestScene::Update(float dt)
 		Zoom(0.25f * scrollWheelY, mouseRawX, mouseRawY, scale);
 	}*/
 
-	
 
 
 

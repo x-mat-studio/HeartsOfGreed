@@ -4,6 +4,7 @@
 #include "SDL/include/SDL.h"
 #include "Module.h"
 #include <map>
+#include <list>
 
 enum class EVENT_ENUM;
 

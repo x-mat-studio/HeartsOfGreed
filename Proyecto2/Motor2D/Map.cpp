@@ -58,7 +58,7 @@ void ModuleMap::Draw()
 
 					float worldX;
 					float worldY;
-					MapToWorldCoordinates(j, i, data, worldX, worldY);
+					MapToWorldCoords(j, i, data, worldX, worldY);
 
 					//whith camera culling
 
@@ -412,7 +412,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 	{
 		Properties* set = new Properties;
 		set->name = currentProp.attribute("name").as_string();
-		set->value = currentProp.attribute("value").as_float();
+		set->value = currentProp.attribute("value").as_bool();
 		layer->layerPropVector.push_back(set);
 	}
 
@@ -422,7 +422,6 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 	for (int i = 0; i < layer->width * layer->height; i++)
 	{
-
 		layer->gid[i] = gidIterator->attribute("gid").as_uint();
 		if (gidIterator->attribute("gid").as_uint() == NULL) {
 			layer->gid[i] = 0;
@@ -430,34 +429,29 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
-	
+
 	if (layer->name == "Collision") {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
 
 			if (layer->gid[i] > 0) {
-			
-				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
-				
-				int tilePosAux_x, tilePosAux_y;
-				tilePosAux_x = (i % layer->width); 
-				tilePosAux_y = ( (i - (i % layer->width)) / layer->width);
-				
-				colliderRectAux.x = tilePosAux_x * colliderRectAux.w / 2 - tilePosAux_y * colliderRectAux.w / 2 ;
-				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2 ;
-				colliderRectAux.w /= 2;
-				
-				app->coll->AddCollider(colliderRectAux,COLLIDER_WALL);
 
-				LOG("Yoink");
+				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
+
+				int tilePosAux_x, tilePosAux_y;
+				tilePosAux_x = (i % layer->width);
+				tilePosAux_y = ((i - (i % layer->width)) / layer->width);
+
+				colliderRectAux.x = tilePosAux_x * colliderRectAux.w / 2 - tilePosAux_y * colliderRectAux.w / 2;
+				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2;
+				colliderRectAux.w /= 2;
+
+				app->coll->AddCollider(colliderRectAux, COLLIDER_WALL);
 
 			}
 		}
 	}
-	
-	
-
 
 	return ret;
 }
@@ -532,7 +526,7 @@ SDL_Rect ModuleMap::RectFromTileId(uint tile_id, TileSet* currenttileset)
 
 
 //isometric map to world
-void ModuleMap::MapToWorldCoordinates(int posX, int posY, MapData& dat, float& outX, float& outY)
+void ModuleMap::MapToWorldCoords(int posX, int posY, MapData& dat, float& outX, float& outY)
 {
 	outX = (posX - posY) * dat.tileWidth * 0.5f;
 	outY = (posX + posY) * dat.tileHeight * 0.5f;
@@ -540,10 +534,35 @@ void ModuleMap::MapToWorldCoordinates(int posX, int posY, MapData& dat, float& o
 
 
 //isometric world to map
-void ModuleMap::WorldToMap(int x, int y, MapData& dat, int& outX, int& outY) const
+void ModuleMap::WorldToMapCoords(int x, int y, MapData& dat, int& outX, int& outY) const
 {
 	outX = (x / (dat.tileWidth * 0.5f) + y / (dat.tileHeight * 0.5f)) * 0.5f;
 	outY = (y / (dat.tileHeight * 0.5f) - (x / (dat.tileWidth * 0.5f))) * 0.5f;
+}
+
+//Returns x,y coordinates in the world
+iMPoint ModuleMap::MapToWorld(int x, int y) const
+{
+	iMPoint ret;
+
+	ret.x = (x - y) * (data.tileWidth * 0.5f);
+	ret.y = (x + y) * (data.tileHeight * 0.5f);
+
+	return ret;
+}
+
+//Returns x,y coordinates in the Map
+iMPoint ModuleMap::WorldToMap(int x, int y) const
+{
+	iMPoint ret(0, 0);
+
+	float half_width = data.tileWidth * 0.5f;
+	float half_height = data.tileHeight * 0.5f;
+
+	ret.x = int((x / half_width + y / half_height) / 2);
+	ret.y = int((y / half_height - (x / half_width)) / 2);
+
+	return ret;
 }
 
 
@@ -612,3 +631,61 @@ bool ModuleMap::InsideCamera(float& posX, float& posY) const {
 	}
 }
 
+bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
+{
+	bool ret = false;
+	std::vector<MapLayer*>::iterator layIt;
+
+	for (layIt = data.layers.begin(); layIt != data.layers.end(); ++layIt)
+	{
+		MapLayer* layer = *layIt;
+
+		//Search for Navigation Propierty
+		for (std::vector<Properties*>::iterator propIt = layer->layerPropVector.begin(); propIt != layer->layerPropVector.end(); ++propIt)
+		{
+			Properties* currProp = *propIt;
+			if (currProp->name != P2SString("Navigation"))
+			{
+				continue;
+			}
+			else if (currProp->value == 1)
+			{
+				ret = true;
+			}
+		}
+		if (!ret) continue;
+
+		uchar* map = new uchar[layer->width * layer->height];
+		memset(map, 1, layer->width * layer->height);
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int i = (y * layer->width) + x;
+
+				int tile_id = layer->gid[Get(x, y, layer)];
+
+				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = 0;
+
+				}
+				else
+					map[i] = 1;
+
+			}
+		}
+
+		*buffer = map;
+		width = data.width;
+		height = data.height;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
+}

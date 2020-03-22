@@ -38,11 +38,15 @@ private:
 	bool HandleInput();
 	void ExecuteEvent(EVENT_ENUM& eventId) const;
 
+	void DrawSelectQuad();
+
 private:
 	std::vector <Hero*> heroesVector;
 	Entity* focusedEntity;
 
 	iMPoint clickPosition;
+
+	SDL_Rect selectRect;
 };
 
 

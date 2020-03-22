@@ -5,9 +5,10 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Entity.h"
+#include <list>
 
 class Hero;
-
+class DynamicEntity;
 
 
 class ModuleEntityManager : public Module
@@ -46,6 +47,11 @@ public:
 	Entity* CheckEntityOnClick(iMPoint mousePos);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
+
+	void GetEntityNeighbours(std::list<DynamicEntity*>* close_entity_list, std::list<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
+
+public:
+	SDL_Texture* debugPathTexture;
 
 private:
 

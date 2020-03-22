@@ -7,8 +7,9 @@
 #include "Window.h"
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
+#include "Map.h"
 
-ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr)
+ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr), selectRect{ 0,0,0,0 }
 {
 	name.create("player");
 }
@@ -23,7 +24,7 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-	
+
 
 	return true;
 }
@@ -32,7 +33,7 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModulePlayer::Start()
 {
-	
+
 
 	return true;
 }
@@ -41,11 +42,12 @@ bool ModulePlayer::Start()
 // Called each loop iteration
 bool ModulePlayer::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue);
 
 	CheckListener();
 
 	HandleInput();
+
 
 	return true;
 }
@@ -56,7 +58,8 @@ bool ModulePlayer::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
 
-	CheckListener();
+
+		CheckListener();
 
 
 	return true;
@@ -67,9 +70,9 @@ bool ModulePlayer::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
 
-	CheckListener();
+		CheckListener();
 
-
+	DrawSelectQuad();
 	return true;
 }
 
@@ -82,16 +85,16 @@ bool ModulePlayer::HandleInput()
 		RightClick();
 	}
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) 
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
 	{
 		Click();
 	}
-	
+
 	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 	{
 		Select();
 	}
-	
+
 	return true;
 }
 
@@ -104,7 +107,7 @@ bool ModulePlayer::Click()
 
 	clickPosition.x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
 	clickPosition.y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
-		
+
 	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
 
 	if (focusedEntity != nullptr)
@@ -118,7 +121,6 @@ bool ModulePlayer::Click()
 
 void ModulePlayer::Select()
 {
-
 	iMPoint mousePosition;
 
 	app->input->GetMousePositionRaw(mousePosition.x, mousePosition.y);
@@ -127,7 +129,7 @@ void ModulePlayer::Select()
 	int rectY;
 	int rectW;
 	int rectH;
-	
+
 	mousePosition.x = (-app->render->currentCamX + mousePosition.x) / app->win->GetScale();
 	mousePosition.y = (-app->render->currentCamY + mousePosition.y) / app->win->GetScale();
 
@@ -153,17 +155,17 @@ void ModulePlayer::Select()
 
 	rectH = abs(mousePosition.y - clickPosition.y);
 
-	app->entityManager->CheckHeroOnSelection(SDL_Rect{ rectX, rectY, rectW, rectH }, &heroesVector);
+	selectRect = { rectX,rectY, rectW,rectH };
+
+	app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
 
 }
 
 
 void ModulePlayer::RightClick()
 {
-	
 	if (heroesVector.empty())
 		return;
-	
 
 	if (Click())
 	{
@@ -186,7 +188,18 @@ void ModulePlayer::RightClick()
 	}
 }
 
-
 void ModulePlayer::ExecuteEvent(EVENT_ENUM& eventId) const
+{}
+
+void ModulePlayer::DrawSelectQuad()
 {
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+	{
+		app->render->DrawQuad(selectRect, 0, 200, 0, 50, false);
+		app->render->DrawQuad(selectRect, 0, 200, 0, 100);
+	}
+	else
+	{
+		selectRect = { 0,0,0,0 };
+	}
 }

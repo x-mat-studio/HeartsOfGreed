@@ -35,8 +35,8 @@ class Entity
 public:
 
 	Entity();
-	Entity(iMPoint position, ENTITY_TYPE type);
-	Entity(iMPoint position, ENTITY_TYPE type, Collider* collider);
+	Entity(iMPoint position, ENTITY_TYPE type, bool dynamic = false);
+	Entity(iMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic = false);
 	virtual ~Entity();
 
 	virtual bool Start(SDL_Texture* texture);
@@ -61,6 +61,7 @@ public:
 	bool toDelete;
 
 	bool flip;
+	bool dynamic;
 
 protected:
 	iMPoint position;

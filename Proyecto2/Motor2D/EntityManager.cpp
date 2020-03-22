@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "Hero.h"
 #include "Enemy.h"
+#include "DynamicEntity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -28,7 +29,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	iMPoint pos;
-	pos.create(100, 200);
+	pos.create(100, 600);
 
 	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
 	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
@@ -49,6 +50,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
+
+	entityVector.push_back(tmpHero);
+	heroVector.push_back(tmpHero);
 	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 
 	return ret;
@@ -61,6 +65,7 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 
 	texture = app->tex->Load("spritesheets/characters/suitmale.png");
+	debugPathTexture = app->tex->Load("maps/path.png");
 
 	return ret;
 }
@@ -135,6 +140,12 @@ bool ModuleEntityManager::Update(float dt)
 			}
 		}
 	}
+
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		entityVector[i]->Update(dt);
+	}
 	return ret;
 }
 
@@ -181,7 +192,6 @@ bool ModuleEntityManager::CleanUp()
 {
 	int numEntities = entityVector.size();
 
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
@@ -190,6 +200,8 @@ bool ModuleEntityManager::CleanUp()
 	}
 
 	entityVector.clear();
+	texture = nullptr;
+	debugPathTexture = nullptr;
 
 	return true;
 }
@@ -328,3 +340,43 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
 {}
+
+
+void ModuleEntityManager::GetEntityNeighbours(std::list<DynamicEntity*>* close_entity_list, std::list<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit)
+{
+	close_entity_list->clear();
+	colliding_entity_list->clear();
+
+	std::vector<Entity*>::iterator iterator;
+	Entity* checkDynamism;
+	DynamicEntity* it;
+
+	for (iterator = entityVector.begin(); iterator != entityVector.end(); ++iterator) 
+	{
+		checkDynamism = *iterator;
+		if (!checkDynamism->dynamic)
+		{
+			continue;
+		}
+
+		it = (DynamicEntity*)checkDynamism;
+
+		//The GetType should be a "GetAlignment()", to see if is the player units or not
+		if (it != thisUnit && it->GetType() != thisUnit->GetType() )
+		{
+			iMPoint pos = it->GetPosition();
+
+			float distance = sqrt( pos.x * pos.x + pos.y * pos.y);
+			if (distance < it->moveRange2)
+			{
+				colliding_entity_list->push_back(it);
+
+			}
+			if (distance < thisUnit->moveRange1)
+			{
+				close_entity_list->push_back(it);
+			}
+		}
+	}
+
+}
