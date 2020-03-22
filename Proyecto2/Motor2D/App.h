@@ -23,6 +23,7 @@ class ModuleMap;
 class ModuleTestScene;
 class ModulePlayer;
 class ModuleEntityManager;
+class ModulePathfinding;
 
 class App
 {
@@ -96,6 +97,7 @@ public:
 	ModuleCollision*		coll;
 	ModulePlayer*			player;
 	ModuleEntityManager*	entityManager;
+	ModulePathfinding*		pathfinding;
 
 	uint32_t			frames;
 	

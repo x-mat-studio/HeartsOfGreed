@@ -42,7 +42,7 @@ private:
 	std::vector <Hero*> heroesVector;
 	Entity* focusedEntity;
 
-	SDL_Point clickPosition;
+	iMPoint clickPosition;
 };
 
 

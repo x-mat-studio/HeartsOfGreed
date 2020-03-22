@@ -91,7 +91,7 @@ public:
 
 
 	}
-
+	
 
 	const P2SString& create(const char* format, ...)
 	{

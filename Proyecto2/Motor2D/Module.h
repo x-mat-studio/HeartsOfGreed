@@ -10,6 +10,7 @@
 
 #include "p2SString.h"
 #include "PugiXml\src\pugixml.hpp"
+#include "p2Point.h"
 
 struct Collider;
 

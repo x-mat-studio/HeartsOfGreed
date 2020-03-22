@@ -11,6 +11,7 @@
 #include "TestScene.h"
 #include "Player.h"
 #include "EntityManager.h"
+#include "Pathfinding.h"
 
 #include "App.h"
 
@@ -33,6 +34,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	coll = new ModuleCollision();
 	entityManager = new ModuleEntityManager();
 	player = new ModulePlayer();
+	pathfinding = new ModulePathfinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp

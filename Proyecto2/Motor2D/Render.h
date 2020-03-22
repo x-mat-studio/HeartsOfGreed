@@ -3,6 +3,8 @@
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
+#include "p2Point.h"
+
 
 class ModuleRender : public Module
 {
