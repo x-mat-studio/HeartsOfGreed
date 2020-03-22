@@ -3,10 +3,10 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
 
-#include "vector"
 #include "SDL/include/SDL_rect.h"
 #include "Collision.h"
 #include "p2Point.h"
+#include "Animation.h"
 
 struct Collider;
 struct SDL_Texture;
@@ -45,6 +45,7 @@ public:
 	virtual bool PostUpdate(float dt);
 
 	virtual void OnCollision(Collider* collider);
+	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
 	iMPoint GetPosition();
@@ -59,6 +60,8 @@ public:
 	bool started;
 	bool toDelete;
 
+	bool flip;
+
 protected:
 	iMPoint position;
 
@@ -68,6 +71,7 @@ protected:
 
 	Collider* collider;
 
+	Animation* current_animation;
 };
 
 #endif//__ENTITY_H__

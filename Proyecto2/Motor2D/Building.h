@@ -4,7 +4,6 @@
 #define __BUILDING_H__
 
 #include "Entity.h"
-#include "vector"
 
 class Core;
 class UpgradeCenter;
@@ -58,29 +57,29 @@ public:
 public:
 
 	BUILDING_STATE currentState;
-
-	Base* myBase;
-
-
-private:
-
-	void ChangeBuildingState(BUILDING_STATE state);
-
-	void BeingRepaired();
-	void RecoverHealth();
-
-	void Contruct();
+	Base*		myBase;
 
 
 private:
 
-	int hitPointsMax;
-	int hitPointsCurrent;
-	int recoveryHitPointsRate;
-	int xpOnDeath;
-	int buildingCost;
+	int			hitPointsMax;
+	int			hitPointsCurrent;
+	int			recoveryHitPointsRate;
+	int			xpOnDeath;
+	int			buildingCost;
 
-	bool selected;
+	bool		selected;
+
+
+private:
+
+	void		ChangeBuildingState(BUILDING_STATE state);
+
+	void		BeingRepaired();
+	void		RecoverHealth();
+
+	void		Contruct();
+
 };
 
 

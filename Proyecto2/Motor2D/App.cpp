@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "Pathfinding.h"
+#include "EventManager.h"
 
 #include "App.h"
 
@@ -33,11 +34,13 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	testScene = new ModuleTestScene();
 	coll = new ModuleCollision();
 	entityManager = new ModuleEntityManager();
+	eventManager = new ModuleEventManager();
 	player = new ModulePlayer();
 	pathfinding = new ModulePathfinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(eventManager);
 	AddModule(input);
 	AddModule(win);
 	AddModule(audio);
@@ -224,7 +227,10 @@ void App::FinishUpdate()
 	uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
 	static char title[256];
+	sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  ",
+		app->render->GetCameraX(), app->render->GetCameraY());
 
+	app->win->SetTitle(title);
 
 	if (capFrames == false)
 	{
@@ -259,10 +265,6 @@ void App::FinishUpdate()
 		}*/
 
 	}
-
-
-	app->win->SetTitle(title);
-
 
 	//actuvate / deactivate framrate cap
 	/*if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
@@ -303,6 +305,10 @@ bool App::PreUpdate()
 		ret = modules[i]->PreUpdate(dt);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_STATE::KEY_DOWN) {
+
+		debugMode = !debugMode;
+	}
 
 	return ret;
 }

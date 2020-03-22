@@ -2,8 +2,10 @@
 #include "EntityManager.h"
 #include "Textures.h"
 #include "Entity.h"
+#include "Map.h"
 #include "Collision.h"
 #include "Hero.h"
+#include "Enemy.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -68,6 +70,8 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
+	CheckListener();
+
 	CheckIfStarted();
 
 	int numEntities = entityVector.size();
@@ -99,12 +103,37 @@ bool ModuleEntityManager::Update(float dt)
 
 		bool ret = true;
 
-	int numEntities = entityVector.size();
+	CheckListener();
 
+	int numEntities = entityVector.size();
+	float posX;
+	float posY;
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i]->Update(dt);
+		posX = entityVector[i]->GetPosition().x;
+		posY = entityVector[i]->GetPosition().y;
+
+		if (app->map->InsideCamera(posX, posY) == true){
+			
+			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
+			switch (entityVector[i]->GetType())
+			{
+			case ENTITY_TYPE::BUILDING:
+			case ENTITY_TYPE::BLDG_BARRICADE:
+			case ENTITY_TYPE::BLDG_BASE:
+			case ENTITY_TYPE::BLDG_TURRET:
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				buildingVector.push_back(entityVector[i]);
+				break;
+			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::HERO_GATHERER:
+			case ENTITY_TYPE::HERO_MELEE:
+			case ENTITY_TYPE::HERO_RANGED:
+				movableEntitiesVector.push_back(entityVector[i]);
+				break;
+			}
+		}
 	}
 	return ret;
 }
@@ -117,12 +146,30 @@ bool ModuleEntityManager::PostUpdate(float dt)
 		bool ret = true;
 
 	int numEntities = entityVector.size();
-
+	float posX;
+	float posY;
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i]->PostUpdate(dt);
+		posX = entityVector[i]->GetPosition().x;
+		posY = entityVector[i]->GetPosition().y;
+
+		if (app->map->InsideCamera(posX, posY) == true)
+		{
+			renderVector.push_back(entityVector[i]);
+		}
 	}
+
+	numEntities = renderVector.size();
+
+	// SORTING
+	
+	for (int i = 0; i < numEntities; i++)
+	{
+		renderVector[i]->PostUpdate(dt);
+	}
+
+	renderVector.clear();
 
 	RemoveDeletedEntitys();
 
@@ -278,3 +325,6 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 	}
 
 }
+
+void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
+{}

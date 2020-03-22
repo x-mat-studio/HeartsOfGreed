@@ -7,7 +7,6 @@
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_mouse.h"
 #include "Module.h"
-#include "vector"
 
 class Hero;
 class Entity;
@@ -17,26 +16,27 @@ class ModulePlayer : public Module
 public:
 	ModulePlayer();
 
-	//Destructor
+
 	~ModulePlayer();
 
-	// Called before render is available
+
 	bool Awake(pugi::xml_node&);
 
-	// Called before the first frame
+
 	bool Start();
 
-	// Called each loop iteration
+
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
 private:
-	//Handles Player Input
+	
 	void Select();
 	bool Click();
 	void RightClick();
 	bool HandleInput();
+	void ExecuteEvent(EVENT_ENUM& eventId) const;
 
 private:
 	std::vector <Hero*> heroesVector;
@@ -44,6 +44,7 @@ private:
 
 	iMPoint clickPosition;
 };
+
 
 
 #endif __PLAYER_H__

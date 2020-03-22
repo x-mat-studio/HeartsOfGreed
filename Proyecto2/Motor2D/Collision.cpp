@@ -4,6 +4,7 @@
 #include "Collision.h"
 
 
+
 ModuleCollision::ModuleCollision()
 {
 	name.create("colliders");
@@ -15,14 +16,32 @@ ModuleCollision::ModuleCollision()
 	matrix[COLLIDER_HERO][COLLIDER_WALL] = true;
 	matrix[COLLIDER_HERO][COLLIDER_HERO] = true;
 	matrix[COLLIDER_HERO][COLLIDER_ENEMY] = true;
+	matrix[COLLIDER_HERO][COLLIDER_BASE_ALERT] = false;
+	matrix[COLLIDER_HERO][COLLIDER_RECLUIT_IA] = false;
 
 	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
 	matrix[COLLIDER_WALL][COLLIDER_HERO] = true;
 	matrix[COLLIDER_WALL][COLLIDER_ENEMY] = true;
+	matrix[COLLIDER_WALL][COLLIDER_BASE_ALERT] = false;
+	matrix[COLLIDER_WALL][COLLIDER_RECLUIT_IA] = false;
 
 	matrix[COLLIDER_ENEMY][COLLIDER_WALL] = true;
-	matrix[COLLIDER_ENEMY][COLLIDER_WALL] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_HERO] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_BASE_ALERT] = false;
+	matrix[COLLIDER_ENEMY][COLLIDER_RECLUIT_IA] = true;
+
+	matrix[COLLIDER_BASE_ALERT][COLLIDER_WALL] = false;
+	matrix[COLLIDER_BASE_ALERT][COLLIDER_HERO] = true;
+	matrix[COLLIDER_BASE_ALERT][COLLIDER_ENEMY] = false;
+	matrix[COLLIDER_BASE_ALERT][COLLIDER_BASE_ALERT] = false;
+	matrix[COLLIDER_BASE_ALERT][COLLIDER_RECLUIT_IA] = false;
+
+	matrix[COLLIDER_RECLUIT_IA][COLLIDER_WALL] = false;
+	matrix[COLLIDER_RECLUIT_IA][COLLIDER_HERO] = false;
+	matrix[COLLIDER_RECLUIT_IA][COLLIDER_ENEMY] = true;
+	matrix[COLLIDER_RECLUIT_IA][COLLIDER_BASE_ALERT] = false;
+	matrix[COLLIDER_RECLUIT_IA][COLLIDER_RECLUIT_IA] = false;
 }
 
 
@@ -97,8 +116,8 @@ bool ModuleCollision::PostUpdate(float dt)
 
 void ModuleCollision::DebugDraw()
 {
-	/* if (App->scene->debug == false)  //Needs debug functionality
-		return; */
+	 if (app->debugMode == false)  
+		return; 
 
 	Uint8 alpha = 80;
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
@@ -185,4 +204,3 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 {
 	return !((this->rect.x + this->rect.w < r.x || r.x + r.w < this->rect.x) || (this->rect.y + this->rect.h < r.y || r.y + r.h < this->rect.y));
 }
-

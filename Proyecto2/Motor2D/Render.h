@@ -47,6 +47,9 @@ public:
 	//Returns the width & height of the camera
 	void GetCameraMeasures(int& w, int& h);
 
+	const int GetCameraX();
+	const int GetCameraY();
+
 public:
 	SDL_Renderer* renderer;
 
@@ -58,6 +61,7 @@ public:
 	float currentCamY;//buffer for the camera movement(otherwise when converting to int behaves wrong)
 private:
 	SDL_Rect camera;
+
 };
 
 #endif // __RENDER_H__

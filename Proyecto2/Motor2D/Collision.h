@@ -1,7 +1,7 @@
 #ifndef __Collision_H__
 #define __Collision_H__
 
-#define MAX_COLLIDERS 200
+#define MAX_COLLIDERS 5000
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
@@ -16,6 +16,10 @@ enum COLLIDER_TYPE
 	COLLIDER_HERO,
 	COLLIDER_ENEMY,
 	COLLIDER_DEATH,
+
+	COLLIDER_BASE_ALERT,
+	COLLIDER_RECLUIT_IA,
+
 	COLLIDER_MAX,
 };
 

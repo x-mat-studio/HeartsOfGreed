@@ -102,6 +102,7 @@ private:
 
 	P2SString	text;
 	int			cursorPos;
+
 };
 
 #endif // __INPUT_H__

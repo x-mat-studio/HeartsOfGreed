@@ -41,6 +41,8 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
+	CheckListener();
+
 	return true;
 }
 
@@ -48,6 +50,8 @@ bool  ModuleTestScene::PreUpdate(float dt)
 // Called each loop iteration
 bool  ModuleTestScene::Update(float dt)
 {
+	CheckListener();
+
 	float scale = app->win->GetScale();
 	float camVel = 10 * scale;
 	int mousePosX;
@@ -126,8 +130,16 @@ bool  ModuleTestScene::Update(float dt)
 // Called each loop iteration
 bool  ModuleTestScene::PostUpdate(float dt)
 {
+	bool ret = true;
+	
 	app->map->Draw();
-	return true;
+	
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
+
+		ret = false;
+	}
+
+	return ret;
 }
 
 
@@ -164,3 +176,7 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 		app->render->currentCamY = (((app->render->currentCamY - offsetY) * newScale) / currentScale) + offsetY;
 	}
 }
+
+
+void ModuleTestScene::ExecuteEvent(EVENT_ENUM& eventId) const
+{}

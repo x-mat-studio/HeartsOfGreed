@@ -3,7 +3,6 @@
 
 #include "Module.h"
 #include "SDL_mixer\include\SDL_mixer.h"
-#include "vector"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 #define MAX_VOLUME 128
@@ -64,7 +63,6 @@ public:
 
 
 	bool ConfigureChannel(unsigned int channel,LOUDNESS loudness, DIRECTION direction);
-
 
 private:
 	P2SString fxFolder;

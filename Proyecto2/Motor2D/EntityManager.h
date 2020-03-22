@@ -3,13 +3,12 @@
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
-#include "vector"
-#include "Entity.h"
 #include "Animation.h"
+#include "Entity.h"
 
 class Hero;
 
-class Entity;
+
 
 class ModuleEntityManager : public Module
 {
@@ -48,16 +47,22 @@ public:
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
 
-
 private:
 
 	void CheckIfStarted();
+
+	void ExecuteEvent(EVENT_ENUM& eventId) const;
 
 private:
 
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
 	std::vector <Hero*> heroVector;
+
+	// Sprite sorting vectors
+	std::vector <Entity*> renderVector;
+	std::vector <Entity*> movableEntitiesVector;
+	std::vector <Entity*> buildingVector;
 
 	SDL_Texture* texture;
 
