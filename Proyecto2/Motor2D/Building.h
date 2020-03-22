@@ -28,7 +28,7 @@ public:
 
 	Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost);
 
-	Building(SDL_Point position, Building* copy);
+	Building(iMPoint position, Building* copy);
 
 	Building();
 
@@ -53,11 +53,19 @@ public:
 	//Called to save the game
 	bool Save(pugi::xml_node&) const;
 
+private:
+	void		ChangeBuildingState(BUILDING_STATE state);
+
+	void		BeingRepaired();
+	void		RecoverHealth();
+
+	void		Contruct();
+
 
 public:
 
-	BUILDING_STATE currentState;
-	Base*		myBase;
+	BUILDING_STATE	currentState;
+	Base*			myBase;
 
 
 private:
@@ -71,14 +79,7 @@ private:
 	bool		selected;
 
 
-private:
 
-	void		ChangeBuildingState(BUILDING_STATE state);
-
-	void		BeingRepaired();
-	void		RecoverHealth();
-
-	void		Contruct();
 
 };
 

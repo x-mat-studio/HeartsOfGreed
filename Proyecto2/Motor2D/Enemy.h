@@ -42,12 +42,12 @@ class Enemy : public Entity
 {
 public:
 
-	Enemy(SDL_Point position, ENTITY_TYPE type, SDL_Texture* texture, Collider* col,
+	Enemy(iMPoint position, ENTITY_TYPE type, SDL_Texture* texture, Collider* col,
 		Animation& animation, int hitPoints, int recoveryHitPointsRate, int attackDamage, int attackSpeed, int attackRange,
 		int movementSpeed, int xpOnDeath);
 
 
-	Enemy(SDL_Point position, Enemy* copy);
+	Enemy(iMPoint position, Enemy* copy);
 
 
 	~Enemy();
@@ -61,7 +61,6 @@ public:
 	void OnCollision(Collider* collider);
 
 	bool MoveTo(int x, int y);
-	bool Enemy::LockOn(Entity* entity);
 
 private:
 
@@ -73,6 +72,9 @@ private:
 
 	void RecoverHealth();
 
+	bool SearchObjective();
+	bool CheckAttackRange();
+
 	void internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	bool externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	ENEMY_STATES processFsm(std::vector<ENEMY_INPUTS>& inputs);
@@ -81,6 +83,7 @@ private:
 
 	int hitPoints;
 	int recoveryHitPointsRate;
+	int vision;
 
 	int attackDamage;
 	int attackSpeed;
@@ -89,9 +92,12 @@ private:
 	int movementSpeed;
 	int xpOnDeath;
 
+	bool attackCharged;
 	float attackCooldown;
 
-	Entity* objective;
+	bool haveOrders;
+	Entity* shortTermObjective;
+	iMPoint longTermObjective;
 
 	Animation animation;
 

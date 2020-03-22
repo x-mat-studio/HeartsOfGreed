@@ -41,7 +41,7 @@ private:
 private:
 	int maxTurrets;
 	int maxBarricades;
-	Collider* baseArea; //if this seems odd, ask Jose -Adri
+	Collider* baseAreaAlarm; //if this seems odd, ask Jose -Adri
 
 	//Childs---
 	Core* baseCore;

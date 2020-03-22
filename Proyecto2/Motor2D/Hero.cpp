@@ -4,7 +4,7 @@
 #include "Render.h"
 #include "EntityManager.h"
 
-Hero::Hero(SDL_Point position, ENTITY_TYPE type, Collider* collider,
+Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 	Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -63,7 +63,7 @@ Hero::Hero(SDL_Point position, ENTITY_TYPE type, Collider* collider,
 {}
 
 
-Hero::Hero(SDL_Point position, Hero* copy) :
+Hero::Hero(iMPoint position, Hero* copy) :
 
 	Entity(position, copy->type, copy->collider),
 
@@ -169,6 +169,9 @@ bool Hero::Update(float dt)
 			attackCooldown += dt;
 			break;
 
+		case HERO_STATES::CHARGING_ATTACK:
+			break;
+
 		case HERO_STATES::SKILL1:
 			UseHability1();
 			cooldownHability1 += dt;
@@ -202,7 +205,6 @@ bool Hero::Update(float dt)
 
 bool Hero::PostUpdate(float dt)
 {
-	texture;
 	Draw(dt);
 	return true;
 }

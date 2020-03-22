@@ -119,7 +119,7 @@ bool ModulePlayer::Click()
 void ModulePlayer::Select()
 {
 
-	SDL_Point mousePosition;
+	iMPoint mousePosition;
 
 	app->input->GetMousePositionRaw(mousePosition.x, mousePosition.y);
 

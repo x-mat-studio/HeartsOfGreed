@@ -12,6 +12,8 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "Pathfinding.h"
+#include "AI.h"
 
 #include "App.h"
 
@@ -35,6 +37,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	entityManager = new ModuleEntityManager();
 	eventManager = new ModuleEventManager();
 	player = new ModulePlayer();
+	ai = new ModuleAI();
+	pathfinding = new ModulePathfinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -47,7 +51,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(testScene);
 	AddModule(coll);
 	AddModule(entityManager);
+	AddModule(pathfinding);
 	AddModule(player);
+	AddModule(ai);
 	// render last to swap buffer
 	AddModule(render);
 

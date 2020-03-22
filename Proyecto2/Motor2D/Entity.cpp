@@ -6,7 +6,7 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(SDL_Point position, ENTITY_TYPE type) :
+Entity::Entity(iMPoint position, ENTITY_TYPE type) :
 
 	position(position),
 	type(type),	
@@ -19,7 +19,7 @@ Entity::Entity(SDL_Point position, ENTITY_TYPE type) :
 {}
 
 
-Entity::Entity(SDL_Point position, ENTITY_TYPE type, Collider* collider) :
+Entity::Entity(iMPoint position, ENTITY_TYPE type, Collider* collider) :
 
 	position(position),
 	type(type),	
@@ -92,7 +92,7 @@ void Entity::Draw(float dt)
 }
 
 
-SDL_Point Entity::GetPosition()
+iMPoint Entity::GetPosition()
 {
 	return position;
 }
