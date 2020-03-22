@@ -23,6 +23,7 @@ class ModuleTestScene;
 class ModulePlayer;
 class ModuleEntityManager;
 class ModuleEventManager;
+class ModuleAI;
 
 class App
 {
@@ -97,6 +98,7 @@ public:
 	ModulePlayer*			player;
 	ModuleEntityManager*	entityManager;
 	ModuleEventManager*		eventManager;
+	ModuleAI*				ai;
 
 	uint32_t			frames;
 	

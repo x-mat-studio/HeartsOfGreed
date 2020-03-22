@@ -8,7 +8,7 @@ Base::Base(int maxTurrets, int maxBarricades, Core* baseCore, UpgradeCenter* bas
 	baseUpgradeCenter(baseUpgradeCenter),
 	baseTurrets(baseTurrets),
 	baseBarricades(baseBarricades),
-	baseArea(baseArea)
+	baseAreaAlarm(baseArea)
 {}
 
 
@@ -20,7 +20,7 @@ Base::Base(Base * copy):
 	baseUpgradeCenter(copy->baseUpgradeCenter),
 	baseTurrets(copy->baseTurrets),
 	baseBarricades(copy->baseBarricades),
-	baseArea(copy->baseArea)
+	baseAreaAlarm(copy->baseAreaAlarm)
 {}
 
 

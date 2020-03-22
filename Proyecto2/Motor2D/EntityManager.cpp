@@ -69,7 +69,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	CheckIfStarted();
+		CheckIfStarted();
 
 	int numEntities = entityVector.size();
 
@@ -109,8 +109,8 @@ bool ModuleEntityManager::Update(float dt)
 		posX = entityVector[i]->GetPosition().x;
 		posY = entityVector[i]->GetPosition().y;
 
-		if (app->map->InsideCamera(posX, posY) == true){
-			
+		if (app->map->InsideCamera(posX, posY) == true) {
+
 			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
 			switch (entityVector[i]->GetType())
 			{
@@ -158,7 +158,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	numEntities = renderVector.size();
 
 	// SORTING
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		renderVector[i]->PostUpdate(dt);
@@ -302,6 +302,35 @@ bool ModuleEntityManager::CheckEntityExists(Entity* entity)
 	}
 
 	return false;
+}
+
+
+Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
+{
+	int numEntitys = entityVector.size();
+
+	Collider* col;
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::PARTICLE || entityVector[i]->GetType() == ENTITY_TYPE::PARTICLE_SYSTEM ||
+			entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		{
+			continue;
+		}
+
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr)
+		{
+			if (col->CheckCollision(*rect))
+			{
+				return entityVector[i];
+			}
+		}
+	}
+
+	return nullptr;
 }
 
 

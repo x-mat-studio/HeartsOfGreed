@@ -46,6 +46,7 @@ public:
 	Entity* CheckEntityOnClick(SDL_Point mousePos);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	bool CheckEntityExists(Entity* entity);
+	Entity* CheckEnemyObjective(SDL_Rect* rect);
 
 private:
 

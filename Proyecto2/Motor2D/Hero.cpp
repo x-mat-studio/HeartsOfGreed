@@ -169,6 +169,9 @@ bool Hero::Update(float dt)
 			attackCooldown += dt;
 			break;
 
+		case HERO_STATES::CHARGING_ATTACK:
+			break;
+
 		case HERO_STATES::SKILL1:
 			UseHability1();
 			cooldownHability1 += dt;
