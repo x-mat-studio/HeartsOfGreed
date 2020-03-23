@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Map.h"
+#include "EventManager.h"
 
 ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr), selectRect{ 0,0,0,0 }
 {
@@ -33,6 +34,11 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModulePlayer::Start()
 {
+	//register the module as a listener to the following events
+	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_COMMAND, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_INTERACTION, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
+	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
 
 
 	return true;
@@ -44,7 +50,7 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue);
 
-	CheckListener();
+	CheckListener(this);
 
 	HandleInput();
 
@@ -59,7 +65,7 @@ bool ModulePlayer::Update(float dt)
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
 
 
-		CheckListener();
+		CheckListener(this);
 
 
 	return true;
@@ -70,7 +76,7 @@ bool ModulePlayer::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
 
-		CheckListener();
+	CheckListener(this);
 
 	DrawSelectQuad();
 	return true;
@@ -80,17 +86,19 @@ bool ModulePlayer::PostUpdate(float dt)
 //Handles Player Input
 bool ModulePlayer::HandleInput()
 {
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN)
+	if (entityComand)
 	{
+		entityComand = false;
 		RightClick();
 	}
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
+	if (entityInteraction)
 	{
+		entityInteraction = false;
 		Click();
 	}
 
-	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+	else if (selectUnits)
 	{
 		Select();
 	}
@@ -188,8 +196,28 @@ void ModulePlayer::RightClick()
 	}
 }
 
-void ModulePlayer::ExecuteEvent(EVENT_ENUM& eventId) const
-{}
+void ModulePlayer::ExecuteEvent(EVENT_ENUM& eventId)
+{
+	
+	switch (eventId)
+	{
+	
+	case EVENT_ENUM::SELECT_UNITS:
+		selectUnits = true;
+		break;
+	case EVENT_ENUM::STOP_SELECTING_UNITS:
+		selectUnits = false;
+		break;
+	case EVENT_ENUM::ENTITY_COMMAND:
+		entityComand = true;
+		break;
+	case EVENT_ENUM::ENTITY_INTERACTION:
+		entityInteraction = true;
+		break;
+	}
+
+
+}
 
 void ModulePlayer::DrawSelectQuad()
 {

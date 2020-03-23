@@ -67,7 +67,7 @@ void ModuleEventManager::GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTri
 		FireEvent(eventCheck);
 	}
 
-	if (eventTriggerId != EVENT_ENUM::NULL_EVENT)
+	if (eventTriggerId == EVENT_ENUM::NULL_EVENT)
 	{
 		FireEvent(eventId);
 	}

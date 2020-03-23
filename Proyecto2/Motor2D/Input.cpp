@@ -5,10 +5,11 @@
 #include "Window.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
+#include "EventManager.h"
 
 #define MAX_KEYS 300
 
-ModuleInput::ModuleInput() : Module(), inputTexActivated(false), keyboard(new KEY_STATE[MAX_KEYS]), cursorPos(0)
+ModuleInput::ModuleInput() : Module(), inputTexActivated(false), keyboard(new KEY_STATE[MAX_KEYS]), cursorPos(0), keybindings(new EventsOnKeyPress[MAX_KEYS])
 {
 	name.create("input");
 
@@ -20,6 +21,8 @@ ModuleInput::ModuleInput() : Module(), inputTexActivated(false), keyboard(new KE
 ModuleInput::~ModuleInput()
 {
 	delete[] keyboard;
+	delete[] keybindings;
+
 }
 
 // Called before render is available
@@ -46,6 +49,14 @@ bool ModuleInput::Start()
 
 	SDL_StopTextInput();
 
+	//configure bindings (will be loaded from xml in the future) TODO
+	AddMouseBinding(SDL_BUTTON_LEFT-1, KEY_STATE::KEY_DOWN, EVENT_ENUM::ENTITY_INTERACTION);
+	AddMouseBinding(SDL_BUTTON_LEFT-1, KEY_STATE::KEY_REPEAT, EVENT_ENUM::SELECT_UNITS);
+	AddMouseBinding(SDL_BUTTON_RIGHT-1, KEY_STATE::KEY_DOWN, EVENT_ENUM::ENTITY_COMMAND);
+	AddMouseBinding(SDL_BUTTON_RIGHT - 1, KEY_STATE::KEY_UP, EVENT_ENUM::STOP_SELECTING_UNITS);
+
+
+
 	return true;
 }
 
@@ -70,9 +81,15 @@ bool ModuleInput::PreUpdate(float dt)
 
 
 			if (keyboard[i] == KEY_STATE::KEY_IDLE)
+			{
 				keyboard[i] = KEY_STATE::KEY_DOWN;
+				keyBindingSendEvent(i, KEY_STATE::KEY_DOWN);
+			}
 			else
+			{
 				keyboard[i] = KEY_STATE::KEY_REPEAT;
+				keyBindingSendEvent(i, KEY_STATE::KEY_REPEAT);
+			}
 
 
 		}
@@ -81,9 +98,16 @@ bool ModuleInput::PreUpdate(float dt)
 
 
 			if (keyboard[i] == KEY_STATE::KEY_REPEAT || keyboard[i] == KEY_STATE::KEY_DOWN)
+			{
 				keyboard[i] = KEY_STATE::KEY_UP;
+				keyBindingSendEvent(i, KEY_STATE::KEY_UP);
+
+			}
 			else
+			{
 				keyboard[i] = KEY_STATE::KEY_IDLE;
+				keyBindingSendEvent(i, KEY_STATE::KEY_IDLE);
+			}
 
 
 		}
@@ -97,11 +121,17 @@ bool ModuleInput::PreUpdate(float dt)
 
 
 		if (mouseButtons[i] == KEY_STATE::KEY_DOWN)
+		{
 			mouseButtons[i] = KEY_STATE::KEY_REPEAT;
+			mouseBindingSendEvent(i, KEY_STATE::KEY_REPEAT);
+		}
 
 
 		if (mouseButtons[i] == KEY_STATE::KEY_UP)
+		{
 			mouseButtons[i] = KEY_STATE::KEY_IDLE;
+			mouseBindingSendEvent(i, KEY_STATE::KEY_IDLE);
+		}
 
 
 	}
@@ -155,10 +185,12 @@ bool ModuleInput::PreUpdate(float dt)
 
 		case SDL_MOUSEBUTTONDOWN:
 			mouseButtons[event.button.button - 1] = KEY_STATE::KEY_DOWN;
+			mouseBindingSendEvent(event.button.button - 1, KEY_STATE::KEY_DOWN);
 			break;
 
 		case SDL_MOUSEBUTTONUP:
 			mouseButtons[event.button.button - 1] = KEY_STATE::KEY_UP;
+			mouseBindingSendEvent(event.button.button - 1, KEY_STATE::KEY_UP);
 			break;
 
 		case SDL_MOUSEWHEEL:
@@ -261,4 +293,200 @@ void ModuleInput::HandleTextInput()
 const char* ModuleInput::GetInputText()
 {
 	return text.GetString();
+}
+
+
+void ModuleInput::AddKeyBinding(int key, KEY_STATE keyAction, EVENT_ENUM event)
+{
+
+
+	switch (keyAction)
+	{
+	case KEY_STATE::KEY_IDLE:
+		keybindings[key].keyIdle = event;
+		break;
+
+	case KEY_STATE::KEY_DOWN:
+		keybindings[key].keyDown = event;
+		break;
+
+	case KEY_STATE::KEY_REPEAT:
+		keybindings[key].keyRepeat = event;
+		break;
+
+	case KEY_STATE::KEY_UP:
+		keybindings[key].keyUp = event;
+		break;
+
+	}
+
+
+}
+
+
+void ModuleInput::AddMouseBinding(int buttonId, KEY_STATE buttonAction, EVENT_ENUM event)
+{
+	switch (buttonAction)
+	{
+	case KEY_STATE::KEY_IDLE:
+		mouseBindings[buttonId].keyIdle = event;
+		break;
+
+	case KEY_STATE::KEY_DOWN:
+		mouseBindings[buttonId].keyDown = event;
+		break;
+
+	case KEY_STATE::KEY_REPEAT:
+		mouseBindings[buttonId].keyRepeat = event;
+		break;
+
+	case KEY_STATE::KEY_UP:
+		mouseBindings[buttonId].keyUp = event;
+		break;
+
+	}
+}
+
+
+void ModuleInput::RemoveSingleKeyBinding(int key, KEY_STATE keyAction)
+{
+
+
+	switch (keyAction)
+	{
+	case KEY_STATE::KEY_IDLE:
+		keybindings[key].keyIdle = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	case KEY_STATE::KEY_DOWN:
+		keybindings[key].keyDown = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	case KEY_STATE::KEY_REPEAT:
+		keybindings[key].keyRepeat = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	case KEY_STATE::KEY_UP:
+		keybindings[key].keyUp = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	}
+
+
+}
+
+
+void ModuleInput::RemoveKeyBinding(int key)
+{
+
+	keybindings[key].keyDown = EVENT_ENUM::NULL_EVENT;
+	keybindings[key].keyIdle = EVENT_ENUM::NULL_EVENT;
+	keybindings[key].keyRepeat = EVENT_ENUM::NULL_EVENT;
+	keybindings[key].keyUp = EVENT_ENUM::NULL_EVENT;
+
+}
+
+
+
+void ModuleInput::RemoveSingleMouseBinding(int buttonId, KEY_STATE keyAction)
+{
+
+
+	switch (keyAction)
+	{
+	case KEY_STATE::KEY_IDLE:
+		mouseBindings[buttonId].keyIdle = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	case KEY_STATE::KEY_DOWN:
+		mouseBindings[buttonId].keyDown = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	case KEY_STATE::KEY_REPEAT:
+		mouseBindings[buttonId].keyRepeat = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	case KEY_STATE::KEY_UP:
+		mouseBindings[buttonId].keyUp = EVENT_ENUM::NULL_EVENT;
+		break;
+
+	}
+}
+
+
+void ModuleInput::RemoveMouseBinding(int buttonId)
+{
+	mouseBindings[buttonId].keyDown = EVENT_ENUM::NULL_EVENT;
+	mouseBindings[buttonId].keyIdle = EVENT_ENUM::NULL_EVENT;
+	mouseBindings[buttonId].keyRepeat = EVENT_ENUM::NULL_EVENT;
+	mouseBindings[buttonId].keyUp = EVENT_ENUM::NULL_EVENT;
+}
+
+
+void ModuleInput::keyBindingSendEvent(int key, KEY_STATE keyAction)
+{
+	EVENT_ENUM nullEvent = EVENT_ENUM::NULL_EVENT;
+
+
+	switch (keyAction)
+	{
+	case KEY_STATE::KEY_IDLE:
+		if (keybindings[key].keyIdle!=nullEvent)
+			app->eventManager->GenerateEvent(keybindings[key].keyIdle, nullEvent);
+
+		break;
+
+	case KEY_STATE::KEY_DOWN:
+		if (keybindings[key].keyDown != nullEvent)
+		app->eventManager->GenerateEvent(keybindings[key].keyDown, nullEvent);
+		
+		break;
+
+	case KEY_STATE::KEY_REPEAT:
+		if (keybindings[key].keyRepeat != nullEvent)
+		app->eventManager->GenerateEvent(keybindings[key].keyRepeat, nullEvent);
+		break;
+
+	case KEY_STATE::KEY_UP:
+		if (keybindings[key].keyUp != nullEvent)
+		app->eventManager->GenerateEvent(keybindings[key].keyUp, nullEvent);
+		break;
+
+	}
+
+
+}
+
+
+void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
+{
+
+
+	EVENT_ENUM nullEvent = EVENT_ENUM::NULL_EVENT;
+
+	switch (keyAction)
+	{
+	case KEY_STATE::KEY_IDLE:
+		if (mouseBindings[button].keyIdle != nullEvent)
+		app->eventManager->GenerateEvent(mouseBindings[button].keyIdle, nullEvent);
+		break;
+
+	case KEY_STATE::KEY_DOWN:	
+		if (mouseBindings[button].keyDown != nullEvent)
+		app->eventManager->GenerateEvent(mouseBindings[button].keyDown, nullEvent);
+		break;
+
+	case KEY_STATE::KEY_REPEAT:	
+		if (mouseBindings[button].keyRepeat != nullEvent)
+		app->eventManager->GenerateEvent(mouseBindings[button].keyRepeat, nullEvent);
+		break;
+
+	case KEY_STATE::KEY_UP:
+		if (mouseBindings[button].keyUp != nullEvent)
+		app->eventManager->GenerateEvent(mouseBindings[button].keyUp, nullEvent);
+		break;
+
+	}
+
+
 }

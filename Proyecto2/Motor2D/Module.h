@@ -17,11 +17,15 @@ struct Collider;
 
 class App;
 
- enum class EVENT_ENUM
+enum class EVENT_ENUM
 {
 	AUDIO_INCOMES,
 	KEYBOARD_INPUT,
 	MOUSE_INPUT,
+	SELECT_UNITS,
+	STOP_SELECTING_UNITS,
+	ENTITY_COMMAND, //aka right click
+	ENTITY_INTERACTION, //aka left click
 	PAUSE_GAME,
 	NULL_EVENT
 };
@@ -73,9 +77,9 @@ public:
 
 	void RemoveEvent(EVENT_ENUM& eventId);
 
-	bool CheckListener();
+	bool CheckListener(Module*mod);
 
-	virtual void ExecuteEvent(EVENT_ENUM& eventId) const;
+	virtual void ExecuteEvent(EVENT_ENUM& eventId);
 
 public:
 

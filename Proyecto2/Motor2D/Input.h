@@ -9,6 +9,7 @@
 
 struct SDL_Rect;
 
+
 enum class EVENT_WINDOW //used to control mouse events
 {
 	WE_QUIT = 0,
@@ -23,6 +24,15 @@ enum class KEY_STATE
 	KEY_DOWN,
 	KEY_REPEAT,
 	KEY_UP
+};
+
+
+struct EventsOnKeyPress
+{
+	EVENT_ENUM keyIdle		=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyDown		=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyRepeat	=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyUp		=	EVENT_ENUM::NULL_EVENT;
 };
 
 class ModuleInput : public Module
@@ -78,6 +88,22 @@ public:
 
 	const char* GetInputText();
 
+	// keybinding managing:
+
+	void AddKeyBinding(int key, KEY_STATE keyAction, EVENT_ENUM event);
+	void AddMouseBinding(int buttonId, KEY_STATE buttonAction, EVENT_ENUM event);
+
+	
+	void RemoveSingleKeyBinding(int key, KEY_STATE keyAction);
+	void RemoveKeyBinding(int key);
+	void RemoveSingleMouseBinding(int buttonId, KEY_STATE keyAction);
+	void RemoveMouseBinding(int buttonId);
+
+	void keyBindingSendEvent(int key, KEY_STATE keyAction);
+	void mouseBindingSendEvent(int button, KEY_STATE keyAction);
+
+
+
 private:
 	//	bool TextHasSpace();
 	void HandleTextInput();
@@ -102,6 +128,10 @@ private:
 
 	P2SString	text;
 	int			cursorPos;
+
+	EventsOnKeyPress* keybindings;
+	EventsOnKeyPress mouseBindings[NUM_MOUSE_BUTTONS];
+
 
 };
 

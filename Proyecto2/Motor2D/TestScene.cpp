@@ -53,7 +53,7 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
-	CheckListener();
+	CheckListener(this);
 
 	return true;
 }
@@ -62,7 +62,7 @@ bool  ModuleTestScene::PreUpdate(float dt)
 // Called each loop iteration
 bool  ModuleTestScene::Update(float dt)
 {
-	CheckListener();
+	CheckListener(this);
 
 	float scale = app->win->GetScale();
 	float camVel = 10 * scale;

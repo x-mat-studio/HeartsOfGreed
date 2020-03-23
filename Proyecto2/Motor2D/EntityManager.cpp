@@ -74,7 +74,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	CheckListener();
+	CheckListener(this);
 
 	CheckIfStarted();
 
@@ -107,7 +107,7 @@ bool ModuleEntityManager::Update(float dt)
 
 		bool ret = true;
 
-	CheckListener();
+	CheckListener(this);
 
 	int numEntities = entityVector.size();
 

@@ -36,7 +36,7 @@ private:
 	bool Click();
 	void RightClick();
 	bool HandleInput();
-	void ExecuteEvent(EVENT_ENUM& eventId) const;
+	void ExecuteEvent(EVENT_ENUM& eventId);
 
 	void DrawSelectQuad();
 
@@ -47,6 +47,10 @@ private:
 	iMPoint clickPosition;
 
 	SDL_Rect selectRect;
+
+	bool selectUnits=false;
+	bool entityComand=false;
+	bool entityInteraction=false;
 };
 
 

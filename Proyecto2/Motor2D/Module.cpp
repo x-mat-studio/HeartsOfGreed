@@ -118,7 +118,7 @@ void Module::RemoveEvent(EVENT_ENUM& eventId)
 }
 
 
-bool Module::CheckListener()
+bool Module::CheckListener(Module* mod)
 {
 	int numElem = listener.size();
 
@@ -129,13 +129,13 @@ bool Module::CheckListener()
 
 	for (int i = 0; i < numElem; i++)
 	{
-		ExecuteEvent(listener[i]);
+		mod->ExecuteEvent(listener[i]);
 	}
 
 	return true;
 }
 
 
-void Module::ExecuteEvent(EVENT_ENUM& eventId) const
+void Module::ExecuteEvent(EVENT_ENUM& eventId)
 {}
 
