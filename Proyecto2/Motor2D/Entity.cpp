@@ -45,8 +45,11 @@ bool Entity::Start(SDL_Texture* texture)
 {
 	this->texture = texture;
 
-	collider->thisEntity = this;
-	app->coll->AddColliderEntity(collider);
+	if (collider != nullptr)
+	{
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+	}
 
 	started = true;
 

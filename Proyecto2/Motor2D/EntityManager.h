@@ -66,7 +66,6 @@ private:
 
 	//The list where we will store all the entities
 	std::vector <Entity*> entityVector;
-	std::vector <Hero*> heroVector;
 
 	// Sprite sorting vectors
 	std::vector <Entity*> renderVector;
