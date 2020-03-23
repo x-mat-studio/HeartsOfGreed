@@ -91,13 +91,11 @@ bool ModulePlayer::HandleInput()
 		entityComand = false;
 		RightClick();
 	}
-
 	if (entityInteraction)
 	{
 		entityInteraction = false;
 		Click();
 	}
-
 	else if (selectUnits)
 	{
 		Select();
@@ -221,7 +219,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM& eventId)
 
 void ModulePlayer::DrawSelectQuad()
 {
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+	if (selectUnits)
 	{
 		app->render->DrawQuad(selectRect, 0, 200, 0, 50, false);
 		app->render->DrawQuad(selectRect, 0, 200, 0, 100);
