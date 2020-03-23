@@ -15,7 +15,7 @@ GathererHero::GathererHero(iMPoint position, Collider* col, Animation& walkLeft,
 
 bool GathererHero::UseHability1()
 {
-
+	//Hola soy Marc :)
 	return true;
 }
 
