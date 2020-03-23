@@ -132,6 +132,8 @@ bool Module::CheckListener(Module* mod)
 		mod->ExecuteEvent(listener[i]);
 	}
 
+	listener.clear();
+
 	return true;
 }
 
