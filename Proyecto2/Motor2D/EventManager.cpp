@@ -55,7 +55,8 @@ bool ModuleEventManager::CleanUp()
 	return true;
 }
 
-void ModuleEventManager::GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTriggerId) {
+void ModuleEventManager::GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTriggerId)
+{
 
 	Event newEvent(eventId, eventTriggerId);
 
