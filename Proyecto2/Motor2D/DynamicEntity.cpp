@@ -13,7 +13,7 @@ DynamicEntity::DynamicEntity(iMPoint position, ENTITY_TYPE type, Collider* colli
 DynamicEntity::~DynamicEntity()
 {}
 
-void DynamicEntity::Move()
+bool DynamicEntity::Move()
 {
 	BROFILER_CATEGORY("UpdateTest_1", Profiler::Color::BlanchedAlmond);
 
@@ -109,17 +109,19 @@ void DynamicEntity::Move()
 
 	// ---------------------------------------------------------------- 
 
-	speed.x += 1.5 * pathSpeed.x + 1 * separationSpeed.x + 0.5 * cohesionSpeed.x + 0.1 * alignmentSpeed.x;
-	speed.y += 1.5 * pathSpeed.y + 1 * separationSpeed.y + 0.5 * cohesionSpeed.y + 0.1 * alignmentSpeed.y;
+	speed += pathSpeed *1.5f + separationSpeed * 1 + cohesionSpeed *0.5f + alignmentSpeed *0.1f;
 
 	// ------------------------------------------------------------------
 
 	position.y += speed.y;
 	position.x += speed.x;
 
+	if (!pathSpeed.IsZero())
+		return true;
+	else
+		return false;
+
 }
-
-
 
 fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, iMPoint position)
 {
@@ -242,7 +244,7 @@ bool DynamicEntity::GeneratePath(int x, int y)
 	int X, Y = 0;
 
 	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
-	app->map->WorldToMapCoords(x, y, app->map->data, X, Y);
+	app->map->WorldToMapCoords(x-app->map->data.tileWidth * 0.5f, y, app->map->data, X, Y);
 
 	if (app->pathfinding->CreatePath(origin, { X,Y }) == 0)
 	{
@@ -258,7 +260,6 @@ bool DynamicEntity::GeneratePath(int x, int y)
 void DynamicEntity::DebugDraw()
 {
 	// Debug pathfinding ------------------------------
-	//int x, y;
 
 	if (!app->debugMode)
 		return;
@@ -268,8 +269,6 @@ void DynamicEntity::DebugDraw()
 	int x, y;
 	app->input->GetMousePosition(x, y);
 	iMPoint p = app->map->MapToWorld(x, y);
-	p = app->map->WorldToMap(p.x, p.y);
-	p = app->map->MapToWorld(p.x, p.y);
 
 	app->render->Blit(debug_tex, p.x, p.y);
 

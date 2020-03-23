@@ -42,7 +42,7 @@ public:
 	// Math ------------------------------------------------
 	MAT_Point operator -(const MAT_Point& v) const
 	{
-		p2Vector2 r;
+		MAT_Point r;
 
 		r.x = x - v.x;
 		r.y = y - v.y;
@@ -52,7 +52,7 @@ public:
 
 	MAT_Point operator + (const MAT_Point& v) const
 	{
-		p2Vector2 r;
+		MAT_Point r;
 
 		r.x = x + v.x;
 		r.y = y + v.y;
@@ -191,7 +191,7 @@ public:
 
 	MAT_Point GetInverse()
 	{
-		p2Point r;
+		MAT_Point r;
 		r.x = -x;
 		r.y = -y;
 
