@@ -13,6 +13,15 @@ RangedHero::RangedHero(iMPoint position, Collider* col, Animation& walkLeft, Ani
 {}
 
 
+RangedHero::RangedHero(iMPoint position, RangedHero* copy) :
+
+	Hero(position, ENTITY_TYPE::HERO_RANGED, copy->GetCollider(), copy->walkLeft, copy->walkLeftUp, copy->walkLeftDown, copy->walkRightUp, copy->walkRightDown, copy-> walkRight,
+		copy->idleRight, copy->idleRightDown, copy->idleRightUp, copy->idleLeft, copy->idleLeftUp, copy->idleLeftDown, copy->level, copy->hitPoints, copy->recoveryHitPointsRate,
+		copy->energyPoints, copy->recoveryEnergyRate, copy->attackDamage, copy->attackSpeed, copy->attackRange, copy->movementSpeed, copy->vision, copy->attackCooldown,
+		copy->skill1ExecutionTime, copy->skill2ExecutionTime, copy->skill3ExecutionTime, copy->skill1RecoverTime, copy->skill2RecoverTime, copy->skill3RecoverTime)
+{}
+
+
 bool RangedHero::UseHability1()
 {
 

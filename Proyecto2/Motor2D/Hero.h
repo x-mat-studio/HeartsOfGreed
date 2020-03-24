@@ -92,7 +92,7 @@ private:
 	bool externalInput(std::vector<HERO_INPUTS>& inputs, float dt);
 	HERO_STATES processFsm(std::vector<HERO_INPUTS>& inputs);
 
-private:
+public:
 	int level;
 
 	int hitPoints;
