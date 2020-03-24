@@ -98,6 +98,7 @@
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RangedHero.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="MeleeHero.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RangedHero.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Textures.h" />
