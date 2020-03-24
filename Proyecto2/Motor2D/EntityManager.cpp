@@ -28,6 +28,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
+
+	// Sample Hero Melee---------------------
 	iMPoint pos;
 	pos.create(100, 600);
 
@@ -44,15 +46,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
 
-	Collider* collider = new Collider({ 0,0,100,100 }, COLLIDER_HERO, nullptr);
+	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, nullptr);
 
-	tmpHero = new Hero(iMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
+	sampleMelee = new Hero(iMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
-	entityVector.push_back(tmpHero);
-	//AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+	//Test Hero
+	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 
 	return ret;
 }
@@ -74,7 +76,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	CheckListener(this);
+		CheckListener(this);
 
 	CheckIfStarted();
 
@@ -176,11 +178,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
 	{
-		//Test Things :)
-
-		/*Hero* tmpHero = new Hero(SDL_Point{ x,y }, ENTITY_TYPE::HERO_MELEE, { 0,0,100,100 }, COLLIDER_HERO, this, animation, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20);
-		heroVector.push_back(tmpHero);
-		ret = tmpHero;*/
+		ret = new Hero({ x,y }, sampleMelee);
 	}
 	break;
 	case ENTITY_TYPE::HERO_RANGED:
@@ -345,19 +343,19 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
-//				if (entityVector[i].POINTER == nullptr)
-//				{
-					frontEntitiesVector.push_back(entityVector[i]);
-/*				}
-				else
-				{
-					backEntitiesVector.push_back(entityVector[i]);
-				}*/
+				//				if (entityVector[i].POINTER == nullptr)
+				//				{
+				frontEntitiesVector.push_back(entityVector[i]);
+				/*				}
+								else
+								{
+									backEntitiesVector.push_back(entityVector[i]);
+								}*/
 				break;
 			}
 		}
 	}
-	
+
 	EntityQuickSort(backEntitiesVector, 0, backEntitiesVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 	EntityQuickSort(frontEntitiesVector, 0, frontEntitiesVector.size());
@@ -399,7 +397,7 @@ void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low,
 		int numElem = vector.size();
 		int pivotLocation = EntityPartition(vector, low, high);
 		EntityQuickSort(vector, low, pivotLocation);
-		EntityQuickSort(vector, pivotLocation +1, high);
+		EntityQuickSort(vector, pivotLocation + 1, high);
 	}
 }
 
@@ -424,7 +422,7 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 	auxVec = pivot;
 	pivot = vector[left];
 	vector[left] = auxVec;
-	
+
 	return left;
 }
 
@@ -442,7 +440,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::list<DynamicEntity*>* close_e
 	Entity* checkDynamism;
 	DynamicEntity* it;
 
-	for (iterator = entityVector.begin(); iterator != entityVector.end(); ++iterator) 
+	for (iterator = entityVector.begin(); iterator != entityVector.end(); ++iterator)
 	{
 		checkDynamism = *iterator;
 		if (!checkDynamism->dynamic)
@@ -453,11 +451,11 @@ void ModuleEntityManager::GetEntityNeighbours(std::list<DynamicEntity*>* close_e
 		it = (DynamicEntity*)checkDynamism;
 
 		//The GetType should be a "GetAlignment()", to see if is the player units or not
-		if (it != thisUnit && it->GetType() != thisUnit->GetType() )
+		if (it != thisUnit && it->GetType() != thisUnit->GetType())
 		{
 			iMPoint pos = it->GetPosition();
 
-			float distance = sqrt( pos.x * pos.x + pos.y * pos.y);
+			float distance = sqrt(pos.x * pos.x + pos.y * pos.y);
 			if (distance < it->moveRange2)
 			{
 				colliding_entity_list->push_back(it);
