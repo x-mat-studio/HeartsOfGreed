@@ -66,77 +66,63 @@ const std::vector <iMPoint>* ModulePathfinding::GetLastPath() const
 }
 
 
-std::list<PathNode>::pointer PathList::Find(const iMPoint& point)
-{
-	BROFILER_CATEGORY("Find", Profiler::Color::Bisque);
-
-	for (std::list<PathNode>::iterator it = list.begin(); it != list.end(); it++)
-	{
-		if (it->pos == point)
-			return &*it;
-	}
-
-	return NULL;
-
-}
-
-
-PathNode::PathNode() : g(-1), h(-1), pos{ -1, -1 }, parent(NULL)
+PathNode::PathNode() : g(-1), h(-1), pos{ -1, -1 }, parent(NULL), is_Diagonal(false)
 {}
 
-PathNode::PathNode(float g, float h, const iMPoint& pos, PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
+PathNode::PathNode(float g, float h, const iMPoint& pos, PathNode* parent, int parentDir, int myDir, bool isdiagonal) :
+
+	g(g), h(h), pos(pos), parent(parent), parentDir(parentDir), myDirection(myDir), is_Diagonal(isdiagonal)
 {}
 
-PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
+PathNode::PathNode(const PathNode& node) :
+
+	g(node.g), h(node.h), pos(node.pos), parent(node.parent), parentDir(node.parentDir), myDirection(node.myDirection), is_Diagonal(node.is_Diagonal)
 {}
 
-
-uint PathNode::FindWalkableAdjacents(PathList& list_to_fill)
+uint PathNode::FindWalkableAdjacents(std::vector<PathNode>& list_to_fill)
 {
 	iMPoint cell;
-	uint before = list_to_fill.list.size();
 
 	// north
 	cell.create(pos.x, pos.y + 1);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, false));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, false));
 
 	// east
 	cell.create(pos.x + 1, pos.y);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, false));
 
 	// west
 	cell.create(pos.x - 1, pos.y);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, false));
 
 	cell.create(pos.x + 1, pos.y + 1);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, true));
 
 	// south
 	cell.create(pos.x + 1, pos.y - 1);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, true));
 
 	// east
 	cell.create(pos.x - 1, pos.y + 1);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, true));
 
 	// west
 	cell.create(pos.x - 1, pos.y - 1);
 	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+		list_to_fill.push_back(PathNode(-1, -1, cell, this, myDirection, 0, true));
 
-	return list_to_fill.list.size();
+	return list_to_fill.size();
 }
 
 
@@ -149,7 +135,15 @@ float PathNode::Score() const
 float PathNode::CalculateF(const iMPoint& destination)
 {
 
-	g = parent->g + 1;
+	if (is_Diagonal)
+	{
+
+		g = parent->g + 1.5;
+	}
+	else
+	{
+		g = parent->g + 1;
+	}
 
 	h = pos.DistanceTo(destination);
 
@@ -169,22 +163,25 @@ int ModulePathfinding::CreatePath(const iMPoint& origin, const iMPoint& destinat
 
 	std::multimap<int, PathNode> open;
 
-	PathList closed;
-	open.insert(std::pair<int, PathNode>(0, PathNode(0, origin.DistanceTo(destination), origin, NULL)));
+	std::vector<PathNode> closed;
+	open.insert(std::pair<int, PathNode>(0, PathNode(0, origin.DistanceTo(destination), origin, nullptr, 0, 0)));
 
 	while (open.empty() == false)
 	{
 		std::multimap<int, PathNode>::iterator lowest = open.begin();
-		closed.list.push_back(lowest->second);
-		std::list<PathNode>::pointer node = &closed.list.back();
+		closed.push_back(lowest->second);
+		std::vector<PathNode>::pointer node = &closed.back();
 
+		node->myDirection = closed.size() - 1;
 		open.erase(lowest);
 
 		if (node->pos == destination)
 		{
-			for (PathNode* iterator = node; iterator->pos != origin; iterator = iterator->parent)
+			int dir;
+			for (node; node->pos != origin; node = &closed[dir])
 			{
-				last_path.push_back(iterator->pos);
+				last_path.push_back(node->pos);
+				dir = node->parentDir;
 			}
 			last_path.push_back(origin);
 
@@ -193,34 +190,32 @@ int ModulePathfinding::CreatePath(const iMPoint& origin, const iMPoint& destinat
 			return 0;
 		}
 
-		PathList adjList;
+		std::vector<PathNode> adjList;
 		uint limit = node->FindWalkableAdjacents(adjList);
 
-		std::list<PathNode>::iterator it = adjList.list.begin();
 		std::multimap<int, PathNode>::iterator it2;
 
 		for (uint i = 0; i < limit; i++)
 		{
-			if (closed.Find(it->pos) == NULL)
+			if (FindV(adjList[i].pos, closed) == closed.size())
 			{
-				it2 = Find(it->pos, open);
+				it2 = Find(adjList[i].pos, open);
+				adjList[i].CalculateF(destination);
 				if (it2 == open.end())
 				{
-					it->CalculateF(destination);
-					open.insert(std::pair<int, PathNode>(it->Score(), *it));
+					open.insert(std::pair<int, PathNode>(adjList[i].Score(), adjList[i]));
 				}
 				else
 				{
-					it->CalculateF(destination);
-					if (it->g < it2->second.g)
+					if (adjList[i].g < it2->second.g)
 					{
-						open.erase(it2);
-						open.insert(std::pair<int, PathNode>(it->Score(), *it));
+						open.erase(Find(adjList[i].pos, open));
+						open.insert(std::pair<int, PathNode>(adjList[i].Score(), adjList[i]));
 					}
 				}
 			}
-			++it;
 		}
+
 	}
 }
 
@@ -236,9 +231,14 @@ void ModulePathfinding::SavePath(std::vector <iMPoint>* path)
 
 }
 
+
 std::multimap<int, PathNode>::iterator ModulePathfinding::Find(iMPoint point, std::multimap<int, PathNode>& map)
 {
-	for (std::multimap<int, PathNode>::iterator iterator = map.begin(); iterator != map.end(); iterator++)
+	BROFILER_CATEGORY("Multimap Find", Profiler::Color::AliceBlue);
+
+	std::multimap<int, PathNode>::iterator iterator = map.begin();
+
+	for (iterator; iterator != map.end(); iterator++)
 	{
 		if (iterator->second.pos == point)
 		{
@@ -247,4 +247,22 @@ std::multimap<int, PathNode>::iterator ModulePathfinding::Find(iMPoint point, st
 	}
 
 	return map.end();
+}
+
+
+int ModulePathfinding::FindV(iMPoint point, std::vector<PathNode>& vec)
+{
+	BROFILER_CATEGORY("Vector Find", Profiler::Color::Black);
+
+	int numElements = vec.size();
+
+	for (int i = 0; i < numElements; i++)
+	{
+		if (vec[i].pos == point)
+		{
+			return i;
+		}
+	}
+
+	return vec.size();
 }

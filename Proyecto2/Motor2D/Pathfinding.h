@@ -18,16 +18,30 @@ struct PathList;
 struct PathNode
 {
 	PathNode();
-	PathNode(float g, float h, const iMPoint& pos, PathNode* parent);
+	PathNode(float g, float h, const iMPoint& pos, PathNode* parent, int parentdir, int myDir, bool isdiagonal = false);
 	PathNode(const PathNode& node);
-	uint FindWalkableAdjacents(PathList& list_to_fill);
+	uint FindWalkableAdjacents(std::vector<PathNode>& list_to_fill);
 	float Score() const;
 	float CalculateF(const iMPoint& destination);
 	float g;
 	float h;
+	bool is_Diagonal;
 	iMPoint pos;
+
 	PathNode* parent;
 
+	int parentDir;
+	int myDirection;
+
+	bool operator==(PathNode* node)
+	{
+		if (g == node->g && h == node->h && pos == node->pos && parent == node->parent)
+		{
+			return true;
+		}
+
+		return false;
+	}
 };
 
 
@@ -63,6 +77,7 @@ public:
 	void SavePath(std::vector<iMPoint>* path);
 
 	std::multimap<int, PathNode>::iterator Find(iMPoint point, std::multimap<int, PathNode>& map);
+	int FindV(iMPoint point, std::vector<PathNode>& vec);
 
 private:
 	uint width;
@@ -70,15 +85,6 @@ private:
 	uchar* map;
 	std::vector<iMPoint> last_path;
 };
-
-
-struct PathList
-{
-	std::list<PathNode>::pointer Find(const iMPoint& point);
-
-	std::list<PathNode> list;
-};
-
 
 
 #endif // __j1PATHFINDING_H__
