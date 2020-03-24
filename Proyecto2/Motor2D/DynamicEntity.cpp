@@ -21,44 +21,25 @@ bool DynamicEntity::Move()
 	speed = { 0, 0 };
 	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
 
+
 	// ----------------------------------------------------------------
 
 	fMPoint pathSpeed{ 0,0 };
+	fMPoint pathSpeed2{ 0,0 };
 	fMPoint nextPoint;
-	if (path.size() > pathToFollow)
+	if (path.size() > 0)
 	{
-		for (uint i = 0; i < path.size(); ++i)
-		{
-			app->map->MapToWorldCoords(path[i].x, path[i].y, app->map->data, nextPoint.x, nextPoint.y);
-		}
-		if (path[pathToFollow].x < origin.x)
-		{
-			pathSpeed.x = -1;
-		}
+		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
 
-		else if (path[pathToFollow].x > origin.x)
+		pathSpeed2.create((nextPoint.x - position.x), (nextPoint.y - position.y));
+
+		pathSpeed2.Normalize();
+		
+		if ((origin.x == path[0].x && origin.y == path[0].y) )
 		{
-			pathSpeed.x = 1;
+			path.erase(path.begin());
 		}
-
-		if (path[pathToFollow].y < origin.y)
-		{
-			pathSpeed.y = -1;
-
-		}
-
-		else if (path[pathToFollow].y > origin.y)
-		{
-			pathSpeed.y = 1;
-		}
-
-		if (origin.x == path[pathToFollow].x && origin.y == path[pathToFollow].y)
-		{
-			pathToFollow++;
-		}
-
 	}
-
 
 	std::list<Entity*>::iterator neighbours_it;
 
@@ -109,7 +90,7 @@ bool DynamicEntity::Move()
 
 	// ---------------------------------------------------------------- 
 
-	speed += pathSpeed *1.5f + separationSpeed * 1 + cohesionSpeed *0.5f + alignmentSpeed *0.1f;
+	speed += pathSpeed2 * 1.5f + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
 
 	// ------------------------------------------------------------------
 
@@ -244,7 +225,7 @@ bool DynamicEntity::GeneratePath(int x, int y)
 	int X, Y = 0;
 
 	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
-	app->map->WorldToMapCoords(x-app->map->data.tileWidth * 0.5f, y, app->map->data, X, Y);
+	app->map->WorldToMapCoords(x - app->map->data.tileWidth * 0.5f, y, app->map->data, X, Y);
 
 	if (app->pathfinding->CreatePath(origin, { X,Y }) == 0)
 	{
@@ -274,7 +255,7 @@ void DynamicEntity::DebugDraw()
 
 	std::vector<iMPoint>* path = &this->path;
 
-	
+
 	for (std::vector<iMPoint>::iterator it = path->begin(); it != path->end(); ++it)
 	{
 		iMPoint pos = app->map->MapToWorld(it->x, it->y);

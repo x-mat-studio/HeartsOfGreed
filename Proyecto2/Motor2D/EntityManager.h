@@ -75,7 +75,7 @@ private:
 
 	SDL_Texture* texture;
 
-	Hero* tmpHero;
+	Hero* sampleMelee;
 
 };
 
