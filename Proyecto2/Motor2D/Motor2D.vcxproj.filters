@@ -97,6 +97,9 @@
     <ClCompile Include="GathererHero.cpp">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClCompile>
+    <ClCompile Include="RangedHero.cpp">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -208,6 +211,9 @@
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
     <ClInclude Include="GathererHero.h">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedHero.h">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
   </ItemGroup>
