@@ -13,7 +13,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 {}
 
 
-GathererHero::GathererHero(iMPoint position, GathererHero* copy) :
+GathererHero::GathererHero(fMPoint position, GathererHero* copy) :
 
 	Hero(position, ENTITY_TYPE::HERO_GATHERER, copy->GetCollider(), copy->walkLeft, copy->walkLeftUp, copy->walkLeftDown, copy->walkRightUp, copy->walkRightDown, copy-> walkRight,
 		copy->idleRight, copy->idleRightDown, copy->idleRightUp, copy->idleLeft, copy->idleLeftUp, copy->idleLeftDown, copy->level, copy->hitPoints, copy->recoveryHitPointsRate, 

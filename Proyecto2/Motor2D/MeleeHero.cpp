@@ -13,7 +13,7 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 {}
 
 
-MeleeHero::MeleeHero(iMPoint position, MeleeHero* copy) :
+MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy) :
 
 	Hero(position, ENTITY_TYPE::HERO_MELEE, copy->GetCollider(), copy->walkLeft, copy->walkLeftUp, copy->walkLeftDown, copy->walkRightUp, copy->walkRightDown, copy-> walkRight,
 		copy->idleRight, copy->idleRightDown, copy->idleRightUp, copy->idleLeft, copy->idleLeftUp, copy->idleLeftDown, copy->level, copy->hitPoints, copy->recoveryHitPointsRate,
