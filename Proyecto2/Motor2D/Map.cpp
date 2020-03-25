@@ -642,9 +642,9 @@ bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 		MapLayer* layer = *layIt;
 
 		//Search for Navigation Propierty
-		for (std::vector<Properties*>::iterator propIt = layer->layerPropVector.begin(); propIt != layer->layerPropVector.end(); ++propIt)
+		for (int i = 0; i < layer->layerPropVector.size(); i++)
 		{
-			Properties* currProp = *propIt;
+			Properties* currProp = layer->layerPropVector[i];
 			if (currProp->name != P2SString("Navigation"))
 			{
 				continue;

@@ -49,7 +49,7 @@ public:
 	bool CheckEntityExists(Entity* entity);
 	Entity* CheckEnemyObjective(SDL_Rect* rect);
 
-	void GetEntityNeighbours(std::list<DynamicEntity*>* close_entity_list, std::list<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
+	void GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
 
 public:
 	SDL_Texture* debugPathTexture;

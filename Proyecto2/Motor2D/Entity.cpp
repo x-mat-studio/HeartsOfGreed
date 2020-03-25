@@ -9,7 +9,7 @@ Entity::Entity()
 Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
 
 	position(position),
-	type(type),	
+	type(type),
 	started(false),
 	toDelete(false),
 	collider(nullptr),
@@ -23,7 +23,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
 Entity::Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic) :
 
 	position(position),
-	type(type),	
+	type(type),
 	started(false),
 	toDelete(false),
 	collider(collider),
@@ -47,9 +47,12 @@ bool Entity::Start(SDL_Texture* texture)
 
 	if (collider != nullptr)
 	{
+		collider = new Collider(collider);
 		collider->thisEntity = this;
 		app->coll->AddColliderEntity(collider);
 	}
+
+	SetAlignment();
 
 	started = true;
 
@@ -106,6 +109,46 @@ fMPoint Entity::GetPosition()
 ENTITY_TYPE Entity::GetType()
 {
 	return type;
+}
+
+ENTITY_ALIGNEMENT Entity::GetAlignment()
+{
+	return this->align;
+}
+
+void Entity::SetAlignment(ENTITY_ALIGNEMENT newAlign)
+{
+	if (newAlign == ENTITY_ALIGNEMENT::UNKNOWN)
+	{
+		switch (this->type)
+		{
+		case ENTITY_TYPE::HERO_MELEE:
+			this->align = ENTITY_ALIGNEMENT::PLAYER;
+			break;
+
+		case ENTITY_TYPE::HERO_RANGED:
+			this->align = ENTITY_ALIGNEMENT::PLAYER;
+			break;
+
+		case ENTITY_TYPE::HERO_GATHERER:
+			this->align = ENTITY_ALIGNEMENT::PLAYER;
+			break;
+
+		case ENTITY_TYPE::ENEMY:
+			this->align = ENTITY_ALIGNEMENT::ENEMY;
+			break;
+
+		default:
+			this->align = ENTITY_ALIGNEMENT::NEUTRAL;
+			break;
+		}
+
+	}
+	else
+	{
+		this->align = newAlign;
+	}
+
 }
 
 void Entity::SetToDelete(bool toDel)

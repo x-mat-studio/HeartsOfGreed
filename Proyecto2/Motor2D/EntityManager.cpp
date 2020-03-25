@@ -55,6 +55,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Test Hero
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x+64, pos.y);
 
 	return ret;
 }
@@ -144,8 +145,7 @@ bool ModuleEntityManager::CleanUp()
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
-		entityVector[i] = nullptr;
-		entityVector.erase(entityVector.begin() + i);
+		entityVector.erase(entityVector.begin());
 	}
 
 	entityVector.clear();
@@ -315,7 +315,6 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 
 }
 
-
 void ModuleEntityManager::SpriteOrdering(float dt)
 {
 	int numEntities = entityVector.size();
@@ -431,39 +430,37 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
 {}
 
 
-void ModuleEntityManager::GetEntityNeighbours(std::list<DynamicEntity*>* close_entity_list, std::list<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit)
+void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit)
 {
 	close_entity_list->clear();
 	colliding_entity_list->clear();
 
-	std::vector<Entity*>::iterator iterator;
-	Entity* checkDynamism;
 	DynamicEntity* it;
 
-	for (iterator = entityVector.begin(); iterator != entityVector.end(); ++iterator)
+	for (int i = 0; i < entityVector.size(); ++i)
 	{
-		checkDynamism = *iterator;
-		if (!checkDynamism->dynamic)
+		if (!entityVector[i]->dynamic)
 		{
 			continue;
 		}
-
-		it = (DynamicEntity*)checkDynamism;
-
-		//The GetType should be a "GetAlignment()", to see if is the player units or not
-		if (it != thisUnit && it->GetType() != thisUnit->GetType())
+		else
 		{
-			fMPoint pos = it->GetPosition();
+			it = (DynamicEntity*)entityVector[i];
 
-			float distance = sqrt(pos.x * pos.x + pos.y * pos.y);
-			if (distance < it->moveRange2)
+			if (it != thisUnit && it->GetAlignment() == thisUnit->GetAlignment())
 			{
-				colliding_entity_list->push_back(it);
+				fMPoint pos = it->GetPosition();
 
-			}
-			if (distance < thisUnit->moveRange1)
-			{
-				close_entity_list->push_back(it);
+				float distance = pos.DistanceTo(thisUnit->GetPosition());
+				if (distance < it->moveRange2)
+				{
+					colliding_entity_list->push_back(it);
+
+				}
+				if (distance < thisUnit->moveRange1)
+				{
+					close_entity_list->push_back(it);
+				}
 			}
 		}
 	}

@@ -32,9 +32,6 @@ bool DynamicEntity::Move()
 		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
 	}
 
-
-	std::list<Entity*>::iterator neighbours_it;
-
 	// ----------------------------------------------------------------
 
 	app->entityManager->GetEntityNeighbours(&close_entity_list, &colliding_entity_list, this);
@@ -51,7 +48,6 @@ bool DynamicEntity::Move()
 		separationSpeed.x = 0;
 		separationSpeed.y = 0;
 	}
-
 
 	// ---------------------------------------------------------------- 
 
@@ -103,7 +99,7 @@ bool DynamicEntity::Move()
 
 }
 
-fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, fMPoint position)
+fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_entity_list, fMPoint position)
 {
 	BROFILER_CATEGORY("SEPARATION SPEED", Profiler::Color::Aquamarine);
 
@@ -112,15 +108,14 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_ent
 	if (colliding_entity_list.size() == 0)
 		return separationSpeed;
 
-	std::list<DynamicEntity*>::iterator entities_list;
 	DynamicEntity* it;
-	for (entities_list = colliding_entity_list.begin(); entities_list != colliding_entity_list.end(); ++entities_list)
+
+	for (int i = 0; i < colliding_entity_list.size(); i++)
 	{
-		it = *entities_list;
+		it = colliding_entity_list[i];
 
 		separationSpeed.x += (position.x - it->GetPosition().x);
 		separationSpeed.y += (position.y - it->GetPosition().y);
-
 	}
 
 	separationSpeed.x /= colliding_entity_list.size();
@@ -140,7 +135,7 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_ent
 	return separationSpeed;
 }
 
-fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_list, fMPoint position)
+fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_list, fMPoint position)
 {
 	BROFILER_CATEGORY("COHESION SPEED", Profiler::Color::DarkOliveGreen);
 
@@ -148,12 +143,13 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_li
 	{
 		(float)position.x, (float)position.y
 	};
-	std::list<DynamicEntity*>::iterator neighbours_it;
+
 	DynamicEntity* it = nullptr;
 
-	for (neighbours_it = close_entity_list.begin(); neighbours_it != close_entity_list.end(); ++neighbours_it)
+	for (int i = 0; i < close_entity_list.size(); i++)
 	{
-		it = *neighbours_it;
+		it = close_entity_list[i];
+
 		MassCenter.x += it->GetPosition().x;
 		MassCenter.y += it->GetPosition().y;
 	}
@@ -187,7 +183,7 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_li
 	return cohesionSpeed;
 }
 
-fMPoint DynamicEntity::GetDirectionSpeed(std::list<DynamicEntity*>close_entity_list)
+fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity_list)
 {
 	BROFILER_CATEGORY("DIRECTION SPEED", Profiler::Color::Magenta);
 
@@ -196,12 +192,11 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::list<DynamicEntity*>close_entity_l
 	0, 0
 	};
 
-	std::list<DynamicEntity*>::iterator neighbours_it;
 	DynamicEntity* it;
 
-	for (neighbours_it = close_entity_list.begin(); neighbours_it != close_entity_list.end(); ++neighbours_it) {
-
-		it = *neighbours_it;
+	for (int i = 0; i < close_entity_list.size(); i++)
+	{
+		it = close_entity_list[i];
 
 		alignmentSpeed += it->speed;
 	}
@@ -224,9 +219,9 @@ bool DynamicEntity::GeneratePath(int x, int y)
 	int X, Y = 0;
 
 	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
-	app->map->WorldToMapCoords(x - app->map->data.tileWidth * 0.5f, y, app->map->data, X, Y);
+	app->map->WorldToMapCoords(x, y, app->map->data, X, Y);
 
-	if (app->pathfinding->CreatePath(origin, { X,Y }) == 0)
+	if (app->pathfinding->CreatePath(origin, { X-1,Y }) == 0)
 	{
 		path.clear();
 		app->pathfinding->SavePath(&path);
