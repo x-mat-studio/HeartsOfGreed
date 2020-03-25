@@ -2,7 +2,7 @@
 #include "Render.h"
 #include "Textures.h"
 
-Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider) :
 
 	Entity(position, ENTITY_TYPE::BUILDING),
 
@@ -14,16 +14,19 @@ Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int 
 	transparencyValue(transparency),
 
 	myBase(nullptr),
-	texture(nullptr),
+
 	transparent(false),
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
-{}
+{
+	this->collider = collider;
+}
 
 
 Building::Building(fMPoint position, Building* copy) :
 
-	Entity(position, copy->type),
+	Entity(position, copy->type, copy->collider),
+
 
 	hitPointsMax(copy->hitPointsMax),
 	hitPointsCurrent(copy->hitPointsMax),
@@ -33,7 +36,7 @@ Building::Building(fMPoint position, Building* copy) :
 	transparencyValue(copy->transparencyValue),
 
 	myBase(nullptr),
-	texture(nullptr),
+
 	transparent(false),
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
@@ -55,30 +58,23 @@ Building::~Building()
 }
 
 
-bool Building::Start()
-{
-	
-	return true;
-}
-
-
 bool Building::PreUpdate(float dt)
 {
-	transparent = false;
+
 	return true;
 }
 
 
 bool Building::Update(float dt)
 {
-	
+	Draw(dt);
 	return true;
 }
 
 
 bool Building::PostUpdate(float dt)
 {
-	Draw();
+
 	return true;
 }
 
@@ -89,7 +85,6 @@ bool Building::CleanUp()
 	return true;
 }
 
-
 void Building::OnCollision(Collider* collider)
 {
 	if (collider->type == COLLIDER_HERO)
@@ -98,15 +93,14 @@ void Building::OnCollision(Collider* collider)
 	}
 }
 
-
-bool Building::Load(pugi::xml_node &)
+bool Building::Load(pugi::xml_node&)
 {
 
 	return true;
 }
 
 
-bool Building::Save(pugi::xml_node &) const
+bool Building::Save(pugi::xml_node&) const
 {
 
 	return true;
@@ -135,7 +129,7 @@ void Building::Contruct()
 }
 
 
-void Building::Draw()
+void Building::Draw(float dt)
 {
 	if (transparent)
 	{

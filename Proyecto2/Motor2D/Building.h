@@ -26,7 +26,7 @@ class Building : public Entity
 {
 public:
 
-	Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency);
+	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider);
 
 	Building(fMPoint position, Building* copy);
 
@@ -38,7 +38,7 @@ public:
 	~Building();
 
 	// Called before the first frame
-	bool Start();
+	// bool Start();
 
 	// Called each loop iteration
 	bool PreUpdate(float dt);
@@ -62,13 +62,13 @@ private:
 	void RecoverHealth();
 
 	void Contruct();
-	void Draw();
+	void Draw(float dt);
 
 
 public:
 
 	BUILDING_STATE	currentState;
-	Base*			myBase;
+	Base* myBase;
 
 
 private:
@@ -79,15 +79,10 @@ private:
 	int			recoveryHitPointsRate;
 	int			xpOnDeath;
 	int			buildingCost;
-	
-	SDL_Texture* texture;
+
 	bool		transparent;
 
 	bool		selected;
-
-
-
-
 };
 
 

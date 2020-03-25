@@ -18,30 +18,43 @@ ModuleCollision::ModuleCollision()
 	matrix[COLLIDER_HERO][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_HERO][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_HERO][COLLIDER_RECLUIT_IA] = false;
+	matrix[COLLIDER_HERO][COLLIDER_VISIBILITY] = false;
 
 	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
 	matrix[COLLIDER_WALL][COLLIDER_HERO] = true;
 	matrix[COLLIDER_WALL][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_WALL][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_WALL][COLLIDER_RECLUIT_IA] = false;
+	matrix[COLLIDER_WALL][COLLIDER_VISIBILITY] = false;
 
 	matrix[COLLIDER_ENEMY][COLLIDER_WALL] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_HERO] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_ENEMY][COLLIDER_RECLUIT_IA] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_VISIBILITY] = false;
 
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_WALL] = false;
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_HERO] = true;
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_ENEMY] = false;
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_RECLUIT_IA] = false;
+	matrix[COLLIDER_BASE_ALERT][COLLIDER_VISIBILITY] = false;
 
 	matrix[COLLIDER_RECLUIT_IA][COLLIDER_WALL] = false;
 	matrix[COLLIDER_RECLUIT_IA][COLLIDER_HERO] = false;
 	matrix[COLLIDER_RECLUIT_IA][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_RECLUIT_IA][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_RECLUIT_IA][COLLIDER_RECLUIT_IA] = false;
+	matrix[COLLIDER_RECLUIT_IA][COLLIDER_VISIBILITY] = false;
+
+	matrix[COLLIDER_VISIBILITY][COLLIDER_WALL] = false;
+	matrix[COLLIDER_VISIBILITY][COLLIDER_HERO] = true;
+	matrix[COLLIDER_VISIBILITY][COLLIDER_ENEMY] = false;
+	matrix[COLLIDER_VISIBILITY][COLLIDER_BASE_ALERT] = false;
+	matrix[COLLIDER_VISIBILITY][COLLIDER_RECLUIT_IA] = false;
+	matrix[COLLIDER_VISIBILITY][COLLIDER_VISIBILITY] = false;
+
 }
 
 
@@ -116,8 +129,8 @@ bool ModuleCollision::PostUpdate(float dt)
 
 void ModuleCollision::DebugDraw()
 {
-	 if (app->debugMode == false)  
-		return; 
+	if (app->debugMode == false)
+		return;
 
 	Uint8 alpha = 80;
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
@@ -141,6 +154,10 @@ void ModuleCollision::DebugDraw()
 
 		case COLLIDER_DEATH: // white
 			app->render->DrawQuad(colliders[i]->rect, 0, 109, 109, alpha);
+			break;
+
+		case COLLIDER_VISIBILITY: // no clue
+			app->render->DrawQuad(colliders[i]->rect, 30, 75, 240, alpha);
 			break;
 
 		case COLLIDER_ENEMY:

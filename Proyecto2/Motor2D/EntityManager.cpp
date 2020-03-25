@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "Hero.h"
 #include "Enemy.h"
+#include "Building.h"
 #include "DynamicEntity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -53,9 +54,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
+	Collider* bruh = new Collider({ 0,500,100,100 }, COLLIDER_VISIBILITY, nullptr);
+	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, bruh);
+
 	//Test Hero
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x+64, pos.y);
+
+	AddEntity(ENTITY_TYPE::BUILDING, 0, 200);
 
 	return ret;
 }
@@ -66,8 +72,8 @@ bool ModuleEntityManager::Start()
 {
 	bool ret = true;
 
-	texture = app->tex->Load("spritesheets/characters/suitmale.png");
-	debugPathTexture = app->tex->Load("maps/path.png");
+	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
+	buildingTexture = app->tex->Load("maps/base03.png");
 
 	return ret;
 }
@@ -97,8 +103,20 @@ void ModuleEntityManager::CheckIfStarted() {
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (entityVector[i]->started == false)
-			entityVector[i]->Start(texture);
+		if (entityVector[i]->started == false) {
+
+			switch (entityVector[i]->GetType())
+			{
+
+			case ENTITY_TYPE::BUILDING:
+				entityVector[i]->Start(buildingTexture);
+				break;
+
+			default:
+				entityVector[i]->Start(suitManTexture);
+				break;
+			}
+		}
 	}
 }
 
@@ -145,12 +163,16 @@ bool ModuleEntityManager::CleanUp()
 	for (int i = 0; i < numEntities; i++)
 	{
 		RELEASE(entityVector[i]);
-		entityVector.erase(entityVector.begin());
+		entityVector[i] = nullptr;
 	}
 
 	entityVector.clear();
-	texture = nullptr;
-	debugPathTexture = nullptr;
+	
+	app->tex->UnLoad(suitManTexture);
+	app->tex->UnLoad(buildingTexture);
+
+	suitManTexture = nullptr;
+	buildingTexture = nullptr;
 
 	return true;
 }
@@ -185,6 +207,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
 		break;
+	case ENTITY_TYPE::BUILDING:
+	{
+		ret = new Building({ (float)x,(float)y }, testBuilding);
+	}
 	case ENTITY_TYPE::BLDG_TURRET:
 		break;
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -318,6 +344,7 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 void ModuleEntityManager::SpriteOrdering(float dt)
 {
 	int numEntities = entityVector.size();
+	/*
 	float posX;
 	float posY;
 
@@ -332,6 +359,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			switch (entityVector[i]->GetType())
 			{
 			case ENTITY_TYPE::BUILDING:
+				buildingVector.push_back(entityVector[i]);
+				break;
 			case ENTITY_TYPE::BLDG_BARRICADE:
 			case ENTITY_TYPE::BLDG_BASE:
 			case ENTITY_TYPE::BLDG_TURRET:
@@ -345,11 +374,14 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 				//				if (entityVector[i].POINTER == nullptr)
 				//				{
 				frontEntitiesVector.push_back(entityVector[i]);
-				/*				}
-								else
-								{
-									backEntitiesVector.push_back(entityVector[i]);
-								}*/
+				//			}
+				//				else
+				//				{
+				//					backEntitiesVector.push_back(entityVector[i]);
+				//				}
+				break;
+
+			default:
 				break;
 			}
 		}
@@ -359,9 +391,10 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 	EntityQuickSort(frontEntitiesVector, 0, frontEntitiesVector.size());
 
-	while (backEntitiesVector.size() != 0 && buildingVector.size() != 0)
+	while (backEntitiesVector.size() != 0 || buildingVector.size() != 0)
 	{
-		while (backEntitiesVector.front()/*.POINTER*/ == buildingVector.front())
+
+		while (backEntitiesVector.front() == buildingVector.front()) //POINTER
 		{
 			renderVector.push_back(backEntitiesVector.front());
 			backEntitiesVector.erase(backEntitiesVector.cbegin());
@@ -369,6 +402,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 		renderVector.push_back(buildingVector.front());
 		buildingVector.erase(buildingVector.cbegin()); // CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE
+
 	}
 
 	while (frontEntitiesVector.size() != 0)
@@ -376,12 +410,13 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 		renderVector.push_back(frontEntitiesVector.front());
 		frontEntitiesVector.erase(frontEntitiesVector.cbegin());
 	}
-
 	numEntities = renderVector.size();
+	*/
+
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		renderVector[i]->PostUpdate(dt);
+		entityVector[i]->PostUpdate(dt); //this used to be render vector
 	}
 
 	renderVector.clear();

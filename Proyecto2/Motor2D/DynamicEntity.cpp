@@ -87,7 +87,7 @@ bool DynamicEntity::Move()
 
 	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
 
-	if (origin.x == path[0].x && origin.y == path[0].y && path.size() > 0)
+	if (path.size() > 0 && origin.x == path[0].x && origin.y == path[0].y)
 	{
 		path.erase(path.begin());
 	}

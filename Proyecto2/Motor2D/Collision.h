@@ -16,6 +16,7 @@ enum COLLIDER_TYPE
 	COLLIDER_HERO,
 	COLLIDER_ENEMY,
 	COLLIDER_DEATH,
+	COLLIDER_VISIBILITY,
 
 	COLLIDER_BASE_ALERT,
 	COLLIDER_RECLUIT_IA,
@@ -29,8 +30,8 @@ struct Collider
 	SDL_Rect		rect;
 	bool			to_delete = false;
 	COLLIDER_TYPE	type;
-	Module*			callback = nullptr;
-	Entity*			thisEntity = nullptr;
+	Module* callback = nullptr;
+	Entity* thisEntity = nullptr;
 
 	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, Module* callback = nullptr, Entity* thisEntity = nullptr) :
 		rect(rectangle),
@@ -71,7 +72,7 @@ class ModuleCollision : public Module
 public:
 
 	ModuleCollision();
-	 ~ModuleCollision();
+	~ModuleCollision();
 
 	bool PreUpdate(float dt);
 	bool Update(float dt);

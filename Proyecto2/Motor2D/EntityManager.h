@@ -8,6 +8,7 @@
 #include <list>
 
 class Hero;
+class Building;
 class DynamicEntity;
 
 
@@ -73,9 +74,11 @@ private:
 	std::vector <Entity*> frontEntitiesVector;
 	std::vector <Entity*> buildingVector;
 
-	SDL_Texture* texture;
+	SDL_Texture* suitManTexture;
+	SDL_Texture* buildingTexture;
 
 	Hero* sampleMelee;
+	Building* testBuilding;
 
 };
 
