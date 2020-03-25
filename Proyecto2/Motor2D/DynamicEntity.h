@@ -33,13 +33,13 @@ protected:
 
 	iMPoint origin, mouse;
 	std::vector <iMPoint> path;
-	std::list<DynamicEntity*> close_entity_list;
-	std::list<DynamicEntity*> colliding_entity_list;
+	std::vector<DynamicEntity*> close_entity_list;
+	std::vector<DynamicEntity*> colliding_entity_list;
 
 private:
-	fMPoint DynamicEntity::GetDirectionSpeed(std::list<DynamicEntity*>close_entity_list);
-	fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_list, fMPoint position);
-	fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, fMPoint position);
+	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity_list);
+	fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_list, fMPoint position);
+	fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_entity_list, fMPoint position);
 
 };
 

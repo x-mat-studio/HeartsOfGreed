@@ -71,7 +71,6 @@ Hero::Hero(fMPoint position, Hero* copy) :
 
 	DynamicEntity(position, copy->type, copy->collider, copy->moveRange1, copy->moveRange2),
 
-
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
 	walkLeftDown(copy->walkLeftDown),

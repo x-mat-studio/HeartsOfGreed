@@ -30,6 +30,17 @@ enum class ENTITY_TYPE
 	MAX_TYPE
 };
 
+enum class ENTITY_ALIGNEMENT
+{
+	UNKNOWN,
+	PLAYER,
+	ENEMY,
+	NEUTRAL,
+
+
+	MAX_ALIGN
+};
+
 class Entity
 {
 public:
@@ -50,6 +61,8 @@ public:
 
 	fMPoint GetPosition();
 	ENTITY_TYPE GetType();
+	ENTITY_ALIGNEMENT GetAlignment();
+	void SetAlignment(ENTITY_ALIGNEMENT newAlign = ENTITY_ALIGNEMENT::UNKNOWN);
 
 	void SetToDelete(bool toDelete);
 
@@ -67,6 +80,7 @@ protected:
 	fMPoint position;
 
 	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
 
 	SDL_Texture* texture;
 
