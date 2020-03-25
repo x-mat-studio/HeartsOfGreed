@@ -1,27 +1,49 @@
 #include "Building.h"
+#include "Render.h"
+#include "Textures.h"
 
-Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost) :
+Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+
+	Entity(position, ENTITY_TYPE::BUILDING),
 
 	hitPointsMax(hitPoints),
 	hitPointsCurrent(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	xpOnDeath(xpOnDeath),
-	buildingCost(buildingCost)
+	buildingCost(buildingCost),
+	transparencyValue(transparency),
+
+	myBase(nullptr),
+	texture(nullptr),
+	transparent(false),
+	selected(false),
+	currentState(BUILDING_STATE::ST_UNKNOWN)
 {}
 
 
 Building::Building(fMPoint position, Building* copy) :
 
 	Entity(position, copy->type),
+
 	hitPointsMax(copy->hitPointsMax),
 	hitPointsCurrent(copy->hitPointsMax),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	xpOnDeath(copy->xpOnDeath),
-	buildingCost(copy->buildingCost)
+	buildingCost(copy->buildingCost),
+	transparencyValue(copy->transparencyValue),
+
+	myBase(nullptr),
+	texture(nullptr),
+	transparent(false),
+	selected(false),
+	currentState(BUILDING_STATE::ST_UNKNOWN)
 {}
 
+
 Building::Building()
-{}
+{
+}
+
 
 void Building::Destroy()
 {
@@ -29,70 +51,75 @@ void Building::Destroy()
 
 
 Building::~Building()
-{}
+{
+}
+
 
 bool Building::Start()
 {
-	bool ret = true;
-
-	return ret;
+	
+	return true;
 }
+
 
 bool Building::PreUpdate(float dt)
 {
-	bool ret = true;
-
-	return ret;
+	
+	return true;
 }
+
 
 bool Building::Update(float dt)
 {
-	bool ret = true;
-
-	return ret;
+	
+	return true;
 }
+
 
 bool Building::PostUpdate(float dt)
 {
-	bool ret = true;
-
-	return ret;
+	Draw();
+	return true;
 }
+
 
 bool Building::CleanUp()
 {
-	bool ret = true;
 
-	return ret;
+	return true;
 }
+
 
 bool Building::Load(pugi::xml_node &)
 {
-	bool ret = true;
 
-	return ret;
+	return true;
 }
+
 
 bool Building::Save(pugi::xml_node &) const
 {
-	bool ret = true;
 
-	return ret;
+	return true;
 }
+
 
 void Building::ChangeBuildingState(BUILDING_STATE state)
 {
-	this->currentState = state;
+	currentState = state;
 }
+
 
 void Building::BeingRepaired()
 {
 }
 
+
 void Building::RecoverHealth()
 {
 	this->hitPointsCurrent += this->recoveryHitPointsRate;
 }
+
 
 void Building::Contruct()
 {
@@ -101,5 +128,13 @@ void Building::Contruct()
 
 void Building::Draw()
 {
+	if (transparent)
+	{
+		app->render->Blit(texture, position.x, position.y, NULL, transparencyValue);
+	}
 
+	else
+	{
+		app->render->Blit(texture, position.x, position.y);
+	}
 }

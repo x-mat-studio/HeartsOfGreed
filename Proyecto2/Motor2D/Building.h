@@ -26,7 +26,7 @@ class Building : public Entity
 {
 public:
 
-	Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost);
+	Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency);
 
 	Building(fMPoint position, Building* copy);
 
@@ -70,12 +70,16 @@ public:
 
 
 private:
+	int			transparencyValue;
 
 	int			hitPointsMax;
 	int			hitPointsCurrent;
 	int			recoveryHitPointsRate;
 	int			xpOnDeath;
 	int			buildingCost;
+	
+	SDL_Texture* texture;
+	bool		transparent;
 
 	bool		selected;
 
