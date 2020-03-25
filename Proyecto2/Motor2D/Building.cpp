@@ -1,4 +1,6 @@
 #include "Building.h"
+#include "Render.h"
+#include "Textures.h"
 
 Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost) :
 
@@ -6,7 +8,13 @@ Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int 
 	hitPointsCurrent(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	xpOnDeath(xpOnDeath),
-	buildingCost(buildingCost)
+	buildingCost(buildingCost),
+	myBase(nullptr),
+	texture(nullptr),
+	transparent(false),
+	selected(false),
+	currentState(BUILDING_STATE::ST_UNKNOWN)
+	
 {}
 
 
@@ -17,7 +25,12 @@ Building::Building(fMPoint position, Building* copy) :
 	hitPointsCurrent(copy->hitPointsMax),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	xpOnDeath(copy->xpOnDeath),
-	buildingCost(copy->buildingCost)
+	buildingCost(copy->buildingCost),
+	myBase(nullptr),
+	texture(nullptr),
+	transparent(false),
+	selected(false),
+	currentState(BUILDING_STATE::ST_UNKNOWN)
 {}
 
 Building::Building()
@@ -30,6 +43,7 @@ void Building::Destroy()
 
 Building::~Building()
 {}
+
 
 bool Building::Start()
 {
@@ -101,5 +115,5 @@ void Building::Contruct()
 
 void Building::Draw()
 {
-
+	app->render->Blit(texture, position.x, position.y);
 }

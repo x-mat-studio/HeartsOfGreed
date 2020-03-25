@@ -146,7 +146,7 @@ void ModuleRender::ResetViewPort()
 
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, bool fliped, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
 	camera.x = currentCamX;
 	camera.y = currentCamY;
@@ -156,6 +156,12 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speedX) + x * scale;
 	rect.y = (int)(camera.y * speedY) + y * scale;
+
+	if (alpha != 0)
+	{
+		SDL_SetTextureAlphaMod(texture, alpha);
+	}
+	
 
 
 	if (section != NULL)
@@ -207,6 +213,11 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 			//LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError()); //TODO solve this
 			ret = false;
 		}
+	}
+
+	if (alpha != 0)
+	{
+		SDL_SetTextureAlphaMod(texture, 255);
 	}
 
 

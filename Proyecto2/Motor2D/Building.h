@@ -76,6 +76,9 @@ private:
 	int			recoveryHitPointsRate;
 	int			xpOnDeath;
 	int			buildingCost;
+	
+	SDL_Texture* texture;
+	bool		transparent;
 
 	bool		selected;
 
