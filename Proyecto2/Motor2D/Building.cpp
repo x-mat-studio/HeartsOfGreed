@@ -10,7 +10,7 @@ Building::Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int 
 {}
 
 
-Building::Building(iMPoint position, Building* copy) :
+Building::Building(fMPoint position, Building* copy) :
 
 	Entity(position, copy->type),
 	hitPointsMax(copy->hitPointsMax),

@@ -6,7 +6,7 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(iMPoint position, ENTITY_TYPE type, bool dynamic) :
+Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
 
 	position(position),
 	type(type),	
@@ -20,7 +20,7 @@ Entity::Entity(iMPoint position, ENTITY_TYPE type, bool dynamic) :
 {}
 
 
-Entity::Entity(iMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic) :
+Entity::Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic) :
 
 	position(position),
 	type(type),	
@@ -93,11 +93,11 @@ Collider* Entity::GetCollider() const
 
 void Entity::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &current_animation->GetCurrentFrameBox(dt));
+	app->render->Blit(texture, round(position.x), round(position.y), &current_animation->GetCurrentFrameBox(dt));
 }
 
 
-iMPoint Entity::GetPosition()
+fMPoint Entity::GetPosition()
 {
 	return position;
 }

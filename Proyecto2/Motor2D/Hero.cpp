@@ -4,7 +4,7 @@
 #include "Render.h"
 #include "EntityManager.h"
 
-Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* collider,
+Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 	Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -67,7 +67,7 @@ Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* collider,
 {}
 
 
-Hero::Hero(iMPoint position, Hero* copy) :
+Hero::Hero(fMPoint position, Hero* copy) :
 
 	DynamicEntity(position, copy->type, copy->collider, copy->moveRange1, copy->moveRange2),
 

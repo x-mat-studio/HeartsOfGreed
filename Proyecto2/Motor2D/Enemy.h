@@ -42,12 +42,12 @@ class Enemy : public Entity
 {
 public:
 
-	Enemy(iMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation,
+	Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation,
 		int hitPoints, int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
 		int xpOnDeath);
 
 
-	Enemy(iMPoint position, Enemy* copy);
+	Enemy(fMPoint position, Enemy* copy);
 
 
 	~Enemy();

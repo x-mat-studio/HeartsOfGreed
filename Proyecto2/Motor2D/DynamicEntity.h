@@ -10,7 +10,7 @@ class DynamicEntity : public Entity
 {
 public:
 
-	DynamicEntity(iMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2);
+	DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2);
 
 	~DynamicEntity();
 
@@ -38,8 +38,8 @@ protected:
 
 private:
 	fMPoint DynamicEntity::GetDirectionSpeed(std::list<DynamicEntity*>close_entity_list);
-	fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_list, iMPoint position);
-	fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, iMPoint position);
+	fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_list, fMPoint position);
+	fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, fMPoint position);
 
 };
 

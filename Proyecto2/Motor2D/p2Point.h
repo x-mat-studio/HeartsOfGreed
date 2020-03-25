@@ -164,7 +164,9 @@ public:
 	// Utils ------------------------------------------------
 	bool IsZero() const
 	{
-		return (x == 0 && y == 0);
+		int X = (int)round(x);
+		int Y = (int)round(y);
+		return (Y == 0 && Y == 0);
 	}
 
 	MAT_Point& SetToZero()

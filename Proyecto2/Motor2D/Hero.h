@@ -52,7 +52,7 @@ enum HERO_INPUTS
 class Hero : public DynamicEntity
 {
 public:
-	Hero::Hero(iMPoint position, ENTITY_TYPE type, Collider* col,
+	Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 		Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 		Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -60,7 +60,7 @@ public:
 		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime);
 
-	Hero(iMPoint position, Hero* copy);
+	Hero(fMPoint position, Hero* copy);
 	~Hero();
 
 	bool MoveTo(int x, int y);

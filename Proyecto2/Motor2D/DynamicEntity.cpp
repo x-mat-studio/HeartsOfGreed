@@ -7,7 +7,7 @@
 #include "Input.h"
 #include "Render.h"
 
-DynamicEntity::DynamicEntity(iMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
+DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
 	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), pathToFollow(0), isMoving(false), Entity(position, type, collider, true) {}
 
 DynamicEntity::~DynamicEntity()
@@ -19,27 +19,19 @@ bool DynamicEntity::Move()
 
 	//Speed is resetted to 0 each iteration
 	speed = { 0, 0 };
-	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
-
 
 	// ----------------------------------------------------------------
 
-	fMPoint pathSpeed{ 0,0 };
-	fMPoint pathSpeed2{ 0,0 };
+	fMPoint pathSpeed;
+	pathSpeed.create(0, 0);
 	fMPoint nextPoint;
 	if (path.size() > 0)
 	{
 		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
 
-		pathSpeed2.create((nextPoint.x - position.x), (nextPoint.y - position.y));
-
-		pathSpeed2.Normalize();
-		
-		if ((origin.x == path[0].x && origin.y == path[0].y) )
-		{
-			path.erase(path.begin());
-		}
+		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
 	}
+
 
 	std::list<Entity*>::iterator neighbours_it;
 
@@ -90,21 +82,28 @@ bool DynamicEntity::Move()
 
 	// ---------------------------------------------------------------- 
 
-	speed += pathSpeed2 * 1.5f + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
+	speed += pathSpeed + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
 
 	// ------------------------------------------------------------------
 
-	position.y += speed.y;
-	position.x += speed.x;
+	position.x += (speed.x) * 1.5f;
+	position.y += (speed.y) *1.5f;
 
-	if (!pathSpeed.IsZero())
+	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
+
+	if (origin.x == path[0].x && origin.y == path[0].y && path.size() > 0)
+	{
+		path.erase(path.begin());
+	}
+
+	if (pathSpeed.IsZero())
 		return true;
 	else
 		return false;
 
 }
 
-fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, iMPoint position)
+fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_entity_list, fMPoint position)
 {
 	BROFILER_CATEGORY("SEPARATION SPEED", Profiler::Color::Aquamarine);
 
@@ -141,7 +140,7 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::list<DynamicEntity*>colliding_ent
 	return separationSpeed;
 }
 
-fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_list, iMPoint position)
+fMPoint DynamicEntity::GetCohesionSpeed(std::list<DynamicEntity*>close_entity_list, fMPoint position)
 {
 	BROFILER_CATEGORY("COHESION SPEED", Profiler::Color::DarkOliveGreen);
 

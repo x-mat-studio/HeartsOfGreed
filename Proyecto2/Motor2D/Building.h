@@ -28,7 +28,7 @@ public:
 
 	Building(int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost);
 
-	Building(iMPoint position, Building* copy);
+	Building(fMPoint position, Building* copy);
 
 	Building();
 

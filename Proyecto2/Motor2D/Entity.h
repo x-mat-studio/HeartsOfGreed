@@ -35,8 +35,8 @@ class Entity
 public:
 
 	Entity();
-	Entity(iMPoint position, ENTITY_TYPE type, bool dynamic = false);
-	Entity(iMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic = false);
+	Entity(fMPoint position, ENTITY_TYPE type, bool dynamic = false);
+	Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic = false);
 	virtual ~Entity();
 
 	virtual bool Start(SDL_Texture* texture);
@@ -48,7 +48,7 @@ public:
 	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
-	iMPoint GetPosition();
+	fMPoint GetPosition();
 	ENTITY_TYPE GetType();
 
 	void SetToDelete(bool toDelete);
@@ -64,7 +64,7 @@ public:
 	bool dynamic;
 
 protected:
-	iMPoint position;
+	fMPoint position;
 
 	ENTITY_TYPE type;
 

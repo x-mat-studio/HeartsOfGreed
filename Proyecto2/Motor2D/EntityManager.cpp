@@ -30,7 +30,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Hero Melee---------------------
-	iMPoint pos;
+	fMPoint pos;
 	pos.create(100, 600);
 
 	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
@@ -48,7 +48,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, nullptr);
 
-	sampleMelee = new Hero(iMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
+	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
@@ -178,7 +178,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
 	{
-		ret = new Hero({ x,y }, sampleMelee);
+		ret = new Hero({ (float)x,(float)y }, sampleMelee);
 	}
 	break;
 	case ENTITY_TYPE::HERO_RANGED:
@@ -453,7 +453,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::list<DynamicEntity*>* close_e
 		//The GetType should be a "GetAlignment()", to see if is the player units or not
 		if (it != thisUnit && it->GetType() != thisUnit->GetType())
 		{
-			iMPoint pos = it->GetPosition();
+			fMPoint pos = it->GetPosition();
 
 			float distance = sqrt(pos.x * pos.x + pos.y * pos.y);
 			if (distance < it->moveRange2)
