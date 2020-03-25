@@ -64,7 +64,7 @@ bool Building::Start()
 
 bool Building::PreUpdate(float dt)
 {
-	
+	transparent = false;
 	return true;
 }
 
@@ -87,6 +87,15 @@ bool Building::CleanUp()
 {
 
 	return true;
+}
+
+
+void Building::OnCollision(Collider* collider)
+{
+	if (collider->type == COLLIDER_HERO)
+	{
+		transparent = true;
+	}
 }
 
 

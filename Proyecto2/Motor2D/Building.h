@@ -53,6 +53,8 @@ public:
 	//Called to save the game
 	bool Save(pugi::xml_node&) const;
 
+	void OnCollision(Collider* collider);
+
 private:
 	void ChangeBuildingState(BUILDING_STATE state);
 
