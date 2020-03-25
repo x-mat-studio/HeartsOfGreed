@@ -47,7 +47,7 @@ bool Entity::Start(SDL_Texture* texture)
 
 	if (collider != nullptr)
 	{
-		collider = new Collider(collider);
+		collider = new Collider(collider->rect, collider->type, nullptr, this);
 		collider->thisEntity = this;
 		app->coll->AddColliderEntity(collider);
 	}
@@ -80,6 +80,7 @@ bool Entity::PostUpdate(float dt)
 
 void Entity::OnCollision(Collider* collider)
 {
+	LOG("Yeeet :D");
 }
 
 void Entity::CollisionPosUpdate()

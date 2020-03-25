@@ -67,14 +67,14 @@ bool Building::PreUpdate(float dt)
 
 bool Building::Update(float dt)
 {
-	Draw(dt);
+	
 	return true;
 }
 
 
 bool Building::PostUpdate(float dt)
 {
-
+	Draw(dt);
 	return true;
 }
 
