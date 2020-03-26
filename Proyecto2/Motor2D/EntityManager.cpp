@@ -47,14 +47,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
 
-	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, nullptr);
+	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 
 	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
-	Collider* bruh = new Collider({ 0,500,100,100 }, COLLIDER_VISIBILITY, nullptr);
+	Collider* bruh = new Collider({ 0,500,100,100 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, bruh);
 
 	//Test Hero

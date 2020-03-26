@@ -60,6 +60,7 @@ Building::~Building()
 
 bool Building::PreUpdate(float dt)
 {
+	transparent = false;
 
 	return true;
 }
