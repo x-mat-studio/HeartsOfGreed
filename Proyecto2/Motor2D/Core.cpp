@@ -4,6 +4,7 @@
 
 Core::Core(int resourceProductionRate) :
 
+	// WHEN A CONSTRUCTOR IS MADE, CTRL + F AND ERASE THE COMMENT BARS ON THE LINES WITH "CORE_CONSTRUCTOR_NEEDED"
 	resourceProductionRate(resourceProductionRate)
 {}
 

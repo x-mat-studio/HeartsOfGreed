@@ -344,7 +344,7 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 void ModuleEntityManager::SpriteOrdering(float dt)
 {
 	int numEntities = entityVector.size();
-	/*
+
 	float posX;
 	float posY;
 
@@ -355,30 +355,22 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 		if (app->map->InsideCamera(posX, posY) == true) {
 
-			assert((int)ENTITY_TYPE::MAX_TYPE == 13);
+			assert((int)ENTITY_TYPE::MAX_TYPE == 14);
 			switch (entityVector[i]->GetType())
 			{
 			case ENTITY_TYPE::BUILDING:
-				buildingVector.push_back(entityVector[i]);
-				break;
 			case ENTITY_TYPE::BLDG_BARRICADE:
 			case ENTITY_TYPE::BLDG_BASE:
 			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+			//case ENTITY_TYPE::BLDG_CORE:	CORE_CONSTRUCTOR_NEEDED
 				buildingVector.push_back(entityVector[i]);
 				break;
 			case ENTITY_TYPE::ENEMY:
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
-				//				if (entityVector[i].POINTER == nullptr)
-				//				{
-				frontEntitiesVector.push_back(entityVector[i]);
-				//			}
-				//				else
-				//				{
-				//					backEntitiesVector.push_back(entityVector[i]);
-				//				}
+				movableEntityVector.push_back(entityVector[i]);
 				break;
 
 			default:
@@ -387,36 +379,56 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 		}
 	}
 
-	EntityQuickSort(backEntitiesVector, 0, backEntitiesVector.size());
+	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
-	EntityQuickSort(frontEntitiesVector, 0, frontEntitiesVector.size());
 
-	while (backEntitiesVector.size() != 0 || buildingVector.size() != 0)
+	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
+		SPRITE_POSITION pivotEnum = SPRITE_POSITION::BOTH_NULL;
 
-		while (backEntitiesVector.front() == buildingVector.front()) //POINTER
+		if (buildingVector.size() == 0)
 		{
-			renderVector.push_back(backEntitiesVector.front());
-			backEntitiesVector.erase(backEntitiesVector.cbegin());
+			pivotEnum = SPRITE_POSITION::NULL_BUILDING;
 		}
 
-		renderVector.push_back(buildingVector.front());
-		buildingVector.erase(buildingVector.cbegin()); // CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE
+		else if (movableEntityVector.size() == 0)
+		{
+			pivotEnum = SPRITE_POSITION::NULL_MOVABLE_ENTITY;
+		}
 
+		else
+		{
+			pivotEnum = CheckSpriteHeight(movableEntityVector.front(), buildingVector.front(), dt);
+		}
+
+		switch (pivotEnum)
+		{
+		case SPRITE_POSITION::BEHIND_BUILDING:
+		case SPRITE_POSITION::HIGHER_THAN_BUILDING:
+		case SPRITE_POSITION::NULL_BUILDING:
+			renderVector.push_back(movableEntityVector.front());
+			movableEntityVector.erase(movableEntityVector.cbegin());
+			break;
+		case SPRITE_POSITION::LOWER_THAN_BUILDING:
+		case SPRITE_POSITION::NULL_MOVABLE_ENTITY:
+			renderVector.push_back(buildingVector.front());
+			buildingVector.erase(buildingVector.cbegin());
+			break;
+		case SPRITE_POSITION::BOTH_NULL:
+			break;
+		}
+
+		// I Need more than one building to check this, or at least one i can go behind of...
+	// CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE; USE POINTERS ONTO THE VECTOR
+		//  movEntity->GetAnimationRect(dt) THIS DOES A VERY DIRTY TRICK. IS IT A FRAME 1 THING OR DO I HAVE TO CHANGE THE COMPARISSON METHOD ON CHECKSPRITEHEIHGT?
 	}
 
-	while (frontEntitiesVector.size() != 0)
-	{
-		renderVector.push_back(frontEntitiesVector.front());
-		frontEntitiesVector.erase(frontEntitiesVector.cbegin());
-	}
 	numEntities = renderVector.size();
-	*/
 
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		entityVector[i]->PostUpdate(dt); //this used to be render vector
+		renderVector[i]->PostUpdate(dt);
 	}
 
 	renderVector.clear();
@@ -499,5 +511,26 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 			}
 		}
 	}
+
+}
+
+SPRITE_POSITION ModuleEntityManager:: CheckSpriteHeight(Entity* movEntity, Entity* building, float dt) const
+{
+	
+	if (movEntity->GetPosition().y + movEntity->GetAnimationRect(dt).h < building->GetPosition().y)
+	{
+		return SPRITE_POSITION::HIGHER_THAN_BUILDING;
+	}
+
+	else if (movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetAnimationRect(dt).h > building->GetPosition().y)
+	{
+		return SPRITE_POSITION::BEHIND_BUILDING;
+	}
+	
+	else
+	{
+		return SPRITE_POSITION::LOWER_THAN_BUILDING;
+	}
+
 
 }

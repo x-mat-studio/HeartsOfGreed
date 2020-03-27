@@ -159,3 +159,20 @@ void Entity::SetToDelete(bool toDel)
 		toDelete = !toDelete;
 	}
 }
+
+SDL_Rect Entity::GetAnimationRect(float dt)
+{
+	if (current_animation == NULL)
+	{
+		SDL_Rect rec;
+		rec.x = 0;
+		rec.y = 0;
+		rec.w = 0;
+		rec.h = 0;
+		return rec;
+	}
+	else
+	{
+		return current_animation->GetCurrentFrameBox(dt);
+	}
+}

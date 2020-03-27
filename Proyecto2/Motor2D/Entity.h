@@ -26,6 +26,7 @@ enum class ENTITY_TYPE
 	BLDG_UPGRADE_CENTER,
 	BLDG_BASE,
 	BLDG_BARRICADE,
+	BLDG_CORE,
 
 	MAX_TYPE
 };
@@ -60,6 +61,7 @@ public:
 	virtual Collider* GetCollider() const;
 
 	fMPoint GetPosition();
+	SDL_Rect GetAnimationRect(float dt);
 	ENTITY_TYPE GetType();
 	ENTITY_ALIGNEMENT GetAlignment();
 	void SetAlignment(ENTITY_ALIGNEMENT newAlign = ENTITY_ALIGNEMENT::UNKNOWN);

@@ -11,6 +11,15 @@ class Hero;
 class Building;
 class DynamicEntity;
 
+enum class SPRITE_POSITION
+{
+	BEHIND_BUILDING,
+	HIGHER_THAN_BUILDING,
+	LOWER_THAN_BUILDING,
+	NULL_BUILDING,
+	NULL_MOVABLE_ENTITY,
+	BOTH_NULL
+};
 
 class ModuleEntityManager : public Module
 {
@@ -62,6 +71,7 @@ private:
 	void SpriteOrdering(float dt);
 	void EntityQuickSort(std::vector<Entity*>& vector, int low, int high);
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
+	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building, float dt) const;
 
 private:
 
@@ -70,8 +80,7 @@ private:
 
 	// Sprite sorting vectors
 	std::vector <Entity*> renderVector;
-	std::vector <Entity*> backEntitiesVector;
-	std::vector <Entity*> frontEntitiesVector;
+	std::vector <Entity*> movableEntityVector;
 	std::vector <Entity*> buildingVector;
 
 	SDL_Texture* suitManTexture;
