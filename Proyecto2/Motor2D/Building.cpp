@@ -4,7 +4,7 @@
 
 Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider) :
 
-	Entity(position, ENTITY_TYPE::BUILDING),
+	Entity(position, ENTITY_TYPE::BUILDING, collider),
 
 	hitPointsMax(hitPoints),
 	hitPointsCurrent(hitPoints),
@@ -18,15 +18,12 @@ Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, i
 	transparent(false),
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
-{
-	this->collider = collider;
-}
+{}
 
 
 Building::Building(fMPoint position, Building* copy) :
 
 	Entity(position, copy->type, copy->collider),
-
 
 	hitPointsMax(copy->hitPointsMax),
 	hitPointsCurrent(copy->hitPointsMax),
