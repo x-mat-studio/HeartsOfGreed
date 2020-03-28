@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "UIManager.h"
 #include "Pathfinding.h"
 #include "AI.h"
 
@@ -36,6 +37,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	coll = new ModuleCollision();
 	entityManager = new ModuleEntityManager();
 	eventManager = new ModuleEventManager();
+	uiManager = new ModuleUIManager();
 	player = new ModulePlayer();
 	ai = new ModuleAI();
 	pathfinding = new ModulePathfinding();
@@ -54,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(player);
 	AddModule(ai);
+	AddModule(uiManager);
 	// render last to swap buffer
 	AddModule(render);
 
