@@ -22,6 +22,7 @@ class ModuleMap;
 class ModuleTestScene;
 class ModulePlayer;
 class ModuleEntityManager;
+class ModuleUIManager;
 class ModulePathfinding;
 class ModuleEventManager;
 class ModuleAI;
@@ -101,6 +102,7 @@ public:
 	ModulePathfinding*		pathfinding;
 	ModuleEventManager*		eventManager;
 	ModuleAI*				ai;
+	ModuleUIManager*		uiManager;
 
 	uint32_t			frames;
 	
