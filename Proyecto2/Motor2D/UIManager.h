@@ -24,6 +24,8 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName);
+	void RemoveDeletedUI();
 
 	bool CleanUp();
 
@@ -32,6 +34,7 @@ public:
 
 private:
 
+	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
 
 };

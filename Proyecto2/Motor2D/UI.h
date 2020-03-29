@@ -21,11 +21,11 @@ public:
 
 	bool operator==(UI* element);
 
-	virtual bool Start(SDL_Texture* texture);
+	virtual bool Start();
 	virtual bool PreUpdate(float dt);
 	virtual bool Update(float dt);
-	virtual bool PostUpdate(float dt);
-	virtual bool Draw();
+	virtual bool PostUpdate(float dt, SDL_Texture* texture);
+	void Draw(SDL_Texture* texture);
 
 	bool MouseUnderElement(int x, int y);
 	void Drag(int x, int y);
@@ -40,6 +40,7 @@ public:
 	bool debugBox;
 	bool dragable;
 	bool focused;
+	bool toDelete;
 
 protected:
 
@@ -47,12 +48,8 @@ protected:
 	fMPoint localPosition;
 
 	SDL_Rect* box;
-	SDL_Texture* texture;
 	UI* parent;
 	UI_TYPE type;
-
-	bool toDelete;
-	bool started;
 
 	P2SString name;
 

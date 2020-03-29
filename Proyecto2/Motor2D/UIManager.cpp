@@ -1,6 +1,5 @@
 #include "App.h"
 #include "Textures.h"
-#include "UI.h"
 #include "UIManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -43,6 +42,14 @@ bool ModuleUIManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("UI Manager Pre-Update", Profiler::Color::Purple)
 
+		bool ret = true;
+	
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		uiVector[i]->PreUpdate(dt);
+	}
 
 	return true;
 }
@@ -54,7 +61,12 @@ bool ModuleUIManager::Update(float dt)
 
 		bool ret = true;
 
+	int numEntities = uiVector.size();
 
+	for (int i = 0; i < numEntities; i++)
+	{
+		uiVector[i]->Update(dt);
+	}
 
 	return ret;
 }
@@ -66,7 +78,12 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 		bool ret = true;
 
+	int numEntities = uiVector.size();
 
+	for (int i = 0; i < numEntities; i++)
+	{
+		uiVector[i]->PostUpdate(dt, atlas);
+	}
 
 	return ret;
 }
@@ -79,3 +96,31 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName)
+{
+	UI* ret = nullptr;
+
+	switch (uiType)
+	{
+	}
+
+	if (ret != nullptr)
+	{
+		uiVector.push_back(ret);
+	}
+
+}
+
+void ModuleUIManager::RemoveDeletedUI()
+{
+	int numEntitys = uiVector.size();
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (uiVector[i]->toDelete == true)
+		{
+			uiVector.erase(uiVector.begin() + i);
+		}
+	}
+
+}
