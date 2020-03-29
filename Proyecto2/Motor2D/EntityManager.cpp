@@ -4,7 +4,9 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Collision.h"
-#include "Hero.h"
+#include "GathererHero.h"
+#include "MeleeHero.h"
+#include "RangedHero.h"
 #include "Enemy.h"
 #include "Building.h"
 #include "DynamicEntity.h"
@@ -49,19 +51,19 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 
-	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_MELEE, collider, walkLeft, walkLeftUp,
+	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
-	Collider* bruh = new Collider({ 0,500,100,100 }, COLLIDER_VISIBILITY, this);
-	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, bruh);
+	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
+	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
 
 	//Test Hero
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x+64, pos.y);
 
-	AddEntity(ENTITY_TYPE::BUILDING, 0, 200);
+	AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
 
 	return ret;
 }
@@ -73,7 +75,12 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 
 	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
+	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
+	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
+
 	buildingTexture = app->tex->Load("maps/base03.png");
+	base1Texture = app->tex->Load("maps/base01.png");
+	base2Texture = app->tex->Load("maps/base02.png");
 
 	return ret;
 }
@@ -83,7 +90,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-		CheckListener(this);
+	CheckListener(this);
 
 	CheckIfStarted();
 
@@ -107,9 +114,41 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			switch (entityVector[i]->GetType())
 			{
+			case ENTITY_TYPE::PARTICLE:
+				break;
+
+			case ENTITY_TYPE::HERO_MELEE:
+				entityVector[i]->Start(armorMaleTexture);
+				break;
+
+			case ENTITY_TYPE::HERO_RANGED:
+				entityVector[i]->Start(combatFemaleTexture);
+				break;
+
+			case ENTITY_TYPE::HERO_GATHERER:
+				entityVector[i]->Start(suitManTexture);
+				break;
+
+			case ENTITY_TYPE::ENEMY:
+				break;
 
 			case ENTITY_TYPE::BUILDING:
-				entityVector[i]->Start(buildingTexture);
+				entityVector[i]->Start(base1Texture);
+				break;
+
+			case ENTITY_TYPE::BLDG_TURRET:
+				break;
+
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				break;
+
+			case ENTITY_TYPE::BLDG_BASE:
+				break;
+
+			case ENTITY_TYPE::BLDG_BARRICADE:
+				break;
+
+			case ENTITY_TYPE::BLDG_CORE:
 				break;
 
 			default:

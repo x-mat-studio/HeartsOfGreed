@@ -84,10 +84,16 @@ private:
 	std::vector <Entity*> buildingVector;
 
 	SDL_Texture* suitManTexture;
+	SDL_Texture* armorMaleTexture;
+	SDL_Texture* combatFemaleTexture;
+
 	SDL_Texture* buildingTexture;
+	SDL_Texture* base1Texture;
+	SDL_Texture* base2Texture;
 
 	Hero* sampleMelee;
 	Building* testBuilding;
+	Building* blueBuilding;
 
 };
 

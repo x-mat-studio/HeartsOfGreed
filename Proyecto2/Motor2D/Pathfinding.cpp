@@ -138,7 +138,7 @@ float PathNode::CalculateF(const iMPoint& destination)
 	if (is_Diagonal)
 	{
 
-		g = parent->g + 1.5;
+		g = parent->g + 1.41;
 	}
 	else
 	{

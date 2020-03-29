@@ -6,6 +6,15 @@
 struct SDL_Window;
 struct SDL_Surface;
 
+enum class RESOLUTION_MODE
+{
+	FULLSCREEN,
+	BORDERLESS,
+	RESIZABLE,
+	FULLSCREEN_WINDOW,
+	STATIC
+};
+
 class ModuleWindow : public Module
 {
 public:
@@ -20,6 +29,16 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	//Called each loop
+	bool Update(float dt);
+
+	//Change screen resolution functions
+	SDL_Window* ResizeWindow(RESOLUTION_MODE stateResolution);
+
+	bool AssignSurface(SDL_Window* window);
+
+	bool ChangeWindow(RESOLUTION_MODE stateResolution);
 
 	// Changae title
 	void SetTitle(const char* new_title);
@@ -43,6 +62,8 @@ public:
 
 	uint		width;
 	uint		height;
+
+	RESOLUTION_MODE stateResolution;
 	
 
 private:

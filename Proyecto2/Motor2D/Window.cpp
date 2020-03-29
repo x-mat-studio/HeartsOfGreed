@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "App.h"
 #include "Window.h"
+#include "Input.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -30,7 +31,7 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 	else
 	{
 		//Create window
-		Uint32 flags = SDL_WINDOW_SHOWN;
+		
 		bool fullscreen = config.child("fullscreen").attribute("value").as_bool(false);
 		bool borderless = config.child("borderless").attribute("value").as_bool(false);
 		bool resizable = config.child("resizable").attribute("value").as_bool(false);
@@ -42,36 +43,22 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 		minScaleValue = config.child("resolution").attribute("minScaleValue").as_float(1.0);
 		maxScaleValue = config.child("resolution").attribute("maxScaleValue").as_float(1.0);
 		
-		if(fullscreen == true)
-			flags |= SDL_WINDOW_FULLSCREEN;
-
+		stateResolution = RESOLUTION_MODE::STATIC;
+		
+		if (fullscreen == true)
+			stateResolution = RESOLUTION_MODE::FULLSCREEN;
 
 		if(borderless == true)
-			flags |= SDL_WINDOW_BORDERLESS;
-
+			stateResolution = RESOLUTION_MODE::BORDERLESS;
 
 		if(resizable == true)
-			flags |= SDL_WINDOW_RESIZABLE;
-
+			stateResolution = RESOLUTION_MODE::RESIZABLE;
 
 		if(fullscreenWindow == true)
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			stateResolution = RESOLUTION_MODE::FULLSCREEN_WINDOW;
 
-
-		window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
-
-
-		if(window == NULL)
-			ret = false;
-		else
-		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface(window);
-		}
-
-
+		ret = ChangeWindow(stateResolution);
 	}
-
 
 	return ret;
 }
@@ -92,6 +79,79 @@ bool ModuleWindow::CleanUp()
 	//Quit SDL subsystems
 	SDL_Quit();
 	return true;
+}
+
+bool ModuleWindow::Update(float dt)
+{
+	bool ret = true;
+	
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
+
+		//ChangeWindow(RESOLUTION_MODE::FULLSCREEN_WINDOW); If you value your life, dont uncomment this. Work in progress. -Adri
+
+	}
+
+	return ret;
+}
+
+
+SDL_Window* ModuleWindow::ResizeWindow(RESOLUTION_MODE stateResolution)
+{
+	Uint32 flags = 0;
+	
+	switch (stateResolution)
+	{
+	case RESOLUTION_MODE::FULLSCREEN:
+		flags |= SDL_WINDOW_FULLSCREEN;
+		break;
+
+	case RESOLUTION_MODE::BORDERLESS:
+		flags |= SDL_WINDOW_BORDERLESS;
+		break;
+
+	case RESOLUTION_MODE::RESIZABLE:
+		flags |= SDL_WINDOW_RESIZABLE;
+		break;
+
+	case RESOLUTION_MODE::FULLSCREEN_WINDOW:
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		break;
+
+	case RESOLUTION_MODE::STATIC:
+		flags |= SDL_WINDOW_SHOWN;
+		break;
+
+	default:
+		flags |= SDL_WINDOW_SHOWN;
+		break;
+	}
+
+	window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+
+	return window;
+}
+
+
+bool ModuleWindow::AssignSurface(SDL_Window * window)
+{
+	if (window == NULL)
+		return false;
+	else
+	{
+		//Get window surface
+		screenSurface = SDL_GetWindowSurface(window);
+		return true;
+	}
+}
+
+
+bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
+{
+	SDL_Window* newWindow = ResizeWindow(stateResolution);
+
+	bool changeRet = AssignSurface(newWindow);
+
+	return changeRet;
 }
 
 

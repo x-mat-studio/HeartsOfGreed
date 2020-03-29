@@ -35,7 +35,7 @@ bool ModuleTestScene::Start()
 	
 	app->audio->PlayMusic("audio/music/Raiders.ogg", 0.0F, 50);
 
-	if (app->map->LoadNew("map_prototype.tmx") == true)
+	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{
 		int w, h;
 		uchar* data = nullptr;
