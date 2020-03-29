@@ -109,6 +109,7 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		uiVector.push_back(ret);
 	}
 
+	return ret;
 }
 
 void ModuleUIManager::RemoveDeletedUI()
