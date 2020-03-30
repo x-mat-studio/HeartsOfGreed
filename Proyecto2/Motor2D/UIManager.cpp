@@ -1,6 +1,9 @@
 #include "App.h"
 #include "Textures.h"
 #include "UIManager.h"
+//#include "UI_Image.h"
+//#include "UI_Button.h"
+//#include "UI_Text.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -22,7 +25,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
-
+	atlas = app->tex->Load("spritesheets/atlas.png");
 
 	return ret;
 }
@@ -32,7 +35,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 bool ModuleUIManager::Start()
 {
 	bool ret = true;
-
 
 	return ret;
 }

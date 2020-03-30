@@ -1,12 +1,11 @@
 #ifndef __UIMANAGER_H__
 #define __UIMANAGER_H__
 
-#include "SDL/include/SDL.h"
 #include "Module.h"
 #include "UI.h"
 #include <list>
 
-
+class UI;
 
 class ModuleUIManager : public Module
 {

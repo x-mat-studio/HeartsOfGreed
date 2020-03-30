@@ -52,7 +52,7 @@ enum HERO_INPUTS
 class Hero : public DynamicEntity
 {
 public:
-	Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
+	Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 		Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 		Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
