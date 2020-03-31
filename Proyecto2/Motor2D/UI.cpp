@@ -4,14 +4,14 @@
 UI::UI()
 {}
 
-UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName, bool draggable) :
+UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool draggable) :
 
 	worldPosition(positionValue),
 	parent(father),
 	type(uiType),
 	name(uiName),
 	localPosition(0, 0),
-	box(nullptr),
+	box(rect),
 	toDelete(false),
 	debugBox(false),
 	focused(false),

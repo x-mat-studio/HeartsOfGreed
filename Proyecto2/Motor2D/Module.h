@@ -26,6 +26,17 @@ enum class EVENT_ENUM
 	STOP_SELECTING_UNITS,
 	ENTITY_COMMAND, //aka right click
 	ENTITY_INTERACTION, //aka left click
+	
+	// Hero creation /revival
+	HERO_MELEE_ON_BATTLE,
+	HERO_GATHERER_ON_BATTLE,
+	HERO_RANGED_ON_BATTLE,
+
+	// Heroe dies
+	HERO_MELEE_OUT,
+	HERO_GATHERER_OUT,
+	HERO_RANGED_OUT,
+
 	PAUSE_GAME,
 	NULL_EVENT
 };
@@ -73,13 +84,13 @@ public:
 
 	// Event managing: saves an event into the listener vector
 
-	void AddEvent(EVENT_ENUM& eventId);
+	void AddEvent(EVENT_ENUM eventId);
 
-	void RemoveEvent(EVENT_ENUM& eventId);
+	void RemoveEvent(EVENT_ENUM eventId);
 
 	bool CheckListener(Module*mod);
 
-	virtual void ExecuteEvent(EVENT_ENUM& eventId);
+	virtual void ExecuteEvent(EVENT_ENUM eventId);
 
 public:
 

@@ -20,7 +20,7 @@ class UI
 public:
 
 	UI();
-	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName, bool dragable);
+	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool dragable);
 	virtual ~UI();
 
 	bool operator==(UI* element);
@@ -28,7 +28,7 @@ public:
 	virtual bool Start();
 	virtual bool PreUpdate(float dt);
 	virtual bool Update(float dt);
-	virtual bool PostUpdate(float dt, SDL_Texture* texture);
+	bool PostUpdate(float dt, SDL_Texture* texture);
 	void Draw(SDL_Texture* texture);
 
 	bool MouseUnderElement(int x, int y);

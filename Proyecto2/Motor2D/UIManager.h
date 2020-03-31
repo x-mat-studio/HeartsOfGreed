@@ -23,13 +23,16 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName);
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool dragable);
 	void RemoveDeletedUI();
+
+	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 	bool CleanUp();
 
-public:
+private:
 
+	void ExecuteEvent(EVENT_ENUM eventId);
 
 private:
 

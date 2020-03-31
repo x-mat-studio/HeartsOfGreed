@@ -1,5 +1,6 @@
 #include "App.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "Textures.h"
 #include "Entity.h"
 #include "Map.h"

@@ -8,13 +8,12 @@ class UI_Button : public UI
 
 public:
 
-	UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName, bool draggable);
+	UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool draggable);
 	~UI_Button();
 
 	bool Start();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
-	bool PostUpdate(float dt, SDL_Texture* texture);
 
 private:
 
