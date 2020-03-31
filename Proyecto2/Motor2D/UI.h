@@ -20,7 +20,7 @@ class UI
 public:
 
 	UI();
-	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool dragable);
+	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName, bool dragable);
 	virtual ~UI();
 
 	bool operator==(UI* element);

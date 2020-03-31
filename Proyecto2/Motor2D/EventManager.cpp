@@ -8,7 +8,7 @@ Event::Event()
 	idTrigger = EVENT_ENUM::NULL_EVENT;
 }
 
-Event::Event(EVENT_ENUM idValue, EVENT_ENUM idTriggerValue)
+Event::Event(EVENT_ENUM& idValue, EVENT_ENUM& idTriggerValue)
 {
 	id = idValue;
 	idTrigger = idTriggerValue;
@@ -55,7 +55,7 @@ bool ModuleEventManager::CleanUp()
 	return true;
 }
 
-void ModuleEventManager::GenerateEvent(EVENT_ENUM eventId, EVENT_ENUM eventTriggerId)
+void ModuleEventManager::GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTriggerId)
 {
 
 	Event newEvent(eventId, eventTriggerId);
@@ -78,22 +78,19 @@ void ModuleEventManager::GenerateEvent(EVENT_ENUM eventId, EVENT_ENUM eventTrigg
 
 }
 
-void ModuleEventManager::FireEvent(EVENT_ENUM eventId) const
+void ModuleEventManager::FireEvent(EVENT_ENUM& eventId) const
 {
 
-	/*if (eventId != EVENT_ENUM::NULL_EVENT)
+	std::vector<Module*> listeners = eventListenersMap.at(eventId);
+	int numElem = listeners.size();
+	for (int i = 0; i < numElem; i++)
 	{
-		std::vector<Module*> listeners = eventListenersMap.at(eventId);
-		int numElem = listeners.size();
-		for (int i = 0; i < numElem; i++)
-		{
-			listeners[i]->AddEvent(eventId);
-		}
-	}*/
+		listeners[i]->AddEvent(eventId);
+	}
 
 }
 
-EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger) const
+EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM& eventTrigger) const
 {
 
 	int numElem = eventVector.size();
@@ -105,7 +102,7 @@ EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger) const
 			return eventVector[i].id;
 		}
 	}
-	
+
 	return EVENT_ENUM::NULL_EVENT;
 }
 
