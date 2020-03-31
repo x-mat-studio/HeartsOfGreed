@@ -87,7 +87,7 @@ bool ModuleWindow::Update(float dt)
 	bool ret = true;
 	
 
-	//This logic needs to be turned into events and we're gucci -Adri
+	//TODO: THIS SHOULD BE A LISTENER - Adri
 
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
 
