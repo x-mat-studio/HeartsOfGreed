@@ -50,6 +50,8 @@ public:
 	const int GetCameraX();
 	const int GetCameraY();
 
+	void AssignCameraMeasures();
+
 public:
 	SDL_Renderer* renderer;
 

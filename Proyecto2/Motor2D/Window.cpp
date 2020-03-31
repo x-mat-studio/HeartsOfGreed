@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "App.h"
 #include "Window.h"
+#include "Render.h"
 #include "Input.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -85,19 +86,17 @@ bool ModuleWindow::Update(float dt)
 {
 	bool ret = true;
 	
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN && stateResolution != RESOLUTION_MODE::FULLSCREEN_WINDOW) {
 
-		stateResolution = RESOLUTION_MODE::FULLSCREEN_WINDOW;
+	//This logic needs to be turned into events and we're gucci -Adri
 
-		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
 
+		ChangeResolution(RESOLUTION_MODE::FULLSCREEN);
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN&& stateResolution != RESOLUTION_MODE::STATIC) {
+
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN) {
 		
-		stateResolution = RESOLUTION_MODE::STATIC;
-
-		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
-
+		ChangeResolution(RESOLUTION_MODE::STATIC);
 	}
 
 	return ret;
@@ -134,6 +133,7 @@ bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
 	return changeRet;
 }
 
+
 int ModuleWindow::SetResolutionFlag(RESOLUTION_MODE stateResolution)
 {
 	Uint32 flags = 0;
@@ -166,6 +166,25 @@ int ModuleWindow::SetResolutionFlag(RESOLUTION_MODE stateResolution)
 	}
 
 	return flags;
+}
+
+
+bool ModuleWindow::ChangeResolution(RESOLUTION_MODE newResolution)
+{
+	bool ret = false;
+	
+	if (stateResolution != newResolution) {
+
+		stateResolution = newResolution;
+
+		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+
+		app->render->AssignCameraMeasures();
+
+		ret = true;
+	}
+
+	return ret;
 }
 
 
