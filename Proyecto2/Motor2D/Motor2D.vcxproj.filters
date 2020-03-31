@@ -115,9 +115,6 @@
     <ClCompile Include="UI_Text.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -248,9 +245,6 @@
     </ClInclude>
     <ClInclude Include="UI_Image.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

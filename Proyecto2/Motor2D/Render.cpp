@@ -45,7 +45,8 @@ bool ModuleRender::Awake(pugi::xml_node& config)
 	}
 	else
 	{
-		AssignCameraMeasures();
+		camera.w = app->win->screenSurface->w;
+		camera.h = app->win->screenSurface->h;
 		camera.x = 0;
 		camera.y = 0;
 	}
@@ -340,11 +341,5 @@ const int ModuleRender::GetCameraX()
 const int ModuleRender::GetCameraY()
 {
 	return camera.y;
-}
-
-void ModuleRender::AssignCameraMeasures()
-{
-	camera.w = app->win->screenSurface->w;
-	camera.h = app->win->screenSurface->h;
 }
 
