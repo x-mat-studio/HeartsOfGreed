@@ -1,5 +1,6 @@
 #include "App.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "Textures.h"
 #include "Entity.h"
 #include "Map.h"
@@ -240,11 +241,14 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 	case ENTITY_TYPE::HERO_MELEE:
 	{
 		ret = new Hero({ (float)x,(float)y }, sampleMelee);
+		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
 	}
 	break;
 	case ENTITY_TYPE::HERO_RANGED:
+		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
+		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
 		break;
 	case ENTITY_TYPE::BUILDING:
 	{

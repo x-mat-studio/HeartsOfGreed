@@ -9,7 +9,7 @@ class UI_Text : public UI
 
 public:
 
-	UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName, bool draggable);
+	UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool draggable);
 	~UI_Text();
 
 	bool Start();
