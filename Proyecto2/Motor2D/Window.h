@@ -40,6 +40,8 @@ public:
 
 	bool ChangeWindow(RESOLUTION_MODE stateResolution);
 
+	int SetResolutionFlag(RESOLUTION_MODE stateResolution);
+
 	// Changae title
 	void SetTitle(const char* new_title);
 

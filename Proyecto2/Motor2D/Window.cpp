@@ -85,9 +85,18 @@ bool ModuleWindow::Update(float dt)
 {
 	bool ret = true;
 	
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN && stateResolution != RESOLUTION_MODE::FULLSCREEN_WINDOW) {
 
-		//ChangeWindow(RESOLUTION_MODE::FULLSCREEN_WINDOW); If you value your life, dont uncomment this. Work in progress. -Adri
+		stateResolution = RESOLUTION_MODE::FULLSCREEN_WINDOW;
+
+		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN&& stateResolution != RESOLUTION_MODE::STATIC) {
+		
+		stateResolution = RESOLUTION_MODE::STATIC;
+
+		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
 
 	}
 
@@ -97,8 +106,38 @@ bool ModuleWindow::Update(float dt)
 
 SDL_Window* ModuleWindow::ResizeWindow(RESOLUTION_MODE stateResolution)
 {
+	window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SetResolutionFlag(stateResolution));
+
+	return window;
+}
+
+
+bool ModuleWindow::AssignSurface(SDL_Window * window)
+{
+	if (window == NULL)
+		return false;
+	else
+	{
+		//Get window surface
+		screenSurface = SDL_GetWindowSurface(window);
+		return true;
+	}
+}
+
+
+bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
+{
+	SDL_Window* newWindow = ResizeWindow(stateResolution);
+
+	bool changeRet = AssignSurface(newWindow);
+
+	return changeRet;
+}
+
+int ModuleWindow::SetResolutionFlag(RESOLUTION_MODE stateResolution)
+{
 	Uint32 flags = 0;
-	
+
 	switch (stateResolution)
 	{
 	case RESOLUTION_MODE::FULLSCREEN:
@@ -126,32 +165,7 @@ SDL_Window* ModuleWindow::ResizeWindow(RESOLUTION_MODE stateResolution)
 		break;
 	}
 
-	window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
-
-	return window;
-}
-
-
-bool ModuleWindow::AssignSurface(SDL_Window * window)
-{
-	if (window == NULL)
-		return false;
-	else
-	{
-		//Get window surface
-		screenSurface = SDL_GetWindowSurface(window);
-		return true;
-	}
-}
-
-
-bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
-{
-	SDL_Window* newWindow = ResizeWindow(stateResolution);
-
-	bool changeRet = AssignSurface(newWindow);
-
-	return changeRet;
+	return flags;
 }
 
 
