@@ -47,9 +47,9 @@ bool ModuleUIManager::Start()
 	atlas = app->tex->Load("spritesheets/atlas.png");
 
 	// THIS SHOULDN'T GO HERE; IT'S FOR TESTIN; TODO
-	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
-	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
-	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_CREATED, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
 
 	return ret;
 }
@@ -162,7 +162,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 
-	case EVENT_ENUM::HERO_MELEE_ON_BATTLE:
+	case EVENT_ENUM::HERO_MELEE_CREATED:
 		
 		rect = RectConstructor(889, 201, 100, 78);
 		AddUIElement(fMPoint (w / app->win->GetScale() - rect.w, 60 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHeroMark", false);
