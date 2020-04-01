@@ -165,7 +165,7 @@ bool ModuleEntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-		bool ret = true;
+	bool ret = true;
 
 	CheckListener(this);
 

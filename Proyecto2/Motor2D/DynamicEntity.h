@@ -23,6 +23,7 @@ public:
 public:
 	int pathToFollow;
 	bool isMoving;
+
 	//used for moving close entities to have an smooth group movement
 	int moveRange1;
 	int moveRange2;
@@ -33,13 +34,13 @@ protected:
 
 	iMPoint origin, mouse;
 	std::vector <iMPoint> path;
-	std::vector<DynamicEntity*> close_entity_list;
-	std::vector<DynamicEntity*> colliding_entity_list;
+	std::vector<DynamicEntity*> closeEntityList;
+	std::vector<DynamicEntity*> collidingEntityList;
 
 private:
-	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity_list);
-	fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_list, fMPoint position);
-	fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_entity_list, fMPoint position);
+	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
+	fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
+	fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
 
 };
 

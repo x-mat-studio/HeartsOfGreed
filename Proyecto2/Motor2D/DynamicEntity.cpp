@@ -15,7 +15,7 @@ DynamicEntity::~DynamicEntity()
 
 bool DynamicEntity::Move()
 {
-	BROFILER_CATEGORY("UpdateTest_1", Profiler::Color::BlanchedAlmond);
+	BROFILER_CATEGORY("Move Unit", Profiler::Color::BlanchedAlmond);
 
 	//Speed is resetted to 0 each iteration
 	speed = { 0, 0 };
@@ -25,6 +25,7 @@ bool DynamicEntity::Move()
 	fMPoint pathSpeed;
 	pathSpeed.create(0, 0);
 	fMPoint nextPoint;
+
 	if (path.size() > 0)
 	{
 		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
@@ -34,14 +35,14 @@ bool DynamicEntity::Move()
 
 	// ----------------------------------------------------------------
 
-	app->entityManager->GetEntityNeighbours(&close_entity_list, &colliding_entity_list, this);
+	app->entityManager->GetEntityNeighbours(&closeEntityList, &collidingEntityList, this);
 
 	//---------------------------------------------------------------- 
 	fMPoint separationSpeed;
 
-	if (!colliding_entity_list.empty())
+	if (!collidingEntityList.empty())
 	{
-		separationSpeed = GetSeparationSpeed(colliding_entity_list, position);
+		separationSpeed = GetSeparationSpeed(collidingEntityList, position);
 	}
 	else
 	{
@@ -52,9 +53,9 @@ bool DynamicEntity::Move()
 	// ---------------------------------------------------------------- 
 
 	fMPoint cohesionSpeed = { 0,0 };
-	if (!close_entity_list.empty())
+	if (!closeEntityList.empty())
 	{
-		cohesionSpeed = GetCohesionSpeed(close_entity_list, position);
+		cohesionSpeed = GetCohesionSpeed(closeEntityList, position);
 	}
 	else
 	{
@@ -65,9 +66,9 @@ bool DynamicEntity::Move()
 	//---------------------------------------------------------------- 
 
 	fMPoint alignmentSpeed = { 0,0 };
-	if (!close_entity_list.empty() && (abs(pathSpeed.x) > 0 || abs(pathSpeed.y) > 0))
+	if (!closeEntityList.empty() && (abs(pathSpeed.x) > 0 || abs(pathSpeed.y) > 0))
 	{
-		alignmentSpeed = GetDirectionSpeed(close_entity_list);
+		alignmentSpeed = GetDirectionSpeed(closeEntityList);
 	}
 	else
 	{
@@ -93,9 +94,13 @@ bool DynamicEntity::Move()
 	}
 
 	if (pathSpeed.IsZero())
+	{
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 
 }
 
@@ -106,7 +111,9 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 	fMPoint separationSpeed = { 0,0 };
 
 	if (colliding_entity_list.size() == 0)
+	{
 		return separationSpeed;
+	}
 
 	DynamicEntity* it;
 
@@ -124,7 +131,9 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 	float spdNorm = sqrtf(separationSpeed.x * separationSpeed.x + separationSpeed.y * separationSpeed.y);
 
 	if (spdNorm == 0)
+	{
 		separationSpeed = { 0,0 };
+	}
 	else
 	{
 		separationSpeed.x /= spdNorm;
@@ -139,10 +148,7 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_
 {
 	BROFILER_CATEGORY("COHESION SPEED", Profiler::Color::DarkOliveGreen);
 
-	fMPoint MassCenter
-	{
-		(float)position.x, (float)position.y
-	};
+	fMPoint MassCenter{(float)position.x, (float)position.y};
 
 	DynamicEntity* it = nullptr;
 
@@ -187,10 +193,7 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 {
 	BROFILER_CATEGORY("DIRECTION SPEED", Profiler::Color::Magenta);
 
-
-	fMPoint alignmentSpeed{
-	0, 0
-	};
+	fMPoint alignmentSpeed{0, 0};
 
 	DynamicEntity* it;
 
@@ -237,22 +240,23 @@ void DynamicEntity::DebugDraw()
 	// Debug pathfinding ------------------------------
 
 	if (!app->debugMode)
+	{
 		return;
+	}
 
-	SDL_Texture* debug_tex = app->entityManager->debugPathTexture;
+	SDL_Texture* debugTex = app->entityManager->debugPathTexture;
 
 	int x, y;
 	app->input->GetMousePosition(x, y);
 	iMPoint p = app->map->MapToWorld(x, y);
 
-	app->render->Blit(debug_tex, p.x, p.y);
+	app->render->Blit(debugTex, p.x, p.y);
 
 	std::vector<iMPoint>* path = &this->path;
-
 
 	for (std::vector<iMPoint>::iterator it = path->begin(); it != path->end(); ++it)
 	{
 		iMPoint pos = app->map->MapToWorld(it->x, it->y);
-		app->render->Blit(debug_tex, pos.x, pos.y);
+		app->render->Blit(debugTex, pos.x, pos.y);
 	}
 }
