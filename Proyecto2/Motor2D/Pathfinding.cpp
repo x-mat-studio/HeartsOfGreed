@@ -238,12 +238,13 @@ std::multimap<int, PathNode>::iterator ModulePathfinding::Find(iMPoint point, st
 
 	std::multimap<int, PathNode>::iterator iterator = map.begin();
 
-	for (iterator; iterator != map.end(); iterator++)
+	for (int i = 0; i < map.size(); i++)
 	{
 		if (iterator->second.pos == point)
 		{
 			return iterator;
 		}
+		iterator++;
 	}
 
 	return map.end();
