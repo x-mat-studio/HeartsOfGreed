@@ -27,9 +27,9 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_ON_BATTLE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_ON_BATTLE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_ON_BATTLE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_CREATED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_CREATED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_CREATED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
@@ -170,7 +170,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero", false);
 
 		break;
-	case EVENT_ENUM::HERO_GATHERER_ON_BATTLE:
+	case EVENT_ENUM::HERO_GATHERER_CREATED:
 		
 		rect = RectConstructor(889, 201, 100, 78);
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark", false);
@@ -178,7 +178,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 60 / app->win->GetScale() + rect.h + 12), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero", false);
 		
 		break;
-	case EVENT_ENUM::HERO_RANGED_ON_BATTLE:
+	case EVENT_ENUM::HERO_RANGED_CREATED:
 		
 		rect = RectConstructor(889, 201, 100, 78);
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + 2 * rect.h + 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHeroMark", false);

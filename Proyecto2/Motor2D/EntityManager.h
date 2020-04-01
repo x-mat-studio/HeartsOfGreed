@@ -56,7 +56,7 @@ public:
 
 	Entity* CheckEntityOnClick(iMPoint mousePos);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
-	bool CheckEntityExists(Entity* entity);
+	void CheckDynamicEntitysObjectives(Entity* entity);
 	Entity* CheckEnemyObjective(SDL_Rect* rect);
 
 	void GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
@@ -67,7 +67,7 @@ public:
 private:
 
 	void CheckIfStarted();
-	void ExecuteEvent(EVENT_ENUM eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId);
 	void SpriteOrdering(float dt);
 	void EntityQuickSort(std::vector<Entity*>& vector, int low, int high);
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);

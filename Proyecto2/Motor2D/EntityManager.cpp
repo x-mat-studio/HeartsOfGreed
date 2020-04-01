@@ -70,7 +70,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 }
 
 
-// Called before the first frame
+
 bool ModuleEntityManager::Start()
 {
 	bool ret = true;
@@ -83,10 +83,12 @@ bool ModuleEntityManager::Start()
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
 
+	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
+
 	return ret;
 }
 
-// Called each loop iteration
+
 bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
@@ -104,6 +106,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 
 	return true;
 }
+
 
 void ModuleEntityManager::CheckIfStarted() {
 
@@ -161,7 +164,7 @@ void ModuleEntityManager::CheckIfStarted() {
 }
 
 
-// Called each loop iteration
+
 bool ModuleEntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
@@ -186,16 +189,13 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-		bool ret = true;
-
 	SpriteOrdering(dt);
 
-	RemoveDeletedEntitys();
 
-	return ret;
+	return true;
 }
 
-//// Called before quitting
+
 bool ModuleEntityManager::CleanUp()
 {
 	int numEntities = entityVector.size();
@@ -320,19 +320,30 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 }
 
 
-bool ModuleEntityManager::CheckEntityExists(Entity* entity)
+void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 {
 	int numEntitys = entityVector.size();
 
+	ENTITY_TYPE type;
+
 	for (int i = 0; i < numEntitys; i++)
 	{
-		if (entityVector[i] == entity)
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
 		{
-			return true;
+			Hero* hero = (Hero*)entityVector[i];
+			hero->CheckObjecive(entity);
+		}
+
+		else if (type == ENTITY_TYPE::ENEMY)
+		{
+			Enemy* enemy = (Enemy*)entityVector[i];
+			enemy->CheckObjecive(entity);
 		}
 	}
 
-	return false;
+	
 }
 
 
@@ -342,10 +353,13 @@ Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
 
 	Collider* col;
 
+	ENTITY_TYPE type;
+
 	for (int i = 0; i < numEntitys; i++)
 	{
-		if (entityVector[i]->GetType() == ENTITY_TYPE::PARTICLE || entityVector[i]->GetType() == ENTITY_TYPE::PARTICLE_SYSTEM ||
-			entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::PARTICLE || type == ENTITY_TYPE::PARTICLE_SYSTEM || type == ENTITY_TYPE::BLDG_BASE || type == ENTITY_TYPE::ENEMY)
 		{
 			continue;
 		}
@@ -373,6 +387,8 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 	{
 		if (entityVector[i]->toDelete == true)
 		{
+			CheckDynamicEntitysObjectives(entityVector[i]);
+
 			delete entityVector[i];
 			entityVector.erase(entityVector.begin() + i);
 			entityVector[i] = nullptr;
@@ -513,8 +529,16 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 }
 
 
-void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId) const
-{}
+void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
+{
+	switch (eventId)
+	{
+	case EVENT_ENUM::ENTITY_DEAD:
+		RemoveDeletedEntitys();
+		break;
+	}
+
+}
 
 
 void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit)

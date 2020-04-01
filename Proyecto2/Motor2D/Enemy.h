@@ -49,7 +49,6 @@ public:
 
 	Enemy(fMPoint position, Enemy* copy);
 
-
 	~Enemy();
 
 
@@ -59,6 +58,8 @@ public:
 
 
 	void OnCollision(Collider* collider);
+
+	void CheckObjecive(Entity* entity);
 
 	bool MoveTo(int x, int y);
 

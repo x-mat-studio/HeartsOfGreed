@@ -179,7 +179,10 @@ void ModulePlayer::RightClick()
 
 		for (int i = 0; i < numHeroes; i++)
 		{
-			heroesVector[i]->LockOn(focusedEntity);
+			if (heroesVector[i]->LockOn(focusedEntity) == false)
+			{
+				heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y);
+			}
 		}
 	}
 

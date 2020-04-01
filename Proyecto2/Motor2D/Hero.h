@@ -76,6 +76,8 @@ public:
 	virtual bool UseHability2();
 	virtual bool UseHability3();
 
+	void CheckObjecive(Entity* entity);
+
 private:
 	void LevelUp();
 

@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -240,8 +241,17 @@ bool Hero::MoveTo(int x, int y)
 
 bool Hero::LockOn(Entity* entity)
 {
-	objective = entity;
-	return true;
+	ENTITY_TYPE type = entity->GetType();
+
+	if (type == ENTITY_TYPE::ENEMY)
+	{
+		objective = entity;
+		MoveTo(entity->GetPosition().x, entity->GetPosition().y);
+
+		return true;
+	}
+	
+	return false;
 }
 
 
@@ -297,7 +307,17 @@ void Hero::Attack()
 
 void Hero::Die()
 {
+	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 	toDelete = true;
+}
+
+
+void Hero::CheckObjecive(Entity* entity)
+{
+	if (objective == entity)
+	{
+		objective == nullptr;
+	}
 }
 
 
