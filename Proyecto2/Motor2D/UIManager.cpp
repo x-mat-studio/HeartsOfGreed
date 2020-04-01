@@ -184,7 +184,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		
 		break;
 	case EVENT_ENUM::HERO_MELEE_OUT:
-
+		
 		break;
 	case EVENT_ENUM::HERO_GATHERER_OUT:
 
