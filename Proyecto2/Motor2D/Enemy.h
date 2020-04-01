@@ -63,6 +63,12 @@ public:
 
 	bool MoveTo(int x, int y);
 
+	//Various clone methods, all share same utility 
+
+	virtual Enemy* Clone();
+	virtual Enemy* Clone(fMPoint positionToBe);
+	virtual Enemy* Clone(int x, int y);
+
 private:
 
 	void Draw(float dt);
