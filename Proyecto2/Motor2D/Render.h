@@ -46,6 +46,7 @@ public:
 
 	//Returns the width & height of the camera
 	void GetCameraMeasures(int& w, int& h);
+	void AssignCameraMeasures();
 
 	const int GetCameraX();
 	const int GetCameraY();

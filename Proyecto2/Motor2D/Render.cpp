@@ -333,6 +333,12 @@ void ModuleRender::GetCameraMeasures(int& w, int& h)
 	h = camera.h;
 }
 
+void ModuleRender::AssignCameraMeasures()
+{
+	camera.w = app->win->screenSurface->w;
+	camera.h = app->win->screenSurface->h;
+}
+
 const int ModuleRender::GetCameraX()
 {
 	return camera.x;

@@ -8,11 +8,11 @@ struct SDL_Surface;
 
 enum class RESOLUTION_MODE
 {
-	FULLSCREEN,
+	FULLSCREEN, //use this for fullscreen
 	BORDERLESS,
 	RESIZABLE,
 	FULLSCREEN_WINDOW,
-	STATIC
+	STATIC //this for windowed
 };
 
 class ModuleWindow : public Module
@@ -41,6 +41,8 @@ public:
 	bool ChangeWindow(RESOLUTION_MODE stateResolution);
 
 	int SetResolutionFlag(RESOLUTION_MODE stateResolution);
+
+	bool ChangeResolution(RESOLUTION_MODE newResolution);
 
 	// Changae title
 	void SetTitle(const char* new_title);

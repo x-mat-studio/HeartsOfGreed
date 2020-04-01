@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Input.h"
+#include "Render.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -83,20 +84,18 @@ bool ModuleWindow::CleanUp()
 
 bool ModuleWindow::Update(float dt)
 {
-	bool ret = true;
+	bool ret = true; 
 	
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN && stateResolution != RESOLUTION_MODE::FULLSCREEN_WINDOW) {
+	//ONCE we have UI this should be menu events
+	
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
 
-		stateResolution = RESOLUTION_MODE::FULLSCREEN_WINDOW;
-
-		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+		ChangeResolution(RESOLUTION_MODE::FULLSCREEN);
 
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN&& stateResolution != RESOLUTION_MODE::STATIC) {
-		
-		stateResolution = RESOLUTION_MODE::STATIC;
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN) {
 
-		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+		ChangeResolution(RESOLUTION_MODE::STATIC);
 
 	}
 
@@ -134,6 +133,7 @@ bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
 	return changeRet;
 }
 
+
 int ModuleWindow::SetResolutionFlag(RESOLUTION_MODE stateResolution)
 {
 	Uint32 flags = 0;
@@ -166,6 +166,25 @@ int ModuleWindow::SetResolutionFlag(RESOLUTION_MODE stateResolution)
 	}
 
 	return flags;
+}
+
+
+bool ModuleWindow::ChangeResolution(RESOLUTION_MODE newResolution)
+{
+	bool ret = false;
+
+	if (stateResolution != newResolution) {
+
+		stateResolution = newResolution;
+
+		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+
+		app->render->AssignCameraMeasures();
+
+		ret = true;
+	}
+
+	return ret;
 }
 
 
