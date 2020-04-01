@@ -4,7 +4,7 @@
 UI::UI()
 {}
 
-UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool draggable) :
+UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable) :
 
 	worldPosition(positionValue),
 	parent(father),
@@ -52,7 +52,7 @@ bool UI::PostUpdate(float dt, SDL_Texture* texture)
 
 void UI::Draw(SDL_Texture* texture)
 {
-	app->render->Blit(texture, worldPosition.x, worldPosition.y, box);
+	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box);
 
 }
 

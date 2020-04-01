@@ -34,7 +34,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
 
-	atlas = app->tex->Load("spritesheets/atlas.png");
 
 	return ret;
 }
@@ -45,6 +44,12 @@ bool ModuleUIManager::Start()
 {
 	bool ret = true;
 
+	atlas = app->tex->Load("spritesheets/atlas.png");
+
+	// THIS SHOULDN'T GO HERE; IT'S FOR TESTIN; TODO
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_ON_BATTLE, EVENT_ENUM::NULL_EVENT);
 
 	return ret;
 }
@@ -110,7 +115,7 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
-UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool dragable)
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable)
 {
 	UI* newUI = nullptr;
 
@@ -151,26 +156,34 @@ void ModuleUIManager::RemoveDeletedUI()
 
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
+	SDL_Rect rect;
+	uint w (app->win->width), h(app->win->height);
 
 	switch (eventId)
 	{
 
 	case EVENT_ENUM::HERO_MELEE_ON_BATTLE:
-
-		AddUIElement(fMPoint (1180 * app->win->GetScale(), 60 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(889, 201, 100, 78), (P2SString)"meleeHeroMark", false);
-		AddUIElement(fMPoint(1183 * app->win->GetScale(), 65 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(776, 206, 94, 73), (P2SString)"meleeHero", false);
+		
+		rect = RectConstructor(889, 201, 100, 78);
+		AddUIElement(fMPoint (w / app->win->GetScale() - rect.w, 60 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHeroMark", false);
+		rect = RectConstructor(776, 206, 94, 73); 
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero", false);
 
 		break;
 	case EVENT_ENUM::HERO_GATHERER_ON_BATTLE:
 		
-		AddUIElement(fMPoint(1180 * app->win->GetScale(), 60 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(889, 201, 100, 78), (P2SString)"gathererHeroMark", false);
-		AddUIElement(fMPoint(1183 * app->win->GetScale(), 165 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(486, 206, 94, 73), (P2SString)"gathererHero", false);
+		rect = RectConstructor(889, 201, 100, 78);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark", false);
+		rect = RectConstructor(486, 206, 94, 73);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 60 / app->win->GetScale() + rect.h + 12), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero", false);
 		
 		break;
 	case EVENT_ENUM::HERO_RANGED_ON_BATTLE:
 		
-		AddUIElement(fMPoint(1180 * app->win->GetScale(), 60 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(889, 201, 100, 78), (P2SString)"rangedHeroMark", false);
-		AddUIElement(fMPoint(1183 * app->win->GetScale(), 265 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(204, 206, 94, 73), (P2SString)"rangedHero", false);
+		rect = RectConstructor(889, 201, 100, 78);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + 2 * rect.h + 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHeroMark", false);
+		rect = RectConstructor(204, 206, 94, 73);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 60 / app->win->GetScale() + 2 * rect.h + 22), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHero", false);
 		
 		break;
 	case EVENT_ENUM::HERO_MELEE_OUT:
