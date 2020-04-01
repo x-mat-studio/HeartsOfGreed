@@ -194,7 +194,7 @@ void ModulePlayer::RightClick()
 	}
 }
 
-void ModulePlayer::ExecuteEvent(EVENT_ENUM& eventId)
+void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
 	
 	switch (eventId)

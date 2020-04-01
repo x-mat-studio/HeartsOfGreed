@@ -513,7 +513,7 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 }
 
 
-void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
+void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId) const
 {}
 
 

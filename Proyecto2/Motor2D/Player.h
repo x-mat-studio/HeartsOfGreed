@@ -36,7 +36,7 @@ private:
 	bool Click();
 	void RightClick();
 	bool HandleInput();
-	void ExecuteEvent(EVENT_ENUM& eventId);
+	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DrawSelectQuad();
 

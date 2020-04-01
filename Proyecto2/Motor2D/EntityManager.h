@@ -67,7 +67,7 @@ public:
 private:
 
 	void CheckIfStarted();
-	void ExecuteEvent(EVENT_ENUM& eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId) const;
 	void SpriteOrdering(float dt);
 	void EntityQuickSort(std::vector<Entity*>& vector, int low, int high);
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
