@@ -4,11 +4,15 @@
 #include "SDL/include/SDL_rect.h"
 #include "p2Point.h"
 #include "Animation.h"
+#include "p2SString.h"
 
 struct SDL_Texture;
 
 enum class UI_TYPE
 {
+	UI_IMG,
+	UI_BUTTON,
+	UI_TEXT
 };
 
 class UI
@@ -16,23 +20,23 @@ class UI
 public:
 
 	UI();
-	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, P2SString uiName);
+	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect* rect, P2SString uiName, bool dragable);
 	virtual ~UI();
 
 	bool operator==(UI* element);
 
-	virtual bool Start(SDL_Texture* texture);
+	virtual bool Start();
 	virtual bool PreUpdate(float dt);
 	virtual bool Update(float dt);
-	virtual bool PostUpdate(float dt);
-	virtual bool Draw();
+	bool PostUpdate(float dt, SDL_Texture* texture);
+	void Draw(SDL_Texture* texture);
 
 	bool MouseUnderElement(int x, int y);
 	void Drag(int x, int y);
 
 protected:
 
-	virtual void Move();
+	void Move();
 	virtual void HandleInput();
 
 public:
@@ -40,6 +44,7 @@ public:
 	bool debugBox;
 	bool dragable;
 	bool focused;
+	bool toDelete;
 
 protected:
 
@@ -47,12 +52,8 @@ protected:
 	fMPoint localPosition;
 
 	SDL_Rect* box;
-	SDL_Texture* texture;
 	UI* parent;
 	UI_TYPE type;
-
-	bool toDelete;
-	bool started;
 
 	P2SString name;
 

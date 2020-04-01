@@ -92,7 +92,7 @@ void Module::OnCollision(Collider*, Collider*)
 }
 
 
-void Module::AddEvent(EVENT_ENUM& eventId)
+void Module::AddEvent(EVENT_ENUM eventId)
 {
 
 	listener.push_back(eventId);
@@ -100,7 +100,7 @@ void Module::AddEvent(EVENT_ENUM& eventId)
 }
 
 
-void Module::RemoveEvent(EVENT_ENUM& eventId)
+void Module::RemoveEvent(EVENT_ENUM eventId)
 {
 
 	int numElem = listener.size();
@@ -138,6 +138,6 @@ bool Module::CheckListener(Module* mod)
 }
 
 
-void Module::ExecuteEvent(EVENT_ENUM& eventId)
+void Module::ExecuteEvent(EVENT_ENUM eventId)
 {}
 

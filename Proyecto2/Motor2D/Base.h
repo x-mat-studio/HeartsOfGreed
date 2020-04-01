@@ -4,7 +4,6 @@
 #define __BASE_H__
 #include "Entity.h"
 #include "Building.h"
-#include "Entity.h"
 
 class Base
 {

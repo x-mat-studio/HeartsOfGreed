@@ -106,6 +106,18 @@
     <ClCompile Include="UI.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Text.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -228,6 +240,18 @@
     <ClInclude Include="UI.h">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -247,9 +271,6 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Timers">
       <UniqueIdentifier>{d8360410-638f-413b-af30-fd905b8a728e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Desenvolupament  ========\UIElements">
-      <UniqueIdentifier>{408d7c25-afc7-48f2-ac77-451e0deb6d48}</UniqueIdentifier>
     </Filter>
     <Filter Include="Desenvolupament  ========\Modules\header files">
       <UniqueIdentifier>{c667b984-02e3-4fdb-b108-c185daf0789e}</UniqueIdentifier>
@@ -286,6 +307,9 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\UI">
       <UniqueIdentifier>{ec289a4a-9544-4bd6-85ae-8b0b5e343719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\UI\UIElements">
+      <UniqueIdentifier>{408d7c25-afc7-48f2-ac77-451e0deb6d48}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -13,7 +13,7 @@ class Event {
 public:
 
 	Event();
-	Event(EVENT_ENUM& idValue, EVENT_ENUM& idTriggerValue);
+	Event(EVENT_ENUM idValue, EVENT_ENUM idTriggerValue);
 	~Event();
 
 	EVENT_ENUM id;
@@ -27,7 +27,7 @@ public:
 	ModuleEventManager();
 	virtual ~ModuleEventManager();
 
-	void GenerateEvent(EVENT_ENUM& eventId, EVENT_ENUM& eventTriggerId);
+	void GenerateEvent(EVENT_ENUM eventId, EVENT_ENUM eventTriggerId);
 	bool EventRegister(EVENT_ENUM event, Module* mod);
 	bool EventUnRegister(EVENT_ENUM event, Module* mod);
 
@@ -40,8 +40,8 @@ public:
 
 private:
 	void CreateEventOnMap(EVENT_ENUM event);
-	void FireEvent(EVENT_ENUM& eventId) const;
-	EVENT_ENUM CheckEventTrigger(EVENT_ENUM& eventTrigger) const;
+	void FireEvent(EVENT_ENUM eventId) const;
+	EVENT_ENUM CheckEventTrigger(EVENT_ENUM eventTrigger) const;
 	int FindListener(EVENT_ENUM event,Module*mod);
 	std::vector<Module*>::iterator EraseListener(EVENT_ENUM event, Module* mod, int vecId);
 

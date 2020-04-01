@@ -41,7 +41,7 @@ public:
 
 private:
 	
-	void ExecuteEvent(EVENT_ENUM& eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId) const;
 
 private:
 	int prevMousePosX;

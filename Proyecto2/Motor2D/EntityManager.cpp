@@ -1,5 +1,6 @@
 #include "App.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "Textures.h"
 #include "Entity.h"
 #include "Map.h"
@@ -512,7 +513,7 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 }
 
 
-void ModuleEntityManager::ExecuteEvent(EVENT_ENUM& eventId) const
+void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId) const
 {}
 
 

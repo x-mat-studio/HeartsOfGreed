@@ -189,5 +189,5 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 }
 
 
-void ModuleTestScene::ExecuteEvent(EVENT_ENUM& eventId) const
+void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId) const
 {}
