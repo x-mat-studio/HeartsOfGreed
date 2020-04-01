@@ -4,145 +4,106 @@
 	<enemy_folder>textures/enemy</enemy_folder>
 	<values aggro_range="600" delta_move="1" speed="0.04"></values>
 	<Animations>
-		<alien frames="9" name="alienFly">
+		<rightIdle frames="16" name="wanamingo_rightIdle">
 			<frame
-				rposX="0" rposY="0" rwidth="63" rheight="83"
+				rposX="3" rposY="59" rwidth="60" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="14" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="100" rposY="0" rwidth="63" rheight="83"
+				rposX="68" rposY="59" rwidth="62" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="16" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="200" rposY="0" rwidth="63" rheight="83"
+				rposX="136" rposY="59" rwidth="57" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="12" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="0" rposY="119" rwidth="63" rheight="83"
+				rposX="205" rposY="59" rwidth="52" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="8" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="100" rposY="119" rwidth="63" rheight="83"
+				rposX="274" rposY="59" rwidth="46" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="3" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="200" rposY="119" rwidth="63" rheight="83"
+				rposX="342" rposY="59" rwidth="42" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="1" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="0" rposY="238" rwidth="63" rheight="83"
+				rposX="410" rposY="59" rwidth="38" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="1" pivotY="54">
 			</frame>
 
 			<frame
-				rposX="100" rposY="238" rwidth="63" rheight="83"
+				rposX="476" rposY="59" rwidth="62" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="1" pivotY="50">
 			</frame>
 
 			<frame
-				rposX="200" rposY="238" rwidth="63" rheight="83"
+				rposX="542" rposY="59" rwidth="38" rheight="54"
 				time="5"
-				pivotX="0" pivotY="0">
+				pivotX="1" pivotY="50">
+			</frame>
+
+			<frame
+				rposX="608" rposY="59" rwidth="38" rheight="54"
+				time="5"
+				pivotX="1" pivotY="51">
+			</frame>
+
+			<frame
+				rposX="673" rposY="59" rwidth="39" rheight="54"
+				time="5"
+				pivotX="1" pivotY="54">
+			</frame>
+
+			<frame
+				rposX="740" rposY="59" rwidth="38" rheight="54"
+				time="5"
+				pivotX="0" pivotY="54">
+			</frame>
+
+			<frame
+				rposX="806" rposY="59" rwidth="38" rheight="54"
+				time="5"
+				pivotX="0" pivotY="54">
+			</frame>
+
+			<frame
+				rposX="872" rposY="59" rwidth="38" rheight="54"
+				time="5"
+				pivotX="0" pivotY="54">
+			</frame>
+
+			<frame
+				rposX="937" rposY="59" rwidth="40" rheight="54"
+				time="5"
+				pivotX="2" pivotY="54">
+			</frame>
+
+			<frame
+				rposX="997" rposY="59" rwidth="52" rheight="54"
+				time="5"
+				pivotX="8" pivotY="54">
 			</frame>
 
 		</alien>
 
-		<walkingAlien frames="13" name="alienRun">
-			<frame
-				rposX="0" rposY="0" rwidth="135" rheight="90"
-				time="5"
-				pivotX="48" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="142" rposY="3" rwidth="134" rheight="87"
-				time="5"
-				pivotX="54" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="283" rposY="4" rwidth="134" rheight="86"
-				time="5"
-				pivotX="57" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="423" rposY="0" rwidth="134" rheight="90"
-				time="5"
-				pivotX="61" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="0" rposY="108" rwidth="133" rheight="90"
-				time="5"
-				pivotX="48" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="142" rposY="108" rwidth="133" rheight="90"
-				time="5"
-				pivotX="42" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="283" rposY="110" rwidth="132" rheight="88"
-				time="5"
-				pivotX="35" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="423" rposY="110" rwidth="132" rheight="88"
-				time="5"
-				pivotX="42" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="0" rposY="218" rwidth="132" rheight="88"
-				time="5"
-				pivotX="49" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="142" rposY="218" rwidth="133" rheight="88"
-				time="5"
-				pivotX="53" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="283" rposY="218" rwidth="133" rheight="88"
-				time="5"
-				pivotX="56" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="423" rposY="216" rwidth="133" rheight="90"
-				time="5"
-				pivotX="53" pivotY="0">
-			</frame>
-
-			<frame
-				rposX="0" rposY="328" rwidth="135" rheight="88"
-				time="5"
-				pivotX="50" pivotY="0">
-			</frame>
-
-
-
-		</walkingAlien>
+		
 	</Animations>
 
   </enemy>
