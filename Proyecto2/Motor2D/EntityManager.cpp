@@ -259,6 +259,16 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;
+	case ENTITY_TYPE::ENEMY:
+	{
+		//Collider colEnemy(SDL_Rect{ 0,0,0,0 }, COLLIDER_TYPE::COLLIDER_ENEMY);
+		//ret = new Enemy({ (float)x,(float)y }, ENTITY_TYPE::ENEMY,colEnemy,nullptr,100,100,100,100,100,100,100,100);
+		//I need animation and collidr pls
+	}
+		break;
+
+	default:
+		break;
 	}
 
 	if (ret != nullptr)

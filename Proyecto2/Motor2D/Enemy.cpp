@@ -130,6 +130,22 @@ bool Enemy::MoveTo(int x, int y)
 }
 
 
+Enemy* Enemy::Clone()
+{
+	return new Enemy(this->position, this);
+}
+
+Enemy* Enemy::Clone(fMPoint positionToBe)
+{
+	return  new Enemy(positionToBe, this);
+}
+
+Enemy* Enemy::Clone(int x, int y)
+{
+	fMPoint newPos(x,y);
+	return  new Enemy(newPos, this);
+}
+
 
 void Enemy::OnCollision(Collider* collider)
 {
