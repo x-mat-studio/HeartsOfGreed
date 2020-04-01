@@ -123,14 +123,17 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::HERO_MELEE:
 				entityVector[i]->Start(armorMaleTexture);
+				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_CREATED, EVENT_ENUM::NULL_EVENT);
 				break;
 
 			case ENTITY_TYPE::HERO_RANGED:
 				entityVector[i]->Start(combatFemaleTexture);
+				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
 				break;
 
 			case ENTITY_TYPE::HERO_GATHERER:
 				entityVector[i]->Start(suitManTexture);
+				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
 				break;
 
 			case ENTITY_TYPE::ENEMY:
@@ -411,15 +414,16 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 {
 	int numEntities = entityVector.size();
 
-	float posX;
-	float posY;
+	float posX, posY, w, h;
 
 	for (int i = 0; i < numEntities; i++)
 	{
 		posX = entityVector[i]->GetPosition().x;
 		posY = entityVector[i]->GetPosition().y;
+		w = entityVector[i]->GetCollider()->rect.w;
+		h = entityVector[i]->GetCollider()->rect.h;
 
-		if (app->map->InsideCamera(posX, posY) == true) {
+		if (app->map->EntityInsideCamera(posX, posY, w, h) == true) {
 
 			assert((int)ENTITY_TYPE::MAX_TYPE == 14);
 			switch (entityVector[i]->GetType())

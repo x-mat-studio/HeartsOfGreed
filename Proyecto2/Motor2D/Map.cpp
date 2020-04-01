@@ -632,6 +632,24 @@ bool ModuleMap::InsideCamera(float& posX, float& posY) const {
 	}
 }
 
+bool ModuleMap::EntityInsideCamera(float& posX, float& posY, float& w, float& h) const {
+
+	int camW;
+	int camH;
+	app->render->GetCameraMeasures(camW, camH);
+	float scale = app->win->GetScale();
+
+	float up_left_cam_cornerX = -app->render->currentCamX;
+	float up_left_cam_cornerY = -app->render->currentCamY;
+	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
+	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
+
+	if ((posX + w > (up_left_cam_cornerX - (data.tileWidth * scale)) / scale && posX < down_right_cam_cornerX / scale) &&
+		((posY + h > (up_left_cam_cornerY - (data.tileWidth * scale)) / scale) && posY < down_right_cam_cornerY / scale)) {
+		return true;
+	}
+}
+
 bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 {
 	bool ret = false;

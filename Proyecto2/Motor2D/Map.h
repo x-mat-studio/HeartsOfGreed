@@ -121,6 +121,7 @@ public:
 	iMPoint MapToWorld(int x, int y) const;
 	iMPoint WorldToMap(int x, int y) const;
 	bool InsideCamera(float& posX, float& posY) const;
+	bool EntityInsideCamera(float& posX, float& posY, float& w, float& h) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
 
 private:

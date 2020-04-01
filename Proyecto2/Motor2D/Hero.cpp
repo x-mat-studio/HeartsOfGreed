@@ -308,6 +308,20 @@ void Hero::Attack()
 void Hero::Die()
 {
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
+
+	switch (type)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_OUT, EVENT_ENUM::NULL_EVENT);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_OUT, EVENT_ENUM::NULL_EVENT);
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_OUT, EVENT_ENUM::NULL_EVENT);
+		break;
+	}
+
 	toDelete = true;
 }
 

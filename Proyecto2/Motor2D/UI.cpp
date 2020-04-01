@@ -52,7 +52,8 @@ bool UI::PostUpdate(float dt, SDL_Texture* texture)
 
 void UI::Draw(SDL_Texture* texture)
 {
-	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box);
+
+	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, '\000', false, false);
 
 }
 
