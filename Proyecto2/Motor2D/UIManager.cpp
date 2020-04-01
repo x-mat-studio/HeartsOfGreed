@@ -27,9 +27,9 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_ON_BATTLE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_ON_BATTLE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_ON_BATTLE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_CREATED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_CREATED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_CREATED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
@@ -155,19 +155,19 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 
-	case EVENT_ENUM::HERO_MELEE_ON_BATTLE:
+	case EVENT_ENUM::HERO_MELEE_CREATED:
 
 		AddUIElement(fMPoint (1180 * app->win->GetScale(), 60 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(889, 201, 100, 78), (P2SString)"meleeHeroMark", false);
 		AddUIElement(fMPoint(1183 * app->win->GetScale(), 65 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(776, 206, 94, 73), (P2SString)"meleeHero", false);
 
 		break;
-	case EVENT_ENUM::HERO_GATHERER_ON_BATTLE:
+	case EVENT_ENUM::HERO_GATHERER_CREATED:
 		
 		AddUIElement(fMPoint(1180 * app->win->GetScale(), 60 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(889, 201, 100, 78), (P2SString)"gathererHeroMark", false);
 		AddUIElement(fMPoint(1183 * app->win->GetScale(), 165 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(486, 206, 94, 73), (P2SString)"gathererHero", false);
 		
 		break;
-	case EVENT_ENUM::HERO_RANGED_ON_BATTLE:
+	case EVENT_ENUM::HERO_RANGED_CREATED:
 		
 		AddUIElement(fMPoint(1180 * app->win->GetScale(), 60 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(889, 201, 100, 78), (P2SString)"rangedHeroMark", false);
 		AddUIElement(fMPoint(1183 * app->win->GetScale(), 265 * app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, &RectConstructor(204, 206, 94, 73), (P2SString)"rangedHero", false);

@@ -162,8 +162,19 @@ void Enemy::Attack()
 
 void Enemy::Die()
 {
+	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 	toDelete = true;
 }
+
+
+void Enemy::CheckObjecive(Entity* entity)
+{
+	if (shortTermObjective == entity)
+	{
+		shortTermObjective == nullptr;
+	}
+}
+
 
 
 void Enemy::RecoverHealth()
