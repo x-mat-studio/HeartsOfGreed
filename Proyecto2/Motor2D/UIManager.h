@@ -33,6 +33,7 @@ private:
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 	void ExecuteEvent(EVENT_ENUM eventId);
+	void CreateBasicUI();
 
 private:
 

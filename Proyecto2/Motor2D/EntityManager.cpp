@@ -123,14 +123,17 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::HERO_MELEE:
 				entityVector[i]->Start(armorMaleTexture);
+				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_CREATED, EVENT_ENUM::NULL_EVENT);
 				break;
 
 			case ENTITY_TYPE::HERO_RANGED:
 				entityVector[i]->Start(combatFemaleTexture);
+				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
 				break;
 
 			case ENTITY_TYPE::HERO_GATHERER:
 				entityVector[i]->Start(suitManTexture);
+				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
 				break;
 
 			case ENTITY_TYPE::ENEMY:

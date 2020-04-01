@@ -46,10 +46,7 @@ bool ModuleUIManager::Start()
 
 	atlas = app->tex->Load("spritesheets/atlas.png");
 
-	// THIS SHOULDN'T GO HERE; IT'S FOR TESTIN; TODO
-	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_CREATED, EVENT_ENUM::NULL_EVENT);
-	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
-	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
+	CreateBasicUI();
 
 	return ret;
 }
@@ -164,26 +161,26 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::HERO_MELEE_CREATED:
 		
-		rect = RectConstructor(889, 201, 100, 78);
+		rect = RectConstructor(643, 145, 72, 56);
 		AddUIElement(fMPoint (w / app->win->GetScale() - rect.w, 60 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHeroMark", false);
-		rect = RectConstructor(776, 206, 94, 73); 
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero", false);
+		rect = RectConstructor(561, 149, 68, 52); 
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero", false);
 
 		break;
 	case EVENT_ENUM::HERO_GATHERER_CREATED:
 		
-		rect = RectConstructor(889, 201, 100, 78);
+		rect = RectConstructor(643, 145, 72, 56);
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark", false);
-		rect = RectConstructor(486, 206, 94, 73);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 60 / app->win->GetScale() + rect.h + 12), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero", false);
+		rect = RectConstructor(351, 149, 68, 52);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h + 11), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero", false);
 		
 		break;
 	case EVENT_ENUM::HERO_RANGED_CREATED:
 		
-		rect = RectConstructor(889, 201, 100, 78);
+		rect = RectConstructor(643, 145, 72, 56);
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + 2 * rect.h + 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHeroMark", false);
-		rect = RectConstructor(204, 206, 94, 73);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 3, 60 / app->win->GetScale() + 2 * rect.h + 22), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHero", false);
+		rect = RectConstructor(147, 149, 68, 52);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + 2 * rect.h + 20), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHero", false);
 		
 		break;
 	case EVENT_ENUM::HERO_MELEE_OUT:
@@ -197,6 +194,19 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	}
+}
+
+void ModuleUIManager::CreateBasicUI()
+{
+
+	SDL_Rect rect;
+	uint w(app->win->width), h(app->win->height);
+
+	rect = RectConstructor(221, 317, 162, 174);
+	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground", false);
+	rect = RectConstructor(449, 24, 24, 24);
+	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseButton", false);
+
 }
 
 SDL_Rect ModuleUIManager::RectConstructor(int x, int y, int w, int h)

@@ -146,7 +146,7 @@ void ModuleRender::ResetViewPort()
 
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, bool fliped, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, bool fliped, bool cameraUse, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
 	camera.x = currentCamX;
 	camera.y = currentCamY;
@@ -154,8 +154,16 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	float scale = app->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speedX) + x * scale;
-	rect.y = (int)(camera.y * speedY) + y * scale;
+	
+	if (cameraUse == true) {
+		rect.x = (int)(camera.x * speedX) + x * scale;
+		rect.y = (int)(camera.y * speedY) + y * scale;
+	}
+	else
+	{
+		rect.x = (int) x * scale;
+		rect.y = (int) y * scale;
+	}
 
 	if (alpha != 0)
 	{
