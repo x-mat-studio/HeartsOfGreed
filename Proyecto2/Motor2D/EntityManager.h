@@ -72,7 +72,7 @@ private:
 	void SpriteOrdering(float dt);
 	void EntityQuickSort(std::vector<Entity*>& vector, int low, int high);
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
-	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building, float dt) const;
+	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
 private:
 
