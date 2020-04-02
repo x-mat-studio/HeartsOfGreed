@@ -468,7 +468,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 		else
 		{
-			pivotEnum = CheckSpriteHeight(movableEntityVector.front(), buildingVector.front(), dt);
+			pivotEnum = CheckSpriteHeight(movableEntityVector.front(), buildingVector.front());
 		}
 
 		switch (pivotEnum)
@@ -526,7 +526,7 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 	for (int i = low + 1; i < high; i++)
 	{
-		if (vector[i] < pivot)	// HERE YOU COMPARE THEIR PIVOT POINT'S HEIGHT, NOT THE ELEMENT
+		if (vector[i]->GetPosition().y + (float)vector[i]->GetCollider()->rect.h <= pivot->GetPosition().y + (float)pivot->GetCollider()->rect.h)
 		{
 			auxVec = vector[i];
 			vector[i] = vector[left];
@@ -592,15 +592,16 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 
 }
 
-SPRITE_POSITION ModuleEntityManager:: CheckSpriteHeight(Entity* movEntity, Entity* building, float dt) const
+SPRITE_POSITION ModuleEntityManager:: CheckSpriteHeight(Entity* movEntity, Entity* building) const
 {
 	
-	if (movEntity->GetPosition().y + movEntity->GetAnimationRect(dt).h < building->GetPosition().y)
+	if (movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y)
 	{
 		return SPRITE_POSITION::HIGHER_THAN_BUILDING;
 	}
 
-	else if (movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetAnimationRect(dt).h > building->GetPosition().y)
+	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
+		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
