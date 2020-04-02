@@ -178,14 +178,20 @@ bool Hero::Update(float dt)
 		break;
 
 	case HERO_STATES::ATTACK:
-		Attack();
-		attackCooldown += dt;
+		
+		if (attackCooldown == 0)
+		{
+			Attack();
+			attackCooldown += dt;
 
-		currentAnimation = &walkRight;
-		inputs.push_back(IN_CHARGING_ATTACK);
+			currentAnimation = &walkRight;
+		}
+		
+		inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
+		currentAnimation = &idleLeftDown;
 		break;
 
 	case HERO_STATES::SKILL1:
@@ -304,7 +310,7 @@ void Hero::CheckAttackRange()
 
 	fMPoint point = objective->GetPosition();
 
-	int distance = abs(abs(point.x) + abs(point.y) - (abs(position.x) + abs(position.y)));
+	int distance = abs(abs(point.x) + abs(point.y) - (abs(position.x) + abs(position.y))); //TODO, THIS ISNT CORRECT, MUST SOLVE
 
 	if (distance < attackRange)
 	{
@@ -478,8 +484,8 @@ void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 }
 
 
-HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
-
+HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) 
+{
 	HERO_INPUTS lastInput;
 
 	while (inputs.empty() == false)

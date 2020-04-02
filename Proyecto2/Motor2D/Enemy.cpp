@@ -5,10 +5,10 @@
 #include "Textures.h"
 #include "Render.h"
 
-Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate, 
+Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	Entity(position, type, collider),
+	DynamicEntity(position, type, collider, 10, 20),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -23,7 +23,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	xpOnDeath(xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
-	
+
 	attackCharged(true),
 	haveOrders(false),
 
@@ -33,7 +33,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 
 Enemy::Enemy(fMPoint position, Enemy* copy) :
 
-	Entity(position, copy->type, copy->collider),
+	DynamicEntity(position, copy->type, copy->collider, copy->moveRange1, copy->moveRange2),
 	animation(copy->animation),
 
 	hitPoints(copy->hitPoints),
@@ -74,44 +74,42 @@ bool Enemy::PreUpdate(float dt)
 
 bool Enemy::Update(float dt)
 {
-	ENEMY_STATES current_state = ENEMY_STATES::UNKNOWN;
-	//current_animation = &idle;
 
 	//check inputs to traverse state matrix
 	externalInput(inputs, dt);
 	internalInput(inputs, dt);
 	state = processFsm(inputs);
 
-	if (state != current_state)
+	switch (state)
 	{
-		switch (state)
+	case ENEMY_STATES::IDLE:
+
+		break;
+
+	case ENEMY_STATES::MOVE:
+		Move();
+		break;
+
+	case ENEMY_STATES::ATTACK:
+		if (attackCooldown == 0)
 		{
-		case ENEMY_STATES::IDLE:
-
-			break;
-
-		case ENEMY_STATES::MOVE:
-			Move();
-			break;
-
-		case ENEMY_STATES::ATTACK:
 			Attack();
 			attackCooldown += dt;
-			break;
 
-		case ENEMY_STATES::CHARGING_ATTACK:
-			break;
-
-		case ENEMY_STATES::DEAD:
-			Die();
-			break;
 		}
-	}
-	current_state = state;
+		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
+		break;
 
+	case ENEMY_STATES::CHARGING_ATTACK:
+		break;
+
+	case ENEMY_STATES::DEAD:
+		Die();
+		break;
+	}
 
 	collider->SetPos((int)position.x, (int)position.y);
-	
+
 	return true;
 }
 
@@ -126,9 +124,13 @@ bool Enemy::PostUpdate(float dt)
 bool Enemy::MoveTo(int x, int y)
 {
 	//do pathfinding, if it works return true
+	if (GeneratePath(x, y))
+	{
+		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
+		return true;
+	}
 
-	inputs.push_back(ENEMY_INPUTS::IN_MOVE);
-	return true;
+	return false;
 }
 
 
@@ -144,7 +146,7 @@ Enemy* Enemy::Clone(fMPoint positionToBe)
 
 Enemy* Enemy::Clone(int x, int y)
 {
-	fMPoint newPos(x,y);
+	fMPoint newPos(x, y);
 	return  new Enemy(newPos, this);
 }
 
@@ -162,12 +164,6 @@ void Enemy::OnCollision(Collider* collider)
 void Enemy::Draw(float dt)
 {
 	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
-}
-
-
-void Enemy::Move()
-{
-	//Put logic to move the unit to the desired destination
 }
 
 
@@ -239,7 +235,7 @@ bool Enemy::CheckAttackRange()
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
 		return false;
-	}	
+	}
 }
 
 
@@ -284,7 +280,6 @@ bool Enemy::externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 ENEMY_STATES Enemy::processFsm(std::vector<ENEMY_INPUTS>& inputs)
 {
-	static ENEMY_STATES state = ENEMY_STATES::IDLE;
 	ENEMY_INPUTS lastInput;
 
 	while (inputs.empty() == false)

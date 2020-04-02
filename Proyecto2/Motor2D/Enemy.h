@@ -3,7 +3,7 @@
 #ifndef __ENEMY_H__
 #define __ENEMY_H__
 
-#include "Entity.h"
+#include "DynamicEntity.h"
 #include "Animation.h"
 
 enum class ENEMY_STATES
@@ -38,7 +38,7 @@ enum class ENEMY_INPUTS
 };
 
 
-class Enemy : public Entity
+class Enemy : public DynamicEntity
 {
 public:
 
@@ -73,7 +73,6 @@ private:
 
 	void Draw(float dt);
 
-	void Move();
 	void Attack();
 	void Die();
 
@@ -110,6 +109,7 @@ private:
 
 	ENEMY_STATES state;
 	std::vector<ENEMY_INPUTS> inputs;
+	Animation* currentAnimation;
 
 };
 

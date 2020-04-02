@@ -55,7 +55,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 200, 20, 20, 20, 20, 20, 20, 15, 15, 15);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 100, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 60, 1, 5, 5, 5, 0);
