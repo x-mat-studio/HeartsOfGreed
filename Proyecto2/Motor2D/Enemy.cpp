@@ -109,6 +109,8 @@ bool Enemy::Update(float dt)
 	}
 	current_state = state;
 
+
+	collider->SetPos((int)position.x, (int)position.y);
 	
 	return true;
 }

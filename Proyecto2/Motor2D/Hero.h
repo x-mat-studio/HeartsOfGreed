@@ -83,7 +83,7 @@ private:
 
 	void Draw(float dt);
 
-	bool CheckRange(int maxDistance);
+	void CheckAttackRange();
 	void Attack();
 	void Die();
 
@@ -151,7 +151,9 @@ public:
 
 	bool skillFromAttacking;
 	HERO_STATES state;
+
 	std::vector<HERO_INPUTS> inputs;
+	Animation *currentAnimation;
 };
 
 

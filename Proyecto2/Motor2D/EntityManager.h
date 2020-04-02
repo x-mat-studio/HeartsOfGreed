@@ -10,6 +10,7 @@
 class Hero;
 class Building;
 class DynamicEntity;
+class Enemy;
 
 enum class SPRITE_POSITION
 {
@@ -91,7 +92,12 @@ private:
 	SDL_Texture* base1Texture;
 	SDL_Texture* base2Texture;
 
+	SDL_Texture* enemyTexture;
+
 	Hero* sampleMelee;
+
+	Enemy* sampleEnemy;
+
 	Building* testBuilding;
 	Building* blueBuilding;
 

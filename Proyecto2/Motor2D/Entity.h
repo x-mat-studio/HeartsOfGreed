@@ -58,6 +58,8 @@ public:
 	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
+	virtual bool DealDamage(int damage);
+
 	fMPoint GetPosition();
 	SDL_Rect GetAnimationRect(float dt);
 	ENTITY_TYPE GetType();
@@ -65,6 +67,7 @@ public:
 	void SetAlignment(ENTITY_ALIGNEMENT newAlign = ENTITY_ALIGNEMENT::UNKNOWN);
 
 	void SetToDelete(bool toDelete);
+
 
 protected:
 	virtual void Draw(float dt);

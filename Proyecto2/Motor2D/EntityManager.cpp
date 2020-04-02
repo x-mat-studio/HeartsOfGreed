@@ -51,10 +51,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
 
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
+	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
 
 	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 20, 20, 20, 20, 20, 20, 20, 15, 15, 15);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 200, 20, 20, 20, 20, 20, 20, 15, 15, 15);
+
+
+	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 60, 1, 5, 5, 5, 0);
 
 
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
@@ -62,9 +66,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Test Hero
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x+64, pos.y);
+	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
+	
 
 	AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
+
+	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
 
 	return ret;
 }
@@ -78,6 +85,8 @@ bool ModuleEntityManager::Start()
 	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
 	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
 	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
+
+	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
 
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
@@ -137,6 +146,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::ENEMY:
+				entityVector[i]->Start(enemyTexture);
 				break;
 
 			case ENTITY_TYPE::BUILDING:
@@ -172,8 +182,6 @@ bool ModuleEntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	bool ret = true;
-
 	CheckListener(this);
 
 	int numEntities = entityVector.size();
@@ -184,7 +192,7 @@ bool ModuleEntityManager::Update(float dt)
 		entityVector[i]->Update(dt);
 	}
 
-	return ret;
+	return true;
 }
 
 // Called each loop iteration
@@ -237,37 +245,41 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 	{
 	case ENTITY_TYPE::PARTICLE:
 		break;
+
 	case ENTITY_TYPE::EMITER:
 		break;
+
 	case ENTITY_TYPE::PARTICLE_SYSTEM:
 		break;
+
 	case ENTITY_TYPE::HERO_MELEE:
-	{
 		ret = new Hero({ (float)x,(float)y }, sampleMelee);
-	}
-	break;
+		break;
+
 	case ENTITY_TYPE::HERO_RANGED:
 		break;
+
 	case ENTITY_TYPE::HERO_GATHERER:
 		break;
+
 	case ENTITY_TYPE::BUILDING:
-	{
 		ret = new Building({ (float)x,(float)y }, testBuilding);
-	}
+		break;
+
 	case ENTITY_TYPE::BLDG_TURRET:
 		break;
+
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 		break;
+
 	case ENTITY_TYPE::BLDG_BASE:
 		break;
+
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;
+
 	case ENTITY_TYPE::ENEMY:
-	{
-		//Collider colEnemy(SDL_Rect{ 0,0,0,0 }, COLLIDER_TYPE::COLLIDER_ENEMY);
-		//ret = new Enemy({ (float)x,(float)y }, ENTITY_TYPE::ENEMY,colEnemy,nullptr,100,100,100,100,100,100,100,100);
-		//I need animation and collidr pls
-	}
+		ret = new Enemy({ (float)x,(float)y }, sampleEnemy);
 		break;
 
 	default:

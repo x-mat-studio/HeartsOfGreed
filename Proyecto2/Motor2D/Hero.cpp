@@ -41,7 +41,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	movementSpeed(movementSpeed),
 	vision(vision),
 
-	attackCooldown(attackCooldown),
+	attackCooldown(0),
 	skill1ExecutionTime(skill1ExecutionTime),
 	skill2ExecutionTime(skill2ExecutionTime),
 	skill3ExecutionTime(skill3ExecutionTime),
@@ -65,7 +65,9 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	state(HERO_STATES::IDLE),
 
 	objective(nullptr)
-{}
+{
+	currentAnimation = &walkLeft;
+}
 
 
 Hero::Hero(fMPoint position, Hero* copy) :
@@ -96,7 +98,7 @@ Hero::Hero(fMPoint position, Hero* copy) :
 	movementSpeed(copy->movementSpeed),
 	vision(copy->vision),
 
-	attackCooldown(copy->attackCooldown),
+	attackCooldown(0),
 	skill1ExecutionTime(copy->skill1ExecutionTime),
 	skill2ExecutionTime(copy->skill2ExecutionTime),
 	skill3ExecutionTime(copy->skill3ExecutionTime),
@@ -120,7 +122,9 @@ Hero::Hero(fMPoint position, Hero* copy) :
 	state(HERO_STATES::IDLE),
 
 	objective(nullptr)
-{}
+{
+	currentAnimation = &walkLeft;
+}
 
 
 Hero::~Hero()
@@ -153,60 +157,62 @@ bool Hero::PreUpdate(float dt)
 
 bool Hero::Update(float dt)
 {
-	HERO_STATES current_state = HERO_STATES::UNKNOWN;
-	//current_animation = &idle;
 
 	//check inputs to traverse state matrix
 	externalInput(inputs, dt);
 	internalInput(inputs, dt);
 	state = processFsm(inputs);
 
-	if (state != current_state)
+
+	switch (state)
 	{
-		switch (state)
-		{
-		case HERO_STATES::IDLE:
+	case HERO_STATES::IDLE:
+		currentAnimation = &walkLeft;
+		break;
 
-			break;
+	case HERO_STATES::MOVE:
+		currentAnimation = &walkLeft;
+		Move();
 
-		case HERO_STATES::MOVE:
-			Move();
-			break;
+		CheckAttackRange();
+		break;
 
-		case HERO_STATES::ATTACK:
-			Attack();
-			attackCooldown += dt;
-			break;
+	case HERO_STATES::ATTACK:
+		Attack();
+		attackCooldown += dt;
 
-		case HERO_STATES::CHARGING_ATTACK:
-			break;
+		currentAnimation = &walkRight;
+		inputs.push_back(IN_CHARGING_ATTACK);
+		break;
 
-		case HERO_STATES::SKILL1:
-			UseHability1();
-			cooldownHability1 += dt;
-			break;
+	case HERO_STATES::CHARGING_ATTACK:
+		break;
 
-		case HERO_STATES::SKILL2:
-			UseHability2();
-			cooldownHability2 += dt;
-			break;
+	case HERO_STATES::SKILL1:
+		UseHability1();
+		cooldownHability1 += dt;
+		break;
 
-		case HERO_STATES::SKILL3:
-			UseHability3();
-			cooldownHability3 += dt;
-			break;
+	case HERO_STATES::SKILL2:
+		UseHability2();
+		cooldownHability2 += dt;
+		break;
 
-		case HERO_STATES::REPAIR:
-			break;
+	case HERO_STATES::SKILL3:
+		UseHability3();
+		cooldownHability3 += dt;
+		break;
 
-		case HERO_STATES::DEAD:
-			Die();
-			break;
+	case HERO_STATES::REPAIR:
+		break;
 
+	case HERO_STATES::DEAD:
+		Die();
+		break;
 
-		}
 	}
-	current_state = state;
+
+	state;
 
 
 	collider->SetPos((int)position.x, (int)position.y);
@@ -228,6 +234,7 @@ bool Hero::PostUpdate(float dt)
 bool Hero::MoveTo(int x, int y)
 {
 	//do pathfinding, if it works return true
+	objective = nullptr;
 
 	if (GeneratePath(x, y))
 	{
@@ -245,12 +252,12 @@ bool Hero::LockOn(Entity* entity)
 
 	if (type == ENTITY_TYPE::ENEMY)
 	{
-		objective = entity;
 		MoveTo(entity->GetPosition().x, entity->GetPosition().y);
+		objective = entity;
 
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -283,23 +290,39 @@ void Hero::LevelUp()
 
 void Hero::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &walkLeft.GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));
 }
 
 
-bool Hero::CheckRange(int maxDistance)
+void Hero::CheckAttackRange()
 {
 	//check if the maxDistance is equal or bigger than the actual distance between the objective and the unit 
+	if (objective == nullptr)
+	{
+		return;
+	}
+
+	fMPoint point = objective->GetPosition();
+
+	int distance = abs(abs(point.x) + abs(point.y) - (abs(position.x) + abs(position.y)));
+
+	if (distance < attackRange)
+	{
+		inputs.push_back(HERO_INPUTS::IN_ATTACK);
+	}
+
+	else
+	{
+		inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
+	}
 
 
-
-	return true;
 }
 
 
 void Hero::Attack()
 {
-	//i have to think about this one
+
 
 
 }
@@ -379,7 +402,7 @@ void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
 	if (attackCooldown > 0)
 	{
-		if (attackCooldown >= attackSpeed)
+		if (attackCooldown >= attackSpeed * 10)
 		{
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
@@ -407,7 +430,7 @@ void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		{
 			skill1Charged = true;
 		}
-		
+
 		cooldownHability1 += dt;
 	}
 
@@ -456,7 +479,7 @@ void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 
 
 HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
-	static HERO_STATES state = HERO_STATES::IDLE;
+
 	HERO_INPUTS lastInput;
 
 	while (inputs.empty() == false)
@@ -513,6 +536,8 @@ HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
 			{
 			case HERO_INPUTS::IN_CHARGING_ATTACK:state = HERO_STATES::CHARGING_ATTACK;			 break;
 
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;								 break;
+
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
@@ -560,7 +585,7 @@ HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
 					state = HERO_STATES::IDLE;
 
 				skillFromAttacking = false;
-																			break;
+				break;
 			}
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
@@ -584,7 +609,7 @@ HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
 					state = HERO_STATES::IDLE;
 
 				skillFromAttacking = false;
-																			break;
+				break;
 			}
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
@@ -607,7 +632,7 @@ HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) {
 					state = HERO_STATES::IDLE;
 
 				skillFromAttacking = false;
-																			break;
+				break;
 			}
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;

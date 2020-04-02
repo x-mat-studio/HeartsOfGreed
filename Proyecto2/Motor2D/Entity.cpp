@@ -176,3 +176,10 @@ SDL_Rect Entity::GetAnimationRect(float dt)
 		return current_animation->GetCurrentFrameBox(dt);
 	}
 }
+
+
+bool Entity::DealDamage(int damage)
+{
+
+	return false;
+}
