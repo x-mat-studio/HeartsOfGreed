@@ -536,8 +536,8 @@ void ModuleMap::MapToWorldCoords(int posX, int posY, MapData& dat, float& outX, 
 //isometric world to map
 void ModuleMap::WorldToMapCoords(int x, int y, MapData& dat, int& outX, int& outY) const
 {
-	outX = round((x / (dat.tileWidth * 0.5f) + y / (dat.tileHeight * 0.5f)) * 0.5f);
-	outY = round((y / (dat.tileHeight * 0.5f) - (x / (dat.tileWidth * 0.5f))) * 0.5f);
+	outX = int((x / (dat.tileWidth * 0.5f) + y / (dat.tileHeight * 0.5f)) * 0.5f);
+	outY = int((y / (dat.tileHeight * 0.5f) - (x / (dat.tileWidth * 0.5f))) * 0.5f);
 }
 
 
@@ -560,8 +560,8 @@ iMPoint ModuleMap::WorldToMap(int x, int y) const
 	float halWidth = data.tileWidth * 0.5f;
 	float halfHeight = data.tileHeight * 0.5f;
 
-	ret.x = int((x / halWidth + y / halfHeight) / 2);
-	ret.y = int((y / halfHeight - (x / halWidth)) / 2);
+	ret.x = round((x / halWidth + y / halfHeight) * 0.5f);
+	ret.y = round((y / halfHeight - (x / halWidth)) * 0.5f);
 
 	return ret;
 }
