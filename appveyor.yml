@@ -3,7 +3,7 @@ build:
   verbosity: minimal
   
 after_build:
-- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Release\Motor2D.exe"
+- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Debug\Motor2D.exe"
 - 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Game"
 - 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
 
