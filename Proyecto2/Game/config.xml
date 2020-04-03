@@ -70,11 +70,7 @@
 	<Animations>
 		<idle frames="6" name="idle">
 
-			<frame
-				rposX="550" rposY="200" rwidth="20" rheight="49"
-				time="5"
-				pivotX="5" pivotY="34">
-			</frame>
+			<frame rposX="550" rposY="200" rwidth="20" rheight="49" time="5" pivotX="5" pivotY="34"/>
 
 			<frame
 				rposX="0" rposY="0" rwidth="20" rheight="48"
@@ -570,11 +566,7 @@
 
         <walk_left name="walk_left" frames="9">
 
-          <frame
-              rposX="55" rposY="286" rwidth="20" rheight="66"
-              time="20"
-              pivotX="0" pivotY="0">
-          </frame>
+          <frame rposX="55" rposY="286" rwidth="20" rheight="66" time="20" pivotX="0" pivotY="0"/>
 
           <frame
              rposX="94" rposY="286" rwidth="23" rheight="66"
