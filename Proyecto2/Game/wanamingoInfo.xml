@@ -118,6 +118,96 @@
 			<frame rposX="1006" rposY="280" rwidth="33" rheight="52" time="5" pivotX="11" pivotY="52"/>
 		</wanamingoUpLeftIdle>
 
+		<wanamingoUpRightPunch frames="12" name="wanamingoUpRightIdle">
+			<frame rposX="684" rposY="675" rwidth="63" rheight="70" time="5" pivotX="33" pivotY="64"/>
+			<frame rposX="773" rposY="675" rwidth="60" rheight="70" time="5" pivotX="27" pivotY="64"/>
+			<frame rposX="848" rposY="675" rwidth="86" rheight="70" time="5" pivotX="50" pivotY="64"/>
+			<frame rposX="944" rposY="675" rwidth="71" rheight="70" time="5" pivotX="18" pivotY="64"/>
+			<frame rposX="1040" rposY="675" rwidth="55" rheight="70" time="5" pivotX="19" pivotY="64"/>
+			<frame rposX="1129" rposY="675" rwidth="53" rheight="70" time="5" pivotX="19" pivotY="64"/>
+			<frame rposX="1218" rposY="675" rwidth="50" rheight="70" time="5" pivotX="18" pivotY="64"/>
+			<frame rposX="1302" rposY="675" rwidth="58" rheight="70" time="5" pivotX="29" pivotY="64"/>
+			<frame rposX="1387" rposY="675" rwidth="65" rheight="70" time="5" pivotX="39" pivotY="64"/>
+			<frame rposX="1478" rposY="675" rwidth="59" rheight="70" time="5" pivotX="38" pivotY="64"/>
+			<frame rposX="1571" rposY="675" rwidth="49" rheight="70" time="5" pivotX="30" pivotY="64"/>
+			<frame rposX="1659" rposY="675" rwidth="49" rheight="70" time="5" pivotX="29" pivotY="64"/>
+		</wanamingoUpRightPunch>
+
+		<wanamingoRightPunch frames="12" name="wanamingoRightPunch">
+			<frame rposX="682" rposY="760" rwidth="66" rheight="57" time="5" pivotX="20" pivotY="43"/>
+			<frame rposX="771" rposY="760" rwidth="65" rheight="57" time="5" pivotX="23" pivotY="43"/>
+			<frame rposX="860" rposY="760" rwidth="63" rheight="57" time="5" pivotX="14" pivotY="43"/>
+			<frame rposX="950" rposY="760" rwidth="58" rheight="57" time="5" pivotX="0" pivotY="43"/>
+			<frame rposX="1035" rposY="760" rwidth="65" rheight="57" time="5" pivotX="0" pivotY="43"/>
+			<frame rposX="1123" rposY="760" rwidth="64" rheight="57" time="5" pivotX="0" pivotY="43"/>
+			<frame rposX="1213" rposY="760" rwidth="60" rheight="57" time="5" pivotX="0" pivotY="43"/>
+			<frame rposX="1304" rposY="760" rwidth="55" rheight="57" time="5" pivotX="0" pivotY="43"/>
+			<frame rposX="1394" rposY="760" rwidth="50" rheight="57" time="5" pivotX="0" pivotY="43"/>
+			<frame rposX="1481" rposY="760" rwidth="53" rheight="57" time="5" pivotX="7" pivotY="43"/>
+			<frame rposX="1566" rposY="760" rwidth="55" rheight="57" time="5" pivotX="14" pivotY="43"/>
+			<frame rposX="1654" rposY="760" rwidth="59" rheight="57" time="5" pivotX="14" pivotY="43"/>
+		</wanamingoRightPunch>
+
+		<wanamingoDownRightPunch frames="12" name="wanamingoDownRightPunch">
+			<frame rposX="678" rposY="846" rwidth="75" rheight="43" time="5" pivotX="29" pivotY="52"/>
+			<frame rposX="773" rposY="846" rwidth="60" rheight="43" time="5" pivotX="11" pivotY="52"/>
+			<frame rposX="853" rposY="846" rwidth="77" rheight="43" time="5" pivotX="26" pivotY="52"/>
+			<frame rposX="941" rposY="846" rwidth="76" rheight="43" time="5" pivotX="8" pivotY="52"/>
+			<frame rposX="1042" rposY="846" rwidth="50" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1126" rposY="846" rwidth="58" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1211" rposY="846" rwidth="65" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1300" rposY="846" rwidth="62" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1393" rposY="846" rwidth="52" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1489" rposY="846" rwidth="36" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1579" rposY="846" rwidth="32" rheight="43" time="5" pivotX="0" pivotY="52"/>
+			<frame rposX="1667" rposY="846" rwidth="32" rheight="43" time="5" pivotX="0" pivotY="52"/>
+		</wanamingoDownRightPunch>
+
+		<wanamingoDownLeftPunch frames="12" name="wanamingoDownLeftPunch">
+			<frame rposX="684" rposY="918" rwidth="63" rheight="43" time="5" pivotX="26" pivotY="52"/>
+			<frame rposX="773" rposY="918" rwidth="61" rheight="43" time="5" pivotX="30" pivotY="52"/>
+			<frame rposX="849" rposY="918" rwidth="85" rheight="43" time="5" pivotX="34" pivotY="52"/>
+			<frame rposX="947" rposY="918" rwidth="64" rheight="43" time="5" pivotX="44" pivotY="52"/>
+			<frame rposX="1040" rposY="918" rwidth="55" rheight="43" time="5" pivotX="35" pivotY="52"/>
+			<frame rposX="1129" rposY="918" rwidth="52" rheight="43" time="5" pivotX="32" pivotY="52"/>
+			<frame rposX="1219" rposY="918" rwidth="49" rheight="43" time="5" pivotX="29" pivotY="52"/>
+			<frame rposX="1302" rposY="918" rwidth="59" rheight="43" time="5" pivotX="27" pivotY="52"/>
+			<frame rposX="1387" rposY="918" rwidth="65" rheight="43" time="5" pivotX="23" pivotY="52"/>
+			<frame rposX="1477" rposY="918" rwidth="61" rheight="43" time="5" pivotX="20" pivotY="52"/>
+			<frame rposX="1571" rposY="918" rwidth="48" rheight="43" time="5" pivotX="17" pivotY="52"/>
+			<frame rposX="1659" rposY="918" rwidth="48" rheight="43" time="5" pivotX="17" pivotY="52"/>
+		</wanamingoDownLeftPunch>
+
+		<wanamingoLeftPunch frames="12" name="wanamingoLeftPunch">
+			<frame rposX="682" rposY="982" rwidth="67" rheight="52" time="5" pivotX="45" pivotY="34"/>
+			<frame rposX="771" rposY="982" rwidth="64" rheight="52" time="5" pivotX="41" pivotY="34"/>
+			<frame rposX="860" rposY="982" rwidth="62" rheight="52" time="5" pivotX="47" pivotY="34"/>
+			<frame rposX="950" rposY="982" rwidth="58" rheight="52" time="5" pivotX="58" pivotY="34"/>
+			<frame rposX="1035" rposY="982" rwidth="64" rheight="52" time="5" pivotX="64" pivotY="34"/>
+			<frame rposX="1123" rposY="982" rwidth="64" rheight="52" time="5" pivotX="64" pivotY="34"/>
+			<frame rposX="1213" rposY="982" rwidth="60" rheight="52" time="5" pivotX="60" pivotY="34"/>
+			<frame rposX="1303" rposY="982" rwidth="56" rheight="52" time="5" pivotX="55" pivotY="34"/>
+			<frame rposX="1394" rposY="982" rwidth="50" rheight="52" time="5" pivotX="50" pivotY="34"/>
+			<frame rposX="1480" rposY="982" rwidth="54" rheight="52" time="5" pivotX="54" pivotY="34"/>
+			<frame rposX="1566" rposY="982" rwidth="59" rheight="52" time="5" pivotX="59" pivotY="34"/>
+			<frame rposX="1654" rposY="982" rwidth="59" rheight="52" time="5" pivotX="59" pivotY="34"/>
+		</wanamingoLeftPunch>
+
+		<wanamingoUpLeftPunch frames="12" name="wanamingoUpLeftPunch">
+			<frame rposX="679" rposY="1039" rwidth="73" rheight="65" time="5" pivotX="46" pivotY="53"/>
+			<frame rposX="773" rposY="1039" rwidth="60" rheight="65" time="5" pivotX="48" pivotY="53"/>
+			<frame rposX="853" rposY="1039" rwidth="77" rheight="65" time="5" pivotX="50" pivotY="53"/>
+			<frame rposX="941" rposY="1039" rwidth="77" rheight="65" time="5" pivotX="67" pivotY="53"/>
+			<frame rposX="1042" rposY="1039" rwidth="51" rheight="65" time="5" pivotX="48" pivotY="53"/>
+			<frame rposX="1126" rposY="1039" rwidth="58" rheight="65" time="5" pivotX="56" pivotY="53"/>
+			<frame rposX="1211" rposY="1039" rwidth="64" rheight="65" time="5" pivotX="62" pivotY="53"/>
+			<frame rposX="1299" rposY="1039" rwidth="64" rheight="65" time="5" pivotX="62" pivotY="53"/>
+			<frame rposX="1392" rposY="1039" rwidth="55" rheight="65" time="5" pivotX="53" pivotY="53"/>
+			<frame rposX="1489" rposY="1039" rwidth="36" rheight="65" time="5" pivotX="34" pivotY="53"/>
+			<frame rposX="1579" rposY="1039" rwidth="32" rheight="65" time="5" pivotX="30" pivotY="53"/>
+			<frame rposX="1667" rposY="1039" rwidth="32" rheight="65" time="5" pivotX="33" pivotY="53"/>
+		</wanamingoUpLeftPunch>
+
 	</Animations>
 
   </enemy>
