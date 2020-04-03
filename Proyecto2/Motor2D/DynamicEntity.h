@@ -19,9 +19,9 @@ public:
 
 	bool GeneratePath(int x, int y);
 	void DebugDraw();
+	virtual void OnCollision(Collider* collider) {};
 
 public:
-	int pathToFollow;
 	bool isMoving;
 
 	//used for moving close entities to have an smooth group movement

@@ -9,7 +9,7 @@
 #include "Window.h"
 
 DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
-	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), pathToFollow(0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
+	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
 {}
 
 DynamicEntity::~DynamicEntity()
@@ -78,14 +78,14 @@ bool DynamicEntity::Move()
 		alignmentSpeed.y = 0;
 	}
 
-	// ---------------------------------------------------------------- 
+	// ----------------------------------------------------------------- 
 
 	speed += pathSpeed + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
 
 	// ------------------------------------------------------------------
 
-	position.x += (speed.x) * 0.25;
-	position.y += (speed.y) * 0.25;
+	position.x += (speed.x);
+	position.y += (speed.y);
 
 	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 5  && abs(position.y - nextPoint.y) <= 5)
 	{
@@ -228,7 +228,6 @@ bool DynamicEntity::GeneratePath(int x, int y)
 		path.clear();
 		app->pathfinding->SavePath(&path);
 		path.erase(path.begin());
-		pathToFollow = 1;
 		return true;
 	}
 
@@ -237,6 +236,16 @@ bool DynamicEntity::GeneratePath(int x, int y)
 
 void DynamicEntity::DebugDraw()
 {
+	//Position --------------------------------------
+	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
+
+	fMPoint nextPoint = { 0,0 };
+	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
+	origin = app->map->MapToWorld(origin.x, origin.y);
+
+	app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
+
+
 	// Debug pathfinding ------------------------------
 
 	if (!app->debugMode)

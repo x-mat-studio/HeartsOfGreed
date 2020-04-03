@@ -131,6 +131,10 @@ void Enemy::StateMachine()
 		Die();
 		break;
 	}
+
+	CollisionPosUpdate();
+
+	return true;
 }
 
 
@@ -185,7 +189,7 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
 }
 
 

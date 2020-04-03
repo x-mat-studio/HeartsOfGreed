@@ -72,7 +72,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	void OnCollision(Collider* collider);
+	virtual void OnCollision(Collider* collider);
 
 	virtual bool UseHability1();
 	virtual bool UseHability2();
