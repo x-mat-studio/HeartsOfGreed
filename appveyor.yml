@@ -8,4 +8,15 @@ after_build:
 - 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
 
 artifacts:
-  - path: HoDfromAppVeyor.zip 
+  - path: HoGfromAppVeyor.zip 
+
+
+## notifications:
+ ## - provider: Email
+ ##   to:
+ ##     - racso2516@gmail.com
+ ##  subject: 'Build Success {{buildVersion}}'
+  ##  message: "Build Compiles"
+  ##  on_build_success: true
+  ##  on_build_failure: false
+  ##  on_build_status_changed: false
