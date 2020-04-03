@@ -98,8 +98,10 @@ private:
 	int movementSpeed;
 	int xpOnDeath;
 
-	bool attackCharged;
 	float attackCooldown;
+
+	int framesPerPathfinding = 20;
+	int framePathfindingCount = 0;
 
 	bool haveOrders;
 	Entity* shortTermObjective;
