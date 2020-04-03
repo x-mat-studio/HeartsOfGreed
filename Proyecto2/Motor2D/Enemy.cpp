@@ -133,8 +133,6 @@ void Enemy::StateMachine()
 	}
 
 	CollisionPosUpdate();
-
-	return true;
 }
 
 
