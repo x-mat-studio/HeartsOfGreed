@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
-<entity_info>
-	<enemy>
-	<enemy_folder>textures/enemy</enemy_folder>
-	<values aggro_range="600" delta_move="1" speed="0.04"></values>
+<wanamingo>
+
 	<Animations>
+
 		<wanamingoUpRightIdle frames="16" name="wanamingoUpRightIdle">
 			<frame rposX="8" rposY="5" rwidth="50" rheight="53" time="5" pivotX="31" pivotY="53"/>
 			<frame rposX="73" rposY="5" rwidth="51" rheight="53" time="5" pivotX="31" pivotY="53"/>
@@ -210,5 +209,4 @@
 
 	</Animations>
 
-  </enemy>
-</entity_info>
+</wanamingo>

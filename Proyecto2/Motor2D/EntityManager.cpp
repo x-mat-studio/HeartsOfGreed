@@ -53,8 +53,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
 	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
 	Animation idleLeft = idleLeft.PushAnimation(suitman, "idle_left");
-	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_right_up");
-	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_right_down");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
 
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
