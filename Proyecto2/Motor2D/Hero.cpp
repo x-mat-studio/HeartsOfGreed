@@ -164,7 +164,6 @@ bool Hero::Update(float dt)
 	internalInput(inputs, dt);
 	state = processFsm(inputs);
 
-
 	switch (state)
 	{
 	case HERO_STATES::IDLE:
@@ -234,6 +233,7 @@ bool Hero::PostUpdate(float dt)
 
 	if (app->debugMode)
 		DebugDraw();
+
 	return true;
 }
 
@@ -299,12 +299,7 @@ void Hero::Draw(float dt)
 {
 	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
 
-	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
 
-	fMPoint nextPoint = { 0,0 };
-	app->map->MapToWorldCoords(origin.x, origin.y, app->map->data, nextPoint.x, nextPoint.y);
-
-	app->render->DrawQuad({ (int)nextPoint.x, (int)nextPoint.y, 20,20}, 255, 0, 0);
 }
 
 

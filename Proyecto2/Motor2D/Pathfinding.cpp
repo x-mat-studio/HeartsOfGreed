@@ -155,7 +155,8 @@ int ModulePathfinding::CreatePath(const iMPoint& origin, const iMPoint& destinat
 {
 	BROFILER_CATEGORY("Pathfinding", Profiler::Color::Gold);
 
-	if (IsWalkable(origin) == false || IsWalkable(destination) == false) {
+	if (IsWalkable(destination) == false) 
+	{
 		return -1;
 	}
 

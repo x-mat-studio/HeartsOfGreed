@@ -83,7 +83,7 @@ bool Entity::PostUpdate(float dt)
 
 void Entity::OnCollision(Collider* collider)
 {
-	LOG("Yeeet :D");
+	
 }
 
 void Entity::CollisionPosUpdate()
