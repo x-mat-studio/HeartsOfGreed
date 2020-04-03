@@ -310,7 +310,11 @@ void Hero::CheckAttackRange()
 
 	fMPoint point = objective->GetPosition();
 
-	int distance = abs(abs(point.x) + abs(point.y) - (abs(position.x) + abs(position.y))); //TODO, THIS ISNT CORRECT, MUST SOLVE
+	int distanceX = abs(position.x - point.x);
+	int distanceY = abs(position.y - point.y);
+
+
+	int distance = distanceX + distanceY;
 
 	if (distance < attackRange)
 	{
@@ -408,78 +412,78 @@ void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
 	if (attackCooldown > 0)
 	{
+		attackCooldown += dt;
+
 		if (attackCooldown >= attackSpeed * 10)
 		{
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
 		}
-
-		attackCooldown += dt;
 	}
 
 
 	if (skill1TimePassed > 0)
 	{
+		skill1TimePassed += dt;
+
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0;
 		}
-
-		skill1TimePassed += dt;
 	}
 
 
 	if (cooldownHability1 > 0)
 	{
+		cooldownHability1 += dt;
+
 		if (cooldownHability1 >= skill1RecoverTime)
 		{
 			skill1Charged = true;
 		}
-
-		cooldownHability1 += dt;
 	}
 
 	if (skill2TimePassed > 0)
 	{
+		skill2TimePassed += dt;
+
 		if (skill2TimePassed >= skill2ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill2TimePassed = 0;
 		}
-
-		skill2TimePassed += dt;
 	}
 
 	if (cooldownHability2 > 0)
 	{
+		cooldownHability2 += dt;
+
 		if (cooldownHability2 >= skill2RecoverTime)
 		{
 			skill2Charged = true;
 		}
-
-		cooldownHability2 += dt;
 	}
 
 	if (skill3TimePassed > 0)
 	{
+		skill3TimePassed += dt;
+
 		if (skill3TimePassed >= skill3ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill3TimePassed = 0;
 		}
-
-		skill3TimePassed += dt;
 	}
 
 	if (cooldownHability3 > 0)
 	{
+		cooldownHability3 += dt;
+
 		if (cooldownHability3 >= skill3RecoverTime)
 		{
 			skill3Charged = true;
 		}
-
-		cooldownHability3 += dt;
 	}
 }
 

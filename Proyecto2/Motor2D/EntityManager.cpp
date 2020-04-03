@@ -58,7 +58,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 100, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 60, 1, 5, 5, 5, 0);
+	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 250, 1, 120, 25, 5, 0);
 
 
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
@@ -69,9 +69,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
 	
 
-	AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
+	//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
 
-	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
+	AddEntity(ENTITY_TYPE::ENEMY, 180, 650);
 
 	return ret;
 }
