@@ -11,6 +11,7 @@ class Hero;
 class Building;
 class DynamicEntity;
 class Enemy;
+class Spawner;
 
 enum class SPRITE_POSITION
 {
@@ -97,6 +98,8 @@ private:
 	Hero* sampleMelee;
 
 	Enemy* sampleEnemy;
+
+	Spawner* testSpawner;
 
 	Building* testBuilding;
 	Building* blueBuilding;

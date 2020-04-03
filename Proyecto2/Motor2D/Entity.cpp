@@ -14,7 +14,6 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
 	toDelete(false),
 	collider(nullptr),
 	flip(false),
-	current_animation(nullptr),
 	texture(nullptr),
 	offset {0,0},
 	dynamic(dynamic)
@@ -29,7 +28,6 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dyna
 	toDelete(false),
 	collider(collider),
 	flip(false),
-	current_animation(nullptr),
 	texture(nullptr),
 	offset{ 0,0 },
 	dynamic(dynamic)
@@ -100,10 +98,9 @@ Collider* Entity::GetCollider() const
 }
 
 
-void Entity::Draw(float dt)
-{
-	app->render->Blit(texture, round(position.x - offset.x), round(position.y -offset.y), &current_animation->GetCurrentFrameBox(dt));
-}
+
+void Entity::Draw()
+{}
 
 
 fMPoint Entity::GetPosition()
@@ -162,23 +159,6 @@ void Entity::SetToDelete(bool toDel)
 	if (toDel != toDelete)
 	{
 		toDelete = !toDelete;
-	}
-}
-
-SDL_Rect Entity::GetAnimationRect(float dt)
-{
-	if (current_animation == NULL)
-	{
-		SDL_Rect rec;
-		rec.x = 0;
-		rec.y = 0;
-		rec.w = 0;
-		rec.h = 0;
-		return rec;
-	}
-	else
-	{
-		return current_animation->GetCurrentFrameBox(dt);
 	}
 }
 

@@ -8,7 +8,8 @@
 #include "Render.h"
 
 DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
-	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), pathToFollow(0), isMoving(false), Entity(position, type, collider, true) {}
+	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), pathToFollow(0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
+{}
 
 DynamicEntity::~DynamicEntity()
 {}
@@ -261,3 +262,23 @@ void DynamicEntity::DebugDraw()
 		app->render->Blit(debugTex, pos.x, pos.y);
 	}
 }
+
+SDL_Rect DynamicEntity::GetAnimationRect(float dt)
+{
+	if (current_animation == NULL)
+	{
+		SDL_Rect rec;
+		rec.x = 0;
+		rec.y = 0;
+		rec.w = 0;
+		rec.h = 0;
+		return rec;
+	}
+	else
+	{
+		return current_animation->GetCurrentFrameBox(dt);
+	}
+}
+
+void DynamicEntity::Draw(float dt)
+{}
