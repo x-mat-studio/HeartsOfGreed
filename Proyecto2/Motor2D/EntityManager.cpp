@@ -9,6 +9,7 @@
 #include "MeleeHero.h"
 #include "RangedHero.h"
 #include "Enemy.h"
+#include "Spawner.h"
 #include "Building.h"
 #include "DynamicEntity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -37,18 +38,23 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	fMPoint pos;
 	pos.create(100, 600);
 
-	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
-	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
-	Animation walkLeftDown = walkLeftDown.PushAnimation(config.child("suitmale"), "walk_left_down");
-	Animation walkRightUp = walkRightUp.PushAnimation(config.child("suitmale"), "walk_right_up");
-	Animation walkRightDown = walkRightDown.PushAnimation(config.child("suitmale"), "walk_right_down");
-	Animation walkRight = walkRight.PushAnimation(config.child("suitmale"), "walk_right");
-	Animation idleRight = idleRight.PushAnimation(config.child("suitmale"), "idle_right");
-	Animation idleRightUp = idleRightUp.PushAnimation(config.child("suitmale"), "idle_right_up");
-	Animation idleRightDown = idleRightDown.PushAnimation(config.child("suitmale"), "idle_right_down");
-	Animation idleLeft = idleLeft.PushAnimation(config.child("suitmale"), "idle_left");
-	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
-	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
+	P2SString filename = config.child("load").attribute("docname").as_string();
+	pugi::xml_document suitmandoc;
+	suitmandoc.load_file(filename.GetString());
+	pugi::xml_node suitman = suitmandoc.child("suitman");
+
+	Animation walkLeft = walkLeft.PushAnimation(suitman, "walk_left");
+	Animation walkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
+	Animation walkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
+	Animation walkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
+	Animation walkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
+	Animation walkRight = walkRight.PushAnimation(suitman, "walk_right");
+	Animation idleRight = idleRight.PushAnimation(suitman, "idle_right");
+	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
+	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
+	Animation idleLeft = idleLeft.PushAnimation(suitman, "idle_left");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_right_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_right_down");
 
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
@@ -60,6 +66,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 60, 1, 5, 5, 5, 0);
 
+	testSpawner = new Spawner(sampleEnemy);
 
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
@@ -72,6 +79,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
 
 	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
+	
+
+	for (int i = 0; i < 5; i++) {
+		testSpawner->spawnEnemy(150 + 15*i, 650);
+	}
 
 	return ret;
 }
@@ -91,6 +103,8 @@ bool ModuleEntityManager::Start()
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
+
+	debugPathTexture = app->tex->Load("maps/path.png");
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
