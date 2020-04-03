@@ -160,11 +160,19 @@ bool Hero::Update(float dt)
 {
 
 	//check inputs to traverse state matrix
-	externalInput(inputs, dt);
-	internalInput(inputs, dt);
-	state = processFsm(inputs);
+	InternalInput(inputs, dt);
+	state = ProcessFsm(inputs);
+
+	StateMachine();
+
+	CollisionPosUpdate();
+
+	return true;
+}
 
 
+void Hero::StateMachine()
+{
 	switch (state)
 	{
 	case HERO_STATES::IDLE:
@@ -179,15 +187,15 @@ bool Hero::Update(float dt)
 		break;
 
 	case HERO_STATES::ATTACK:
-		
+
 		if (attackCooldown == 0)
 		{
 			Attack();
-			attackCooldown += dt;
+			attackCooldown += TIME_TRIGGER;
 
 			currentAnimation = &walkRight;
 		}
-		
+
 		inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 		break;
 
@@ -197,17 +205,17 @@ bool Hero::Update(float dt)
 
 	case HERO_STATES::SKILL1:
 		UseHability1();
-		cooldownHability1 += dt;
+		cooldownHability1 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL2:
 		UseHability2();
-		cooldownHability2 += dt;
+		cooldownHability2 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL3:
 		UseHability3();
-		cooldownHability3 += dt;
+		cooldownHability3 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::REPAIR:
@@ -218,13 +226,6 @@ bool Hero::Update(float dt)
 		break;
 
 	}
-
-	state;
-
-
-	CollisionPosUpdate();
-
-	return true;
 }
 
 
@@ -406,17 +407,8 @@ bool Hero::UseHability3()
 }
 
 
-//Capture all the inputs, dont exactly know how, but ill figure something out
-bool Hero::externalInput(std::vector<HERO_INPUTS>& inputs, float dt)
-{
-
-
-	return true;
-}
-
-
 //Here goes all timers
-void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
+void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
 	if (attackCooldown > 0)
 	{
@@ -496,7 +488,7 @@ void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 }
 
 
-HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) 
+HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs) 
 {
 	HERO_INPUTS lastInput;
 

@@ -74,10 +74,20 @@ bool Enemy::Update(float dt)
 {
 
 	//check inputs to traverse state matrix
-	externalInput(inputs, dt);
-	internalInput(inputs, dt);
-	state = processFsm(inputs);
+	ExternalInput(inputs, dt);
+	InternalInput(inputs, dt);
+	state = ProcessFsm(inputs);
 
+	StateMachine();
+
+	collider->SetPos((int)position.x, (int)position.y);
+
+	return true;
+}
+
+
+void Enemy::StateMachine()
+{
 	switch (state)
 	{
 	case ENEMY_STATES::IDLE:
@@ -108,7 +118,7 @@ bool Enemy::Update(float dt)
 		if (attackCooldown == 0)
 		{
 			Attack();
-			attackCooldown += dt;
+			attackCooldown += 0.1;
 		}
 
 		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
@@ -121,10 +131,6 @@ bool Enemy::Update(float dt)
 		Die();
 		break;
 	}
-
-	collider->SetPos((int)position.x, (int)position.y);
-
-	return true;
 }
 
 
@@ -267,7 +273,7 @@ bool Enemy::CheckAttackRange()
 }
 
 
-void Enemy::internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
+void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 {
 	if (attackCooldown > 0)
 	{
@@ -287,7 +293,7 @@ void Enemy::internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 }
 
 
-bool Enemy::externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
+bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 {
 	if (CheckAttackRange())
 	{
@@ -311,7 +317,7 @@ bool Enemy::externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 }
 
 
-ENEMY_STATES Enemy::processFsm(std::vector<ENEMY_INPUTS>& inputs)
+ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 {
 	ENEMY_INPUTS lastInput;
 

@@ -81,10 +81,11 @@ private:
 	bool SearchObjective();
 	bool CheckAttackRange();
 
-	void internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
-	bool externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
-	ENEMY_STATES processFsm(std::vector<ENEMY_INPUTS>& inputs);
+	void InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
+	bool ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
+	ENEMY_STATES ProcessFsm(std::vector<ENEMY_INPUTS>& inputs);
 
+	void StateMachine();
 private:
 
 	int hitPoints;
