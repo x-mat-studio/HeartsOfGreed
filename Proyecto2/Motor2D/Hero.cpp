@@ -4,6 +4,7 @@
 #include "Render.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "Map.h"
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -159,11 +160,19 @@ bool Hero::Update(float dt)
 {
 
 	//check inputs to traverse state matrix
-	externalInput(inputs, dt);
-	internalInput(inputs, dt);
-	state = processFsm(inputs);
+	InternalInput(inputs, dt);
+	state = ProcessFsm(inputs);
+
+	StateMachine();
+
+	CollisionPosUpdate();
+
+	return true;
+}
 
 
+void Hero::StateMachine()
+{
 	switch (state)
 	{
 	case HERO_STATES::IDLE:
@@ -178,15 +187,15 @@ bool Hero::Update(float dt)
 		break;
 
 	case HERO_STATES::ATTACK:
-		
+
 		if (attackCooldown == 0)
 		{
 			Attack();
-			attackCooldown += dt;
+			attackCooldown += TIME_TRIGGER;
 
 			currentAnimation = &walkRight;
 		}
-		
+
 		inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 		break;
 
@@ -196,17 +205,17 @@ bool Hero::Update(float dt)
 
 	case HERO_STATES::SKILL1:
 		UseHability1();
-		cooldownHability1 += dt;
+		cooldownHability1 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL2:
 		UseHability2();
-		cooldownHability2 += dt;
+		cooldownHability2 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL3:
 		UseHability3();
-		cooldownHability3 += dt;
+		cooldownHability3 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::REPAIR:
@@ -217,13 +226,6 @@ bool Hero::Update(float dt)
 		break;
 
 	}
-
-	state;
-
-
-	collider->SetPos((int)position.x, (int)position.y);
-
-	return true;
 }
 
 
@@ -233,6 +235,7 @@ bool Hero::PostUpdate(float dt)
 
 	if (app->debugMode)
 		DebugDraw();
+
 	return true;
 }
 
@@ -296,7 +299,9 @@ void Hero::LevelUp()
 
 void Hero::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
+
+
 }
 
 
@@ -310,7 +315,11 @@ void Hero::CheckAttackRange()
 
 	fMPoint point = objective->GetPosition();
 
-	int distance = abs(abs(point.x) + abs(point.y) - (abs(position.x) + abs(position.y))); //TODO, THIS ISNT CORRECT, MUST SOLVE
+	int distanceX = abs(position.x - point.x);
+	int distanceY = abs(position.y - point.y);
+
+
+	int distance = distanceX + distanceY;
 
 	if (distance < attackRange)
 	{
@@ -394,97 +403,88 @@ bool Hero::UseHability3()
 }
 
 
-//Capture all the inputs, dont exactly know how, but ill figure something out
-bool Hero::externalInput(std::vector<HERO_INPUTS>& inputs, float dt)
-{
-
-
-	return true;
-}
-
-
 //Here goes all timers
-void Hero::internalInput(std::vector<HERO_INPUTS>& inputs, float dt)
+void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
 	if (attackCooldown > 0)
 	{
+		attackCooldown += dt;
+
 		if (attackCooldown >= attackSpeed * 10)
 		{
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
 		}
-
-		attackCooldown += dt;
 	}
 
 
 	if (skill1TimePassed > 0)
 	{
+		skill1TimePassed += dt;
+
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0;
 		}
-
-		skill1TimePassed += dt;
 	}
 
 
 	if (cooldownHability1 > 0)
 	{
+		cooldownHability1 += dt;
+
 		if (cooldownHability1 >= skill1RecoverTime)
 		{
 			skill1Charged = true;
 		}
-
-		cooldownHability1 += dt;
 	}
 
 	if (skill2TimePassed > 0)
 	{
+		skill2TimePassed += dt;
+
 		if (skill2TimePassed >= skill2ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill2TimePassed = 0;
 		}
-
-		skill2TimePassed += dt;
 	}
 
 	if (cooldownHability2 > 0)
 	{
+		cooldownHability2 += dt;
+
 		if (cooldownHability2 >= skill2RecoverTime)
 		{
 			skill2Charged = true;
 		}
-
-		cooldownHability2 += dt;
 	}
 
 	if (skill3TimePassed > 0)
 	{
+		skill3TimePassed += dt;
+
 		if (skill3TimePassed >= skill3ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill3TimePassed = 0;
 		}
-
-		skill3TimePassed += dt;
 	}
 
 	if (cooldownHability3 > 0)
 	{
+		cooldownHability3 += dt;
+
 		if (cooldownHability3 >= skill3RecoverTime)
 		{
 			skill3Charged = true;
 		}
-
-		cooldownHability3 += dt;
 	}
 }
 
 
-HERO_STATES Hero::processFsm(std::vector<HERO_INPUTS>& inputs) 
+HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs) 
 {
 	HERO_INPUTS lastInput;
 

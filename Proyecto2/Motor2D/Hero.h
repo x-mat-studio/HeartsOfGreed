@@ -3,6 +3,8 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
+#define TIME_TRIGGER 0.001
+
 #include "Animation.h"
 #include "DynamicEntity.h"
 
@@ -70,7 +72,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	void OnCollision(Collider* collider);
+	virtual void OnCollision(Collider* collider);
 
 	virtual bool UseHability1();
 	virtual bool UseHability2();
@@ -90,9 +92,10 @@ private:
 	void RecoverHealth();
 	void RecoverEnergy();
 
-	void internalInput(std::vector<HERO_INPUTS>& inputs, float dt);
-	bool externalInput(std::vector<HERO_INPUTS>& inputs, float dt);
-	HERO_STATES processFsm(std::vector<HERO_INPUTS>& inputs);
+	void InternalInput(std::vector<HERO_INPUTS>& inputs, float dt);
+	HERO_STATES ProcessFsm(std::vector<HERO_INPUTS>& inputs);
+
+	void StateMachine();
 
 public:
 	int level;

@@ -8,7 +8,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, type, collider, 10, 20),
+	DynamicEntity(position, type, collider, 5, 10),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -24,7 +24,6 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
 
-	attackCharged(true),
 	haveOrders(false),
 
 	state(ENEMY_STATES::IDLE)
@@ -49,7 +48,6 @@ Enemy::Enemy(fMPoint position, Enemy* copy) :
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
 
-	attackCharged(true),
 	haveOrders(false),
 
 	state(ENEMY_STATES::IDLE)
@@ -76,10 +74,20 @@ bool Enemy::Update(float dt)
 {
 
 	//check inputs to traverse state matrix
-	externalInput(inputs, dt);
-	internalInput(inputs, dt);
-	state = processFsm(inputs);
+	ExternalInput(inputs, dt);
+	InternalInput(inputs, dt);
+	state = ProcessFsm(inputs);
 
+	StateMachine();
+
+	collider->SetPos((int)position.x, (int)position.y);
+
+	return true;
+}
+
+
+void Enemy::StateMachine()
+{
 	switch (state)
 	{
 	case ENEMY_STATES::IDLE:
@@ -87,16 +95,32 @@ bool Enemy::Update(float dt)
 		break;
 
 	case ENEMY_STATES::MOVE:
-		Move();
+
+		if (Move() == true)
+		{
+			if (shortTermObjective == nullptr)
+			{
+				inputs.push_back(ENEMY_INPUTS::IN_IDLE);
+			}
+			else
+			{
+				if (framePathfindingCount == framesPerPathfinding)
+				{
+					fMPoint pos = shortTermObjective->GetPosition();
+					MoveTo(pos.x, pos.y);
+				}
+			}
+		}
 		break;
 
 	case ENEMY_STATES::ATTACK:
+
 		if (attackCooldown == 0)
 		{
 			Attack();
-			attackCooldown += dt;
-
+			attackCooldown += 0.1;
 		}
+
 		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
 		break;
 
@@ -108,9 +132,7 @@ bool Enemy::Update(float dt)
 		break;
 	}
 
-	collider->SetPos((int)position.x, (int)position.y);
-
-	return true;
+	CollisionPosUpdate();
 }
 
 
@@ -124,6 +146,8 @@ bool Enemy::PostUpdate(float dt)
 bool Enemy::MoveTo(int x, int y)
 {
 	//do pathfinding, if it works return true
+	framePathfindingCount = 0;
+
 	if (GeneratePath(x, y))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
@@ -163,7 +187,7 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
 }
 
 
@@ -199,6 +223,8 @@ void Enemy::RecoverHealth()
 
 bool Enemy::SearchObjective()
 {
+	bool ret = false;
+
 	SDL_Rect rect;
 
 	rect.x = position.x - vision;
@@ -206,14 +232,17 @@ bool Enemy::SearchObjective()
 	rect.w = vision * 2;
 	rect.h = vision * 2;
 
-	shortTermObjective = app->entityManager->CheckEnemyObjective(&rect);
+	Entity* objective;
+	objective = app->entityManager->CheckEnemyObjective(&rect);
 
-	if (shortTermObjective != nullptr)
+	if (objective != nullptr && shortTermObjective != objective)
 	{
-		return true;
+		ret = true;
 	}
 
-	return false;
+	shortTermObjective = objective;
+
+	return ret;
 }
 
 
@@ -224,7 +253,14 @@ bool Enemy::CheckAttackRange()
 		return false;
 	}
 
-	int distance = abs(abs(shortTermObjective->GetPosition().x) + abs(shortTermObjective->GetPosition().y) - (abs(position.x) + abs(position.y)));
+
+	fMPoint point = shortTermObjective->GetPosition();
+
+	int distanceX = abs(position.x - point.x);
+	int distanceY = abs(position.y - point.y);
+
+
+	int distance = distanceX + distanceY;
 
 	if (distance < attackRange)
 	{
@@ -239,22 +275,27 @@ bool Enemy::CheckAttackRange()
 }
 
 
-void Enemy::internalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
+void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 {
 	if (attackCooldown > 0)
 	{
+		attackCooldown += dt;
+
 		if (attackCooldown >= attackSpeed)
 		{
-			attackCharged = true;
+			inputs.push_back(ENEMY_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
 		}
+	}
 
-		attackCooldown += dt;
+	if (framePathfindingCount < framesPerPathfinding)
+	{
+		framePathfindingCount++;
 	}
 }
 
 
-bool Enemy::externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
+bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 {
 	if (CheckAttackRange())
 	{
@@ -278,7 +319,7 @@ bool Enemy::externalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 }
 
 
-ENEMY_STATES Enemy::processFsm(std::vector<ENEMY_INPUTS>& inputs)
+ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 {
 	ENEMY_INPUTS lastInput;
 

@@ -6,9 +6,10 @@
 #include "TestScene.h"
 #include "Input.h"
 #include "Render.h"
+#include "Window.h"
 
 DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
-	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), pathToFollow(0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
+	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
 {}
 
 DynamicEntity::~DynamicEntity()
@@ -77,19 +78,16 @@ bool DynamicEntity::Move()
 		alignmentSpeed.y = 0;
 	}
 
-
-	// ---------------------------------------------------------------- 
+	// ----------------------------------------------------------------- 
 
 	speed += pathSpeed + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
 
 	// ------------------------------------------------------------------
 
-	position.x += (speed.x) * 1.5f;
-	position.y += (speed.y) *1.5f;
+	position.x += (speed.x);
+	position.y += (speed.y);
 
-	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
-
-	if (path.size() > 0 && origin.x == path[0].x && origin.y == path[0].y)
+	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 5  && abs(position.y - nextPoint.y) <= 5)
 	{
 		path.erase(path.begin());
 	}
@@ -220,16 +218,16 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 
 bool DynamicEntity::GeneratePath(int x, int y)
 {
-	int X, Y = 0;
+	iMPoint goal = { 0,0 };
 
-	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
-	app->map->WorldToMapCoords(x, y, app->map->data, X, Y);
+	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
+	goal = app->map->WorldToMap(x , y );
 
-	if (app->pathfinding->CreatePath(origin, { X-1,Y }) == 0)
+	if (app->pathfinding->CreatePath(origin, goal) == 0)
 	{
 		path.clear();
 		app->pathfinding->SavePath(&path);
-		pathToFollow = 1;
+		path.erase(path.begin());
 		return true;
 	}
 
@@ -238,6 +236,16 @@ bool DynamicEntity::GeneratePath(int x, int y)
 
 void DynamicEntity::DebugDraw()
 {
+	//Position --------------------------------------
+	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
+
+	fMPoint nextPoint = { 0,0 };
+	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
+	origin = app->map->MapToWorld(origin.x, origin.y);
+
+	app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
+
+
 	// Debug pathfinding ------------------------------
 
 	if (!app->debugMode)
@@ -247,17 +255,10 @@ void DynamicEntity::DebugDraw()
 
 	SDL_Texture* debugTex = app->entityManager->debugPathTexture;
 
-	int x, y;
-	app->input->GetMousePosition(x, y);
-	iMPoint p = app->map->MapToWorld(x, y);
-
-	app->render->Blit(debugTex, p.x, p.y);
-
 	std::vector<iMPoint>* path = &this->path;
-
 	for (std::vector<iMPoint>::iterator it = path->begin(); it != path->end(); ++it)
 	{
-		iMPoint pos = app->map->MapToWorld(it->x, it->y);
+		iMPoint pos = app->map->MapToWorld(it->x-1, it->y);
 		app->render->Blit(debugTex, pos.x, pos.y);
 	}
 }

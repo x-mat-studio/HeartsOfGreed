@@ -15,6 +15,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
 	collider(nullptr),
 	flip(false),
 	texture(nullptr),
+	offset {0,0},
 	dynamic(dynamic)
 {}
 
@@ -28,6 +29,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dyna
 	collider(collider),
 	flip(false),
 	texture(nullptr),
+	offset{ 0,0 },
 	dynamic(dynamic)
 {}
 
@@ -54,6 +56,9 @@ bool Entity::Start(SDL_Texture* texture)
 
 	started = true;
 
+	offset.x =  (float)collider->rect.w* 0.5f;
+	offset.y =  (float)collider->rect.h;
+
 	return true;
 }
 
@@ -78,12 +83,12 @@ bool Entity::PostUpdate(float dt)
 
 void Entity::OnCollision(Collider* collider)
 {
-	LOG("Yeeet :D");
+	
 }
 
 void Entity::CollisionPosUpdate()
 {
-	collider->SetPos(position.x, position.y);
+	collider->SetPos(position.x - offset.x, position.y - offset.y);
 }
 
 
@@ -91,6 +96,7 @@ Collider* Entity::GetCollider() const
 {
 	return collider;
 }
+
 
 
 void Entity::Draw()
