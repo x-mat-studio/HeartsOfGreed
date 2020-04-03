@@ -9,12 +9,13 @@ build:
 
 
 after_build:
-- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Release\Motor 2D.exe"
-- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Game"
-- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Release\Motor 2D.exe"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Game\*"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\LICENSE"
 
 artifacts:
-  - path: HoGfromAppVeyor.zip 
+  - path: HeartsOfGreed_Release.zip 
 
 
 ## notifications:
