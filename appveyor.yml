@@ -4,7 +4,6 @@ branches:
   - master
 skip_tags: true
 configuration: Release
-platform: x86
 build:
   verbosity: minimal
 
