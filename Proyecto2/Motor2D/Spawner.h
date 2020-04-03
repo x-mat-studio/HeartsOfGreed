@@ -15,7 +15,8 @@ public:
     Spawner(Enemy* prototype);
         
     Enemy* spawnEnemy();
-   
+    Enemy* spawnEnemy(fMPoint positionToBe);
+    Enemy* spawnEnemy(int x, int y);  
 
 private:
 

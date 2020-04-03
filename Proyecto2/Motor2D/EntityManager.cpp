@@ -9,6 +9,7 @@
 #include "MeleeHero.h"
 #include "RangedHero.h"
 #include "Enemy.h"
+#include "Spawner.h"
 #include "Building.h"
 #include "DynamicEntity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -60,6 +61,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 60, 1, 5, 5, 5, 0);
 
+	testSpawner = new Spawner(sampleEnemy);
 
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
@@ -72,6 +74,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
 
 	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
+	
+
+	for (int i = 0; i < 5; i++) {
+		testSpawner->spawnEnemy(150 + 15*i, 650);
+	}
 
 	return ret;
 }
