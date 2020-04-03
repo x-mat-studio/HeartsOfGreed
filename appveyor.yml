@@ -1,9 +1,9 @@
-version: 1.0.{build}
+version: 0.3.{build}
 build:
   verbosity: minimal
   
 after_build:
-- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Debug\Motor2D.exe"
+- 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Debug\Motor 2D.exe"
 - 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\Proyecto2\Game"
 - 7z a HoGfromAppVeyor.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
 
