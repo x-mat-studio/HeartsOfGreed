@@ -4,6 +4,7 @@
 #include "Render.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "Map.h"
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -221,7 +222,7 @@ bool Hero::Update(float dt)
 	state;
 
 
-	collider->SetPos((int)position.x, (int)position.y);
+	CollisionPosUpdate();
 
 	return true;
 }
@@ -296,7 +297,14 @@ void Hero::LevelUp()
 
 void Hero::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
+
+	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
+
+	fMPoint nextPoint = { 0,0 };
+	app->map->MapToWorldCoords(origin.x, origin.y, app->map->data, nextPoint.x, nextPoint.y);
+
+	app->render->DrawQuad({ (int)nextPoint.x, (int)nextPoint.y, 20,20}, 255, 0, 0);
 }
 
 

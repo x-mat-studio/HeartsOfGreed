@@ -70,7 +70,7 @@ public:
 
 
 protected:
-	virtual void Draw(float dt);
+	virtual void Draw();
 
 public:
 	bool started;
@@ -81,6 +81,7 @@ public:
 
 protected:
 	fMPoint position;
+	fMPoint offset;
 
 	ENTITY_TYPE type;
 	ENTITY_ALIGNEMENT align;
@@ -89,7 +90,6 @@ protected:
 
 	Collider* collider;
 
-	Animation* current_animation;
 };
 
 #endif//__ENTITY_H__

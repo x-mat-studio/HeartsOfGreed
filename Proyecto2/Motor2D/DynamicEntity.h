@@ -33,14 +33,20 @@ public:
 protected:
 
 	iMPoint origin, mouse;
+	Animation* current_animation;
 	std::vector <iMPoint> path;
 	std::vector<DynamicEntity*> closeEntityList;
 	std::vector<DynamicEntity*> collidingEntityList;
+
+protected:
+
+	void Draw(float dt);
 
 private:
 	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
 	fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
 	fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
+	SDL_Rect GetAnimationRect(float dt);
 
 };
 
