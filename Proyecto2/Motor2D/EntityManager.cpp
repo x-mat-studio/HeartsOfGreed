@@ -92,6 +92,8 @@ bool ModuleEntityManager::Start()
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
 
+	debugPathTexture = app->tex->Load("maps/path.png");
+
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
 	return ret;

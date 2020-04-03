@@ -557,11 +557,11 @@ iMPoint ModuleMap::WorldToMap(int x, int y) const
 {
 	iMPoint ret(0, 0);
 
-	float half_width = data.tileWidth * 0.5f;
-	float half_height = data.tileHeight * 0.5f;
+	float halWidth = data.tileWidth * 0.5f;
+	float halfHeight = data.tileHeight * 0.5f;
 
-	ret.x = int((x / half_width + y / half_height) / 2);
-	ret.y = int((y / half_height - (x / half_width)) / 2);
+	ret.x = int((x / halWidth + y / halfHeight) / 2);
+	ret.y = int((y / halfHeight - (x / halWidth)) / 2);
 
 	return ret;
 }

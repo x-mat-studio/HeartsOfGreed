@@ -81,6 +81,7 @@ public:
 
 protected:
 	fMPoint position;
+	fMPoint offset;
 
 	ENTITY_TYPE type;
 	ENTITY_ALIGNEMENT align;

@@ -84,9 +84,9 @@ bool DynamicEntity::Move()
 	// ------------------------------------------------------------------
 
 	position.x += (speed.x) * 1.5f;
-	position.y += (speed.y) *1.5f;
+	position.y += (speed.y) * 1.5f;
 
-	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
+	origin = app->map->WorldToMap(round(position.x), round(position.y));
 
 	if (path.size() > 0 && origin.x == path[0].x && origin.y == path[0].y)
 	{
@@ -221,13 +221,14 @@ bool DynamicEntity::GeneratePath(int x, int y)
 {
 	int X, Y = 0;
 
-	app->map->WorldToMapCoords(position.x, position.y, app->map->data, origin.x, origin.y);
+	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
 	app->map->WorldToMapCoords(x, y, app->map->data, X, Y);
 
-	if (app->pathfinding->CreatePath(origin, { X-1,Y }) == 0)
+	if (app->pathfinding->CreatePath(origin, { X,Y }) == 0)
 	{
 		path.clear();
 		app->pathfinding->SavePath(&path);
+		path.erase(path.begin());
 		pathToFollow = 1;
 		return true;
 	}
@@ -256,7 +257,7 @@ void DynamicEntity::DebugDraw()
 
 	for (std::vector<iMPoint>::iterator it = path->begin(); it != path->end(); ++it)
 	{
-		iMPoint pos = app->map->MapToWorld(it->x, it->y);
+		iMPoint pos = app->map->MapToWorld(it->x-1, it->y);
 		app->render->Blit(debugTex, pos.x, pos.y);
 	}
 }
