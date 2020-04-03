@@ -70,7 +70,7 @@ public:
 
 
 protected:
-	virtual void Draw(float dt);
+	virtual void Draw();
 
 public:
 	bool started;
@@ -89,7 +89,6 @@ protected:
 
 	Collider* collider;
 
-	Animation* current_animation;
 };
 
 #endif//__ENTITY_H__

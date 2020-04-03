@@ -38,18 +38,23 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	fMPoint pos;
 	pos.create(100, 600);
 
-	Animation walkLeft = walkLeft.PushAnimation(config.child("suitmale"), "walk_left");
-	Animation walkLeftUp = walkLeftUp.PushAnimation(config.child("suitmale"), "walk_left_up");
-	Animation walkLeftDown = walkLeftDown.PushAnimation(config.child("suitmale"), "walk_left_down");
-	Animation walkRightUp = walkRightUp.PushAnimation(config.child("suitmale"), "walk_right_up");
-	Animation walkRightDown = walkRightDown.PushAnimation(config.child("suitmale"), "walk_right_down");
-	Animation walkRight = walkRight.PushAnimation(config.child("suitmale"), "walk_right");
-	Animation idleRight = idleRight.PushAnimation(config.child("suitmale"), "idle_right");
-	Animation idleRightUp = idleRightUp.PushAnimation(config.child("suitmale"), "idle_right_up");
-	Animation idleRightDown = idleRightDown.PushAnimation(config.child("suitmale"), "idle_right_down");
-	Animation idleLeft = idleLeft.PushAnimation(config.child("suitmale"), "idle_left");
-	Animation idleLeftUp = idleLeftUp.PushAnimation(config.child("suitmale"), "idle_right_up");
-	Animation idleLeftDown = idleLeftDown.PushAnimation(config.child("suitmale"), "idle_right_down");
+	P2SString filename = config.child("load").attribute("docname").as_string();
+	pugi::xml_document suitmandoc;
+	suitmandoc.load_file(filename.GetString());
+	pugi::xml_node suitman = suitmandoc.child("suitman");
+
+	Animation walkLeft = walkLeft.PushAnimation(suitman, "walk_left");
+	Animation walkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
+	Animation walkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
+	Animation walkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
+	Animation walkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
+	Animation walkRight = walkRight.PushAnimation(suitman, "walk_right");
+	Animation idleRight = idleRight.PushAnimation(suitman, "idle_right");
+	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
+	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
+	Animation idleLeft = idleLeft.PushAnimation(suitman, "idle_left");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_right_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_right_down");
 
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
