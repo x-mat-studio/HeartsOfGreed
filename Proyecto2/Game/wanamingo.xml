@@ -207,6 +207,90 @@
 			<frame rposX="1667" rposY="1039" rwidth="32" rheight="65" time="5" pivotX="33" pivotY="53"/>
 		</wanamingoUpLeftPunch>
 
+<wanamingoUpRightWalk frames="15" name="wanamingoUpRightWalk">
+<frame rposX="1063" rposY="5" rwidth="49" rheight="53" time="5" pivotX="30" pivotY="8"/>
+<frame rposX="1128" rposY="5" rwidth="50" rheight="53" time="5" pivotX="30" pivotY="8"/>
+<frame rposX="1193" rposY="5" rwidth="50" rheight="53" time="5" pivotX="28" pivotY="8"/>
+<frame rposX="1256" rposY="5" rwidth="53" rheight="53" time="5" pivotX="28" pivotY="8"/>
+<frame rposX="1320" rposY="5" rwidth="55" rheight="53" time="5" pivotX="26" pivotY="8"/>
+<frame rposX="1384" rposY="5" rwidth="57" rheight="53" time="5" pivotX="23" pivotY="8"/>
+<frame rposX="1450" rposY="5" rwidth="56" rheight="53" time="5" pivotX="17" pivotY="8"/>
+<frame rposX="1518" rposY="5" rwidth="49" rheight="53" time="5" pivotX="8" pivotY="8"/>
+<frame rposX="1584" rposY="5" rwidth="48" rheight="53" time="5" pivotX="7" pivotY="8"/>
+<frame rposX="1649" rposY="5" rwidth="48" rheight="53" time="5" pivotX="9" pivotY="8"/>
+<frame rposX="1713" rposY="5" rwidth="50" rheight="53" time="5" pivotX="13" pivotY="8"/>
+<frame rposX="1777" rposY="5" rwidth="52" rheight="53" time="5" pivotX="16" pivotY="8"/>
+<frame rposX="1840" rposY="5" rwidth="56" rheight="53" time="5" pivotX="19" pivotY="8"/>
+<frame rposX="1903" rposY="5" rwidth="59" rheight="53" time="5" pivotX="22" pivotY="8"/>
+<frame rposX="1969" rposY="5" rwidth="57" rheight="53" time="5" pivotX="25" pivotY="8"/>
+</wanamingoUpRightWalk>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<wanamingoRightWalk frames="15" name="wanamingoUpRightWalk">
+</wanamingoRightWalk>
+
+<wanamingoDownRightWalk frames="15" name="wanamingoUpRightWalk">
+</wanamingoDownRightWalk>
+
+<wanamingoDownLeftWalk frames="15" name="wanamingoUpRightWalk">
+</wanamingoDownLeftWalk>
+
+<wanamingoLeftWalk frames="15" name="wanamingoUpRightWalk">
+</wanamingoLeftWalk>
+
+<wanamingoUpLeftWalk frames="15" name="wanamingoUpRightWalk">
+</wanamingoUpLeftWalk >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	</Animations>
 
 </wanamingo>
