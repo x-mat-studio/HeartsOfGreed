@@ -47,7 +47,7 @@ bool ModuleTestScene::Start()
 			app->pathfinding->SetMap(w, h, data);
 			RELEASE_ARRAY(data);
 		}
-		app->fowManager->CreateFoWMap(w, h);
+		app->fowManager->CreateFoWMap(app->map->data.width, app->map->data.height);
 		
 		fMPoint pos;
 		pos.create(100, 600);
