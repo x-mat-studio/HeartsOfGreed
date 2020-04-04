@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Audio.h"
 #include "Map.h"
+#include "Fonts.h"
 #include "Pathfinding.h"
 #include "FoWManager.h"
 #include "EntityManager.h"
@@ -166,6 +167,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 
 		ret = false;
 	}
+
 
 	return ret;
 }

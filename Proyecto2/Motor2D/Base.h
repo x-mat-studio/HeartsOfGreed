@@ -2,8 +2,14 @@
 
 #ifndef __BASE_H__
 #define __BASE_H__
-#include "Entity.h"
-#include "Building.h"
+
+#include "vector"
+class Turret;
+class Barricade;
+class Core;
+class UpgradeCenter;
+class Building;
+struct Collider;
 
 class Base
 {
@@ -24,11 +30,6 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
-
-	//Called when loading a save
-	bool Load(pugi::xml_node&);
-	//Called to save the game
-	bool Save(pugi::xml_node&) const;
 
 private:
 	

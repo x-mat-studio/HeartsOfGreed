@@ -121,6 +121,9 @@
     <ClCompile Include="Spawner.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
     <ClCompile Include="FoWManager.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
@@ -263,6 +266,9 @@
     </ClInclude>
     <ClInclude Include="Spawner.h">
       <Filter>Desenvolupament  ========\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
     <ClInclude Include="FoWManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>

@@ -2,12 +2,24 @@
 
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range) :
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, int hitPoints, int recoveryHitPointsRate , int xpOnDeath, int buildingCost , int transparency ) :
 
+	Building( position,  hitPoints,  recoveryHitPointsRate,  xpOnDeath,  buildingCost,  transparency,  collider),
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
 	attackSpeed(attackSpeed),
 	range(range)
+{}
+
+Turret::Turret(Turret* copy) :
+
+	turretLvl(copy->turretLvl),
+	attackDmg(copy->attackDmg),
+	attackSpeed(copy->attackSpeed),
+	range(copy->range),
+
+	//Building(fMPoint position, Building* copy)
+	Building(copy->position, copy) 
 {}
 
 
