@@ -20,6 +20,7 @@ public:
 	bool GeneratePath(int x, int y);
 	void DebugDraw();
 	virtual void OnCollision(Collider* collider) {};
+	void Draw(float dt);
 
 public:
 	bool isMoving;
@@ -37,10 +38,6 @@ protected:
 	std::vector <iMPoint> path;
 	std::vector<DynamicEntity*> closeEntityList;
 	std::vector<DynamicEntity*> collidingEntityList;
-
-protected:
-
-	void Draw(float dt);
 
 private:
 	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);

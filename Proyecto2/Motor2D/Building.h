@@ -54,6 +54,7 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void OnCollision(Collider* collider);
+	void Draw(float dt);
 
 private:
 	void ChangeBuildingState(BUILDING_STATE state);
@@ -62,7 +63,7 @@ private:
 	void RecoverHealth();
 
 	void Contruct();
-	void Draw(float dt);
+
 
 
 public:

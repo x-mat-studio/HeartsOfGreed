@@ -12,6 +12,7 @@ class Barricade : public Building
 public:
 
 	Barricade(int barricadeLvl);
+	Barricade(Barricade* copy);
 	~Barricade();
 
 

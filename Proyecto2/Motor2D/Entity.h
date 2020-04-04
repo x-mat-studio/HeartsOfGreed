@@ -5,6 +5,7 @@
 #include "Collision.h"
 #include "p2Point.h"
 #include "Animation.h"
+#include "FoWEntity.h"
 
 struct Collider;
 struct SDL_Texture;
@@ -67,10 +68,7 @@ public:
 	void SetAlignment(ENTITY_ALIGNEMENT newAlign = ENTITY_ALIGNEMENT::UNKNOWN);
 
 	void SetToDelete(bool toDelete);
-
-
-protected:
-	virtual void Draw();
+	virtual void Draw(float dt);	
 
 public:
 	bool started;
@@ -78,6 +76,7 @@ public:
 
 	bool flip;
 	bool dynamic;
+	FoWEntity* visionEntity;
 
 protected:
 	fMPoint position;

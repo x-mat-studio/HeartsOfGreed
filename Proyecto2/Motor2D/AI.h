@@ -6,6 +6,10 @@
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
 
+#include "vector"
+
+class Building;
+
 class ModuleAI : public Module
 {
 public:
@@ -17,14 +21,20 @@ public:
 
 	void OnCollision(Collider*, Collider*);
 
-	iMPoint* GetObjective();
+	fMPoint* GetObjective();
 	
+	void PushBase(Building* building);
 
 private:
 	void CreateSelectionCollider(Collider*);
+	void ExecuteEvent(EVENT_ENUM eventId);
+
+	int CheckBaseAligmentAttack();
 	
 private:
-	iMPoint objectivePos;
+	fMPoint objectivePos;
+	std::vector<Building*> baseVector;
+
 };
 
 

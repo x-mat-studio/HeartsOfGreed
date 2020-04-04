@@ -68,10 +68,11 @@ public:
 	virtual Enemy* Clone();
 	virtual Enemy* Clone(fMPoint positionToBe);
 	virtual Enemy* Clone(int x, int y);
+	void Draw(float dt);
 
 private:
 
-	void Draw(float dt);
+
 
 	void Attack();
 	void Die();
@@ -106,7 +107,7 @@ private:
 
 	bool haveOrders;
 	Entity* shortTermObjective;
-	iMPoint longTermObjective;
+	fMPoint longTermObjective;
 
 	Animation animation;
 

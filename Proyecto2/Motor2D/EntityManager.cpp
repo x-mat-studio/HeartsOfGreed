@@ -5,13 +5,17 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Collision.h"
+
+#include "DynamicEntity.h"
 #include "GathererHero.h"
 #include "MeleeHero.h"
 #include "RangedHero.h"
 #include "Enemy.h"
+
 #include "Spawner.h"
+
 #include "Building.h"
-#include "DynamicEntity.h"
+
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -38,7 +42,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	fMPoint pos;
 	pos.create(100, 600);
 
-	P2SString filename = config.child("load").attribute("docname").as_string();
+	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
@@ -49,6 +53,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation walkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
 	Animation walkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
 	Animation walkRight = walkRight.PushAnimation(suitman, "walk_right");
+
 	Animation idleRight = idleRight.PushAnimation(suitman, "idle_right");
 	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
 	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
@@ -56,34 +61,54 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
 
-	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
 
+	// Hero collider
+	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 100, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 250, 1, 120, 25, 5, 0);
+	// Sample Enemy---------------------
+	filename = config.child("load").attribute("docnameWanamingo").as_string();
+	pugi::xml_document wanamingodoc;
+	wanamingodoc.load_file(filename.GetString());
+	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo");
 
+	//Animation enemyWalkLeft = walkLeft.PushAnimation(suitman, "walk_left");
+	//Animation enemyWalkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
+	//Animation enemyWalkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
+	//Animation enemyWalkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
+	//Animation enemyWalkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
+	//Animation enemyWalkRight = walkRight.PushAnimation(suitman, "walk_right");
+
+	Animation enemyIdleRight = enemyIdleRight.PushAnimation(wanamingo, "wanamingoRightIdle");
+	Animation enemyIdleRightUp = enemyIdleRightUp.PushAnimation(wanamingo, "wanamingoUpRightIdle");
+	Animation enemyIdleRightDown = enemyIdleRightDown.PushAnimation(wanamingo, "wanamingoDownRightIdle");
+	Animation enemyIdleLeft = enemyIdleLeft.PushAnimation(wanamingo, "wanamingoLeftIdle");
+	Animation enemyIdleLeftUp = enemyIdleLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftIdle");
+	Animation enemyIdleLeftDown = enemyIdleLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftIdle");
+
+	Animation enemyPunchRight = enemyPunchRight.PushAnimation(wanamingo, "wanamingoRightIdle");
+	Animation enemyPunchRightUp = enemyPunchRightUp.PushAnimation(wanamingo, "wanamingoUpRightIdle");
+	Animation enemyPunchRightDown = enemyPunchRightDown.PushAnimation(wanamingo, "wanamingoDownRightIdle");
+	Animation enemyPunchLeft = enemyPunchLeft.PushAnimation(wanamingo, "wanamingoLeftIdle");
+	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftIdle");
+	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftIdle");
+
+
+	//Enemy collider and spawner
+	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyIdleLeftDown, 5, 0, 250, 1, 120, 25, 5, 0);
 	testSpawner = new Spawner(sampleEnemy);
 
+	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
-
-	//Test Hero
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
 	
-
-	//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
-
-	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
-	
-
-	for (int i = 0; i < 5; i++) {
-		testSpawner->spawnEnemy(150 + 15*i, 650);
-	}
+	/*for (int i = 0; i < 5; i++) {
+		testSpawner->spawnEnemy(150 + 15 * i, 650);
+	}*/
 
 	return ret;
 }
@@ -215,7 +240,6 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
 	SpriteOrdering(dt);
-
 
 	return true;
 }
@@ -398,7 +422,38 @@ Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::PARTICLE || type == ENTITY_TYPE::PARTICLE_SYSTEM || type == ENTITY_TYPE::BLDG_BASE || type == ENTITY_TYPE::ENEMY)
+		if (type == ENTITY_TYPE::PARTICLE || type == ENTITY_TYPE::PARTICLE_SYSTEM || type == ENTITY_TYPE::BLDG_BASE || type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::BUILDING)
+		{
+			continue;
+		}
+
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr)
+		{
+			if (col->CheckCollision(*rect))
+			{
+				return entityVector[i];
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+Entity* ModuleEntityManager::CheckEnemyObjectiveTurret(SDL_Rect* rect)
+{
+	int numEntitys = entityVector.size();
+
+	Collider* col;
+
+	ENTITY_TYPE type;
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type != ENTITY_TYPE::ENEMY) //This type of check is only for player alliegment turrets
 		{
 			continue;
 		}
@@ -435,6 +490,7 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 	}
 
 }
+
 
 void ModuleEntityManager::SpriteOrdering(float dt)
 {
@@ -524,7 +580,10 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		renderVector[i]->PostUpdate(dt);
+		if (renderVector[i]->visionEntity->isVisible)
+		{
+			renderVector[i]->Draw(dt);
+		}
 	}
 
 	renderVector.clear();
@@ -617,6 +676,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 	}
 
 }
+
 
 SPRITE_POSITION ModuleEntityManager:: CheckSpriteHeight(Entity* movEntity, Entity* building) const
 {
