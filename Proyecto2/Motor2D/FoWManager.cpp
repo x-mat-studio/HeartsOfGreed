@@ -291,9 +291,9 @@ void FoWManager::DrawFoWMap()
 		for (int x = 0; x < width; x++)
 		{
 			
-			fMPoint worldPosfa;
-			app->map->MapToWorldCoords(x, y,app->map->data,worldPosfa.x,worldPosfa.y);
-			if (app->map->InsideCamera(worldPosfa.x,worldPosfa.y))
+			fMPoint worldPos;
+			app->map->MapToWorldCoords(x, y,app->map->data,worldPos.x,worldPos.y);
+			if (app->map->InsideCamera(worldPos.x,worldPos.y))
 			{
 				FoWDataStruct* tileInfo = GetFoWTileState({ x, y });
 				int fogId = -1;
@@ -327,13 +327,13 @@ void FoWManager::DrawFoWMap()
 				{
 					SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
 					SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
-					app->render->Blit(displayFogTexture, worldPosfa.x, worldPosfa.y-halfTileHeight, &r);
+					app->render->Blit(displayFogTexture, worldPos.x, worldPos.y-halfTileHeight, &r);
 				}
 				if (shroudId != -1)
 				{
 					SDL_SetTextureAlphaMod(displayFogTexture, 255);//set the alpha to white again
 					SDL_Rect r = { shroudId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
-					app->render->Blit(displayFogTexture, worldPosfa.x, worldPosfa.y-halfTileHeight, &r);
+					app->render->Blit(displayFogTexture, worldPos.x, worldPos.y-halfTileHeight, &r);
 				}
 
 			}
