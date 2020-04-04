@@ -54,11 +54,13 @@ fMPoint* ModuleAI::GetObjective()
 
 void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 {
+	int base = 0;
+
 	switch (eventId)
 	{
 	case EVENT_ENUM::NIGHT_START:
 
-		int base = CheckBaseAligmentAttack();
+		base = CheckBaseAligmentAttack();
 
 		if (base != -1) //-1 means no player controlled bases were found
 		{
@@ -66,7 +68,8 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 
 			//call random spawners and spawning x number of monsters
 		}
-		break;
+
+	break;
 
 
 	case EVENT_ENUM::DAY_START:

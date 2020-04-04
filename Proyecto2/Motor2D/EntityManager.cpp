@@ -241,7 +241,6 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 	SpriteOrdering(dt);
 
-
 	return true;
 }
 

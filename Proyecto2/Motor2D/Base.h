@@ -4,11 +4,15 @@
 #define __BASE_H__
 
 #include "vector"
+#include "Entity.h"
+
 class Turret;
 class Barricade;
 class Core;
 class UpgradeCenter;
 class Building;
+
+
 struct Collider;
 
 class Base
@@ -20,22 +24,19 @@ public:
 
 	~Base();
 
-	// Called before the first frame
-	bool Start();
+	void AddTurret(Turret* turret);
+	void AddBarricade(Barricade* barricade);
+	void AddUpgradeCenter(UpgradeCenter* upgradeCenter);
 
-	// Called each loop iteration
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	bool PostUpdate(float dt);
+	void RemoveTurret(Turret* turret);
+	void RemoveBarricade(Barricade* barricade);
+	void RemoveUpgradeCenter();
 
-	// Called before quitting
-	bool CleanUp();
-
+	void ChangeAligment(ENTITY_ALIGNEMENT aligment);
 private:
 	
 	void DisableTurrets();
-	void AddBuilding(Building* building);
-	void RemoveBuilding(Building* building);
+	
 
 
 private:
@@ -43,11 +44,15 @@ private:
 	int maxBarricades;
 	Collider* baseAreaAlarm; //if this seems odd, ask Jose -Adri
 
+	ENTITY_ALIGNEMENT baseAligment;
+
 	//Childs---
 	Core* baseCore;
 	UpgradeCenter* baseUpgradeCenter;
-	std::vector <Turret*> baseTurrets;
-	std::vector <Barricade*> baseBarricades;
+	std::vector <Turret*> turretsVector;
+	std::vector <Barricade*> barricadesVector;
+
+
 };
 
 
