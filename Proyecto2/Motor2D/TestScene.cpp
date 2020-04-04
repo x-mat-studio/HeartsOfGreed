@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Audio.h"
 #include "Map.h"
+#include "Fonts.h"
 #include "Pathfinding.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
@@ -149,6 +150,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 
 		ret = false;
 	}
+
 
 	return ret;
 }
