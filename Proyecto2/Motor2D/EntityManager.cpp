@@ -70,20 +70,10 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
-
-	//Test Hero
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-	AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
 	
-
-	//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
-
-	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
-	
-
-	for (int i = 0; i < 5; i++) {
-		testSpawner->spawnEnemy(150 + 15*i, 650);
-	}
+	/*for (int i = 0; i < 5; i++) {
+		testSpawner->spawnEnemy(150 + 15 * i, 650);
+	}*/
 
 	return ret;
 }
@@ -524,7 +514,10 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		renderVector[i]->PostUpdate(dt);
+		if (renderVector[i]->visionEntity->isVisible)
+		{
+			renderVector[i]->Draw(dt);
+		}
 	}
 
 	renderVector.clear();

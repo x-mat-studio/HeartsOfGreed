@@ -4,6 +4,7 @@
 #include "Render.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "FoWManager.h"
 #include "Map.h"
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
@@ -68,6 +69,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	objective(nullptr)
 {
 	currentAnimation = &walkLeft;
+
 }
 
 
@@ -125,6 +127,9 @@ Hero::Hero(fMPoint position, Hero* copy) :
 	objective(nullptr)
 {
 	currentAnimation = &walkLeft;
+	//FoW Related
+	visionEntity = app->fowManager->CreateFoWEntity(position, true);
+	visionEntity->SetNewVisionRadius(5);
 }
 
 
@@ -182,6 +187,7 @@ void Hero::StateMachine()
 	case HERO_STATES::MOVE:
 		currentAnimation = &walkLeft;
 		Move();
+		visionEntity->SetNewPosition(position);
 
 		CheckAttackRange();
 		break;

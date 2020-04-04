@@ -26,6 +26,7 @@ class ModuleUIManager;
 class ModulePathfinding;
 class ModuleEventManager;
 class ModuleAI;
+class FoWManager;
 
 class App
 {
@@ -103,6 +104,7 @@ public:
 	ModuleEventManager*		eventManager;
 	ModuleAI*				ai;
 	ModuleUIManager*		uiManager;
+	FoWManager*				fowManager;
 
 	uint32_t			frames;
 	

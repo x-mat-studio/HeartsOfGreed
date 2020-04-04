@@ -15,6 +15,7 @@
 #include "UIManager.h"
 #include "Pathfinding.h"
 #include "AI.h"
+#include "FoWManager.h"
 
 #include "App.h"
 
@@ -41,6 +42,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	player = new ModulePlayer();
 	ai = new ModuleAI();
 	pathfinding = new ModulePathfinding();
+	fowManager = new FoWManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -52,6 +54,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(testScene);
 	AddModule(coll);
+	AddModule(fowManager);
 	AddModule(entityManager);
 	AddModule(pathfinding);
 	AddModule(player);

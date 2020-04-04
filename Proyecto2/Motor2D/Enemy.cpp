@@ -2,6 +2,7 @@
 #include "App.h"
 #include "AI.h"
 #include "EntityManager.h"
+#include "FoWManager.h"
 #include "Textures.h"
 #include "Render.h"
 
@@ -51,7 +52,10 @@ Enemy::Enemy(fMPoint position, Enemy* copy) :
 	haveOrders(false),
 
 	state(ENEMY_STATES::IDLE)
-{}
+{
+	//FoW Related
+	visionEntity = app->fowManager->CreateFoWEntity(position, false);
+}
 
 
 Enemy::~Enemy()
@@ -111,6 +115,7 @@ void Enemy::StateMachine()
 				}
 			}
 		}
+		visionEntity->SetNewPosition(position);
 		break;
 
 	case ENEMY_STATES::ATTACK:
