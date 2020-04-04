@@ -68,7 +68,7 @@ void ModuleMap::Draw()
 						if (id > 0)
 						{
 							FoWDataStruct* fogData = app->fowManager->GetFoWTileState({ j,i });
-							if (fogData != nullptr)
+							if (fogData != nullptr && app->fowManager->foWMapVisible)
 							{
 								if (fogData->tileShroudBits != fow_ALL)
 								{

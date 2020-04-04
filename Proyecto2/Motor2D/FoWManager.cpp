@@ -115,6 +115,10 @@ bool FoWManager::PreUpdate(float dt)
 		debugMode = !debugMode;
 		MapNeedsUpdate();
 	}
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_STATE::KEY_DOWN)
+	{
+		foWMapVisible = !foWMapVisible;
+	}
 
 	return ret;
 }
@@ -142,7 +146,10 @@ bool FoWManager::Update(float dt)
 bool FoWManager::PostUpdate(float dt)
 {
 	bool ret = true;
-	DrawFoWMap();
+	if (foWMapVisible)
+	{
+		DrawFoWMap();
+	}
 	return ret;
 }
 

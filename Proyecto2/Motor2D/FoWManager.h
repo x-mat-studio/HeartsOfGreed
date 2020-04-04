@@ -56,6 +56,8 @@ public:
 
 	//VARIABLES
 public:
+	bool foWMapVisible = false;
+
 	//A number of precomputed circle masks for you to use ranging between a radius of 2 to a radius of 5
 	unsigned short circleMasks[4][fow_MAX_CIRCLE_LENGTH * fow_MAX_CIRCLE_LENGTH] =
 	{
