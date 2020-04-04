@@ -95,7 +95,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
-	sampleEnemy = new Enemy(fMPoint{ 150, 650 }, ENTITY_TYPE::ENEMY, enemyCollider, walkLeft, 5, 0, 250, 1, 120, 25, 5, 0);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyIdleLeftDown, 5, 0, 250, 1, 120, 25, 5, 0);
 	testSpawner = new Spawner(sampleEnemy);
 
 	//Test building
@@ -109,11 +109,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
 
-	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
+	AddEntity(ENTITY_TYPE::ENEMY, 150, 250);
 
 
 	for (int i = 0; i < 5; i++) {
-		testSpawner->spawnEnemy(150 + 15 * i, 650);
+		testSpawner->spawnEnemy(150 + 70 * i, 250);
 	}
 
 	return ret;

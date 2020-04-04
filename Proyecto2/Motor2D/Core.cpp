@@ -2,10 +2,16 @@
 
 
 
-Core::Core(int resourceProductionRate) :
+Core::Core(int resourceProductionRate, fMPoint position, Collider* collider, int hitPoints , int recoveryHitPointsRate , int xpOnDeath , int buildingCost , int transparency ) :
 
-	// WHEN A CONSTRUCTOR IS MADE, CTRL + F AND ERASE THE COMMENT BARS ON THE LINES WITH "CORE_CONSTRUCTOR_NEEDED"
+	Building(position, hitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider),
 	resourceProductionRate(resourceProductionRate)
+{}
+
+Core::Core(Core * copy):
+
+	Building(copy->position, copy),
+	resourceProductionRate(copy->resourceProductionRate)
 {}
 
 

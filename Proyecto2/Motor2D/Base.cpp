@@ -1,4 +1,11 @@
 #include "Base.h"
+#include "Turret.h"
+#include "Barricade.h"
+#include "Core.h"
+#include "UpgradeCenter.h"
+#include "Building.h"
+#include "Collision.h"
+
 
 Base::Base(int maxTurrets, int maxBarricades, Core* baseCore, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets, std::vector <Barricade*> baseBarricades, Collider* baseArea) :
 
@@ -61,22 +68,6 @@ bool Base::PostUpdate(float dt)
 
 
 bool Base::CleanUp()
-{
-	bool ret = true;
-
-	return ret;
-}
-
-
-bool Base::Load(pugi::xml_node &)
-{
-	bool ret = true;
-
-	return ret;
-}
-
-
-bool Base::Save(pugi::xml_node &) const
 {
 	bool ret = true;
 
