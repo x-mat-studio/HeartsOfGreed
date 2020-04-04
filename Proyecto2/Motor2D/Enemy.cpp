@@ -80,7 +80,7 @@ bool Enemy::Update(float dt)
 
 	StateMachine();
 
-	collider->SetPos((int)position.x, (int)position.y);
+	CollisionPosUpdate();
 
 	return true;
 }

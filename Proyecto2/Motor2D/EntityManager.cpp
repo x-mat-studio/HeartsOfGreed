@@ -5,13 +5,17 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Collision.h"
+
+#include "DynamicEntity.h"
 #include "GathererHero.h"
 #include "MeleeHero.h"
 #include "RangedHero.h"
 #include "Enemy.h"
+
 #include "Spawner.h"
+
 #include "Building.h"
-#include "DynamicEntity.h"
+
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -81,9 +85,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	AddEntity(ENTITY_TYPE::ENEMY, 150, 650);
 	
 
-	for (int i = 0; i < 5; i++) {
-		testSpawner->spawnEnemy(150 + 15*i, 650);
-	}
+	/*for (int i = 0; i < 100; i++) {
+		testSpawner->spawnEnemy(150, 650);
+	}*/
 
 	return ret;
 }
@@ -398,7 +402,7 @@ Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::PARTICLE || type == ENTITY_TYPE::PARTICLE_SYSTEM || type == ENTITY_TYPE::BLDG_BASE || type == ENTITY_TYPE::ENEMY)
+		if (type == ENTITY_TYPE::PARTICLE || type == ENTITY_TYPE::PARTICLE_SYSTEM || type == ENTITY_TYPE::BLDG_BASE || type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::BUILDING)
 		{
 			continue;
 		}
@@ -435,6 +439,7 @@ void ModuleEntityManager::RemoveDeletedEntitys()
 	}
 
 }
+
 
 void ModuleEntityManager::SpriteOrdering(float dt)
 {
@@ -617,6 +622,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 	}
 
 }
+
 
 SPRITE_POSITION ModuleEntityManager:: CheckSpriteHeight(Entity* movEntity, Entity* building) const
 {

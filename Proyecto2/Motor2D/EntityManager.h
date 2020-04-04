@@ -63,17 +63,24 @@ public:
 
 	void GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
 
-public:
-	SDL_Texture* debugPathTexture;
 
 private:
 
 	void CheckIfStarted();
+
 	void ExecuteEvent(EVENT_ENUM eventId);
+
+	//Sprite ordering
 	void SpriteOrdering(float dt);
 	void EntityQuickSort(std::vector<Entity*>& vector, int low, int high);
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
+
+
+public:
+
+	SDL_Texture* debugPathTexture;
+
 
 private:
 
