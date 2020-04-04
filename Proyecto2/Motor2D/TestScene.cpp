@@ -5,7 +5,10 @@
 #include "Window.h"
 #include "Audio.h"
 #include "Map.h"
+#include "Fonts.h"
 #include "Pathfinding.h"
+#include "FoWManager.h"
+#include "EntityManager.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
 {
@@ -44,6 +47,21 @@ bool ModuleTestScene::Start()
 			app->pathfinding->SetMap(w, h, data);
 			RELEASE_ARRAY(data);
 		}
+		app->fowManager->CreateFoWMap(w, h);
+		
+		fMPoint pos;
+		pos.create(100, 600);
+
+		//Test Hero
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
+
+
+		//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
+
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
 	}
 	
 	return true;
@@ -149,6 +167,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 
 		ret = false;
 	}
+
 
 	return ret;
 }

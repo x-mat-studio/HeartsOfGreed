@@ -12,6 +12,7 @@ class UpgradeCenter : public Building
 public:
 
 	UpgradeCenter(int turretLvl, int barricadeLvl);
+	UpgradeCenter(UpgradeCenter* copy);
 	~UpgradeCenter();
 
 

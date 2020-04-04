@@ -121,6 +121,15 @@
     <ClCompile Include="Spawner.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="FoWManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="FoWEntity.cpp">
+      <Filter>Desenvolupament  ========\Fog of War\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -258,6 +267,18 @@
     <ClInclude Include="Spawner.h">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWEntity.h">
+      <Filter>Desenvolupament  ========\Fog of War\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWBitDefs.h">
+      <Filter>Desenvolupament  ========\Fog of War\header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -316,6 +337,15 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\UI\UIElements">
       <UniqueIdentifier>{408d7c25-afc7-48f2-ac77-451e0deb6d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Fog of War">
+      <UniqueIdentifier>{53cbac33-f01a-48a1-a742-aee1c7a5dc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Fog of War\cpp files">
+      <UniqueIdentifier>{e0bc134e-7392-44b8-bd7a-d828e0ba854f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Fog of War\header files">
+      <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

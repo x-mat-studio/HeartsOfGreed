@@ -16,7 +16,8 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
 	flip(false),
 	texture(nullptr),
 	offset {0,0},
-	dynamic(dynamic)
+	dynamic(dynamic),
+	visionEntity(nullptr)
 {}
 
 
@@ -30,7 +31,8 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dyna
 	flip(false),
 	texture(nullptr),
 	offset{ 0,0 },
-	dynamic(dynamic)
+	dynamic(dynamic),
+	visionEntity(nullptr)
 {}
 
 Entity::~Entity()
@@ -99,7 +101,7 @@ Collider* Entity::GetCollider() const
 
 
 
-void Entity::Draw()
+void Entity::Draw(float dt)
 {}
 
 

@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Window.h"
 #include "Collision.h"
+#include "FoWManager.h"
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -66,7 +67,19 @@ void ModuleMap::Draw()
 					{
 						if (id > 0)
 						{
-							app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+							FoWDataStruct* fogData = app->fowManager->GetFoWTileState({ j,i });
+							if (fogData != nullptr)
+							{
+								if (fogData->tileShroudBits != fow_ALL)
+								{
+									app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+								}
+							}
+							else
+							{
+								app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+							}
+
 						}
 					}
 				}

@@ -44,7 +44,7 @@
   </map>
 
   <entityManager>
-	<load docname="suitman.xml"/>
+	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml"/>
   </entityManager>
 
 </config>

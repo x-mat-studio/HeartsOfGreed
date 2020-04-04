@@ -79,11 +79,12 @@ public:
 	virtual bool UseHability3();
 
 	void CheckObjecive(Entity* entity);
+	void Draw(float dt);
 
 private:
 	void LevelUp();
 
-	void Draw(float dt);
+	
 
 	void CheckAttackRange();
 	void Attack();
