@@ -438,6 +438,37 @@ Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
 	return nullptr;
 }
 
+Entity* ModuleEntityManager::CheckEnemyObjectiveTurret(SDL_Rect* rect)
+{
+	int numEntitys = entityVector.size();
+
+	Collider* col;
+
+	ENTITY_TYPE type;
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type != ENTITY_TYPE::ENEMY) //This type of check is only for player alliegment turrets
+		{
+			continue;
+		}
+
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr)
+		{
+			if (col->CheckCollision(*rect))
+			{
+				return entityVector[i];
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 
 void ModuleEntityManager::RemoveDeletedEntitys()
 {

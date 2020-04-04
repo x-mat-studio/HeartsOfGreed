@@ -60,6 +60,7 @@ public:
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
 	Entity* CheckEnemyObjective(SDL_Rect* rect);
+	Entity* CheckEnemyObjectiveTurret(SDL_Rect* rect);
 
 	void GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
 
