@@ -622,7 +622,6 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 	auxVec = pivot;
 	pivot = vector[left];
-	vector[left] = auxVec;
 
 	return left;
 }
