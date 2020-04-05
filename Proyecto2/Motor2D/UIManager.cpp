@@ -220,7 +220,7 @@ void ModuleUIManager::CreateBasicUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseButton", false);
 
-
+	rect = RectConstructor(30, 30, 100, 30);
 	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", false, "Hooooola");
 
 }
