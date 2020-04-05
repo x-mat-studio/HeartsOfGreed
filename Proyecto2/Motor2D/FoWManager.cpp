@@ -5,7 +5,13 @@
 #include "Render.h"
 #include "Input.h"
 
-FoWManager::FoWManager()
+FoWManager::FoWManager():
+	foWMapVisible(false),
+	fowMap(nullptr),
+	smoothFoWtexture(nullptr),
+	debugFoWtexture(nullptr),
+	debugMode(false),
+	foWMapNeedsRefresh(false)
 {
 
 }
@@ -13,7 +19,7 @@ FoWManager::FoWManager()
 
 FoWManager::~FoWManager()
 {
-	CleanUp();
+
 }
 
 

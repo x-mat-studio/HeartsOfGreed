@@ -40,8 +40,12 @@ Entity::~Entity()
 	texture = nullptr;
 	collider->to_delete = true;
 	collider = nullptr;
-	
+	if (visionEntity != nullptr && visionEntity!= NULL)
+	{
+		visionEntity->deleteEntity = true;
+	}
 	visionEntity = nullptr;
+	
 }
 
 
