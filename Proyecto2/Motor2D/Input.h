@@ -9,6 +9,7 @@
 
 struct SDL_Rect;
 
+
 enum class EVENT_WINDOW //used to control mouse events
 {
 	WE_QUIT = 0,
@@ -23,6 +24,15 @@ enum class KEY_STATE
 	KEY_DOWN,
 	KEY_REPEAT,
 	KEY_UP
+};
+
+
+struct EventsOnKeyPress
+{
+	EVENT_ENUM keyIdle		=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyDown		=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyRepeat	=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyUp		=	EVENT_ENUM::NULL_EVENT;
 };
 
 class ModuleInput : public Module
@@ -42,7 +52,7 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
+	bool PreUpdate(float dt);
 
 	// Called before quitting
 	bool CleanUp();
@@ -67,11 +77,32 @@ public:
 	// Get mouse / axis position
 	void GetMousePosition(int& x, int& y);
 	void GetMouseMotion(int& x, int& y);
+	//Same as GetMousePosition but without the scaling factor
+	void GetMousePositionRaw(int& x, int& y);
+	//Get motion of the scrollwheel in both x (left[negative]/right[positive]) and y (up[positive]/down[negative])axis
+	void GetScrollWheelMotion(int& x, int& y);
+
 
 	void ActivateTextInput(SDL_Rect& rect);
 	void DesactivateTextInput();
 
 	const char* GetInputText();
+
+	// keybinding managing:
+
+	void AddKeyBinding(int key, KEY_STATE keyAction, EVENT_ENUM event);
+	void AddMouseBinding(int buttonId, KEY_STATE buttonAction, EVENT_ENUM event);
+
+	
+	void RemoveSingleKeyBinding(int key, KEY_STATE keyAction);
+	void RemoveKeyBinding(int key);
+	void RemoveSingleMouseBinding(int buttonId, KEY_STATE keyAction);
+	void RemoveMouseBinding(int buttonId);
+
+	void keyBindingSendEvent(int key, KEY_STATE keyAction);
+	void mouseBindingSendEvent(int button, KEY_STATE keyAction);
+
+
 
 private:
 	//	bool TextHasSpace();
@@ -88,9 +119,20 @@ private:
 	int			mouseMotionY;
 	int			mouseX;
 	int			mouseY;
+	int			mouseXRaw;
+	int			mouseYRaw;
+
+	int			mouseWheelMotionX;
+	int			mouseWheelMotionY;
+
 
 	P2SString	text;
 	int			cursorPos;
+
+	EventsOnKeyPress* keybindings;
+	EventsOnKeyPress mouseBindings[NUM_MOUSE_BUTTONS];
+
+
 };
 
 #endif // __INPUT_H__

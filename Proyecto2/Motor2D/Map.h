@@ -5,14 +5,13 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
-#include <vector>
 
 // ----------------------------------------------------
+
 struct Properties
 {
 	P2SString name;
-	float value;
-
+	int value;
 };
 struct MapLayer
 {
@@ -117,8 +116,14 @@ public:
 	bool LoadNew(const char* path);
 	bool ReloadMap(P2SString newmap);
 	inline uint Get(int x, int y, MapLayer* currentlayer) const;
-	void MapToWorldCoordinates(int posX, int posY, MapData& dat, float& outX, float& outY);
-	void WorldToMap(int x, int y, MapData& dat, int& outX, int& outY) const;
+	void MapToWorldCoords(int posX, int posY, MapData& dat, float& outX, float& outY);
+	void WorldToMapCoords(int x, int y, MapData& dat, int& outX, int& outY) const;
+	iMPoint MapToWorld(int x, int y) const;
+	iMPoint WorldToMap(int x, int y) const;
+	bool InsideCamera(float& posX, float& posY) const;
+	bool EntityInsideCamera(float& posX, float& posY, float& w, float& h) const;
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
+
 private:
 
 	bool LoadMap(P2SString path, P2SString name);
@@ -144,7 +149,7 @@ private:
 	P2SString folder;
 
 	bool mapLoaded;
-
+	
 };
 
 #endif // __MAP_H__

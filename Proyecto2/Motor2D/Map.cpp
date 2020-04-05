@@ -5,7 +5,10 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Window.h"
+#include "Collision.h"
+#include "FoWManager.h"
 #include <math.h>
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
 ModuleMap::ModuleMap() : Module(), mapLoaded(false)
@@ -34,74 +37,56 @@ bool ModuleMap::Awake(pugi::xml_node& config)
 
 void ModuleMap::Draw()
 {
-
+	BROFILER_CATEGORY("DRAW", Profiler::Color::Aquamarine);
 
 	if (mapLoaded == false)
 		return;
 
 
-	uint windowW;
-	uint windowH;
-	app->win->GetWindowSize(windowW, windowH);
-
-	int i = 0;
+	int f = 0;
 
 
-	while (i < data.layers.size())
+	while (f < data.layers.size())
 	{
-		int scale = app->win->GetScale();
+		if (data.layers[f]->name != "Collision") {
 
-		int up_left_cam_cornerX;
-		int up_left_cam_cornerY;
-		int down_right_cam_cornerX;
-		int down_right_cam_cornerY;
-
-		WorldToMap(app->render->camera.x * -1, app->render->camera.y * -1, data, up_left_cam_cornerX, up_left_cam_cornerY);
-		WorldToMap((app->render->camera.x * -1) + windowW, (app->render->camera.y * -1) + windowH, data, down_right_cam_cornerX, down_right_cam_cornerY);
-
-
-		for (int i = 0; i < data.layers[i]->height; i++)//number of rows
-		{
-
-
-			for (int j = 0; j < data.layers[i]->width; j++)//number of columns
+			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
 
-
-				if (i<down_right_cam_cornerY + 1 && i>up_left_cam_cornerY - 1)//These are a camera culling implementation the game just draws what's seen in the camera
+				for (int j = 0; j < data.layers[f]->width; j++)//number of columns
 				{
+					int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
 
+					float worldX;
+					float worldY;
+					MapToWorldCoords(j, i, data, worldX, worldY);
 
-					if (j<down_right_cam_cornerX + 1 && j>up_left_cam_cornerX - 1)
+					//whith camera culling
+
+					if (InsideCamera(worldX, worldY) == true)
 					{
-						int id = data.layers[i]->gid[Get(j, i, data.layers[i])];
-
-
 						if (id > 0)
 						{
-							float worldX;
-							float worldY;
-							MapToWorldCoordinates(j, i, data, worldX, worldY);
-							app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+							FoWDataStruct* fogData = app->fowManager->GetFoWTileState({ j,i });
+							if (fogData != nullptr && app->fowManager->foWMapVisible)
+							{
+								if (fogData->tileShroudBits != fow_ALL)
+								{
+									app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+								}
+							}
+							else
+							{
+								app->render->Blit(GetTilesetFromTileId(id)->texture, worldX, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)));
+							}
+
 						}
-
-
 					}
-
-
 				}
-
-
 			}
-
-
 		}
-
-
+		f++;
 	}
-
-
-	i++;
 }
 
 
@@ -440,7 +425,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 	{
 		Properties* set = new Properties;
 		set->name = currentProp.attribute("name").as_string();
-		set->value = currentProp.attribute("value").as_float();
+		set->value = currentProp.attribute("value").as_bool();
 		layer->layerPropVector.push_back(set);
 	}
 
@@ -450,7 +435,6 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 	for (int i = 0; i < layer->width * layer->height; i++)
 	{
-
 		layer->gid[i] = gidIterator->attribute("gid").as_uint();
 		if (gidIterator->attribute("gid").as_uint() == NULL) {
 			layer->gid[i] = 0;
@@ -459,6 +443,28 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
 
+	if (layer->name == "Collision") {
+
+		for (int i = 0; i < layer->width * layer->height; i++)
+		{
+
+			if (layer->gid[i] > 0) {
+
+				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
+
+				int tilePosAux_x, tilePosAux_y;
+				tilePosAux_x = (i % layer->width);
+				tilePosAux_y = ((i - (i % layer->width)) / layer->width);
+
+				colliderRectAux.x = tilePosAux_x * colliderRectAux.w / 2 - tilePosAux_y * colliderRectAux.w / 2;
+				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2;
+				colliderRectAux.w /= 2;
+
+				app->coll->AddCollider(colliderRectAux, COLLIDER_WALL);
+
+			}
+		}
+	}
 
 	return ret;
 }
@@ -501,6 +507,7 @@ bool ModuleMap::LoadObjGroup(pugi::xml_node& objgroupnode, ObjectGroup* group)
 
 
 //gets the position in a 1 row vector
+//gets the position in a 1 row vector
 //X horizontal, Y vertical, data.layers.(currentLayer)
 inline uint ModuleMap::Get(int x, int y, MapLayer* currentlayer) const
 {
@@ -520,7 +527,7 @@ SDL_Rect ModuleMap::RectFromTileId(uint tile_id, TileSet* currenttileset)
 
 	SDL_Rect rect;
 	rect.h = currenttileset->tileHeight;
-	rect.w = currenttileset->tileHeight;
+	rect.w = currenttileset->tileWidth;
 
 	int tileX = (tile_id - firstGid) % columns;//number of tiles full in a row
 	int tileY = (tile_id - firstGid) / columns;//number of rows full
@@ -532,7 +539,7 @@ SDL_Rect ModuleMap::RectFromTileId(uint tile_id, TileSet* currenttileset)
 
 
 //isometric map to world
-void ModuleMap::MapToWorldCoordinates(int posX, int posY, MapData& dat, float& outX, float& outY)
+void ModuleMap::MapToWorldCoords(int posX, int posY, MapData& dat, float& outX, float& outY)
 {
 	outX = (posX - posY) * dat.tileWidth * 0.5f;
 	outY = (posX + posY) * dat.tileHeight * 0.5f;
@@ -540,10 +547,36 @@ void ModuleMap::MapToWorldCoordinates(int posX, int posY, MapData& dat, float& o
 
 
 //isometric world to map
-void ModuleMap::WorldToMap(int x, int y, MapData& dat, int& outX, int& outY) const
+void ModuleMap::WorldToMapCoords(int x, int y, MapData& dat, int& outX, int& outY) const
 {
-	outX = (x / (dat.tileWidth * 0.5f) + y / (dat.tileHeight * 0.5f)) * 0.5f;
-	outY = (y / (dat.tileHeight * 0.5f) - (x / (dat.tileWidth * 0.5f))) * 0.5f;
+	outX = int((x / (dat.tileWidth * 0.5f) + y / (dat.tileHeight * 0.5f)) * 0.5f);
+	outY = int((y / (dat.tileHeight * 0.5f) - (x / (dat.tileWidth * 0.5f))) * 0.5f);
+}
+
+
+//Returns x,y coordinates in the world
+iMPoint ModuleMap::MapToWorld(int x, int y) const
+{
+	iMPoint ret;
+
+	ret.x = (x - y) * (data.tileWidth * 0.5f);
+	ret.y = (x + y) * (data.tileHeight * 0.5f);
+
+	return ret;
+}
+
+//Returns x,y coordinates in the Map
+iMPoint ModuleMap::WorldToMap(int x, int y) const
+{
+	iMPoint ret(0, 0);
+
+	float halWidth = data.tileWidth * 0.5f;
+	float halfHeight = data.tileHeight * 0.5f;
+
+	ret.x = round((x / halWidth + y / halfHeight) * 0.5f);
+	ret.y = round((y / halfHeight - (x / halWidth)) * 0.5f);
+
+	return ret;
 }
 
 
@@ -592,4 +625,99 @@ bool ModuleMap::Save(pugi::xml_node& ldata) const
 {
 	ldata.append_attribute("name") = data.name.GetString();
 	return true;
+}
+
+bool ModuleMap::InsideCamera(float& posX, float& posY) const {
+
+	int camW;
+	int camH;
+	app->render->GetCameraMeasures(camW, camH);
+	float scale = app->win->GetScale();
+
+	float up_left_cam_cornerX = -app->render->currentCamX;
+	float up_left_cam_cornerY = -app->render->currentCamY;
+	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
+	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
+
+	if ((posX > (up_left_cam_cornerX - (data.tileWidth * scale)) / scale && posX < down_right_cam_cornerX / scale) &&
+		((posY > (up_left_cam_cornerY - (data.tileWidth * scale)) / scale) && posY < down_right_cam_cornerY / scale)) {
+		return true;
+	}
+}
+
+bool ModuleMap::EntityInsideCamera(float& posX, float& posY, float& w, float& h) const {
+
+	int camW;
+	int camH;
+	app->render->GetCameraMeasures(camW, camH);
+	float scale = app->win->GetScale();
+
+	float up_left_cam_cornerX = -app->render->currentCamX;
+	float up_left_cam_cornerY = -app->render->currentCamY;
+	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
+	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
+
+	if ((posX + w > (up_left_cam_cornerX - (data.tileWidth * scale)) / scale && posX < down_right_cam_cornerX / scale) &&
+		((posY + h > (up_left_cam_cornerY - (data.tileWidth * scale)) / scale) && posY < down_right_cam_cornerY / scale)) {
+		return true;
+	}
+}
+
+bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
+{
+	bool ret = false;
+	std::vector<MapLayer*>::iterator layIt;
+
+	for (layIt = data.layers.begin(); layIt != data.layers.end(); ++layIt)
+	{
+		MapLayer* layer = *layIt;
+
+		//Search for Navigation Propierty
+		for (int i = 0; i < layer->layerPropVector.size(); i++)
+		{
+			Properties* currProp = layer->layerPropVector[i];
+			if (currProp->name != P2SString("Navigation"))
+			{
+				continue;
+			}
+			else if (currProp->value == 1)
+			{
+				ret = true;
+			}
+		}
+		if (!ret) continue;
+
+		uchar* map = new uchar[layer->width * layer->height];
+		memset(map, 1, layer->width * layer->height);
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int i = (y * layer->width) + x;
+
+				int tile_id = layer->gid[Get(x, y, layer)];
+
+				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = 0;
+
+				}
+				else
+					map[i] = 1;
+
+			}
+		}
+
+		*buffer = map;
+		width = data.width;
+		height = data.height;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
 }

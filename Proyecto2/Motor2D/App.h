@@ -7,7 +7,6 @@
 #include "Module.h"
 #include "PerfectTimer.h"
 #include "SimpleTimer.h"
-#include "vector"
 #include "PugiXml\src\pugixml.hpp"
 
 typedef unsigned int uint;
@@ -18,7 +17,17 @@ class ModuleInput;
 class ModuleAudio;
 class ModuleRender;
 class ModuleTextures;
+class ModuleCollision;
 class ModuleMap;
+class ModuleTestScene;
+class ModulePlayer;
+class ModuleEntityManager;
+class ModuleUIManager;
+class ModulePathfinding;
+class ModuleEventManager;
+class ModuleAI;
+class FoWManager;
+class ModuleFonts;
 
 class App
 {
@@ -88,12 +97,23 @@ public:
 	ModuleRender*			render;
 	ModuleTextures*			tex;
 	ModuleMap*				map;
+	ModuleTestScene*		testScene;
+	ModuleCollision*		coll;
+	ModulePlayer*			player;
+	ModuleEntityManager*	entityManager;
+	ModulePathfinding*		pathfinding;
+	ModuleEventManager*		eventManager;
+	ModuleAI*				ai;
+	ModuleUIManager*		uiManager;
+	ModuleFonts*			fonts;
+	FoWManager*				fowManager;
 
 	uint32_t			frames;
 	
 	uint				frameRate = 0;
 
 	bool				vSyncActivated;
+	bool				debugMode = false;
 
 private:
 	std::vector<Module*>	modules;

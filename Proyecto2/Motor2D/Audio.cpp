@@ -36,7 +36,7 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 	}
 
 
-	// load support for the JPG and PNG image formats
+	// load support 
 	int flags = MIX_INIT_OGG;
 	int init = Mix_Init(flags);
 
@@ -54,7 +54,6 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 		active = false;
 		ret = true;
 	}
-
 
 	return ret;
 }
@@ -81,9 +80,14 @@ bool ModuleAudio::CleanUp()
 
 
 // Play a music file
-bool ModuleAudio::PlayMusic(const char* path, float fade_time)
+bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume)
 {
 	bool ret = true;
+
+	if (volume < 0) {
+		volume = 0;
+	}
+	Mix_VolumeMusic(volume);
 
 	if (!active)
 		return false;
@@ -153,8 +157,10 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 
 
 // Play WAV
-bool ModuleAudio::PlayFx(unsigned int id, int repeat)
+bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loudness, DIRECTION direction)
 {
+	ConfigureChannel(channel, loudness, direction);
+
 	bool ret = false;
 	id += 0;
 	if (!active)
@@ -163,7 +169,7 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 
 	if (id > 0 && id <= fx.size())
 	{
-		Mix_PlayChannel(-1, fx[id - 1], repeat);
+		Mix_PlayChannel(channel, fx[id - 1], repeat,);
 		//Input explanation: first argument is channel, -1  meanining first free channel. Second argument is a pointer to the chunk to play.
 		//3rd argument is number of loops. if you want in once, put 0. -1 plays it "infinite" times.
 	}
@@ -171,3 +177,82 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 
 	return ret;
 }
+
+
+// Configure Audio Channel
+bool ModuleAudio::ConfigureChannel(unsigned int channel, int volume, float angle)
+{
+	
+	angle = -90;
+	
+
+	Mix_SetPosition(channel, angle, volume);
+	
+	return false;
+}
+
+
+// Configure Audio Channel for dummies
+bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRECTION direction)
+{
+	float angle;
+	int volume;
+	bool ret = true;
+
+	switch (loudness)
+	{
+	case LOUDNESS::QUIET:
+		volume = 254;
+		break;
+	case LOUDNESS::NORMAL:
+		volume = 120;
+		break;
+	case LOUDNESS::LOUD:
+		volume = 1;
+		break;
+	default:
+		Mix_HaltChannel(-1); //Someone missused the function
+		volume = 0;
+		angle = 0;
+		ret = false;
+		break;
+	}
+	
+	switch (direction)
+	{
+	case DIRECTION::FRONT:
+		angle = 0;
+		break;
+	case DIRECTION::FRONT_RIGHT:
+		angle = 45;
+		break;
+	case DIRECTION::RIGHT:
+		angle = 90;
+		break;
+	case DIRECTION::BACK_RIGHT:
+		angle = 135;
+		break;
+	case DIRECTION::BACK:
+		angle = 180;
+		break;
+	case DIRECTION::BACK_LEFT:
+		angle = 225;
+		break;
+	case DIRECTION::LEFT:
+		angle = 270;
+		break;
+	case DIRECTION::FRONT_LEFT:
+		angle = 315;
+		break;
+	default:
+		Mix_HaltChannel(-1); //Someone missused the function
+		volume = 0;
+		angle = 0;
+		ret = false;
+		break;
+	}
+	
+	Mix_SetPosition(channel, angle, volume);
+	return ret;
+}
+

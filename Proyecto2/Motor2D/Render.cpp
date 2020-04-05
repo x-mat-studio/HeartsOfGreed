@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "Collision.h"
 
 
 ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 })
@@ -61,14 +62,18 @@ bool ModuleRender::Start()
 	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
-	app->render->currentCamX = app->render->camera.x;
-	app->render->currentCamY = app->render->camera.y;
+	currentCamX = camera.x;
+	currentCamY = camera.y;
+
+	//these 2 lines are here to test the 1st map TODO delete
+	/*app->render->currentCamX = 1027;
+	app->render->currentCamY = -2500;*/
 	return true;
 }
 
 
 // Called each loop iteration
-bool ModuleRender::PreUpdate()
+bool ModuleRender::PreUpdate(float dt)
 {
 	SDL_RenderClear(renderer);
 	return true;
@@ -81,13 +86,12 @@ bool ModuleRender::Update(float dt)
 }
 
 
-bool ModuleRender::PostUpdate()
+bool ModuleRender::PostUpdate(float dt)
 {
-	app->render->camera.x = app->render->currentCamX;
-	app->render->camera.y = app->render->currentCamY;
-
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+	
 	SDL_RenderPresent(renderer);
+	
 	return true;
 }
 
@@ -142,14 +146,30 @@ void ModuleRender::ResetViewPort()
 
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y) const
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, bool fliped, bool cameraUse, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	float scale = app->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speedX) + x * scale;
-	rect.y = (int)(camera.y * speedY) + y * scale;
+	
+	if (cameraUse == true) {
+		rect.x = (int)(camera.x * speedX) + x * scale;
+		rect.y = (int)(camera.y * speedY) + y * scale;
+	}
+	else
+	{
+		rect.x = (int) x * scale;
+		rect.y = (int) y * scale;
+	}
+
+	if (alpha != 0)
+	{
+		SDL_SetTextureAlphaMod(texture, alpha);
+	}
+	
 
 
 	if (section != NULL)
@@ -201,8 +221,11 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 			//LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError()); //TODO solve this
 			ret = false;
 		}
+	}
 
-
+	if (alpha != 0)
+	{
+		SDL_SetTextureAlphaMod(texture, 255);
 	}
 
 
@@ -210,10 +233,12 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 }
 
 
-bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
+bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera)
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	float scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -244,10 +269,12 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 }
 
 
-bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) 
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	float scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -272,10 +299,12 @@ bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Ui
 }
 
 
-bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
+	camera.x = currentCamX;
+	camera.y = currentCamY;
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	float scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -305,3 +334,26 @@ bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 
 
 	return ret;
 }
+
+void ModuleRender::GetCameraMeasures(int& w, int& h)
+{
+	w = camera.w;
+	h = camera.h;
+}
+
+void ModuleRender::AssignCameraMeasures()
+{
+	camera.w = app->win->screenSurface->w;
+	camera.h = app->win->screenSurface->h;
+}
+
+const int ModuleRender::GetCameraX()
+{
+	return camera.x;
+}
+
+const int ModuleRender::GetCameraY()
+{
+	return camera.y;
+}
+

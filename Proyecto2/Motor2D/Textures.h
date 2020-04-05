@@ -2,7 +2,6 @@
 #define __TEXTURES_H__
 
 #include "Module.h"
-#include <vector>
 
 struct SDL_Texture;
 struct SDL_Surface;
@@ -34,7 +33,7 @@ public:
 public:
 
 	std::vector<SDL_Texture*>	textures;
+	
 };
-
 
 #endif // __TEXTURES_H__

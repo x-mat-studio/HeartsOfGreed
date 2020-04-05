@@ -4,8 +4,6 @@
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
 
-enum class COLLIDER_TYPE;
-
 class Frame
 {
 public:

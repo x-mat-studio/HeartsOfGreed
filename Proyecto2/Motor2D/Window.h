@@ -6,6 +6,15 @@
 struct SDL_Window;
 struct SDL_Surface;
 
+enum class RESOLUTION_MODE
+{
+	FULLSCREEN, //use this for fullscreen
+	BORDERLESS,
+	RESIZABLE,
+	FULLSCREEN_WINDOW,
+	STATIC //this for windowed
+};
+
 class ModuleWindow : public Module
 {
 public:
@@ -21,6 +30,20 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Called each loop
+	bool Update(float dt);
+
+	//Change screen resolution functions
+	SDL_Window* ResizeWindow(RESOLUTION_MODE stateResolution);
+
+	bool AssignSurface(SDL_Window* window);
+
+	bool ChangeWindow(RESOLUTION_MODE stateResolution);
+
+	int SetResolutionFlag(RESOLUTION_MODE stateResolution);
+
+	bool ChangeResolution(RESOLUTION_MODE newResolution);
+
 	// Changae title
 	void SetTitle(const char* new_title);
 
@@ -28,7 +51,11 @@ public:
 	void GetWindowSize(uint& width, uint& height) const;
 
 	// Retrieve window scale
-	uint GetScale() const;
+	float GetScale() const;
+
+	float SetScale(float newScale);
+
+	float  AddScale(float addedScale);
 
 public:
 	//The window we'll be rendering to
@@ -39,10 +66,15 @@ public:
 
 	uint		width;
 	uint		height;
-	uint		scale;
+
+	RESOLUTION_MODE stateResolution;
+	
 
 private:
 	P2SString	title;
+	float		scale;
+	float minScaleValue;
+	float maxScaleValue;
 
 };
 

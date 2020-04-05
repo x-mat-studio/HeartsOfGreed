@@ -35,7 +35,6 @@ bool ModuleTextures::Awake(pugi::xml_node& config)
 		ret = false;
 	}
 
-
 	return ret;
 }
 
@@ -55,12 +54,10 @@ bool ModuleTextures::CleanUp()
 	LOG("Freeing textures and Image library");
 	int numTextures = textures.size();
 
-
 	for (int i = 0; i < numTextures; i++)
 	{
 		SDL_DestroyTexture(textures[i]);
 	}
-
 
 	textures.clear();
 	IMG_Quit();

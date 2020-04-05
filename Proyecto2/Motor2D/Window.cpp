@@ -2,14 +2,14 @@
 #include "p2Log.h"
 #include "App.h"
 #include "Window.h"
+#include "Input.h"
+#include "Render.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleWindow::ModuleWindow() : Module()
+ModuleWindow::ModuleWindow() : Module(), scale(.0f),minScaleValue(.0f),maxScaleValue(.0f),height(0u),width(0u),window(NULL),screenSurface(NULL)
 {
-	window = NULL;
-	screenSurface = NULL;
 	name.create("window");
 }
 
@@ -32,7 +32,7 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 	else
 	{
 		//Create window
-		Uint32 flags = SDL_WINDOW_SHOWN;
+		
 		bool fullscreen = config.child("fullscreen").attribute("value").as_bool(false);
 		bool borderless = config.child("borderless").attribute("value").as_bool(false);
 		bool resizable = config.child("resizable").attribute("value").as_bool(false);
@@ -40,39 +40,26 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 
 		width = config.child("resolution").attribute("width").as_int(640);
 		height = config.child("resolution").attribute("height").as_int(480);
-		scale = config.child("resolution").attribute("scale").as_int(1);
-
-
-		if(fullscreen == true)
-			flags |= SDL_WINDOW_FULLSCREEN;
-
+		scale = config.child("resolution").attribute("scale").as_float(1.0);
+		minScaleValue = config.child("resolution").attribute("minScaleValue").as_float(1.0);
+		maxScaleValue = config.child("resolution").attribute("maxScaleValue").as_float(1.0);
+		
+		stateResolution = RESOLUTION_MODE::STATIC;
+		
+		if (fullscreen == true)
+			stateResolution = RESOLUTION_MODE::FULLSCREEN;
 
 		if(borderless == true)
-			flags |= SDL_WINDOW_BORDERLESS;
-
+			stateResolution = RESOLUTION_MODE::BORDERLESS;
 
 		if(resizable == true)
-			flags |= SDL_WINDOW_RESIZABLE;
-
+			stateResolution = RESOLUTION_MODE::RESIZABLE;
 
 		if(fullscreenWindow == true)
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			stateResolution = RESOLUTION_MODE::FULLSCREEN_WINDOW;
 
-
-		window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
-
-
-		if(window == NULL)
-			ret = false;
-		else
-		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface(window);
-		}
-
-
+		ret = ChangeWindow(stateResolution);
 	}
-
 
 	return ret;
 }
@@ -95,6 +82,111 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
+bool ModuleWindow::Update(float dt)
+{
+	bool ret = true; 
+	
+	//ONCE we have UI this should be menu events
+	
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
+
+		ChangeResolution(RESOLUTION_MODE::FULLSCREEN);
+
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN) {
+
+		ChangeResolution(RESOLUTION_MODE::STATIC);
+
+	}
+
+	return ret;
+}
+
+
+SDL_Window* ModuleWindow::ResizeWindow(RESOLUTION_MODE stateResolution)
+{
+	window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SetResolutionFlag(stateResolution));
+
+	return window;
+}
+
+
+bool ModuleWindow::AssignSurface(SDL_Window * window)
+{
+	if (window == NULL)
+		return false;
+	else
+	{
+		//Get window surface
+		screenSurface = SDL_GetWindowSurface(window);
+		return true;
+	}
+}
+
+
+bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
+{
+	SDL_Window* newWindow = ResizeWindow(stateResolution);
+
+	bool changeRet = AssignSurface(newWindow);
+
+	return changeRet;
+}
+
+
+int ModuleWindow::SetResolutionFlag(RESOLUTION_MODE stateResolution)
+{
+	Uint32 flags = 0;
+
+	switch (stateResolution)
+	{
+	case RESOLUTION_MODE::FULLSCREEN:
+		flags |= SDL_WINDOW_FULLSCREEN;
+		break;
+
+	case RESOLUTION_MODE::BORDERLESS:
+		flags |= SDL_WINDOW_BORDERLESS;
+		break;
+
+	case RESOLUTION_MODE::RESIZABLE:
+		flags |= SDL_WINDOW_RESIZABLE;
+		break;
+
+	case RESOLUTION_MODE::FULLSCREEN_WINDOW:
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+		break;
+
+	case RESOLUTION_MODE::STATIC:
+		flags |= SDL_WINDOW_SHOWN;
+		break;
+
+	default:
+		flags |= SDL_WINDOW_SHOWN;
+		break;
+	}
+
+	return flags;
+}
+
+
+bool ModuleWindow::ChangeResolution(RESOLUTION_MODE newResolution)
+{
+	bool ret = false;
+
+	if (stateResolution != newResolution) {
+
+		stateResolution = newResolution;
+
+		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
+
+		app->render->AssignCameraMeasures();
+
+		ret = true;
+	}
+
+	return ret;
+}
+
 
 // Set new window title
 void ModuleWindow::SetTitle(const char* new_title)
@@ -110,7 +202,37 @@ void ModuleWindow::GetWindowSize(uint& width, uint& height) const
 }
 
 
-uint ModuleWindow::GetScale() const
+float ModuleWindow::GetScale() const
 {
+	return scale;
+}
+
+
+float ModuleWindow::SetScale(float newScale)
+{
+	scale = newScale;
+	
+	
+	if (scale < minScaleValue)
+		scale = minScaleValue;
+	else if (scale > maxScaleValue)
+		scale = maxScaleValue;
+
+	
+	return scale;
+}
+
+
+float  ModuleWindow::AddScale(float addedScale)
+{
+	scale += addedScale;
+
+
+	if (scale < minScaleValue)
+		scale = minScaleValue;
+	else if (scale > maxScaleValue)
+		scale = maxScaleValue;
+
+
 	return scale;
 }

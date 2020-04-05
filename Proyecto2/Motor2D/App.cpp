@@ -4,12 +4,20 @@
 #include "Window.h"
 #include "Input.h"
 #include "Textures.h"
+#include "Collision.h"
 #include "Audio.h"
 #include "Render.h"
 #include "Map.h"
-
+#include "TestScene.h"
+#include "Player.h"
+#include "EntityManager.h"
+#include "EventManager.h"
+#include "UIManager.h"
+#include "Pathfinding.h"
+#include "AI.h"
+#include "FoWManager.h"
+#include "Fonts.h"
 #include "App.h"
-
 
 
 // Constructor
@@ -26,14 +34,35 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new ModuleRender();
 	map = new ModuleMap();
 	tex = new ModuleTextures();
+	testScene = new ModuleTestScene();
+	coll = new ModuleCollision();
+	entityManager = new ModuleEntityManager();
+	eventManager = new ModuleEventManager();
+	uiManager = new ModuleUIManager();
+	player = new ModulePlayer();
+	ai = new ModuleAI();
+	pathfinding = new ModulePathfinding();
+	fonts = new ModuleFonts();
+	fowManager = new FoWManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(eventManager);
 	AddModule(input);
 	AddModule(win);
 	AddModule(audio);
 	AddModule(tex);
+	AddModule(fonts);
 	AddModule(map);
+	AddModule(testScene);
+	AddModule(coll);
+	AddModule(fowManager);
+	AddModule(entityManager);
+	AddModule(pathfinding);
+	AddModule(player);
+	AddModule(ai);
+	AddModule(uiManager);
+	
 	// render last to swap buffer
 	AddModule(render);
 
@@ -210,8 +239,16 @@ void App::FinishUpdate()
 	uint32 lastFrameMs = frameTime.Read();
 	uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
+	int mouseX, mouseY = 0;
+	input->GetMousePosition(mouseX, mouseY);
 	static char title[256];
+	sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  || Mouse X:%f  Y:%f",
+		app->render->GetCameraX(), app->render->GetCameraY(),
+		(-app->render->currentCamX + mouseX) / app->win->GetScale(),
+		(-app->render->currentCamY + mouseY) / app->win->GetScale()
+	);
 
+	app->win->SetTitle(title);
 
 	if (capFrames == false)
 	{
@@ -246,10 +283,6 @@ void App::FinishUpdate()
 		}*/
 
 	}
-
-
-	app->win->SetTitle(title);
-
 
 	//actuvate / deactivate framrate cap
 	/*if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
@@ -287,9 +320,13 @@ bool App::PreUpdate()
 			continue;
 
 
-		ret = modules[i]->PreUpdate();
+		ret = modules[i]->PreUpdate(dt);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_STATE::KEY_DOWN) {
+
+		debugMode = !debugMode;
+	}
 
 	return ret;
 }
@@ -330,7 +367,7 @@ bool App::PostUpdate()
 			continue;
 		}
 
-		ret = modules[i]->PostUpdate();
+		ret = modules[i]->PostUpdate(dt);
 	}
 
 	frames++;		//NOT SURE
