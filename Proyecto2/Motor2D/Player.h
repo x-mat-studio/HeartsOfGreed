@@ -30,6 +30,9 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
+	void AddResources(int gain);
+	bool UseResources(int cost);
+
 private:
 	
 	void Select();
@@ -48,9 +51,11 @@ private:
 
 	SDL_Rect selectRect;
 
-	bool selectUnits=false;
-	bool entityComand=false;
-	bool entityInteraction=false;
+	bool selectUnits = false;
+	bool entityComand = false;
+	bool entityInteraction = false;
+
+	int resources;
 };
 
 

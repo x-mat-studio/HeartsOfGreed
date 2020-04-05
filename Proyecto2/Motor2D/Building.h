@@ -37,21 +37,11 @@ public:
 	//Destructor
 	~Building();
 
-	// Called before the first frame
-	// bool Start();
-
 	// Called each loop iteration
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	// Called before quitting
-	bool CleanUp();
-
-	//Called when loading a save
-	bool Load(pugi::xml_node&);
-	//Called to save the game
-	bool Save(pugi::xml_node&) const;
 
 	void OnCollision(Collider* collider);
 	void Draw(float dt);

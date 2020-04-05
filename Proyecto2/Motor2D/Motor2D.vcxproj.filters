@@ -64,9 +64,6 @@
     <ClCompile Include="Building.cpp">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
-    </ClCompile>
     <ClCompile Include="Turret.cpp">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
@@ -211,9 +208,6 @@
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
-      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Turret.h">
