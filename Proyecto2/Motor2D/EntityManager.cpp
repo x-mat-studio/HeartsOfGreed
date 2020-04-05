@@ -105,7 +105,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
-	
+
 	/*for (int i = 0; i < 5; i++) {
 		testSpawner->spawnEnemy(150 + 15 * i, 650);
 	}*/
@@ -133,6 +133,8 @@ bool ModuleEntityManager::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
+	testBuilding->SetTexture(base1Texture);
+	
 	return ret;
 }
 
@@ -141,7 +143,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	CheckListener(this);
+		CheckListener(this);
 
 	CheckIfStarted();
 
@@ -204,9 +206,6 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::BLDG_BARRICADE:
 				break;
 
-			case ENTITY_TYPE::BLDG_CORE:
-				break;
-
 			default:
 				entityVector[i]->Start(suitManTexture);
 				break;
@@ -221,7 +220,7 @@ bool ModuleEntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	CheckListener(this);
+		CheckListener(this);
 
 	int numEntities = entityVector.size();
 
@@ -239,7 +238,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	SpriteOrdering(dt);
+		SpriteOrdering(dt);
 
 
 	int numEntities = entityVector.size();
@@ -265,7 +264,7 @@ bool ModuleEntityManager::CleanUp()
 	}
 
 	entityVector.clear();
-	
+
 	app->tex->UnLoad(suitManTexture);
 	app->tex->UnLoad(buildingTexture);
 
@@ -415,7 +414,7 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 		}
 	}
 
-	
+
 }
 
 
@@ -516,7 +515,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 		if (app->map->EntityInsideCamera(posX, posY, w, h) == true) {
 
-			assert((int)ENTITY_TYPE::MAX_TYPE == 14);
+			assert((int)ENTITY_TYPE::MAX_TYPE == MAX_ENTITY_TYPES);
+
 			switch (entityVector[i]->GetType())
 			{
 			case ENTITY_TYPE::BUILDING:
@@ -524,7 +524,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			case ENTITY_TYPE::BLDG_BASE:
 			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
-			//case ENTITY_TYPE::BLDG_CORE:	CORE_CONSTRUCTOR_NEEDED
+				//case ENTITY_TYPE::BLDG_CORE:	CORE_CONSTRUCTOR_NEEDED
 				buildingVector.push_back(entityVector[i]);
 				break;
 			case ENTITY_TYPE::ENEMY:
@@ -686,24 +686,46 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 }
 
 
-SPRITE_POSITION ModuleEntityManager:: CheckSpriteHeight(Entity* movEntity, Entity* building) const
+SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity* building) const
 {
-	
 	if (movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y)
 	{
 		return SPRITE_POSITION::HIGHER_THAN_BUILDING;
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
-	
+
 	else
 	{
 		return SPRITE_POSITION::LOWER_THAN_BUILDING;
 	}
+}
 
+
+void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
+{
+	switch (type)
+	{
+	case ENTITY_TYPE::BUILDING:
+		testBuilding->SetPosition(x, y);
+		testBuilding->Draw(0);
+		break;
+	case ENTITY_TYPE::BLDG_TURRET:
+		break;
+	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+		break;
+	case ENTITY_TYPE::BLDG_BASE:
+		break;
+	case ENTITY_TYPE::BLDG_BARRICADE:
+		break;
+
+	default:
+
+		break;
+	}
 
 }

@@ -8,8 +8,9 @@
 #include "SDL/include/SDL_mouse.h"
 #include "Module.h"
 
+#include "Entity.h"
+
 class Hero;
-class Entity;
 
 class ModulePlayer : public Module
 {
@@ -33,12 +34,17 @@ public:
 	void AddResources(int gain);
 	bool UseResources(int cost);
 
+	bool ActivateBuildMode(ENTITY_TYPE building);
+	void DesactivateBuildMode();
+
 private:
 	
+	bool HandleInput();
+
 	void Select();
 	bool Click();
 	void RightClick();
-	bool HandleInput();
+	bool BuildClick();
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DrawSelectQuad();
@@ -47,17 +53,20 @@ private:
 	std::vector <Hero*> heroesVector;
 	Entity* focusedEntity;
 
+	ENTITY_TYPE buildingToBuild;
+
 	iMPoint clickPosition;
 
 	SDL_Rect selectRect;
 
-	bool selectUnits = false;
-	bool entityComand = false;
-	bool entityInteraction = false;
+	bool selectUnits;
+	bool entityComand;
+	bool entityInteraction;
+
+	bool buildMode;
 
 	int resources;
 };
 
 
-
-#endif __PLAYER_H__
+#endif //__PLAYER_H__
