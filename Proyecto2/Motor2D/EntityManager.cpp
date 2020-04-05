@@ -241,6 +241,15 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 	SpriteOrdering(dt);
 
+
+	int numEntities = entityVector.size();
+
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		entityVector[i]->PostUpdate(dt);
+	}
+
 	return true;
 }
 
