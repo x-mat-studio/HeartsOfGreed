@@ -72,7 +72,6 @@ bool Building::Update(float dt)
 
 bool Building::PostUpdate(float dt)
 {
-	Draw(dt);
 	return true;
 }
 

@@ -98,7 +98,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Enemy collider and spawner
-	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
+	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyIdleLeftDown, 5, 0, 250, 1, 120, 25, 5, 0);
 	testSpawner = new Spawner(sampleEnemy);
 
@@ -239,9 +239,6 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	SpriteOrdering(dt);
-
-
 	int numEntities = entityVector.size();
 
 
@@ -249,6 +246,8 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	{
 		entityVector[i]->PostUpdate(dt);
 	}
+
+	SpriteOrdering(dt);
 
 	return true;
 }
@@ -579,9 +578,6 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			break;
 		}
 
-		// I Need more than one building to check this, or at least one i can go behind of...
-	// CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE; USE POINTERS ONTO THE VECTOR
-		//  movEntity->GetAnimationRect(dt) THIS DOES A VERY DIRTY TRICK. IS IT A FRAME 1 THING OR DO I HAVE TO CHANGE THE COMPARISSON METHOD ON CHECKSPRITEHEIHGT?
 	}
 
 	numEntities = renderVector.size();
