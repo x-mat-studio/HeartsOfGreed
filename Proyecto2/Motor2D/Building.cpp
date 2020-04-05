@@ -76,31 +76,12 @@ bool Building::PostUpdate(float dt)
 }
 
 
-bool Building::CleanUp()
-{
-
-	return true;
-}
-
 void Building::OnCollision(Collider* collider)
 {
 	if (collider->type == COLLIDER_HERO)
 	{
 		transparent = true;
 	}
-}
-
-bool Building::Load(pugi::xml_node&)
-{
-
-	return true;
-}
-
-
-bool Building::Save(pugi::xml_node&) const
-{
-
-	return true;
 }
 
 

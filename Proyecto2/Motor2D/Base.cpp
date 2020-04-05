@@ -1,32 +1,44 @@
 #include "Base.h"
 #include "Turret.h"
 #include "Barricade.h"
-#include "Core.h"
 #include "UpgradeCenter.h"
 #include "Building.h"
+
 #include "Collision.h"
+#include "EntityManager.h"
+#include "Player.h"
 
 
-Base::Base(int maxTurrets, int maxBarricades, Core* baseCore, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets, std::vector <Barricade*> baseBarricades, Collider* baseArea) :
+Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets, 
+	       std::vector <Barricade*> baseBarricades, Collider* baseArea, int resourceProductionRate, int hitPoints, int recoveryHitPointsRate, int transparency) :
+
+	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider),
 
 	maxTurrets(maxTurrets),
 	maxBarricades(maxBarricades),
-	baseCore(baseCore),
+	resourceProductionRate(resourceProductionRate),
+
 	baseUpgradeCenter(baseUpgradeCenter),
 	turretsVector(baseTurrets),
 	barricadesVector(baseBarricades),
+
 	baseAreaAlarm(baseArea)
+	
 {}
 
 
-Base::Base(Base * copy):
+Base::Base(fMPoint position, Base* copy) :
+
+	Building(copy->position, copy),
 
 	maxTurrets(copy->maxTurrets),
 	maxBarricades(copy->maxBarricades),
-	baseCore(copy->baseCore),
+	resourceProductionRate(copy->resourceProductionRate),
+
 	baseUpgradeCenter(copy->baseUpgradeCenter),
 	turretsVector(copy->turretsVector),
 	barricadesVector(copy->barricadesVector),
+
 	baseAreaAlarm(copy->baseAreaAlarm)
 {}
 
@@ -34,6 +46,21 @@ Base::Base(Base * copy):
 Base::~Base()
 {}
 
+
+bool Base::Update(float dt)
+{
+
+	GainResources(dt);
+
+	return true;
+}
+
+
+bool Base::PostUpdate(float dt)
+{
+	
+	return true;
+}
 
 void Base::DisableTurrets()
 {
@@ -45,24 +72,47 @@ void Base::DisableTurrets()
 }
 
 
-void Base::AddTurret(Turret* turret)
+bool Base::AddTurret(Turret* turret)
 {
-	turretsVector.push_back(turret);
+	if (turretsVector.size() == maxTurrets)
+		return false;
+
+
+	else
+	{
+		turretsVector.push_back(turret);
+		return true;
+	}
 }
 
 
-void Base::AddBarricade(Barricade* barricade)
+bool Base::AddBarricade(Barricade* barricade)
 {
-	barricadesVector.push_back(barricade);
+	if (barricadesVector.size() == maxBarricades)
+		return false;
+
+
+	else
+	{
+		barricadesVector.push_back(barricade);
+		return true;
+	}
 }
 
 
-void Base::AddUpgradeCenter(UpgradeCenter* upgradeCenter)
+bool Base::AddUpgradeCenter(UpgradeCenter* upgradeCenter)
 {
 	//We should only have one upgrade center
-	assert(baseUpgradeCenter != nullptr);
+	if (baseUpgradeCenter == nullptr)
+	{
+		baseUpgradeCenter = upgradeCenter;
+		return true;
+	}
 
-	baseUpgradeCenter = upgradeCenter;
+
+	else
+		return false;
+	
 }
 
 
@@ -99,14 +149,12 @@ void Base::RemoveBarricade(Barricade* barricade)
 
 void Base::RemoveUpgradeCenter()
 {
-
+	baseUpgradeCenter = nullptr;
 }
 
 
 void Base::ChangeAligment(ENTITY_ALIGNEMENT aligment)
 {
-
-	baseCore->SetAlignment(aligment);
 	baseUpgradeCenter->SetAlignment(aligment);
 
 	int numTurrets = turretsVector.size();
@@ -124,5 +172,39 @@ void Base::ChangeAligment(ENTITY_ALIGNEMENT aligment)
 		barricadesVector[i]->SetAlignment(aligment);
 	}
 
-	baseAligment = aligment;
+	align = aligment;
+}
+
+
+bool Base::RessurectHero(ENTITY_TYPE heroType)
+{
+	if (heroType == ENTITY_TYPE::HERO_GATHERER)
+	{
+		app->entityManager->AddEntity(heroType, position.x, position.y);
+		return true;
+	}
+
+	else if (heroType == ENTITY_TYPE::HERO_MELEE)
+	{
+		app->entityManager->AddEntity(heroType, position.x, position.y);
+		return true;
+	}
+
+	else if (heroType == ENTITY_TYPE::HERO_RANGED)
+	{
+		app->entityManager->AddEntity(heroType, position.x, position.y);
+		return true;
+	}
+
+
+	return false;
+}
+
+
+void Base::GainResources(float dt)
+{
+	if (align == ENTITY_ALIGNEMENT::PLAYER)
+	{
+		app->player->AddResources(resourceProductionRate * dt);
+	}
 }

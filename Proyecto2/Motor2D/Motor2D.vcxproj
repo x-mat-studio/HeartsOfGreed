@@ -85,7 +85,6 @@
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="Core.cpp" />
     <ClCompile Include="DynamicEntity.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -132,7 +131,6 @@
     <ClInclude Include="Brofiler\Brofiler\Brofiler.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="Collision.h" />
-    <ClInclude Include="Core.h" />
     <ClInclude Include="DynamicEntity.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />

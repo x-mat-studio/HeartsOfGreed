@@ -159,20 +159,14 @@ bool FoWManager::CleanUp()
 	bool ret = true;
 	DeleteFoWMap();
 
-	int i = 0;
-	while (fowEntities.size() > 0)
+	int numElements = fowEntities.size();
+
+	for (int i = 0; i < numElements; i++)
 	{
-
-
-		if (fowEntities[i] != nullptr)
-		{
-			delete fowEntities[i];
-			fowEntities[i] = nullptr;
-			fowEntities.erase(fowEntities.begin() + i);
-			i--;
-		}
-		i++;
+		RELEASE(fowEntities[i]);
+		fowEntities[i] = nullptr;
 	}
+
 	fowEntities.clear();
 
 

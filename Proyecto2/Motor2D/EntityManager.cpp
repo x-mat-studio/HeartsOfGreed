@@ -265,6 +265,12 @@ bool ModuleEntityManager::CleanUp()
 
 	entityVector.clear();
 	
+	//destroy sample entites
+	RELEASE(sampleMelee);
+	RELEASE(sampleEnemy);
+	sampleMelee = nullptr;
+	sampleEnemy = nullptr;
+
 	app->tex->UnLoad(suitManTexture);
 	app->tex->UnLoad(buildingTexture);
 

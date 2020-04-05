@@ -10,7 +10,18 @@
 #include "Map.h"
 #include "EventManager.h"
 
-ModulePlayer::ModulePlayer() : Module(), focusedEntity(nullptr), selectRect{ 0,0,0,0 }
+ModulePlayer::ModulePlayer() :
+	
+Module(), 
+
+focusedEntity(nullptr), 
+
+resources(0),
+selectRect{ 0,0,0,0 },
+
+selectUnits(false),
+entityComand(false),
+entityInteraction(false)
 {
 	name.create("player");
 }
@@ -220,6 +231,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 }
 
+
 void ModulePlayer::DrawSelectQuad()
 {
 	if (selectUnits)
@@ -230,5 +242,25 @@ void ModulePlayer::DrawSelectQuad()
 	else
 	{
 		selectRect = { 0,0,0,0 };
+	}
+}
+
+
+void ModulePlayer::AddResources(int gain)
+{
+	resources += gain;
+}
+
+
+bool ModulePlayer::UseResources(int cost)
+{
+	if (cost > resources)
+		return false;
+
+
+	else
+	{
+		resources -= cost;
+		return true;
 	}
 }
