@@ -96,7 +96,7 @@ private:
 	void InternalInput(std::vector<HERO_INPUTS>& inputs, float dt);
 	HERO_STATES ProcessFsm(std::vector<HERO_INPUTS>& inputs);
 
-	void StateMachine();
+	void StateMachine(float dt);
 
 public:
 	int level;
