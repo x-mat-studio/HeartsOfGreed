@@ -82,7 +82,7 @@ bool Enemy::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
-	StateMachine();
+	StateMachine(dt);
 
 	CollisionPosUpdate();
 
@@ -90,7 +90,7 @@ bool Enemy::Update(float dt)
 }
 
 
-void Enemy::StateMachine()
+void Enemy::StateMachine(float dt)
 {
 	switch (state)
 	{
@@ -100,7 +100,7 @@ void Enemy::StateMachine()
 
 	case ENEMY_STATES::MOVE:
 
-		if (Move() == true)
+		if (Move(dt) == true)
 		{
 			if (shortTermObjective == nullptr)
 			{
@@ -143,7 +143,6 @@ void Enemy::StateMachine()
 
 bool Enemy::PostUpdate(float dt)
 {
-	Draw(dt);
 	return true;
 }
 

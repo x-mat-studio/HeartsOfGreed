@@ -86,7 +86,7 @@ private:
 	bool ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	ENEMY_STATES ProcessFsm(std::vector<ENEMY_INPUTS>& inputs);
 
-	void StateMachine();
+	void StateMachine(float dt);
 private:
 
 	int hitPoints;

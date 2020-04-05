@@ -107,7 +107,20 @@ bool ModuleUIManager::PostUpdate(float dt)
 //// Called before quitting
 bool ModuleUIManager::CleanUp()
 {
-	
+	int numElements = uiVector.size();
+
+	for (int i = 0; i < numElements; i++)
+	{
+		RELEASE(uiVector[i]);
+		uiVector[i] = nullptr;
+	}
+
+	uiVector.clear();
+
+
+	app->tex->UnLoad(atlas);
+
+	atlas = nullptr;
 
 	return true;
 }

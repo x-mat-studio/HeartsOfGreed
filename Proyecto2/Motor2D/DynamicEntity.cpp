@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
+#include "App.h"
 
 DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
 	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
@@ -15,7 +16,7 @@ DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* colli
 DynamicEntity::~DynamicEntity()
 {}
 
-bool DynamicEntity::Move()
+bool DynamicEntity::Move(float dt)
 {
 	BROFILER_CATEGORY("Move Unit", Profiler::Color::BlanchedAlmond);
 
@@ -84,8 +85,8 @@ bool DynamicEntity::Move()
 
 	// ------------------------------------------------------------------
 
-	position.x += (speed.x);
-	position.y += (speed.y);
+	position.x += (speed.x) * dt;
+	position.y += (speed.y) * dt;
 
 	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 5  && abs(position.y - nextPoint.y) <= 5)
 	{

@@ -56,7 +56,7 @@ public:
 
 	//VARIABLES
 public:
-	bool foWMapVisible = false;
+	bool foWMapVisible;
 
 	//A number of precomputed circle masks for you to use ranging between a radius of 2 to a radius of 5
 	unsigned short circleMasks[4][fow_MAX_CIRCLE_LENGTH * fow_MAX_CIRCLE_LENGTH] =
@@ -108,18 +108,18 @@ private:
 	//This is where the FoWEntites are stored
 	std::vector<FoWEntity*> fowEntities;
 	//This is where we store our FoW information
-	FoWDataStruct* fowMap = nullptr;
+	FoWDataStruct* fowMap;
 
-	SDL_Texture* smoothFoWtexture = nullptr;
-	SDL_Texture* debugFoWtexture = nullptr;
+	SDL_Texture* smoothFoWtexture;
+	SDL_Texture* debugFoWtexture;
 
 	//Map that we use to translate bits to Texture Id's
 	std::map<unsigned short, uint> bitToTextureTable;
 
 	uint width;
 	uint height;
-	bool debugMode = false;
-	bool foWMapNeedsRefresh = false;
+	bool debugMode;
+	bool foWMapNeedsRefresh;
 	float fowUpdateTimer;
 };
 
