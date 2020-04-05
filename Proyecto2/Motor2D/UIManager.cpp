@@ -98,7 +98,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		uiVector[i]->PostUpdate(dt, atlas);
+		uiVector[i]->PostUpdate(dt);
 	}
 
 	return ret;
@@ -112,7 +112,7 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
-UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable)
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text)
 {
 	UI* newUI = nullptr;
 
@@ -122,7 +122,7 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		newUI = new UI_Image(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_TEXT:
-		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable);
+		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable , text);
 		break;
 	case UI_TYPE::UI_BUTTON:
 		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
@@ -207,7 +207,13 @@ void ModuleUIManager::CreateBasicUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseButton", false);
 
+
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", false, "Hooooola");
+
 }
+
+SDL_Texture* ModuleUIManager::GetAtlasTexture() const
+{ return atlas; }
 
 SDL_Rect ModuleUIManager::RectConstructor(int x, int y, int w, int h)
 {
