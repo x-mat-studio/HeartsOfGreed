@@ -65,6 +65,8 @@ public:
 	void GetEntityNeighbours(std::vector<DynamicEntity*>* close_entity_list, std::vector<DynamicEntity*>* colliding_entity_list, DynamicEntity* thisUnit);
 
 
+	void PlayerBuildPreview(int x, int y, ENTITY_TYPE type);
+
 private:
 
 	void CheckIfStarted();

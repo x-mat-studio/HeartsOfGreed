@@ -127,6 +127,9 @@
     <ClCompile Include="Spawner.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Healthbar.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -272,6 +275,9 @@
     </ClInclude>
     <ClInclude Include="Spawner.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Healthbar.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -117,47 +117,62 @@ fMPoint Entity::GetPosition()
 }
 
 
+void Entity::SetPosition(int x, int y)
+{
+	position.x = x;
+	position.y = y;
+}
+
+
+void Entity::SetTexture(SDL_Texture* tex)
+{
+	texture = tex;
+}
+
+
 ENTITY_TYPE Entity::GetType()
 {
 	return type;
 }
+
 
 ENTITY_ALIGNEMENT Entity::GetAlignment()
 {
 	return this->align;
 }
 
+
 void Entity::SetAlignment(ENTITY_ALIGNEMENT newAlign)
 {
 	if (newAlign == ENTITY_ALIGNEMENT::UNKNOWN)
 	{
-		switch (this->type)
+		switch (type)
 		{
 		case ENTITY_TYPE::HERO_MELEE:
-			this->align = ENTITY_ALIGNEMENT::PLAYER;
+			align = ENTITY_ALIGNEMENT::PLAYER;
 			break;
 
 		case ENTITY_TYPE::HERO_RANGED:
-			this->align = ENTITY_ALIGNEMENT::PLAYER;
+			align = ENTITY_ALIGNEMENT::PLAYER;
 			break;
 
 		case ENTITY_TYPE::HERO_GATHERER:
-			this->align = ENTITY_ALIGNEMENT::PLAYER;
+			align = ENTITY_ALIGNEMENT::PLAYER;
 			break;
 
 		case ENTITY_TYPE::ENEMY:
-			this->align = ENTITY_ALIGNEMENT::ENEMY;
+			align = ENTITY_ALIGNEMENT::ENEMY;
 			break;
 
 		default:
-			this->align = ENTITY_ALIGNEMENT::NEUTRAL;
+			align = ENTITY_ALIGNEMENT::NEUTRAL;
 			break;
 		}
 
 	}
 	else
 	{
-		this->align = newAlign;
+		align = newAlign;
 	}
 
 }

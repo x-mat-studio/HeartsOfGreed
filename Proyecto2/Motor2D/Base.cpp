@@ -62,6 +62,7 @@ bool Base::PostUpdate(float dt)
 	return true;
 }
 
+
 void Base::DisableTurrets()
 {
 	for (uint i = 0; i < this->turretsVector.size(); i++) 

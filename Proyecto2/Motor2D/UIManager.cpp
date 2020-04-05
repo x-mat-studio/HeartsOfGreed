@@ -4,6 +4,7 @@
 #include "UI_Image.h"
 #include "UI_Button.h"
 #include "UI_Text.h"
+#include "UI_Healthbar.h"
 #include "EventManager.h"
 #include "Window.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -138,6 +139,9 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable , text);
 		break;
 	case UI_TYPE::UI_BUTTON:
+		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
+		break;
+	case UI_TYPE::UI_HEALTHBAR:
 		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	}

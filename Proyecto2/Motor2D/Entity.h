@@ -7,6 +7,8 @@
 #include "Animation.h"
 #include "FoWEntity.h"
 
+#define MAX_ENTITY_TYPES 13
+
 struct Collider;
 struct SDL_Texture;
 
@@ -25,7 +27,6 @@ enum class ENTITY_TYPE
 	BLDG_UPGRADE_CENTER,
 	BLDG_BASE,
 	BLDG_BARRICADE,
-	BLDG_CORE,
 
 	MAX_TYPE
 };
@@ -62,6 +63,11 @@ public:
 	virtual bool DealDamage(int damage);
 
 	fMPoint GetPosition();
+	void SetPosition(int x, int y);
+
+	void SetTexture(SDL_Texture* texture);
+	
+
 	SDL_Rect GetAnimationRect(float dt);
 	ENTITY_TYPE GetType();
 	ENTITY_ALIGNEMENT GetAlignment();

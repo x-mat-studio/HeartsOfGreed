@@ -1,7 +1,8 @@
-#include "Player.h"
-#include "Entity.h"
-#include "Hero.h"
 #include "App.h"
+
+#include "Player.h"
+
+#include "Hero.h"
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
@@ -21,7 +22,11 @@ selectRect{ 0,0,0,0 },
 
 selectUnits(false),
 entityComand(false),
-entityInteraction(false)
+entityInteraction(false),
+buildMode(false),
+
+buildingToBuild(ENTITY_TYPE::UNKNOWN)
+
 {
 	name.create("player");
 }
@@ -61,6 +66,11 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue);
 
+	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN) // For debug purposes
+	{
+		ActivateBuildMode(ENTITY_TYPE::BUILDING);
+	}
+
 	CheckListener(this);
 
 	HandleInput();
@@ -75,9 +85,7 @@ bool ModulePlayer::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
 
-
-		CheckListener(this);
-
+	CheckListener(this);
 
 	return true;
 }
@@ -88,6 +96,11 @@ bool ModulePlayer::PostUpdate(float dt)
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
 
 	CheckListener(this);
+	
+	if (buildMode == true)
+	{
+		app->entityManager->PlayerBuildPreview((-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale(), buildingToBuild);
+	}
 
 	DrawSelectQuad();
 	return true;
@@ -97,19 +110,33 @@ bool ModulePlayer::PostUpdate(float dt)
 //Handles Player Input
 bool ModulePlayer::HandleInput()
 {
-	if (entityComand)
+	if (buildMode == false)
 	{
-		entityComand = false;
-		RightClick();
+		if (entityComand)
+		{
+			entityComand = false;
+			RightClick();
+		}
+		if (entityInteraction)
+		{
+			entityInteraction = false;
+			Click();
+		}
+		else if (selectUnits)
+		{
+			Select();
+		}
 	}
-	if (entityInteraction)
+
+	else
 	{
-		entityInteraction = false;
-		Click();
-	}
-	else if (selectUnits)
-	{
-		Select();
+		app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
+
+
+		if (entityInteraction)
+		{
+			BuildClick();
+		}
 	}
 
 	return true;
@@ -208,6 +235,16 @@ void ModulePlayer::RightClick()
 	}
 }
 
+
+bool ModulePlayer::BuildClick()
+{
+	//Needs more work
+	app->entityManager->AddEntity(buildingToBuild, clickPosition.x, clickPosition.y);
+
+	return true;
+}
+
+
 void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
 	
@@ -263,4 +300,27 @@ bool ModulePlayer::UseResources(int cost)
 		resources -= cost;
 		return true;
 	}
+}
+
+
+bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building)
+{
+	if (buildMode == false || (building != ENTITY_TYPE::BLDG_TURRET && building != ENTITY_TYPE::BLDG_UPGRADE_CENTER && building != ENTITY_TYPE::BLDG_BARRICADE && building != ENTITY_TYPE::BUILDING))
+	{
+		buildMode = true;
+		buildingToBuild = building;
+
+		return true;
+	}
+
+	else
+		return false;
+
+}
+
+
+void ModulePlayer::DesactivateBuildMode()
+{
+	buildMode = false;
+	buildingToBuild = ENTITY_TYPE::UNKNOWN;
 }
