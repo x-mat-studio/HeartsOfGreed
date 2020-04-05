@@ -43,17 +43,11 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Barricade.cpp">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
@@ -62,9 +56,6 @@
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Building.cpp">
-      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClCompile>
     <ClCompile Include="Turret.cpp">
@@ -87,9 +78,6 @@
     </ClCompile>
     <ClCompile Include="Pathfinding.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicEntity.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
     <ClCompile Include="MeleeHero.cpp">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
@@ -118,9 +106,6 @@
     <ClCompile Include="AssetManager.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
-    <ClCompile Include="Spawner.cpp">
-      <Filter>Desenvolupament  ========\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Fonts.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
@@ -129,6 +114,18 @@
     </ClCompile>
     <ClCompile Include="FoWEntity.cpp">
       <Filter>Desenvolupament  ========\Fog of War\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicEntity.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,17 +189,11 @@
     <ClInclude Include="EntityManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Barricade.h">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
@@ -211,9 +202,6 @@
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
-      <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
       <Filter>Desenvolupament  ========\Entities\Buildings</Filter>
     </ClInclude>
     <ClInclude Include="Turret.h">
@@ -233,9 +221,6 @@
     </ClInclude>
     <ClInclude Include="Pathfinding.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicEntity.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
     <ClInclude Include="MeleeHero.h">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
@@ -264,9 +249,6 @@
     <ClInclude Include="AssetManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
-    <ClInclude Include="Spawner.h">
-      <Filter>Desenvolupament  ========\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Fonts.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
@@ -278,6 +260,18 @@
     </ClInclude>
     <ClInclude Include="FoWBitDefs.h">
       <Filter>Desenvolupament  ========\Fog of War\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicEntity.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +340,12 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Fog of War\header files">
       <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\cpp files">
+      <UniqueIdentifier>{264e1060-39b9-4e8c-a535-b5ab03f0e522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\header files">
+      <UniqueIdentifier>{cbdc8652-8c70-4841-bde0-e62fe4536b86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -237,8 +237,6 @@ void Hero::StateMachine()
 
 bool Hero::PostUpdate(float dt)
 {
-	Draw(dt);
-
 	if (app->debugMode)
 		DebugDraw();
 

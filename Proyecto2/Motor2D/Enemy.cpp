@@ -143,7 +143,6 @@ void Enemy::StateMachine()
 
 bool Enemy::PostUpdate(float dt)
 {
-	Draw(dt);
 	return true;
 }
 

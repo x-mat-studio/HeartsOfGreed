@@ -72,16 +72,9 @@ bool Building::Update(float dt)
 
 bool Building::PostUpdate(float dt)
 {
-	Draw(dt);
 	return true;
 }
 
-
-bool Building::CleanUp()
-{
-
-	return true;
-}
 
 void Building::OnCollision(Collider* collider)
 {
@@ -89,19 +82,6 @@ void Building::OnCollision(Collider* collider)
 	{
 		transparent = true;
 	}
-}
-
-bool Building::Load(pugi::xml_node&)
-{
-
-	return true;
-}
-
-
-bool Building::Save(pugi::xml_node&) const
-{
-
-	return true;
 }
 
 
