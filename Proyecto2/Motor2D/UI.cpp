@@ -42,10 +42,8 @@ bool UI::Update(float dt)
 	return true;
 }
 
-bool UI::PostUpdate(float dt, SDL_Texture* texture)
+bool UI::PostUpdate(float dt)
 {
-
-	Draw(texture);
 
 	return true;
 }
