@@ -75,31 +75,31 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	wanamingodoc.load_file(filename.GetString());
 	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo");
 
-	//Animation enemyWalkLeft = walkLeft.PushAnimation(suitman, "walk_left");
-	//Animation enemyWalkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
-	//Animation enemyWalkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
-	//Animation enemyWalkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
-	//Animation enemyWalkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
-	//Animation enemyWalkRight = walkRight.PushAnimation(suitman, "walk_right");
+	Animation enemyWalkLeft = enemyWalkLeft.PushAnimation(wanamingo, "wanamingoLeftWalk"); // looks good
+	Animation enemyWalkLeftUp = enemyWalkLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftWalk");// looks good
+	Animation enemyWalkLeftDown = enemyWalkLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftWalk"); // last frame teleports to the left
+	Animation enemyWalkRightUp = enemyWalkRightUp.PushAnimation(wanamingo, "wanamingoUpRightWalk"); // looks good
+	Animation enemyWalkRightDown = enemyWalkRightDown.PushAnimation(wanamingo, "wanamingoDownRightWalk"); // looks good
+	Animation enemyWalkRight = enemyWalkRight.PushAnimation(wanamingo, "wanamingoRightWalk");// looks good
 
-	Animation enemyIdleRight = enemyIdleRight.PushAnimation(wanamingo, "wanamingoRightIdle");
-	Animation enemyIdleRightUp = enemyIdleRightUp.PushAnimation(wanamingo, "wanamingoUpRightIdle");
-	Animation enemyIdleRightDown = enemyIdleRightDown.PushAnimation(wanamingo, "wanamingoDownRightIdle");
-	Animation enemyIdleLeft = enemyIdleLeft.PushAnimation(wanamingo, "wanamingoLeftIdle");
-	Animation enemyIdleLeftUp = enemyIdleLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftIdle");
-	Animation enemyIdleLeftDown = enemyIdleLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftIdle");
+	Animation enemyIdleRight = enemyIdleRight.PushAnimation(wanamingo, "wanamingoRightIdle"); //goes up then bumps right
+	Animation enemyIdleRightUp = enemyIdleRightUp.PushAnimation(wanamingo, "wanamingoUpRightIdle"); //bumps left
+	Animation enemyIdleRightDown = enemyIdleRightDown.PushAnimation(wanamingo, "wanamingoDownRightIdle"); //bumps right
+	Animation enemyIdleLeft = enemyIdleLeft.PushAnimation(wanamingo, "wanamingoLeftIdle"); //bumps left
+	Animation enemyIdleLeftUp = enemyIdleLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftIdle"); //bumps right
+	Animation enemyIdleLeftDown = enemyIdleLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftIdle"); //bumps right
 
-	Animation enemyPunchRight = enemyPunchRight.PushAnimation(wanamingo, "wanamingoRightIdle");
-	Animation enemyPunchRightUp = enemyPunchRightUp.PushAnimation(wanamingo, "wanamingoUpRightIdle");
-	Animation enemyPunchRightDown = enemyPunchRightDown.PushAnimation(wanamingo, "wanamingoDownRightIdle");
-	Animation enemyPunchLeft = enemyPunchLeft.PushAnimation(wanamingo, "wanamingoLeftIdle");
-	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftIdle");
-	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftIdle");
+	Animation enemyPunchRight = enemyPunchRight.PushAnimation(wanamingo, "wanamingoRightPunch"); //looks good
+	Animation enemyPunchRightUp = enemyPunchRightUp.PushAnimation(wanamingo, "wanamingoUpRightPunch"); //jesus christ 
+	Animation enemyPunchRightDown = enemyPunchRightDown.PushAnimation(wanamingo, "wanamingoDownRightPunch"); //goes back and forth
+	Animation enemyPunchLeft = enemyPunchLeft.PushAnimation(wanamingo, "wanamingoLeftPunch"); //It should bump to the other side!
+	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftPunch"); //jesus christ 
+	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
 
 
 	//Enemy collider and spawner
-	Collider* enemyCollider = new Collider({ 0,0,30,65 }, COLLIDER_ENEMY, this);
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyIdleLeftDown, 5, 0, 250, 1, 120, 25, 5, 0);
+	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 120, 25, 5, 0);
 	testSpawner = new Spawner(sampleEnemy);
 
 	//Test building
@@ -249,6 +249,8 @@ bool ModuleEntityManager::PostUpdate(float dt)
 		entityVector[i]->PostUpdate(dt);
 	}
 
+	SpriteOrdering(dt);
+
 	return true;
 }
 
@@ -264,6 +266,12 @@ bool ModuleEntityManager::CleanUp()
 	}
 
 	entityVector.clear();
+	
+	//destroy sample entites
+	RELEASE(sampleMelee);
+	RELEASE(sampleEnemy);
+	sampleMelee = nullptr;
+	sampleEnemy = nullptr;
 
 	app->tex->UnLoad(suitManTexture);
 	app->tex->UnLoad(buildingTexture);
@@ -579,9 +587,6 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			break;
 		}
 
-		// I Need more than one building to check this, or at least one i can go behind of...
-	// CHECK IF DELETING IT LIKE THIS WORKS OR I HAVE TO ITERATE; USE POINTERS ONTO THE VECTOR
-		//  movEntity->GetAnimationRect(dt) THIS DOES A VERY DIRTY TRICK. IS IT A FRAME 1 THING OR DO I HAVE TO CHANGE THE COMPARISSON METHOD ON CHECKSPRITEHEIHGT?
 	}
 
 	numEntities = renderVector.size();

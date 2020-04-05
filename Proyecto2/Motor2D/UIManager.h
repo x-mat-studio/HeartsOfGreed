@@ -2,10 +2,11 @@
 #define __UIMANAGER_H__
 
 #include "Module.h"
-#include "UI.h"
 #include <list>
 
+struct SDL_Texture;
 class UI;
+enum class UI_TYPE;
 
 class ModuleUIManager : public Module
 {
@@ -23,7 +24,8 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable);
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text = nullptr);
+	SDL_Texture* GetAtlasTexture() const;
 	void RemoveDeletedUI();
 
 	bool CleanUp();

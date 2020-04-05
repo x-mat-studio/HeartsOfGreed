@@ -168,7 +168,7 @@ bool Hero::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
-	StateMachine();
+	StateMachine(dt);
 
 	CollisionPosUpdate();
 
@@ -176,7 +176,7 @@ bool Hero::Update(float dt)
 }
 
 
-void Hero::StateMachine()
+void Hero::StateMachine(float dt)
 {
 	switch (state)
 	{
@@ -186,7 +186,7 @@ void Hero::StateMachine()
 
 	case HERO_STATES::MOVE:
 		currentAnimation = &walkLeft;
-		Move();
+		Move(dt);
 		visionEntity->SetNewPosition(position);
 
 		CheckAttackRange();

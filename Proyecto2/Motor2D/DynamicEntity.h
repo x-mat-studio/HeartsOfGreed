@@ -15,7 +15,7 @@ public:
 	~DynamicEntity();
 
 	//Returns true while moving, returns false when stops
-	bool Move();
+	bool Move(float dt);
 
 	bool GeneratePath(int x, int y);
 	void DebugDraw();

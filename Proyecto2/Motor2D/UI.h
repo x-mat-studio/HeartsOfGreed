@@ -4,6 +4,7 @@
 #include "SDL/include/SDL_rect.h"
 #include "p2Point.h"
 #include "Animation.h"
+#include "UIManager.h"
 #include "p2SString.h"
 
 struct SDL_Texture;
@@ -12,7 +13,10 @@ enum class UI_TYPE
 {
 	UI_IMG,
 	UI_BUTTON,
-	UI_TEXT
+	UI_TEXT,
+	UI_HEALTHBAR,
+
+	UI_NONE
 };
 
 class UI
@@ -28,7 +32,7 @@ public:
 	virtual bool Start();
 	virtual bool PreUpdate(float dt);
 	virtual bool Update(float dt);
-	bool PostUpdate(float dt, SDL_Texture* texture);
+	virtual bool PostUpdate(float dt);
 	void Draw(SDL_Texture* texture);
 
 	bool MouseUnderElement(int x, int y);
@@ -42,6 +46,7 @@ protected:
 public:
 	
 	bool debugBox;
+	bool hover;
 	bool dragable;
 	bool focused;
 	bool toDelete;
@@ -52,6 +57,8 @@ protected:
 	fMPoint localPosition;
 
 	SDL_Rect box;
+	SDL_Texture* texture = nullptr;
+
 	UI* parent;
 	UI_TYPE type;
 
