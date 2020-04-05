@@ -114,6 +114,7 @@
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_Button.cpp" />
+    <ClCompile Include="UI_Healthbar.cpp" />
     <ClCompile Include="UI_Image.cpp" />
     <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_Button.h" />
+    <ClInclude Include="UI_Healthbar.h" />
     <ClInclude Include="UI_Image.h" />
     <ClInclude Include="UI_Text.h" />
     <ClInclude Include="UpgradeCenter.h" />

@@ -13,7 +13,10 @@ enum class UI_TYPE
 {
 	UI_IMG,
 	UI_BUTTON,
-	UI_TEXT
+	UI_TEXT,
+	UI_HEALTHBAR,
+
+	UI_NONE
 };
 
 class UI
@@ -43,6 +46,7 @@ protected:
 public:
 	
 	bool debugBox;
+	bool hover;
 	bool dragable;
 	bool focused;
 	bool toDelete;
