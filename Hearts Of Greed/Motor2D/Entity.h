@@ -3,6 +3,7 @@
 
 #include "SDL/include/SDL_rect.h"
 #include "Collision.h"
+#include "Audio.h"
 #include "p2Point.h"
 #include "Animation.h"
 #include "FoWEntity.h"
@@ -12,16 +13,24 @@
 struct Collider;
 struct SDL_Texture;
 
-enum class ENTITY_TYPE
+
+enum class ENTITY_TYPE : int
+
 {
-	UNKNOWN,
+	UNKNOWN = -1,
+
 	PARTICLE,
 	EMITER,
 	PARTICLE_SYSTEM,
+
+	SPAWNER,
+
 	HERO_MELEE,
 	HERO_RANGED,
 	HERO_GATHERER,
+
 	ENEMY,
+
 	BUILDING,
 	BLDG_TURRET,
 	BLDG_UPGRADE_CENTER,
@@ -31,9 +40,9 @@ enum class ENTITY_TYPE
 	MAX_TYPE
 };
 
-enum class ENTITY_ALIGNEMENT
+enum class ENTITY_ALIGNEMENT : int
 {
-	UNKNOWN,
+	UNKNOWN = -1,
 	PLAYER,
 	ENEMY,
 	NEUTRAL,
@@ -74,6 +83,10 @@ public:
 
 	void SetToDelete(bool toDelete);
 	virtual void Draw(float dt);	
+
+	//Sound related
+	DIRECTION GetMyDirection();
+	LOUDNESS GetMyLoudness();
 
 public:
 	bool started;

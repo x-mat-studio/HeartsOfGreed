@@ -6,6 +6,7 @@
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 #define MAX_VOLUME 128
+#define MAX_SFX 50
 
 struct _Mix_Music;
 
@@ -25,7 +26,8 @@ enum class DIRECTION {
 enum class LOUDNESS {
 	QUIET,
 	NORMAL,
-	LOUD
+	LOUD,
+	SILENCE
 };
 
 class ModuleAudio : public Module
@@ -69,6 +71,8 @@ private:
 
 	_Mix_Music* music;
 
+	int sfxList[MAX_SFX];
+	
 	std::vector<Mix_Chunk*>	fx;  //We need a Array of Numbers: sfx are stored as unsigned int
 };
 

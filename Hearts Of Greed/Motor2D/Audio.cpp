@@ -159,23 +159,21 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 // Play WAV
 bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loudness, DIRECTION direction)
 {
-	ConfigureChannel(channel, loudness, direction);
-
-	bool ret = false;
 	id += 0;
-	if (!enabled)
+	if (!enabled || loudness == LOUDNESS::SILENCE)
 		return false;
 
-
-	if (id > 0 && id <= fx.size())
-	{
-		Mix_PlayChannel(channel, fx[id - 1], repeat,);
-		//Input explanation: first argument is channel, -1  meanining first free channel. Second argument is a pointer to the chunk to play.
-		//3rd argument is number of loops. if you want in once, put 0. -1 plays it "infinite" times.
+	if (channel > 0 && Mix_Playing(channel) == 0) {
+		ConfigureChannel(channel, loudness, direction);
+		if (id > 0 && id <= fx.size())
+		{
+			Mix_PlayChannel(channel, fx[id - 1], repeat, );
+			//Input explanation: first argument is channel, -1  meanining first free channel. Second argument is a pointer to the chunk to play.
+			//3rd argument is number of loops. if you want in once, put 0. -1 plays it "infinite" times.
+		}
 	}
-
-
-	return ret;
+	
+	return true;
 }
 
 
@@ -202,10 +200,10 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	switch (loudness)
 	{
 	case LOUDNESS::QUIET:
-		volume = 254;
+		volume = 200;
 		break;
 	case LOUDNESS::NORMAL:
-		volume = 120;
+		volume = 100;
 		break;
 	case LOUDNESS::LOUD:
 		volume = 1;
