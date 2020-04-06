@@ -13,8 +13,10 @@ class DynamicEntity;
 class Enemy;
 class Spawner;
 
-enum class SPRITE_POSITION
+enum class SPRITE_POSITION : int
 {
+	INVALID = -1,
+
 	BEHIND_BUILDING,
 	HIGHER_THAN_BUILDING,
 	LOWER_THAN_BUILDING,
@@ -111,7 +113,7 @@ private:
 
 	Enemy* sampleEnemy;
 
-	Spawner* testSpawner;
+	Spawner* sampleSpawner;
 
 	Building* testBuilding;
 	Building* blueBuilding;

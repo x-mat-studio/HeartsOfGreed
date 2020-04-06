@@ -13,17 +13,27 @@
 struct Collider;
 struct SDL_Texture;
 
+<<<<<<< HEAD
 
 enum class ENTITY_TYPE
+=======
+enum class ENTITY_TYPE : int
+>>>>>>> 7890a75206cf4386a05bcc16121d247783f14e04
 {
-	UNKNOWN,
+	UNKNOWN = -1,
+
 	PARTICLE,
 	EMITER,
 	PARTICLE_SYSTEM,
+
+	SPAWNER,
+
 	HERO_MELEE,
 	HERO_RANGED,
 	HERO_GATHERER,
+
 	ENEMY,
+
 	BUILDING,
 	BLDG_TURRET,
 	BLDG_UPGRADE_CENTER,
@@ -33,9 +43,9 @@ enum class ENTITY_TYPE
 	MAX_TYPE
 };
 
-enum class ENTITY_ALIGNEMENT
+enum class ENTITY_ALIGNEMENT : int
 {
-	UNKNOWN,
+	UNKNOWN = -1,
 	PLAYER,
 	ENEMY,
 	NEUTRAL,

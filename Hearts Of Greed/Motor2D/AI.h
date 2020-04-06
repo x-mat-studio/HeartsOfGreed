@@ -8,7 +8,8 @@
 
 #include "vector"
 
-class Building;
+class Base;
+class Spawner;
 
 class ModuleAI : public Module
 {
@@ -23,7 +24,8 @@ public:
 
 	fMPoint* GetObjective();
 	
-	void PushBase(Building* building);
+	void PushBase(Base* building);
+	void PushSpawner(Spawner* spawner);
 
 private:
 	void CreateSelectionCollider(Collider*);
@@ -33,7 +35,8 @@ private:
 	
 private:
 	fMPoint objectivePos;
-	std::vector<Building*> baseVector;
+	std::vector<Base*> baseVector;
+	std::vector<Spawner*> spawnerVector;
 
 };
 
