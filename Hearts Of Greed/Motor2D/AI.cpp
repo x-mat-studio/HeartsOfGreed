@@ -2,7 +2,8 @@
 #include "AI.h"
 #include "EventManager.h"
 #include "Collision.h"
-#include "Building.h"
+#include "Base.h"
+#include "Spawner.h"
 
 ModuleAI::ModuleAI() : Module()
 {
@@ -103,7 +104,13 @@ int ModuleAI::CheckBaseAligmentAttack()
 }
 
 
-void ModuleAI::PushBase(Building* building)
+void ModuleAI::PushBase(Base* building)
 {
 	baseVector.push_back(building);
+}
+
+
+void ModuleAI::PushSpawner(Spawner* building)
+{
+	spawnerVector.push_back(building);
 }

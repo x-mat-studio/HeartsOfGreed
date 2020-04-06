@@ -6,7 +6,7 @@
 #include "DynamicEntity.h"
 #include "Animation.h"
 
-enum class ENEMY_STATES
+enum class ENEMY_STATES : int
 {
 	UNKNOWN = -1,
 	IDLE,
@@ -21,7 +21,7 @@ enum class ENEMY_STATES
 };
 
 
-enum class ENEMY_INPUTS
+enum class ENEMY_INPUTS : int
 {
 	IN_IDLE,
 	IN_MOVE,
@@ -63,11 +63,6 @@ public:
 
 	bool MoveTo(int x, int y);
 
-	//Various clone methods, all share same utility 
-
-	virtual Enemy* Clone();
-	virtual Enemy* Clone(fMPoint positionToBe);
-	virtual Enemy* Clone(int x, int y);
 	void Draw(float dt);
 
 private:

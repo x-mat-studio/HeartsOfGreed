@@ -9,6 +9,7 @@
 #include "Pathfinding.h"
 #include "FoWManager.h"
 #include "EntityManager.h"
+#include "FadeToBlack.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
 {
@@ -31,12 +32,11 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	//Play Music
+	//app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 	
-	
-	//app->map->LoadNew("map_prototype.tmx");
-
-	
-	app->audio->PlayMusic("audio/music/Raiders.ogg", 0.0F, 50);
+	//Load sfx used in this scene
+	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{
@@ -112,7 +112,19 @@ bool  ModuleTestScene::Update(float dt)
 	{
 		app->render->currentCamX -= camVel * dt;
 	}
+
+	//DEBUGSOUND
+	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN)
+	{
+		app->audio->PlayFx(wanamingoRoar,0,1,LOUDNESS::LOUD,DIRECTION::BACK_RIGHT);
+	}
+
 	
+	//debug key to try Module Fade
+	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN)
+	{
+		app->fadeToBlack->FadeToBlack(this, this);
+	}
 	
 
 	//mouse drag / mouse zoom

@@ -20,6 +20,7 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	interactable(false),
 	hover(false),
 	enabled(true)
+
 {}
 
 UI::~UI()

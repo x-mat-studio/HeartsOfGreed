@@ -1,5 +1,7 @@
 #include "Entity.h"
 #include "Render.h"
+#include "Window.h"
+#include "Audio.h"
 #include "App.h"
 
 Entity::Entity()
@@ -86,6 +88,7 @@ void Entity::OnCollision(Collider* collider)
 	
 }
 
+
 void Entity::CollisionPosUpdate()
 {
 	collider->SetPos(position.x - offset.x, position.y - offset.y);
@@ -98,9 +101,58 @@ Collider* Entity::GetCollider() const
 }
 
 
-
 void Entity::Draw(float dt)
 {}
+
+
+DIRECTION Entity::GetMyDirection()
+{
+	int midScreenX = app->render->GetCameraX() + app->win->width / 2;
+	
+	int relativeX = position.x - midScreenX;
+	
+
+	if (relativeX > 30) {
+
+		return DIRECTION::RIGHT;
+	}
+
+	if (relativeX < -30) {
+
+		return DIRECTION::LEFT;
+	}
+	
+	return DIRECTION::FRONT;
+}
+
+
+LOUDNESS Entity::GetMyLoudness()
+{
+	int deltaX = position.x - app->render->GetCameraX();
+	int deltaY = position.y - app->render->GetCameraY();
+
+	int SQRDistance = deltaX * deltaX + deltaY * deltaY;
+
+	//numbers need testing
+
+	if (SQRDistance < 100) {
+
+		return LOUDNESS::LOUD;
+	}
+	if (SQRDistance < 200) {
+
+		return LOUDNESS::NORMAL;
+	}
+	if (SQRDistance < 300) {
+
+		return LOUDNESS::QUIET;
+	}
+	
+
+	return LOUDNESS::SILENCE;
+
+}
+
 
 
 fMPoint Entity::GetPosition()
@@ -168,6 +220,7 @@ void Entity::SetAlignment(ENTITY_ALIGNEMENT newAlign)
 	}
 
 }
+
 
 void Entity::SetToDelete(bool toDel)
 {

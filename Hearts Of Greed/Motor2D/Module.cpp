@@ -1,11 +1,11 @@
 #include "Module.h"
 
-Module::Module() : active(false)
+Module::Module() : enabled(false)
 {}
 
 void Module::Init()
 {
-	active = true;
+	enabled = true;
 }
 
 

@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Collision.h"
+#include "AI.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -100,15 +101,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 120, 25, 5, 0);
-	testSpawner = new Spawner(sampleEnemy);
+	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
 
-	/*for (int i = 0; i < 5; i++) {
-		testSpawner->spawnEnemy(150 + 15 * i, 650);
-	}*/
 
 	return ret;
 }
@@ -207,7 +205,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			default:
-				entityVector[i]->Start(suitManTexture);
+				entityVector[i]->started = true;
 				break;
 			}
 		}
@@ -237,9 +235,6 @@ bool ModuleEntityManager::Update(float dt)
 bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
-
-		SpriteOrdering(dt);
-
 
 	int numEntities = entityVector.size();
 
@@ -297,6 +292,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	switch (type)
 	{
+	case ENTITY_TYPE::SPAWNER:
+		ret = new Spawner({ (float)x,(float)y }, sampleSpawner);
+		app->ai->PushSpawner((Spawner*)ret);
+		break;
 	case ENTITY_TYPE::PARTICLE:
 		break;
 
@@ -327,6 +326,8 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:
+
+		app->ai->PushBase((Base*)ret);
 		break;
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
@@ -702,6 +703,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 	switch (type)
 	{
 	case ENTITY_TYPE::BUILDING:
+		testBuilding->ActivateTransparency();
 		testBuilding->SetPosition(x, y);
 		testBuilding->Draw(0);
 		break;

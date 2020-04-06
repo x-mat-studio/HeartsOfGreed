@@ -119,3 +119,9 @@ void Building::Draw(float dt)
 		app->render->Blit(texture, position.x, position.y);
 	}
 }
+
+
+void Building::ActivateTransparency()
+{
+	transparent = true;
+}

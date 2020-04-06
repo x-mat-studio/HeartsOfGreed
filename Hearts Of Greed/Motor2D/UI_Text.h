@@ -3,7 +3,6 @@
 
 #include "UI.h"
 #include "Fonts.h"
-#include "UIManager.h"
 
 class UI_Text : public UI
 

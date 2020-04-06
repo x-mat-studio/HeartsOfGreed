@@ -2,7 +2,6 @@
 #define __UI_IMAGE_H__
 
 #include "UI.h"
-#include "UIManager.h"
 
 class UI_Image : public UI
 {
