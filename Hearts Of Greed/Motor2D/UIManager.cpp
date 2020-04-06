@@ -5,6 +5,7 @@
 #include "UI_Button.h"
 #include "UI_Text.h"
 #include "UI_Healthbar.h"
+#include "UI_Portrait.h"
 #include "EventManager.h"
 #include "Window.h"
 #include "Brofiler/Brofiler/Brofiler.h"

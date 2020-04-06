@@ -50,6 +50,9 @@ bool UI::PostUpdate(float dt)
 	return true;
 }
 
+void UI::CleanUp()
+{}
+
 void UI::Draw(SDL_Texture* texture)
 {
 
