@@ -66,9 +66,14 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue);
 
-	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN) // For debug purposes
+	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
 		ActivateBuildMode(ENTITY_TYPE::BUILDING);
+	}
+
+	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
+	{
+		DesactivateBuildMode();
 	}
 
 	CheckListener(this);

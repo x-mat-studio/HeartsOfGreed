@@ -42,9 +42,10 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-
 	void OnCollision(Collider* collider);
 	void Draw(float dt);
+
+	void ActivateTransparency();
 
 private:
 	void ChangeBuildingState(BUILDING_STATE state);
