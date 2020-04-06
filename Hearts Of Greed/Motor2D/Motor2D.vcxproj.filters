@@ -130,6 +130,9 @@
     <ClCompile Include="UI_Healthbar.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="FadeToBlack.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -278,6 +281,9 @@
     </ClInclude>
     <ClInclude Include="UI_Healthbar.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeToBlack.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

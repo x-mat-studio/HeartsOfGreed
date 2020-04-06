@@ -31,7 +31,7 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
-		active = false;
+		enabled = false;
 		ret = true;
 	}
 
@@ -43,7 +43,7 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 
 	if ((init & flags) != flags)
 	{
-		active = false;
+		enabled = false;
 		ret = true;
 	}
 
@@ -51,7 +51,7 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
-		active = false;
+		enabled = false;
 		ret = true;
 	}
 
@@ -62,7 +62,7 @@ bool ModuleAudio::Awake(pugi::xml_node& config)
 // Called before quitting
 bool ModuleAudio::CleanUp()
 {
-	if (!active)
+	if (!enabled)
 		return true;
 
 
@@ -89,7 +89,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume)
 	}
 	Mix_VolumeMusic(volume);
 
-	if (!active)
+	if (!enabled)
 		return false;
 
 
@@ -137,7 +137,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 {
 	unsigned int ret = 0;
 
-	if (!active)
+	if (!enabled)
 		return 0;
 
 	Mix_Chunk* chunk = Mix_LoadWAV(path);
@@ -163,7 +163,7 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loud
 
 	bool ret = false;
 	id += 0;
-	if (!active)
+	if (!enabled)
 		return false;
 
 

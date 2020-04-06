@@ -9,6 +9,7 @@
 #include "Pathfinding.h"
 #include "FoWManager.h"
 #include "EntityManager.h"
+#include "FadeToBlack.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
 {
@@ -113,6 +114,11 @@ bool  ModuleTestScene::Update(float dt)
 		app->render->currentCamX -= camVel * dt;
 	}
 	
+	//debug key to try Module Fade
+	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN)
+	{
+		app->fadeToBlack->FadeToBlack(this, this);
+	}
 	
 
 	//mouse drag / mouse zoom

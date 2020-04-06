@@ -28,7 +28,7 @@ enum class EVENT_ENUM
 	ENTITY_INTERACTION, //aka left click
 
 	ENTITY_DEAD,
-	
+
 	// Hero creation /revival
 	HERO_MELEE_CREATED,
 	HERO_GATHERER_CREATED,
@@ -96,19 +96,18 @@ public:
 
 	void RemoveEvent(EVENT_ENUM eventId);
 
-	bool CheckListener(Module*mod);
+	bool CheckListener(Module* mod);
 
 	virtual void ExecuteEvent(EVENT_ENUM eventId);
 
 public:
 
 	P2SString				name;
-	bool					active;
 	std::vector<EVENT_ENUM>	listener;
 
-private:
+protected:
+	bool					enabled;
 
-	bool enabled = true;
 
 };
 
