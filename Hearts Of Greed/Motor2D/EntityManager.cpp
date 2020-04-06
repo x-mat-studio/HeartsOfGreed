@@ -239,9 +239,6 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-		SpriteOrdering(dt);
-
-
 	int numEntities = entityVector.size();
 
 

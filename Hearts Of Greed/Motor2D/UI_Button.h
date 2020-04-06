@@ -2,7 +2,6 @@
 #define __UI_BUTTON_H__
 
 #include "UI.h"
-#include "UIManager.h"
 
 class UI_Button : public UI
 {

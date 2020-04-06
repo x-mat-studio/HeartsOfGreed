@@ -15,7 +15,9 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	toDelete(false),
 	debugBox(false),
 	focused(false),
-	dragable(draggable)
+	dragable(draggable),
+	texture(app->uiManager->GetAtlasTexture())
+
 {}
 
 UI::~UI()

@@ -14,10 +14,19 @@ public:
 	bool Start();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
+	bool PostUpdate(float dt);
 
 private:
 
 	void HandleInput();
+	void AdjustHealth();
+
+private:
+
+	int* maxHealth;
+	int* currentHealth;
+	int previousHealth;
+	int originalWidth;
 
 };
 

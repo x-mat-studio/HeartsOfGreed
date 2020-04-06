@@ -57,7 +57,7 @@ protected:
 	fMPoint localPosition;
 
 	SDL_Rect box;
-	SDL_Texture* texture = nullptr;
+	SDL_Texture* texture;
 
 	UI* parent;
 	UI_TYPE type;
