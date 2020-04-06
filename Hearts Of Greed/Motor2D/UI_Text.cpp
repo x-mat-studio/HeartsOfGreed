@@ -1,39 +1,20 @@
 #include "UI_Text.h"
 #include "Render.h"
 
-UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable, char* text) : UI(positionValue, father, uiType, rect, uiName, draggable)
+UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable, char* text, SDL_Color color) : UI(positionValue, father, uiType, rect, uiName, draggable)
 {
-	texture = app->fonts->Print(text);
+	texture = app->fonts->Print(text, color);
 }
 
 UI_Text::~UI_Text()
 {}
 
-bool UI_Text::Start()
-{
-
-
-
-	return true;
-}
-
-bool UI_Text::PreUpdate(float dt)
-{
-	return true;
-}
-
-bool UI_Text::Update(float dt)
-{
-
-	return true;
-}
 
 bool UI_Text::PostUpdate(float dt)
 {
 
-	app->render->DrawQuad(box, 0, 0, 0, 255, true, false);
-
-	Draw(texture);
+	// We only use directly Blit in the case of Text. We need an NULL SDL_Rect.
+	app->render->Blit(texture, worldPosition.x, worldPosition.y, nullptr, 0.0f, false, false);
 
 	return true;
 }

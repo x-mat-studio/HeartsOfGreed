@@ -126,7 +126,7 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
-UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text)
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text, SDL_Color color)
 {
 	UI* newUI = nullptr;
 
@@ -136,7 +136,7 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		newUI = new UI_Image(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_TEXT:
-		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable , text);
+		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable , text , color);
 		break;
 	case UI_TYPE::UI_BUTTON:
 		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
@@ -224,8 +224,8 @@ void ModuleUIManager::CreateBasicUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseButton", false);
 
-	rect = RectConstructor(30, 30, 100, 30);
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", false, "Hooooola");
+	rect = RectConstructor(0, 0, 0, 0);
+	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", false, "DEMO OF TEXT");
 
 }
 
