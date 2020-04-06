@@ -5,7 +5,6 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 {
 	interactable = true;
 	accuratedDrag = { 0,0 };
-	texture = app->uiManager->GetAtlasTexture();
 }
 
 UI_Button::~UI_Button()

@@ -1,6 +1,6 @@
 #include "UI_Portrait.h"
 
-UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
+UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	nextVectorPosition(positionValue.y)
 {}
 
@@ -45,12 +45,12 @@ void UI_Portrait::CreatePortrait(Entity* entity)
 	newPortrait.position.x = worldPosition.x;
 	newPortrait.position.y = nextVectorPosition;
 	
-	newPortrait.background = new UI_Image(newPortrait.position, this, UI_TYPE::UI_IMG, rect, (P2SString)"backgroundPortrait", false);
+	newPortrait.background = new UI_Image(newPortrait.position, this, UI_TYPE::UI_IMG, rect, (P2SString)"backgroundPortrait", DRAGGABLE::DRAG_OFF);
 	
 //	newPortrait.backgroundLevel = ;		TODO
 	
 	rect = RectConstructor(29, 76, 68, 14);
-	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x - 5, newPortrait.position.y + 42), this, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"healthbarPortrait", false);
+	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x - 5, newPortrait.position.y + 42), this, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"healthbarPortrait", DRAGGABLE::DRAG_OFF);
 	
 //	newPortrait.level = ;				TODO
 
@@ -58,15 +58,15 @@ void UI_Portrait::CreatePortrait(Entity* entity)
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
 		rect = RectConstructor(351, 149, 68, 52);
-		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x - 2, newPortrait.position.y + 5), this, UI_TYPE::UI_IMG, rect, (P2SString)"gathererProtrait", false);
+		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x - 2, newPortrait.position.y + 5), this, UI_TYPE::UI_IMG, rect, (P2SString)"gathererProtrait", DRAGGABLE::DRAG_OFF);
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
 		rect = RectConstructor(147, 149, 68, 52);
-		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x - 2, newPortrait.position.y + 5), this, UI_TYPE::UI_IMG, rect, (P2SString)"rangedPortrait", false);
+		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x - 2, newPortrait.position.y + 5), this, UI_TYPE::UI_IMG, rect, (P2SString)"rangedPortrait", DRAGGABLE::DRAG_OFF);
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
 		rect = RectConstructor(561, 149, 68, 52);
-		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x - 2, newPortrait.position.y + 5), this, UI_TYPE::UI_IMG, rect, (P2SString)"meleePortrait", false);
+		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x - 2, newPortrait.position.y + 5), this, UI_TYPE::UI_IMG, rect, (P2SString)"meleePortrait", DRAGGABLE::DRAG_OFF);
 		break;
 	default:
 		assert(0 == 1);
