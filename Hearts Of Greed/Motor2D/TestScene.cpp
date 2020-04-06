@@ -31,12 +31,11 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	//Play Music
+	//app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 	
-	
-	//app->map->LoadNew("map_prototype.tmx");
-
-	
-	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
+	//Load sfx used in this scene
+	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{
@@ -112,6 +111,13 @@ bool  ModuleTestScene::Update(float dt)
 	{
 		app->render->currentCamX -= camVel * dt;
 	}
+
+	//DEBUGSOUND
+	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN)
+	{
+		app->audio->PlayFx(wanamingoRoar,0,1,LOUDNESS::LOUD,DIRECTION::BACK_RIGHT);
+	}
+
 	
 	
 

@@ -3,6 +3,7 @@
 
 #include "SDL/include/SDL_rect.h"
 #include "Collision.h"
+#include "Audio.h"
 #include "p2Point.h"
 #include "Animation.h"
 #include "FoWEntity.h"
@@ -11,6 +12,7 @@
 
 struct Collider;
 struct SDL_Texture;
+
 
 enum class ENTITY_TYPE
 {
@@ -74,6 +76,10 @@ public:
 
 	void SetToDelete(bool toDelete);
 	virtual void Draw(float dt);	
+
+	//Sound related
+	DIRECTION GetMyDirection();
+	LOUDNESS GetMyLoudness();
 
 public:
 	bool started;
