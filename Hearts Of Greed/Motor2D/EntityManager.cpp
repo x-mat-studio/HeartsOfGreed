@@ -423,19 +423,31 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 }
 
 
-Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
+Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT alig)
 {
-	int numEntitys = entityVector.size();
+	ENTITY_ALIGNEMENT alignementToSearch = ENTITY_ALIGNEMENT::UNKNOWN;
+	ENTITY_ALIGNEMENT alignement;
 
 	Collider* col;
 
-	ENTITY_TYPE type;
+	if (alig == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		alignementToSearch = ENTITY_ALIGNEMENT::PLAYER;
+	}
+
+	else if (alig == ENTITY_ALIGNEMENT::PLAYER)
+	{
+		alignementToSearch = ENTITY_ALIGNEMENT::ENEMY;
+	}
+
+
+	int numEntitys = entityVector.size();
 
 	for (int i = 0; i < numEntitys; i++)
 	{
-		type = entityVector[i]->GetType();
+		alignement = entityVector[i]->GetAlignment();
 
-		if (type == ENTITY_TYPE::PARTICLE || type == ENTITY_TYPE::PARTICLE_SYSTEM || type == ENTITY_TYPE::BLDG_BASE || type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::BUILDING)
+		if (alignement != alignementToSearch) 
 		{
 			continue;
 		}
@@ -450,39 +462,6 @@ Entity* ModuleEntityManager::CheckEnemyObjective(SDL_Rect* rect)
 			}
 		}
 	}
-
-	return nullptr;
-}
-
-Entity* ModuleEntityManager::CheckEnemyObjectiveTurret(SDL_Rect* rect)
-{
-	int numEntitys = entityVector.size();
-
-	Collider* col;
-
-	ENTITY_TYPE type;
-
-	for (int i = 0; i < numEntitys; i++)
-	{
-		type = entityVector[i]->GetType();
-
-		if (type != ENTITY_TYPE::ENEMY) //This type of check is only for player alliegment turrets
-		{
-			continue;
-		}
-
-		col = entityVector[i]->GetCollider();
-
-		if (col != nullptr)
-		{
-			if (col->CheckCollision(*rect))
-			{
-				return entityVector[i];
-			}
-		}
-	}
-
-	return nullptr;
 }
 
 

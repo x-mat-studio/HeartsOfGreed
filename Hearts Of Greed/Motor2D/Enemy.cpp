@@ -237,7 +237,7 @@ bool Enemy::SearchObjective()
 	rect.h = vision * 2;
 
 	Entity* objective;
-	objective = app->entityManager->CheckEnemyObjective(&rect);
+	objective = app->entityManager->SearchEntityRect(&rect, align);
 
 	if (objective != nullptr && shortTermObjective != objective)
 	{
