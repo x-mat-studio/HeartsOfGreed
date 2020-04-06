@@ -8,7 +8,7 @@ class UI_Healthbar : public UI
 
 public:
 
-	UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable);
+	UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable);
 	~UI_Healthbar();
 
 	bool Start();

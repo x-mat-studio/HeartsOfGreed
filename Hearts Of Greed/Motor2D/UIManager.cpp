@@ -126,7 +126,7 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
-UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text, SDL_Color color)
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE dragable, char* text, SDL_Color color)
 {
 	UI* newUI = nullptr;
 
@@ -179,25 +179,25 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::HERO_MELEE_CREATED:
 		
 		rect = RectConstructor(643, 145, 72, 56);
-		AddUIElement(fMPoint (w / app->win->GetScale() - rect.w, 60 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHeroMark", false);
+		AddUIElement(fMPoint (w / app->win->GetScale() - rect.w, 60 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHeroMark");
 		rect = RectConstructor(561, 149, 68, 52); 
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero", false);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero");
 
 		break;
 	case EVENT_ENUM::HERO_GATHERER_CREATED:
 		
 		rect = RectConstructor(643, 145, 72, 56);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark", false);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark");
 		rect = RectConstructor(351, 149, 68, 52);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h + 11), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero", false);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h + 11), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero");
 		
 		break;
 	case EVENT_ENUM::HERO_RANGED_CREATED:
 		
 		rect = RectConstructor(643, 145, 72, 56);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + 2 * rect.h + 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHeroMark", false);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + 2 * rect.h + 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHeroMark");
 		rect = RectConstructor(147, 149, 68, 52);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + 2 * rect.h + 20), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHero", false);
+		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + 2 * rect.h + 20), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHero");
 		
 		break;
 	case EVENT_ENUM::HERO_MELEE_OUT:
@@ -220,12 +220,12 @@ void ModuleUIManager::CreateBasicUI()
 	uint w(app->win->width), h(app->win->height);
 
 	rect = RectConstructor(221, 317, 162, 174);
-	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground", false);
+	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 	rect = RectConstructor(449, 24, 24, 24);
-	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseButton", false);
+	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", DRAGGABLE::DRAG_OFF);
 
 	rect = RectConstructor(0, 0, 0, 0);
-	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", false, "DEMO OF TEXT");
+	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT");
 
 }
 

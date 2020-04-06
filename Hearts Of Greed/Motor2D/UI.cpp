@@ -4,7 +4,7 @@
 UI::UI()
 {}
 
-UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable) :
+UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) :
 
 	worldPosition(positionValue),
 	parent(father),
@@ -15,7 +15,11 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	toDelete(false),
 	debugBox(false),
 	focused(false),
-	dragable(draggable)
+	draggable(draggable),
+	dragging(false),
+	interactable(false),
+	hover(false),
+	enabled(true)
 {}
 
 UI::~UI()
