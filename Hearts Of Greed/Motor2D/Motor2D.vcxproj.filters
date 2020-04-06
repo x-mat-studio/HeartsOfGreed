@@ -130,6 +130,9 @@
     <ClCompile Include="UI_Healthbar.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Hero.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -277,6 +280,9 @@
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
     <ClInclude Include="UI_Healthbar.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Hero.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
