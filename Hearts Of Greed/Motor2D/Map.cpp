@@ -657,8 +657,8 @@ bool ModuleMap::EntityInsideCamera(float& posX, float& posY, float& w, float& h)
 	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
 	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
 
-	if ((posX + w > up_left_cam_cornerX / scale && posX < down_right_cam_cornerX / scale) &&
-		((posY > up_left_cam_cornerY / scale) && posY - h < (down_right_cam_cornerY + data.tileHeight * scale) / scale)) {
+	if ((posX + (2 * w) > up_left_cam_cornerX / scale && posX - w < down_right_cam_cornerX / scale) &&
+		((posY + 2 * h > up_left_cam_cornerY / scale) && posY - h < (down_right_cam_cornerY + data.tileHeight) / scale)) {
 		return true;
 	}
 }
