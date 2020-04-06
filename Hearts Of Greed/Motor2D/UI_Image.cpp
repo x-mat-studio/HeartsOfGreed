@@ -32,7 +32,7 @@ bool UI_Image::Update(float dt)
 bool UI_Image::PostUpdate(float dt)
 {
 
-	Draw(texture);
+	//Draw(texture);
 
 	return true;
 }

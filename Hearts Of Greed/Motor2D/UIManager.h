@@ -24,7 +24,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text = nullptr);
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool dragable, char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 });
 	SDL_Texture* GetAtlasTexture() const;
 	void RemoveDeletedUI();
 
