@@ -12,7 +12,7 @@ class UpgradeCenter : public Building
 public:
 
 	UpgradeCenter(int turretLvl, int barricadeLvl);
-	UpgradeCenter(UpgradeCenter* copy);
+	UpgradeCenter(fMPoint position, UpgradeCenter* copy, ENTITY_ALIGNEMENT alignement);
 	~UpgradeCenter();
 
 

@@ -27,9 +27,9 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 {}
 
 
-Base::Base(fMPoint position, Base* copy) :
+Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Building(copy->position, copy),
+	Building(copy->position, copy, alignement),
 
 	maxTurrets(copy->maxTurrets),
 	maxBarricades(copy->maxBarricades),

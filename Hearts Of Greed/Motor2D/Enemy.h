@@ -47,7 +47,7 @@ public:
 		int xpOnDeath);
 
 
-	Enemy(fMPoint position, Enemy* copy);
+	Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align);
 
 	~Enemy();
 

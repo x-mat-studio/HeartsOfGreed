@@ -12,7 +12,7 @@ public:
 		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime);
 
-	GathererHero(fMPoint position, GathererHero* copy);
+	GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement);
 
 	bool UseHability1();
 	bool UseHability2();

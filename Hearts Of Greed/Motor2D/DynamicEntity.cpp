@@ -9,8 +9,15 @@
 #include "Window.h"
 #include "App.h"
 
-DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, Collider* collider, int moveRange1, int moveRange2) :
-	moveRange1(moveRange1), moveRange2(moveRange2), speed(0, 0), isMoving(false), Entity(position, type, collider, true), current_animation(nullptr)
+DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
+	
+	Entity(position, type, align, collider, true),
+
+	moveRange1(moveRange1), 
+	moveRange2(moveRange2), 
+	speed(0, 0), 
+	isMoving(false), 
+	current_animation(nullptr)
 {}
 
 DynamicEntity::~DynamicEntity()

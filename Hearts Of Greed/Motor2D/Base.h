@@ -20,7 +20,7 @@ public:
 	Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter , std::vector <Turret*> baseTurrets, 
 		std::vector <Barricade*> baseBarricades, Collider* baseArea, int resourceProductionRate, int hitPoints, int recoveryHitPointsRate, int transparency);
 
-	Base(fMPoint position, Base* copy);
+	Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement);
 
 	~Base();
 

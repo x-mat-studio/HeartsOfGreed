@@ -50,7 +50,7 @@ public:
 	void OnCollision(Collider*, Collider*);
 
 
-	Entity* AddEntity(ENTITY_TYPE type, int x, int y);
+	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
 
 
 	void RemoveDeletedEntitys();

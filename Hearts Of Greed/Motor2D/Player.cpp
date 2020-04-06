@@ -135,6 +135,7 @@ bool ModulePlayer::HandleInput()
 
 		if (entityInteraction)
 		{
+			entityInteraction = false;
 			BuildClick();
 		}
 	}
@@ -239,7 +240,7 @@ void ModulePlayer::RightClick()
 bool ModulePlayer::BuildClick()
 {
 	//Needs more work
-	app->entityManager->AddEntity(buildingToBuild, clickPosition.x, clickPosition.y);
+	app->entityManager->AddEntity(buildingToBuild, (-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale());
 
 	return true;
 }

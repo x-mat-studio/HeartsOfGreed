@@ -4,7 +4,7 @@
 
 Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider) :
 
-	Entity(position, ENTITY_TYPE::BUILDING, collider),
+	Entity(position, ENTITY_TYPE::BUILDING, ENTITY_ALIGNEMENT::NEUTRAL, collider),
 
 	hitPointsMax(hitPoints),
 	hitPointsCurrent(hitPoints),
@@ -21,9 +21,9 @@ Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, i
 {}
 
 
-Building::Building(fMPoint position, Building* copy) :
+Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Entity(position, copy->type, copy->collider),
+	Entity(position, copy->type, alignement, copy->collider),
 
 	hitPointsMax(copy->hitPointsMax),
 	hitPointsCurrent(copy->hitPointsMax),

@@ -62,7 +62,7 @@ public:
 		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime);
 
-	Hero(fMPoint position, Hero* copy);
+	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
 	~Hero();
 
 	bool MoveTo(int x, int y);

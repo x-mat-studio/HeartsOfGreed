@@ -12,28 +12,29 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	attackSpeed(attackSpeed),
 	range(range),
 	attackCD(0),
-	longTermObjective{ NULL, NULL },
+	
 	shortTermObjective(nullptr),
 	haveOrders(false),
 	state(TURRET_STATES::IDLE)
 {}
 
 
-Turret::Turret(Turret* copy) :
+Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
+
+	Building(position, copy, alignement),
 
 	animation(copy->animation),
 	turretLvl(copy->turretLvl),
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
 	range(copy->range), 
-	attackCD(0),
-	longTermObjective{ NULL, NULL },
-	shortTermObjective(nullptr),
-	haveOrders(false),
-	state(TURRET_STATES::IDLE),
 
-	//Building(fMPoint position, Building* copy)
-	Building(copy->position, copy) 
+	attackCD(0),
+
+	shortTermObjective(nullptr),
+
+	haveOrders(false),
+	state(TURRET_STATES::IDLE)
 {}
 
 
@@ -205,7 +206,7 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 			{
 			case TURRET_INPUTS::IN_ATTACK: state = TURRET_STATES::ATTACK;		break;
 
-			case TURRET_INPUTS::IN_DEAD:   state = TURRET_STATES::DEAD;		break;
+			case TURRET_INPUTS::IN_DEAD:   state = TURRET_STATES::DEAD;			break;
 			}
 		}	break;
 
@@ -215,7 +216,7 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 			{
 			case TURRET_INPUTS::IN_CHARGING_ATTACK:		state = TURRET_STATES::CHARGING_ATTACK;	break;
 
-			case TURRET_INPUTS::IN_DEAD:			   state = TURRET_STATES::DEAD;				break;
+			case TURRET_INPUTS::IN_DEAD:			    state = TURRET_STATES::DEAD;			break;
 			}
 		}	break;
 
@@ -224,13 +225,13 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case TURRET_INPUTS::IN_ATTACK_CHARGED: state = TURRET_STATES::ATTACK;				break;
+			case TURRET_INPUTS::IN_ATTACK_CHARGED:  state = TURRET_STATES::ATTACK;				break;
 
 			case TURRET_INPUTS::IN_OBJECTIVE_DONE:  state = TURRET_STATES::IDLE;				break;
 
-			case TURRET_INPUTS::IN_OUT_OF_RANGE:												break;
+			case TURRET_INPUTS::IN_OUT_OF_RANGE:	state = TURRET_STATES::IDLE;				break;
 
-			case TURRET_INPUTS::IN_DEAD:			   state = TURRET_STATES::DEAD;				break;
+			case TURRET_INPUTS::IN_DEAD:			state = TURRET_STATES::DEAD;				break;
 			}
 		}	break;
 

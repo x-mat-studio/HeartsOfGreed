@@ -28,7 +28,7 @@ public:
 
 	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider);
 
-	Building(fMPoint position, Building* copy);
+	Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement);
 
 	Building();
 

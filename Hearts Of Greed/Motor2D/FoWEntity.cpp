@@ -4,7 +4,7 @@
 #include "FoWBitDefs.h"
 #include "Map.h"
 
-FoWEntity::FoWEntity(fMPoint WorldPos,bool providesVisibility) :boundingBoxRadius(3), deleteEntity(false), providesVisibility(providesVisibility),posInMap({0,0}),isVisible(false)
+FoWEntity::FoWEntity(fMPoint WorldPos, bool providesVisibility) :boundingBoxRadius(3), deleteEntity(false), providesVisibility(providesVisibility), posInMap({ 0,0 }), isVisible(false)
 {
 	SetNewPosition(WorldPos);
 }
@@ -26,8 +26,8 @@ bool FoWEntity::CleanUp()
 
 void FoWEntity::SetNewPosition(fMPoint pos)
 {
-	posInMap= app->map->WorldToMap((int)pos.x, (int)pos.y);
-	
+	posInMap = app->map->WorldToMap((int)pos.x, (int)pos.y);
+
 	if (providesVisibility)
 	{
 		//updates the visibility map
@@ -68,7 +68,7 @@ std::vector<iMPoint> FoWEntity::GetTilesInsideRadius()const
 	{
 		for (int j = startingPos.x; j < finishingPos.x; j++)
 		{
-				ret.push_back({ j,i });
+			ret.push_back({ j,i });
 		}
 	}
 
@@ -107,8 +107,8 @@ void FoWEntity::ApplyMaskToTiles(std::vector<iMPoint>tilesAffected)
 //Applies the Mask to all tiles inside the radius
 void FoWEntity::Update()
 {
-	if(providesVisibility)
-	ApplyMaskToTiles(GetTilesInsideRadius());
+	if (providesVisibility)
+		ApplyMaskToTiles(GetTilesInsideRadius());
 }
 
 

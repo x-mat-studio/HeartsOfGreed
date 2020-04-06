@@ -291,7 +291,7 @@ void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 }
 
 //Add an entity
-Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
+Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement)
 {
 	Entity* ret = nullptr;
 
@@ -307,7 +307,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
-		ret = new Hero({ (float)x,(float)y }, sampleMelee);
+		ret = new Hero({ (float)x,(float)y }, sampleMelee, alignement);
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
@@ -317,7 +317,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 
 	case ENTITY_TYPE::BUILDING:
-		ret = new Building({ (float)x,(float)y }, testBuilding);
+		ret = new Building({ (float)x,(float)y }, testBuilding, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
@@ -333,7 +333,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y)
 		break;
 
 	case ENTITY_TYPE::ENEMY:
-		ret = new Enemy({ (float)x,(float)y }, sampleEnemy);
+		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, alignement);
 		break;
 
 	default:

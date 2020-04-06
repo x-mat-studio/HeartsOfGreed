@@ -6,44 +6,36 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(fMPoint position, ENTITY_TYPE type, bool dynamic) :
+Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, bool dynamic) :
 
 	position(position),
 	type(type),
-	started(false),
-	toDelete(false),
-	collider(nullptr),
-	flip(false),
-	texture(nullptr),
-	offset {0,0},
+	align(alignement),
 	dynamic(dynamic),
-	visionEntity(nullptr)
-{}
 
-
-Entity::Entity(fMPoint position, ENTITY_TYPE type, Collider* collider, bool dynamic) :
-
-	position(position),
-	type(type),
 	started(false),
 	toDelete(false),
+	flip(false),
+	
 	collider(collider),
-	flip(false),
+	visionEntity(nullptr),
 	texture(nullptr),
-	offset{ 0,0 },
-	dynamic(dynamic),
-	visionEntity(nullptr)
+
+	offset {0, 0}
 {}
 
 Entity::~Entity()
 {
-	texture = nullptr;
 	collider->to_delete = true;
+
+	texture = nullptr;
 	collider = nullptr;
+
 	if (visionEntity != nullptr && visionEntity!= NULL)
 	{
 		visionEntity->deleteEntity = true;
 	}
+
 	visionEntity = nullptr;
 	
 }

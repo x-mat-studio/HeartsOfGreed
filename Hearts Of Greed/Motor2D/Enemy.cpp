@@ -9,7 +9,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, type, collider, 5, 10),
+	DynamicEntity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -31,9 +31,9 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 {}
 
 
-Enemy::Enemy(fMPoint position, Enemy* copy) :
+Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
-	DynamicEntity(position, copy->type, copy->collider, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
 	animation(copy->animation),
 
 	hitPoints(copy->hitPoints),
@@ -164,18 +164,18 @@ bool Enemy::MoveTo(int x, int y)
 
 Enemy* Enemy::Clone()
 {
-	return new Enemy(this->position, this);
+	return new Enemy(this->position, this, ENTITY_ALIGNEMENT::NEUTRAL);
 }
 
 Enemy* Enemy::Clone(fMPoint positionToBe)
 {
-	return  new Enemy(positionToBe, this);
+	return  new Enemy(positionToBe, this, ENTITY_ALIGNEMENT::NEUTRAL);
 }
 
 Enemy* Enemy::Clone(int x, int y)
 {
 	fMPoint newPos(x, y);
-	return  new Enemy(newPos, this);
+	return  new Enemy(newPos, this, ENTITY_ALIGNEMENT::NEUTRAL);
 }
 
 
