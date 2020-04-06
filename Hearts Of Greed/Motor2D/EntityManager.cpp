@@ -107,9 +107,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
 
-	/*for (int i = 0; i < 5; i++) {
-		testSpawner->spawnEnemy(150 + 15 * i, 650);
-	}*/
 
 	return ret;
 }
@@ -706,6 +703,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 	switch (type)
 	{
 	case ENTITY_TYPE::BUILDING:
+		testBuilding->ActivateTransparency();
 		testBuilding->SetPosition(x, y);
 		testBuilding->Draw(0);
 		break;

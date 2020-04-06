@@ -22,7 +22,7 @@ class UI_Portrait : public UI
 
 public:
 
-	UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool draggable);
+	UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable);
 	~UI_Portrait();
 
 	bool Start();

@@ -18,6 +18,7 @@
 #include "FoWManager.h"
 #include "Fonts.h"
 #include "App.h"
+#include "FadeToBlack.h"
 
 
 // Constructor
@@ -43,7 +44,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	ai = new ModuleAI();
 	pathfinding = new ModulePathfinding();
 	fonts = new ModuleFonts();
-	fowManager = new FoWManager();
+	fowManager = new ModuleFoWManager();
+	fadeToBlack = new ModuleFadeToBlack();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -63,6 +65,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(ai);
 	AddModule(uiManager);
 	
+	//Fade to black before render
+	AddModule(fadeToBlack);
 	// render last to swap buffer
 	AddModule(render);
 
@@ -125,8 +129,9 @@ bool App::Awake()
 
 	loadGame = config.first_child().child("load").attribute("fileName").as_string();
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
+	//Set disabled modules here
 
-
+	//------
 	PERF_PEEK(pTimer);
 
 	return ret;
@@ -141,7 +146,10 @@ bool App::Start()
 
 	for (int i = 0; i < numModules; i++)
 	{
-		ret = modules[i]->Start();
+		if (modules[i]->IsEnabled())
+		{
+			ret = modules[i]->Start();
+		}
 	}
 
 
@@ -316,7 +324,7 @@ bool App::PreUpdate()
 	{
 
 
-		if (modules[i]->active == false)
+		if (modules[i]->IsEnabled() == false)
 			continue;
 
 
@@ -342,7 +350,7 @@ bool App::DoUpdate()
 	{
 
 
-		if (modules[i]->active == false)
+		if (modules[i]->IsEnabled() == false)
 		{
 			continue;
 		}
@@ -363,7 +371,7 @@ bool App::PostUpdate()
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{
-		if (modules[i]->active == false) {
+		if (modules[i]->IsEnabled() == false) {
 			continue;
 		}
 

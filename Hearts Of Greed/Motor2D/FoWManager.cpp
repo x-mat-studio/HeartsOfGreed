@@ -5,7 +5,7 @@
 #include "Render.h"
 #include "Input.h"
 
-FoWManager::FoWManager():
+ModuleFoWManager::ModuleFoWManager():
 	foWMapVisible(false),
 	fowMap(nullptr),
 	smoothFoWtexture(nullptr),
@@ -17,13 +17,13 @@ FoWManager::FoWManager():
 }
 
 
-FoWManager::~FoWManager()
+ModuleFoWManager::~ModuleFoWManager()
 {
 
 }
 
 
-bool FoWManager::Awake(pugi::xml_node&)
+bool ModuleFoWManager::Awake(pugi::xml_node&)
 {
 	bool ret = true;
 
@@ -31,7 +31,7 @@ bool FoWManager::Awake(pugi::xml_node&)
 }
 
 
-bool FoWManager::Start()
+bool ModuleFoWManager::Start()
 {
 	bool ret = true;
 
@@ -92,7 +92,7 @@ bool FoWManager::Start()
 }
 
 
-bool FoWManager::PreUpdate(float dt)
+bool ModuleFoWManager::PreUpdate(float dt)
 {
 	bool ret = true;
 
@@ -130,7 +130,7 @@ bool FoWManager::PreUpdate(float dt)
 }
 
 
-bool FoWManager::Update(float dt)
+bool ModuleFoWManager::Update(float dt)
 {
 	bool ret = true;
 	fowUpdateTimer += dt;
@@ -149,7 +149,7 @@ bool FoWManager::Update(float dt)
 }
 
 
-bool FoWManager::PostUpdate(float dt)
+bool ModuleFoWManager::PostUpdate(float dt)
 {
 	bool ret = true;
 	if (foWMapVisible)
@@ -160,7 +160,7 @@ bool FoWManager::PostUpdate(float dt)
 }
 
 
-bool FoWManager::CleanUp()
+bool ModuleFoWManager::CleanUp()
 {
 	bool ret = true;
 	DeleteFoWMap();
@@ -191,7 +191,7 @@ bool FoWManager::CleanUp()
 }
 
 
-void FoWManager::ResetFoWMap()
+void ModuleFoWManager::ResetFoWMap()
 {
 	if (fowMap != nullptr)
 	{
@@ -206,7 +206,7 @@ void FoWManager::ResetFoWMap()
 }
 
 
-FoWDataStruct* FoWManager::GetFoWTileState(iMPoint mapPos)const
+FoWDataStruct* ModuleFoWManager::GetFoWTileState(iMPoint mapPos)const
 {
 	FoWDataStruct* ret = nullptr;
 	if (CheckFoWTileBoundaries(mapPos) && fowMap != nullptr)
@@ -218,7 +218,7 @@ FoWDataStruct* FoWManager::GetFoWTileState(iMPoint mapPos)const
 }
 
 
-bool FoWManager::CheckFoWTileBoundaries(iMPoint mapPos)const
+bool ModuleFoWManager::CheckFoWTileBoundaries(iMPoint mapPos)const
 {
 	bool ret = false;
 	if (mapPos.x >= 0 && mapPos.x < width && mapPos.y >= 0 && mapPos.y < height)
@@ -227,7 +227,7 @@ bool FoWManager::CheckFoWTileBoundaries(iMPoint mapPos)const
 	return ret;
 }
 
-void FoWManager::CreateFoWMap(uint w, uint h)
+void ModuleFoWManager::CreateFoWMap(uint w, uint h)
 {
 	width = w;
 	height = h;
@@ -240,7 +240,7 @@ void FoWManager::CreateFoWMap(uint w, uint h)
 }
 
 
-void FoWManager::DeleteFoWMap()
+void ModuleFoWManager::DeleteFoWMap()
 {
 	if (fowMap != nullptr)
 	{
@@ -250,7 +250,7 @@ void FoWManager::DeleteFoWMap()
 }
 
 
-void FoWManager::UpdateFoWMap()
+void ModuleFoWManager::UpdateFoWMap()
 {
 	if (fowMap != nullptr)
 	{
@@ -290,7 +290,7 @@ void FoWManager::UpdateFoWMap()
 	}
 }
 
-void FoWManager::DrawFoWMap()
+void ModuleFoWManager::DrawFoWMap()
 {
 	float halfTileHeight=app->map->data.tileHeight*0.5f;
 	for (int y = 0; y < height; y++)
@@ -349,7 +349,7 @@ void FoWManager::DrawFoWMap()
 	}
 }
 
-FoWEntity* FoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility)
+FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility)
 {
 	FoWEntity* entity = nullptr;
 
@@ -365,7 +365,7 @@ FoWEntity* FoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility)
 }
 
 
-bool FoWManager::CheckTileVisibility(iMPoint mapPos)const
+bool ModuleFoWManager::CheckTileVisibility(iMPoint mapPos)const
 {
 	bool ret = false;
 	
@@ -381,7 +381,7 @@ bool FoWManager::CheckTileVisibility(iMPoint mapPos)const
 	return ret;
 }
 
-void FoWManager::MapNeedsUpdate()
+void ModuleFoWManager::MapNeedsUpdate()
 {
 	if (foWMapNeedsRefresh == false)
 		foWMapNeedsRefresh = true;

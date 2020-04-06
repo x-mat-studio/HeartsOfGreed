@@ -18,12 +18,12 @@ struct FoWDataStruct
 };
 
 
-class FoWManager :public Module
+class ModuleFoWManager :public Module
 {
 	//FUNCTIONS
 public:
-	FoWManager();
-	~FoWManager();
+	ModuleFoWManager();
+	~ModuleFoWManager();
 
 
 	bool Awake(pugi::xml_node&);
