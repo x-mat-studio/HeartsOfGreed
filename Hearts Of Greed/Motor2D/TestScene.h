@@ -47,6 +47,9 @@ private:
 	int prevMousePosX;
 	int prevmousePosY;
 
+public:
+	int wanamingoRoar;
+
 };
 
 #endif // __TEST_SCENE_H__
