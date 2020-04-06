@@ -142,7 +142,7 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_HEALTHBAR:
-		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
+		newUI = new UI_Healthbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	}
 
@@ -188,6 +188,8 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		
 		rect = RectConstructor(643, 145, 72, 56);
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark", false);
+		rect = RectConstructor(29, 76, 68, 14);
+		AddUIElement(fMPoint((w - 5) / app->win->GetScale() - rect.w, 70 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"gathererHeroHealthbar", false);
 		rect = RectConstructor(351, 149, 68, 52);
 		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h + 11), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero", false);
 		

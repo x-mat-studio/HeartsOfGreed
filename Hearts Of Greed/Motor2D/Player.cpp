@@ -70,9 +70,6 @@ bool ModulePlayer::PreUpdate(float dt)
 	{
 		ActivateBuildMode(ENTITY_TYPE::BUILDING);
 	}
-	else if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_STATE::KEY_DOWN) {
-		DesactivateBuildMode();
-	}
 
 	CheckListener(this);
 
