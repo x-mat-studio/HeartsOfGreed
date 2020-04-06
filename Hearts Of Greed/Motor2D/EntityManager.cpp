@@ -594,7 +594,14 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (renderVector[i]->visionEntity->isVisible)
+		if (renderVector[i]->visionEntity != nullptr)
+		{
+			if (renderVector[i]->visionEntity->isVisible)
+			{
+				renderVector[i]->Draw(dt);
+			}
+		}
+		else
 		{
 			renderVector[i]->Draw(dt);
 		}
