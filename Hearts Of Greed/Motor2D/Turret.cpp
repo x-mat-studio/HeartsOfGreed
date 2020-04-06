@@ -101,7 +101,7 @@ bool Turret::SearchObjective()
 	rect.h = range * 2;
 
 	Entity* objective;
-	objective = app->entityManager->CheckEnemyObjectiveTurret(&rect);
+	objective = app->entityManager->SearchEntityRect(&rect, align);
 
 	if (objective != nullptr && shortTermObjective != objective)
 	{
