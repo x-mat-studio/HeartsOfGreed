@@ -162,23 +162,6 @@ bool Enemy::MoveTo(int x, int y)
 }
 
 
-Enemy* Enemy::Clone()
-{
-	return new Enemy(this->position, this, ENTITY_ALIGNEMENT::NEUTRAL);
-}
-
-Enemy* Enemy::Clone(fMPoint positionToBe)
-{
-	return  new Enemy(positionToBe, this, ENTITY_ALIGNEMENT::NEUTRAL);
-}
-
-Enemy* Enemy::Clone(int x, int y)
-{
-	fMPoint newPos(x, y);
-	return  new Enemy(newPos, this, ENTITY_ALIGNEMENT::NEUTRAL);
-}
-
-
 void Enemy::OnCollision(Collider* collider)
 {
 	if (collider->type == COLLIDER_RECLUIT_IA)
