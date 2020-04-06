@@ -13,12 +13,9 @@
 struct Collider;
 struct SDL_Texture;
 
-<<<<<<< HEAD
 
-enum class ENTITY_TYPE
-=======
 enum class ENTITY_TYPE : int
->>>>>>> 7890a75206cf4386a05bcc16121d247783f14e04
+
 {
 	UNKNOWN = -1,
 
