@@ -1,33 +1,40 @@
 #include "Spawner.h"
 #include "EntityManager.h"
-#include "Enemy.h"
 
 
-Spawner::Spawner(Enemy* prototype) : prototype(prototype)
+Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType) :
+	
+	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, nullptr),
+	spawnerType(spawnerType),
+	entitysToSpawn(0)
 {}
 
+Spawner::Spawner(fMPoint position, Spawner* copy) :
 
-Enemy* Spawner::spawnEnemy()
+	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, nullptr),
+	spawnerType(copy->spawnerType),
+	entitysToSpawn(0)
+{}
+
+bool Spawner::PreUpdate(float dt)
 {
-	app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, position.x, position.y);
-	return prototype->Clone();
-}
-
-
-Enemy* Spawner::spawnEnemy(int x, int y)
-{
-	app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, x, y);
-	return prototype->Clone(x, y);
-}
-
-
-void spawnEnemies(int x, int y, uint nEnemies)
-{
-
-	for (int i = 0; i < nEnemies; i++)
+	if (entitysToSpawn > 0)
 	{
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, x, y);
+		Spawn();
+		entitysToSpawn--;
 	}
 
+	return true;
 }
 
+
+void Spawner::SetNumberToSpawn(int number)
+{
+	entitysToSpawn = number;
+}
+
+
+void Spawner::Spawn()
+{
+	app->entityManager->AddEntity(spawnerType, position.x, position.y, ENTITY_ALIGNEMENT::ENEMY);
+}

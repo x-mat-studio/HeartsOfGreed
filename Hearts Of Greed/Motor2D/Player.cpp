@@ -99,7 +99,10 @@ bool ModulePlayer::PostUpdate(float dt)
 	
 	if (buildMode == true)
 	{
-		app->entityManager->PlayerBuildPreview((-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale(), buildingToBuild);
+		int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
+		int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+
+		app->entityManager->PlayerBuildPreview(x, y, buildingToBuild);
 	}
 
 	DrawSelectQuad();
