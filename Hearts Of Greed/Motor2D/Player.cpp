@@ -239,7 +239,7 @@ void ModulePlayer::RightClick()
 
 		for (int i = 0; i < numHeroes; i++)
 		{
-			heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y);
+			heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, false);
 		}
 	}
 }
