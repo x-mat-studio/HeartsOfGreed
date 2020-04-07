@@ -3,8 +3,8 @@
 
 UI_Scrollbar::UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable)
 {
-	SDL_Rect rect = { 0,0,0,0 };
-	scrollButton = app->uiManager->AddUIElement(fMPoint(0, 0), this, UI_TYPE::UI_BUTTON, rect, (P2SString)"scrollButton", DRAGGABLE::DRAG_X);
+	SDL_Rect aux = { 0,0,0,0 };
+	scrollButton = app->uiManager->AddUIElement(fMPoint(0, 0), this, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", DRAGGABLE::DRAG_X);
 	interactable = true;
 }
 
