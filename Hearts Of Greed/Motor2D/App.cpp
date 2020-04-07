@@ -65,11 +65,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(fonts);
 	AddModule(map);
-	AddModule(introScene);
-	AddModule(mainMenu);
-	AddModule(testScene);
-	AddModule(winScene);
-	AddModule(loseScene);
 	AddModule(coll);
 	AddModule(fowManager);
 	AddModule(entityManager);
@@ -77,6 +72,11 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(player);
 	AddModule(ai);
 	AddModule(uiManager);
+	AddModule(mainMenu);
+	AddModule(testScene);
+	AddModule(winScene);
+	AddModule(loseScene);
+	AddModule(introScene);
 	
 	//Fade to black before render
 	AddModule(fadeToBlack);
@@ -144,7 +144,7 @@ bool App::Awake()
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
 	//Set disabled modules here
 	mainMenu->Disable();
-	testScene->Disable();
+	introScene->Disable();
 	winScene->Disable();
 	loseScene->Disable();
 	//------

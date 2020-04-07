@@ -41,11 +41,11 @@ public:
 	void RemoveDeletedUI();
 	void CreateBasicUI();
 
+	SDL_Rect RectConstructor(int x, int y, int w, int h);
+
 	bool CleanUp();
 
 private:
-
-	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 	void ExecuteEvent(EVENT_ENUM eventId);
 
