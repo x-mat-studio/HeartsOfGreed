@@ -186,7 +186,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::MOVE:
 		currentAnimation = &walkLeft;
-		Move(dt);
+		Move(dt * 2);
 		visionEntity->SetNewPosition(position);
 
 		CheckAttackRange();
