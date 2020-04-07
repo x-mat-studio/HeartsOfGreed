@@ -89,7 +89,8 @@ private:
 public:
 
 	SDL_Texture* debugPathTexture;
-
+	int wanamingoRoar;
+	int wanamingoRoar2;
 
 private:
 
@@ -120,10 +121,6 @@ private:
 	Building* testBuilding;
 	Building* blueBuilding;
 	Base* sampleBase;
-
-public:
-	int wanamingoRoar;
-	int wanamingoRoar2;
 
 };
 

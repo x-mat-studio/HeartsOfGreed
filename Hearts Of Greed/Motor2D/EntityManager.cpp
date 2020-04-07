@@ -29,12 +29,7 @@ ModuleEntityManager::ModuleEntityManager()
 
 // Destructor
 ModuleEntityManager::~ModuleEntityManager()
-{
-	RELEASE(sampleMelee);
-	RELEASE(sampleEnemy);
-	sampleMelee = nullptr;
-	sampleEnemy = nullptr;
-}
+{}
 
 
 // Called before render is available
@@ -271,10 +266,41 @@ bool ModuleEntityManager::CleanUp()
 	DeleteAllEntities();
 	
 	app->tex->UnLoad(suitManTexture);
+	app->tex->UnLoad(armorMaleTexture);
+	app->tex->UnLoad(combatFemaleTexture);
+	app->tex->UnLoad(enemyTexture);
+
 	app->tex->UnLoad(buildingTexture);
+	app->tex->UnLoad(base1Texture);
+	app->tex->UnLoad(base2Texture);
+	
+	app->tex->UnLoad(debugPathTexture);
 
 	suitManTexture = nullptr;
+	armorMaleTexture = nullptr;
+	combatFemaleTexture = nullptr;
+	enemyTexture = nullptr;
+
 	buildingTexture = nullptr;
+	base1Texture = nullptr;
+	base2Texture = nullptr;
+
+	debugPathTexture = nullptr;
+
+	RELEASE(sampleMelee);
+	RELEASE(sampleEnemy);
+	RELEASE(sampleSpawner);
+	RELEASE(testBuilding);
+	RELEASE(blueBuilding);
+	RELEASE(sampleBase);
+
+	sampleMelee = nullptr;
+	sampleEnemy = nullptr;
+	sampleSpawner = nullptr;
+	testBuilding = nullptr;
+	blueBuilding = nullptr;
+	sampleBase = nullptr;
+
 
 	return true;
 }

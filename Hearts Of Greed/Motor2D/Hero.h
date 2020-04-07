@@ -157,8 +157,8 @@ public:
 	std::vector<HERO_INPUTS> inputs;
 	Animation *currentAnimation;
 
-	int framesPerPathfinding = 20;
-	int framePathfindingCount = 0;
+	int framesPerPathfinding;
+	int framePathfindingCount;
 };
 
 

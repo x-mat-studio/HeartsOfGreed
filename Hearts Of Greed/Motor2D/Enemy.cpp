@@ -21,6 +21,9 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	attackRange(attackRange),
 	attackCooldown(0),
 
+	framePathfindingCount(0),
+	framesPerPathfinding(FRAMES_PER_PATHFINDING),
+
 	movementSpeed(movementSpeed),
 	xpOnDeath(xpOnDeath),
 	longTermObjective{ NULL, NULL },
@@ -44,6 +47,9 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	attackSpeed(copy->attackSpeed),
 	attackRange(copy->attackRange),
 	attackCooldown(0),
+
+	framePathfindingCount(0),
+	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
 	movementSpeed(copy->movementSpeed),
 	xpOnDeath(copy->xpOnDeath),
@@ -86,6 +92,7 @@ bool Enemy::Update(float dt)
 	GroupMovement(dt);
 
 	//DEBUGSOUND
+	//Put this in a function pls :D att Jose
 	int randomCounter = rand() % 1000;
 
 	if (randomCounter == 997) {

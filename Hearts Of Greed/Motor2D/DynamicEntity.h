@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include <list>
 
+#define FRAMES_PER_PATHFINDING 30
+
 class DynamicEntity : public Entity
 {
 public:

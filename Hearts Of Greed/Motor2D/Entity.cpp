@@ -28,7 +28,11 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 
 Entity::~Entity()
 {
-	collider->to_delete = true;
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+	}
+	
 
 	texture = nullptr;
 	collider = nullptr;
