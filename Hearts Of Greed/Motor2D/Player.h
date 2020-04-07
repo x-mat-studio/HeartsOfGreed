@@ -37,6 +37,8 @@ public:
 	bool ActivateBuildMode(ENTITY_TYPE building);
 	void DesactivateBuildMode();
 
+	void RemoveHeroFromVector(Hero* hero);
+
 private:
 	
 	bool HandleInput();

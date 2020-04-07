@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "FoWManager.h"
 #include "Map.h"
+#include "Player.h"
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -139,6 +140,8 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 Hero::~Hero()
 {
+	app->player->RemoveHeroFromVector(this);
+
 	objective = nullptr;
 
 	inputs.clear();
