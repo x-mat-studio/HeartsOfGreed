@@ -1,8 +1,8 @@
 #ifndef __APP_H__
 #define __APP_H__
 
-#define TIME_CONST 50
-#define MAX_DT 3
+#define TIME_CONST 50.f
+#define MAX_DT 0.33
 
 #include "Module.h"
 #include "PerfectTimer.h"

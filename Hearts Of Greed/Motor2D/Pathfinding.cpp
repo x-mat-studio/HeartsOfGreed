@@ -323,9 +323,6 @@ HierNode* graphLevel::insertNode(iMPoint pos, int maxLvl, bool* toDelete)
 	HierNode* newNode = nullptr;
 	Cluster* c;
 
-	if (!app->pathfinding->IsWalkable(pos))
-		return nullptr;
-
 	for (int l = 1; l <= maxLvl; l++)
 	{
 		if (l > this->lvlClusters.size())

@@ -65,8 +65,8 @@ bool ModuleTestScene::Start()
 		//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 850);
 	}
 
 	SDL_Rect rect = { 0, 0, 0, 0 };
@@ -92,7 +92,7 @@ bool  ModuleTestScene::Update(float dt)
 	CheckListener(this);
 
 	float scale = app->win->GetScale();
-	float camVel = 10 * scale;
+	float camVel = 350 * scale;
 	int mousePosX;
 	int mousePosY;
 	app->input->GetMousePosition(mousePosX, mousePosY);
@@ -208,6 +208,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 bool  ModuleTestScene::CleanUp()
 {
 	app->uiManager->CleanUp();
+	app->entityManager->CleanUp();
 	return true;
 }
 

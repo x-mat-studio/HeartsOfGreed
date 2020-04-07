@@ -9,7 +9,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, { 2,2 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
+	DynamicEntity(position, { 100,100 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -85,6 +85,7 @@ bool Enemy::Update(float dt)
 	StateMachine(dt);
 
 	CollisionPosUpdate();
+
 
 	return true;
 }

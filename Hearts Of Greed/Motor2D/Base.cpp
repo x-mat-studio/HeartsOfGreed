@@ -206,6 +206,6 @@ void Base::GainResources(float dt)
 {
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
-		app->player->AddResources(resourceProductionRate * dt);
+		app->player->AddResources(resourceProductionRate * dt * TIME_CONST);
 	}
 }
