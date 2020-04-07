@@ -52,9 +52,9 @@ bool Entity::Start(SDL_Texture* texture)
 		collider = new Collider(collider->rect, collider->type, collider->callback, this);
 		collider->thisEntity = this;
 		app->coll->AddColliderEntity(collider);
-	}
 
-	SetAlignment();
+		collider->SetPos(position.x, position.y);
+	}
 
 	started = true;
 
