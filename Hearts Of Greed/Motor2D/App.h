@@ -19,7 +19,7 @@ class ModuleRender;
 class ModuleTextures;
 class ModuleCollision;
 class ModuleMap;
-class ModuleTestScene;
+
 class ModulePlayer;
 class ModuleEntityManager;
 class ModuleUIManager;
@@ -29,6 +29,12 @@ class ModuleAI;
 class ModuleFoWManager;
 class ModuleFonts;
 class ModuleFadeToBlack;
+class ModuleIntroScene;
+class ModuleMainMenuScene;
+class ModuleTestScene;
+class ModuleWinScene;
+class ModuleLoseScene;
+
 
 class App
 {
@@ -98,7 +104,6 @@ public:
 	ModuleRender*			render;
 	ModuleTextures*			tex;
 	ModuleMap*				map;
-	ModuleTestScene*		testScene;
 	ModuleCollision*		coll;
 	ModulePlayer*			player;
 	ModuleEntityManager*	entityManager;
@@ -109,6 +114,11 @@ public:
 	ModuleFonts*			fonts;
 	ModuleFoWManager*		fowManager;
 	ModuleFadeToBlack*		fadeToBlack;
+	ModuleIntroScene*		introScene;
+	ModuleMainMenuScene*	mainMenu;
+	ModuleTestScene*		testScene;
+	ModuleWinScene*			winScene;
+	ModuleLoseScene*		loseScene;
 
 	uint32_t			frames;
 	
