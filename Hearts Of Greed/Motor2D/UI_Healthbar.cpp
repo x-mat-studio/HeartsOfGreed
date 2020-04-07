@@ -2,7 +2,7 @@
 
 
 UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
-	maxHealth(nullptr),
+	maxHealth(nullptr),		// TODO initialize and make them pretty (I'm already recieving the entity with the portraits)
 	currentHealth(nullptr),
 	originalWidth(rect.w),
 	previousHealth(NULL)
