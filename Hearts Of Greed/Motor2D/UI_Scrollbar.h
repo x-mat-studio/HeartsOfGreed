@@ -4,6 +4,7 @@
 #include "UI.h"
 #include "Input.h"
 #include "UIManager.h"
+#include "UI_Button.h"
 
 
 class UI_Scrollbar : public UI
@@ -21,8 +22,11 @@ public:
 
 private:
 
+	void ScrollLimit();
 	void HandleInput();
 
+private:
+	UI* scrollButton;
 
 
 };

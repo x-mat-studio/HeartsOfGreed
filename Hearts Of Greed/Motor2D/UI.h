@@ -60,12 +60,13 @@ public:
 	bool enabled;
 	bool interactable;
 
-protected:
-
 	fMPoint worldPosition;
 	fMPoint localPosition;
 
 	SDL_Rect box;
+
+protected:
+
 	SDL_Texture* texture;
 
 	UI* parent;
