@@ -17,7 +17,7 @@ public:
 	//Returns true while moving, returns false when stops
 	bool Move(float dt);
 
-	bool GeneratePath(int x, int y);
+	bool GeneratePath(int x, int y, int lvl);
 	void DebugDraw();
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
