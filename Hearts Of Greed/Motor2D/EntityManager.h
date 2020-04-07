@@ -56,7 +56,8 @@ public:
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
 
 
-	void RemoveDeletedEntitys();
+	void RemoveDeletedEntities();
+	void DeleteAllEntities();
 
 
 	Entity* CheckEntityOnClick(iMPoint mousePos);

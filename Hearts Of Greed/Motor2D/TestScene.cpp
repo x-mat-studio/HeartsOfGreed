@@ -38,7 +38,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 bool ModuleTestScene::Start()
 {
 	//Play Music
-	//app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
+	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 	
 	//Load sfx used in this scene
 	
@@ -62,11 +62,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
 
 
-		//AddEntity(ENTITY_TYPE::BUILDING, -220, 130);
-
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 850);
 	}
 
 	app->uiManager->CreateBasicUI();
@@ -94,7 +92,7 @@ bool  ModuleTestScene::Update(float dt)
 	CheckListener(this);
 
 	float scale = app->win->GetScale();
-	float camVel = 10 * scale;
+	float camVel = 350 * scale;
 	int mousePosX;
 	int mousePosY;
 	app->input->GetMousePosition(mousePosX, mousePosY);
@@ -203,6 +201,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 bool  ModuleTestScene::CleanUp()
 {
 	app->uiManager->CleanUp();
+	app->entityManager->CleanUp();
 	return true;
 }
 

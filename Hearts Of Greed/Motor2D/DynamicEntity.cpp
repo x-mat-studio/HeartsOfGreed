@@ -32,9 +32,8 @@ bool DynamicEntity::Move(float dt)
 
 	// ----------------------------------------------------------------
 
-	fMPoint pathSpeed;
-	pathSpeed.create(0, 0);
-	fMPoint nextPoint;
+	fMPoint pathSpeed = {0,0};
+	fMPoint nextPoint = {0,0};
 
 	if (path.size() < 2)
 		app->pathfinding->RequestPath(this, &path);
@@ -93,7 +92,7 @@ bool DynamicEntity::Move(float dt)
 	pathSpeed.x = pathSpeed.x * unitSpeed.x;
 	pathSpeed.y = pathSpeed.y * unitSpeed.y;
 
-	speed += pathSpeed  + separationSpeed * 2.f + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
+	speed += pathSpeed  + separationSpeed * 20.f + cohesionSpeed * 5.0f + alignmentSpeed * 1.0f;
 
 	// ------------------------------------------------------------------
 

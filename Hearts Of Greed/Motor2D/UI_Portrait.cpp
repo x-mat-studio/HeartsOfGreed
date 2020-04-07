@@ -6,8 +6,25 @@ UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_
 
 UI_Portrait::~UI_Portrait()
 {
-	//DELETE ALL ELEMENTS IN A COOL WAY		TODO
-	//THEN, DELETE ALL ELEMENTS IN VECTOR
+
+	int numElements = portraitVector.size();
+
+	for (int i = 0; i < numElements; i++)
+	{
+		RELEASE(portraitVector[i].background);
+		RELEASE(portraitVector[i].backgroundLevel);
+		RELEASE(portraitVector[i].healthbar);
+		RELEASE(portraitVector[i].level);
+		RELEASE(portraitVector[i].portrait);
+		portraitVector[i].background = nullptr;
+		portraitVector[i].backgroundLevel = nullptr;
+		portraitVector[i].healthbar = nullptr;
+		portraitVector[i].level = nullptr;
+		portraitVector[i].portrait = nullptr;
+	}
+
+	portraitVector.clear();
+
 }
 
 bool UI_Portrait::Start()
@@ -17,17 +34,35 @@ bool UI_Portrait::Start()
 
 bool UI_Portrait::PreUpdate(float dt)
 {
+
+	int numElem = portraitVector.size();
+
+	for (int i = 0; i < numElem; i++)
+	{
+		portraitVector[i].healthbar->PreUpdate(dt);
+		portraitVector[i].level->PreUpdate(dt);
+	}
+
 	return true;
 }
 
 bool UI_Portrait::Update(float dt)
 {
+	
+	int numElem = portraitVector.size();
+
+	for (int i = 0; i < numElem; i++)
+	{
+		portraitVector[i].healthbar->Update(dt);
+		portraitVector[i].level->Update(dt);
+	}
+
 	return true;
 }
 
 bool UI_Portrait::PostUpdate(float dt)
 {
-	// CALL THE DRAW OF ALL ELEMENTS		TODO
+	
 	int numElem = portraitVector.size();
 
 	for (int i = 0; i < numElem; i++)

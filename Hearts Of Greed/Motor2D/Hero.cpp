@@ -15,7 +15,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
-	DynamicEntity(position, {2,2}, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
+	DynamicEntity(position, {100,100}, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -186,7 +186,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::MOVE:
 		currentAnimation = &walkLeft;
-		Move(dt * 2);
+		Move(dt);
 		visionEntity->SetNewPosition(position);
 
 		if (objective != nullptr)

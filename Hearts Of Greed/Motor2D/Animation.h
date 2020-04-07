@@ -77,8 +77,6 @@ public:
 
 	Frame& GetCurrentFrame(float dt)
 	{
-
-
 		if (framesPassed * dt < frames[currentFrame].maxFrames * dt) 
 			framesPassed += dt;
 		else 

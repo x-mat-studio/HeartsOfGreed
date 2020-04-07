@@ -10,7 +10,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, { 2,2 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
+	DynamicEntity(position, { 100,100 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -90,15 +90,16 @@ bool Enemy::Update(float dt)
 
 	if (randomCounter == 997) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),DIRECTION::RIGHT);
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),this->GetMyDirection());
 	
 	}
 	if (randomCounter == 998) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), DIRECTION::LEFT);
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
 	CollisionPosUpdate();
+
 
 	return true;
 }
