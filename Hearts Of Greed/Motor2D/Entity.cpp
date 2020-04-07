@@ -107,17 +107,18 @@ void Entity::Draw(float dt)
 
 DIRECTION Entity::GetMyDirection()
 {
-	int midScreenX = app->render->GetCameraX() + app->win->width / 2;
-	
-	int relativeX = position.x - midScreenX;
-	
+	int width = app->win->width; 
 
-	if (relativeX > 30) {
+	int MidX = (-app->render->GetCameraX() + width / 2);
+	
+	int relativeX = position.x - MidX;
+
+	if (relativeX > 120) {
 
 		return DIRECTION::RIGHT;
 	}
 
-	if (relativeX < -30) {
+	if (relativeX < -120) {
 
 		return DIRECTION::LEFT;
 	}
