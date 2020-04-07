@@ -19,6 +19,10 @@
 #include "Fonts.h"
 #include "App.h"
 #include "FadeToBlack.h"
+#include "IntroScene.h"
+#include "MainMenuScene.h"
+#include "WinScene.h"
+#include "LoseScene.h"
 
 
 // Constructor
@@ -35,7 +39,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new ModuleRender();
 	map = new ModuleMap();
 	tex = new ModuleTextures();
-	testScene = new ModuleTestScene();
 	coll = new ModuleCollision();
 	entityManager = new ModuleEntityManager();
 	eventManager = new ModuleEventManager();
@@ -47,6 +50,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fowManager = new ModuleFoWManager();
 	fadeToBlack = new ModuleFadeToBlack();
 
+	introScene = new ModuleIntroScene();
+	mainMenu = new ModuleMainMenuScene();
+	testScene = new ModuleTestScene();
+	winScene = new ModuleWinScene();
+	loseScene = new ModuleLoseScene();
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(eventManager);
@@ -56,7 +65,11 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(fonts);
 	AddModule(map);
+	AddModule(introScene);
+	AddModule(mainMenu);
 	AddModule(testScene);
+	AddModule(winScene);
+	AddModule(loseScene);
 	AddModule(coll);
 	AddModule(fowManager);
 	AddModule(entityManager);
@@ -130,7 +143,10 @@ bool App::Awake()
 	loadGame = config.first_child().child("load").attribute("fileName").as_string();
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
 	//Set disabled modules here
-
+	mainMenu->Disable();
+	testScene->Disable();
+	winScene->Disable();
+	loseScene->Disable();
 	//------
 	PERF_PEEK(pTimer);
 

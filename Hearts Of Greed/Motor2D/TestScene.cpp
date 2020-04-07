@@ -10,6 +10,11 @@
 #include "FoWManager.h"
 #include "EntityManager.h"
 #include "FadeToBlack.h"
+#include "WinScene.h"
+#include "LoseScene.h"
+#include "UIManager.h"
+#include "UI_Text.h"
+#include "MainMenuScene.h"
 
 ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
 {
@@ -63,6 +68,10 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
 	}
+
+	SDL_Rect rect = { 0, 0, 0, 0 };
+	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
+
 	
 	return true;
 }
@@ -120,12 +129,22 @@ bool  ModuleTestScene::Update(float dt)
 	}
 
 	
-	//debug key to try Module Fade
+	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
+	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN)
+	{
+		app->fadeToBlack->FadeToBlack(this, app->winScene);
+	}
+	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE LOSE SCENE
+	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_STATE::KEY_DOWN)
+	{
+		app->fadeToBlack->FadeToBlack(this, app->loseScene);
+	}
+	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
 	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN)
 	{
-		app->fadeToBlack->FadeToBlack(this, this);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu);
 	}
-	
+
 
 	//mouse drag / mouse zoom
 	int scrollWheelX;
@@ -188,6 +207,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 // Called before quitting
 bool  ModuleTestScene::CleanUp()
 {
+	app->uiManager->CleanUp();
 	return true;
 }
 
