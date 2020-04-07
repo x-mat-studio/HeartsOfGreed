@@ -53,6 +53,7 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	LoadAtlas();
+	portraitPointer = nullptr;
 
 	return ret;
 }
@@ -123,6 +124,8 @@ bool ModuleUIManager::CleanUp()
 
 	uiVector.clear();
 
+	portraitPointer = nullptr;
+
 	return true;
 }
 
@@ -148,7 +151,8 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_PORTRAIT:
-		newUI = new UI_Portrait(positionValue, father, uiType, rect, uiName, dragable);
+		portraitPointer = new UI_Portrait(positionValue, father, uiType, rect, uiName, dragable);
+		newUI = portraitPointer;
 		break;
 	}
 
@@ -176,48 +180,21 @@ void ModuleUIManager::RemoveDeletedUI()
 
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
-	SDL_Rect rect;
-	uint w (app->win->width), h(app->win->height);
 
 	switch (eventId)
 	{
 
 	case EVENT_ENUM::HERO_MELEE_CREATED:
-		
-		rect = RectConstructor(643, 145, 72, 56);
-		AddUIElement(fMPoint (w / app->win->GetScale() - rect.w, 60 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHeroMark");
-		rect = RectConstructor(561, 149, 68, 52); 
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 65 / app->win->GetScale()), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"meleeHero");
-
-		break;
 	case EVENT_ENUM::HERO_GATHERER_CREATED:
-		
-		rect = RectConstructor(643, 145, 72, 56);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHeroMark");
-
-		rect = RectConstructor(29, 76, 68, 14);
-		AddUIElement(fMPoint((w - 5) / app->win->GetScale() - rect.w, 70 / app->win->GetScale() + rect.h + 5), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"gathererHeroHealthbar");
-
-		rect = RectConstructor(351, 149, 68, 52);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + rect.h + 11), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"gathererHero");
-		
-		break;
 	case EVENT_ENUM::HERO_RANGED_CREATED:
 		
-		rect = RectConstructor(643, 145, 72, 56);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w, 60 / app->win->GetScale() + 2 * rect.h + 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHeroMark");
-		rect = RectConstructor(147, 149, 68, 52);
-		AddUIElement(fMPoint(w / app->win->GetScale() - rect.w - 2, 60 / app->win->GetScale() + 2 * rect.h + 20), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"rangedHero");
-		
+		// ADD PORTRAITS			TODO MAXIMUM
+
 		break;
 	case EVENT_ENUM::HERO_MELEE_OUT:
-		
-		break;
 	case EVENT_ENUM::HERO_GATHERER_OUT:
-
-		break;
 	case EVENT_ENUM::HERO_RANGED_OUT:
-
+		// DELETE PORTRAIT			TODO
 		break;
 
 	}

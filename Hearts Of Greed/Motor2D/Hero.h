@@ -59,7 +59,7 @@ public:
 		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 		Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 		int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
-		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
+		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);

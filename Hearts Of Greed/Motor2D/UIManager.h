@@ -7,6 +7,7 @@
 
 struct SDL_Texture;
 class UI;
+class UI_Portrait;
 enum class UI_TYPE;
 
 enum class DRAGGABLE
@@ -55,6 +56,7 @@ private:
 
 	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
+	UI_Portrait* portraitPointer;
 
 };
 

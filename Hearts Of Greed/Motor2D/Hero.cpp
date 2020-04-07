@@ -12,7 +12,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
 	Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
+	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
 	DynamicEntity(position, {100,100}, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
@@ -441,7 +441,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		if (attackCooldown >= attackSpeed * 10)
+		if (attackCooldown >= attackSpeed)
 		{
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
