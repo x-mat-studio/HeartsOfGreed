@@ -38,7 +38,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 bool ModuleTestScene::Start()
 {
 	//Play Music
-	//app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
+	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 	
 	//Load sfx used in this scene
 	
