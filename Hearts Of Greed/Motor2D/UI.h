@@ -16,6 +16,7 @@ enum class UI_TYPE
 	UI_BUTTON,
 	UI_TEXT,
 	UI_HEALTHBAR,
+	UI_SCROLLBAR,
 
 	UI_NONE
 };
