@@ -249,7 +249,7 @@ bool Hero::MoveTo(int x, int y)
 	//do pathfinding, if it works return true
 	objective = nullptr;
 
-	if (GeneratePath(x, y))
+	if (GeneratePath(x, y, 1))
 	{
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;

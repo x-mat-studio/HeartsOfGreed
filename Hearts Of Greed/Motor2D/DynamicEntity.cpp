@@ -36,6 +36,9 @@ bool DynamicEntity::Move(float dt)
 	pathSpeed.create(0, 0);
 	fMPoint nextPoint;
 
+	if (path.size() < 2)
+		app->pathfinding->RequestPath(this, &path);
+
 	if (path.size() > 0)
 	{
 		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
@@ -92,8 +95,8 @@ bool DynamicEntity::Move(float dt)
 
 	// ------------------------------------------------------------------
 
-	position.x += (speed.x) * dt;
-	position.y += (speed.y) * dt;
+	position.x += (speed.x) * dt *2;
+	position.y += (speed.y) * dt *2;
 
 	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 5  && abs(position.y - nextPoint.y) <= 5)
 	{
@@ -224,17 +227,18 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	return alignmentSpeed;
 }
 
-bool DynamicEntity::GeneratePath(int x, int y)
+bool DynamicEntity::GeneratePath(int x, int y, int lvl)
 {
 	iMPoint goal = { 0,0 };
 
 	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
 	goal = app->map->WorldToMap(x , y );
 
-	if (app->pathfinding->CreatePath(origin, goal) == 0)
+	if (app->pathfinding->CreatePath(origin, goal, 1, this) != PATH_TYPE::NO_TYPE)
 	{
 		path.clear();
-		app->pathfinding->SavePath(&path);
+		app->pathfinding->RequestPath(this, &path);
+		if (path.size() > 0)
 		path.erase(path.begin());
 		return true;
 	}
