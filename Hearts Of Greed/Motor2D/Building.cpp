@@ -2,9 +2,9 @@
 #include "Render.h"
 #include "Textures.h"
 
-Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider) :
+Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type) :
 
-	Entity(position, ENTITY_TYPE::BUILDING, ENTITY_ALIGNEMENT::NEUTRAL, collider),
+	Entity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider),
 
 	hitPointsMax(hitPoints),
 	hitPointsCurrent(hitPoints),
@@ -65,7 +65,6 @@ bool Building::PreUpdate(float dt)
 
 bool Building::Update(float dt)
 {
-	
 	return true;
 }
 

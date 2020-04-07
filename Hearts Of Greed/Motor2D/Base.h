@@ -17,8 +17,11 @@ class Base : public Building
 {
 public:
 
-	Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter , std::vector <Turret*> baseTurrets, 
-		std::vector <Barricade*> baseBarricades, Collider* baseArea, int resourceProductionRate, int hitPoints, int recoveryHitPointsRate, int transparency);
+	Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter , std::vector <Turret*> baseTurrets, std::vector <Barricade*> baseBarricades, 
+		 Collider* baseArea, int resourcesProduced, float resourcesRate, int hitPoints, int recoveryHitPointsRate, int transparency);
+
+	Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate, 
+		 int hitPoints, int recoveryHitPointsRate, int transparency);
 
 	Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -56,7 +59,11 @@ private:
 	std::vector <Turret*> turretsVector;
 	std::vector <Barricade*> barricadesVector;
 
-	int resourceProductionRate;
+	int resourcesProduced;
+	float resourcesRate;
+	float resourcesCooldown;
+
+	
 
 };
 

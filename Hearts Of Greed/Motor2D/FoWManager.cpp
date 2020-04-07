@@ -4,8 +4,9 @@
 #include "Map.h"
 #include "Render.h"
 #include "Input.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
-ModuleFoWManager::ModuleFoWManager():
+ModuleFoWManager::ModuleFoWManager() :
 	foWMapVisible(false),
 	fowMap(nullptr),
 	smoothFoWtexture(nullptr),
@@ -132,6 +133,7 @@ bool ModuleFoWManager::PreUpdate(float dt)
 
 bool ModuleFoWManager::Update(float dt)
 {
+	BROFILER_CATEGORY("FOW Update", Profiler::Color::AliceBlue);
 	bool ret = true;
 	fowUpdateTimer += dt;
 
@@ -152,6 +154,7 @@ bool ModuleFoWManager::Update(float dt)
 bool ModuleFoWManager::PostUpdate(float dt)
 {
 	bool ret = true;
+	BROFILER_CATEGORY("FOW PostUpdate", Profiler::Color::BlanchedAlmond);
 	if (foWMapVisible)
 	{
 		DrawFoWMap();
@@ -292,15 +295,25 @@ void ModuleFoWManager::UpdateFoWMap()
 
 void ModuleFoWManager::DrawFoWMap()
 {
-	float halfTileHeight=app->map->data.tileHeight*0.5f;
+	BROFILER_CATEGORY("FOW DRAW", Profiler::Color::DarkGoldenRod);
+
+	SDL_Texture* displayFogTexture = nullptr;
+	if (debugMode)
+	{
+		displayFogTexture = debugFoWtexture;
+	}
+	else displayFogTexture = smoothFoWtexture;
+
+
+	float halfTileHeight = app->map->data.tileHeight * 0.5f;
 	for (int y = 0; y < height; y++)
 	{
 		for (int x = 0; x < width; x++)
 		{
-			
+
 			fMPoint worldPos;
-			app->map->MapToWorldCoords(x, y,app->map->data,worldPos.x,worldPos.y);
-			if (app->map->InsideCamera(worldPos.x,worldPos.y))
+			app->map->MapToWorldCoords(x, y, app->map->data, worldPos.x, worldPos.y);
+			if (app->map->InsideCamera(worldPos.x, worldPos.y)==true)
 			{
 				FoWDataStruct* tileInfo = GetFoWTileState({ x, y });
 				int fogId = -1;
@@ -319,28 +332,23 @@ void ModuleFoWManager::DrawFoWMap()
 						shroudId = bitToTextureTable[tileInfo->tileShroudBits];
 					}
 
-				}
 
 
-				SDL_Texture* displayFogTexture = nullptr;
-				if (debugMode)
-				{
-					displayFogTexture = debugFoWtexture;
-				}
-				else displayFogTexture = smoothFoWtexture;
+					//draw fog
+					if (fogId != -1)
+					{
 
-				//draw fog
-				if (fogId != -1)
-				{
-					SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
-					SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
-					app->render->Blit(displayFogTexture, worldPos.x, worldPos.y-halfTileHeight, &r);
-				}
-				if (shroudId != -1)
-				{
-					SDL_SetTextureAlphaMod(displayFogTexture, 255);//set the alpha to white again
-					SDL_Rect r = { shroudId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
-					app->render->Blit(displayFogTexture, worldPos.x, worldPos.y-halfTileHeight, &r);
+						SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
+						SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
+					}
+					if (shroudId != -1)
+					{
+						SDL_SetTextureAlphaMod(displayFogTexture, 255);//set the alpha to white again
+						SDL_Rect r = { shroudId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
+					}
+
 				}
 
 			}
@@ -368,12 +376,12 @@ FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibilit
 bool ModuleFoWManager::CheckTileVisibility(iMPoint mapPos)const
 {
 	bool ret = false;
-	
+
 	FoWDataStruct* tileState = GetFoWTileState(mapPos);
 
 	if (tileState != nullptr)
 	{
-		
+
 		if (tileState->tileFogBits != fow_ALL)
 			ret = true;
 	}

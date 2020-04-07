@@ -9,14 +9,18 @@
 #include "Player.h"
 
 
-Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets, 
-	       std::vector <Barricade*> baseBarricades, Collider* baseArea, int resourceProductionRate, int hitPoints, int recoveryHitPointsRate, int transparency) :
+Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
+	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int hitPoints, 
+	       int recoveryHitPointsRate, int transparency) :
 
-	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider),
+	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider, ENTITY_TYPE::BLDG_BASE),
 
 	maxTurrets(maxTurrets),
 	maxBarricades(maxBarricades),
-	resourceProductionRate(resourceProductionRate),
+
+	resourcesProduced(resourcesProduced),
+	resourcesRate(resourcesRate),
+	resourcesCooldown(0),
 
 	baseUpgradeCenter(baseUpgradeCenter),
 	turretsVector(baseTurrets),
@@ -26,6 +30,24 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 	
 {}
 
+Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate,
+	int hitPoints, int recoveryHitPointsRate, int transparency):
+
+	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider),
+
+	maxTurrets(maxTurrets),
+	maxBarricades(maxBarricades),
+
+	resourcesProduced(resourcesProduced),
+	resourcesRate(resourcesRate),
+	resourcesCooldown(0),
+
+	baseUpgradeCenter(baseUpgradeCenter),
+
+	baseAreaAlarm(baseArea)
+
+{}
+
 
 Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
@@ -33,7 +55,10 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
 	maxTurrets(copy->maxTurrets),
 	maxBarricades(copy->maxBarricades),
-	resourceProductionRate(copy->resourceProductionRate),
+	
+	resourcesProduced(copy->resourcesProduced),
+	resourcesRate(copy->resourcesRate),
+	resourcesCooldown(0),
 
 	baseUpgradeCenter(copy->baseUpgradeCenter),
 	turretsVector(copy->turretsVector),
@@ -49,7 +74,6 @@ Base::~Base()
 
 bool Base::Update(float dt)
 {
-
 	GainResources(dt);
 
 	return true;
@@ -206,6 +230,13 @@ void Base::GainResources(float dt)
 {
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
-		app->player->AddResources(resourceProductionRate * dt * TIME_CONST);
+		resourcesCooldown += dt;
+
+		if (resourcesCooldown > resourcesRate)
+		{
+			app->player->AddResources(resourcesProduced);
+			resourcesCooldown -= resourcesRate;
+		}
+		
 	}
 }

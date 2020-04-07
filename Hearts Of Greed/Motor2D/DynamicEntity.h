@@ -16,6 +16,7 @@ public:
 
 	//Returns true while moving, returns false when stops
 	bool Move(float dt);
+	void GroupMovement(float dt);
 
 	bool GeneratePath(int x, int y, int lvl);
 	void DebugDraw();
@@ -38,6 +39,10 @@ protected:
 	std::vector <iMPoint> path;
 	std::vector<DynamicEntity*> closeEntityList;
 	std::vector<DynamicEntity*> collidingEntityList;
+
+private:
+	fMPoint toMove;
+
 
 private:
 	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
