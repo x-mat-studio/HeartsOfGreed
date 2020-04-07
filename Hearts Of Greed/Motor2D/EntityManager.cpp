@@ -73,7 +73,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 20, 100, 20, 20, 20, 20, 20, 20, 15, 15, 15);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
 	// Sample Enemy---------------------
@@ -308,7 +308,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
-		ret = new Hero({ (float)x,(float)y }, sampleMelee, alignement);
+		ret = new Hero({ (float)x,(float)y }, sampleMelee, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
@@ -336,7 +336,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::ENEMY:
-		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, alignement);
+		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, ENTITY_ALIGNEMENT::ENEMY);
 		break;
 
 	default:
