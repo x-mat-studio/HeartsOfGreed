@@ -45,7 +45,7 @@ public:
 					rect.w = iteratorFrames.attribute("rwidth").as_int();
 					rect.h = iteratorFrames.attribute("rheight").as_int();
 
-					aux.PushBack(rect, iteratorFrames.attribute("time").as_int(),  iteratorFrames.attribute("pivotX").as_int(), iteratorFrames.attribute("pivotY").as_int());
+					aux.PushBack(rect, iteratorFrames.attribute("time").as_float(),  iteratorFrames.attribute("pivotX").as_int(), iteratorFrames.attribute("pivotY").as_int());
 					
 					iteratorFrames = iteratorFrames.next_sibling();
 				}
@@ -63,7 +63,7 @@ public:
 	}
 
 	
-	void PushBack(const SDL_Rect& rect, const int maxFrames,int pivotPositionX, int pivotPositionY) {
+	void PushBack(const SDL_Rect& rect, const float maxFrames,int pivotPositionX, int pivotPositionY) {
 		
 		frames[lastFrame].frame = rect;
 		frames[lastFrame].maxFrames = maxFrames;
@@ -77,7 +77,7 @@ public:
 
 	Frame& GetCurrentFrame(float dt)
 	{
-		if (framesPassed * dt < frames[currentFrame].maxFrames * dt) 
+		if (framesPassed * dt < frames[currentFrame].maxFrames * dt)
 			framesPassed += dt;
 		else 
 		{

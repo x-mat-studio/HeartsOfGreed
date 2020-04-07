@@ -163,12 +163,12 @@ bool Hero::PreUpdate(float dt)
 
 bool Hero::Update(float dt)
 {
-
 	//check inputs to traverse state matrix
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
+	GroupMovement(dt);
 
 	CollisionPosUpdate();
 
