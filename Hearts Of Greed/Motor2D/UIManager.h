@@ -45,6 +45,8 @@ public:
 
 	bool CleanUp();
 
+	void LoadAtlas();
+
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);

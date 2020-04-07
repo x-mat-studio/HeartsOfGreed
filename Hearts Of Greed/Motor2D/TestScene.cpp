@@ -42,6 +42,7 @@ bool ModuleTestScene::Start()
 	
 	//Load sfx used in this scene
 	
+	app->uiManager->LoadAtlas();
 
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{

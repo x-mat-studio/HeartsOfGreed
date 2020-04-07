@@ -8,15 +8,11 @@
 #include "UI_Text.h"
 
 ModuleLoseScene::ModuleLoseScene()
-{
-
-}
+{}
 
 
 ModuleLoseScene::~ModuleLoseScene()
-{
-
-}
+{}
 
 
 bool  ModuleLoseScene::Awake(pugi::xml_node&)

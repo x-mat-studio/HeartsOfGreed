@@ -28,6 +28,7 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleMainMenuScene::Start()
 {
+
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
 

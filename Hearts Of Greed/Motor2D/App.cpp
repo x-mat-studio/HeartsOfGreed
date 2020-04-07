@@ -73,10 +73,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(coll);
 	AddModule(fowManager);
 	AddModule(entityManager);
+	AddModule(uiManager);
 	AddModule(pathfinding);
 	AddModule(player);
 	AddModule(ai);
-	AddModule(uiManager);
 
 	
 	//Fade to black before render

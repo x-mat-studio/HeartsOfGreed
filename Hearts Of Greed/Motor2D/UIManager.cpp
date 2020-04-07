@@ -52,7 +52,7 @@ bool ModuleUIManager::Start()
 {
 	bool ret = true;
 
-	atlas = app->tex->Load("spritesheets/atlas.png");
+	LoadAtlas();
 
 	return ret;
 }
@@ -225,7 +225,6 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 void ModuleUIManager::CreateBasicUI()
 {
-
 	SDL_Rect rect;
 	uint w(app->win->width), h(app->win->height);
 
@@ -256,4 +255,10 @@ SDL_Rect ModuleUIManager::RectConstructor(int x, int y, int w, int h)
 	rect.w = w;
 	rect.h = h;
 	return rect;
+}
+
+void ModuleUIManager::LoadAtlas()
+{
+	if(!atlas)
+	atlas = app->tex->Load("spritesheets/atlas.png");
 }
