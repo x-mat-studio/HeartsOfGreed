@@ -125,6 +125,7 @@ bool ModuleFoWManager::PreUpdate(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_STATE::KEY_DOWN)
 	{
 		foWMapVisible = !foWMapVisible;
+		MapNeedsUpdate();
 	}
 
 	return ret;
@@ -269,7 +270,7 @@ void ModuleFoWManager::UpdateFoWMap()
 
 
 
-		if (!debugMode)
+		if (!debugMode&& foWMapVisible)
 		{
 			for (int i = 0; i < fowEntities.size(); i++)
 			{
