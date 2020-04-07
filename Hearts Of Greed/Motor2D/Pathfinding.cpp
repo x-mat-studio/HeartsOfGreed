@@ -20,7 +20,7 @@ bool ModulePathfinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
 
-	//A*--------------------------------------
+	//A*-----------------------------------------
 	last_path.clear();
 	RELEASE_ARRAY(walkabilityMap);
 
@@ -38,10 +38,12 @@ bool ModulePathfinding::CleanUp()
 					delete absGraph.lvlClusters[i].at(j).clustNodes.at(k)->edges.at(z);
 					absGraph.lvlClusters[i].at(j).clustNodes.at(k)->edges.at(z) = nullptr;
 				}
+				absGraph.lvlClusters[i].at(j).clustNodes.at(k)->edges.clear();
 
 				delete absGraph.lvlClusters[i].at(j).clustNodes.at(k);
 				absGraph.lvlClusters[i].at(j).clustNodes.at(k) = nullptr;
 			}
+			absGraph.lvlClusters[i].at(j).clustNodes.clear();
 		}
 		absGraph.lvlClusters[i].clear();
 	}
