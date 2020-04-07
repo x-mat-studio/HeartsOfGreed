@@ -132,6 +132,11 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
 	testBuilding->SetTexture(base1Texture);
+
+
+	//sfx baby
+	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
+	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
 	
 	return ret;
 }

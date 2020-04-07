@@ -128,22 +128,22 @@ DIRECTION Entity::GetMyDirection()
 
 LOUDNESS Entity::GetMyLoudness()
 {
-	int deltaX = position.x - app->render->GetCameraX();
-	int deltaY = position.y - app->render->GetCameraY();
+	int width = app->win->width; int height = app->win->height;
 
-	int SQRDistance = deltaX * deltaX + deltaY * deltaY;
+	int MidX = (-app->render->GetCameraX() + width  /2);
+	int MidY = (-app->render->GetCameraY() + height /2);
 
-	//numbers need testing
+	float SQRDistance = sqrt((position.x - MidX) * (position.x - MidX) + (position.y - MidY) * (position.y - MidY));
 
-	if (SQRDistance < 100) {
+	if (SQRDistance < width/4 * app->win->GetScale()) {
 
 		return LOUDNESS::LOUD;
 	}
-	if (SQRDistance < 200) {
+	if (SQRDistance < width/3 * app->win->GetScale()) {
 
 		return LOUDNESS::NORMAL;
 	}
-	if (SQRDistance < 300) {
+	if (SQRDistance < width/2 * app->win->GetScale()) {
 
 		return LOUDNESS::QUIET;
 	}

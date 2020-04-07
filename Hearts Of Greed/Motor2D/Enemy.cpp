@@ -3,6 +3,7 @@
 #include "AI.h"
 #include "EntityManager.h"
 #include "FoWManager.h"
+#include "Audio.h"
 #include "Textures.h"
 #include "Render.h"
 
@@ -84,6 +85,19 @@ bool Enemy::Update(float dt)
 
 	StateMachine(dt);
 
+	//DEBUGSOUND
+	int randomCounter = rand() % 1000;
+
+	if (randomCounter == 997) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),DIRECTION::RIGHT);
+	
+	}
+	if (randomCounter == 998) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), DIRECTION::LEFT);
+
+	}
 	CollisionPosUpdate();
 
 	return true;

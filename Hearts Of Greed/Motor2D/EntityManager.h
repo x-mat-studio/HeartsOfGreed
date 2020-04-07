@@ -118,6 +118,10 @@ private:
 	Building* testBuilding;
 	Building* blueBuilding;
 
+public:
+	int wanamingoRoar;
+	int wanamingoRoar2;
+
 };
 
 #endif //__ENTITYMANAGER_H__
