@@ -26,7 +26,7 @@ class Building : public Entity
 {
 public:
 
-	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider);
+	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type = ENTITY_TYPE::BUILDING);
 
 	Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement);
 
