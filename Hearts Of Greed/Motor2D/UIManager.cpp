@@ -5,6 +5,8 @@
 #include "UI_Button.h"
 #include "UI_Text.h"
 #include "UI_Healthbar.h"
+#include "UI_Portrait.h"
+#include "UI_Scrollbar.h"
 #include "EventManager.h"
 #include "Window.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -144,6 +146,8 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 	case UI_TYPE::UI_HEALTHBAR:
 		newUI = new UI_Healthbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
+	case UI_TYPE::UI_SCROLLBAR:
+		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
 	}
 
 	if (newUI != nullptr)
@@ -228,7 +232,7 @@ void ModuleUIManager::CreateBasicUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", DRAGGABLE::DRAG_OFF);
 
-	rect = RectConstructor(0, 0, 0, 0);
+	rect = RectConstructor(0, 0, 0, 0); // Text will ignore Rect.
 	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT");
 
 }

@@ -16,6 +16,7 @@ enum class UI_TYPE
 	UI_BUTTON,
 	UI_TEXT,
 	UI_HEALTHBAR,
+	UI_SCROLLBAR,
 
 	UI_NONE
 };
@@ -36,6 +37,7 @@ public:
 	virtual bool PreUpdate(float dt);
 	virtual bool Update(float dt);
 	virtual bool PostUpdate(float dt);
+	virtual void CleanUp();
 	void Draw(SDL_Texture* texture);
 
 	bool MouseUnderElement(int x, int y);

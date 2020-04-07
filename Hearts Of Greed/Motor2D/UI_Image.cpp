@@ -1,10 +1,7 @@
 #include "UI_Image.h"
 
 UI_Image::UI_Image(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable)
-{
-
-	texture = app->uiManager->GetAtlasTexture();
-}
+{}
 
 UI_Image::~UI_Image()
 {}
