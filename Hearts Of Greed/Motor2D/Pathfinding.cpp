@@ -583,7 +583,7 @@ PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, const iMPoint& de
 	bool toDeleteN1 = false;
 	bool toDeleteN2 = false;
 
-	if (IsWalkable(origin) == false || IsWalkable(destination) == false)
+	if (IsWalkable(destination) == false)
 	{
 		return ret;
 	}

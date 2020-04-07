@@ -1,22 +1,22 @@
-#ifndef __TEST_SCENE_H__
-#define __TEST_SCENE_H__
+#ifndef __INTRO_SCENE__
+#define __INTRO_SCENE__
 
 #include "Module.h"
 
 
 
-class ModuleTestScene : public Module
+class ModuleIntroScene : public Module
 {
 public:
 
-	ModuleTestScene();
+	ModuleIntroScene();
 
 	// Destructor
-	virtual ~ModuleTestScene();
+	virtual ~ModuleIntroScene();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
-	
+
 	// Called before the first frame
 	bool Start();
 
@@ -36,16 +36,12 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
-	void Zoom(float addZoomAmount, int windowTargetCenterX, int windowTargetCenterY, float currentScale);
-
-
 private:
-	
+
 	void ExecuteEvent(EVENT_ENUM eventId) const;
 
 private:
-	int prevMousePosX;
-	int prevmousePosY;
+
 };
 
-#endif // __TEST_SCENE_H__
+#endif // __INTRO_SCENE__

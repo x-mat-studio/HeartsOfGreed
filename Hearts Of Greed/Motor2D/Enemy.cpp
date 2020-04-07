@@ -3,13 +3,14 @@
 #include "AI.h"
 #include "EntityManager.h"
 #include "FoWManager.h"
+#include "Audio.h"
 #include "Textures.h"
 #include "Render.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
+	DynamicEntity(position, { 2,2 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -33,7 +34,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 
 Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
-	DynamicEntity(position, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->unitSpeed, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
 	animation(copy->animation),
 
 	hitPoints(copy->hitPoints),
@@ -84,6 +85,19 @@ bool Enemy::Update(float dt)
 
 	StateMachine(dt);
 
+	//DEBUGSOUND
+	int randomCounter = rand() % 1000;
+
+	if (randomCounter == 997) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),DIRECTION::RIGHT);
+	
+	}
+	if (randomCounter == 998) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), DIRECTION::LEFT);
+
+	}
 	CollisionPosUpdate();
 
 	return true;
@@ -175,6 +189,7 @@ void Enemy::OnCollision(Collider* collider)
 void Enemy::Draw(float dt)
 {
 	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+	DebugDraw();
 }
 
 

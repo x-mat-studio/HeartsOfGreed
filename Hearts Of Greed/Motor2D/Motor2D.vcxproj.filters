@@ -139,6 +139,18 @@
     <ClCompile Include="UI_Scrollbar.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoseScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -296,6 +308,18 @@
     </ClInclude>
     <ClInclude Include="UI_Scrollbar.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Desenvolupament  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinScene.h">
+      <Filter>Desenvolupament  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoseScene.h">
+      <Filter>Desenvolupament  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Desenvolupament  ========\Scenes\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
