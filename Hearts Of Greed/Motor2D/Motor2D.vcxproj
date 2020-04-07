@@ -95,10 +95,13 @@
     <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="GathererHero.cpp" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="IntroScene.cpp" />
+    <ClCompile Include="LoseScene.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MeleeHero.cpp" />
     <ClCompile Include="Module.cpp" />
@@ -118,12 +121,14 @@
     <ClCompile Include="UI_Healthbar.cpp" />
     <ClCompile Include="UI_Portrait.cpp" />
     <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="UI_Scrollbar.cpp" />
     <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="SimpleTimer.cpp" />
+    <ClCompile Include="WinScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
@@ -148,6 +153,9 @@
     <ClInclude Include="GathererHero.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IntroScene.h" />
+    <ClInclude Include="LoseScene.h" />
+    <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MeleeHero.h" />
     <ClInclude Include="FadeToBlack.h" />
@@ -169,6 +177,7 @@
     <ClInclude Include="UI_Healthbar.h" />
     <ClInclude Include="UI_Portrait.h" />
     <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI_Scrollbar.h" />
     <ClInclude Include="UI_Text.h" />
     <ClInclude Include="UpgradeCenter.h" />
     <ClInclude Include="Window.h" />
@@ -177,6 +186,7 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="SimpleTimer.h" />
+    <ClInclude Include="WinScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

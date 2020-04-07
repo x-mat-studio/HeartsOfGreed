@@ -10,14 +10,14 @@ class DynamicEntity : public Entity
 {
 public:
 
-	DynamicEntity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2);
+	DynamicEntity(fMPoint position, iMPoint speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2);
 
 	~DynamicEntity();
 
 	//Returns true while moving, returns false when stops
 	bool Move(float dt);
 
-	bool GeneratePath(int x, int y);
+	bool GeneratePath(int x, int y, int lvl);
 	void DebugDraw();
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
@@ -29,7 +29,7 @@ public:
 	int moveRange1;
 	int moveRange2;
 
-	fMPoint speed;
+	iMPoint unitSpeed;
 
 protected:
 

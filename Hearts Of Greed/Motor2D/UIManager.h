@@ -37,7 +37,9 @@ public:
 
 	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 });
 	SDL_Texture* GetAtlasTexture() const;
+
 	void RemoveDeletedUI();
+	void CreateBasicUI();
 
 	bool CleanUp();
 
@@ -46,7 +48,6 @@ private:
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 	void ExecuteEvent(EVENT_ENUM eventId);
-	void CreateBasicUI();
 
 private:
 

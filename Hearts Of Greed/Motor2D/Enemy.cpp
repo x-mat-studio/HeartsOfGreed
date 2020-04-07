@@ -10,7 +10,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
+	DynamicEntity(position, { 2,2 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 5, 10),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -34,7 +34,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 
 Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
-	DynamicEntity(position, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->unitSpeed, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
 	animation(copy->animation),
 
 	hitPoints(copy->hitPoints),
@@ -122,7 +122,7 @@ void Enemy::StateMachine(float dt)
 			}
 			else
 			{
-				if (framePathfindingCount == framesPerPathfinding)
+				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
 					MoveTo(pos.x, pos.y);
@@ -166,7 +166,7 @@ bool Enemy::MoveTo(int x, int y)
 	//do pathfinding, if it works return true
 	framePathfindingCount = 0;
 
-	if (GeneratePath(x, y))
+	if (GeneratePath(x, y, 0))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;
@@ -189,6 +189,7 @@ void Enemy::OnCollision(Collider* collider)
 void Enemy::Draw(float dt)
 {
 	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+	DebugDraw();
 }
 
 

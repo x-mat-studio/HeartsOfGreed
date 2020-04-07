@@ -471,6 +471,8 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 			}
 		}
 	}
+
+	return nullptr;
 }
 
 

@@ -9,13 +9,13 @@
 #include "Window.h"
 #include "App.h"
 
-DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
+DynamicEntity::DynamicEntity(fMPoint position,iMPoint speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
 	
 	Entity(position, type, align, collider, true),
 
 	moveRange1(moveRange1), 
 	moveRange2(moveRange2), 
-	speed(0, 0), 
+	unitSpeed(speed), 
 	isMoving(false), 
 	current_animation(nullptr)
 {}
@@ -28,13 +28,16 @@ bool DynamicEntity::Move(float dt)
 	BROFILER_CATEGORY("Move Unit", Profiler::Color::BlanchedAlmond);
 
 	//Speed is resetted to 0 each iteration
-	speed = { 0, 0 };
+	fMPoint speed = { 0, 0 };
 
 	// ----------------------------------------------------------------
 
 	fMPoint pathSpeed;
 	pathSpeed.create(0, 0);
 	fMPoint nextPoint;
+
+	if (path.size() < 2)
+		app->pathfinding->RequestPath(this, &path);
 
 	if (path.size() > 0)
 	{
@@ -87,8 +90,10 @@ bool DynamicEntity::Move(float dt)
 	}
 
 	// ----------------------------------------------------------------- 
+	pathSpeed.x = pathSpeed.x * unitSpeed.x;
+	pathSpeed.y = pathSpeed.y * unitSpeed.y;
 
-	speed += pathSpeed + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
+	speed += pathSpeed  + separationSpeed * 2.f + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
 
 	// ------------------------------------------------------------------
 
@@ -208,7 +213,8 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	{
 		it = close_entity_list[i];
 
-		alignmentSpeed += it->speed;
+		alignmentSpeed.x += it->unitSpeed.x;
+		alignmentSpeed.y += it->unitSpeed.y;
 	}
 
 	alignmentSpeed.x = alignmentSpeed.x / close_entity_list.size();
@@ -224,17 +230,18 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	return alignmentSpeed;
 }
 
-bool DynamicEntity::GeneratePath(int x, int y)
+bool DynamicEntity::GeneratePath(int x, int y, int lvl)
 {
 	iMPoint goal = { 0,0 };
 
 	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
 	goal = app->map->WorldToMap(x , y );
 
-	if (app->pathfinding->CreatePath(origin, goal) == 0)
+	if (app->pathfinding->CreatePath(origin, goal, 1, this) != PATH_TYPE::NO_TYPE)
 	{
 		path.clear();
-		app->pathfinding->SavePath(&path);
+		app->pathfinding->RequestPath(this, &path);
+		if (path.size() > 0)
 		path.erase(path.begin());
 		return true;
 	}

@@ -15,7 +15,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float attackCooldown, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
-	DynamicEntity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
+	DynamicEntity(position, {2,2}, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -75,7 +75,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	DynamicEntity(position, copy->type, alignement, copy->collider, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->unitSpeed, copy->type, alignement, copy->collider, copy->moveRange1, copy->moveRange2),
 
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
@@ -186,7 +186,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::MOVE:
 		currentAnimation = &walkLeft;
-		Move(dt);
+		Move(dt * 2);
 		visionEntity->SetNewPosition(position);
 
 		CheckAttackRange();
@@ -249,7 +249,7 @@ bool Hero::MoveTo(int x, int y)
 	//do pathfinding, if it works return true
 	objective = nullptr;
 
-	if (GeneratePath(x, y))
+	if (GeneratePath(x, y, 1))
 	{
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
