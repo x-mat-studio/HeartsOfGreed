@@ -65,7 +65,7 @@ public:
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
 	~Hero();
 
-	bool MoveTo(int x, int y);
+	bool MoveTo(int x, int y, bool haveObjective = true);
 	bool LockOn(Entity*);
 
 	bool PreUpdate(float dt);
@@ -83,10 +83,8 @@ public:
 
 private:
 	void LevelUp();
-
 	
-
-	void CheckAttackRange();
+	bool CheckAttackRange();
 	void Attack();
 	void Die();
 
@@ -129,7 +127,7 @@ public:
 	bool skill3Charged;
 
 	int movementSpeed;
-	int vision;
+	int visionDistance;
 
 	float attackCooldown;
 	float cooldownHability1;
@@ -158,6 +156,9 @@ public:
 
 	std::vector<HERO_INPUTS> inputs;
 	Animation *currentAnimation;
+
+	int framesPerPathfinding = 20;
+	int framePathfindingCount = 0;
 };
 
 

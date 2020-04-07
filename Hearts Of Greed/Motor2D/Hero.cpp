@@ -41,7 +41,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	attackSpeed(attackSpeed),
 	attackRange(attackRange),
 	movementSpeed(movementSpeed),
-	vision(vision),
+	visionDistance(visionDistance),
 
 	attackCooldown(0),
 	skill1ExecutionTime(skill1ExecutionTime),
@@ -99,7 +99,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	attackSpeed(copy->attackSpeed),
 	attackRange(copy->attackRange),
 	movementSpeed(copy->movementSpeed),
-	vision(copy->vision),
+	visionDistance(copy->visionDistance),
 
 	attackCooldown(0),
 	skill1ExecutionTime(copy->skill1ExecutionTime),
@@ -189,17 +189,38 @@ void Hero::StateMachine(float dt)
 		Move(dt);
 		visionEntity->SetNewPosition(position);
 
-		CheckAttackRange();
+		if (objective != nullptr)
+		{
+			if (CheckAttackRange() == true)
+			{
+				inputs.push_back(HERO_INPUTS::IN_ATTACK);
+			}
+
+			else if (framePathfindingCount == framesPerPathfinding)
+			{
+				fMPoint pos = objective->GetPosition();
+				MoveTo(pos.x, pos.y);
+			}
+		}
+		
 		break;
 
 	case HERO_STATES::ATTACK:
 
 		if (attackCooldown == 0)
 		{
-			Attack();
-			attackCooldown += TIME_TRIGGER;
+			if (CheckAttackRange() == true)
+			{
+				Attack();
+				attackCooldown += TIME_TRIGGER;
 
-			currentAnimation = &walkRight;
+				currentAnimation = &walkRight;
+			}
+
+			else
+			{
+				inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
+			}
 		}
 
 		inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
@@ -244,10 +265,13 @@ bool Hero::PostUpdate(float dt)
 }
 
 
-bool Hero::MoveTo(int x, int y)
+bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
 	//do pathfinding, if it works return true
-	objective = nullptr;
+	if (haveObjective == false)
+	{
+		objective = nullptr;
+	}
 
 	if (GeneratePath(x, y, 1))
 	{
@@ -261,13 +285,19 @@ bool Hero::MoveTo(int x, int y)
 
 bool Hero::LockOn(Entity* entity)
 {
-	ENTITY_TYPE type = entity->GetType();
+	ENTITY_ALIGNEMENT align = entity->GetAlignment();
 
-	if (type == ENTITY_TYPE::ENEMY)
+	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		MoveTo(entity->GetPosition().x, entity->GetPosition().y);
 		objective = entity;
 
+		return true;
+	}
+
+	else
+	{
+		MoveTo(entity->GetPosition().x, entity->GetPosition().y, false);
 		return true;
 	}
 
@@ -297,24 +327,22 @@ void Hero::LevelUp()
 	attackRange;
 
 	movementSpeed;
-	vision;
+	visionDistance;
 }
 
 
 void Hero::Draw(float dt)
 {
 	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
-
-
 }
 
 
-void Hero::CheckAttackRange()
+bool Hero::CheckAttackRange()
 {
 	//check if the maxDistance is equal or bigger than the actual distance between the objective and the unit 
 	if (objective == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	fMPoint point = objective->GetPosition();
@@ -327,16 +355,15 @@ void Hero::CheckAttackRange()
 
 	if (distance < attackRange)
 	{
-		inputs.push_back(HERO_INPUTS::IN_ATTACK);
+		return true;
 	}
 
 	else
 	{
-		inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
+		return false;
 	}
-
-
 }
+
 
 
 void Hero::Attack()
@@ -484,6 +511,12 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		{
 			skill3Charged = true;
 		}
+	}
+
+
+	if (framePathfindingCount < framesPerPathfinding)
+	{
+		framePathfindingCount++;
 	}
 }
 

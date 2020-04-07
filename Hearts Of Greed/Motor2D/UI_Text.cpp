@@ -12,7 +12,6 @@ UI_Text::~UI_Text()
 
 bool UI_Text::PostUpdate(float dt)
 {
-
 	// We only use directly Blit in the case of Text. We need an NULL SDL_Rect.
 	app->render->Blit(texture, worldPosition.x, worldPosition.y, nullptr, 0.0f, false, false);
 

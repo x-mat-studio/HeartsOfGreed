@@ -17,6 +17,7 @@ enum class UI_TYPE
 	UI_TEXT,
 	UI_HEALTHBAR,
 	UI_SCROLLBAR,
+	UI_PORTRAIT,
 
 	UI_NONE
 };
@@ -60,12 +61,13 @@ public:
 	bool enabled;
 	bool interactable;
 
-protected:
-
 	fMPoint worldPosition;
 	fMPoint localPosition;
 
 	SDL_Rect box;
+
+protected:
+
 	SDL_Texture* texture;
 
 	UI* parent;
