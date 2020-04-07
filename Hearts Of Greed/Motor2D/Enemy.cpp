@@ -90,12 +90,12 @@ bool Enemy::Update(float dt)
 
 	if (randomCounter == 997) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),DIRECTION::RIGHT);
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),this->GetMyDirection());
 	
 	}
 	if (randomCounter == 998) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), DIRECTION::LEFT);
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
 	CollisionPosUpdate();

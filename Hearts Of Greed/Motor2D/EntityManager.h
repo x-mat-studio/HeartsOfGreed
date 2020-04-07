@@ -12,6 +12,7 @@ class Building;
 class DynamicEntity;
 class Enemy;
 class Spawner;
+class Base;
 
 enum class SPRITE_POSITION : int
 {
@@ -118,6 +119,7 @@ private:
 
 	Building* testBuilding;
 	Building* blueBuilding;
+	Base* sampleBase;
 
 public:
 	int wanamingoRoar;

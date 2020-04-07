@@ -11,10 +11,12 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	attackDmg(attackDmg),
 	attackSpeed(attackSpeed),
 	range(range),
+
 	attackCD(0),
 	
 	shortTermObjective(nullptr),
 	haveOrders(false),
+
 	state(TURRET_STATES::IDLE)
 {}
 
@@ -32,8 +34,8 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	attackCD(0),
 
 	shortTermObjective(nullptr),
-
 	haveOrders(false),
+
 	state(TURRET_STATES::IDLE)
 {}
 
@@ -261,7 +263,7 @@ void Turret::StateMachine()
 		if (attackCD == 0)
 		{
 			Attack();
-			attackCD += 0.1;
+			attackCD += 0.001;
 		}
 
 		inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
