@@ -65,7 +65,6 @@ bool Building::PreUpdate(float dt)
 
 bool Building::Update(float dt)
 {
-	
 	return true;
 }
 
