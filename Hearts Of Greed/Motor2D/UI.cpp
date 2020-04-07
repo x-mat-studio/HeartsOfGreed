@@ -34,7 +34,6 @@ bool UI::operator==(UI* element)
 
 bool UI::Start()
 {
-
 	return true;
 }
 
@@ -50,7 +49,6 @@ bool UI::Update(float dt)
 
 bool UI::PostUpdate(float dt)
 {
-
 	return true;
 }
 

@@ -20,7 +20,12 @@ ModuleUIManager::ModuleUIManager()
 
 // Destructor
 ModuleUIManager::~ModuleUIManager()
-{}
+{
+	
+	app->tex->UnLoad(atlas);
+	atlas = nullptr;
+
+}
 
 
 // Called before render is available
@@ -48,8 +53,6 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	atlas = app->tex->Load("spritesheets/atlas.png");
-
-	CreateBasicUI();
 
 	return ret;
 }
@@ -120,11 +123,6 @@ bool ModuleUIManager::CleanUp()
 
 	uiVector.clear();
 
-
-	app->tex->UnLoad(atlas);
-
-	atlas = nullptr;
-
 	return true;
 }
 
@@ -148,6 +146,10 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 		break;
 	case UI_TYPE::UI_SCROLLBAR:
 		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
+		break;
+	case UI_TYPE::UI_PORTRAIT:
+		newUI = new UI_Portrait(positionValue, father, uiType, rect, uiName, dragable);
+		break;
 	}
 
 	if (newUI != nullptr)
@@ -227,8 +229,12 @@ void ModuleUIManager::CreateBasicUI()
 	SDL_Rect rect;
 	uint w(app->win->width), h(app->win->height);
 
+	rect = RectConstructor(0, 0, 0, 0);
+	AddUIElement(fMPoint(w / app->win->GetScale() - 72, 60), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
+
 	rect = RectConstructor(221, 317, 162, 174);
 	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
+
 	rect = RectConstructor(449, 24, 24, 24);
 	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", DRAGGABLE::DRAG_OFF);
 

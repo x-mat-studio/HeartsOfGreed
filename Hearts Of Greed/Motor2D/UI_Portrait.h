@@ -5,7 +5,7 @@
 #include "UI_Image.h"
 #include "UI_Text.h"
 #include "UI_Healthbar.h"
-#include "Entity.h"
+#include "Hero.h"
 
 struct Portrait
 {
@@ -30,7 +30,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	void CreatePortrait(Entity* entity);
+	void CreatePortrait(Hero* entity);
 
 private:
 

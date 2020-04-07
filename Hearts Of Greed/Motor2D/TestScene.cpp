@@ -41,7 +41,7 @@ bool ModuleTestScene::Start()
 	//app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 	
 	//Load sfx used in this scene
-	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
+	
 
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{
@@ -68,6 +68,8 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
 	}
+
+	app->uiManager->CreateBasicUI();
 
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
@@ -121,13 +123,6 @@ bool  ModuleTestScene::Update(float dt)
 	{
 		app->render->currentCamX -= camVel * dt;
 	}
-
-	//DEBUGSOUND
-	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN)
-	{
-		app->audio->PlayFx(wanamingoRoar,0,1,LOUDNESS::LOUD,DIRECTION::BACK_RIGHT);
-	}
-
 	
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN)
