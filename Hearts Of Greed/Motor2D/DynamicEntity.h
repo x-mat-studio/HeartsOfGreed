@@ -10,7 +10,7 @@ class DynamicEntity : public Entity
 {
 public:
 
-	DynamicEntity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2);
+	DynamicEntity(fMPoint position, iMPoint speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2);
 
 	~DynamicEntity();
 
@@ -29,7 +29,7 @@ public:
 	int moveRange1;
 	int moveRange2;
 
-	fMPoint speed;
+	iMPoint unitSpeed;
 
 protected:
 

@@ -9,13 +9,13 @@
 #include "Window.h"
 #include "App.h"
 
-DynamicEntity::DynamicEntity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
+DynamicEntity::DynamicEntity(fMPoint position,iMPoint speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
 	
 	Entity(position, type, align, collider, true),
 
 	moveRange1(moveRange1), 
 	moveRange2(moveRange2), 
-	speed(0, 0), 
+	unitSpeed(speed), 
 	isMoving(false), 
 	current_animation(nullptr)
 {}
@@ -28,7 +28,7 @@ bool DynamicEntity::Move(float dt)
 	BROFILER_CATEGORY("Move Unit", Profiler::Color::BlanchedAlmond);
 
 	//Speed is resetted to 0 each iteration
-	speed = { 0, 0 };
+	fMPoint speed = { 0, 0 };
 
 	// ----------------------------------------------------------------
 
@@ -90,13 +90,15 @@ bool DynamicEntity::Move(float dt)
 	}
 
 	// ----------------------------------------------------------------- 
+	pathSpeed.x = pathSpeed.x * unitSpeed.x;
+	pathSpeed.y = pathSpeed.y * unitSpeed.y;
 
-	speed += pathSpeed + separationSpeed * 1 + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
+	speed += pathSpeed  + separationSpeed * 2.f + cohesionSpeed * 0.5f + alignmentSpeed * 0.1f;
 
 	// ------------------------------------------------------------------
 
-	position.x += (speed.x) * dt *2;
-	position.y += (speed.y) * dt *2;
+	position.x += (speed.x) * dt;
+	position.y += (speed.y) * dt;
 
 	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 5  && abs(position.y - nextPoint.y) <= 5)
 	{
@@ -211,7 +213,8 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	{
 		it = close_entity_list[i];
 
-		alignmentSpeed += it->speed;
+		alignmentSpeed.x += it->unitSpeed.x;
+		alignmentSpeed.y += it->unitSpeed.y;
 	}
 
 	alignmentSpeed.x = alignmentSpeed.x / close_entity_list.size();

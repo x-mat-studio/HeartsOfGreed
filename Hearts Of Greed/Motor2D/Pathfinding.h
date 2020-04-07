@@ -14,7 +14,7 @@
 #include <unordered_map>
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 5
+#define NODE_MIN_DISTANCE 3
 #define CLUSTER_SIZE_LVL 5
 #define MAX_LEVELS 1
 
