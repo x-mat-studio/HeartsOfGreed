@@ -28,7 +28,12 @@ ModuleEntityManager::ModuleEntityManager()
 
 // Destructor
 ModuleEntityManager::~ModuleEntityManager()
-{}
+{
+	RELEASE(sampleMelee);
+	RELEASE(sampleEnemy);
+	sampleMelee = nullptr;
+	sampleEnemy = nullptr;
+}
 
 
 // Called before render is available
@@ -257,22 +262,8 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 bool ModuleEntityManager::CleanUp()
 {
-	int numEntities = entityVector.size();
-
-	for (int i = 0; i < numEntities; i++)
-	{
-		RELEASE(entityVector[i]);
-		entityVector[i] = nullptr;
-	}
-
-	entityVector.clear();
+	DeleteAllEntities();
 	
-	//destroy sample entites
-	RELEASE(sampleMelee);
-	RELEASE(sampleEnemy);
-	sampleMelee = nullptr;
-	sampleEnemy = nullptr;
-
 	app->tex->UnLoad(suitManTexture);
 	app->tex->UnLoad(buildingTexture);
 
@@ -476,7 +467,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 }
 
 
-void ModuleEntityManager::RemoveDeletedEntitys()
+void ModuleEntityManager::RemoveDeletedEntities()
 {
 	int numEntitys = entityVector.size();
 
@@ -640,7 +631,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::ENTITY_DEAD:
-		RemoveDeletedEntitys();
+		RemoveDeletedEntities();
 		break;
 	}
 
@@ -669,7 +660,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 				fMPoint pos = it->GetPosition();
 
 				float distance = pos.DistanceTo(thisUnit->GetPosition());
-				if (distance < it->moveRange2)
+				if (distance < thisUnit->moveRange2)
 				{
 					colliding_entity_list->push_back(it);
 
@@ -728,4 +719,17 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 		break;
 	}
 
+}
+
+void ModuleEntityManager::DeleteAllEntities()
+{
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		RELEASE(entityVector[i]);
+		entityVector[i] = nullptr;
+	}
+
+	entityVector.clear();
 }
