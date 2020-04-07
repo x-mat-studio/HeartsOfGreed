@@ -126,7 +126,29 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 		break;
 	}
 
+	newPortrait.hero = entity;
+
 	portraitVector.push_back(newPortrait);
+}
+
+void UI_Portrait::DeletePortrait(Portrait portrait)
+{
+	// TODO
+}
+
+void UI_Portrait::Move()
+{
+	// TODO
+}
+
+void UI_Portrait::CheckLevel()
+{
+	// TODO
+}
+
+void UI_Portrait::ReWriteLevelTexture()
+{
+	// TODO
 }
 
 SDL_Rect UI_Portrait::RectConstructor(int x, int y, int w, int h)

@@ -46,7 +46,7 @@ public:
 
 protected:
 
-	void Move();
+	virtual void Move();
 	virtual void HandleInput();
 
 public:
@@ -64,6 +64,7 @@ public:
 	fMPoint worldPosition;
 	fMPoint localPosition;
 
+	UI_TYPE type;
 	SDL_Rect box;
 
 protected:
@@ -71,7 +72,6 @@ protected:
 	SDL_Texture* texture;
 
 	UI* parent;
-	UI_TYPE type;
 	DRAGGABLE draggable;
 
 	P2SString name;

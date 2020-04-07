@@ -15,6 +15,7 @@ struct Portrait
 	UI_Healthbar* healthbar;
 	UI_Image* backgroundLevel;
 	UI_Text* level;
+	Hero* hero;
 };
 
 class UI_Portrait : public UI
@@ -31,17 +32,22 @@ public:
 	bool PostUpdate(float dt);
 
 	void CreatePortrait(Hero* entity);
+	void DeletePortrait(Portrait portrait);
 
 private:
 
 	void HandleInput();
+	void Move();
 	void CheckLevel();
 	void ReWriteLevelTexture();
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
-private:
+public:
 
 	std::vector<Portrait> portraitVector;
+
+private:
+
 	int nextVectorPosition;
 
 };
