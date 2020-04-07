@@ -68,7 +68,7 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
-		ActivateBuildMode(ENTITY_TYPE::BUILDING);
+		ActivateBuildMode(ENTITY_TYPE::BLDG_BASE);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
@@ -248,7 +248,7 @@ void ModulePlayer::RightClick()
 bool ModulePlayer::BuildClick()
 {
 	//Needs more work
-	app->entityManager->AddEntity(buildingToBuild, (-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale());
+	app->entityManager->AddEntity(buildingToBuild, (-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale(), ENTITY_ALIGNEMENT::PLAYER);
 
 	return true;
 }
@@ -256,7 +256,6 @@ bool ModulePlayer::BuildClick()
 
 void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
-	
 	switch (eventId)
 	{
 	

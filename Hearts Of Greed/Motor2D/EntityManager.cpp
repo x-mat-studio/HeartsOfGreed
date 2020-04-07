@@ -16,6 +16,7 @@
 #include "Spawner.h"
 
 #include "Building.h"
+#include "Base.h"
 
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -111,6 +112,10 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
+
+
+	//Template base
+	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, nullptr, 5, 3, 500, 20, 100);
 
 
 	return ret;
@@ -209,6 +214,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
+				entityVector[i]->Start(base2Texture);
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
@@ -322,7 +328,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:
-
+		ret = new Base({ (float)x,(float)y }, sampleBase, alignement);
 		app->ai->PushBase((Base*)ret);
 		break;
 
@@ -710,6 +716,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 		break;
 	case ENTITY_TYPE::BLDG_BASE:
+		sampleBase->ActivateTransparency();
+		sampleBase->SetPosition(x, y);
+		sampleBase->Draw(0);
 		break;
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;

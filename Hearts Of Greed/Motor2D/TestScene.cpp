@@ -38,7 +38,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 bool ModuleTestScene::Start()
 {
 	//Play Music
-	//app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
+	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 	
 	//Load sfx used in this scene
 	
@@ -200,8 +200,14 @@ bool  ModuleTestScene::PostUpdate(float dt)
 // Called before quitting
 bool  ModuleTestScene::CleanUp()
 {
+	app->pathfinding->CleanUp();
 	app->uiManager->CleanUp();
-	app->entityManager->CleanUp();
+	app->entityManager->DeleteAllEntities();
+	app->coll->CleanUp();
+	app->map->CleanUp();
+	app->fowManager->DeleteFoWMap();
+	
+
 	return true;
 }
 

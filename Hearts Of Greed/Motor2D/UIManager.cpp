@@ -241,6 +241,8 @@ void ModuleUIManager::CreateBasicUI()
 	rect = RectConstructor(0, 0, 0, 0); // Text will ignore Rect.
 	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT");
 
+	rect = RectConstructor(17, 12, 195, 37);
+	AddUIElement(fMPoint(20, 40), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollBar", DRAGGABLE::DRAG_OFF);
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const

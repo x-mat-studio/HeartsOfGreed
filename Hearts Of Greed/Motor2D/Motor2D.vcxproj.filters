@@ -113,7 +113,7 @@
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
     <ClCompile Include="FoWEntity.cpp">
-      <Filter>Desenvolupament  ========\Fog of War\cpp files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Fog of War\cpp files</Filter>
     </ClCompile>
     <ClCompile Include="DynamicEntity.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
@@ -280,10 +280,10 @@
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
     <ClInclude Include="FoWEntity.h">
-      <Filter>Desenvolupament  ========\Fog of War\header files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Fog of War\header files</Filter>
     </ClInclude>
     <ClInclude Include="FoWBitDefs.h">
-      <Filter>Desenvolupament  ========\Fog of War\header files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Fog of War\header files</Filter>
     </ClInclude>
     <ClInclude Include="DynamicEntity.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
@@ -380,20 +380,20 @@
     <Filter Include="Desenvolupament  ========\UI\UIElements">
       <UniqueIdentifier>{408d7c25-afc7-48f2-ac77-451e0deb6d48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Desenvolupament  ========\Fog of War">
-      <UniqueIdentifier>{53cbac33-f01a-48a1-a742-aee1c7a5dc85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Desenvolupament  ========\Fog of War\cpp files">
-      <UniqueIdentifier>{e0bc134e-7392-44b8-bd7a-d828e0ba854f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Desenvolupament  ========\Fog of War\header files">
-      <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Desenvolupament  ========\Entities\cpp files">
       <UniqueIdentifier>{264e1060-39b9-4e8c-a535-b5ab03f0e522}</UniqueIdentifier>
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities\header files">
       <UniqueIdentifier>{cbdc8652-8c70-4841-bde0-e62fe4536b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Fog of War">
+      <UniqueIdentifier>{53cbac33-f01a-48a1-a742-aee1c7a5dc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Fog of War\cpp files">
+      <UniqueIdentifier>{e0bc134e-7392-44b8-bd7a-d828e0ba854f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Fog of War\header files">
+      <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

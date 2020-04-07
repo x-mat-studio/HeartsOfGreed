@@ -71,7 +71,7 @@ private:
 	float attackCD;
 	int range;
 
-private:
+
 	bool haveOrders;
 	Entity* shortTermObjective;
 	Animation animation;
