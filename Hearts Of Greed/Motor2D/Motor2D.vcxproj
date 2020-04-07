@@ -118,6 +118,7 @@
     <ClCompile Include="UI_Healthbar.cpp" />
     <ClCompile Include="UI_Portrait.cpp" />
     <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="UI_Scrollbar.cpp" />
     <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="UI_Healthbar.h" />
     <ClInclude Include="UI_Portrait.h" />
     <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI_Scrollbar.h" />
     <ClInclude Include="UI_Text.h" />
     <ClInclude Include="UpgradeCenter.h" />
     <ClInclude Include="Window.h" />
