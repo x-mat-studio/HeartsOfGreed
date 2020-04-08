@@ -313,9 +313,7 @@ bool Hero::LockOn(Entity* entity)
 
 
 void Hero::OnCollision(Collider* collider)
-{
-
-}
+{}
 
 
 void Hero::LevelUp()
@@ -375,8 +373,8 @@ bool Hero::CheckAttackRange()
 
 void Hero::Attack()
 {
-
-
+	if (objective)
+		objective->RecieveDamage(attackDamage);
 
 }
 

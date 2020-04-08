@@ -38,6 +38,8 @@ public:
 
 	void Zoom(float addZoomAmount, int windowTargetCenterX, int windowTargetCenterY, float currentScale);
 
+	void StartDragging(iMPoint mousePos);
+	void Drag(iMPoint mousePos, float scale);
 
 private:
 	

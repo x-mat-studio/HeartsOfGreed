@@ -69,7 +69,7 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
 	baseAreaAlarm(copy->baseAreaAlarm)
 {
-	app->coll->AddColliderEntity(baseAreaAlarm);
+	app->coll->AddCollider(baseAreaAlarm->rect, baseAreaAlarm->type, baseAreaAlarm->callback);
 	baseAreaAlarm->SetPos(position.x, position.y);
 }
 

@@ -406,3 +406,20 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 	return state;
 
 }
+
+bool Enemy::RecieveDamage(int damage)
+{
+	bool ret = false;
+
+	if (hitPoints > 0)
+	{
+		hitPoints -= damage;
+		if (hitPoints <= 0)
+		{
+			Die();
+			ret = true;
+		}
+	}
+
+	return ret;
+}

@@ -71,6 +71,7 @@ void ModulePathfinding::SetMap(uint width, uint height, uchar* data)
 
 void ModulePathfinding::preProcessing(int maxLevel)
 {
+	BROFILER_CATEGORY("Pre-processing", Profiler::Color::Cornsilk);
 	abstractMaze();
 	buildGraph();
 	//for (int l = 2; l <= maxLevel; l++)

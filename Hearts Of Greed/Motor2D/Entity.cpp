@@ -33,6 +33,7 @@ Entity::~Entity()
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;
+		collider->thisEntity = nullptr;
 	}
 	
 
@@ -244,8 +245,9 @@ void Entity::SetToDelete(bool toDel)
 }
 
 
-bool Entity::DealDamage(int damage)
+bool Entity::RecieveDamage(int damage)
 {
 
 	return false;
 }
+
