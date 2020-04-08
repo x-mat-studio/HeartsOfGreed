@@ -66,6 +66,9 @@ public:
 
 	bool ConfigureChannel(unsigned int channel,LOUDNESS loudness, DIRECTION direction);
 
+	void SilenceAllChannels(int id);
+	void SilenceAll();
+
 private:
 	P2SString fxFolder;
 
