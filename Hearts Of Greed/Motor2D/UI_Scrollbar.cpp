@@ -1,13 +1,10 @@
 #include "UI_Scrollbar.h"
 
 
-UI_Scrollbar::UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable)
-{
-	SDL_Rect aux = app->uiManager->RectConstructor(449, 24, 24, 24);
-	scrollButton = app->uiManager->AddUIElement(fMPoint(this->worldPosition.x, this->worldPosition.y), this, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", DRAGGABLE::DRAG_X);
-	scrollButton->worldPosition.y = this->worldPosition.y - scrollButton->box.h / 2 + this->box.h / 2;
-	interactable = true;
-}
+UI_Scrollbar::UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, float maxValue) : UI(positionValue, father, uiType, rect, uiName, draggable),
+generatedButton(false),
+maxValue(maxValue)
+{}
 
 UI_Scrollbar::~UI_Scrollbar()
 {}
@@ -20,24 +17,20 @@ bool UI_Scrollbar::Start()
 
 bool UI_Scrollbar::PreUpdate(float dt)
 {
-
 	return true;
 }
 
 bool UI_Scrollbar::Update(float dt)
 {
-
-	ScrollLimit();
-
-	Draw(texture);
-
 	return true;
 }
 
 bool UI_Scrollbar::PostUpdate(float dt)
 {
-
 	
+	GenerateScrollButton();
+
+	Draw(texture);
 
 	return true;
 }
@@ -63,7 +56,26 @@ void UI_Scrollbar::ScrollLimit()
 
 }
 
-void UI_Scrollbar::HandleInput()
+bool UI_Scrollbar::GenerateScrollButton() 
 {
 
+	if (!generatedButton) 
+	{
+		SDL_Rect aux = app->uiManager->RectConstructor(449, 24, 24, 24);
+		scrollButton = app->uiManager->AddUIElement(fMPoint(this->worldPosition.x, this->worldPosition.y), this, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", DRAGGABLE::DRAG_X);
+		scrollButton->worldPosition.y = this->worldPosition.y - scrollButton->box.h / 2 + this->box.h / 2;
+
+		generatedButton = true;
+	}
+
+	scrollButton->localPosition.x = this->worldPosition.x - scrollButton->worldPosition.x;
+	scrollButton->localPosition.y = this->worldPosition.y - scrollButton->worldPosition.y;
+	ScrollLimit();
+	
+	return generatedButton;
+}
+
+float UI_Scrollbar::GetScrollValue()
+{ 
+	return -((float(-scrollButton->localPosition.x) / (float(-this->box.w) + float(scrollButton->box.w))) * maxValue); 
 }
