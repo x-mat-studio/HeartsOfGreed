@@ -86,11 +86,16 @@ bool ModuleCollision::Update(float dt)
 
 	for (uint i = 0; i < colliders.size(); ++i)
 	{
+		if (colliders[i] == nullptr)
+			continue;
+
 		c1 = colliders[i];
 
 		// avoid checking collisions already checked
 		for (uint k = i + 1; k < colliders.size(); ++k)
 		{
+			if (colliders[k] == nullptr)
+				continue;
 
 			c2 = colliders[k];
 
@@ -147,6 +152,14 @@ void ModuleCollision::DebugDraw()
 
 		case COLLIDER_ENEMY:
 			app->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha);
+			break;
+
+		case COLLIDER_BASE_ALERT:
+			app->render->DrawQuad(colliders[i]->rect, 0, 109, 109, alpha);
+			break;
+
+		case COLLIDER_RECLUIT_IA: // no clue
+			app->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
 			break;
 
 		}

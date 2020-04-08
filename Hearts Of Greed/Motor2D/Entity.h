@@ -68,7 +68,7 @@ public:
 	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
-	virtual bool DealDamage(int damage);
+	virtual bool RecieveDamage(int damage);
 
 	fMPoint GetPosition();
 	void SetPosition(int x, int y);

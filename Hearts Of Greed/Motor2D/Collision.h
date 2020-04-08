@@ -80,6 +80,7 @@ public:
 	bool CleanUp();
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = nullptr);
+
 	void AddColliderEntity(Collider* collider);
 	void DebugDraw();
 

@@ -28,7 +28,9 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 
 	baseAreaAlarm(baseArea)
 	
-{}
+{
+}
+
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate,
 	int hitPoints, int recoveryHitPointsRate, int transparency):
@@ -46,12 +48,13 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 
 	baseAreaAlarm(baseArea)
 
-{}
+{
+}
 
 
 Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Building(copy->position, copy, alignement),
+	Building(position, copy, alignement),
 
 	maxTurrets(copy->maxTurrets),
 	maxBarricades(copy->maxBarricades),
@@ -65,7 +68,10 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	barricadesVector(copy->barricadesVector),
 
 	baseAreaAlarm(copy->baseAreaAlarm)
-{}
+{
+	app->coll->AddCollider(baseAreaAlarm->rect, baseAreaAlarm->type, baseAreaAlarm->callback);
+	baseAreaAlarm->SetPos(position.x, position.y);
+}
 
 
 Base::~Base()

@@ -247,7 +247,11 @@ void ModulePlayer::RightClick()
 bool ModulePlayer::BuildClick()
 {
 	//Needs more work
-	app->entityManager->AddEntity(buildingToBuild, (-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale(), ENTITY_ALIGNEMENT::PLAYER);
+	int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
+	int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+
+
+	app->entityManager->AddEntity(buildingToBuild, x, y , ENTITY_ALIGNEMENT::PLAYER);
 
 	return true;
 }
