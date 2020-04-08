@@ -114,7 +114,7 @@ private:
 
 	SDL_Texture* enemyTexture;
 
-	Hero* sampleMelee;
+	Hero* sampleGatherer;
 
 	Enemy* sampleEnemy;
 

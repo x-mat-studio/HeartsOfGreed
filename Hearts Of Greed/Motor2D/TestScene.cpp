@@ -59,8 +59,8 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x + 64, pos.y);
 
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);

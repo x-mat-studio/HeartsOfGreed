@@ -66,7 +66,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
+	sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 20, 20, 20, 20, 20, 20, 15, 15, 15);
 
@@ -291,14 +291,14 @@ bool ModuleEntityManager::CleanUp()
 
 	debugPathTexture = nullptr;
 
-	RELEASE(sampleMelee);
+	RELEASE(sampleGatherer);
 	RELEASE(sampleEnemy);
 	RELEASE(sampleSpawner);
 	RELEASE(testBuilding);
 	RELEASE(blueBuilding);
 	RELEASE(sampleBase);
 
-	sampleMelee = nullptr;
+	sampleGatherer = nullptr;
 	sampleEnemy = nullptr;
 	sampleSpawner = nullptr;
 	testBuilding = nullptr;
@@ -339,13 +339,13 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
-		ret = new Hero({ (float)x,(float)y }, sampleMelee, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
+		ret = new Hero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::BUILDING:
