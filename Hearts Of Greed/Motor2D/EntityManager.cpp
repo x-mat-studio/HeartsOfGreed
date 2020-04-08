@@ -137,7 +137,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
 	testBuilding->SetTexture(base1Texture);
-
+	sampleBase->SetTexture(base2Texture);
 
 	//sfx baby
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -145,6 +145,7 @@ bool ModuleEntityManager::Start()
 	
 	return ret;
 }
+
 
 
 bool ModuleEntityManager::PreUpdate(float dt)
@@ -164,6 +165,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 
 	return true;
 }
+
 
 
 void ModuleEntityManager::CheckIfStarted() {
@@ -242,6 +244,7 @@ bool ModuleEntityManager::Update(float dt)
 	return true;
 }
 
+
 // Called each loop iteration
 bool ModuleEntityManager::PostUpdate(float dt)
 {
@@ -312,6 +315,7 @@ void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 		c1->thisEntity->OnCollision(c2);
 	}
 }
+
 
 //Add an entity
 Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement)
