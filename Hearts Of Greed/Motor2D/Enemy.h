@@ -67,8 +67,6 @@ public:
 
 private:
 
-
-
 	void Attack();
 	void Die();
 
@@ -80,6 +78,8 @@ private:
 	void InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	bool ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	ENEMY_STATES ProcessFsm(std::vector<ENEMY_INPUTS>& inputs);
+
+	bool RecieveDamage(int damage);
 
 	void StateMachine(float dt);
 private:

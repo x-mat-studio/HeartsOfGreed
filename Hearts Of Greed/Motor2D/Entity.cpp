@@ -232,8 +232,9 @@ void Entity::SetToDelete(bool toDel)
 }
 
 
-bool Entity::DealDamage(int damage)
+bool Entity::RecieveDamage(int damage)
 {
 
 	return false;
 }
+

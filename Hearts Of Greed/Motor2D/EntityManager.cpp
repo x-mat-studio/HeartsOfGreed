@@ -484,8 +484,8 @@ void ModuleEntityManager::RemoveDeletedEntities()
 			CheckDynamicEntitysObjectives(entityVector[i]);
 
 			delete entityVector[i];
-			entityVector.erase(entityVector.begin() + i);
 			entityVector[i] = nullptr;
+			entityVector.erase(entityVector.begin() + i);
 		}
 	}
 
