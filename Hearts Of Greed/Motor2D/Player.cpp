@@ -12,20 +12,20 @@
 #include "EventManager.h"
 
 ModulePlayer::ModulePlayer() :
-	
-Module(), 
 
-focusedEntity(nullptr), 
+	Module(),
 
-resources(0),
-selectRect{ 0,0,0,0 },
+	focusedEntity(nullptr),
 
-selectUnits(false),
-entityComand(false),
-entityInteraction(false),
-buildMode(false),
+	resources(0),
+	selectRect{ 0,0,0,0 },
 
-buildingToBuild(ENTITY_TYPE::UNKNOWN)
+	selectUnits(false),
+	entityComand(false),
+	entityInteraction(false),
+	buildMode(false),
+
+	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
 {
 	name.create("player");
@@ -40,7 +40,6 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
-
 
 
 	return true;
@@ -88,7 +87,7 @@ bool ModulePlayer::PreUpdate(float dt)
 // Called each loop iteration
 bool ModulePlayer::Update(float dt)
 {
-	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Player Update", Profiler::Color::Blue);
 
 	CheckListener(this);
 
@@ -98,10 +97,10 @@ bool ModulePlayer::Update(float dt)
 // Called each loop iteration
 bool ModulePlayer::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Blue);
 
 	CheckListener(this);
-	
+
 	if (buildMode == true)
 	{
 		int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
@@ -248,7 +247,11 @@ void ModulePlayer::RightClick()
 bool ModulePlayer::BuildClick()
 {
 	//Needs more work
-	app->entityManager->AddEntity(buildingToBuild, (-app->render->currentCamX + clickPosition.x) / app->win->GetScale(), (-app->render->currentCamY + clickPosition.y) / app->win->GetScale(), ENTITY_ALIGNEMENT::PLAYER);
+	int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
+	int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+
+
+	app->entityManager->AddEntity(buildingToBuild, x, y , ENTITY_ALIGNEMENT::PLAYER);
 
 	return true;
 }
@@ -258,7 +261,6 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
 	switch (eventId)
 	{
-	
 	case EVENT_ENUM::SELECT_UNITS:
 		selectUnits = true;
 		break;
@@ -331,4 +333,19 @@ void ModulePlayer::DesactivateBuildMode()
 {
 	buildMode = false;
 	buildingToBuild = ENTITY_TYPE::UNKNOWN;
+}
+
+
+void ModulePlayer::RemoveHeroFromVector(Hero* hero)
+{
+	int numHeroes = heroesVector.size();
+
+	for (int i = 0; i < numHeroes; i++)
+	{
+		if (heroesVector[i] == hero)
+		{
+			heroesVector.erase(heroesVector.begin() + i);
+			return;
+		}
+	}
 }

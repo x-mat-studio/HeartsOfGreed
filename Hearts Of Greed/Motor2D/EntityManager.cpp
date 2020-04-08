@@ -29,12 +29,7 @@ ModuleEntityManager::ModuleEntityManager()
 
 // Destructor
 ModuleEntityManager::~ModuleEntityManager()
-{
-	RELEASE(sampleMelee);
-	RELEASE(sampleEnemy);
-	sampleMelee = nullptr;
-	sampleEnemy = nullptr;
-}
+{}
 
 
 // Called before render is available
@@ -115,7 +110,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Template base
-	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, nullptr, 5, 3, 500, 20, 100);
+	Collider* baseAlarmCollider = new Collider({0, 0, 300, 300}, COLLIDER_BASE_ALERT, app->ai);
+	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
 	return ret;
@@ -142,7 +138,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
 	testBuilding->SetTexture(base1Texture);
-
+	sampleBase->SetTexture(base2Texture);
 
 	//sfx baby
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -152,11 +148,12 @@ bool ModuleEntityManager::Start()
 }
 
 
+
 bool ModuleEntityManager::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue);
 
-		CheckListener(this);
+	CheckListener(this);
 
 	CheckIfStarted();
 
@@ -169,6 +166,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 
 	return true;
 }
+
 
 
 void ModuleEntityManager::CheckIfStarted() {
@@ -247,6 +245,7 @@ bool ModuleEntityManager::Update(float dt)
 	return true;
 }
 
+
 // Called each loop iteration
 bool ModuleEntityManager::PostUpdate(float dt)
 {
@@ -271,10 +270,41 @@ bool ModuleEntityManager::CleanUp()
 	DeleteAllEntities();
 	
 	app->tex->UnLoad(suitManTexture);
+	app->tex->UnLoad(armorMaleTexture);
+	app->tex->UnLoad(combatFemaleTexture);
+	app->tex->UnLoad(enemyTexture);
+
 	app->tex->UnLoad(buildingTexture);
+	app->tex->UnLoad(base1Texture);
+	app->tex->UnLoad(base2Texture);
+	
+	app->tex->UnLoad(debugPathTexture);
 
 	suitManTexture = nullptr;
+	armorMaleTexture = nullptr;
+	combatFemaleTexture = nullptr;
+	enemyTexture = nullptr;
+
 	buildingTexture = nullptr;
+	base1Texture = nullptr;
+	base2Texture = nullptr;
+
+	debugPathTexture = nullptr;
+
+	RELEASE(sampleMelee);
+	RELEASE(sampleEnemy);
+	RELEASE(sampleSpawner);
+	RELEASE(testBuilding);
+	RELEASE(blueBuilding);
+	RELEASE(sampleBase);
+
+	sampleMelee = nullptr;
+	sampleEnemy = nullptr;
+	sampleSpawner = nullptr;
+	testBuilding = nullptr;
+	blueBuilding = nullptr;
+	sampleBase = nullptr;
+
 
 	return true;
 }
@@ -286,6 +316,7 @@ void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 		c1->thisEntity->OnCollision(c2);
 	}
 }
+
 
 //Add an entity
 Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement)
@@ -704,24 +735,48 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 
 void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 {
+	SDL_Rect rect;
+
 	switch (type)
 	{
 	case ENTITY_TYPE::BUILDING:
+
+		SDL_QueryTexture(testBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+
+		x -= rect.w / 2;
+		y -= rect.h / 2;
+
 		testBuilding->ActivateTransparency();
 		testBuilding->SetPosition(x, y);
 		testBuilding->Draw(0);
 		break;
+
+
 	case ENTITY_TYPE::BLDG_TURRET:
 		break;
+
+
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 		break;
+
+
 	case ENTITY_TYPE::BLDG_BASE:
+
+		SDL_QueryTexture(sampleBase->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+
+		x -= rect.w / 2;
+		y -= rect.h / 2;
+
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);
 		sampleBase->Draw(0);
 		break;
+
+
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;
+
+
 
 	default:
 
@@ -741,4 +796,38 @@ void ModuleEntityManager::DeleteAllEntities()
 	}
 
 	entityVector.clear();
+}
+
+Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
+{
+	int numEntities = entityVector.size();
+
+	Hero* hero = nullptr;
+
+	anotherHeroWithoutUI = 1;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		switch (entityVector[i]->GetType())
+		{
+		case ENTITY_TYPE::HERO_GATHERER:
+		case ENTITY_TYPE::HERO_MELEE:
+		case ENTITY_TYPE::HERO_RANGED:
+			if (entityVector[i]->UIAssigned == false)
+			{
+				if (hero == nullptr)
+				{
+					hero = (Hero*)entityVector[i];
+					entityVector[i]->UIAssigned = true;
+				}
+				else
+				{
+					anotherHeroWithoutUI = 0;
+				}
+			}
+			break;
+		}
+	}
+
+	return hero;
 }

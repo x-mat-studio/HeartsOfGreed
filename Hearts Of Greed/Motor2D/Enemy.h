@@ -97,8 +97,8 @@ private:
 
 	float attackCooldown;
 
-	int framesPerPathfinding = 20;
-	int framePathfindingCount = 0;
+	int framesPerPathfinding;
+	int framePathfindingCount;
 
 	bool haveOrders;
 	Entity* shortTermObjective;

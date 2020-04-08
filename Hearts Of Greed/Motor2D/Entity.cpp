@@ -23,12 +23,18 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	visionEntity(nullptr),
 	texture(nullptr),
 
-	offset {0, 0}
+	offset {0, 0},
+
+	UIAssigned(false)
 {}
 
 Entity::~Entity()
 {
-	collider->to_delete = true;
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+	}
+	
 
 	texture = nullptr;
 	collider = nullptr;
@@ -172,6 +178,12 @@ void Entity::SetPosition(int x, int y)
 void Entity::SetTexture(SDL_Texture* tex)
 {
 	texture = tex;
+}
+
+
+SDL_Texture* Entity::GetTexture()
+{
+	return texture;
 }
 
 

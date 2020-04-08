@@ -94,12 +94,10 @@ bool  ModuleTestScene::Update(float dt)
 
 	float scale = app->win->GetScale();
 	float camVel = 350 * scale;
-	int mousePosX;
-	int mousePosY;
-	app->input->GetMousePosition(mousePosX, mousePosY);
-	int mouseRawX;
-	int mouseRawY;
-	app->input->GetMousePositionRaw(mouseRawX, mouseRawY);
+	iMPoint mousePos;
+	app->input->GetMousePosition(mousePos.x, mousePos.y);
+	iMPoint mouseRaw;
+	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
 
 
 	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT)
@@ -141,38 +139,22 @@ bool  ModuleTestScene::Update(float dt)
 
 
 	//mouse drag / mouse zoom
-	int scrollWheelX;
-	int scrollWheelY;
-	app->input->GetScrollWheelMotion(scrollWheelX, scrollWheelY);
+	iMPoint scrollWheel;
+	app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
 
-
-	/*if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_DOWN)
+	if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
 	{
-		prevMousePosX = mousePosX;
-		prevmousePosY = mousePosY;
+		StartDragging(mousePos);
 	}
-	else if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_STATE::KEY_REPEAT)
+	else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
 	{
-		int auxX = 0;
-		int auxY = 0;
-		int x = mousePosX;
-		int y = mousePosY;
-		auxX = x;
-		auxY = y;
-		x -= prevMousePosX;
-		y -= prevmousePosY;
-		app->render->currentCamX += x * scale;
-		app->render->currentCamY += y * scale;
-
-		prevMousePosX = auxX;
-		prevmousePosY = auxY;
-
+		Drag(mousePos,scale);
 	}
-	else if (scrollWheelY != 0)
+	else if (scrollWheel.y != 0)
 	{
 		//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-		Zoom(0.25f * scrollWheelY, mouseRawX, mouseRawY, scale);
-	}*/
+		Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+	}
 
 
 
@@ -207,7 +189,7 @@ bool  ModuleTestScene::CleanUp()
 	app->coll->CleanUp();
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
-	
+	app->audio->SilenceAll();
 
 	return true;
 }
@@ -243,3 +225,24 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 
 void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId) const
 {}
+
+
+void ModuleTestScene::StartDragging(iMPoint mousePos)
+{
+	prevMousePosX = mousePos.x;
+	prevmousePosY = mousePos.y;
+}
+
+void ModuleTestScene::Drag(iMPoint mousePos,float scale)
+{
+	iMPoint aux = { 0,0 };
+	iMPoint xy = mousePos;
+	aux = xy;
+	xy.x -= prevMousePosX;
+	xy.y -= prevmousePosY;
+	app->render->currentCamX += xy.x * scale;
+	app->render->currentCamY += xy.y * scale;
+
+	prevMousePosX = aux.x;
+	prevmousePosY = aux.y;
+}

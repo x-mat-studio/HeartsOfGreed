@@ -6,6 +6,7 @@
 #include "EventManager.h"
 #include "FoWManager.h"
 #include "Map.h"
+#include "Player.h"
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -43,7 +44,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	movementSpeed(movementSpeed),
 	visionDistance(visionDistance),
 
-	attackCooldown(0),
 	skill1ExecutionTime(skill1ExecutionTime),
 	skill2ExecutionTime(skill2ExecutionTime),
 	skill3ExecutionTime(skill3ExecutionTime),
@@ -51,12 +51,15 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill2RecoverTime(skill2RecoverTime),
 	skill3RecoverTime(skill3RecoverTime),
 
+	attackCooldown(0),
 	cooldownHability1(0),
 	cooldownHability2(0),
 	cooldownHability3(0),
 	skill1TimePassed(0),
 	skill2TimePassed(0),
 	skill3TimePassed(0),
+	framePathfindingCount(0),
+	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
 	skill1Charged(true),
 	skill2Charged(true),
@@ -101,7 +104,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	movementSpeed(copy->movementSpeed),
 	visionDistance(copy->visionDistance),
 
-	attackCooldown(0),
 	skill1ExecutionTime(copy->skill1ExecutionTime),
 	skill2ExecutionTime(copy->skill2ExecutionTime),
 	skill3ExecutionTime(copy->skill3ExecutionTime),
@@ -109,12 +111,15 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill2RecoverTime(copy->skill2RecoverTime),
 	skill3RecoverTime(copy->skill3RecoverTime),
 
+	attackCooldown(0),
 	cooldownHability1(0),
 	cooldownHability2(0),
 	cooldownHability3(0),
 	skill1TimePassed(0),
 	skill2TimePassed(0),
 	skill3TimePassed(0),
+	framePathfindingCount(0),
+	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
 	skill1Charged(true),
 	skill2Charged(true),
@@ -135,6 +140,8 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 Hero::~Hero()
 {
+	app->player->RemoveHeroFromVector(this);
+
 	objective = nullptr;
 
 	inputs.clear();

@@ -17,7 +17,7 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	focused(false),
 	draggable(draggable),
 	dragging(false),
-	interactable(false),
+	interactable(true),
 	hover(false),
 	enabled(true),
 	texture (app->uiManager->GetAtlasTexture())
@@ -39,6 +39,9 @@ bool UI::Start()
 
 bool UI::PreUpdate(float dt)
 {
+
+
+
 	return true;
 }
 

@@ -151,11 +151,12 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	camera.x = currentCamX;
 	camera.y = currentCamY;
 	bool ret = true;
-	float scale = app->win->GetScale();
+	float scale = 2.0f; //TODO THIS IS AN ARBITRARY NUMBER
 
 	SDL_Rect rect;
 	
 	if (cameraUse == true) {
+		scale= app->win->GetScale();
 		rect.x = (int)(camera.x * speedX) + x * scale;
 		rect.y = (int)(camera.y * speedY) + y * scale;
 	}
