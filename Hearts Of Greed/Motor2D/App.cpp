@@ -65,7 +65,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(fonts);
 	AddModule(map);
-	AddModule(uiManager);
 	AddModule(mainMenu);
 	AddModule(testScene);
 	AddModule(winScene);

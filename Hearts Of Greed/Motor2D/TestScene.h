@@ -4,7 +4,6 @@
 #include "Module.h"
 
 
-
 class ModuleTestScene : public Module
 {
 public:
@@ -37,9 +36,10 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void Zoom(float addZoomAmount, int windowTargetCenterX, int windowTargetCenterY, float currentScale);
-
 	void StartDragging(iMPoint mousePos);
 	void Drag(iMPoint mousePos, float scale);
+	bool MouseCameraDisplacement(float camVel, float dt);
+
 
 private:
 	

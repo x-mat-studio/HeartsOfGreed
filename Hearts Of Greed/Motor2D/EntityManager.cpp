@@ -17,6 +17,7 @@
 
 #include "Building.h"
 #include "Base.h"
+#include "Turret.h"
 
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -66,7 +67,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
+	sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 20, 20, 20, 20, 15, 15, 15);
 
@@ -99,6 +100,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
 
 
+	// Sample Crazy Turret Melee---------------------
+	filename = config.child("load").attribute("docnameTurret").as_string();
+	pugi::xml_document turretdoc;
+	turretdoc.load_file(filename.GetString());
+	pugi::xml_node turret = turretdoc.child("turret");
+
+	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazy_idle"); // looks good
+
+
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 120, 25, 5, 0);
@@ -108,9 +118,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
 
+	// Test Turret
+	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
+	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0,0 }, turretCollider, turretCrazyIdle);
 
 	//Template base
-	Collider* baseAlarmCollider = new Collider({ 0, 0, 300, 300 }, COLLIDER_BASE_ALERT, app->ai);
+	Collider* baseAlarmCollider = new Collider({0, 0, 800, 800}, COLLIDER_BASE_ALERT, app->ai);
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
@@ -132,6 +145,8 @@ bool ModuleEntityManager::Start()
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
+
+	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
 
@@ -206,6 +221,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_TURRET:
+				entityVector[i]->Start(turretTexture);
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -277,6 +293,8 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(buildingTexture);
 	app->tex->UnLoad(base1Texture);
 	app->tex->UnLoad(base2Texture);
+	
+	app->tex->UnLoad(turretTexture);
 
 	app->tex->UnLoad(debugPathTexture);
 
@@ -289,16 +307,18 @@ bool ModuleEntityManager::CleanUp()
 	base1Texture = nullptr;
 	base2Texture = nullptr;
 
+	turretTexture = nullptr;
+
 	debugPathTexture = nullptr;
 
-	RELEASE(sampleMelee);
+	RELEASE(sampleGatherer);
 	RELEASE(sampleEnemy);
 	RELEASE(sampleSpawner);
 	RELEASE(testBuilding);
 	RELEASE(blueBuilding);
 	RELEASE(sampleBase);
 
-	sampleMelee = nullptr;
+	sampleGatherer = nullptr;
 	sampleEnemy = nullptr;
 	sampleSpawner = nullptr;
 	testBuilding = nullptr;
@@ -339,13 +359,13 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
-		ret = new Hero({ (float)x,(float)y }, sampleMelee, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
+		ret = new Hero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::BUILDING:
@@ -353,6 +373,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
+		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -753,6 +774,16 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
+
+		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+
+		x -= rect.w / 2;
+		y -= rect.h / 2;
+
+		testTurret->ActivateTransparency();
+		testTurret->SetPosition(x, y);
+		testTurret->Draw(0);
+	
 		break;
 
 

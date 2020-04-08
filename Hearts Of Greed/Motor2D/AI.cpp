@@ -38,7 +38,8 @@ void ModuleAI::OnCollision(Collider* c1, Collider* c2)
 
 void ModuleAI::CreateSelectionCollider(Collider* collider)
 {
-	app->coll->AddCollider(collider->rect, COLLIDER_RECLUIT_IA, this);
+	Collider* col = app->coll->AddCollider(collider->rect, COLLIDER_RECLUIT_IA, this);
+	col->to_delete = true;
 }
 
 
