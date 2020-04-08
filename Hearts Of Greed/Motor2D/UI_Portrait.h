@@ -49,6 +49,12 @@ public:
 private:
 
 	int nextVectorPosition;
+	SDL_Rect backgroundRect;
+	SDL_Rect backgroundLevelRect;
+	SDL_Rect healthbarRect;
+	SDL_Rect meleePortraitRect;
+	SDL_Rect gathererPortraitRect;
+	SDL_Rect rangedPortraitRect;
 
 };
 
