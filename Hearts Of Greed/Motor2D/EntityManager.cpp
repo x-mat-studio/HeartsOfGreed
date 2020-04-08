@@ -110,7 +110,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Template base
-	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, nullptr, 5, 3, 500, 20, 100);
+	Collider* baseAlarmCollider = new Collider({0, 0, 300, 300}, COLLIDER_BASE_ALERT, app->ai);
+	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
 	return ret;
@@ -150,9 +151,9 @@ bool ModuleEntityManager::Start()
 
 bool ModuleEntityManager::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue);
 
-		CheckListener(this);
+	CheckListener(this);
 
 	CheckIfStarted();
 
