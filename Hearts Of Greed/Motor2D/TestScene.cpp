@@ -66,6 +66,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 850);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 850);
+
+		// Test Turret
+		app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x + 10, pos.y);
 	}
 
 	app->uiManager->CreateBasicUI();
