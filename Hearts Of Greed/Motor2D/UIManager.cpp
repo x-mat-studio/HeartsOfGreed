@@ -135,20 +135,20 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 
 	switch (uiType)
 	{
+	case UI_TYPE::UI_TEXT:
+		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable, text, color);
+		break;
 	case UI_TYPE::UI_IMG:
 		newUI = new UI_Image(positionValue, father, uiType, rect, uiName, dragable);
 		break;
-	case UI_TYPE::UI_TEXT:
-		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable , text , color);
+	case UI_TYPE::UI_SCROLLBAR:
+		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_BUTTON:
 		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_HEALTHBAR:
 		newUI = new UI_Healthbar(positionValue, father, uiType, rect, uiName, dragable);
-		break;
-	case UI_TYPE::UI_SCROLLBAR:
-		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
 	case UI_TYPE::UI_PORTRAIT:
 		portraitPointer = new UI_Portrait(positionValue, father, uiType, rect, uiName, dragable);
@@ -218,7 +218,7 @@ void ModuleUIManager::CreateBasicUI()
 	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT");
 
 	rect = RectConstructor(17, 12, 195, 37);
-	AddUIElement(fMPoint(20, 40), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollBar", DRAGGABLE::DRAG_OFF);
+	AddUIElement(fMPoint(20, 40), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollBar", DRAGGABLE::DRAG_XY);
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const
