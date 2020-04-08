@@ -77,7 +77,7 @@ bool Turret::Update(float dt)
 
 bool Turret::PostUpdate(float dt)
 {
-	Draw(dt);
+	// Draw(dt);
 	return true;
 }
 
