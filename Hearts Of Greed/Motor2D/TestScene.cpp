@@ -59,13 +59,13 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x + 64, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x-680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 500, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 510, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 520, 850);
 	}
 
 	app->uiManager->CreateBasicUI();
