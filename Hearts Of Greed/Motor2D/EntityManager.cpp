@@ -772,3 +772,37 @@ void ModuleEntityManager::DeleteAllEntities()
 
 	entityVector.clear();
 }
+
+Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
+{
+	int numEntities = entityVector.size();
+
+	Hero* hero = nullptr;
+
+	anotherHeroWithoutUI = 1;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		switch (entityVector[i]->GetType())
+		{
+		case ENTITY_TYPE::HERO_GATHERER:
+		case ENTITY_TYPE::HERO_MELEE:
+		case ENTITY_TYPE::HERO_RANGED:
+			if (entityVector[i]->UIAssigned == false)
+			{
+				if (hero == nullptr)
+				{
+					hero = (Hero*)entityVector[i];
+					entityVector[i]->UIAssigned = true;
+				}
+				else
+				{
+					anotherHeroWithoutUI = 0;
+				}
+			}
+			break;
+		}
+	}
+
+	return hero;
+}

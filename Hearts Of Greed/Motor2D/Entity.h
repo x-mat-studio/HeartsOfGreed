@@ -94,6 +94,7 @@ public:
 
 	bool flip;
 	bool dynamic;
+	bool UIAssigned;
 	FoWEntity* visionEntity;
 
 protected:
