@@ -207,7 +207,7 @@ bool  ModuleTestScene::CleanUp()
 	app->coll->CleanUp();
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
-	
+	app->audio->SilenceAll();
 
 	return true;
 }
