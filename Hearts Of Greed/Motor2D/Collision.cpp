@@ -149,6 +149,14 @@ void ModuleCollision::DebugDraw()
 			app->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha);
 			break;
 
+		case COLLIDER_BASE_ALERT:
+			app->render->DrawQuad(colliders[i]->rect, 0, 109, 109, alpha);
+			break;
+
+		case COLLIDER_RECLUIT_IA: // no clue
+			app->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
+			break;
+
 		}
 	}
 }
