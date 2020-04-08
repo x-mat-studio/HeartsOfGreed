@@ -75,6 +75,8 @@ public:
 
 	Hero* CheckUIAssigned(int& anotherHeroWithoutUI);
 
+	Entity* SearchUnitsInRange(float distance, Entity* from);
+
 private:
 
 	void CheckIfStarted();

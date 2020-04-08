@@ -68,7 +68,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleMelee = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 20, 20, 20, 20, 20, 20, 15, 15, 15);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 20, 20, 20, 20, 15, 15, 15);
 
 
 	// Sample Enemy---------------------
@@ -110,7 +110,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Template base
-	Collider* baseAlarmCollider = new Collider({0, 0, 300, 300}, COLLIDER_BASE_ALERT, app->ai);
+	Collider* baseAlarmCollider = new Collider({ 0, 0, 300, 300 }, COLLIDER_BASE_ALERT, app->ai);
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
@@ -143,7 +143,7 @@ bool ModuleEntityManager::Start()
 	//sfx baby
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
-	
+
 	return ret;
 }
 
@@ -251,7 +251,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 
-	int numEntities = entityVector.size();
+		int numEntities = entityVector.size();
 
 
 	for (int i = 0; i < numEntities; i++)
@@ -268,7 +268,7 @@ bool ModuleEntityManager::PostUpdate(float dt)
 bool ModuleEntityManager::CleanUp()
 {
 	DeleteAllEntities();
-	
+
 	app->tex->UnLoad(suitManTexture);
 	app->tex->UnLoad(armorMaleTexture);
 	app->tex->UnLoad(combatFemaleTexture);
@@ -277,7 +277,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(buildingTexture);
 	app->tex->UnLoad(base1Texture);
 	app->tex->UnLoad(base2Texture);
-	
+
 	app->tex->UnLoad(debugPathTexture);
 
 	suitManTexture = nullptr;
@@ -484,7 +484,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	{
 		alignement = entityVector[i]->GetAlignment();
 
-		if (alignement != alignementToSearch) 
+		if (alignement != alignementToSearch)
 		{
 			continue;
 		}
@@ -721,7 +721,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -830,4 +830,22 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 	}
 
 	return hero;
+}
+
+Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thisUnit)
+{
+	for (int i = 0; i < entityVector.size(); ++i)
+	{
+		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
+		{
+			fMPoint pos = thisUnit->GetPosition();
+
+			float distance = pos.DistanceNoSqrt(thisUnit->GetPosition());
+			if (distance <= checkdistance)
+			{
+				return entityVector[i];
+			}
+		}
+	}
+	return nullptr;
 }
