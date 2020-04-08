@@ -8,6 +8,7 @@
 #include "UI_Portrait.h"
 #include "UI_Scrollbar.h"
 #include "EventManager.h"
+#include "EntityManager.h"
 #include "Window.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -53,7 +54,6 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	LoadAtlas();
-	portraitPointer = nullptr;
 
 	return ret;
 }
@@ -181,14 +181,28 @@ void ModuleUIManager::RemoveDeletedUI()
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 
+	int eventCheck = 0;
+
 	switch (eventId)
 	{
 
+	// When adding a Hero to these enum, add it to the checking function below
 	case EVENT_ENUM::HERO_MELEE_CREATED:
 	case EVENT_ENUM::HERO_GATHERER_CREATED:
 	case EVENT_ENUM::HERO_RANGED_CREATED:
-		
-		// ADD PORTRAITS			TODO MAXIMUM
+
+		if (portraitPointer != nullptr)
+		{
+			while (eventCheck == 0)
+			{
+				Hero* hero = app->entityManager->CheckUIAssigned(eventCheck);
+				if (hero != nullptr)
+				{
+					portraitPointer->CreatePortrait(hero);
+					// AUGMENT POSITION IN THE PORTRAIT LIST
+				}
+			}
+		}
 
 		break;
 	case EVENT_ENUM::HERO_MELEE_OUT:

@@ -23,7 +23,9 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	visionEntity(nullptr),
 	texture(nullptr),
 
-	offset {0, 0}
+	offset {0, 0},
+
+	UIAssigned(false)
 {}
 
 Entity::~Entity()

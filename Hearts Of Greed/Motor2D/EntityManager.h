@@ -73,6 +73,8 @@ public:
 
 	void PlayerBuildPreview(int x, int y, ENTITY_TYPE type);
 
+	Hero* CheckUIAssigned(int& anotherHeroWithoutUI);
+
 private:
 
 	void CheckIfStarted();
