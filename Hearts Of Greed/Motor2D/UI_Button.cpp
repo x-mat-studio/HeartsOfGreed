@@ -96,7 +96,6 @@ void UI_Button::MovingIt(float dt)
 
 	fMPoint currentPos = this->worldPosition;
 
-
 	if (draggable == DRAGGABLE::DRAG_X)
 		this->worldPosition.x += ((MousePos.x - this->worldPosition.x) - accuratedDrag.x);	
 	else if(draggable == DRAGGABLE::DRAG_Y)

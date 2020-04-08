@@ -65,7 +65,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(fonts);
 	AddModule(map);
-	AddModule(uiManager);
 	AddModule(mainMenu);
 	AddModule(testScene);
 	AddModule(winScene);
@@ -262,7 +261,7 @@ void App::FinishUpdate()
 
 	float avgFps = float(frameCount) / startupTime.ReadSec();
 	float secondsSinceStartup = startupTime.ReadSec();
-	uint32 lastFrameMs = frameTime.Read();
+	uint32 lastFrameMs = frameTime.ReadSec();
 	uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
 	int mouseX, mouseY = 0;
@@ -316,7 +315,6 @@ void App::FinishUpdate()
 		capFrames = !capFrames;
 	}*/
 
-	// TODO 2: Use SDL_Delay to make sure you get your capped framerate
 	int delay;
 	int averageFrame = ((1.0f / frameRate) * 1000);
 	delay = averageFrame - lastFrameMs;

@@ -11,7 +11,6 @@ UI_Scrollbar::~UI_Scrollbar()
 
 bool UI_Scrollbar::Start()
 {
-
 	return true;
 }
 
