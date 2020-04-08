@@ -734,24 +734,48 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 
 void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 {
+	SDL_Rect rect;
+
 	switch (type)
 	{
 	case ENTITY_TYPE::BUILDING:
+
+		SDL_QueryTexture(testBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+
+		x -= rect.w / 2;
+		y -= rect.h / 2;
+
 		testBuilding->ActivateTransparency();
 		testBuilding->SetPosition(x, y);
 		testBuilding->Draw(0);
 		break;
+
+
 	case ENTITY_TYPE::BLDG_TURRET:
 		break;
+
+
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 		break;
+
+
 	case ENTITY_TYPE::BLDG_BASE:
+
+		SDL_QueryTexture(sampleBase->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+
+		x -= rect.w / 2;
+		y -= rect.h / 2;
+
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);
 		sampleBase->Draw(0);
 		break;
+
+
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;
+
+
 
 	default:
 
