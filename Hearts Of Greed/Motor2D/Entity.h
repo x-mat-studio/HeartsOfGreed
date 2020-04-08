@@ -74,7 +74,7 @@ public:
 	void SetPosition(int x, int y);
 
 	void SetTexture(SDL_Texture* texture);
-	
+	SDL_Texture* GetTexture();
 
 	SDL_Rect GetAnimationRect(float dt);
 	ENTITY_TYPE GetType();

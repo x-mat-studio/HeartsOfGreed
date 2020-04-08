@@ -33,7 +33,7 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate,
 	int hitPoints, int recoveryHitPointsRate, int transparency):
 
-	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider),
+	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider, ENTITY_TYPE::BLDG_BASE),
 
 	maxTurrets(maxTurrets),
 	maxBarricades(maxBarricades),
