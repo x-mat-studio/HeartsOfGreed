@@ -254,3 +254,13 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	return ret;
 }
 
+void ModuleAudio::SilenceAllChannels(int id)
+{
+	Mix_HaltChannel(id);
+}
+
+void ModuleAudio::SilenceAll()
+{
+	SilenceAllChannels(-1);
+	Mix_HaltMusic();
+}

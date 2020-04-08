@@ -179,6 +179,12 @@ void Entity::SetTexture(SDL_Texture* tex)
 }
 
 
+SDL_Texture* Entity::GetTexture()
+{
+	return texture;
+}
+
+
 ENTITY_TYPE Entity::GetType()
 {
 	return type;
