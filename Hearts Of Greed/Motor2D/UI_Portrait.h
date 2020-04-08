@@ -14,6 +14,7 @@ struct Portrait
 	UI_Image* portrait;
 	UI_Healthbar* healthbar;
 	UI_Image* backgroundLevel;
+	UI_Image* backgroundHealthbar;
 	UI_Text* level;
 	Hero* hero;
 };
@@ -45,12 +46,13 @@ private:
 public:
 
 	std::vector<Portrait> portraitVector;
+	int nextVectorPosition;
 
 private:
 
-	int nextVectorPosition;
 	SDL_Rect backgroundRect;
 	SDL_Rect backgroundLevelRect;
+	SDL_Rect backgroundHealthbarRect;
 	SDL_Rect healthbarRect;
 	SDL_Rect meleePortraitRect;
 	SDL_Rect gathererPortraitRect;

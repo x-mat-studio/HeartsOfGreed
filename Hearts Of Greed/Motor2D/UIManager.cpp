@@ -199,7 +199,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 				if (hero != nullptr)
 				{
 					portraitPointer->CreatePortrait(hero);
-					// AUGMENT POSITION IN THE PORTRAIT LIST
+					portraitPointer->nextVectorPosition += 60;
 				}
 			}
 		}
@@ -220,7 +220,7 @@ void ModuleUIManager::CreateBasicUI()
 	uint w(app->win->width), h(app->win->height);
 
 	rect = RectConstructor(0, 0, 0, 0);
-	AddUIElement(fMPoint(w / app->win->GetScale() - 72, 60), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
+	AddUIElement(fMPoint(w / app->win->GetScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
 	rect = RectConstructor(221, 317, 162, 174);
 	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
