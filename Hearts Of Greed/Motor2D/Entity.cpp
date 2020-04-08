@@ -33,6 +33,7 @@ Entity::~Entity()
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;
+		collider->thisEntity = nullptr;
 	}
 	
 

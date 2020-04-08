@@ -316,7 +316,6 @@ void App::FinishUpdate()
 		capFrames = !capFrames;
 	}*/
 
-	// TODO 2: Use SDL_Delay to make sure you get your capped framerate
 	int delay;
 	int averageFrame = ((1.0f / frameRate) * 1000);
 	delay = averageFrame - lastFrameMs;
