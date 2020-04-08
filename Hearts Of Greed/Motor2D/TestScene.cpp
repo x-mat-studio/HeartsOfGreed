@@ -141,21 +141,22 @@ bool  ModuleTestScene::Update(float dt)
 	//mouse drag / mouse zoom
 	iMPoint scrollWheel;
 	app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-
-	if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+	if (MouseCameraDisplacement(camVel,dt)==false)
 	{
-		StartDragging(mousePos);
+		if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+		{
+			StartDragging(mousePos);
+		}
+		else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
+		{
+			Drag(mousePos, scale);
+		}
+		else if (scrollWheel.y != 0)
+		{
+			//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+			Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+		}
 	}
-	else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
-	{
-		Drag(mousePos,scale);
-	}
-	else if (scrollWheel.y != 0)
-	{
-		//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-		Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
-	}
-
 
 
 
@@ -245,4 +246,39 @@ void ModuleTestScene::Drag(iMPoint mousePos,float scale)
 
 	prevMousePosX = aux.x;
 	prevmousePosY = aux.y;
+}
+
+bool ModuleTestScene::MouseCameraDisplacement(float camVel,float dt)
+{
+	bool ret = false;
+	int offset = 30; //TODO THIS OFFSET VALUE (IN PIXELS) FOR THE DETECTION WILL BE LOADED FROM XML IN THE FUTURE
+	iMPoint mouseRaw;
+	uint width;
+	uint height;
+	app->input->GetMousePositionRaw(mouseRaw.x,mouseRaw.y);
+	app->win->GetWindowSize(width,height);
+
+	if (mouseRaw.x <= 0+offset)
+	{
+		app->render->currentCamX += camVel * dt;
+		ret = true;
+	}
+	else if (mouseRaw.x >= width-1-offset)
+	{
+		app->render->currentCamX -= camVel * dt;
+		ret = true;
+	}
+
+	if (mouseRaw.y <= 0+offset)
+	{
+		app->render->currentCamY += camVel * dt;
+		ret = true;
+
+	}
+	else if (mouseRaw.y >= height-1-offset)
+	{
+		app->render->currentCamY -= camVel * dt;
+		ret = true;
+	}
+	return ret;
 }
