@@ -24,7 +24,8 @@ ModuleTestScene::ModuleTestScene() :
 	camDown(false),
 	camRight(false),
 	camLeft(false),
-	camSprint(false)
+	camSprint(false),
+	allowCamMovement(true)
 {
 
 }
@@ -67,7 +68,7 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x-680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
 
@@ -124,27 +125,59 @@ bool  ModuleTestScene::Update(float dt)
 	app->input->GetMousePosition(mousePos.x, mousePos.y);
 	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
 
+	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_STATE::KEY_DOWN) //Debug key to lock camera movement
+	{
+		ToggleCamMovement();
+	}
 
-	if (camSprint)
+
+	if (allowCamMovement)
 	{
-		camVel *= 2;
+		if (camSprint)
+		{
+			camVel *= 2;
+		}
+		if (camUp)
+		{
+			app->render->currentCamY += camVel * dt;
+		}
+		if (camDown)
+		{
+			app->render->currentCamY -= camVel * dt;
+		}
+		if (camLeft)
+		{
+			app->render->currentCamX += camVel * dt;
+		}
+		if (camRight)
+		{
+			app->render->currentCamX -= camVel * dt;
+		}
+
+		//mouse drag / mouse zoom
+		iMPoint scrollWheel;
+		app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
+		if (MouseCameraDisplacement(camVel, dt) == false)
+		{
+			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+			{
+				StartDragging(mousePos);
+			}
+			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
+			{
+				Drag(mousePos, scale);
+			}
+			else if (scrollWheel.y != 0)
+			{
+				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+				Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+			}
+		}
 	}
-	if (camUp)
-	{
-		app->render->currentCamY += camVel * dt;
-	}
-	if (camDown)
-	{
-		app->render->currentCamY -= camVel * dt;
-	}
-	if (camLeft)
-	{
-		app->render->currentCamX += camVel * dt;
-	}
-	if (camRight)
-	{
-		app->render->currentCamX -= camVel * dt;
-	}
+
+
+
+
 
 
 
@@ -163,28 +196,6 @@ bool  ModuleTestScene::Update(float dt)
 	{
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu);
 	}
-
-
-	//mouse drag / mouse zoom
-	iMPoint scrollWheel;
-	app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-	if (MouseCameraDisplacement(camVel, dt) == false)
-	{
-		if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
-		{
-			StartDragging(mousePos);
-		}
-		else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
-		{
-			Drag(mousePos, scale);
-		}
-		else if (scrollWheel.y != 0)
-		{
-			//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-			Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
-		}
-	}
-
 
 
 	return true;
@@ -344,3 +355,28 @@ bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 	}
 	return ret;
 }
+
+
+void ModuleTestScene::ToggleCamMovement()
+{
+	allowCamMovement = !allowCamMovement;
+}
+
+
+void ModuleTestScene::ActivateCamMovement()
+{
+	allowCamMovement = true;
+}
+
+
+void ModuleTestScene::DeactivateCamMovement()
+{
+	allowCamMovement = false;
+}
+
+
+bool ModuleTestScene::GetCamMovementActivated() const
+{
+	return allowCamMovement;
+}
+
