@@ -35,3 +35,20 @@ bool MeleeHero::UseHability3()
 
 	return true;
 }
+
+void MeleeHero::LevelUp()
+{
+
+	hitPoints;
+	recoveryHitPointsRate;
+	energyPoints;
+	recoveryEnergyRate;
+
+	attackDamage;
+	attackSpeed;
+	attackRange;
+
+	movementSpeed += 200;
+	visionDistance;
+
+}
