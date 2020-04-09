@@ -78,6 +78,8 @@ public:
 	virtual bool UseHability2();
 	virtual bool UseHability3();
 
+	bool RecieveDamage(int damage);
+
 	void CheckObjecive(Entity* entity);
 	void Draw(float dt);
 
