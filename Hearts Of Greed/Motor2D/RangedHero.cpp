@@ -36,3 +36,20 @@ bool RangedHero::UseHability3()
 
 	return true;
 }
+
+void RangedHero::LevelUp()
+{
+	
+	hitPoints;
+	recoveryHitPointsRate;
+	energyPoints;
+	recoveryEnergyRate;
+
+	attackDamage;
+	attackSpeed;
+	attackRange;
+
+	movementSpeed;
+	visionDistance;
+
+}

@@ -320,26 +320,6 @@ void Hero::OnCollision(Collider* collider)
 {}
 
 
-void Hero::LevelUp()
-{
-	level++;
-
-	//Apply the necesary changes when level up
-
-	hitPoints;
-	recoveryHitPointsRate;
-	energyPoints;
-	recoveryEnergyRate;
-
-	attackDamage;
-	attackSpeed;
-	attackRange;
-
-	movementSpeed;
-	visionDistance;
-}
-
-
 void Hero::Draw(float dt)
 {
 	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
@@ -451,6 +431,13 @@ bool Hero::UseHability3()
 {
 	return true;
 }
+
+void Hero::LevelUp()
+{
+	return;
+}
+
+
 
 int Hero::RecieveDamage(int damage)
 {

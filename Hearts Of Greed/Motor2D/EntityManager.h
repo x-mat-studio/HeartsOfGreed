@@ -8,6 +8,7 @@
 #include <list>
 
 class Hero;
+class GathererHero;
 class Building;
 class DynamicEntity;
 class Enemy;
@@ -119,7 +120,7 @@ private:
 
 	SDL_Texture* enemyTexture;
 
-	Hero* sampleGatherer;
+	GathererHero* sampleGatherer;
 
 	Enemy* sampleEnemy;
 

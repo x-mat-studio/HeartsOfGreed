@@ -78,6 +78,8 @@ public:
 	virtual bool UseHability2();
 	virtual bool UseHability3();
 
+	virtual void LevelUp();
+
 	int RecieveDamage(int damage);
 
 	bool GetExperience(int xp);
@@ -87,7 +89,6 @@ public:
 	void Draw(float dt);
 
 private:
-	void LevelUp();
 	
 	bool CheckAttackRange();
 	void Attack();
