@@ -203,10 +203,8 @@ void Enemy::Draw(float dt)
 
 void Enemy::Attack()
 {
-	bool ret = false;
-
 	if (shortTermObjective)
-		ret = shortTermObjective->RecieveDamage(attackDamage);
+		shortTermObjective->RecieveDamage(attackDamage);
 }
 
 
@@ -411,9 +409,9 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 
 }
 
-bool Enemy::RecieveDamage(int damage)
+int Enemy::RecieveDamage(int damage)
 {
-	bool ret = false;
+	int ret = -1;
 
 	if (hitPoints > 0)
 	{
@@ -421,7 +419,7 @@ bool Enemy::RecieveDamage(int damage)
 		if (hitPoints <= 0)
 		{
 			Die();
-			ret = true;
+			ret = xpOnDeath;
 		}
 	}
 

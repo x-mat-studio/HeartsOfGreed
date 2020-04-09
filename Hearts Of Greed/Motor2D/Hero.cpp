@@ -370,12 +370,12 @@ bool Hero::CheckAttackRange()
 
 void Hero::Attack()
 {
-	bool ret = false;
+	int ret = false;
 
 	if (objective)
 		ret = objective->RecieveDamage(attackDamage);
 
-	if (ret)
+	if (ret > 0)
 	{
 		//Add XP FUNCTION HERE
 		true;
@@ -450,9 +450,9 @@ bool Hero::UseHability3()
 	return true;
 }
 
-bool Hero::RecieveDamage(int damage)
+int Hero::RecieveDamage(int damage)
 {
-	bool ret = false;
+	int ret = -1;
 
 	if (hitPoints > 0)
 	{
@@ -460,7 +460,7 @@ bool Hero::RecieveDamage(int damage)
 		if (hitPoints <= 0)
 		{
 			Die();
-			ret = true;
+			ret = 1;
 		}
 	}
 

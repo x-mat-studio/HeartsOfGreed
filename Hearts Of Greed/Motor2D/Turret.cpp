@@ -37,8 +37,6 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	shortTermObjective(nullptr),
 	haveOrders(false),
 
-	
-
 	state(TURRET_STATES::IDLE)
 {}
 
@@ -136,13 +134,7 @@ bool Turret::CheckAttackRange()
 
 	fMPoint point = shortTermObjective->GetPosition();
 
-	int distanceX = abs(position.x - point.x);
-	int distanceY = abs(position.y - point.y);
-
-
-	int distance = distanceX + distanceY;
-
-	if (distance < range)
+	if (point.DistanceManhattan(position) < range)
 	{
 		return true;
 	}
