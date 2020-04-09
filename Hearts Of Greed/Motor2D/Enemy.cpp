@@ -61,7 +61,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, false);
+	visionEntity = app->fowManager->CreateFoWEntity(position, false,3);//TODO this is going to be the enemy vision distance
 }
 
 

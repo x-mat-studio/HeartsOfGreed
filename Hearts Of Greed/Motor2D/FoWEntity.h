@@ -8,7 +8,7 @@ class FoWEntity
 {
 	//FUNCTIONS
 public:
-	FoWEntity(fMPoint WorldPos,bool providesVisibility);
+	FoWEntity(fMPoint WorldPos,bool providesVisibility, int visionRadius);
 	~FoWEntity();
 
 	bool CleanUp();
@@ -25,6 +25,8 @@ public:
 private:
 	
 	void ApplyMaskToTiles(std::vector<iMPoint>tilesAffected);
+	void ApplyMaskToTilesAuto(std::vector<iMPoint>tilesAffected);
+
 
 	//VARIABLES
 public:

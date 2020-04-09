@@ -68,8 +68,8 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 664, pos.y);
 
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
@@ -133,44 +133,55 @@ bool  ModuleTestScene::Update(float dt)
 
 	if (allowCamMovement)
 	{
+		bool wasdMove = false;
+
 		if (camSprint)
 		{
 			camVel *= 2;
+			wasdMove = true;
 		}
 		if (camUp)
 		{
 			app->render->currentCamY += camVel * dt;
+			wasdMove = true;
 		}
 		if (camDown)
 		{
 			app->render->currentCamY -= camVel * dt;
+			wasdMove = true;
 		}
 		if (camLeft)
 		{
 			app->render->currentCamX += camVel * dt;
+			wasdMove = true;
 		}
 		if (camRight)
 		{
 			app->render->currentCamX -= camVel * dt;
+			wasdMove = true;
 		}
 
-		//mouse drag / mouse zoom
-		iMPoint scrollWheel;
-		app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-		if (MouseCameraDisplacement(camVel, dt) == false)
+
+		if (!wasdMove)
 		{
-			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+			//mouse drag / mouse zoom
+			iMPoint scrollWheel;
+			app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
+			if (MouseCameraDisplacement(camVel, dt) == false)
 			{
-				StartDragging(mousePos);
-			}
-			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
-			{
-				Drag(mousePos, scale);
-			}
-			else if (scrollWheel.y != 0)
-			{
-				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-				Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+				if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+				{
+					StartDragging(mousePos);
+				}
+				else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
+				{
+					Drag(mousePos, scale);
+				}
+				else if (scrollWheel.y != 0)
+				{
+					//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+				}
 			}
 		}
 	}

@@ -133,8 +133,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 {
 	currentAnimation = &walkLeft;
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, true);
-	visionEntity->SetNewVisionRadius(visionDistance);
+	visionEntity = app->fowManager->CreateFoWEntity(position, true,visionDistance);
 }
 
 

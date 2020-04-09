@@ -17,6 +17,12 @@ struct FoWDataStruct
 	unsigned short tileShroudBits; //same as above but for shroud
 };
 
+struct MaskData
+{
+	int numberOfUsers=0;
+	unsigned short* mask= nullptr;
+};
+
 
 class ModuleFoWManager :public Module
 {
@@ -35,7 +41,7 @@ public:
 
 	bool CleanUp();
 
-	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility);
+	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius=3);
 	
 	//Resets the map to its shrouded state
 	void ResetFoWMap();
@@ -53,6 +59,15 @@ public:
 	bool CheckFoWTileBoundaries(iMPoint mapPos)const;
 	//Returns true if the tile is visible (there's no FOG in it) otherwise returns false
 	bool CheckTileVisibility(iMPoint mapPos)const;
+
+	unsigned short* GetMaskFromRadius(int radius);
+	void RequestMaskGeneration(int radius);
+	void RequestMaskDeletion(int radius);
+
+private:
+	unsigned short* GenerateCircle(int radius);
+	bool InsideCircle(iMPoint center, iMPoint tile, float radius);
+
 
 	//VARIABLES
 public:
@@ -107,6 +122,8 @@ public:
 private:
 	//This is where the FoWEntites are stored
 	std::vector<FoWEntity*> fowEntities;
+	//A map where we will store all created masks using their radius as the key
+	std::map<uint, MaskData> maskMap;
 	//This is where we store our FoW information
 	FoWDataStruct* fowMap;
 
