@@ -293,6 +293,9 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 bool Hero::LockOn(Entity* entity)
 {
+	if (entity == nullptr)
+		return false;
+
 	ENTITY_ALIGNEMENT align = entity->GetAlignment();
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
@@ -300,12 +303,6 @@ bool Hero::LockOn(Entity* entity)
 		MoveTo(entity->GetPosition().x, entity->GetPosition().y);
 		objective = entity;
 
-		return true;
-	}
-
-	else
-	{
-		MoveTo(entity->GetPosition().x, entity->GetPosition().y, false);
 		return true;
 	}
 
@@ -380,7 +377,6 @@ void Hero::Attack()
 		//Add XP FUNCTION HERE
 		true;
 	}
-
 }
 
 

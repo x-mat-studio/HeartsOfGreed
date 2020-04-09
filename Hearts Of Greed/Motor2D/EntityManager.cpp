@@ -111,7 +111,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 0);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 10);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -867,18 +867,24 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 
 Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thisUnit)
 {
+	fMPoint pos = thisUnit->GetPosition();
+	float minDistance = checkdistance;
+	Entity* ret = nullptr;
+	float currDistance = 0.f;
+
 	for (int i = 0; i < entityVector.size(); ++i)
 	{
 		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
 		{
-			fMPoint pos = thisUnit->GetPosition();
+			currDistance = pos.DistanceNoSqrt(thisUnit->GetPosition());
 
-			float distance = pos.DistanceNoSqrt(thisUnit->GetPosition());
-			if (distance <= checkdistance)
+			if (currDistance <= minDistance)
 			{
-				return entityVector[i];
+				minDistance = currDistance;
+				ret = entityVector[i];
 			}
 		}
 	}
-	return nullptr;
+
+	return ret;
 }
