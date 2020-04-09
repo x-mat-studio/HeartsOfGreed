@@ -111,6 +111,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
+
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
@@ -218,7 +219,30 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BUILDING:
-				entityVector[i]->Start(base1Texture);
+
+				SDL_Texture* DecorTex;
+
+				Building* bld;
+				bld = (Building*)entityVector[i];  
+				
+				switch (bld->GetDecor())
+				{
+				case BUILDING_DECOR::ST_01:
+					DecorTex = base1Texture;
+					break;
+				case BUILDING_DECOR::ST_02:
+					DecorTex = base2Texture;
+					break;
+				case BUILDING_DECOR::ST_03:
+					DecorTex = buildingTexture;
+					break;
+				default:
+					DecorTex = nullptr;
+					break;
+				}
+
+				entityVector[i]->Start(DecorTex);
+
 				break;
 
 			case ENTITY_TYPE::BLDG_TURRET:
@@ -867,18 +891,24 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 
 Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thisUnit)
 {
+	fMPoint pos = thisUnit->GetPosition();
+	float minDistance = checkdistance;
+	Entity* ret = nullptr;
+	float currDistance = 0.f;
+
 	for (int i = 0; i < entityVector.size(); ++i)
 	{
 		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
 		{
-			fMPoint pos = thisUnit->GetPosition();
+			currDistance = pos.DistanceNoSqrt(thisUnit->GetPosition());
 
-			float distance = pos.DistanceNoSqrt(thisUnit->GetPosition());
-			if (distance <= checkdistance)
+			if (currDistance <= minDistance)
 			{
-				return entityVector[i];
+				minDistance = currDistance;
+				ret = entityVector[i];
 			}
 		}
 	}
-	return nullptr;
+
+	return ret;
 }
