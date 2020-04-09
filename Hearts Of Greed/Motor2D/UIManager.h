@@ -41,7 +41,8 @@ public:
 	SDL_Texture* GetAtlasTexture() const;
 
 	void RemoveDeletedUI();
-	void CreateBasicUI();
+	void CreateBasicInGameUI();
+	void CreatePauseMenu();
 	void CreateMainMenu();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);

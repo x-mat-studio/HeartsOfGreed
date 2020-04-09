@@ -42,6 +42,8 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 
 
 	return ret;
@@ -217,41 +219,52 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::OPTION_MENU:
-
+		// CREATE OPTION WINDOW		TODO
 		break;
 
 	case EVENT_ENUM::CREDIT_MENU:
+		// CREATE CREDIT WINDOW		TODO
+		break;
 
+	case EVENT_ENUM::PAUSE_GAME:
+		CreatePauseMenu();
 		break;
 	}
 }
 
-void ModuleUIManager::CreateBasicUI()
+void ModuleUIManager::CreateBasicInGameUI()
 {
-	SDL_Rect rect;
+	
+	SDL_Rect rect = RectConstructor(0, 0, 0, 0);;
 	uint w(app->win->width), h(app->win->height);
 
-	rect = RectConstructor(0, 0, 0, 0);
 	AddUIElement(fMPoint(w / app->win->GetScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
 	rect = RectConstructor(221, 317, 162, 174);
 	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 
 	rect = RectConstructor(449, 24, 24, 24);
-	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", false, EVENT_ENUM::PAUSE_GAME, DRAGGABLE::DRAG_OFF);
 
-	rect = RectConstructor(0, 0, 0, 0); // Text will ignore Rect.
-	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT");
+}
 
-	rect = RectConstructor(17, 12, 195, 37);
-	AddUIElement(fMPoint(20, 40), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollBar", DRAGGABLE::DRAG_XY);
+void ModuleUIManager::CreatePauseMenu()
+{
+	SDL_Rect rect = RectConstructor(221, 317, 163, 185);;
+	uint w(app->win->width), h(app->win->height);
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), h / (app->win->GetScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+
+	rect = RectConstructor(17, 12, 195, 36);
+//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+
+//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
 }
 
 void ModuleUIManager::CreateMainMenu()
 {
 	SDL_Rect rect = RectConstructor(17, 12, 195, 36);
-	uint w(app->win->width), h(app->win->height);	// TODO Do the right events, their listener, and the pertinent code. Does load just happen, or do I have to close modules and then do it?
-	// Load i continue son events diferents (mirar DEV) = cambiam a test scene --> carreguem dades
+	uint w(app->win->width), h(app->win->height);
 	
 	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"continueButton", true, EVENT_ENUM::START_GAME_FROM_CONTINUE, DRAGGABLE::DRAG_OFF);
 
@@ -263,15 +276,15 @@ void ModuleUIManager::CreateMainMenu()
 
 	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 160), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"exitGameButton", true, EVENT_ENUM::EXIT_GAME, DRAGGABLE::DRAG_OFF);
 
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 5, (h / (app->win->GetScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueButton", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 5, (h / (app->win->GetScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
 	
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 35, (h / (app->win->GetScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameButton", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 35, (h / (app->win->GetScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
 	
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 40, (h / (app->win->GetScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsButton", DRAGGABLE::DRAG_OFF, "O P T I O N S");
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 40, (h / (app->win->GetScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsText", DRAGGABLE::DRAG_OFF, "O P T I O N S");
 	
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 42, (h / (app->win->GetScale() * 4)) + 125), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"creditsButton", DRAGGABLE::DRAG_OFF, "C R E D I T S");
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 42, (h / (app->win->GetScale() * 4)) + 125), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"creditsText", DRAGGABLE::DRAG_OFF, "C R E D I T S");
 	
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 30, (h / (app->win->GetScale() * 4)) + 165), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"exitGameButton", DRAGGABLE::DRAG_OFF, "E X I T    G A M E");
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 30, (h / (app->win->GetScale() * 4)) + 165), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"exitGameText", DRAGGABLE::DRAG_OFF, "E X I T    G A M E");
 
 }
 
