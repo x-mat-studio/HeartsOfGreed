@@ -59,7 +59,7 @@ bool DynamicEntity::Move(float dt)
 
 	// ------------------------------------------------------------------
 
-	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 5 && abs(position.y - nextPoint.y) <= 5)
+	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 10 && abs(position.y - nextPoint.y) <= 10)
 	{
 		path.erase(path.begin());
 	}
@@ -242,7 +242,7 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	return alignmentSpeed;
 }
 
-bool DynamicEntity::GeneratePath(int x, int y, int lvl)
+bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 {
 	iMPoint goal = { 0,0 };
 
