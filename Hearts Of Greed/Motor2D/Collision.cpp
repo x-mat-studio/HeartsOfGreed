@@ -86,16 +86,12 @@ bool ModuleCollision::Update(float dt)
 
 	for (uint i = 0; i < colliders.size(); ++i)
 	{
-		if (colliders[i] == nullptr)
-			continue;
-
 		c1 = colliders[i];
 
 		// avoid checking collisions already checked
 		for (uint k = i + 1; k < colliders.size(); ++k)
 		{
-			if (colliders[k] == nullptr)
-				continue;
+
 
 			c2 = colliders[k];
 

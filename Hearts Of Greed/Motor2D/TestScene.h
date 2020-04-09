@@ -39,6 +39,11 @@ public:
 	void Drag(iMPoint mousePos, float scale);
 	bool MouseCameraDisplacement(float camVel, float dt);
 
+	void ToggleCamMovement();
+	void ActivateCamMovement();
+	void DeactivateCamMovement();
+	bool GetCamMovementActivated() const;
+
 
 private:
 	
@@ -53,6 +58,8 @@ private:
 	bool camRight;
 	bool camLeft;
 	bool camSprint;
+
+	bool allowCamMovement;
 };
 
 #endif // __TEST_SCENE_H__

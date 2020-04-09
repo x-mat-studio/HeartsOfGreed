@@ -293,6 +293,9 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 bool Hero::LockOn(Entity* entity)
 {
+	if (entity == nullptr)
+		return false;
+
 	ENTITY_ALIGNEMENT align = entity->GetAlignment();
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
@@ -364,17 +367,16 @@ bool Hero::CheckAttackRange()
 
 void Hero::Attack()
 {
-	bool ret = false;
+	int ret = -1;
 
 	if (objective)
 		ret = objective->RecieveDamage(attackDamage);
 
-	if (ret)
+	if (ret > 0)
 	{
 		//Add XP FUNCTION HERE
 		true;
 	}
-
 }
 
 
@@ -442,6 +444,23 @@ bool Hero::UseHability2()
 bool Hero::UseHability3()
 {
 	return true;
+}
+
+int Hero::RecieveDamage(int damage)
+{
+	int ret = -1;
+
+	if (hitPoints > 0)
+	{
+		hitPoints -= damage;
+		if (hitPoints <= 0)
+		{
+			Die();
+			ret = 1;
+		}
+	}
+
+	return ret;
 }
 
 
