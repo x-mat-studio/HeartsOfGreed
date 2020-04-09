@@ -370,7 +370,7 @@ bool Hero::CheckAttackRange()
 
 void Hero::Attack()
 {
-	int ret = false;
+	int ret = -1;
 
 	if (objective)
 		ret = objective->RecieveDamage(attackDamage);
