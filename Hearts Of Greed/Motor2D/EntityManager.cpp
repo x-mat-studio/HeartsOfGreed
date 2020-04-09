@@ -217,7 +217,30 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BUILDING:
-				entityVector[i]->Start(base1Texture);
+
+				SDL_Texture* DecorTex;
+
+				Building* bld;
+				bld = (Building*)entityVector[i];  
+				
+				switch (bld->GetDecor())
+				{
+				case BUILDING_DECOR::ST_01:
+					DecorTex = base1Texture;
+					break;
+				case BUILDING_DECOR::ST_02:
+					DecorTex = base2Texture;
+					break;
+				case BUILDING_DECOR::ST_03:
+					DecorTex = buildingTexture;
+					break;
+				default:
+					DecorTex = nullptr;
+					break;
+				}
+
+				entityVector[i]->Start(DecorTex);
+
 				break;
 
 			case ENTITY_TYPE::BLDG_TURRET:

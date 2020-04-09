@@ -22,11 +22,25 @@ enum class BUILDING_STATE : int
 	ST_ALL,
 };
 
+enum class BUILDING_DECOR : int
+{
+	ST_UNKNOWN = -1,
+
+	ST_01,
+	ST_02,
+	ST_03,
+	NONE,
+
+	ST_ALL,
+
+
+};
+
 class Building : public Entity
 {
 public:
 
-	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type = ENTITY_TYPE::BUILDING);
+	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type = ENTITY_TYPE::BUILDING, BUILDING_DECOR decor = BUILDING_DECOR::NONE);
 
 	Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -46,6 +60,7 @@ public:
 	void Draw(float dt);
 
 	void ActivateTransparency();
+	BUILDING_DECOR GetDecor();
 
 private:
 	void ChangeBuildingState(BUILDING_STATE state);
@@ -60,12 +75,12 @@ private:
 public:
 
 	BUILDING_STATE	currentState;
+	BUILDING_DECOR myDecor;
 	Base* myBase;
 
 
 private:
 	int			transparencyValue;
-
 	int			hitPointsMax;
 	int			hitPointsCurrent;
 	int			recoveryHitPointsRate;
@@ -73,7 +88,6 @@ private:
 	int			buildingCost;
 
 	bool		transparent;
-
 	bool		selected;
 };
 
