@@ -61,7 +61,7 @@ public:
 
 	void CheckObjecive(Entity* entity);
 
-	bool MoveTo(int x, int y);
+	bool MoveTo(float x, float y);
 
 	void Draw(float dt);
 
@@ -80,6 +80,7 @@ private:
 	ENEMY_STATES ProcessFsm(std::vector<ENEMY_INPUTS>& inputs);
 
 	bool RecieveDamage(int damage);
+	void SearchForNewObjective();
 
 	void StateMachine(float dt);
 private:

@@ -450,6 +450,23 @@ bool Hero::UseHability3()
 	return true;
 }
 
+bool Hero::RecieveDamage(int damage)
+{
+	bool ret = false;
+
+	if (hitPoints > 0)
+	{
+		hitPoints -= damage;
+		if (hitPoints <= 0)
+		{
+			Die();
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
 
 //Here goes all timers
 void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)

@@ -169,12 +169,12 @@ bool Enemy::PostUpdate(float dt)
 }
 
 
-bool Enemy::MoveTo(int x, int y)
+bool Enemy::MoveTo(float x, float y)
 {
-	//do pathfinding, if it works return true
+
 	framePathfindingCount = 0;
 
-	if (GeneratePath(x, y, 0))
+	if (GeneratePath(x, y, 1))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;
@@ -203,8 +203,10 @@ void Enemy::Draw(float dt)
 
 void Enemy::Attack()
 {
-	//i have to think about this one
+	bool ret = false;
 
+	if (shortTermObjective)
+		ret = shortTermObjective->RecieveDamage(attackDamage);
 }
 
 
@@ -212,6 +214,7 @@ void Enemy::Die()
 {
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 	toDelete = true;
+	collider->thisEntity = nullptr;
 }
 
 
@@ -219,11 +222,18 @@ void Enemy::CheckObjecive(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{
-		shortTermObjective == nullptr;
+		path.clear();
+		shortTermObjective = nullptr;
+		SearchForNewObjective();
+
+		inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 	}
 }
 
-
+void Enemy::SearchForNewObjective()
+{
+	shortTermObjective = app->entityManager->SearchUnitsInRange(vision, this);
+}
 
 void Enemy::RecoverHealth()
 {
@@ -266,13 +276,7 @@ bool Enemy::CheckAttackRange()
 
 	fMPoint point = shortTermObjective->GetPosition();
 
-	int distanceX = abs(position.x - point.x);
-	int distanceY = abs(position.y - point.y);
-
-
-	int distance = distanceX + distanceY;
-
-	if (distance < attackRange)
+	if (point.DistanceManhattan(position) < attackRange)
 	{
 		return true;
 	}

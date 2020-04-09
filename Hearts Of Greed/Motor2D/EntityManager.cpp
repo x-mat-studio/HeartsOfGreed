@@ -69,7 +69,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 20, 20, 20, 20, 15, 15, 15);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
 
 
 	// Sample Enemy---------------------
@@ -111,7 +111,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 120, 25, 5, 0);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 0);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -123,7 +123,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 150, 250 }, turretCollider, turretCrazyIdle);
 
 	//Template base
-	Collider* baseAlarmCollider = new Collider({0, 0, 800, 800}, COLLIDER_BASE_ALERT, app->ai);
+	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
@@ -247,9 +247,9 @@ void ModuleEntityManager::CheckIfStarted() {
 
 bool ModuleEntityManager::Update(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
 
-		CheckListener(this);
+	CheckListener(this);
 
 	int numEntities = entityVector.size();
 
@@ -266,9 +266,9 @@ bool ModuleEntityManager::Update(float dt)
 // Called each loop iteration
 bool ModuleEntityManager::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
 
-		int numEntities = entityVector.size();
+	int numEntities = entityVector.size();
 
 
 	for (int i = 0; i < numEntities; i++)
@@ -294,7 +294,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(buildingTexture);
 	app->tex->UnLoad(base1Texture);
 	app->tex->UnLoad(base2Texture);
-	
+
 	app->tex->UnLoad(turretTexture);
 
 	app->tex->UnLoad(debugPathTexture);
@@ -785,7 +785,8 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 		sampleBase->SetPosition(x, y);
 		sampleBase->Draw(0);
 	
-		break;
+
+	break;
 
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
