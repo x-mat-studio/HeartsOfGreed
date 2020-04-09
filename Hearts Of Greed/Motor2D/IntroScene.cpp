@@ -5,6 +5,9 @@
 #include "FadeToBlack.h"
 #include "MainMenuScene.h"
 #include "UIManager.h"
+#include "Textures.h"
+#include "Audio.h"
+#include "Render.h"
 #include "UI_Text.h"
 
 
@@ -29,9 +32,24 @@ bool  ModuleIntroScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleIntroScene::Start()
 {
+	AlphaCounter = 250;
+	
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
 
+
+	//images
+	// gameIcon = app->tex->Load("intro_images/gameIcon.png");
+	// gameTitle = app->tex->Load("intro_images/gameTitle.png");
+	logoXMat = app->tex->Load("intro_images/logoXMat.png");
+	logoBG = app->tex->Load("intro_images/logoBG.png");
+	
+	//sounds
+	logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+	// titleSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+
+
+	app->audio->PlayFx(logoSound);
 	return true;
 }
 
@@ -69,6 +87,18 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 
 		ret = false;
 	}
+	if (AlphaCounter > 0) {
+
+		AlphaCounter -= dt * 95;
+	}
+
+	app->render->Blit(logoBG, 0, 0);
+
+	if (AlphaCounter > 1) {
+		
+		app->render->Blit(logoXMat, 155, 20, NULL, AlphaCounter);
+	}
+	
 
 	return ret;
 }

@@ -188,8 +188,11 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	{
 		SDL_SetTextureAlphaMod(texture, alpha);
 	}
+	if (alpha < 0) {
+		alpha = 0;
+	}
 	
-
+	
 
 	if (section != NULL)
 	{

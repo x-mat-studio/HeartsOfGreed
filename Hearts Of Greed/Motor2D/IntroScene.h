@@ -2,6 +2,7 @@
 #define __INTRO_SCENE__
 
 #include "Module.h"
+#include "SDL/include/SDL.h"
 
 
 
@@ -41,6 +42,16 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId) const;
 
 private:
+	//images
+	SDL_Texture* gameIcon;
+	SDL_Texture* gameTitle;
+	SDL_Texture* logoXMat;
+	SDL_Texture* logoBG;
+
+	//sounds
+	int logoSound;
+	int titleSound;
+	float AlphaCounter; 
 
 };
 
