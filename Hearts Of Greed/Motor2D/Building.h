@@ -78,12 +78,15 @@ public:
 	BUILDING_DECOR myDecor;
 	Base* myBase;
 
-
-private:
-	int			transparencyValue;
+protected:
 	int			hitPointsMax;
 	int			hitPointsCurrent;
 	int			recoveryHitPointsRate;
+
+private:
+	int			transparencyValue;
+
+	
 	int			xpOnDeath;
 	int			buildingCost;
 

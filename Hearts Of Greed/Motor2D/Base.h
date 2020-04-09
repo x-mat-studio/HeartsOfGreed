@@ -40,12 +40,16 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	void ChangeAligment(ENTITY_ALIGNEMENT aligment);
+	void ChangeAligment();
+
+	bool RecieveDamage(int damage);
 private:
 	
 	void DisableTurrets();
 	bool RessurectHero(ENTITY_TYPE heroType);
 	void GainResources(float dt);
+
+	void Die();
 
 
 private:

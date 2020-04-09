@@ -28,8 +28,7 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 
 	baseAreaAlarm(baseArea)
 	
-{
-}
+{}
 
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate,
@@ -48,8 +47,7 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 
 	baseAreaAlarm(baseArea)
 
-{
-}
+{}
 
 
 Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
@@ -68,7 +66,14 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	barricadesVector(copy->barricadesVector)
 {
 	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback);
-	baseAreaAlarm->SetPos(position.x, position.y);
+
+	int x = position.x;
+	int y = position.y;
+
+	x -= baseAreaAlarm->rect.w * 0.25;
+	y -= baseAreaAlarm->rect.h * 0.25;
+
+	baseAreaAlarm->SetPos(x, y);
 }
 
 
@@ -182,8 +187,21 @@ void Base::RemoveUpgradeCenter()
 }
 
 
-void Base::ChangeAligment(ENTITY_ALIGNEMENT aligment)
+void Base::ChangeAligment()
 {
+	ENTITY_ALIGNEMENT aligment;
+
+	if (align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		aligment = ENTITY_ALIGNEMENT::PLAYER;
+	}
+
+	if (align == ENTITY_ALIGNEMENT::PLAYER)
+	{
+		aligment = ENTITY_ALIGNEMENT::ENEMY;
+	}
+
+
 	baseUpgradeCenter->SetAlignment(aligment);
 
 	int numTurrets = turretsVector.size();
@@ -243,4 +261,30 @@ void Base::GainResources(float dt)
 		}
 		
 	}
+}
+
+
+bool Base::RecieveDamage(int damage)
+{
+	bool ret = false;
+
+	if (hitPointsCurrent > 0)
+	{
+		hitPointsCurrent -= damage;
+		if (hitPointsCurrent <= 0)
+		{
+			Die();
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+
+void Base::Die()
+{
+	hitPointsCurrent = hitPointsMax;
+
+	ChangeAligment();
 }
