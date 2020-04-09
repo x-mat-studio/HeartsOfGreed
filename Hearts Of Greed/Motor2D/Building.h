@@ -57,7 +57,7 @@ public:
 	bool PostUpdate(float dt);
 
 	void OnCollision(Collider* collider);
-	void Draw(float dt);
+	virtual void Draw(float dt);
 
 	void ActivateTransparency();
 	BUILDING_DECOR GetDecor();

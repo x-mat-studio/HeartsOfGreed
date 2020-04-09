@@ -64,6 +64,8 @@ public:
 
 	void StateMachine();
 
+	void Draw(float dt);
+
 private:
 	int turretLvl;
 	int attackDmg;

@@ -1,11 +1,12 @@
 #include "Turret.h"
 #include "EntityManager.h"
+#include "Render.h"
 
 
 
 Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
-	Building(position, hitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider),
+	Building(position, hitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 	animation(animation),
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
@@ -52,6 +53,8 @@ Turret::~Turret()
 
 bool Turret::Start()
 {
+
+
 	return true;
 }
 
@@ -77,7 +80,7 @@ bool Turret::Update(float dt)
 
 bool Turret::PostUpdate(float dt)
 {
-	// Draw(dt);
+	//Draw(dt);
 	return true;
 }
 
@@ -115,6 +118,11 @@ bool Turret::SearchObjective()
 	return ret;
 }
 
+void Turret::Draw(float dt)
+{
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+}
+
 
 bool Turret::CheckAttackRange()
 {
@@ -126,13 +134,7 @@ bool Turret::CheckAttackRange()
 
 	fMPoint point = shortTermObjective->GetPosition();
 
-	int distanceX = abs(position.x - point.x);
-	int distanceY = abs(position.y - point.y);
-
-
-	int distance = distanceX + distanceY;
-
-	if (distance < range)
+	if (point.DistanceManhattan(position) < range)
 	{
 		return true;
 	}
