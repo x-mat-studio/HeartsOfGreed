@@ -3,7 +3,6 @@
 
 #include "Module.h"
 
-
 class ModuleTestScene : public Module
 {
 public:
@@ -43,11 +42,17 @@ public:
 
 private:
 	
-	void ExecuteEvent(EVENT_ENUM eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId);
 
 private:
 	int prevMousePosX;
 	int prevmousePosY;
+
+	bool camUp;
+	bool camDown;
+	bool camRight;
+	bool camLeft;
+	bool camSprint;
 };
 
 #endif // __TEST_SCENE_H__

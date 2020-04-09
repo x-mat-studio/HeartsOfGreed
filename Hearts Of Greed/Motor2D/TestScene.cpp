@@ -15,8 +15,16 @@
 #include "UIManager.h"
 #include "UI_Text.h"
 #include "MainMenuScene.h"
+#include "EventManager.h"
 
-ModuleTestScene::ModuleTestScene() :prevMousePosX(0), prevmousePosY(0)
+ModuleTestScene::ModuleTestScene() :
+	prevMousePosX(0),
+	prevmousePosY(0),
+	camUp(false),
+	camDown(false),
+	camRight(false),
+	camLeft(false),
+	camSprint(false)
 {
 
 }
@@ -39,9 +47,9 @@ bool ModuleTestScene::Start()
 {
 	//Play Music
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
-	
+
 	//Load sfx used in this scene
-	
+
 	app->uiManager->LoadAtlas();
 
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
@@ -54,7 +62,7 @@ bool ModuleTestScene::Start()
 			RELEASE_ARRAY(data);
 		}
 		app->fowManager->CreateFoWMap(app->map->data.width, app->map->data.height);
-		
+
 		fMPoint pos;
 		pos.create(100, 600);
 
@@ -73,7 +81,21 @@ bool ModuleTestScene::Start()
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
 
-	
+
+	//Events register
+	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_UP, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_DOWN, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_LEFT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_RIGHT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_UP, this);
+	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_DOWN, this);
+	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_LEFT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_RIGHT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_SPRINT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_SPRINT, this);
+
+
+
 	return true;
 }
 
@@ -93,34 +115,36 @@ bool  ModuleTestScene::Update(float dt)
 	CheckListener(this);
 
 	float scale = app->win->GetScale();
-	float camVel = 350 * scale;
+	float camVel = 700; //TODO LOAD THIS FROM XML
 	iMPoint mousePos;
-	app->input->GetMousePosition(mousePos.x, mousePos.y);
 	iMPoint mouseRaw;
+	app->input->GetMousePosition(mousePos.x, mousePos.y);
 	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
 
 
-	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT)
+	if (camSprint)
 	{
 		camVel *= 2;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_STATE::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_UP) == KEY_STATE::KEY_REPEAT)
+	if (camUp)
 	{
 		app->render->currentCamY += camVel * dt;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_STATE::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_STATE::KEY_REPEAT)
+	if (camDown)
 	{
 		app->render->currentCamY -= camVel * dt;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_STATE::KEY_REPEAT)
+	if (camLeft)
 	{
 		app->render->currentCamX += camVel * dt;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_STATE::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_STATE::KEY_REPEAT)
+	if (camRight)
 	{
 		app->render->currentCamX -= camVel * dt;
 	}
-	
+
+
+
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN)
 	{
@@ -141,7 +165,7 @@ bool  ModuleTestScene::Update(float dt)
 	//mouse drag / mouse zoom
 	iMPoint scrollWheel;
 	app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-	if (MouseCameraDisplacement(camVel,dt)==false)
+	if (MouseCameraDisplacement(camVel, dt) == false)
 	{
 		if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
 		{
@@ -168,9 +192,9 @@ bool  ModuleTestScene::Update(float dt)
 bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
-	
+
 	app->map->Draw();
-	
+
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
 		ret = false;
@@ -224,8 +248,43 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 }
 
 
-void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId) const
-{}
+void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
+{
+	switch (eventId)
+	{
+	case EVENT_ENUM::CAMERA_UP:
+		camUp = true;
+		break;
+	case EVENT_ENUM::STOP_CAMERA_UP:
+		camUp = false;
+		break;
+	case EVENT_ENUM::CAMERA_DOWN:
+		camDown = true;
+		break;
+	case EVENT_ENUM::STOP_CAMERA_DOWN:
+		camDown = false;
+		break;
+	case EVENT_ENUM::CAMERA_RIGHT:
+		camRight = true;
+		break;
+	case EVENT_ENUM::STOP_CAMERA_RIGHT:
+		camRight = false;
+		break;
+	case EVENT_ENUM::CAMERA_LEFT:
+		camLeft = true;
+		break;
+	case EVENT_ENUM::STOP_CAMERA_LEFT:
+		camLeft = false;
+		break;
+	case EVENT_ENUM::CAMERA_SPRINT:
+		camSprint = true;
+		break;
+	case EVENT_ENUM::STOP_CAMERA_SPRINT:
+		camSprint = false;
+		break;
+	}
+
+}
 
 
 void ModuleTestScene::StartDragging(iMPoint mousePos)
@@ -234,7 +293,7 @@ void ModuleTestScene::StartDragging(iMPoint mousePos)
 	prevmousePosY = mousePos.y;
 }
 
-void ModuleTestScene::Drag(iMPoint mousePos,float scale)
+void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 {
 	iMPoint aux = { 0,0 };
 	iMPoint xy = mousePos;
@@ -248,34 +307,34 @@ void ModuleTestScene::Drag(iMPoint mousePos,float scale)
 	prevmousePosY = aux.y;
 }
 
-bool ModuleTestScene::MouseCameraDisplacement(float camVel,float dt)
+bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 {
 	bool ret = false;
 	int offset = 30; //TODO THIS OFFSET VALUE (IN PIXELS) FOR THE DETECTION WILL BE LOADED FROM XML IN THE FUTURE
 	iMPoint mouseRaw;
 	uint width;
 	uint height;
-	app->input->GetMousePositionRaw(mouseRaw.x,mouseRaw.y);
-	app->win->GetWindowSize(width,height);
+	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
+	app->win->GetWindowSize(width, height);
 
-	if (mouseRaw.x <= 0+offset)
+	if (mouseRaw.x <= offset)
 	{
 		app->render->currentCamX += camVel * dt;
 		ret = true;
 	}
-	else if (mouseRaw.x >= width-1-offset)
+	else if (mouseRaw.x >= width - 1 - offset)
 	{
 		app->render->currentCamX -= camVel * dt;
 		ret = true;
 	}
 
-	if (mouseRaw.y <= 0+offset)
+	if (mouseRaw.y <= offset)
 	{
 		app->render->currentCamY += camVel * dt;
 		ret = true;
 
 	}
-	else if (mouseRaw.y >= height-1-offset)
+	else if (mouseRaw.y >= height - 1 - offset)
 	{
 		app->render->currentCamY -= camVel * dt;
 		ret = true;
