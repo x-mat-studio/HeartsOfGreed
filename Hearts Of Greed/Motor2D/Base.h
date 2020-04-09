@@ -42,7 +42,7 @@ public:
 
 	void ChangeAligment();
 
-	bool RecieveDamage(int damage);
+	int RecieveDamage(int damage);
 private:
 	
 	void DisableTurrets();

@@ -264,9 +264,8 @@ void Base::GainResources(float dt)
 }
 
 
-bool Base::RecieveDamage(int damage)
+int Base::RecieveDamage(int damage)
 {
-	bool ret = false;
 
 	if (hitPointsCurrent > 0)
 	{
@@ -274,11 +273,10 @@ bool Base::RecieveDamage(int damage)
 		if (hitPointsCurrent <= 0)
 		{
 			Die();
-			ret = true;
 		}
 	}
 
-	return ret;
+	return 0;
 }
 
 
