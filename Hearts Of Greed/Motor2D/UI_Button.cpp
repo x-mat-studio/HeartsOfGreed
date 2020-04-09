@@ -90,7 +90,8 @@ void UI_Button::OnClick()
 
 void CloseMenu()
 {
-	// TODO if variable is closeMenu, close all UI that has the same father. Maybe do an invisible menu before opening a menu, to avoid deleting everything on nullptr? Or is the menu supposed to be the background?
+	// TODO I really feel like UI shouldn't be deleted here, even if the signal to do it is sent from here (because buttons)
+	// TODO if variable is closeMenu, close all UI that has the same father. Don't delete the father. If there's need to, make a specific function, since it's way less common
 }
 
 void UI_Button::MovingIt(float dt)

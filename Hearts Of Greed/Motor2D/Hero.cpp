@@ -212,7 +212,9 @@ void Hero::StateMachine(float dt)
 			else if (framePathfindingCount == framesPerPathfinding)
 			{
 				fMPoint pos = objective->GetPosition();
-				MoveTo(pos.x, pos.y);
+				fMPoint offSet = objective->GetCenter();
+
+				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 			}
 		}
 
@@ -306,7 +308,6 @@ bool Hero::LockOn(Entity* entity)
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
-		MoveTo(entity->GetPosition().x, entity->GetPosition().y);
 		objective = entity;
 
 		return true;
@@ -318,26 +319,6 @@ bool Hero::LockOn(Entity* entity)
 
 void Hero::OnCollision(Collider* collider)
 {}
-
-
-void Hero::LevelUp()
-{
-	level++;
-
-	//Apply the necesary changes when level up
-
-	hitPoints;
-	recoveryHitPointsRate;
-	energyPoints;
-	recoveryEnergyRate;
-
-	attackDamage;
-	attackSpeed;
-	attackRange;
-
-	movementSpeed;
-	visionDistance;
-}
 
 
 void Hero::Draw(float dt)
@@ -354,11 +335,20 @@ bool Hero::CheckAttackRange()
 		return false;
 	}
 
-	fMPoint point = objective->GetPosition();
+	if (objective->GetAlignment() == align)
+	{
+		objective = nullptr;
+		return false;
+	}
 
-	int distance = position.DistanceManhattan(point);
+	SDL_Rect rect;
+	rect.x = position.x - attackRange;
+	rect.y = position.y - attackRange;
+	rect.w = attackRange * 2;
+	rect.h = attackRange * 2;
 
-	if (distance < attackRange)
+	
+	if (objective->GetCollider()->CheckCollision(rect))
 	{
 		return true;
 	}
@@ -451,6 +441,13 @@ bool Hero::UseHability3()
 {
 	return true;
 }
+
+void Hero::LevelUp()
+{
+	return;
+}
+
+
 
 int Hero::RecieveDamage(int damage)
 {
