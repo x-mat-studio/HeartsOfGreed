@@ -220,15 +220,16 @@ void ModulePlayer::RightClick()
 		return;
 
 	Click();
+	bool enemyFound;
 
 	int numHeroes = heroesVector.size();
 
 	for (int i = 0; i < numHeroes; i++)
 	{
-		if (heroesVector[i]->LockOn(focusedEntity) == false)
-		{
-			heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, false);
-		}
+		enemyFound = heroesVector[i]->LockOn(focusedEntity);
+		
+		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
+		
 	}
 
 

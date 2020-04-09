@@ -133,7 +133,9 @@ void Enemy::StateMachine(float dt)
 				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
-					MoveTo(pos.x, pos.y);
+					fMPoint offSet = shortTermObjective->GetCenter();
+
+					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 				}
 			}
 		}

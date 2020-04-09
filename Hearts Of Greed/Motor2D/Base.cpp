@@ -201,8 +201,10 @@ void Base::ChangeAligment()
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
 	}
 
-
-	baseUpgradeCenter->SetAlignment(aligment);
+	if (baseUpgradeCenter != nullptr)
+	{
+		baseUpgradeCenter->SetAlignment(aligment);
+	}
 
 	int numTurrets = turretsVector.size();
 
@@ -269,7 +271,7 @@ int Base::RecieveDamage(int damage)
 
 	if (hitPointsCurrent > 0)
 	{
-		hitPointsCurrent -= damage;
+		hitPointsCurrent -= damage*4;
 		if (hitPointsCurrent <= 0)
 		{
 			Die();

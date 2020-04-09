@@ -899,7 +899,7 @@ Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thi
 	{
 		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
 		{
-			currDistance = pos.DistanceNoSqrt(thisUnit->GetPosition());
+			currDistance = pos.DistanceTo(thisUnit->GetPosition());
 
 			if (currDistance <= minDistance)
 			{
