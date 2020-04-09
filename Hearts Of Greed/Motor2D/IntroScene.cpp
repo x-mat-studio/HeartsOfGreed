@@ -89,7 +89,7 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 	}
 	if (AlphaCounter > 0) {
 
-		AlphaCounter -= dt * 95;
+		AlphaCounter -= dt * 75;
 	}
 
 	app->render->Blit(logoBG, 0, 0);
