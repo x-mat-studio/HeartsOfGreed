@@ -51,6 +51,9 @@ public:
 	const int GetCameraX();
 	const int GetCameraY();
 
+private:
+	void ExecuteEvent(EVENT_ENUM eventId);
+
 public:
 	SDL_Renderer* renderer;
 
@@ -61,7 +64,10 @@ public:
 	float currentCamX;//buffer for the camera movement(otherwise when converting to int behaves wrong)
 	float currentCamY;//buffer for the camera movement(otherwise when converting to int behaves wrong)
 private:
+
 	SDL_Rect camera;
+
+	bool gameExit;
 
 };
 

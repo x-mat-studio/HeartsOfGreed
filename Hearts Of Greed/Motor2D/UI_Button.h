@@ -11,7 +11,7 @@ class UI_Button : public UI
 
 public:
 
-	UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable);
+	UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, DRAGGABLE draggable, EVENT_ENUM eventTrigger);
 	~UI_Button();
 
 	bool Start();
@@ -27,10 +27,14 @@ public:
 private:
 
 	void HandleInput();
+	void CloseMenu();
 	
 private:
 
+	bool closeMenu;
+
 	fMPoint accuratedDrag;
+	EVENT_ENUM eventTriggered;
 
 };
 

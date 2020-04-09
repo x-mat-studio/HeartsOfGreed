@@ -144,9 +144,6 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 	case UI_TYPE::UI_SCROLLBAR:
 		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
-	case UI_TYPE::UI_BUTTON:
-		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
-		break;
 	case UI_TYPE::UI_HEALTHBAR:
 		newUI = new UI_Healthbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
@@ -163,6 +160,14 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 
 	return newUI;
 }
+
+UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, EVENT_ENUM eventTrigger, DRAGGABLE draggable)
+{
+	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, menuClosure, draggable, eventTrigger);
+	uiVector.push_back(newUI);
+	return newUI;
+}
+
 
 void ModuleUIManager::RemoveDeletedUI()
 {
@@ -211,6 +216,13 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		// DELETE PORTRAIT			TODO
 		break;
 
+	case EVENT_ENUM::OPTION_MENU:
+
+		break;
+
+	case EVENT_ENUM::CREDIT_MENU:
+
+		break;
 	}
 }
 
@@ -233,6 +245,34 @@ void ModuleUIManager::CreateBasicUI()
 
 	rect = RectConstructor(17, 12, 195, 37);
 	AddUIElement(fMPoint(20, 40), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollBar", DRAGGABLE::DRAG_XY);
+}
+
+void ModuleUIManager::CreateMainMenu()
+{
+	SDL_Rect rect = RectConstructor(17, 12, 195, 36);
+	uint w(app->win->width), h(app->win->height);	// TODO Do the right events, their listener, and the pertinent code. Does load just happen, or do I have to close modules and then do it?
+	// Load i continue son events diferents (mirar DEV) = cambiam a test scene --> carreguem dades
+	
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"continueButton", true, EVENT_ENUM::START_GAME_FROM_CONTINUE, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"newGameButton", true, EVENT_ENUM::START_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 80), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionsButton", false, EVENT_ENUM::OPTION_MENU, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 120), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"creditsButton", false, EVENT_ENUM::CREDIT_MENU, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 160), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"exitGameButton", true, EVENT_ENUM::EXIT_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 5, (h / (app->win->GetScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueButton", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 35, (h / (app->win->GetScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameButton", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 40, (h / (app->win->GetScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsButton", DRAGGABLE::DRAG_OFF, "O P T I O N S");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 42, (h / (app->win->GetScale() * 4)) + 125), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"creditsButton", DRAGGABLE::DRAG_OFF, "C R E D I T S");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 30, (h / (app->win->GetScale() * 4)) + 165), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"exitGameButton", DRAGGABLE::DRAG_OFF, "E X I T    G A M E");
+
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const

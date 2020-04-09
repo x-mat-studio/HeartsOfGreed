@@ -37,10 +37,12 @@ public:
 	bool PostUpdate(float dt);
 
 	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 });
+	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT,  DRAGGABLE draggable = DRAGGABLE::DRAG_OFF);
 	SDL_Texture* GetAtlasTexture() const;
 
 	void RemoveDeletedUI();
 	void CreateBasicUI();
+	void CreateMainMenu();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 

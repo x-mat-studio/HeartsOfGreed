@@ -1,8 +1,10 @@
 #include "UI_Button.h"
+#include "EventManager.h"
 
-
-UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable), 
-accuratedDrag({0, 0})
+UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, DRAGGABLE draggable, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
+	accuratedDrag({0, 0}),
+	eventTriggered(eventTrigger),
+	closeMenu(menuClosure)
 {}
 
 UI_Button::~UI_Button()
@@ -83,9 +85,12 @@ bool UI_Button::OnAbove()
 
 void UI_Button::OnClick()
 {
+	app->eventManager->GenerateEvent(eventTriggered, EVENT_ENUM::NULL_EVENT);
+}
 
-	// Call Event
-
+void CloseMenu()
+{
+	// TODO if variable is closeMenu, close all UI that has the same father. Maybe do an invisible menu before opening a menu, to avoid deleting everything on nullptr? Or is the menu supposed to be the background?
 }
 
 void UI_Button::MovingIt(float dt)
