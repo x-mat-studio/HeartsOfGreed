@@ -1,5 +1,6 @@
 #include "Turret.h"
 #include "EntityManager.h"
+#include "Render.h"
 
 
 
@@ -117,6 +118,11 @@ bool Turret::SearchObjective()
 	shortTermObjective = objective;
 
 	return ret;
+}
+
+void Turret::Draw(float dt)
+{
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
 }
 
 
