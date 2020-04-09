@@ -62,13 +62,15 @@ public:
 	BUILDING_STATE	currentState;
 	Base* myBase;
 
+protected:
+	int			hitPointsMax;
+	int			hitPointsCurrent;
+	int			recoveryHitPointsRate;
 
 private:
 	int			transparencyValue;
 
-	int			hitPointsMax;
-	int			hitPointsCurrent;
-	int			recoveryHitPointsRate;
+	
 	int			xpOnDeath;
 	int			buildingCost;
 

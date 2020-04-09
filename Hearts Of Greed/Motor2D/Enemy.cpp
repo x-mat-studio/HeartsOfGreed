@@ -245,7 +245,7 @@ bool Enemy::SearchObjective()
 	Entity* objective;
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 
-	if (objective != nullptr && shortTermObjective != objective)
+	if (objective != nullptr)
 	{
 		ret = true;
 	}

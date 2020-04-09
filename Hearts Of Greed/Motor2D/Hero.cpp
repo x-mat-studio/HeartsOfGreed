@@ -303,12 +303,6 @@ bool Hero::LockOn(Entity* entity)
 		return true;
 	}
 
-	else
-	{
-		MoveTo(entity->GetPosition().x, entity->GetPosition().y, false);
-		return true;
-	}
-
 	return false;
 }
 
