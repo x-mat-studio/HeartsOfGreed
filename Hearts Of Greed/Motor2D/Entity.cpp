@@ -199,6 +199,35 @@ ENTITY_ALIGNEMENT Entity::GetAlignment()
 	return this->align;
 }
 
+bool Entity::IsOpositeAlignement(ENTITY_ALIGNEMENT check)
+{
+	switch (this->align)
+	{
+	case ENTITY_ALIGNEMENT::PLAYER:
+	{
+		if (check == ENTITY_ALIGNEMENT::ENEMY)
+			return true;
+
+		return false;
+	}
+	break;
+	case ENTITY_ALIGNEMENT::ENEMY:
+	{
+		if (check == ENTITY_ALIGNEMENT::PLAYER)
+			return true;
+	}
+	break;
+	case ENTITY_ALIGNEMENT::NEUTRAL:
+	{
+		return false;
+	}
+	break;
+
+	}
+
+
+}
+
 
 void Entity::SetAlignment(ENTITY_ALIGNEMENT newAlign)
 {
@@ -247,7 +276,6 @@ void Entity::SetToDelete(bool toDel)
 
 bool Entity::RecieveDamage(int damage)
 {
-
 	return false;
 }
 

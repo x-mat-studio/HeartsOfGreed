@@ -65,11 +65,9 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
 	baseUpgradeCenter(copy->baseUpgradeCenter),
 	turretsVector(copy->turretsVector),
-	barricadesVector(copy->barricadesVector),
-
-	baseAreaAlarm(copy->baseAreaAlarm)
+	barricadesVector(copy->barricadesVector)
 {
-	app->coll->AddCollider(baseAreaAlarm->rect, baseAreaAlarm->type, baseAreaAlarm->callback);
+	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback);
 	baseAreaAlarm->SetPos(position.x, position.y);
 }
 

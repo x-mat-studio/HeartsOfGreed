@@ -96,6 +96,8 @@ private:
 
 	void StateMachine(float dt);
 
+	void SearchForNewObjective();
+
 public:
 	int level;
 

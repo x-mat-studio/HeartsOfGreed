@@ -16,7 +16,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
-	DynamicEntity(position, {100,100}, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
+	DynamicEntity(position, { 100,100 }, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -134,7 +134,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	currentAnimation = &walkLeft;
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, true);
-	visionEntity->SetNewVisionRadius(5);
+	visionEntity->SetNewVisionRadius(visionDistance);
 }
 
 
@@ -209,7 +209,7 @@ void Hero::StateMachine(float dt)
 				MoveTo(pos.x, pos.y);
 			}
 		}
-		
+
 		break;
 
 	case HERO_STATES::ATTACK:
@@ -274,7 +274,6 @@ bool Hero::PostUpdate(float dt)
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
-	//do pathfinding, if it works return true
 	if (haveObjective == false)
 	{
 		objective = nullptr;
@@ -285,6 +284,8 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 	}
+	//do pathfinding, if it works return true
+
 
 	return false;
 }
@@ -352,11 +353,7 @@ bool Hero::CheckAttackRange()
 
 	fMPoint point = objective->GetPosition();
 
-	int distanceX = abs(position.x - point.x);
-	int distanceY = abs(position.y - point.y);
-
-
-	int distance = distanceX + distanceY;
+	int distance = position.DistanceManhattan(point);
 
 	if (distance < attackRange)
 	{
@@ -373,8 +370,16 @@ bool Hero::CheckAttackRange()
 
 void Hero::Attack()
 {
+	bool ret = false;
+
 	if (objective)
-		objective->RecieveDamage(attackDamage);
+		ret = objective->RecieveDamage(attackDamage);
+
+	if (ret)
+	{
+		//Add XP FUNCTION HERE
+		true;
+	}
 
 }
 
@@ -404,15 +409,22 @@ void Hero::CheckObjecive(Entity* entity)
 {
 	if (objective == entity)
 	{
+		path.clear();
 		objective == nullptr;
+		SearchForNewObjective();
+
+		inputs.push_back(HERO_INPUTS::IN_MOVE);
+
 	}
 }
 
+void Hero::SearchForNewObjective()
+{
+	objective = app->entityManager->SearchUnitsInRange(visionDistance, this);
+}
 
 void Hero::RecoverHealth()
-{
-
-}
+{}
 
 
 void Hero::RecoverEnergy()
@@ -526,7 +538,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 }
 
 
-HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs) 
+HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 {
 	HERO_INPUTS lastInput;
 
