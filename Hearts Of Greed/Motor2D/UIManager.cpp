@@ -250,15 +250,23 @@ void ModuleUIManager::CreateBasicInGameUI()
 
 void ModuleUIManager::CreatePauseMenu()
 {
-	SDL_Rect rect = RectConstructor(221, 317, 163, 185);;
+	SDL_Rect rect = RectConstructor(15, 271, 194, 231);;
 	uint w(app->win->width), h(app->win->height);
 
 	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), h / (app->win->GetScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
 
-	rect = RectConstructor(17, 12, 195, 36);
-//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+	int height = h / (app->win->GetScale() * 2) - (rect.h / 2) + 8;
 
-//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+	rect = RectConstructor(17, 12, 195, 36);
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 44), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"saveButton", false, EVENT_ENUM::SAVE_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 89), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"loadButton", false, EVENT_ENUM::LOAD_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 134), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionButton", false, EVENT_ENUM::OPTION_MENU, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 179), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"mainMenuButton", true, EVENT_ENUM::RETURN_TO_MAIN_MENU, DRAGGABLE::DRAG_OFF);
 }
 
 void ModuleUIManager::CreateMainMenu()
