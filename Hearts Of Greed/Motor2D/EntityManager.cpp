@@ -106,7 +106,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	turretdoc.load_file(filename.GetString());
 	pugi::xml_node turret = turretdoc.child("turret");
 
-	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazy_idle"); // looks good
+	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
 
 
 	//Enemy collider and spawner
@@ -120,7 +120,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0,0 }, turretCollider, turretCrazyIdle);
+	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 150, 250 }, turretCollider, turretCrazyIdle);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({0, 0, 800, 800}, COLLIDER_BASE_ALERT, app->ai);
@@ -146,6 +146,7 @@ bool ModuleEntityManager::Start()
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
 
+	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
@@ -373,7 +374,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
+		ret = new Turret({ (float)x,(float)y }, testTurret, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -780,9 +781,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		testTurret->ActivateTransparency();
-		testTurret->SetPosition(x, y);
-		testTurret->Draw(0);
+		sampleBase->ActivateTransparency();
+		sampleBase->SetPosition(x, y);
+		sampleBase->Draw(0);
 	
 		break;
 

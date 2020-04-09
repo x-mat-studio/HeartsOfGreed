@@ -5,7 +5,7 @@
 
 Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
-	Building(position, hitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider),
+	Building(position, hitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 	animation(animation),
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
@@ -36,6 +36,8 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	shortTermObjective(nullptr),
 	haveOrders(false),
 
+	
+
 	state(TURRET_STATES::IDLE)
 {}
 
@@ -52,6 +54,8 @@ Turret::~Turret()
 
 bool Turret::Start()
 {
+
+
 	return true;
 }
 
@@ -77,7 +81,7 @@ bool Turret::Update(float dt)
 
 bool Turret::PostUpdate(float dt)
 {
-	// Draw(dt);
+	//Draw(dt);
 	return true;
 }
 

@@ -39,6 +39,9 @@ enum class EVENT_ENUM
 	HERO_GATHERER_OUT,
 	HERO_RANGED_OUT,
 
+	//Turret Creation
+	TURRET_BUILDED,
+
 	NIGHT_START,
 	DAY_START,
 
