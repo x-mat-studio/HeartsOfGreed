@@ -49,7 +49,7 @@ void RangedHero::LevelUp()
 	attackSpeed;
 	attackRange;
 
-	movementSpeed += 200;
+	movementSpeed;
 	visionDistance;
 
 }

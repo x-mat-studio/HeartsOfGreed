@@ -434,7 +434,10 @@ bool Hero::UseHability3()
 
 void Hero::LevelUp()
 {
+	return;
 }
+
+
 
 int Hero::RecieveDamage(int damage)
 {
