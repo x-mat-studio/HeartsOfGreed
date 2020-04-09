@@ -3,7 +3,6 @@
 
 #include "Module.h"
 
-
 class ModuleTestScene : public Module
 {
 public:
@@ -40,14 +39,27 @@ public:
 	void Drag(iMPoint mousePos, float scale);
 	bool MouseCameraDisplacement(float camVel, float dt);
 
+	void ToggleCamMovement();
+	void ActivateCamMovement();
+	void DeactivateCamMovement();
+	bool GetCamMovementActivated() const;
+
 
 private:
 	
-	void ExecuteEvent(EVENT_ENUM eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId);
 
 private:
 	int prevMousePosX;
 	int prevmousePosY;
+
+	bool camUp;
+	bool camDown;
+	bool camRight;
+	bool camLeft;
+	bool camSprint;
+
+	bool allowCamMovement;
 };
 
 #endif // __TEST_SCENE_H__
