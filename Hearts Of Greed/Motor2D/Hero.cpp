@@ -61,6 +61,9 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
+	expToLevelUp(100),
+	heroXP(0),
+
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
@@ -120,6 +123,9 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill3TimePassed(0),
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
+
+	expToLevelUp(100),
+	heroXP(0),
 
 	skill1Charged(true),
 	skill2Charged(true),
@@ -315,26 +321,6 @@ void Hero::OnCollision(Collider* collider)
 {}
 
 
-void Hero::LevelUp()
-{
-	level++;
-
-	//Apply the necesary changes when level up
-
-	hitPoints;
-	recoveryHitPointsRate;
-	energyPoints;
-	recoveryEnergyRate;
-
-	attackDamage;
-	attackSpeed;
-	attackRange;
-
-	movementSpeed;
-	visionDistance;
-}
-
-
 void Hero::Draw(float dt)
 {
 	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
@@ -384,7 +370,7 @@ void Hero::Attack()
 
 	if (ret > 0)
 	{
-		//Add XP FUNCTION HERE
+		GetExperience(ret);
 		true;
 	}
 }
@@ -456,6 +442,13 @@ bool Hero::UseHability3()
 	return true;
 }
 
+void Hero::LevelUp()
+{
+	return;
+}
+
+
+
 int Hero::RecieveDamage(int damage)
 {
 	int ret = -1;
@@ -471,6 +464,25 @@ int Hero::RecieveDamage(int damage)
 	}
 
 	return ret;
+}
+
+// Returns TRUE if level up
+bool Hero::GetExperience(int xp)
+{
+	heroXP += xp;
+	return GetLevel();	
+}
+
+bool Hero::GetLevel()
+{
+	if ((expToLevelUp * level) <= heroXP) 
+	{
+		LevelUp();
+		heroXP = 0;
+		return true;
+	}
+
+	return false;
 }
 
 

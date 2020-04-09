@@ -80,7 +80,7 @@ bool ModuleTestScene::Start()
 	//	app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, 100, 750);
 	}
 
-	app->uiManager->CreateBasicUI();
+	app->uiManager->CreateBasicInGameUI();
 
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
@@ -97,8 +97,11 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_RIGHT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_SPRINT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_SPRINT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_STARTED, this);
 
-
+	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
 
 	return true;
 }
@@ -295,6 +298,12 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 	case EVENT_ENUM::STOP_CAMERA_SPRINT:
 		camSprint = false;
+		break;
+	case EVENT_ENUM::SAVE_GAME:
+		// TODO Save game from here
+		break;
+	case EVENT_ENUM::LOAD_GAME:
+		// TODO Load game from here
 		break;
 	}
 

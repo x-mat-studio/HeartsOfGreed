@@ -58,22 +58,25 @@ bool ModuleEventManager::CleanUp()
 void ModuleEventManager::GenerateEvent(EVENT_ENUM eventId, EVENT_ENUM eventTriggerId)
 {
 
-	Event newEvent(eventId, eventTriggerId);
-
-	EVENT_ENUM eventCheck = CheckEventTrigger(eventId);
-
-	if(eventCheck != EVENT_ENUM::NULL_EVENT)
+	if (eventId != EVENT_ENUM::NULL_EVENT)
 	{
-		FireEvent(eventCheck);
-	}
+		Event newEvent(eventId, eventTriggerId);
 
-	if (eventTriggerId == EVENT_ENUM::NULL_EVENT)
-	{
-		FireEvent(eventId);
-	}
-	else
-	{
-		eventVector.push_back(newEvent);
+		EVENT_ENUM eventCheck = CheckEventTrigger(eventId);
+
+		if (eventCheck != EVENT_ENUM::NULL_EVENT)
+		{
+			FireEvent(eventCheck);
+		}
+
+		if (eventTriggerId == EVENT_ENUM::NULL_EVENT)
+		{
+			FireEvent(eventId);
+		}
+		else
+		{
+			eventVector.push_back(newEvent);
+		}
 	}
 
 }

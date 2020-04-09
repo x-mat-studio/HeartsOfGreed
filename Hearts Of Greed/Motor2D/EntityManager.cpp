@@ -67,9 +67,13 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
+	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
+
+	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
+		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);*/
 
 
 	// Sample Enemy---------------------
@@ -111,7 +115,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 10);
+
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -389,7 +394,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
-		ret = new Hero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
+		ret = new GathererHero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::BUILDING:

@@ -42,6 +42,8 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 
 
 	return ret;
@@ -144,9 +146,6 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 	case UI_TYPE::UI_SCROLLBAR:
 		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
-	case UI_TYPE::UI_BUTTON:
-		newUI = new UI_Button(positionValue, father, uiType, rect, uiName, dragable);
-		break;
 	case UI_TYPE::UI_HEALTHBAR:
 		newUI = new UI_Healthbar(positionValue, father, uiType, rect, uiName, dragable);
 		break;
@@ -163,6 +162,14 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 
 	return newUI;
 }
+
+UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, EVENT_ENUM eventTrigger, DRAGGABLE draggable)
+{
+	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, menuClosure, draggable, eventTrigger);
+	uiVector.push_back(newUI);
+	return newUI;
+}
+
 
 void ModuleUIManager::RemoveDeletedUI()
 {
@@ -211,28 +218,74 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		// DELETE PORTRAIT			TODO
 		break;
 
+	case EVENT_ENUM::OPTION_MENU:
+		// CREATE OPTION WINDOW		TODO
+		break;
+
+	case EVENT_ENUM::CREDIT_MENU:
+		// CREATE CREDIT WINDOW		TODO
+		break;
+
+	case EVENT_ENUM::PAUSE_GAME:
+		CreatePauseMenu();
+		break;
 	}
 }
 
-void ModuleUIManager::CreateBasicUI()
+void ModuleUIManager::CreateBasicInGameUI()
 {
-	SDL_Rect rect;
+	
+	SDL_Rect rect = RectConstructor(0, 0, 0, 0);;
 	uint w(app->win->width), h(app->win->height);
 
-	rect = RectConstructor(0, 0, 0, 0);
 	AddUIElement(fMPoint(w / app->win->GetScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
 	rect = RectConstructor(221, 317, 162, 174);
 	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 
 	rect = RectConstructor(449, 24, 24, 24);
-	AddUIElement(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", false, EVENT_ENUM::PAUSE_GAME, DRAGGABLE::DRAG_OFF);
 
-	rect = RectConstructor(0, 0, 0, 0); // Text will ignore Rect.
-	AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"textDemo", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT");
+}
 
-	rect = RectConstructor(17, 12, 195, 37);
-	AddUIElement(fMPoint(20, 40), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollBar", DRAGGABLE::DRAG_XY);
+void ModuleUIManager::CreatePauseMenu()
+{
+	SDL_Rect rect = RectConstructor(221, 317, 163, 185);;
+	uint w(app->win->width), h(app->win->height);
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), h / (app->win->GetScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+
+	rect = RectConstructor(17, 12, 195, 36);
+//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+
+//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+}
+
+void ModuleUIManager::CreateMainMenu()
+{
+	SDL_Rect rect = RectConstructor(17, 12, 195, 36);
+	uint w(app->win->width), h(app->win->height);
+	
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"continueButton", true, EVENT_ENUM::START_GAME_FROM_CONTINUE, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"newGameButton", true, EVENT_ENUM::START_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 80), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionsButton", false, EVENT_ENUM::OPTION_MENU, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 120), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"creditsButton", false, EVENT_ENUM::CREDIT_MENU, DRAGGABLE::DRAG_OFF);
+
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 160), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"exitGameButton", true, EVENT_ENUM::EXIT_GAME, DRAGGABLE::DRAG_OFF);
+
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 5, (h / (app->win->GetScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 35, (h / (app->win->GetScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 40, (h / (app->win->GetScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsText", DRAGGABLE::DRAG_OFF, "O P T I O N S");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 42, (h / (app->win->GetScale() * 4)) + 125), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"creditsText", DRAGGABLE::DRAG_OFF, "C R E D I T S");
+	
+	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 30, (h / (app->win->GetScale() * 4)) + 165), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"exitGameText", DRAGGABLE::DRAG_OFF, "E X I T    G A M E");
+
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const
