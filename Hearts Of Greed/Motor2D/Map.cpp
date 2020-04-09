@@ -8,6 +8,7 @@
 #include "Collision.h"
 #include "FoWManager.h"
 #include "EntityManager.h"
+#include "Building.h" //necessary to read buildings from tiled
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -483,35 +484,52 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2;
 				colliderRectAux.w /= 2;
 				
+				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
+
 				switch (layer->gid[i])
 				{
 					case 390:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y,ENTITY_ALIGNEMENT::PLAYER);
+						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y,ENTITY_ALIGNEMENT::ENEMY);
 						break;
+
 					case 391:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
+						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 						break;
+
 					case 392:
 						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
 						break;
+
 					case 393:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
-						break;
-					case 394:
 						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 						break;
+
+					case 394:
+						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
+						break;
+
 					case 395:
 						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
 						break;
+
 					case 396:
-						app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
+						bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+						bld = (Building*)bldgToBe;
+						bld->myDecor = BUILDING_DECOR::ST_01;
 						break;
+
 					case 397:
-						app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
+						bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+						bld = (Building*)bldgToBe;
+						bld->myDecor = BUILDING_DECOR::ST_02;
 						break;
+
 					case 398:
-						app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+						bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+						bld = (Building*)bldgToBe;
+						bld->myDecor = BUILDING_DECOR::ST_03;
 						break;
+
 					default:
 						break;
 				}

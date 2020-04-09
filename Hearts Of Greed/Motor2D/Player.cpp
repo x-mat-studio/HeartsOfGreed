@@ -219,28 +219,20 @@ void ModulePlayer::RightClick()
 	if (heroesVector.empty())
 		return;
 
-	if (Click())
-	{
-		int numHeroes = heroesVector.size();
+	Click();
+	bool enemyFound;
 
-		for (int i = 0; i < numHeroes; i++)
-		{
-			if (heroesVector[i]->LockOn(focusedEntity) == false)
-			{
-				heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, false);
-			}
-		}
+	int numHeroes = heroesVector.size();
+
+	for (int i = 0; i < numHeroes; i++)
+	{
+		enemyFound = heroesVector[i]->LockOn(focusedEntity);
+		
+		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
+		
 	}
 
-	else
-	{
-		int numHeroes = heroesVector.size();
 
-		for (int i = 0; i < numHeroes; i++)
-		{
-			heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, false);
-		}
-	}
 }
 
 
@@ -251,7 +243,7 @@ bool ModulePlayer::BuildClick()
 	int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
 
 
-	app->entityManager->AddEntity(buildingToBuild, x, y , ENTITY_ALIGNEMENT::PLAYER);
+	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
 
 	return true;
 }

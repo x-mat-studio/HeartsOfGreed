@@ -67,9 +67,13 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
+	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 20, 20, 20, 20, 15, 15, 15);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
+
+	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
+		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);*/
 
 
 	// Sample Enemy---------------------
@@ -106,12 +110,13 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	turretdoc.load_file(filename.GetString());
 	pugi::xml_node turret = turretdoc.child("turret");
 
-	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazy_idle"); // looks good
+	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
 
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 120, 25, 5, 0);
+
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -120,10 +125,10 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0,0 }, turretCollider, turretCrazyIdle);
+	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle);
 
 	//Template base
-	Collider* baseAlarmCollider = new Collider({0, 0, 800, 800}, COLLIDER_BASE_ALERT, app->ai);
+	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
@@ -146,6 +151,7 @@ bool ModuleEntityManager::Start()
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
 
+	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
@@ -217,7 +223,30 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BUILDING:
-				entityVector[i]->Start(base1Texture);
+
+				SDL_Texture* DecorTex;
+
+				Building* bld;
+				bld = (Building*)entityVector[i];  
+				
+				switch (bld->GetDecor())
+				{
+				case BUILDING_DECOR::ST_01:
+					DecorTex = base1Texture;
+					break;
+				case BUILDING_DECOR::ST_02:
+					DecorTex = base2Texture;
+					break;
+				case BUILDING_DECOR::ST_03:
+					DecorTex = buildingTexture;
+					break;
+				default:
+					DecorTex = nullptr;
+					break;
+				}
+
+				entityVector[i]->Start(DecorTex);
+
 				break;
 
 			case ENTITY_TYPE::BLDG_TURRET:
@@ -246,9 +275,9 @@ void ModuleEntityManager::CheckIfStarted() {
 
 bool ModuleEntityManager::Update(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
 
-		CheckListener(this);
+	CheckListener(this);
 
 	int numEntities = entityVector.size();
 
@@ -265,9 +294,9 @@ bool ModuleEntityManager::Update(float dt)
 // Called each loop iteration
 bool ModuleEntityManager::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
+	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
 
-		int numEntities = entityVector.size();
+	int numEntities = entityVector.size();
 
 
 	for (int i = 0; i < numEntities; i++)
@@ -293,7 +322,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(buildingTexture);
 	app->tex->UnLoad(base1Texture);
 	app->tex->UnLoad(base2Texture);
-	
+
 	app->tex->UnLoad(turretTexture);
 
 	app->tex->UnLoad(debugPathTexture);
@@ -365,7 +394,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
-		ret = new Hero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
+		ret = new GathererHero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::BUILDING:
@@ -373,7 +402,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
+		ret = new Turret({ (float)x,(float)y }, testTurret, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -780,11 +809,12 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		testTurret->ActivateTransparency();
-		testTurret->SetPosition(x, y);
-		testTurret->Draw(0);
+		sampleBase->ActivateTransparency();
+		sampleBase->SetPosition(x, y);
+		sampleBase->Draw(0);
 	
-		break;
+
+	break;
 
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -865,18 +895,24 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 
 Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thisUnit)
 {
+	fMPoint pos = thisUnit->GetPosition();
+	float minDistance = checkdistance;
+	Entity* ret = nullptr;
+	float currDistance = 0.f;
+
 	for (int i = 0; i < entityVector.size(); ++i)
 	{
 		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
 		{
-			fMPoint pos = thisUnit->GetPosition();
+			currDistance = pos.DistanceTo(thisUnit->GetPosition());
 
-			float distance = pos.DistanceNoSqrt(thisUnit->GetPosition());
-			if (distance <= checkdistance)
+			if (currDistance <= minDistance)
 			{
-				return entityVector[i];
+				minDistance = currDistance;
+				ret = entityVector[i];
 			}
 		}
 	}
-	return nullptr;
+
+	return ret;
 }

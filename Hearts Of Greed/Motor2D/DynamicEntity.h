@@ -20,7 +20,7 @@ public:
 	bool Move(float dt);
 	void GroupMovement(float dt);
 
-	bool GeneratePath(int x, int y, int lvl);
+	bool GeneratePath(float x, float y, int lvl);
 	void DebugDraw();
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);

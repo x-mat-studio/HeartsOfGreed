@@ -54,6 +54,14 @@ bool Entity::Start(SDL_Texture* texture)
 {
 	this->texture = texture;
 
+	int w;
+	int h;
+
+	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+	center.x = w / 2;
+	center.y = h / 2;
+
 	if (collider != nullptr)
 	{
 		collider = new Collider(collider->rect, collider->type, collider->callback, this);
@@ -169,6 +177,12 @@ fMPoint Entity::GetPosition()
 }
 
 
+fMPoint Entity::GetCenter()
+{
+	return center;
+}
+
+
 void Entity::SetPosition(int x, int y)
 {
 	position.x = x;
@@ -274,8 +288,8 @@ void Entity::SetToDelete(bool toDel)
 }
 
 
-bool Entity::RecieveDamage(int damage)
+int Entity::RecieveDamage(int damage)
 {
-	return false;
+	return -1;
 }
 

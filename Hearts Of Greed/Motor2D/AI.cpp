@@ -30,8 +30,9 @@ void ModuleAI::OnCollision(Collider* c1, Collider* c2)
 	if (c1->type == COLLIDER_BASE_ALERT && c2->type == COLLIDER_HERO)
 	{
 		CreateSelectionCollider(c1);
-		objectivePos.x = c2->rect.x;
-		objectivePos.y = c2->rect.y;
+
+		if(c2->thisEntity)
+		objectivePos = c2->thisEntity->GetPosition();
 	}
 }
 
@@ -45,7 +46,7 @@ void ModuleAI::CreateSelectionCollider(Collider* collider)
 
 fMPoint* ModuleAI::GetObjective()
 {
-	if (objectivePos != fMPoint{NULL, NULL})
+	if (objectivePos != fMPoint{INT_MIN, INT_MIN })
 	{
 		return &objectivePos;
 	}

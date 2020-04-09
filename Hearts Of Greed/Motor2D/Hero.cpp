@@ -61,6 +61,9 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
+	expToLevelUp(100),
+	heroXP(0),
+
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
@@ -120,6 +123,9 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill3TimePassed(0),
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
+
+	expToLevelUp(100),
+	heroXP(0),
 
 	skill1Charged(true),
 	skill2Charged(true),
@@ -205,7 +211,9 @@ void Hero::StateMachine(float dt)
 			else if (framePathfindingCount == framesPerPathfinding)
 			{
 				fMPoint pos = objective->GetPosition();
-				MoveTo(pos.x, pos.y);
+				fMPoint offSet = objective->GetCenter();
+
+				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 			}
 		}
 
@@ -292,19 +300,15 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 bool Hero::LockOn(Entity* entity)
 {
+	if (entity == nullptr)
+		return false;
+
 	ENTITY_ALIGNEMENT align = entity->GetAlignment();
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
-		MoveTo(entity->GetPosition().x, entity->GetPosition().y);
 		objective = entity;
 
-		return true;
-	}
-
-	else
-	{
-		MoveTo(entity->GetPosition().x, entity->GetPosition().y, false);
 		return true;
 	}
 
@@ -314,26 +318,6 @@ bool Hero::LockOn(Entity* entity)
 
 void Hero::OnCollision(Collider* collider)
 {}
-
-
-void Hero::LevelUp()
-{
-	level++;
-
-	//Apply the necesary changes when level up
-
-	hitPoints;
-	recoveryHitPointsRate;
-	energyPoints;
-	recoveryEnergyRate;
-
-	attackDamage;
-	attackSpeed;
-	attackRange;
-
-	movementSpeed;
-	visionDistance;
-}
 
 
 void Hero::Draw(float dt)
@@ -350,11 +334,20 @@ bool Hero::CheckAttackRange()
 		return false;
 	}
 
-	fMPoint point = objective->GetPosition();
+	if (objective->GetAlignment() == align)
+	{
+		objective = nullptr;
+		return false;
+	}
 
-	int distance = position.DistanceManhattan(point);
+	SDL_Rect rect;
+	rect.x = position.x - attackRange;
+	rect.y = position.y - attackRange;
+	rect.w = attackRange * 2;
+	rect.h = attackRange * 2;
 
-	if (distance < attackRange)
+	
+	if (objective->GetCollider()->CheckCollision(rect))
 	{
 		return true;
 	}
@@ -369,17 +362,16 @@ bool Hero::CheckAttackRange()
 
 void Hero::Attack()
 {
-	bool ret = false;
+	int ret = -1;
 
 	if (objective)
 		ret = objective->RecieveDamage(attackDamage);
 
-	if (ret)
+	if (ret > 0)
 	{
-		//Add XP FUNCTION HERE
+		GetExperience(ret);
 		true;
 	}
-
 }
 
 
@@ -447,6 +439,49 @@ bool Hero::UseHability2()
 bool Hero::UseHability3()
 {
 	return true;
+}
+
+void Hero::LevelUp()
+{
+	return;
+}
+
+
+
+int Hero::RecieveDamage(int damage)
+{
+	int ret = -1;
+
+	if (hitPoints > 0)
+	{
+		hitPoints -= damage;
+		if (hitPoints <= 0)
+		{
+			Die();
+			ret = 1;
+		}
+	}
+
+	return ret;
+}
+
+// Returns TRUE if level up
+bool Hero::GetExperience(int xp)
+{
+	heroXP += xp;
+	return GetLevel();	
+}
+
+bool Hero::GetLevel()
+{
+	if ((expToLevelUp * level) <= heroXP) 
+	{
+		LevelUp();
+		heroXP = 0;
+		return true;
+	}
+
+	return false;
 }
 
 

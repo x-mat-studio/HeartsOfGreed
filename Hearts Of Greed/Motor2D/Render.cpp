@@ -3,10 +3,11 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "EventManager.h"
 #include "Collision.h"
 
 
-ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 })
+ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false)
 {
 	name.create("renderer");
 }
@@ -51,6 +52,7 @@ bool ModuleRender::Awake(pugi::xml_node& config)
 		camera.y = 0;
 	}
 
+	app->eventManager->EventRegister(EVENT_ENUM::EXIT_GAME, this);
 
 	return ret;
 }
@@ -92,6 +94,13 @@ bool ModuleRender::PostUpdate(float dt)
 	
 	SDL_RenderPresent(renderer);
 	
+	CheckListener(this);
+
+	if (gameExit)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -144,6 +153,15 @@ void ModuleRender::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
+void ModuleRender::ExecuteEvent(EVENT_ENUM eventId)
+{
+	switch (eventId)
+	{
+	case EVENT_ENUM::EXIT_GAME:
+		gameExit = true;
+		break;
+	}
+}
 
 // Blit to screen
 bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, bool fliped, bool cameraUse, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
@@ -170,8 +188,11 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	{
 		SDL_SetTextureAlphaMod(texture, alpha);
 	}
+	if (alpha < 0) {
+		alpha = 0;
+	}
 	
-
+	
 
 	if (section != NULL)
 	{

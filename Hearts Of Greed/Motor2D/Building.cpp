@@ -2,7 +2,7 @@
 #include "Render.h"
 #include "Textures.h"
 
-Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type) :
+Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type, BUILDING_DECOR decor) :
 
 	Entity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider),
 
@@ -17,7 +17,8 @@ Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, i
 
 	transparent(false),
 	selected(false),
-	currentState(BUILDING_STATE::ST_UNKNOWN)
+	currentState(BUILDING_STATE::ST_UNKNOWN),
+	myDecor(decor)
 {}
 
 
@@ -31,6 +32,7 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 	xpOnDeath(copy->xpOnDeath),
 	buildingCost(copy->buildingCost),
 	transparencyValue(copy->transparencyValue),
+	myDecor(copy->myDecor),
 
 	myBase(nullptr),
 
@@ -73,7 +75,6 @@ bool Building::PostUpdate(float dt)
 {
 	return true;
 }
-
 
 void Building::OnCollision(Collider* collider)
 {
@@ -123,4 +124,9 @@ void Building::Draw(float dt)
 void Building::ActivateTransparency()
 {
 	transparent = true;
+}
+
+BUILDING_DECOR Building::GetDecor()
+{
+	return myDecor;
 }

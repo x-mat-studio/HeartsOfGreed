@@ -78,11 +78,17 @@ public:
 	virtual bool UseHability2();
 	virtual bool UseHability3();
 
+	virtual void LevelUp();
+
+	int RecieveDamage(int damage);
+
+	bool GetExperience(int xp);
+	bool GetLevel();
+
 	void CheckObjecive(Entity* entity);
 	void Draw(float dt);
 
 private:
-	void LevelUp();
 	
 	bool CheckAttackRange();
 	void Attack();
@@ -100,6 +106,8 @@ private:
 
 public:
 	int level;
+	int expToLevelUp;
+	int heroXP;
 
 	int hitPoints;
 	int recoveryHitPointsRate;

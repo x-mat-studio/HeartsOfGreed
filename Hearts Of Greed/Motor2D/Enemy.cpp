@@ -133,7 +133,9 @@ void Enemy::StateMachine(float dt)
 				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
-					MoveTo(pos.x, pos.y);
+					fMPoint offSet = shortTermObjective->GetCenter();
+
+					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 				}
 			}
 		}
@@ -169,12 +171,12 @@ bool Enemy::PostUpdate(float dt)
 }
 
 
-bool Enemy::MoveTo(int x, int y)
+bool Enemy::MoveTo(float x, float y)
 {
-	//do pathfinding, if it works return true
+
 	framePathfindingCount = 0;
 
-	if (GeneratePath(x, y, 0))
+	if (GeneratePath(x, y, 1))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;
@@ -203,8 +205,8 @@ void Enemy::Draw(float dt)
 
 void Enemy::Attack()
 {
-	//i have to think about this one
-
+	if (shortTermObjective)
+		shortTermObjective->RecieveDamage(attackDamage);
 }
 
 
@@ -212,6 +214,7 @@ void Enemy::Die()
 {
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 	toDelete = true;
+	collider->thisEntity = nullptr;
 }
 
 
@@ -219,11 +222,18 @@ void Enemy::CheckObjecive(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{
-		shortTermObjective == nullptr;
+		path.clear();
+		shortTermObjective = nullptr;
+		SearchForNewObjective();
+
+		inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 	}
 }
 
-
+void Enemy::SearchForNewObjective()
+{
+	shortTermObjective = app->entityManager->SearchUnitsInRange(vision, this);
+}
 
 void Enemy::RecoverHealth()
 {
@@ -245,7 +255,7 @@ bool Enemy::SearchObjective()
 	Entity* objective;
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 
-	if (objective != nullptr && shortTermObjective != objective)
+	if (objective != nullptr)
 	{
 		ret = true;
 	}
@@ -266,13 +276,7 @@ bool Enemy::CheckAttackRange()
 
 	fMPoint point = shortTermObjective->GetPosition();
 
-	int distanceX = abs(position.x - point.x);
-	int distanceY = abs(position.y - point.y);
-
-
-	int distance = distanceX + distanceY;
-
-	if (distance < attackRange)
+	if (point.DistanceManhattan(position) < attackRange)
 	{
 		return true;
 	}
@@ -407,9 +411,9 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 
 }
 
-bool Enemy::RecieveDamage(int damage)
+int Enemy::RecieveDamage(int damage)
 {
-	bool ret = false;
+	int ret = -1;
 
 	if (hitPoints > 0)
 	{
@@ -417,7 +421,7 @@ bool Enemy::RecieveDamage(int damage)
 		if (hitPoints <= 0)
 		{
 			Die();
-			ret = true;
+			ret = xpOnDeath;
 		}
 	}
 
