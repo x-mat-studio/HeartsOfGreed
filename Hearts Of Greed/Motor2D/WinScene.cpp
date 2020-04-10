@@ -32,9 +32,9 @@ bool  ModuleWinScene::Awake(pugi::xml_node&)
 bool ModuleWinScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"WinScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Win Scene /  Press N to go to the Menu");
-
+	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"WinScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Win Scene /  Press N to go to the Menu");
 	youWon = app->tex->Load("intro_images/youWon.png");
+	medalWin = app->tex->Load("intro_images/medalWin.png");
 
 	app->audio->PlayMusic("audio/music/youWon.ogg", 15.0F, 200);
 
@@ -57,6 +57,7 @@ bool  ModuleWinScene::Update(float dt)
 	CheckListener(this);
 
 	app->render->Blit(youWon,0,0);
+	app->render->Blit(medalWin, 50, 0);
 
 	return true;
 }
@@ -86,6 +87,8 @@ bool  ModuleWinScene::CleanUp()
 	app->uiManager->CleanUp();
 	app->tex->UnLoad(youWon);
 	youWon = nullptr;
+	app->tex->UnLoad(medalWin);
+	medalWin = nullptr;
 	return true;
 }
 
