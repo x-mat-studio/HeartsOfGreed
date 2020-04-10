@@ -69,7 +69,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
+		idleLeftUp, idleLeftDown,1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
 
 	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,

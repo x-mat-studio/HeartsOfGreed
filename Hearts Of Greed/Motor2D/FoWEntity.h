@@ -24,7 +24,6 @@ public:
 
 private:
 	
-	void ApplyMaskToTiles(std::vector<iMPoint>tilesAffected);
 	void ApplyMaskToTilesAuto(std::vector<iMPoint>tilesAffected);
 
 
