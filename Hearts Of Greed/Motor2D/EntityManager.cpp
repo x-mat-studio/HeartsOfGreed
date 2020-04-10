@@ -921,3 +921,60 @@ Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thi
 
 	return ret;
 }
+
+
+void ModuleEntityManager::ActivateGodModeHeroes()
+{
+	ENTITY_TYPE type;
+	Hero* hero;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		{
+			hero = (Hero*)entityVector[i];
+			hero->godMode = true;
+		}
+	}
+}
+
+
+void ModuleEntityManager::DesactivateGodModeHeroes()
+{
+	ENTITY_TYPE type;
+	Hero* hero;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		{
+			hero = (Hero*)entityVector[i];
+			hero->godMode = false;
+		}
+	}
+}
+
+
+void ModuleEntityManager::KillAllEnemies()
+{
+	Enemy* enemy;
+
+	int numEntities = entityVector.size();
+
+	for (size_t i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		{
+			enemy = (Enemy*)entityVector[i];
+			enemy->Die();
+		}
+	}
+}

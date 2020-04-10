@@ -79,6 +79,11 @@ public:
 
 	Entity* SearchUnitsInRange(float distance, Entity* from);
 
+
+	void ActivateGodModeHeroes();
+	void DesactivateGodModeHeroes();
+
+	void KillAllEnemies();
 private:
 
 	void CheckIfStarted();

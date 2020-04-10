@@ -69,6 +69,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill3Charged(true),
 	skillFromAttacking(false),
 	selected(false),
+	godMode(false),
 
 	state(HERO_STATES::IDLE),
 
@@ -132,6 +133,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill3Charged(true),
 	skillFromAttacking(false),
 	selected(false),
+	godMode(false),
 
 	state(HERO_STATES::IDLE),
 
@@ -417,14 +419,18 @@ void Hero::SearchForNewObjective()
 	objective = app->entityManager->SearchUnitsInRange(visionDistance, this);
 }
 
+
 void Hero::RecoverHealth()
-{}
+{
+
+}
 
 
 void Hero::RecoverEnergy()
 {
 
 }
+
 
 bool Hero::UseHability1()
 {
@@ -443,6 +449,7 @@ bool Hero::UseHability3()
 	return true;
 }
 
+
 void Hero::LevelUp()
 {
 	return;
@@ -454,7 +461,7 @@ int Hero::RecieveDamage(int damage)
 {
 	int ret = -1;
 
-	if (hitPoints > 0)
+	if (hitPoints > 0 && godMode == false)
 	{
 		hitPoints -= damage;
 		if (hitPoints <= 0)
@@ -467,12 +474,14 @@ int Hero::RecieveDamage(int damage)
 	return ret;
 }
 
+
 // Returns TRUE if level up
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
 	return GetLevel();	
 }
+
 
 bool Hero::GetLevel()
 {
