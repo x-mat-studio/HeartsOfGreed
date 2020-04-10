@@ -322,7 +322,7 @@ void Hero::OnCollision(Collider* collider)
 void Hero::Draw(float dt)
 {
 	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currFrame.frame, false, true, 255,255,255,255, currFrame.pivotPositionX, currFrame.pivotPositionY);
+	app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 }
 
 

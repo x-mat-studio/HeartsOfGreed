@@ -11,7 +11,12 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 	closeMenu(menuClosure),
 	includeFather(includeFather),
 	defaultPosition(positionValue.x)
-{}
+{
+
+	if (this->name == "saveButton" || this->name == "loadButton")
+		interactable = false;
+
+}
 
 UI_Button::~UI_Button()
 {}
@@ -33,7 +38,7 @@ bool UI_Button::Update(float dt)
 
 	if (enabled) 
 	{
-		if (interactable) 
+		if (interactable)
 		{
 			if (hover)
 			{
