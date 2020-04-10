@@ -70,6 +70,11 @@ void UI::Draw(SDL_Texture* texture)
 		SDL_SetTextureColorMod(texture, 200, 200, 200);
 		SDL_SetTextureAlphaMod(texture, 225);
 	}
+	else if (!interactable && this->type == UI_TYPE::UI_BUTTON)
+	{
+		SDL_SetTextureColorMod(texture, 100, 100, 100);
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
 
 	if (this->type != UI_TYPE::UI_BUTTON)
 	{

@@ -43,6 +43,7 @@ private:
 private:
 	//images
 	SDL_Texture* youWon;
+	SDL_Texture* medalWin;
 
 	//sounds
 	//int winMusic;
