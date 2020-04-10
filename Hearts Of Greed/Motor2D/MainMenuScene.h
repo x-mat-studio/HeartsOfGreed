@@ -58,6 +58,10 @@ private:
 	//fadecouner
 	float alphaCounter;
 
+	//Canon counter
+	bool canon;
+	float soundDelay;
+
 };
 
 #endif // __MAIN_MENU_SCENE__

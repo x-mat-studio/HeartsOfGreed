@@ -51,14 +51,16 @@ bool ModuleMainMenuScene::Start()
 	BG = app->tex->Load("intro_images/MainMenuBG.png");
 
 	//sounds
-	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
+	
 
-
-	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
+	//app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
 
 	alphaCounter = 0;
+	soundDelay = 0;
+	canon = false;
 
-
+	app->audio->PlayFx(titleSound, 0, 1, LOUDNESS::NORMAL, DIRECTION::LEFT);
 	return true;
 }
 
@@ -78,9 +80,21 @@ bool  ModuleMainMenuScene::Update(float dt)
 	CheckListener(this);
 
 	if (alphaCounter < 255) { alphaCounter += dt * 70; }
+	if (soundDelay < 210) { soundDelay += dt * 100; }
+
 	app->render->Blit(BG, 0,0, NULL, 250);
 	app->render->Blit(gameIcon, 140, 70, NULL, alphaCounter);
 	app->render->Blit(gameTitle, 20, 20, NULL, alphaCounter);
+
+	if (soundDelay > 210) {
+
+		if (canon == false) {
+			
+			canon = true;
+			app->audio->PlayFx(titleSound, 0, 2, LOUDNESS::NORMAL, DIRECTION::RIGHT);
+		
+		}
+	}
 	
 	return true;
 }
