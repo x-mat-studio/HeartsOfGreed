@@ -65,10 +65,11 @@ public:
 
 	void Draw(float dt);
 
+	void Die();
+
 private:
 
 	void Attack();
-	void Die();
 
 	void RecoverHealth();
 
@@ -83,6 +84,8 @@ private:
 	void SearchForNewObjective();
 
 	void StateMachine(float dt);
+
+	void Roar();
 private:
 
 	int hitPoints;
@@ -110,6 +113,8 @@ private:
 	ENEMY_STATES state;
 	std::vector<ENEMY_INPUTS> inputs;
 	Animation* currentAnimation;
+
+	float damageTakenTimer;
 
 };
 

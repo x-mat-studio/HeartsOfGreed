@@ -10,7 +10,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, { 100,100 }, type,  ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
+	DynamicEntity(position, { 100,100 }, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -28,7 +28,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	xpOnDeath(xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
-
+	damageTakenTimer(0.f),
 	haveOrders(false),
 
 	state(ENEMY_STATES::IDLE)
@@ -55,13 +55,14 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	xpOnDeath(copy->xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
+	damageTakenTimer(0.f),
 
 	haveOrders(false),
 
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, false,3);//TODO this is going to be the enemy vision distance
+	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
 }
 
 
@@ -77,6 +78,8 @@ Enemy::~Enemy()
 
 bool Enemy::PreUpdate(float dt)
 {
+
+
 	return true;
 }
 
@@ -91,20 +94,7 @@ bool Enemy::Update(float dt)
 	StateMachine(dt);
 	GroupMovement(dt);
 
-	//DEBUGSOUND
-	//Put this in a function pls :D att Jose
-	int randomCounter = rand() % 1000;
-
-	if (randomCounter == 997) {
-
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),this->GetMyDirection());
-	
-	}
-	if (randomCounter == 998) {
-
-		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
-
-	}
+	Roar();
 	CollisionPosUpdate();
 
 
@@ -117,7 +107,7 @@ void Enemy::StateMachine(float dt)
 	switch (state)
 	{
 	case ENEMY_STATES::IDLE:
-		
+
 		break;
 
 	case ENEMY_STATES::MOVE:
@@ -164,6 +154,23 @@ void Enemy::StateMachine(float dt)
 	CollisionPosUpdate();
 }
 
+void Enemy::Roar()
+{
+	//DEBUGSOUND
+	int randomCounter = rand() % 1000;
+
+	if (randomCounter == 997) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+
+	}
+	if (randomCounter == 998) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+
+	}
+}
+
 
 bool Enemy::PostUpdate(float dt)
 {
@@ -198,7 +205,11 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+	if (damageTakenTimer > 0.f)
+		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt), 0, 255,0,0);
+	else
+		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+
 	DebugDraw();
 }
 
@@ -215,6 +226,17 @@ void Enemy::Die()
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 	toDelete = true;
 	collider->thisEntity = nullptr;
+
+	int randomCounter = rand() % 2;
+
+	if (randomCounter == 1) 
+	{
+		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+	}
+	else
+	{
+		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+	}
 }
 
 
@@ -236,9 +258,7 @@ void Enemy::SearchForNewObjective()
 }
 
 void Enemy::RecoverHealth()
-{
-
-}
+{}
 
 
 bool Enemy::SearchObjective()
@@ -305,6 +325,14 @@ void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 	if (framePathfindingCount < framesPerPathfinding)
 	{
 		framePathfindingCount++;
+	}
+
+	if (damageTakenTimer > 0.f)
+	{
+		damageTakenTimer -= dt;
+
+		if (damageTakenTimer <= 0.f)
+			damageTakenTimer = 0.f;
 	}
 }
 
@@ -418,11 +446,15 @@ int Enemy::RecieveDamage(int damage)
 	if (hitPoints > 0)
 	{
 		hitPoints -= damage;
+		damageTakenTimer = 0.3f;
+
 		if (hitPoints <= 0)
 		{
 			Die();
 			ret = xpOnDeath;
 		}
+		else
+			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
 	}
 
 	return ret;

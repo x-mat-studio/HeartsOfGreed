@@ -22,7 +22,9 @@ public:
 	bool OnAbove();
 	
 	void OnClick();
+	void HoverFeedback();
 	void MovingIt(float dt);
+	
 
 private:
 
@@ -31,8 +33,11 @@ private:
 	
 private:
 
+	float defaultPosition;
+
 	bool closeMenu;
 	bool includeFather;
+	bool hoverSound;
 
 	fMPoint accuratedDrag;
 	EVENT_ENUM eventRecieved;

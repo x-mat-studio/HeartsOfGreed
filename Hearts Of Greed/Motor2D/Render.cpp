@@ -164,7 +164,8 @@ void ModuleRender::ExecuteEvent(EVENT_ENUM eventId)
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, bool fliped, bool cameraUse, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b,
+	bool fliped, bool cameraUse, float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
 	camera.x = currentCamX;
 	camera.y = currentCamY;
@@ -191,8 +192,11 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	if (alpha < 0) {
 		alpha = 0;
 	}
-	
-	
+
+	if (r != 255 || b != 255 || g != 255)
+	{
+		SDL_SetTextureColorMod(texture, r, g, b);
+	}
 
 	if (section != NULL)
 	{
@@ -223,6 +227,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	if (fliped)
 	{
 		rect.x = rect.x - rect.w + pivotX;
+		rect.y = rect.y - rect.h + pivotY;
 
 
 		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_HORIZONTAL) != 0)
@@ -236,6 +241,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	else
 	{
 		rect.x = rect.x - pivotX;
+		rect.y = rect.y + pivotY;
 
 
 		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
@@ -248,6 +254,11 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	if (alpha != 0)
 	{
 		SDL_SetTextureAlphaMod(texture, 255);
+	}
+
+	if (r != 255 || b != 255 || g != 255)
+	{
+		SDL_SetTextureColorMod(texture, 255, 255, 255);
 	}
 
 

@@ -69,6 +69,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill3Charged(true),
 	skillFromAttacking(false),
 	selected(false),
+	godMode(false),
 
 	state(HERO_STATES::IDLE),
 
@@ -132,6 +133,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill3Charged(true),
 	skillFromAttacking(false),
 	selected(false),
+	godMode(false),
 
 	state(HERO_STATES::IDLE),
 
@@ -324,7 +326,8 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
+	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currFrame.frame, 255,255,255,255, false, true, currFrame.pivotPositionX, currFrame.pivotPositionY);
 }
 
 
@@ -416,14 +419,18 @@ void Hero::SearchForNewObjective()
 	objective = app->entityManager->SearchUnitsInRange(visionDistance, this);
 }
 
+
 void Hero::RecoverHealth()
-{}
+{
+
+}
 
 
 void Hero::RecoverEnergy()
 {
 
 }
+
 
 bool Hero::UseHability1()
 {
@@ -442,6 +449,7 @@ bool Hero::UseHability3()
 	return true;
 }
 
+
 void Hero::LevelUp()
 {
 	return;
@@ -453,7 +461,7 @@ int Hero::RecieveDamage(int damage)
 {
 	int ret = -1;
 
-	if (hitPoints > 0)
+	if (hitPoints > 0 && godMode == false)
 	{
 		hitPoints -= damage;
 		if (hitPoints <= 0)
@@ -466,12 +474,14 @@ int Hero::RecieveDamage(int damage)
 	return ret;
 }
 
+
 // Returns TRUE if level up
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
 	return GetLevel();	
 }
+
 
 bool Hero::GetLevel()
 {
@@ -489,6 +499,7 @@ bool Hero::GetLevel()
 //Here goes all timers
 void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
+	//TODO: This needs syncro w/ the animations
 	if (attackCooldown > 0)
 	{
 		attackCooldown += dt;
@@ -655,8 +666,6 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;						 break;
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
-
-			case HERO_INPUTS::IN_MOVE:			 state = HERO_STATES::MOVE;						 break;
 
 			case HERO_INPUTS::IN_SKILL1: if (skill1Charged) { state = HERO_STATES::SKILL1; skillFromAttacking = true; } break;
 			case HERO_INPUTS::IN_SKILL2: if (skill2Charged) { state = HERO_STATES::SKILL2; skillFromAttacking = true; } break;
