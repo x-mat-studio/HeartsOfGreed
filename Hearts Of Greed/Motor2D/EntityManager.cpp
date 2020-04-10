@@ -436,11 +436,11 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
 	Collider* col;
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		col = entityVector[i]->GetCollider();
 
@@ -485,11 +485,11 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 
 void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 {
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
 	ENTITY_TYPE type;
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		type = entityVector[i]->GetType();
 
@@ -528,9 +528,9 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	}
 
 
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		alignement = entityVector[i]->GetAlignment();
 
@@ -556,9 +556,9 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 void ModuleEntityManager::RemoveDeletedEntities()
 {
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		if (entityVector[i]->toDelete == true)
 		{
