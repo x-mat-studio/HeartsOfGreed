@@ -5,6 +5,9 @@
 #include "FadeToBlack.h"
 #include "MainMenuScene.h"
 #include "UIManager.h"
+#include "Textures.h"
+#include "Audio.h"
+#include "Render.h"
 #include "UI_Text.h"
 
 ModuleWinScene::ModuleWinScene()
@@ -31,6 +34,10 @@ bool ModuleWinScene::Start()
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"WinScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Win Scene /  Press N to go to the Menu");
 
+	youWon = app->tex->Load("intro_images/youWon.png");
+
+	app->audio->PlayMusic("audio/music/youWon.ogg", 15.0F, 200);
+
 	return true;
 }
 
@@ -48,6 +55,8 @@ bool  ModuleWinScene::PreUpdate(float dt)
 bool  ModuleWinScene::Update(float dt)
 {
 	CheckListener(this);
+
+	app->render->Blit(youWon,0,0);
 
 	return true;
 }
@@ -75,7 +84,8 @@ bool  ModuleWinScene::PostUpdate(float dt)
 bool  ModuleWinScene::CleanUp()
 {
 	app->uiManager->CleanUp();
-
+	app->tex->UnLoad(youWon);
+	youWon = nullptr;
 	return true;
 }
 

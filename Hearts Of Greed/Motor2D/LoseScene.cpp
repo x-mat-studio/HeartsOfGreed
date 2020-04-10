@@ -6,6 +6,9 @@
 #include "MainMenuScene.h"
 #include "UIManager.h"
 #include "UI_Text.h"
+#include "Render.h"
+#include "Textures.h"
+#include "Audio.h"
 
 ModuleLoseScene::ModuleLoseScene()
 {}
@@ -27,6 +30,10 @@ bool ModuleLoseScene::Start()
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"LoseScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Lose Scene /  Press N to go to the Menu");
 
+	youLost = app->tex->Load("intro_images/youLost.png");
+
+	app->audio->PlayMusic("audio/music/youLost.ogg", 15.0F, 200);
+
 	return true;
 }
 
@@ -44,6 +51,8 @@ bool  ModuleLoseScene::PreUpdate(float dt)
 bool  ModuleLoseScene::Update(float dt)
 {
 	CheckListener(this);
+
+	app->render->Blit(youLost, 0, 0);
 
 	return true;
 }

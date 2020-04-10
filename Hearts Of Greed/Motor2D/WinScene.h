@@ -2,7 +2,7 @@
 #define __WIN_SCENE__
 
 #include "Module.h"
-
+#include "SDL/include/SDL.h"
 
 
 class ModuleWinScene : public Module
@@ -41,7 +41,11 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId) const;
 
 private:
+	//images
+	SDL_Texture* youWon;
 
+	//sounds
+	//int winMusic;
 };
 
 #endif // __WIN_SCENE__
