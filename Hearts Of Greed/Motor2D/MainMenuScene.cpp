@@ -58,6 +58,7 @@ bool ModuleMainMenuScene::Start()
 
 	alphaCounter = 0;
 
+
 	return true;
 }
 

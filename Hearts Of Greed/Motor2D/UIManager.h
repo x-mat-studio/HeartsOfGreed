@@ -55,11 +55,20 @@ private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);
 
+
+public:
+
+	int hoverSound;
+	int clickSound;
+
+
 private:
 
 	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
 	UI_Portrait* portraitPointer;
+
+	
 
 };
 
