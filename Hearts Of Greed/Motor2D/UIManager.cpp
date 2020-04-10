@@ -279,7 +279,7 @@ void ModuleUIManager::CreateMainMenu()
 	SDL_Rect rect = RectConstructor(17, 12, 195, 36);
 	uint w(app->win->width), h(app->win->height);
 	
-	// TODO Charge an image here that serves as father
+	// TODO Charge background image here that serves as father
 
 //	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"continueButton", true, EVENT_ENUM::START_GAME_FROM_CONTINUE, DRAGGABLE::DRAG_OFF);
 
