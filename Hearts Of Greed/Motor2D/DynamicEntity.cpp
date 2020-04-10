@@ -12,13 +12,14 @@
 DynamicEntity::DynamicEntity(fMPoint position, iMPoint speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
 
 	Entity(position, type, align, collider, true),
-
+	
 	moveRange1(moveRange1),
 	moveRange2(moveRange2),
 	unitSpeed(speed),
 	isMoving(false),
 	current_animation(nullptr),
-	toMove{ 0,0 }
+	toMove{ 0,0 },
+	dir(FACE_DIR::SOUTH_EAST)
 {}
 
 DynamicEntity::~DynamicEntity()
@@ -47,6 +48,7 @@ bool DynamicEntity::Move(float dt)
 
 		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
 	}
+	dir = DetermineDirection(pathSpeed);
 
 	// ----------------------------------------------------------------- 
 	pathSpeed.x = pathSpeed.x * unitSpeed.x;
@@ -64,13 +66,55 @@ bool DynamicEntity::Move(float dt)
 		path.erase(path.begin());
 	}
 
-	if (pathSpeed.IsZero())
+	if (!pathSpeed.IsZero())
 	{
 		return true;
 	}
 
 	return false;
 }
+
+FACE_DIR DynamicEntity::DetermineDirection(fMPoint faceDir)
+{
+	FACE_DIR newDir = dir;
+
+	if (faceDir.x > 0)
+	{
+		if (faceDir.y < -0.1f)
+		{
+			newDir = FACE_DIR::NORTH_EAST;
+
+		}
+		else if (faceDir.y > 0.1f)
+		{
+			newDir = FACE_DIR::SOUTH_EAST;
+		}
+		else
+		{
+			newDir = FACE_DIR::EAST;
+		}
+	}
+	else if (faceDir.x < 0)
+	{
+		if (faceDir.y < -0.1f)
+		{
+			newDir = FACE_DIR::NORTH_WEST;
+		}
+		else if (faceDir.y > 0.1f)
+		{
+			newDir = FACE_DIR::SOUTH_WEST;
+
+		}
+		else
+		{
+			newDir = FACE_DIR::WEST;
+		}
+	}
+
+
+	return newDir;
+}
+
 void DynamicEntity::GroupMovement(float dt)
 {
 

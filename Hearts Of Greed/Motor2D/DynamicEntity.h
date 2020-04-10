@@ -4,9 +4,22 @@
 #define __DYNAMICENTITY_H__
 
 #include "Entity.h"
-#include <list>
 
 #define FRAMES_PER_PATHFINDING 30
+
+enum class FACE_DIR : int
+{
+	NONE = -1,
+
+	NORTH,
+	NORTH_EAST,
+	EAST,
+	SOUTH_EAST,
+	SOUTH,
+	SOUTH_WEST,
+	WEST,
+	NORTH_WEST
+};
 
 class DynamicEntity : public Entity
 {
@@ -25,6 +38,8 @@ public:
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
 
+	FACE_DIR DetermineDirection(fMPoint dir);
+
 public:
 	bool isMoving;
 
@@ -33,6 +48,8 @@ public:
 	int moveRange2;
 
 	iMPoint unitSpeed;
+
+	FACE_DIR dir;
 
 protected:
 

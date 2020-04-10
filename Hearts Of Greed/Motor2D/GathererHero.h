@@ -17,6 +17,7 @@ public:
 	bool UseHability1();
 	bool UseHability2();
 	bool UseHability3();
+
 };
 
 

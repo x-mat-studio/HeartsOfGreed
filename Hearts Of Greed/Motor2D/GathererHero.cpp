@@ -36,3 +36,4 @@ bool GathererHero::UseHability3()
 
 	return true;
 }
+
