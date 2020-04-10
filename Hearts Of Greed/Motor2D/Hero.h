@@ -16,8 +16,12 @@ enum class HERO_STATES
 	MOVE,
 	ATTACK,
 	CHARGING_ATTACK,
+
+	PREPARE_SKILL1,
 	SKILL1,
+	PREPARE_SKILL2,
 	SKILL2,
+	PREPARE_SKILL3,
 	SKILL3,
 
 	REPAIR,
@@ -37,8 +41,11 @@ enum HERO_INPUTS
 	IN_CHARGING_ATTACK,
 	IN_ATTACK_CHARGED,
 
+	IN_PREPARE_SKILL1,
 	IN_SKILL1,
+	IN_PREPARE_SKILL2,
 	IN_SKILL2, 
+	IN_PREPARE_SKILL3,
 	IN_SKILL3,
 	
 	IN_SKILL_CANCELLED,
@@ -89,9 +96,15 @@ public:
 	void CheckObjecive(Entity* entity);
 	void Draw(float dt);
 
+	bool PrepareSkill1();
+	bool PrepareSkill2();
+	bool PrepareSkill3();
+
 	bool ActivateSkill1();
 	bool ActivateSkill2();
 	bool ActivateSkill3();
+
+	void CancelSkill();
 
 private:
 	

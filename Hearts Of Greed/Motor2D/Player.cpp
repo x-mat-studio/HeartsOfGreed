@@ -24,6 +24,12 @@ ModulePlayer::ModulePlayer() :
 	entityComand(false),
 	entityInteraction(false),
 	buildMode(false),
+	skill1(false),
+	skill2(false),
+	skill3(false),
+	prepareSkill(false),
+
+	doSkill(false),
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
@@ -139,18 +145,18 @@ bool ModulePlayer::HandleInput()
 {
 	if (buildMode == false)
 	{
-		if (entityComand)
+		if (prepareSkill == true || doSkill == true)
+		{
+			CommandSkill();
+		}
+		
+		else if (entityComand)
 		{
 			entityComand = false;
 			RightClick();
 		}
 
-		if (doSkill == true)
-		{
-			CommandSkill();
-		}
-
-		if (entityInteraction)
+		else if (entityInteraction)
 		{
 			entityInteraction = false;
 			Click();
@@ -253,9 +259,9 @@ void ModulePlayer::RightClick()
 	for (int i = 0; i < numHeroes; i++)
 	{
 		enemyFound = heroesVector[i]->LockOn(focusedEntity);
-		
+
 		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
-		
+
 	}
 
 
@@ -265,26 +271,140 @@ void ModulePlayer::RightClick()
 void ModulePlayer::CommandSkill()
 {
 	if (heroesVector.empty() == true)
+	{
+		prepareSkill = false;
+		skill1 = false;
+		skill2 = false;
+		skill3 = false;
+		doSkill = false;
+
 		return;
-	
+	}
+
 	else
 		if (heroesVector[0] == nullptr)
+		{
+			prepareSkill = false;
+			skill1 = false;
+			skill2 = false;
+			skill3 = false;
+			doSkill = false;
+
 			return;
-	
+		}
+
+
+	if (prepareSkill == true)
+	{
+		PrepareHeroSkills();
+	}
+
+
+	else if (doSkill == true)
+	{
+		DoHeroSkills();
+	}
+
+
+}
+
+
+void ModulePlayer::PrepareHeroSkills()
+{
 
 	if (skill1 == true)
 	{
-		heroesVector[0]->ActivateSkill1();
+		if (heroesVector[0]->skill1Charged == true)
+		{
+			doSkill = heroesVector[0]->PrepareSkill1();
+			prepareSkill = !doSkill;
+		}
+
+		else
+		{
+			prepareSkill = false;
+			skill1 = false;
+		}
+
 	}
 
 	else if (skill2 == true)
 	{
-		heroesVector[0]->ActivateSkill2();
+		if (heroesVector[0]->skill2Charged == true)
+		{
+			doSkill = heroesVector[0]->PrepareSkill2();
+			prepareSkill = !doSkill;
+		}
+
+		else
+		{
+			prepareSkill = false;
+			skill2 = false;
+		}
 	}
+
 
 	else if (skill3 == true)
 	{
-		heroesVector[0]->ActivateSkill3();
+		if (heroesVector[0]->skill3Charged == true)
+		{
+			doSkill = heroesVector[0]->PrepareSkill3();
+			prepareSkill = !doSkill;
+
+		}
+
+		else
+		{
+			prepareSkill = false;
+			skill3 = false;
+		}
+	}
+
+}
+
+
+void ModulePlayer::DoHeroSkills()
+{
+	if (entityComand == true)
+	{
+		entityComand = false;
+		heroesVector[0]->CancelSkill();
+
+		prepareSkill = false;
+		skill1 = false;
+		skill2 = false;
+		skill3 = false;
+		doSkill = false;
+	}
+
+	if (entityInteraction == true)
+	{
+		if (skill1 == true)
+		{
+			if (heroesVector[0]->ActivateSkill1() == true)
+			{
+				skill1 = false;
+				doSkill = false;
+			}
+		}
+
+		else if (skill2 == true)
+		{
+			if (heroesVector[0]->ActivateSkill2() == true)
+			{
+				skill2 = false;
+				doSkill = false;
+			}
+		}
+
+		else if (skill3 == true)
+		{
+			if (heroesVector[0]->ActivateSkill3() == true)
+			{
+				skill3 = false;
+				doSkill = false;
+			}
+		}
 	}
 
 }
@@ -325,17 +445,17 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::SKILL1:
 		skill1 = true;
-		doSkill = true;
+		prepareSkill = true;
 		break;
 
 	case EVENT_ENUM::SKILL2:
 		skill2 = true;
-		doSkill = true;
+		prepareSkill = true;
 		break;
 
 	case EVENT_ENUM::SKILL3:
 		skill3 = true;
-		doSkill = true;
+		prepareSkill = true;
 		break;
 	}
 

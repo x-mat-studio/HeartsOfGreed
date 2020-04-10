@@ -48,6 +48,8 @@ private:
 	void RightClick();
 
 	void CommandSkill();
+	void PrepareHeroSkills();
+	void DoHeroSkills();
 
 	bool BuildClick();
 
@@ -72,6 +74,8 @@ private:
 	bool skill1;
 	bool skill2;
 	bool skill3;
+	bool prepareSkill;
+
 	bool doSkill;
 
 	bool buildMode;

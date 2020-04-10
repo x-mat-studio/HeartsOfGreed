@@ -249,6 +249,18 @@ void Hero::StateMachine(float dt)
 		cooldownHability1 += TIME_TRIGGER;
 		break;
 
+	case HERO_STATES::PREPARE_SKILL1:
+
+		break;
+
+	case HERO_STATES::PREPARE_SKILL2:
+
+		break;
+
+	case HERO_STATES::PREPARE_SKILL3:
+
+		break;
+
 	case HERO_STATES::SKILL2:
 		UseHability2();
 		cooldownHability2 += TIME_TRIGGER;
@@ -448,13 +460,51 @@ bool Hero::UseHability3()
 }
 
 
-bool Hero::ActivateSkill1()
+bool Hero::PrepareSkill1()
 {
-	if (skill1Charged && state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
 	{
-		inputs.push_back(IN_SKILL1);
+		inputs.push_back(IN_PREPARE_SKILL1);
 		return true;
 	}
+
+	return false;
+}
+
+
+bool Hero::PrepareSkill2()
+{
+	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	{
+		inputs.push_back(IN_PREPARE_SKILL2);
+		return true;
+	}
+
+	return false;
+}
+
+
+bool Hero::PrepareSkill3()
+{
+	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	{
+		inputs.push_back(IN_PREPARE_SKILL3);
+		return true;
+	}
+
+	return false;
+
+}
+
+
+void Hero::CancelSkill()
+{
+	inputs.push_back(HERO_INPUTS::IN_SKILL_CANCELLED);
+}
+
+
+bool Hero::ActivateSkill1()
+{
 	
 	return false;
 }
@@ -462,24 +512,12 @@ bool Hero::ActivateSkill1()
 
 bool Hero::ActivateSkill2()
 {
-	if (skill2Charged && state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
-	{
-		inputs.push_back(IN_SKILL2);
-		return true;
-	}
-	
 	return false;
 }
 
 
 bool Hero::ActivateSkill3()
 {
-	if (skill3Charged && state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
-	{
-		inputs.push_back(IN_SKILL3);
-		return true;
-	}
-
 	return false;
 }
 
@@ -638,9 +676,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
 
-			case HERO_INPUTS::IN_SKILL1: if (skill1Charged) { state = HERO_STATES::SKILL1; } break;
-			case HERO_INPUTS::IN_SKILL2: if (skill2Charged) { state = HERO_STATES::SKILL2; } break;
-			case HERO_INPUTS::IN_SKILL3: if (skill3Charged) { state = HERO_STATES::SKILL3; } break;
+			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL3: state = HERO_STATES::PREPARE_SKILL3;  break;
 
 			case HERO_INPUTS::IN_REPAIR: state = HERO_STATES::REPAIR;	break;
 
@@ -659,9 +697,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
 
-			case HERO_INPUTS::IN_SKILL1: if (skill1Charged) { state = HERO_STATES::SKILL1; } break;
-			case HERO_INPUTS::IN_SKILL2: if (skill2Charged) { state = HERO_STATES::SKILL2; } break;
-			case HERO_INPUTS::IN_SKILL3: if (skill3Charged) { state = HERO_STATES::SKILL3; } break;
+			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL3: state = HERO_STATES::PREPARE_SKILL3;  break;
 
 			case HERO_INPUTS::IN_REPAIR: state = HERO_STATES::REPAIR;	break;
 
@@ -682,9 +720,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
 
-			case HERO_INPUTS::IN_SKILL1: if (skill1Charged) { state = HERO_STATES::SKILL1; skillFromAttacking = true; } break;
-			case HERO_INPUTS::IN_SKILL2: if (skill2Charged) { state = HERO_STATES::SKILL2; skillFromAttacking = true; } break;
-			case HERO_INPUTS::IN_SKILL3: if (skill3Charged) { state = HERO_STATES::SKILL3; skillFromAttacking = true; } break;
+			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL3: state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true;  break;
 
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
 			}
@@ -701,9 +739,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
 
-			case HERO_INPUTS::IN_SKILL1: if (skill1Charged) { state = HERO_STATES::SKILL1; skillFromAttacking = true; } break;
-			case HERO_INPUTS::IN_SKILL2: if (skill2Charged) { state = HERO_STATES::SKILL2; skillFromAttacking = true; } break;
-			case HERO_INPUTS::IN_SKILL3: if (skill3Charged) { state = HERO_STATES::SKILL3; skillFromAttacking = true; } break;
+			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true; break;
 
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
 			}
@@ -716,18 +754,6 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_SKILL_FINISHED:
 			{
-				if (skillFromAttacking == true)
-					state = HERO_STATES::ATTACK;
-
-				else
-					state = HERO_STATES::IDLE;
-
-				skillFromAttacking = false;
-				break;
-			}
-
-			case HERO_INPUTS::IN_SKILL_CANCELLED: {
-
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
@@ -762,18 +788,6 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				break;
 			}
 
-			case HERO_INPUTS::IN_SKILL_CANCELLED: {
-
-				if (skillFromAttacking == true)
-					state = HERO_STATES::ATTACK;
-
-				else
-					state = HERO_STATES::IDLE;
-
-				skillFromAttacking = false;
-				break;
-			}
-
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
 			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
@@ -797,6 +811,64 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				break;
 			}
 
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+		}	break;
+
+
+		case HERO_STATES::PREPARE_SKILL1:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_SKILL_CANCELLED: 
+			{
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+				break;
+			}
+
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+
+		}	break;
+
+
+		case HERO_STATES::PREPARE_SKILL2:
+		{
+			switch (lastInput)
+			{
+			case HERO_INPUTS::IN_SKILL_CANCELLED: {
+
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+				break;
+			}
+
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
+
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			}
+		}	break;
+
+
+		case HERO_STATES::PREPARE_SKILL3:
+		{
+			switch (lastInput)
+			{
 			case HERO_INPUTS::IN_SKILL_CANCELLED: {
 
 				if (skillFromAttacking == true)
