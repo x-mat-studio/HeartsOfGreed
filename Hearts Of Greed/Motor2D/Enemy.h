@@ -96,7 +96,6 @@ private:
 	int attackSpeed;
 	int attackRange;
 
-	int movementSpeed;
 	int xpOnDeath;
 
 	float attackCooldown;

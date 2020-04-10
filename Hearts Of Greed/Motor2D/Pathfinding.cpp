@@ -609,7 +609,7 @@ PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, iMPoint& destinat
 	{
 		iMPoint newDest = CheckNearbyTiles(origin, destination);
 
-		if (newDest == destination)
+		if (newDest == destination || newDest == origin)
 			return ret;
 		else
 			destination = newDest;

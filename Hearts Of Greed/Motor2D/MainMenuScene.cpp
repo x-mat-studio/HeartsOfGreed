@@ -54,14 +54,14 @@ bool ModuleMainMenuScene::Start()
 	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
 	
 
-	//app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
+	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
 
 	alphaCounter = 0;
 	soundDelay = 0;
 	canon = false;
 	app->uiManager->LoadAtlas();
 
-	app->audio->PlayFx(titleSound, 0, 1, LOUDNESS::NORMAL, DIRECTION::LEFT);
+	app->audio->PlayFx(titleSound, 0, 3, LOUDNESS::QUIET, DIRECTION::LEFT);
 	return true;
 }
 
@@ -92,7 +92,7 @@ bool  ModuleMainMenuScene::Update(float dt)
 		if (canon == false) {
 			
 			canon = true;
-			app->audio->PlayFx(titleSound, 0, 2, LOUDNESS::NORMAL, DIRECTION::RIGHT);
+			app->audio->PlayFx(titleSound, 0, 2, LOUDNESS::QUIET, DIRECTION::RIGHT);
 		
 		}
 	}

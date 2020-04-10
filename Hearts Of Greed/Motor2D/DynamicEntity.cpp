@@ -9,7 +9,7 @@
 #include "Window.h"
 #include "App.h"
 
-DynamicEntity::DynamicEntity(fMPoint position, iMPoint speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
+DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
 
 	Entity(position, type, align, collider, true),
 	
@@ -51,8 +51,8 @@ bool DynamicEntity::Move(float dt)
 	dir = DetermineDirection(pathSpeed);
 
 	// ----------------------------------------------------------------- 
-	pathSpeed.x = pathSpeed.x * unitSpeed.x;
-	pathSpeed.y = pathSpeed.y * unitSpeed.y;
+	pathSpeed.x = pathSpeed.x * unitSpeed;
+	pathSpeed.y = pathSpeed.y * unitSpeed;
 
 	toMove += pathSpeed;
 
@@ -269,8 +269,8 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	{
 		it = close_entity_list[i];
 
-		alignmentSpeed.x += it->unitSpeed.x;
-		alignmentSpeed.y += it->unitSpeed.y;
+		alignmentSpeed.x += it->unitSpeed;
+		alignmentSpeed.y += it->unitSpeed;
 	}
 
 	alignmentSpeed.x = alignmentSpeed.x / close_entity_list.size();

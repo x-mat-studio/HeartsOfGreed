@@ -139,7 +139,6 @@ public:
 	bool skill2Charged;
 	bool skill3Charged;
 
-	int movementSpeed;
 	int visionDistance;
 
 	float attackCooldown;
