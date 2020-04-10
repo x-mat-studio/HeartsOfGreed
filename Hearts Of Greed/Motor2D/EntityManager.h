@@ -79,6 +79,11 @@ public:
 
 	Entity* SearchUnitsInRange(float distance, Entity* from);
 
+
+	void ActivateGodModeHeroes();
+	void DesactivateGodModeHeroes();
+
+	void KillAllEnemies();
 private:
 
 	void CheckIfStarted();
@@ -97,6 +102,9 @@ public:
 	SDL_Texture* debugPathTexture;
 	int wanamingoRoar;
 	int wanamingoRoar2;
+	int wanamingoGetsHit;
+	int wanamingoDies;
+	int wanamingoDies2;
 
 private:
 

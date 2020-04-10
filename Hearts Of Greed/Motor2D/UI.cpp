@@ -12,7 +12,6 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	name(uiName),
 	localPosition(0, 0),
 	box(rect),
-	toDelete(false),
 	debugBox(false),
 	focused(false),
 	draggable(draggable),
@@ -61,7 +60,30 @@ void UI::CleanUp()
 void UI::Draw(SDL_Texture* texture)
 {
 
-	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, '\000', false, false);
+	if (hover && interactable)
+	{
+		SDL_SetTextureColorMod(texture, 255, 255, 255);
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
+	else if (!hover && interactable)
+	{
+		SDL_SetTextureColorMod(texture, 200, 200, 200);
+		SDL_SetTextureAlphaMod(texture, 200);
+	}
+
+	if (!interactable && this->type != UI_TYPE::UI_BUTTON)
+	{
+		SDL_SetTextureColorMod(texture, 255, 255, 255);
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
+	else if (!interactable && this->type == UI_TYPE::UI_BUTTON)
+	{
+		SDL_SetTextureColorMod(texture, 255, 255, 255);
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
+
+
+	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, '\000',255,255,255, false, false);
 
 }
 

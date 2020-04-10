@@ -126,6 +126,7 @@ public:
 
 	bool				vSyncActivated;
 	bool				debugMode = false;
+	bool				gamePause;
 
 private:
 	std::vector<Module*>	modules;

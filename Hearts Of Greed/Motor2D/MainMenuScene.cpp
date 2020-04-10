@@ -4,7 +4,10 @@
 #include "MainMenuScene.h"
 #include "FadeToBlack.h"
 #include "TestScene.h"
+#include "Textures.h"
+#include "Audio.h"
 #include "UIManager.h"
+#include "Render.h"
 #include "UI_Text.h"
 #include "EventManager.h"
 
@@ -36,11 +39,28 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&)
 bool ModuleMainMenuScene::Start()
 {
 
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
+	//SDL_Rect rect = { 0, 0, 0, 0 };
+	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
 
 	app->uiManager->CreateMainMenu();
 
+
+	//images
+	gameIcon = app->tex->Load("intro_images/gameIcon.png");
+	gameTitle = app->tex->Load("intro_images/gameTitle.png");
+	BG = app->tex->Load("intro_images/MainMenuBG.png");
+
+	//sounds
+	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
+	
+
+	//app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
+
+	alphaCounter = 0;
+	soundDelay = 0;
+	canon = false;
+
+	app->audio->PlayFx(titleSound, 0, 1, LOUDNESS::NORMAL, DIRECTION::LEFT);
 	return true;
 }
 
@@ -59,6 +79,23 @@ bool  ModuleMainMenuScene::Update(float dt)
 {
 	CheckListener(this);
 
+	if (alphaCounter < 255) { alphaCounter += dt * 70; }
+	if (soundDelay < 210) { soundDelay += dt * 100; }
+
+	app->render->Blit(BG, 0,0, NULL, 250);
+	app->render->Blit(gameIcon, 140, 70, NULL, alphaCounter);
+	app->render->Blit(gameTitle, 20, 20, NULL, alphaCounter);
+
+	if (soundDelay > 210) {
+
+		if (canon == false) {
+			
+			canon = true;
+			app->audio->PlayFx(titleSound, 0, 2, LOUDNESS::NORMAL, DIRECTION::RIGHT);
+		
+		}
+	}
+	
 	return true;
 }
 
@@ -72,6 +109,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) {
 
 		app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f);
+		changeScene = false;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
@@ -87,6 +125,13 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 bool  ModuleMainMenuScene::CleanUp()
 {
 	app->uiManager->CleanUp();
+
+	app->tex->UnLoad(gameIcon);
+	gameIcon = nullptr;
+	app->tex->UnLoad(gameTitle);
+	gameTitle = nullptr;
+	app->tex->UnLoad(BG);
+	BG = nullptr;
 
 	return true;
 }

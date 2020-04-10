@@ -75,6 +75,22 @@ bool ModulePlayer::PreUpdate(float dt)
 		DesactivateBuildMode();
 	}
 
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN)
+	{
+		app->entityManager->ActivateGodModeHeroes();
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN)
+	{
+		app->entityManager->DesactivateGodModeHeroes();
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_STATE::KEY_DOWN)
+	{
+		app->entityManager->KillAllEnemies();
+	}
+
 	CheckListener(this);
 
 	HandleInput();

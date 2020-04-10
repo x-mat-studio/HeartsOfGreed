@@ -116,7 +116,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 50);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5000, 0, 250, 1, 1, 25, 5, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -164,6 +164,10 @@ bool ModuleEntityManager::Start()
 	//sfx baby
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
+	wanamingoGetsHit = app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
+	wanamingoDies = app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
+	wanamingoDies2 = app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
+
 
 	return ret;
 }
@@ -228,7 +232,8 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				Building* bld;
 				bld = (Building*)entityVector[i];  
-				
+				//bld = static_cast<Building*>(entityVector[i]);		http://www.cplusplus.com/doc/tutorial/typecasting/
+
 				switch (bld->GetDecor())
 				{
 				case BUILDING_DECOR::ST_01:
@@ -241,7 +246,7 @@ void ModuleEntityManager::CheckIfStarted() {
 					DecorTex = buildingTexture;
 					break;
 				default:
-					DecorTex = nullptr;
+					DecorTex = base1Texture;
 					break;
 				}
 
@@ -436,11 +441,11 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
 	Collider* col;
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		col = entityVector[i]->GetCollider();
 
@@ -485,11 +490,11 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 
 void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 {
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
 	ENTITY_TYPE type;
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		type = entityVector[i]->GetType();
 
@@ -528,9 +533,9 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	}
 
 
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		alignement = entityVector[i]->GetAlignment();
 
@@ -556,9 +561,9 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 void ModuleEntityManager::RemoveDeletedEntities()
 {
-	int numEntitys = entityVector.size();
+	int numEntities = entityVector.size();
 
-	for (int i = 0; i < numEntitys; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		if (entityVector[i]->toDelete == true)
 		{
@@ -915,4 +920,61 @@ Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thi
 	}
 
 	return ret;
+}
+
+
+void ModuleEntityManager::ActivateGodModeHeroes()
+{
+	ENTITY_TYPE type;
+	Hero* hero;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		{
+			hero = (Hero*)entityVector[i];
+			hero->godMode = true;
+		}
+	}
+}
+
+
+void ModuleEntityManager::DesactivateGodModeHeroes()
+{
+	ENTITY_TYPE type;
+	Hero* hero;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		{
+			hero = (Hero*)entityVector[i];
+			hero->godMode = false;
+		}
+	}
+}
+
+
+void ModuleEntityManager::KillAllEnemies()
+{
+	Enemy* enemy;
+
+	int numEntities = entityVector.size();
+
+	for (size_t i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		{
+			enemy = (Enemy*)entityVector[i];
+			enemy->Die();
+		}
+	}
 }

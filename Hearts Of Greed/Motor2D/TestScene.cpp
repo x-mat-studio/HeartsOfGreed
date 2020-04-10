@@ -25,7 +25,8 @@ ModuleTestScene::ModuleTestScene() :
 	camRight(false),
 	camLeft(false),
 	camSprint(false),
-	allowCamMovement(true)
+	allowCamMovement(true),
+	menuScene(false)
 {
 
 }
@@ -100,6 +101,9 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_STARTED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
 
@@ -206,9 +210,10 @@ bool  ModuleTestScene::Update(float dt)
 		app->fadeToBlack->FadeToBlack(this, app->loseScene);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
-	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN || menuScene == true)
 	{
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu);
+		menuScene = false;
 	}
 
 
@@ -315,6 +320,15 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 	case EVENT_ENUM::LOAD_GAME:
 		// TODO Load game from here
+		break;
+	case EVENT_ENUM::PAUSE_GAME:
+		app->gamePause = true;
+		break;
+	case EVENT_ENUM::UNPAUSE_GAME:
+		app->gamePause = false;
+		break;
+	case EVENT_ENUM::RETURN_TO_MAIN_MENU:
+		menuScene = true;
 		break;
 	}
 

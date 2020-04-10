@@ -57,7 +57,6 @@ public:
 	bool dragging;
 
 	bool focused;
-	bool toDelete;
 	bool enabled;
 	bool interactable;
 
@@ -66,15 +65,13 @@ public:
 
 	UI_TYPE type;
 	SDL_Rect box;
+	P2SString name;
+	UI* parent;
 
 protected:
 
 	SDL_Texture* texture;
-
-	UI* parent;
 	DRAGGABLE draggable;
-
-	P2SString name;
 
 };
 

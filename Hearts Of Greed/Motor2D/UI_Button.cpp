@@ -1,10 +1,13 @@
 #include "UI_Button.h"
 #include "EventManager.h"
+#include "Audio.h"
 
-UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, DRAGGABLE draggable, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
+UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	accuratedDrag({0, 0}),
-	eventTriggered(eventTrigger),
-	closeMenu(menuClosure)
+	eventRecieved(eventR),
+	eventTriggerer(eventTrigger),
+	closeMenu(menuClosure),
+	includeFather(includeFather)
 {}
 
 UI_Button::~UI_Button()
@@ -29,22 +32,31 @@ bool UI_Button::Update(float dt)
 	{
 		if (interactable) 
 		{
-			if (hover) 
+			if (hover)
 			{
+				HoverFeedback();
+
 				if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
 					OnClick();
 
-				if(draggable > DRAGGABLE::DRAG_OFF)
-					if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT) 
+				
+					if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT)
 					{
-						if (draggable > DRAGGABLE::DRAG_OFF)
-							dragging = true;
 
-						iMPoint mouseClick = { 0,0 };
-						app->input->GetMousePosition(mouseClick.x, mouseClick.y);								
-						accuratedDrag = { mouseClick.x - (this->worldPosition.x), mouseClick.y - (this->worldPosition.y) };
+
+						if (draggable > DRAGGABLE::DRAG_OFF) 
+						{
+							if (draggable > DRAGGABLE::DRAG_OFF)
+								dragging = true;
+
+							iMPoint mouseClick = { 0,0 };
+							app->input->GetMousePosition(mouseClick.x, mouseClick.y);
+							accuratedDrag = { mouseClick.x - (this->worldPosition.x), mouseClick.y - (this->worldPosition.y) };
+						}
 					}
 			}
+			else
+				hoverSound = true;
 
 
 			if (dragging) 
@@ -64,6 +76,8 @@ bool UI_Button::PostUpdate(float dt)
 {
 	if(enabled)
 		Draw(texture);
+
+	this->worldPosition.x = defaultPosition;
 
 	return true;
 }
@@ -85,13 +99,28 @@ bool UI_Button::OnAbove()
 
 void UI_Button::OnClick()
 {
-	app->eventManager->GenerateEvent(eventTriggered, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(eventRecieved, eventTriggerer);
+	if (closeMenu == true)
+	{
+		CloseMenu();
+	}
+
+	app->audio->PlayFx(app->uiManager->clickSound);
 }
 
-void CloseMenu()
+void UI_Button::HoverFeedback()
 {
-	// TODO I really feel like UI shouldn't be deleted here, even if the signal to do it is sent from here (because buttons)
-	// TODO if variable is closeMenu, close all UI that has the same father. Don't delete the father. If there's need to, make a specific function, since it's way less common
+	if (hoverSound)
+		app->audio->PlayFx(app->uiManager->hoverSound);
+
+	hoverSound = false;
+
+	this->worldPosition.x -= 8;
+}
+
+void UI_Button::CloseMenu()
+{
+	app->uiManager->DeleteUI(parent, includeFather);
 }
 
 void UI_Button::MovingIt(float dt)
@@ -111,22 +140,6 @@ void UI_Button::MovingIt(float dt)
 		this->worldPosition.x += ((MousePos.x - this->worldPosition.x) - accuratedDrag.x);
 		this->worldPosition.y += ((MousePos.y - this->worldPosition.y) - accuratedDrag.y);
 	}
-		
-
-	/* if (parent != nullptr)
-	{
-		if (dragable)
-			this->localPosition.x += currentPos.x - this->worldPosition.x;
-
-		if (dragable)
-			this->localPosition.y += currentPos.y - this->worldPosition.y;
-
-		if (dragable)
-			this->worldPosition.x = parent->worldPosition.x - localPosition.x;
-
-		if (dragable)
-			this->worldPosition.y = parent->worldPosition.y - localPosition.y;
-	} */
 
 }
 
