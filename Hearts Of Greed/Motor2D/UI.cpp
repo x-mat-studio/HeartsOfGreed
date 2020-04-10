@@ -60,23 +60,18 @@ void UI::CleanUp()
 void UI::Draw(SDL_Texture* texture)
 {
 
-	if (hover && interactable)
+	if (hover && interactable && this->type == UI_TYPE::UI_BUTTON)
 	{
 		SDL_SetTextureColorMod(texture, 255, 255, 255);
 		SDL_SetTextureAlphaMod(texture, 255);
 	}
-	else if (!hover && interactable)
+	else if (!hover && interactable && this->type == UI_TYPE::UI_BUTTON)
 	{
 		SDL_SetTextureColorMod(texture, 200, 200, 200);
-		SDL_SetTextureAlphaMod(texture, 200);
+		SDL_SetTextureAlphaMod(texture, 225);
 	}
 
-	if (!interactable && this->type != UI_TYPE::UI_BUTTON)
-	{
-		SDL_SetTextureColorMod(texture, 255, 255, 255);
-		SDL_SetTextureAlphaMod(texture, 255);
-	}
-	else if (!interactable && this->type == UI_TYPE::UI_BUTTON)
+	if (this->type != UI_TYPE::UI_BUTTON)
 	{
 		SDL_SetTextureColorMod(texture, 255, 255, 255);
 		SDL_SetTextureAlphaMod(texture, 255);
