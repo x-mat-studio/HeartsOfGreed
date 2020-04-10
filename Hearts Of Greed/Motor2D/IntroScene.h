@@ -52,6 +52,7 @@ private:
 	int logoSound;
 	int titleSound;
 	float AlphaCounter; 
+	float bgAlphaCounter;
 
 };
 

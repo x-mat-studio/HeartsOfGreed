@@ -33,6 +33,7 @@ bool  ModuleIntroScene::Awake(pugi::xml_node&)
 bool ModuleIntroScene::Start()
 {
 	AlphaCounter = 0;
+	bgAlphaCounter = 255;
 	
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
@@ -91,8 +92,12 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 
 		AlphaCounter += dt * 75;
 	}
+	if (bgAlphaCounter > 130) {
 
-	app->render->Blit(logoBG, 0, 0, false, false);
+		bgAlphaCounter -= dt * 50;
+	}
+
+	app->render->Blit(logoBG, 0, 0, false, false,false,bgAlphaCounter);
 
 	if (AlphaCounter > 1) {
 		

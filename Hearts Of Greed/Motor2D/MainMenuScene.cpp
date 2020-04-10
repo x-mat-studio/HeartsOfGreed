@@ -11,7 +11,7 @@
 #include "UI_Text.h"
 #include "EventManager.h"
 
-ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false)
+ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1)
 {
 
 }
@@ -62,6 +62,9 @@ bool ModuleMainMenuScene::Start()
 	app->uiManager->LoadAtlas();
 
 	app->audio->PlayFx(titleSound, 0, 3, LOUDNESS::QUIET, DIRECTION::LEFT);
+
+	changeScene = false;
+	changeSceneContinue = -1;
 	return true;
 }
 
@@ -107,10 +110,21 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 	bool ret = true;
 
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MAIN SCENE
-	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) {
+	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) 
+	{
 
-		app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f);
-		changeScene = false;
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f))
+		{
+			changeScene = false;
+		}
+	}
+
+	if (changeSceneContinue == 0)
+	{
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f)==true)
+		{
+			changeSceneContinue = 1;
+		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
@@ -133,6 +147,12 @@ bool  ModuleMainMenuScene::CleanUp()
 	gameTitle = nullptr;
 	app->tex->UnLoad(BG);
 	BG = nullptr;
+
+	if (changeSceneContinue == 1)
+	{
+		changeSceneContinue = -1;
+		app->eventManager->GenerateEvent(EVENT_ENUM::LOAD_GAME, EVENT_ENUM::GAME_SCENE_STARTED);
+	}
 
 	return true;
 }
@@ -158,8 +178,7 @@ void ModuleMainMenuScene::ExecuteEvent(EVENT_ENUM eventId)
 		changeScene = true;
 		break;
 	case EVENT_ENUM::START_GAME_FROM_CONTINUE:
-		changeScene = true;
-		app->eventManager->GenerateEvent(EVENT_ENUM::LOAD_GAME, EVENT_ENUM::GAME_SCENE_STARTED);
+		changeSceneContinue = 0;
 		break;
 	}
 }
