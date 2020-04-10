@@ -65,10 +65,11 @@ public:
 
 	void Draw(float dt);
 
+	void Die();
+
 private:
 
 	void Attack();
-	void Die();
 
 	void RecoverHealth();
 
