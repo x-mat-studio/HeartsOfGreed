@@ -54,7 +54,7 @@ bool ModuleMainMenuScene::Start()
 	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
 
 
-	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 12.0F, 200);
+	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
 
 	alphaCounter = 0;
 
@@ -75,9 +75,12 @@ bool  ModuleMainMenuScene::PreUpdate(float dt)
 bool  ModuleMainMenuScene::Update(float dt)
 {
 	CheckListener(this);
+
+	if (alphaCounter < 255) { alphaCounter += dt * 70; }
 	app->render->Blit(BG, 0,0, NULL, 250);
-	app->render->Blit(gameIcon, 140, 70, NULL, 250);
-	app->render->Blit(gameTitle, 20, 20, NULL, 250);
+	app->render->Blit(gameIcon, 140, 70, NULL, alphaCounter);
+	app->render->Blit(gameTitle, 20, 20, NULL, alphaCounter);
+	
 	return true;
 }
 
