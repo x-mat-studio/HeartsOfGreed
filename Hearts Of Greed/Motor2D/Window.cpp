@@ -207,6 +207,12 @@ float ModuleWindow::GetScale() const
 	return scale;
 }
 
+float ModuleWindow::GetUIScale() const
+{
+	// UI Scale is always the same.
+	return 2.0f;
+}
+
 
 float ModuleWindow::SetScale(float newScale)
 {

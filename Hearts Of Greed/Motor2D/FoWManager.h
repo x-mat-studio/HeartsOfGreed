@@ -64,13 +64,14 @@ public:
 	void RequestMaskGeneration(int radius);
 	void RequestMaskDeletion(int radius);
 
+	bool InsideCircle(iMPoint center, iMPoint tile, float radius);
+
 private:
 	unsigned short* GenerateCircle(int radius);
 	unsigned short* GenerateCircleBorders(int radius,unsigned short* mask);
 	unsigned short* GenerateCircleJoints(int radius, unsigned short* mask);
 	unsigned short CheckCornersFromNeighbours(iMPoint pos, int diameter, unsigned short* mask);
 	unsigned short CheckJointsFromNeighbours(iMPoint pos, int diameter, unsigned short* mask);
-	bool InsideCircle(iMPoint center, iMPoint tile, float radius);
 
 
 	//VARIABLES

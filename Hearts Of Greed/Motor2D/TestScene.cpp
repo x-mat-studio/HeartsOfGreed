@@ -212,8 +212,10 @@ bool  ModuleTestScene::Update(float dt)
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
 	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN || menuScene == true)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu);
-		menuScene = false;
+		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu))
+		{
+			menuScene = false;
+		}
 	}
 
 

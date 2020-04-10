@@ -44,6 +44,7 @@ private:
 private:
 
 	bool changeScene;
+	int changeSceneContinue; //-1 for false 0 for requested 1 for doing
 
 private:
 	//images

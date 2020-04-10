@@ -2,22 +2,22 @@
 	<Animations>
 
 		<idle_right_up name="idle_right_up" frames="16">
-			<frame rposX="9" rposY="2" rwidth="33" rheight="70"  time="0.15f" pivotX="24" pivotY="68"/>
-			<frame rposX="9" rposY="859" rwidth="40" rheight="70"  time="0.15f" pivotX="24" pivotY="68"/>
-			<frame rposX="55" rposY="859" rwidth="46" rheight="70"  time="0.15f" pivotX="24" pivotY="68"/>
-			<frame rposX="103" rposY="859" rwidth="48" rheight="70"  time="0.15f" pivotX="26" pivotY="67"/>
-			<frame rposX="153" rposY="859" rwidth="47" rheight="70"  time="0.15f" pivotX="26" pivotY="68"/>
-			<frame rposX="203" rposY="859" rwidth="45" rheight="70"  time="0.15f" pivotX="26" pivotY="67"/>
-			<frame rposX="252" rposY="859" rwidth="44" rheight="70"  time="0.15f" pivotX="25" pivotY="68"/>
-			<frame rposX="303" rposY="859" rwidth="41" rheight="70"  time="0.15f" pivotX="23" pivotY="67"/>
-			<frame rposX="352" rposY="859" rwidth="40" rheight="70"  time="0.15f" pivotX="22" pivotY="67"/>
-			<frame rposX="404" rposY="859" rwidth="35" rheight="70"  time="0.15f" pivotX="19" pivotY="67"/>
-			<frame rposX="450" rposY="859" rwidth="40" rheight="70"  time="0.15f" pivotX="22" pivotY="67"/>
-			<frame rposX="501" rposY="859" rwidth="36" rheight="70"  time="0.15f" pivotX="19" pivotY="67"/>
-			<frame rposX="551" rposY="859" rwidth="35" rheight="70"  time="0.15f" pivotX="20" pivotY="67"/>
-			<frame rposX="600" rposY="859" rwidth="34" rheight="70"  time="0.15f" pivotX="21" pivotY="67"/>
-			<frame rposX="649" rposY="859" rwidth="35" rheight="70"  time="0.15f" pivotX="23" pivotY="67"/>
-			<frame rposX="699" rposY="859" rwidth="33" rheight="70"  time="0.15f" pivotX="24" pivotY="68"/>
+			<frame rposX="9" rposY="3" rwidth="33" rheight="70"  time="0.15f" pivotX="24" pivotY="70"/>
+			<frame rposX="9" rposY="859" rwidth="40" rheight="70"  time="0.15f" pivotX="24" pivotY="70"/>
+			<frame rposX="55" rposY="859" rwidth="46" rheight="70"  time="0.15f" pivotX="24" pivotY="70"/>
+			<frame rposX="103" rposY="859" rwidth="48" rheight="70"  time="0.15f" pivotX="26" pivotY="70"/>
+			<frame rposX="153" rposY="859" rwidth="47" rheight="70"  time="0.15f" pivotX="26" pivotY="70"/>
+			<frame rposX="203" rposY="859" rwidth="45" rheight="70"  time="0.15f" pivotX="26" pivotY="70"/>
+			<frame rposX="252" rposY="859" rwidth="44" rheight="70"  time="0.15f" pivotX="25" pivotY="70"/>
+			<frame rposX="303" rposY="859" rwidth="41" rheight="70"  time="0.15f" pivotX="23" pivotY="70"/>
+			<frame rposX="352" rposY="859" rwidth="40" rheight="70"  time="0.15f" pivotX="22" pivotY="70"/>
+			<frame rposX="404" rposY="859" rwidth="35" rheight="70"  time="0.15f" pivotX="19" pivotY="70"/>
+			<frame rposX="450" rposY="859" rwidth="40" rheight="70"  time="0.15f" pivotX="22" pivotY="70"/>
+			<frame rposX="501" rposY="859" rwidth="36" rheight="70"  time="0.15f" pivotX="19" pivotY="70"/>
+			<frame rposX="551" rposY="859" rwidth="35" rheight="70"  time="0.15f" pivotX="20" pivotY="70"/>
+			<frame rposX="600" rposY="859" rwidth="34" rheight="70"  time="0.15f" pivotX="21" pivotY="70"/>
+			<frame rposX="649" rposY="859" rwidth="35" rheight="70"  time="0.15f" pivotX="23" pivotY="70"/>
+			<frame rposX="699" rposY="859" rwidth="33" rheight="70"  time="0.15f" pivotX="24" pivotY="70"/>
 		</idle_right_up>
 
 		<idle_right name="idle_right" frames="16">
@@ -116,15 +116,15 @@
 		</idle_left_up>
 
 		<walk_right_up name="walk_right_up" frames="9">
-			<frame rposX="48" rposY="4" rwidth="36" rheight="66"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="89" rposY="4" rwidth="33" rheight="67"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="127" rposY="3" rwidth="32" rheight="68"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="165" rposY="3" rwidth="33" rheight="68"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="201" rposY="4" rwidth="35" rheight="67"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="238" rposY="3" rwidth="36" rheight="68"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="277" rposY="1" rwidth="36" rheight="70"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="315" rposY="1" rwidth="37" rheight="70"  time="0.15f" pivotX="0" pivotY="0"/>
-			<frame rposX="355" rposY="4" rwidth="36" rheight="66"  time="0.15f" pivotX="0" pivotY="0"/>
+			<frame rposX="48" rposY="4" rwidth="36" rheight="66"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="89" rposY="4" rwidth="33" rheight="67"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="127" rposY="3" rwidth="32" rheight="68"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="165" rposY="3" rwidth="33" rheight="68"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="201" rposY="4" rwidth="35" rheight="67"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="238" rposY="3" rwidth="36" rheight="68"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="277" rposY="1" rwidth="36" rheight="70"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="315" rposY="1" rwidth="37" rheight="70"  time="0.15f" pivotX="0" pivotY="70"/>
+			<frame rposX="355" rposY="4" rwidth="36" rheight="66"  time="0.15f" pivotX="0" pivotY="70"/>
 		</walk_right_up>
 
 		<walk_right name="walk_right" frames="9">

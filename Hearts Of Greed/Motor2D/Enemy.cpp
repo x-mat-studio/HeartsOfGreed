@@ -203,10 +203,13 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
+	Frame currFrame = animation.GetCurrentFrame(dt);
+
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt), false, true, 0, 255, 0, 0);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
+
 	else
-		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 
 	DebugDraw();
 }

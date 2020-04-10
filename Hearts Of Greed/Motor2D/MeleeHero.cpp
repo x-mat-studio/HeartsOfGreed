@@ -18,19 +18,19 @@ MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT aligne
 	Hero(position, copy, alignement)
 {}
 
-bool MeleeHero::UseHability1()
+bool MeleeHero::UseAbility1()
 {
 
 	return true;
 }
 
-bool MeleeHero::UseHability2()
+bool MeleeHero::UseAbility2()
 {
 
 	return true;
 }
 
-bool MeleeHero::UseHability3()
+bool MeleeHero::UseAbility3()
 {
 
 	return true;
