@@ -264,8 +264,12 @@ void ModulePlayer::RightClick()
 
 void ModulePlayer::CommandSkill()
 {
-	if (heroesVector[0] == nullptr)
+	if (heroesVector.empty() == true)
 		return;
+	
+	else
+		if (heroesVector[0] == nullptr)
+			return;
 	
 
 	if (skill1 == true)
