@@ -46,7 +46,11 @@ private:
 	void Select();
 	bool Click();
 	void RightClick();
+
+	void CommandSkill();
+
 	bool BuildClick();
+
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DrawSelectQuad();
@@ -64,6 +68,11 @@ private:
 	bool selectUnits;
 	bool entityComand;
 	bool entityInteraction;
+
+	bool skill1;
+	bool skill2;
+	bool skill3;
+	bool doSkill;
 
 	bool buildMode;
 

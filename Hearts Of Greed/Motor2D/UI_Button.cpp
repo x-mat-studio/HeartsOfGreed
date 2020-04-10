@@ -1,5 +1,7 @@
 #include "UI_Button.h"
 #include "EventManager.h"
+#include "Window.h"
+#include "Render.h"
 #include "Audio.h"
 
 UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
@@ -88,11 +90,14 @@ bool UI_Button::OnAbove()
 	bool ret = false;
 
 	SDL_Point mouse;
-	app->input->GetMousePosition(mouse.x, mouse.y);
+	app->input->GetMousePositionRaw(mouse.x, mouse.y);
+
+	mouse.x = (mouse.x) / app->win->GetUIScale();
+	mouse.y = (mouse.y) / app->win->GetUIScale();
 
 	SDL_Rect intersect = { worldPosition.x , worldPosition.y, box.w, box.h };
 
-	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interactable) 
+	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interactable)
 		ret = true;
 
 	return ret;

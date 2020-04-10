@@ -41,6 +41,7 @@ enum HERO_INPUTS
 	IN_SKILL2, 
 	IN_SKILL3,
 	
+	IN_SKILL_CANCELLED,
 	IN_SKILL_FINISHED,
 
 	IN_OUT_OF_RANGE,
@@ -87,6 +88,10 @@ public:
 
 	void CheckObjecive(Entity* entity);
 	void Draw(float dt);
+
+	bool ActivateSkill1();
+	bool ActivateSkill2();
+	bool ActivateSkill3();
 
 private:
 	
