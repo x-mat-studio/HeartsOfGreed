@@ -116,7 +116,6 @@ private:
 
 	float damageTakenTimer;
 
-	Animation* currentAnimation;
 };
 
 
