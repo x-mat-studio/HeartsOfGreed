@@ -16,6 +16,26 @@ class Spawner;
 class Base;
 class Turret;
 
+enum class AREA_TYPE
+{
+	NO_TYPE = -1,
+
+	//FORM
+	CIRCLE,
+	QUAD,
+	CONE,
+
+	//CALLBACK
+	GATHERER_SKILL1,
+	MELEE_SKILL1
+};
+
+struct skillArea
+{
+	unsigned short* area;
+	AREA_TYPE form;
+	AREA_TYPE callback;
+};
 
 enum class SPRITE_POSITION : int
 {
@@ -97,7 +117,8 @@ private:
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
-	unsigned short* GenerateCircle(int radius);
+	unsigned short* GenerateCircleArea(int radius);
+	unsigned short* GenerateQuadArea(int width, int height);
 
 public:
 
@@ -142,7 +163,8 @@ private:
 
 	Turret* testTurret;
 
-	unsigned short* gathererSkill1Area;
+	skillArea gathererSkill1Area;
+	skillArea meleeSkill1Area;
 
 };
 
