@@ -448,6 +448,42 @@ bool Hero::UseHability3()
 }
 
 
+bool Hero::ActivateSkill1()
+{
+	if (skill1Charged && state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	{
+		inputs.push_back(IN_SKILL1);
+		return true;
+	}
+	
+	return false;
+}
+
+
+bool Hero::ActivateSkill2()
+{
+	if (skill2Charged && state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	{
+		inputs.push_back(IN_SKILL2);
+		return true;
+	}
+	
+	return false;
+}
+
+
+bool Hero::ActivateSkill3()
+{
+	if (skill3Charged && state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	{
+		inputs.push_back(IN_SKILL3);
+		return true;
+	}
+
+	return false;
+}
+
+
 void Hero::LevelUp()
 {
 	return;
@@ -690,6 +726,18 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				break;
 			}
 
+			case HERO_INPUTS::IN_SKILL_CANCELLED: {
+
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+				break;
+			}
+
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
 			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
@@ -714,6 +762,18 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				break;
 			}
 
+			case HERO_INPUTS::IN_SKILL_CANCELLED: {
+
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+				break;
+			}
+
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
 			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
@@ -727,6 +787,18 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_SKILL_FINISHED:
 			{
+				if (skillFromAttacking == true)
+					state = HERO_STATES::ATTACK;
+
+				else
+					state = HERO_STATES::IDLE;
+
+				skillFromAttacking = false;
+				break;
+			}
+
+			case HERO_INPUTS::IN_SKILL_CANCELLED: {
+
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
