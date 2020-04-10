@@ -4,7 +4,10 @@
 #include "MainMenuScene.h"
 #include "FadeToBlack.h"
 #include "TestScene.h"
+#include "Textures.h"
+#include "Audio.h"
 #include "UIManager.h"
+#include "Render.h"
 #include "UI_Text.h"
 #include "EventManager.h"
 
@@ -36,11 +39,24 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&)
 bool ModuleMainMenuScene::Start()
 {
 
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
+	//SDL_Rect rect = { 0, 0, 0, 0 };
+	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
 
 	app->uiManager->CreateMainMenu();
 
+
+	//images
+	gameIcon = app->tex->Load("intro_images/gameIcon.png");
+	gameTitle = app->tex->Load("intro_images/gameTitle.png");
+	BG = app->tex->Load("intro_images/MainMenuBG.png");
+
+	//sounds
+	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+
+
+	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 12.0F, 200);
+
+	alphaCounter = 0;
 
 
 	return true;
@@ -60,7 +76,9 @@ bool  ModuleMainMenuScene::PreUpdate(float dt)
 bool  ModuleMainMenuScene::Update(float dt)
 {
 	CheckListener(this);
-
+	app->render->Blit(BG, 0,0, NULL, 250);
+	app->render->Blit(gameIcon, 140, 70, NULL, 250);
+	app->render->Blit(gameTitle, 20, 20, NULL, 250);
 	return true;
 }
 
@@ -89,6 +107,13 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 bool  ModuleMainMenuScene::CleanUp()
 {
 	app->uiManager->CleanUp();
+
+	app->tex->UnLoad(gameIcon);
+	gameIcon = nullptr;
+	app->tex->UnLoad(gameTitle);
+	gameTitle = nullptr;
+	app->tex->UnLoad(BG);
+	BG = nullptr;
 
 	return true;
 }

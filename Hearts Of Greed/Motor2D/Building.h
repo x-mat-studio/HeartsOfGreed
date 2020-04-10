@@ -32,8 +32,6 @@ enum class BUILDING_DECOR : int
 	NONE,
 
 	ST_ALL,
-
-
 };
 
 class Building : public Entity
