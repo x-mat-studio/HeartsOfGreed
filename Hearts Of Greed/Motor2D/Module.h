@@ -27,6 +27,10 @@ enum class EVENT_ENUM
 	ENTITY_COMMAND, //aka right click
 	ENTITY_INTERACTION, //aka left click
 
+	SKILL1,
+	SKILL2,
+	SKILL3,
+
 	ENTITY_DEAD,
 
 	// Hero creation /revival

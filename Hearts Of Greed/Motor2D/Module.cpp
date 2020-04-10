@@ -130,6 +130,7 @@ bool Module::CheckListener(Module* mod)
 	for (int i = 0; i < numElem; i++)
 	{
 		mod->ExecuteEvent(listener[i]);
+		numElem = listener.size();
 	}
 
 	listener.clear();
