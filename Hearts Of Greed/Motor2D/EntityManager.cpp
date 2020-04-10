@@ -232,7 +232,8 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				Building* bld;
 				bld = (Building*)entityVector[i];  
-				
+				//bld = static_cast<Building*>(entityVector[i]);		http://www.cplusplus.com/doc/tutorial/typecasting/
+
 				switch (bld->GetDecor())
 				{
 				case BUILDING_DECOR::ST_01:
@@ -245,7 +246,7 @@ void ModuleEntityManager::CheckIfStarted() {
 					DecorTex = buildingTexture;
 					break;
 				default:
-					DecorTex = nullptr;
+					DecorTex = base1Texture;
 					break;
 				}
 
