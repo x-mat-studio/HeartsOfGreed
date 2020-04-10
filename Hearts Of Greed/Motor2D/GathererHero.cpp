@@ -24,10 +24,9 @@ bool GathererHero::UseHability1()
 	//Hola soy Marc :)
 
 	// Request Mask , if not created , create it
-
 	// Blit the tile which the mouse is pointing
-
 	// Only allow ClickToLaunch() inside the Mask
+
 
 
 	return true;

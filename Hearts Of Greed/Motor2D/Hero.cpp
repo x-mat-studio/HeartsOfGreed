@@ -245,17 +245,16 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::SKILL1:
-		UseHability1();
-		cooldownHability1 += TIME_TRIGGER;
+		UseAbility1();
 		break;
 
 	case HERO_STATES::SKILL2:
-		UseHability2();
+		UseAbility2();
 		cooldownHability2 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL3:
-		UseHability3();
+		UseAbility3();
 		cooldownHability3 += TIME_TRIGGER;
 		break;
 
@@ -293,8 +292,6 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 	}
-	//do pathfinding, if it works return true
-
 
 	return false;
 }
@@ -430,19 +427,19 @@ void Hero::RecoverEnergy()
 }
 
 
-bool Hero::UseHability1()
+bool Hero::UseAbility1()
 {
 	return true;
 }
 
 
-bool Hero::UseHability2()
+bool Hero::UseAbility2()
 {
 	return true;
 }
 
 
-bool Hero::UseHability3()
+bool Hero::UseAbility3()
 {
 	return true;
 }
@@ -680,6 +677,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_SKILL_FINISHED:
 			{
+				cooldownHability1 += TIME_TRIGGER;
+
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 

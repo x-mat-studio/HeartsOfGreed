@@ -74,9 +74,9 @@ public:
 
 	virtual void OnCollision(Collider* collider);
 
-	virtual bool UseHability1();
-	virtual bool UseHability2();
-	virtual bool UseHability3();
+	virtual bool UseAbility1();
+	virtual bool UseAbility2();
+	virtual bool UseAbility3();
 
 	virtual void LevelUp();
 
