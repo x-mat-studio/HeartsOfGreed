@@ -144,8 +144,8 @@ bool App::Awake()
 	loadGame = config.first_child().child("load").attribute("fileName").as_string();
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
 	//Set disabled modules here
-	//mainMenu->Disable();
-	introScene->Disable();
+	mainMenu->Disable();
+	//introScene->Disable();
 	winScene->Disable();
 	loseScene->Disable();
 	testScene->Disable();
