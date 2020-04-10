@@ -10,7 +10,7 @@
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, { 100,100 }, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
 	animation(animation),
 
 	hitPoints(hitPoints),
@@ -24,7 +24,6 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
-	movementSpeed(movementSpeed),
 	xpOnDeath(xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
@@ -51,7 +50,6 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
-	movementSpeed(copy->movementSpeed),
 	xpOnDeath(copy->xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
@@ -206,7 +204,7 @@ void Enemy::OnCollision(Collider* collider)
 void Enemy::Draw(float dt)
 {
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt), 0, 255,0,0);
+		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt), false, true, 0, 255, 0, 0);
 	else
 		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
 

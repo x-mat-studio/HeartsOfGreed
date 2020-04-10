@@ -16,7 +16,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
 
-	DynamicEntity(position, { 100,100 }, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -41,7 +41,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	attackDamage(attackDamage),
 	attackSpeed(attackSpeed),
 	attackRange(attackRange),
-	movementSpeed(movementSpeed),
 	visionDistance(vision),
 
 	skill1ExecutionTime(skill1ExecutionTime),
@@ -105,7 +104,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	attackDamage(copy->attackDamage),
 	attackSpeed(copy->attackSpeed),
 	attackRange(copy->attackRange),
-	movementSpeed(copy->movementSpeed),
 	visionDistance(copy->visionDistance),
 
 	skill1ExecutionTime(copy->skill1ExecutionTime),
@@ -327,7 +325,7 @@ void Hero::OnCollision(Collider* collider)
 void Hero::Draw(float dt)
 {
 	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currFrame.frame, 255,255,255,255, false, true, currFrame.pivotPositionX, currFrame.pivotPositionY);
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currFrame.frame, false, true, 255,255,255,255, currFrame.pivotPositionX, currFrame.pivotPositionY);
 }
 
 
