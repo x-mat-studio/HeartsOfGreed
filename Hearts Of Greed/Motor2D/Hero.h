@@ -172,6 +172,8 @@ public:
 
 	int framesPerPathfinding;
 	int framePathfindingCount;
+
+	bool godMode;
 };
 
 
