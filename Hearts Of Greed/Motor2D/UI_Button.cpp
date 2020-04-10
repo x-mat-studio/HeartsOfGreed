@@ -7,7 +7,8 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 	eventRecieved(eventR),
 	eventTriggerer(eventTrigger),
 	closeMenu(menuClosure),
-	includeFather(includeFather)
+	includeFather(includeFather),
+	defaultPosition(positionValue.x)
 {}
 
 UI_Button::~UI_Button()

@@ -59,6 +59,7 @@ bool ModuleMainMenuScene::Start()
 	alphaCounter = 0;
 	soundDelay = 0;
 	canon = false;
+	app->uiManager->LoadAtlas();
 
 	app->audio->PlayFx(titleSound, 0, 1, LOUDNESS::NORMAL, DIRECTION::LEFT);
 	return true;
@@ -82,9 +83,9 @@ bool  ModuleMainMenuScene::Update(float dt)
 	if (alphaCounter < 255) { alphaCounter += dt * 70; }
 	if (soundDelay < 210) { soundDelay += dt * 100; }
 
-	app->render->Blit(BG, 0,0, NULL, 250);
-	app->render->Blit(gameIcon, 140, 70, NULL, alphaCounter);
-	app->render->Blit(gameTitle, 20, 20, NULL, alphaCounter);
+	app->render->Blit(BG, 0,0, NULL, false, false, 250);
+	app->render->Blit(gameIcon, 140, 70, false, false, NULL, alphaCounter);
+	app->render->Blit(gameTitle, 20, 20, false, false, NULL, alphaCounter);
 
 	if (soundDelay > 210) {
 

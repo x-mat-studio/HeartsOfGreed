@@ -33,11 +33,11 @@ private:
 	
 private:
 
-	float defaultPosition;
-
 	bool closeMenu;
 	bool includeFather;
 	bool hoverSound;
+
+	float defaultPosition;
 
 	fMPoint accuratedDrag;
 	EVENT_ENUM eventRecieved;
