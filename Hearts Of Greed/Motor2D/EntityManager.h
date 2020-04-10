@@ -16,6 +16,7 @@ class Spawner;
 class Base;
 class Turret;
 
+
 enum class SPRITE_POSITION : int
 {
 	INVALID = -1,
@@ -96,6 +97,7 @@ private:
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
+	unsigned short* GenerateCircle(int radius);
 
 public:
 
@@ -139,6 +141,8 @@ private:
 	Base* sampleBase;
 
 	Turret* testTurret;
+
+	unsigned short* gathererSkill1Area;
 
 };
 

@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Collision.h"
 #include "AI.h"
+#include "FoWManager.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -131,6 +132,10 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
+
+
+
+	gathererSkill1Area = GenerateCircle(6);
 
 	return ret;
 }
@@ -969,7 +974,7 @@ void ModuleEntityManager::KillAllEnemies()
 
 	int numEntities = entityVector.size();
 
-	for (size_t i = 0; i < numEntities; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
 		{
@@ -977,4 +982,30 @@ void ModuleEntityManager::KillAllEnemies()
 			enemy->Die();
 		}
 	}
+}
+
+unsigned short* ModuleEntityManager::GenerateCircle(int radius)
+{
+	unsigned short* circle = nullptr;
+
+	int diameter = (radius * 2) + 1;
+	iMPoint center = { radius,radius };
+	circle = new unsigned short[diameter * diameter];
+
+	for (int y = 0; y < diameter; y++)
+	{
+		for (int x = 0; x < diameter; x++)
+		{
+			if (app->fowManager->InsideCircle(center, { x,y }, radius) == true)
+			{
+				circle[(y * diameter) + x] = 0;
+			}
+			else
+			{
+				circle[(y * diameter) + x] = 1;
+			}
+		}
+	}
+
+	return circle;
 }

@@ -52,6 +52,7 @@ public:
 
 	// Retrieve window scale
 	float GetScale() const;
+	float GetUIScale() const;
 
 	float SetScale(float newScale);
 

@@ -42,6 +42,7 @@ public:
 
 	void CreateBasicInGameUI();
 	void CreateMainMenu();
+	void CreateOptionsMenu();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 

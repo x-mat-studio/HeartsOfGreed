@@ -55,6 +55,10 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SKILL3, this);
+
 
 	return true;
 }
@@ -140,6 +144,12 @@ bool ModulePlayer::HandleInput()
 			entityComand = false;
 			RightClick();
 		}
+
+		if (doSkill == true)
+		{
+			CommandSkill();
+		}
+
 		if (entityInteraction)
 		{
 			entityInteraction = false;
@@ -252,6 +262,34 @@ void ModulePlayer::RightClick()
 }
 
 
+void ModulePlayer::CommandSkill()
+{
+	if (heroesVector.empty() == true)
+		return;
+	
+	else
+		if (heroesVector[0] == nullptr)
+			return;
+	
+
+	if (skill1 == true)
+	{
+		heroesVector[0]->ActivateSkill1();
+	}
+
+	else if (skill2 == true)
+	{
+		heroesVector[0]->ActivateSkill2();
+	}
+
+	else if (skill3 == true)
+	{
+		heroesVector[0]->ActivateSkill3();
+	}
+
+}
+
+
 bool ModulePlayer::BuildClick()
 {
 	//Needs more work
@@ -272,14 +310,32 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::SELECT_UNITS:
 		selectUnits = true;
 		break;
+
 	case EVENT_ENUM::STOP_SELECTING_UNITS:
 		selectUnits = false;
 		break;
+
 	case EVENT_ENUM::ENTITY_COMMAND:
 		entityComand = true;
 		break;
+
 	case EVENT_ENUM::ENTITY_INTERACTION:
 		entityInteraction = true;
+		break;
+
+	case EVENT_ENUM::SKILL1:
+		skill1 = true;
+		doSkill = true;
+		break;
+
+	case EVENT_ENUM::SKILL2:
+		skill2 = true;
+		doSkill = true;
+		break;
+
+	case EVENT_ENUM::SKILL3:
+		skill3 = true;
+		doSkill = true;
 		break;
 	}
 
