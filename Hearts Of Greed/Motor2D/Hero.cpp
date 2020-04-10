@@ -193,12 +193,12 @@ void Hero::StateMachine(float dt)
 	switch (state)
 	{
 	case HERO_STATES::IDLE:
-		currentAnimation = &walkLeft;
 		break;
 
 	case HERO_STATES::MOVE:
-		currentAnimation = &walkLeft;
-		Move(dt);
+		if (!Move(dt))
+			inputs.push_back(HERO_INPUTS::IN_IDLE);
+
 		visionEntity->SetNewPosition(position);
 
 		if (objective != nullptr)
@@ -267,6 +267,8 @@ void Hero::StateMachine(float dt)
 		break;
 
 	}
+
+	SetAnimation(state);
 }
 
 
@@ -422,7 +424,6 @@ void Hero::RecoverEnergy()
 {
 
 }
-
 
 bool Hero::UseHability1()
 {
@@ -607,7 +608,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_IDLE:   state = HERO_STATES::MOVE;		break;
+			case HERO_INPUTS::IN_IDLE:   state = HERO_STATES::IDLE;		break;
 
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
 
@@ -757,4 +758,63 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 	}
 
 	return state;
+}
+
+
+void Hero::SetAnimation(HERO_STATES currState)
+{
+	switch (currState)
+	{
+	case HERO_STATES::MOVE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &walkRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &walkLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &walkRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &walkRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &walkLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &walkLeft;
+			break;
+		}
+	}
+	break;
+	case HERO_STATES::IDLE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &idleLeft;
+			break;
+		}
+		break;
+	}
+
+	}
 }

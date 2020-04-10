@@ -164,9 +164,7 @@ public:
 	// Utils ------------------------------------------------
 	bool IsZero() const
 	{
-		int X = (int)round(x);
-		int Y = (int)round(y);
-		return (Y == 0 && Y == 0);
+		return ((x <= 0.01f && x >= -0.01f) && (y <= 0.01f && y >= -0.01f));
 	}
 
 	MAT_Point& SetToZero()
@@ -207,7 +205,7 @@ public:
 
 	double Module()
 	{
-		if ((x <= 0.001f && x >= -0.001f) && (y <= 0.001f && y >= -0.001f))//if the vector is nearly 0
+		if ((x <= 0.01f && x >= -0.01f) && (y <= 0.01f && y >= -0.01f))//if the vector is nearly 0
 			return 0;
 		else
 			return sqrtf((x * x) + (y * y));

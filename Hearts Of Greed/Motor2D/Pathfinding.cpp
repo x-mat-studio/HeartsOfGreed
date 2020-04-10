@@ -4,7 +4,6 @@
 #include "PathFinding.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-
 ModulePathfinding::ModulePathfinding() : Module(), walkabilityMap(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
 	name.create("pathfinding");
@@ -451,6 +450,29 @@ generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int l
 
 //---------------------------------------------------
 
+iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination)const
+{
+	iMPoint ret = destination;
+
+	for (int i = 0; i < NEARBY_TILES_CHECK; i++)
+	{
+		if (ret.x < origin.x)
+			ret.x++;
+		else if (ret.x > origin.x)
+			ret.x--;
+
+		if (ret.y < origin.y)
+			ret.y++;
+		else if (ret.y > origin.y)
+			ret.y--;
+
+		if (IsWalkable(ret))
+			return ret;
+	}
+
+	return destination;
+}
+
 bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const
 {
 	return (pos.x >= 0 && pos.x <= (int)width &&
@@ -576,8 +598,9 @@ float HierNode::CalculateF(const iMPoint& destination)
 	return g + h;
 }
 
-PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, const iMPoint& destination, int maxLvl, Entity* pathRequest)
+PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest)
 {
+
 	PATH_TYPE ret = PATH_TYPE::NO_TYPE;
 	HierNode* n1, * n2;
 	bool toDeleteN1 = false;
@@ -585,7 +608,12 @@ PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, const iMPoint& de
 
 	if (IsWalkable(destination) == false)
 	{
-		return ret;
+		iMPoint newDest = CheckNearbyTiles(origin, destination);
+
+		if (newDest == destination)
+			return ret;
+		else
+			destination = newDest;
 	}
 
 	last_path.clear();

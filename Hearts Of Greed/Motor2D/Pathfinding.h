@@ -6,6 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
+#define NEARBY_TILES_CHECK 10
 
 #include <list>
 #include <vector>
@@ -17,6 +18,7 @@
 #define NODE_MIN_DISTANCE 4
 #define CLUSTER_SIZE_LVL 10
 #define MAX_LEVELS 1
+
 
 class HierNode;
 class Entity;
@@ -165,7 +167,9 @@ public:
 
 	void SetMap(uint width, uint height, uchar* data);
 
-	PATH_TYPE CreatePath(const iMPoint& origin, const iMPoint& destination, int maxLvl, Entity* pathRequest);
+	PATH_TYPE CreatePath(const iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
+
+	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination) const;
 
 	bool CheckBoundaries(const iMPoint& pos) const;
 

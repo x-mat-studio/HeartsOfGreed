@@ -104,6 +104,9 @@ private:
 
 	void SearchForNewObjective();
 
+protected:
+	void SetAnimation(HERO_STATES currState);
+
 public:
 	int level;
 	int expToLevelUp;
