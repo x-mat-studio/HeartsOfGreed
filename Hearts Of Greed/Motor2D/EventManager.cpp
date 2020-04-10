@@ -89,11 +89,14 @@ void ModuleEventManager::FireEvent(EVENT_ENUM eventId) const
 		if (eventListenersMap.size() == 0)
 			return;
 
-		std::vector<Module*> listeners = eventListenersMap.at(eventId);
-		int numElem = listeners.size();
-		for (int i = 0; i < numElem; i++)
+		if (eventListenersMap.count(eventId) == 1)
 		{
-			listeners[i]->AddEvent(eventId);
+			std::vector<Module*> listeners = eventListenersMap.at(eventId);
+			int numElem = listeners.size();
+			for (int i = 0; i < numElem; i++)
+			{
+				listeners[i]->AddEvent(eventId);
+			}
 		}
 	}
 
