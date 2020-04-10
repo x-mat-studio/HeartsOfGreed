@@ -290,8 +290,8 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 {
 	iMPoint goal = { 0,0 };
 
-	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
-	goal = app->map->WorldToMap(x, y);
+	origin=app->map->WorldToMap(round(position.x), round(position.y));
+	goal=app->map->WorldToMap(x, y);
 
 	if (app->pathfinding->CreatePath(origin, goal, 1, this) != PATH_TYPE::NO_TYPE)
 	{
@@ -311,7 +311,7 @@ void DynamicEntity::DebugDraw()
 	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
 
 	fMPoint nextPoint = { 0,0 };
-	app->map->WorldToMapCoords(round(position.x), round(position.y), app->map->data, origin.x, origin.y);
+	origin=app->map->WorldToMap(round(position.x), round(position.y));
 	origin = app->map->MapToWorld(origin.x, origin.y);
 
 	app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);

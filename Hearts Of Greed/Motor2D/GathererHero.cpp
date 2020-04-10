@@ -37,3 +37,19 @@ bool GathererHero::UseHability3()
 	return true;
 }
 
+void GathererHero::LevelUp()
+{
+
+	hitPoints;
+	recoveryHitPointsRate;
+	energyPoints;
+	recoveryEnergyRate;
+
+	attackDamage;
+	attackSpeed;
+	attackRange;
+
+	movementSpeed;
+	visionDistance;
+
+}

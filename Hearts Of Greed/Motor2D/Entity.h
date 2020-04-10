@@ -71,6 +71,7 @@ public:
 	virtual int RecieveDamage(int damage);
 
 	fMPoint GetPosition();
+	fMPoint GetCenter();
 	void SetPosition(int x, int y);
 
 	void SetTexture(SDL_Texture* texture);
@@ -101,6 +102,7 @@ public:
 protected:
 	fMPoint position;
 	fMPoint offset;
+	fMPoint center;
 
 	ENTITY_TYPE type;
 	ENTITY_ALIGNEMENT align;

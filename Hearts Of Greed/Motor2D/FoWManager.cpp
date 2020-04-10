@@ -270,7 +270,7 @@ void ModuleFoWManager::UpdateFoWMap()
 
 
 
-		if (!debugMode&& foWMapVisible)
+		if (!debugMode && foWMapVisible)
 		{
 			for (int i = 0; i < fowEntities.size(); i++)
 			{
@@ -314,7 +314,7 @@ void ModuleFoWManager::DrawFoWMap()
 
 			fMPoint worldPos;
 			app->map->MapToWorldCoords(x, y, app->map->data, worldPos.x, worldPos.y);
-			if (app->map->InsideCamera(worldPos.x, worldPos.y)==true)
+			if (app->map->InsideCamera(worldPos.x, worldPos.y) == true)
 			{
 				FoWDataStruct* tileInfo = GetFoWTileState({ x, y });
 				int fogId = -1;
@@ -358,11 +358,11 @@ void ModuleFoWManager::DrawFoWMap()
 	}
 }
 
-FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility)
+FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius)
 {
 	FoWEntity* entity = nullptr;
 
-	entity = new FoWEntity(pos, providesVisibility);
+	entity = new FoWEntity(pos, providesVisibility,visionRadius);
 
 	if (entity != nullptr)
 	{
@@ -395,3 +395,101 @@ void ModuleFoWManager::MapNeedsUpdate()
 	if (foWMapNeedsRefresh == false)
 		foWMapNeedsRefresh = true;
 }
+
+
+unsigned short* ModuleFoWManager::GetMaskFromRadius(int radius)
+{
+	unsigned short* ret = nullptr;
+	
+		if (maskMap.count(radius) > 0) //if the key is found
+		{
+			ret = maskMap.at(radius).mask;
+		}
+	
+
+	return ret;
+}
+
+
+void ModuleFoWManager::RequestMaskGeneration(int radius)
+{
+	
+		if (maskMap.count(radius) > 0)
+		{
+			maskMap.at(radius).numberOfUsers += 1;
+		}
+		else
+		{
+			MaskData data;
+			data.numberOfUsers = 1;
+			data.mask = GenerateCircle(radius);
+			maskMap.insert(std::pair<uint, MaskData>(radius, data));
+			//Fill Corners
+			//Fill joints
+		}
+	
+
+}
+
+
+void ModuleFoWManager::RequestMaskDeletion(int radius)
+{
+	if (radius > 0)
+	{
+		if (maskMap.count(radius) > 0)
+		{
+			if (maskMap.at(radius).numberOfUsers > 1)
+			{
+				maskMap.at(radius).numberOfUsers -= 1;
+			}
+			else
+			{
+				//delete mask
+				RELEASE_ARRAY(maskMap.at(radius).mask);
+				maskMap.at(radius).mask = nullptr;
+				maskMap.erase(radius);
+			}
+		}
+	}
+
+}
+
+
+unsigned short* ModuleFoWManager::GenerateCircle(int radius)
+{
+	unsigned short* circle = nullptr;
+
+	
+		int diameter = (radius * 2) + 1;
+		iMPoint center = { radius,radius };
+		circle = new unsigned short[diameter * diameter];
+
+		for (int y = 0; y < diameter; y++)
+		{
+			for (int x = 0; x < diameter; x++)
+			{
+				if (InsideCircle(center, {x,y}, radius)==true)
+				{
+					circle[(y * diameter) + x] = fow_NON;
+				}
+				else
+				{
+					circle[(y * diameter) + x] = fow_ALL;
+				}
+			}
+		}
+	
+	return circle;
+}
+
+bool ModuleFoWManager::InsideCircle(iMPoint center, iMPoint tile, float radius)
+{
+	float dx = center.x - tile.x;
+	float dy = center.y - tile.y;
+	float distance_squared = dx * dx + dy * dy;
+
+	return distance_squared < (radius+0.5f) * (radius+0.5f);
+}
+
+
+

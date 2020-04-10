@@ -72,15 +72,15 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 850);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 850);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
 
 		// Test Turret
-		app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, 100, 750);
+	//	app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, 100, 750);
 	}
 
-	app->uiManager->CreateBasicUI();
+	app->uiManager->CreateBasicInGameUI();
 
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
@@ -97,8 +97,11 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_RIGHT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_SPRINT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_SPRINT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_STARTED, this);
 
-
+	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
 
 	return true;
 }
@@ -133,44 +136,55 @@ bool  ModuleTestScene::Update(float dt)
 
 	if (allowCamMovement)
 	{
+		bool wasdMove = false;
+
 		if (camSprint)
 		{
 			camVel *= 2;
+			wasdMove = true;
 		}
 		if (camUp)
 		{
 			app->render->currentCamY += camVel * dt;
+			wasdMove = true;
 		}
 		if (camDown)
 		{
 			app->render->currentCamY -= camVel * dt;
+			wasdMove = true;
 		}
 		if (camLeft)
 		{
 			app->render->currentCamX += camVel * dt;
+			wasdMove = true;
 		}
 		if (camRight)
 		{
 			app->render->currentCamX -= camVel * dt;
+			wasdMove = true;
 		}
 
-		//mouse drag / mouse zoom
-		iMPoint scrollWheel;
-		app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-		if (MouseCameraDisplacement(camVel, dt) == false)
+
+		if (!wasdMove)
 		{
-			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+			//mouse drag / mouse zoom
+			iMPoint scrollWheel;
+			app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
+			if (MouseCameraDisplacement(camVel, dt) == false)
 			{
-				StartDragging(mousePos);
-			}
-			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
-			{
-				Drag(mousePos, scale);
-			}
-			else if (scrollWheel.y != 0)
-			{
-				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-				Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+				if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
+				{
+					StartDragging(mousePos);
+				}
+				else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
+				{
+					Drag(mousePos, scale);
+				}
+				else if (scrollWheel.y != 0)
+				{
+					//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+				}
 			}
 		}
 	}
@@ -295,6 +309,12 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 	case EVENT_ENUM::STOP_CAMERA_SPRINT:
 		camSprint = false;
+		break;
+	case EVENT_ENUM::SAVE_GAME:
+		// TODO Save game from here
+		break;
+	case EVENT_ENUM::LOAD_GAME:
+		// TODO Load game from here
 		break;
 	}
 

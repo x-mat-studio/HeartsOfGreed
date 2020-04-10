@@ -61,7 +61,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, false);
+	visionEntity = app->fowManager->CreateFoWEntity(position, false,3);//TODO this is going to be the enemy vision distance
 }
 
 
@@ -133,7 +133,9 @@ void Enemy::StateMachine(float dt)
 				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
-					MoveTo(pos.x, pos.y);
+					fMPoint offSet = shortTermObjective->GetCenter();
+
+					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 				}
 			}
 		}
@@ -253,7 +255,7 @@ bool Enemy::SearchObjective()
 	Entity* objective;
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 
-	if (objective != nullptr && shortTermObjective != objective)
+	if (objective != nullptr)
 	{
 		ret = true;
 	}
