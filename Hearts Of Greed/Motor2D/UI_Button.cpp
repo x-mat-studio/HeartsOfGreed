@@ -104,9 +104,8 @@ void UI_Button::OnClick()
 	{
 		CloseMenu();
 	}
-}
+
 	app->audio->PlayFx(app->uiManager->clickSound);
-	app->eventManager->GenerateEvent(eventTriggered, EVENT_ENUM::NULL_EVENT);
 }
 
 void UI_Button::HoverFeedback()
@@ -119,7 +118,7 @@ void UI_Button::HoverFeedback()
 	this->worldPosition.x -= 8;
 }
 
-void CloseMenu()
+void UI_Button::CloseMenu()
 {
 	app->uiManager->DeleteUI(parent, includeFather);
 }
