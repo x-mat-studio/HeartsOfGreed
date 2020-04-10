@@ -48,7 +48,7 @@ void MeleeHero::LevelUp()
 	attackSpeed;
 	attackRange;
 
-	movementSpeed;
+	unitSpeed;
 	visionDistance;
 
 }
