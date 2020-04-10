@@ -61,7 +61,7 @@ void UI::CleanUp()
 void UI::Draw(SDL_Texture* texture)
 {
 
-	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, '\000', false, false);
+	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, '\000',255,255,255, false, false);
 
 }
 

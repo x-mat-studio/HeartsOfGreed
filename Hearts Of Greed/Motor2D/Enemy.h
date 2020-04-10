@@ -111,6 +111,8 @@ private:
 	std::vector<ENEMY_INPUTS> inputs;
 	Animation* currentAnimation;
 
+	float damageTakenTimer;
+
 };
 
 

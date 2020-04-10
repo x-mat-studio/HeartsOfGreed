@@ -97,6 +97,9 @@ public:
 	SDL_Texture* debugPathTexture;
 	int wanamingoRoar;
 	int wanamingoRoar2;
+	int wanamingoGetsHit;
+	int wanamingoDies;
+	int wanamingoDies2;
 
 private:
 

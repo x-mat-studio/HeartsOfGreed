@@ -324,7 +324,8 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currentAnimation->GetCurrentFrameBox(dt));
+	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currFrame.frame, 255,255,255,255, false, true, currFrame.pivotPositionX, currFrame.pivotPositionY);
 }
 
 
@@ -489,6 +490,7 @@ bool Hero::GetLevel()
 //Here goes all timers
 void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
+	//TODO: This needs syncro w/ the animations
 	if (attackCooldown > 0)
 	{
 		attackCooldown += dt;
@@ -655,8 +657,6 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;						 break;
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
-
-			case HERO_INPUTS::IN_MOVE:			 state = HERO_STATES::MOVE;						 break;
 
 			case HERO_INPUTS::IN_SKILL1: if (skill1Charged) { state = HERO_STATES::SKILL1; skillFromAttacking = true; } break;
 			case HERO_INPUTS::IN_SKILL2: if (skill2Charged) { state = HERO_STATES::SKILL2; skillFromAttacking = true; } break;

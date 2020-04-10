@@ -157,11 +157,14 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 
 
 // Play WAV
-bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loudness, DIRECTION direction)
+bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loudness, DIRECTION direction, bool overrideChannel)
 {
 	id += 0;
 	if (!enabled || loudness == LOUDNESS::SILENCE)
 		return false;
+
+	if(overrideChannel)
+		Mix_HaltChannel(id);
 
 	if (channel > 0 && Mix_Playing(channel) == 0) {
 		ConfigureChannel(channel, loudness, direction);

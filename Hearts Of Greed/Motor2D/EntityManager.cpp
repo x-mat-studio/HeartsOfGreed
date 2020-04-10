@@ -116,7 +116,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5, 0, 250, 1, 1, 25, 5, 50);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5000, 0, 250, 1, 1, 25, 5, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -164,6 +164,10 @@ bool ModuleEntityManager::Start()
 	//sfx baby
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
+	wanamingoGetsHit = app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
+	wanamingoDies = app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
+	wanamingoDies2 = app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
+
 
 	return ret;
 }
