@@ -95,6 +95,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) {
 
 		app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f);
+		changeScene = false;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
