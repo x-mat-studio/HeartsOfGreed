@@ -107,6 +107,12 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 // Called before quitting
 bool  ModuleIntroScene::CleanUp()
 {
+	app->tex->UnLoad(logoXMat);
+	app->tex->UnLoad(logoBG);
+	logoXMat = nullptr;
+	logoBG = nullptr;
+	
+	
 	app->uiManager->CleanUp();
 
 	return true;

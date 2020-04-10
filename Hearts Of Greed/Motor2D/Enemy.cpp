@@ -91,20 +91,7 @@ bool Enemy::Update(float dt)
 	StateMachine(dt);
 	GroupMovement(dt);
 
-	//DEBUGSOUND
-	//Put this in a function pls :D att Jose
-	int randomCounter = rand() % 1000;
-
-	if (randomCounter == 997) {
-
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(),this->GetMyDirection());
-	}
-
-	if (randomCounter == 998) {
-
-		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
-	}
-
+	Roar();
 	CollisionPosUpdate();
 
 
@@ -162,6 +149,23 @@ void Enemy::StateMachine(float dt)
 	}
 
 	CollisionPosUpdate();
+}
+
+void Enemy::Roar()
+{
+	//DEBUGSOUND
+	int randomCounter = rand() % 1000;
+
+	if (randomCounter == 997) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+
+	}
+	if (randomCounter == 998) {
+
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+
+	}
 }
 
 

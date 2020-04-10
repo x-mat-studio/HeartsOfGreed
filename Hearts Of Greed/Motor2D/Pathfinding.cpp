@@ -4,7 +4,6 @@
 #include "PathFinding.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-
 ModulePathfinding::ModulePathfinding() : Module(), walkabilityMap(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
 	name.create("pathfinding");
@@ -601,6 +600,7 @@ float HierNode::CalculateF(const iMPoint& destination)
 
 PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest)
 {
+
 	PATH_TYPE ret = PATH_TYPE::NO_TYPE;
 	HierNode* n1, * n2;
 	bool toDeleteN1 = false;

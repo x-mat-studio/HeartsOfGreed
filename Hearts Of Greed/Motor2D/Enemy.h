@@ -84,6 +84,8 @@ private:
 	void SearchForNewObjective();
 
 	void StateMachine(float dt);
+
+	void Roar();
 private:
 
 	int hitPoints;
