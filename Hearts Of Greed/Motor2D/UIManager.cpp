@@ -9,6 +9,7 @@
 #include "UI_Scrollbar.h"
 #include "EventManager.h"
 #include "EntityManager.h"
+#include "Audio.h"
 #include "Window.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -56,6 +57,9 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	LoadAtlas();
+
+	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
+	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
 
 	return ret;
 }

@@ -44,6 +44,8 @@ private:
 
 	bool changeScene;
 
+	
+
 };
 
 #endif // __MAIN_MENU_SCENE__

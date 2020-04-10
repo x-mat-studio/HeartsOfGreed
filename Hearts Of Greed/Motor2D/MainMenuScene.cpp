@@ -41,6 +41,8 @@ bool ModuleMainMenuScene::Start()
 
 	app->uiManager->CreateMainMenu();
 
+
+
 	return true;
 }
 
