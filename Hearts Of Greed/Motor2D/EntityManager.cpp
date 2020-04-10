@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Collision.h"
 #include "AI.h"
+#include "FoWManager.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -69,14 +70,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown,1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
 
 	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);*/
 
 
-	// Sample Enemy---------------------
+		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
@@ -131,6 +132,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
+
+	//Generate Areas
+	gathererSkill1Area.area = GenerateCircleArea(6);
+	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
+	gathererSkill1Area.callback = AREA_TYPE::GATHERER_SKILL1;
+
+	meleeSkill1Area.area = GenerateCircleArea(2);
+	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
+	meleeSkill1Area.callback = AREA_TYPE::MELEE_SKILL1;
 
 	return ret;
 }
@@ -231,7 +241,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				SDL_Texture* DecorTex;
 
 				Building* bld;
-				bld = (Building*)entityVector[i];  
+				bld = (Building*)entityVector[i];
 				//bld = static_cast<Building*>(entityVector[i]);		http://www.cplusplus.com/doc/tutorial/typecasting/
 
 				switch (bld->GetDecor())
@@ -359,6 +369,8 @@ bool ModuleEntityManager::CleanUp()
 	blueBuilding = nullptr;
 	sampleBase = nullptr;
 
+	delete gathererSkill1Area.area;
+	delete meleeSkill1Area.area;
 
 	return true;
 }
@@ -817,9 +829,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);
 		sampleBase->Draw(0);
-	
 
-	break;
+
+		break;
 
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -969,7 +981,7 @@ void ModuleEntityManager::KillAllEnemies()
 
 	int numEntities = entityVector.size();
 
-	for (size_t i = 0; i < numEntities; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
 		{
@@ -977,4 +989,47 @@ void ModuleEntityManager::KillAllEnemies()
 			enemy->Die();
 		}
 	}
+}
+
+unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
+{
+	unsigned short* circle = nullptr;
+
+	int diameter = (radius * 2) + 1;
+	iMPoint center = { radius,radius };
+	circle = new unsigned short[diameter * diameter];
+
+	for (int y = 0; y < diameter; y++)
+	{
+		for (int x = 0; x < diameter; x++)
+		{
+			if (app->fowManager->InsideCircle(center, { x,y }, radius) == true)
+			{
+				circle[(y * diameter) + x] = 0;
+			}
+			else
+			{
+				circle[(y * diameter) + x] = 1;
+			}
+		}
+	}
+
+	return circle;
+}
+
+unsigned short* ModuleEntityManager::GenerateQuadArea(int w, int h)
+{
+	unsigned short* quad = nullptr;
+
+	quad = new unsigned short[w * h];
+
+	for (int y = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			quad[y + x] = 0;
+		}
+	}
+
+	return quad;
 }

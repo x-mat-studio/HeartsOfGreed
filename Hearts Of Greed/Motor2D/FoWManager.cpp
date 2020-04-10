@@ -13,15 +13,11 @@ ModuleFoWManager::ModuleFoWManager() :
 	debugFoWtexture(nullptr),
 	debugMode(false),
 	foWMapNeedsRefresh(false)
-{
-
-}
+{}
 
 
 ModuleFoWManager::~ModuleFoWManager()
-{
-
-}
+{}
 
 
 bool ModuleFoWManager::Awake(pugi::xml_node&)
@@ -601,9 +597,7 @@ unsigned short* ModuleFoWManager::GenerateCircleJoints(int radius, unsigned shor
 
 bool ModuleFoWManager::InsideCircle(iMPoint center, iMPoint tile, float radius)
 {
-	float dx = center.x - tile.x;
-	float dy = center.y - tile.y;
-	float distance_squared = dx * dx + dy * dy;
+	float distance_squared = center.DistanceNoSqrt(tile);
 
 	return distance_squared < (radius + 0.5f) * (radius + 0.5f);
 }

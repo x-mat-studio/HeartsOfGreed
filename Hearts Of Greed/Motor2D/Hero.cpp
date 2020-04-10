@@ -10,8 +10,8 @@
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
-	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown,
-	Animation& idleRightUp, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
+	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp,
+	Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
@@ -245,8 +245,7 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::SKILL1:
-		UseHability1();
-		cooldownHability1 += TIME_TRIGGER;
+		UseAbility1();
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
@@ -262,12 +261,12 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::SKILL2:
-		UseHability2();
+		UseAbility2();
 		cooldownHability2 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL3:
-		UseHability3();
+		UseAbility3();
 		cooldownHability3 += TIME_TRIGGER;
 		break;
 
@@ -305,8 +304,6 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 	}
-	//do pathfinding, if it works return true
-
 
 	return false;
 }
@@ -337,7 +334,7 @@ void Hero::OnCollision(Collider* collider)
 void Hero::Draw(float dt)
 {
 	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &currFrame.frame, false, true, 255,255,255,255, currFrame.pivotPositionX, currFrame.pivotPositionY);
+	app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 }
 
 
@@ -442,19 +439,19 @@ void Hero::RecoverEnergy()
 }
 
 
-bool Hero::UseHability1()
+bool Hero::UseAbility1()
 {
 	return true;
 }
 
 
-bool Hero::UseHability2()
+bool Hero::UseAbility2()
 {
 	return true;
 }
 
 
-bool Hero::UseHability3()
+bool Hero::UseAbility3()
 {
 	return true;
 }
@@ -754,6 +751,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_SKILL_FINISHED:
 			{
+				cooldownHability1 += TIME_TRIGGER;
+
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
@@ -962,6 +961,32 @@ void Hero::SetAnimation(HERO_STATES currState)
 			break;
 		case FACE_DIR::WEST:
 			currentAnimation = &idleLeft;
+			break;
+		}
+		break;
+	}
+
+	case HERO_STATES::CHARGING_ATTACK:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			//currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			//currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			//currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			//currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			//currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			//currentAnimation = &idleLeft;
 			break;
 		}
 		break;

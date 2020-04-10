@@ -14,9 +14,9 @@ public:
 
 	MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement);
 
-	bool UseHability1();
-	bool UseHability2();
-	bool UseHability3();
+	bool UseAbility1();
+	bool UseAbility2();
+	bool UseAbility3();
 
 	void LevelUp();
 };

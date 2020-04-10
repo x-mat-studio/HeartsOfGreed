@@ -61,6 +61,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 {
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
+	currentAnimation = &animation;
 }
 
 
@@ -127,6 +128,9 @@ void Enemy::StateMachine(float dt)
 				}
 			}
 		}
+		else
+			inputs.push_back(ENEMY_INPUTS::IN_IDLE);
+
 		visionEntity->SetNewPosition(position);
 		break;
 
@@ -150,6 +154,8 @@ void Enemy::StateMachine(float dt)
 	}
 
 	CollisionPosUpdate();
+
+	SetAnimation(state);
 }
 
 void Enemy::Roar()
@@ -203,10 +209,13 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
+	Frame currFrame = animation.GetCurrentFrame(dt);
+
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt), false, true, 0, 255, 0, 0);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
+
 	else
-		app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 
 	DebugDraw();
 }
@@ -456,4 +465,89 @@ int Enemy::RecieveDamage(int damage)
 	}
 
 	return ret;
+}
+
+
+void Enemy::SetAnimation(ENEMY_STATES state)
+{
+	switch (state)
+	{
+	case ENEMY_STATES::MOVE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			//currentAnimation = &walkRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			//currentAnimation = &walkLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			//currentAnimation = &walkRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			//currentAnimation = &walkRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			//currentAnimation = &walkLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			//currentAnimation = &walkLeft;
+			break;
+		}
+	}
+	break;
+	case ENEMY_STATES::IDLE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			//currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			//currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			//currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			//currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			//currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			//currentAnimation = &idleLeft;
+			break;
+		}
+		break;
+	}
+
+	case ENEMY_STATES::CHARGING_ATTACK:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			//currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			//currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			//currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			//currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			//currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			//currentAnimation = &idleLeft;
+			break;
+		}
+		break;
+	}
+
+	}
 }
