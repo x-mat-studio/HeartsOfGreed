@@ -45,6 +45,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
+	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
 
 
 	return ret;
@@ -167,26 +168,11 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 	return newUI;
 }
 
-UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, EVENT_ENUM eventTrigger, DRAGGABLE draggable)
+UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventTrigger)
 {
-	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, menuClosure, draggable, eventTrigger);
+	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, menuClosure, includeFather, draggable, eventR, eventTrigger);
 	uiVector.push_back(newUI);
 	return newUI;
-}
-
-
-void ModuleUIManager::RemoveDeletedUI()
-{
-	int numEntitys = uiVector.size();
-
-	for (int i = 0; i < numEntitys; i++)
-	{
-		if (uiVector[i]->toDelete == true)
-		{
-			uiVector.erase(uiVector.begin() + i);
-		}
-	}
-
 }
 
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
@@ -233,6 +219,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::PAUSE_GAME:
 		CreatePauseMenu();
 		break;
+
+	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
 	}
 }
 
@@ -248,7 +238,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 	AddUIElement(fMPoint(0, h / app->win->GetScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 
 	rect = RectConstructor(449, 24, 24, 24);
-	AddButton(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", false, EVENT_ENUM::PAUSE_GAME, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / app->win->GetScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
 }
 
@@ -257,20 +247,31 @@ void ModuleUIManager::CreatePauseMenu()
 	SDL_Rect rect = RectConstructor(15, 271, 194, 231);;
 	uint w(app->win->width), h(app->win->height);
 
-	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), h / (app->win->GetScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+	UI* father = AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), h / (app->win->GetScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
 
 	int height = h / (app->win->GetScale() * 2) - (rect.h / 2) + 8;
 
 	rect = RectConstructor(17, 12, 195, 36);
-	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", true, EVENT_ENUM::UNPAUSE_GAME, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"resumeButton", EVENT_ENUM::UNPAUSE_GAME, true, true);
 
-	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 44), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"saveButton", false, EVENT_ENUM::SAVE_GAME, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 44), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"saveButton", EVENT_ENUM::SAVE_GAME);
 
-	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 89), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"loadButton", false, EVENT_ENUM::LOAD_GAME, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 89), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"loadButton", EVENT_ENUM::LOAD_GAME);
 
-	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 134), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionButton", false, EVENT_ENUM::OPTION_MENU, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 134), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionButton", EVENT_ENUM::OPTION_MENU);
 
-	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 179), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"mainMenuButton", true, EVENT_ENUM::RETURN_TO_MAIN_MENU, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2), height + 179), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"mainMenuButton", EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, true, true);
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2) + 32, height + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"resumeText", DRAGGABLE::DRAG_OFF, "R E S U M E    G A M E");
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2) + 43, height + 49), father, UI_TYPE::UI_TEXT, rect, (P2SString)"saveText", DRAGGABLE::DRAG_OFF, "S A V E    G A M E");
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2) + 43, height + 94), father, UI_TYPE::UI_TEXT, rect, (P2SString)"loadText", DRAGGABLE::DRAG_OFF, "L O A D    G A M E");
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2) + 58, height + 139), father, UI_TYPE::UI_TEXT, rect, (P2SString)"optionText", DRAGGABLE::DRAG_OFF, "O P T I O N S");
+
+	AddUIElement(fMPoint(w / (app->win->GetScale() * 2) - (rect.w / 2) + 48, height + 184), father, UI_TYPE::UI_TEXT, rect, (P2SString)"mainMenuText", DRAGGABLE::DRAG_OFF, "M A I N    M E N U");
+
 }
 
 void ModuleUIManager::CreateMainMenu()
@@ -278,17 +279,19 @@ void ModuleUIManager::CreateMainMenu()
 	SDL_Rect rect = RectConstructor(17, 12, 195, 36);
 	uint w(app->win->width), h(app->win->height);
 	
-	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"continueButton", true, EVENT_ENUM::START_GAME_FROM_CONTINUE, DRAGGABLE::DRAG_OFF);
+	// TODO Charge an image here that serves as father
 
-	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"newGameButton", true, EVENT_ENUM::START_GAME, DRAGGABLE::DRAG_OFF);
+//	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4))), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"continueButton", true, EVENT_ENUM::START_GAME_FROM_CONTINUE, DRAGGABLE::DRAG_OFF);
 
-	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 80), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionsButton", false, EVENT_ENUM::OPTION_MENU, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"newGameButton", EVENT_ENUM::START_GAME, true, true);
 
-	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 120), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"creditsButton", false, EVENT_ENUM::CREDIT_MENU, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 80), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"optionsButton", EVENT_ENUM::OPTION_MENU);
 
-	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 160), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"exitGameButton", true, EVENT_ENUM::EXIT_GAME, DRAGGABLE::DRAG_OFF);
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 120), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"creditsButton", EVENT_ENUM::CREDIT_MENU);
 
-	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 5, (h / (app->win->GetScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
+	AddButton(fMPoint(w / app->win->GetScale() - rect.w - 20, (h / (app->win->GetScale() * 4)) + 160), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"exitGameButton", EVENT_ENUM::EXIT_GAME, true, true);
+
+//	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 5, (h / (app->win->GetScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
 	
 	AddUIElement(fMPoint(w / app->win->GetScale() - rect.w + 35, (h / (app->win->GetScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
 	
@@ -317,4 +320,43 @@ void ModuleUIManager::LoadAtlas()
 {
 	if(!atlas)
 	atlas = app->tex->Load("spritesheets/atlas.png");
+}
+
+UI* ModuleUIManager::FindUIByName(char* name)
+{
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (uiVector[i]->name == name)
+		{
+			return uiVector[i];
+		}
+	}
+}
+
+void ModuleUIManager::DeleteUI(UI* father, bool includeFather)
+{
+	int numEntities = uiVector.size();
+	
+	int parentId = -1;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (uiVector[i]->parent == father)
+		{
+			uiVector.erase(uiVector.begin() + i);
+			i--;
+			numEntities = uiVector.size();
+		}
+		else if (uiVector[i] == father && includeFather == true)
+		{
+			parentId = i;
+		}
+	}
+
+	if (parentId != -1)
+	{
+		uiVector.erase(uiVector.begin() + parentId);
+	}
 }

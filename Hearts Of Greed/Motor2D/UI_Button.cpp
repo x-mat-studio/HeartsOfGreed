@@ -2,12 +2,12 @@
 #include "EventManager.h"
 #include "Audio.h"
 
-
-UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, DRAGGABLE draggable, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
+UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	accuratedDrag({0, 0}),
-	eventTriggered(eventTrigger),
+	eventRecieved(eventR),
+	eventTriggerer(eventTrigger),
 	closeMenu(menuClosure),
-	defaultPosition(worldPosition.x)
+	includeFather(includeFather)
 {}
 
 UI_Button::~UI_Button()
@@ -99,8 +99,13 @@ bool UI_Button::OnAbove()
 
 void UI_Button::OnClick()
 {
+	app->eventManager->GenerateEvent(eventRecieved, eventTriggerer);
+	if (closeMenu == true)
+	{
+		CloseMenu();
+	}
+
 	app->audio->PlayFx(app->uiManager->clickSound);
-	app->eventManager->GenerateEvent(eventTriggered, EVENT_ENUM::NULL_EVENT);
 }
 
 void UI_Button::HoverFeedback()
@@ -113,10 +118,9 @@ void UI_Button::HoverFeedback()
 	this->worldPosition.x -= 8;
 }
 
-void CloseMenu()
+void UI_Button::CloseMenu()
 {
-	// TODO I really feel like UI shouldn't be deleted here, even if the signal to do it is sent from here (because buttons)
-	// TODO if variable is closeMenu, close all UI that has the same father. Don't delete the father. If there's need to, make a specific function, since it's way less common
+	app->uiManager->DeleteUI(parent, includeFather);
 }
 
 void UI_Button::MovingIt(float dt)

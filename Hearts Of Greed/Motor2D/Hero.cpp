@@ -42,7 +42,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	attackSpeed(attackSpeed),
 	attackRange(attackRange),
 	movementSpeed(movementSpeed),
-	visionDistance(visionDistance),
+	visionDistance(vision),
 
 	skill1ExecutionTime(skill1ExecutionTime),
 	skill2ExecutionTime(skill2ExecutionTime),

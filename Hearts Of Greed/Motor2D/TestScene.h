@@ -60,6 +60,8 @@ private:
 	bool camSprint;
 
 	bool allowCamMovement;
+
+	bool menuScene;
 };
 
 #endif // __TEST_SCENE_H__

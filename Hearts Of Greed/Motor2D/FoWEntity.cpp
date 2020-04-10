@@ -4,7 +4,7 @@
 #include "FoWBitDefs.h"
 #include "Map.h"
 
-FoWEntity::FoWEntity(fMPoint WorldPos, bool providesVisibility,int visionRadius): deleteEntity(false), providesVisibility(providesVisibility), posInMap({ 0,0 }), isVisible(false)
+FoWEntity::FoWEntity(fMPoint WorldPos, bool providesVisibility, int visionRadius) : deleteEntity(false), providesVisibility(providesVisibility), posInMap({ 0,0 }), isVisible(false)
 {
 	if (providesVisibility)
 	{
@@ -24,14 +24,14 @@ FoWEntity::~FoWEntity()
 bool FoWEntity::CleanUp()
 {
 	bool ret = true;
-
+	app->fowManager->RequestMaskDeletion(boundingBoxRadius);
 	return ret;
 }
 
 
 void FoWEntity::SetNewPosition(fMPoint pos)
 {
-	posInMap= app->map->WorldToMap(pos.x,pos.y);
+	posInMap = app->map->WorldToMap(pos.x, pos.y);
 
 	if (providesVisibility)
 	{
@@ -54,11 +54,11 @@ void FoWEntity::SetNewPosition(fMPoint pos)
 void FoWEntity::SetNewVisionRadius(uint radius)
 {
 	//Changes the vision radius of the entity if there's a precomputed shape with that radius
-	
-		boundingBoxRadius = radius;
-		app->fowManager->RequestMaskGeneration(boundingBoxRadius);
-		app->fowManager->MapNeedsUpdate();
-	
+	app->fowManager->RequestMaskDeletion(boundingBoxRadius);
+	boundingBoxRadius = radius;
+	app->fowManager->RequestMaskGeneration(boundingBoxRadius);
+	app->fowManager->MapNeedsUpdate();
+
 }
 
 std::vector<iMPoint> FoWEntity::GetTilesInsideRadius()const
@@ -80,25 +80,6 @@ std::vector<iMPoint> FoWEntity::GetTilesInsideRadius()const
 	return ret;
 }
 
-//TODO 3: Comprehend and complete this function: (this is the function that does the magic for us)
-void FoWEntity::ApplyMaskToTiles(std::vector<iMPoint>tilesAffected)
-{
-	unsigned short* precMask = &app->fowManager->circleMasks[boundingBoxRadius - fow_MIN_CIRCLE_RADIUS][0];
-
-	for (int i = 0; i < tilesAffected.size(); i++)
-	{
-		FoWDataStruct* tileValue = app->fowManager->GetFoWTileState(tilesAffected[i]);
-
-
-		if (tileValue != nullptr)
-		{
-			tileValue->tileShroudBits &= *precMask;
-			tileValue->tileFogBits &= *precMask;
-		}
-		precMask++;
-	}
-
-}
 
 void FoWEntity::ApplyMaskToTilesAuto(std::vector<iMPoint>tilesAffected)
 {

@@ -41,5 +41,24 @@
 #define fow_MAX_CIRCLE_RADIUS 5
 #define fow_MAX_CIRCLE_LENGTH ((fow_MAX_CIRCLE_RADIUS*2)+1)
 
+//Procedural mask generation defines (neighbour selection)
+#define fow_neighbour_W (1 << 0) //defines if the neighbour we are looking for is fow_all
+#define fow_neighbour_N (1 << 1)
+#define fow_neighbour_E (1 << 2)
+#define fow_neighbour_S (1 << 3)
+
+#define fow_neighbour_CNW (fow_neighbour_N|fow_neighbour_W)
+#define fow_neighbour_CNE (fow_neighbour_N|fow_neighbour_E)
+#define fow_neighbour_CSW (fow_neighbour_S|fow_neighbour_W)
+#define fow_neighbour_CSE (fow_neighbour_S|fow_neighbour_E)
+
+#define fow_neighbour_HN (fow_neighbour_S|fow_neighbour_E|fow_neighbour_W) //hole on the north
+#define fow_neighbour_HW (fow_neighbour_S|fow_neighbour_E|fow_neighbour_N)
+#define fow_neighbour_HE (fow_neighbour_S|fow_neighbour_N|fow_neighbour_W) 
+#define fow_neighbour_HS (fow_neighbour_N|fow_neighbour_E|fow_neighbour_W) 
+
+#define fow_neighbour_
+
+
 #endif // !__FOW_BIT_DEFS__
 

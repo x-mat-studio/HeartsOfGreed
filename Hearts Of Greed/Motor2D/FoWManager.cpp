@@ -179,7 +179,6 @@ bool ModuleFoWManager::CleanUp()
 
 	fowEntities.clear();
 
-
 	if (debugFoWtexture != nullptr)
 	{
 		app->tex->UnLoad(debugFoWtexture);
@@ -358,11 +357,11 @@ void ModuleFoWManager::DrawFoWMap()
 	}
 }
 
-FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius)
+FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius)
 {
 	FoWEntity* entity = nullptr;
 
-	entity = new FoWEntity(pos, providesVisibility,visionRadius);
+	entity = new FoWEntity(pos, providesVisibility, visionRadius);
 
 	if (entity != nullptr)
 	{
@@ -400,12 +399,12 @@ void ModuleFoWManager::MapNeedsUpdate()
 unsigned short* ModuleFoWManager::GetMaskFromRadius(int radius)
 {
 	unsigned short* ret = nullptr;
-	
-		if (maskMap.count(radius) > 0) //if the key is found
-		{
-			ret = maskMap.at(radius).mask;
-		}
-	
+
+	if (maskMap.count(radius) > 0) //if the key is found
+	{
+		ret = maskMap.at(radius).mask;
+	}
+
 
 	return ret;
 }
@@ -413,21 +412,21 @@ unsigned short* ModuleFoWManager::GetMaskFromRadius(int radius)
 
 void ModuleFoWManager::RequestMaskGeneration(int radius)
 {
-	
-		if (maskMap.count(radius) > 0)
-		{
-			maskMap.at(radius).numberOfUsers += 1;
-		}
-		else
-		{
-			MaskData data;
-			data.numberOfUsers = 1;
-			data.mask = GenerateCircle(radius);
-			maskMap.insert(std::pair<uint, MaskData>(radius, data));
-			//Fill Corners
-			//Fill joints
-		}
-	
+
+	if (maskMap.count(radius) > 0)
+	{
+		maskMap.at(radius).numberOfUsers += 1;
+	}
+	else
+	{
+		MaskData data;
+		data.numberOfUsers = 1;
+		data.mask = GenerateCircleJoints(radius,GenerateCircleBorders(radius, GenerateCircle(radius)));
+		maskMap.insert(std::pair<uint, MaskData>(radius, data));
+		//Fill Corners
+		//Fill joints
+	}
+
 
 }
 
@@ -459,28 +458,146 @@ unsigned short* ModuleFoWManager::GenerateCircle(int radius)
 {
 	unsigned short* circle = nullptr;
 
-	
-		int diameter = (radius * 2) + 1;
-		iMPoint center = { radius,radius };
-		circle = new unsigned short[diameter * diameter];
 
-		for (int y = 0; y < diameter; y++)
+	int diameter = (radius * 2) + 1;
+	iMPoint center = { radius,radius };
+	circle = new unsigned short[diameter * diameter];
+
+	for (int y = 0; y < diameter; y++)
+	{
+		for (int x = 0; x < diameter; x++)
 		{
-			for (int x = 0; x < diameter; x++)
+			if (InsideCircle(center, { x,y }, radius) == true)
 			{
-				if (InsideCircle(center, {x,y}, radius)==true)
-				{
-					circle[(y * diameter) + x] = fow_NON;
-				}
-				else
-				{
-					circle[(y * diameter) + x] = fow_ALL;
-				}
+				circle[(y * diameter) + x] = fow_NON;
+			}
+			else
+			{
+				circle[(y * diameter) + x] = fow_ALL;
 			}
 		}
-	
+	}
+
 	return circle;
 }
+
+unsigned short* ModuleFoWManager::GenerateCircleBorders(int radius, unsigned short* mask)
+{
+	int diameter = (radius * 2) + 1;
+
+	for (int y = 0; y < diameter; y++)
+	{
+
+
+		for (int x = 0; x < diameter; x++)
+		{
+
+
+			if (mask[(y * diameter) + x] == fow_NON)
+			{
+				//do tile check and change
+				unsigned short aux = CheckCornersFromNeighbours({ x,y }, diameter, mask);
+				switch (aux)
+				{
+				case fow_neighbour_W:
+					mask[(y * diameter) + x] = fow_WWW;
+					break;
+				case fow_neighbour_E:
+					mask[(y * diameter) + x] = fow_EEE;
+					break;
+				case fow_neighbour_N:
+					mask[(y * diameter) + x] = fow_NNN;
+					break;
+				case fow_neighbour_S:
+					mask[(y * diameter) + x] = fow_SSS;
+					break;
+				case fow_neighbour_CNE:
+					mask[(y * diameter) + x] = fow_CNE;
+					break;
+				case fow_neighbour_CNW:
+					mask[(y * diameter) + x] = fow_CNW;
+					break;
+				case fow_neighbour_CSE:
+					mask[(y * diameter) + x] = fow_CSE;
+					break;
+				case fow_neighbour_CSW:
+					mask[(y * diameter) + x] = fow_CSW;
+					break;
+				case fow_neighbour_HE:
+					mask[(y * diameter) + x] = fow_ALL;
+					mask[(y * diameter) + x + 1] = fow_WWW;
+					break;
+				case fow_neighbour_HW:
+					mask[(y * diameter) + x] = fow_ALL;
+					mask[(y * diameter) + x - 1] = fow_EEE;
+					break;
+				case fow_neighbour_HN:
+					mask[(y * diameter) + x] = fow_ALL;
+					mask[((y - 1) * diameter) + x] = fow_SSS;
+					break;
+				case fow_neighbour_HS:
+					mask[(y * diameter) + x] = fow_ALL;
+					mask[((y + 1) * diameter) + x + 1] = fow_NNN;
+					break;
+				}
+			}
+
+
+		}
+
+
+	}
+
+	return mask;
+}
+
+unsigned short* ModuleFoWManager::GenerateCircleJoints(int radius, unsigned short* mask)
+{
+	int diameter = (radius * 2) + 1;
+
+	for (int y = 0; y < diameter; y++)
+	{
+
+
+		for (int x = 0; x < diameter; x++)
+		{
+
+
+			if (mask[(y * diameter) + x] == fow_NON)
+			{
+				//do tile check and change
+				unsigned short aux = CheckJointsFromNeighbours({x,y},diameter,mask);
+
+				switch (aux)
+				{
+				case fow_neighbour_CNE:
+					mask[(y * diameter) + x] = fow_JNE;
+					break;
+				case fow_neighbour_CNW:
+					mask[(y * diameter) + x] = fow_JNW;
+					break;
+				case fow_neighbour_CSE:
+					mask[(y * diameter) + x] = fow_JSE;
+					break;
+				case fow_neighbour_CSW:
+					mask[(y * diameter) + x] = fow_JSW;
+					break;
+				}
+
+
+
+
+			}
+
+
+		}
+
+
+	}
+
+	return mask;
+}
+
 
 bool ModuleFoWManager::InsideCircle(iMPoint center, iMPoint tile, float radius)
 {
@@ -488,8 +605,106 @@ bool ModuleFoWManager::InsideCircle(iMPoint center, iMPoint tile, float radius)
 	float dy = center.y - tile.y;
 	float distance_squared = dx * dx + dy * dy;
 
-	return distance_squared < (radius+0.5f) * (radius+0.5f);
+	return distance_squared < (radius + 0.5f) * (radius + 0.5f);
 }
 
+unsigned short ModuleFoWManager::CheckCornersFromNeighbours(iMPoint pos, int diameter, unsigned short* mask)
+{
+	unsigned short ret = 0;
 
+	//check West tile
+	if (pos.x == 0)
+	{
+		ret += fow_neighbour_W;
+	}
+	else
+	{
+		if (mask[(pos.y * diameter) + pos.x - 1] == fow_ALL)
+		{
+			ret += fow_neighbour_W;
+		}
+	}
+
+	//check East tile
+	if (pos.x == diameter - 1)
+	{
+		ret += fow_neighbour_E;
+	}
+	else
+	{
+		if (mask[(pos.y * diameter) + pos.x + 1] == fow_ALL)
+		{
+			ret += fow_neighbour_E;
+		}
+	}
+
+	//check North tile
+	if (pos.y == 0)
+	{
+		ret += fow_neighbour_N;
+	}
+	else
+	{
+		if (mask[((pos.y - 1) * diameter) + pos.x] == fow_ALL)
+		{
+			ret += fow_neighbour_N;
+		}
+	}
+
+	//check South tile
+	if (pos.y == diameter - 1)
+	{
+		ret += fow_neighbour_S;
+	}
+	else
+	{
+		if (mask[((pos.y + 1) * diameter) + pos.x] == fow_ALL)
+		{
+			ret += fow_neighbour_S;
+		}
+	}
+
+	return ret;
+}
+
+unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diameter, unsigned short* mask)
+{
+	unsigned short ret = 0;
+	int leftTileId = (pos.y * diameter) + pos.x - 1;
+	int rightTileId = (pos.y * diameter) + pos.x + 1;
+	int upperTileId = ((pos.y - 1) * diameter) + pos.x;
+	int bottomTileId = ((pos.y + 1) * diameter) + pos.x;
+
+	if (mask[leftTileId] == fow_CNW || mask[leftTileId] == fow_CNE || mask[leftTileId] == fow_CSE || mask[leftTileId] == fow_CSW)
+	{
+		ret += fow_neighbour_W;
+
+	}
+
+	//check East tile
+
+	if (mask[rightTileId] == fow_CNW || mask[rightTileId] == fow_CNE || mask[rightTileId] == fow_CSE || mask[rightTileId] == fow_CSW)
+	{
+		ret += fow_neighbour_E;
+	}
+
+
+	//check North tile
+
+	if (mask[upperTileId] == fow_CNW || mask[upperTileId] == fow_CNE || mask[upperTileId] == fow_CSE || mask[upperTileId] == fow_CSW)
+	{
+		ret += fow_neighbour_N;
+	}
+
+
+	//check South tile
+
+	if (mask[bottomTileId] == fow_CNW || mask[bottomTileId] == fow_CNE || mask[bottomTileId] == fow_CSE || mask[bottomTileId] == fow_CSW)
+	{
+		ret += fow_neighbour_S;
+	}
+
+
+	return ret;
+}
 
