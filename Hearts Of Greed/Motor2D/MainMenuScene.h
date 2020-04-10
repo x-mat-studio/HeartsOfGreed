@@ -2,6 +2,7 @@
 #define __MAIN_MENU_SCENE__
 
 #include "Module.h"
+#include "SDL/include/SDL.h"
 
 
 
@@ -43,6 +44,19 @@ private:
 private:
 
 	bool changeScene;
+
+private:
+	//images
+	SDL_Texture* gameIcon;
+	SDL_Texture* gameTitle;
+	SDL_Texture* BG;
+	
+
+	//sounds
+	int titleSound;
+
+	//fadecouner
+	float alphaCounter;
 
 };
 
