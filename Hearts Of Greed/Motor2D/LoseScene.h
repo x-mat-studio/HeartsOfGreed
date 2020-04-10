@@ -2,7 +2,7 @@
 #define __LOSE_SCENE__
 
 #include "Module.h"
-
+#include "SDL/include/SDL.h"
 
 
 class ModuleLoseScene : public Module
@@ -41,6 +41,11 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId) const;
 
 private:
+	//images
+	SDL_Texture* youLost;
+
+	//sounds
+	//int winMusic;
 
 };
 
