@@ -84,6 +84,7 @@ private:
 	void SearchForNewObjective();
 
 	void StateMachine(float dt);
+	void SetAnimation(ENEMY_STATES state);
 
 	void Roar();
 private:

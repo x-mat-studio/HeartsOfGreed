@@ -894,5 +894,31 @@ void Hero::SetAnimation(HERO_STATES currState)
 		break;
 	}
 
+	case HERO_STATES::CHARGING_ATTACK:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			//currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			//currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			//currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			//currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			//currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			//currentAnimation = &idleLeft;
+			break;
+		}
+		break;
+	}
+
 	}
 }
