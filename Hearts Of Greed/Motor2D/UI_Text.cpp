@@ -1,13 +1,14 @@
 #include "UI_Text.h"
 #include "Render.h"
 
-UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, char* text, SDL_Color color) : UI(positionValue, father, uiType, rect, uiName, draggable)
+UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, char* text, SDL_Color color, _TTF_Font* font) : UI(positionValue, father, uiType, rect, uiName, draggable)
 {
 
 	if (this->name == "saveText" || this->name == "loadText")
 		color = {100, 100, 100};
 
-	texture = app->fonts->Print(text, color);
+	texture = app->fonts->Print(text, color, font);
+	
 }
 
 UI_Text::~UI_Text()

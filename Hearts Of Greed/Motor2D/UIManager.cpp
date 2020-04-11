@@ -136,14 +136,14 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
-UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE dragable, char* text, SDL_Color color)
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE dragable, char* text, SDL_Color color, _TTF_Font* font)
 {
 	UI* newUI = nullptr;
 
 	switch (uiType)
 	{
 	case UI_TYPE::UI_TEXT:
-		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable, text, color);
+		newUI = new UI_Text(positionValue, father, uiType, rect, uiName, dragable, text, color, font);
 		break;
 	case UI_TYPE::UI_IMG:
 		newUI = new UI_Image(positionValue, father, uiType, rect, uiName, dragable);
@@ -240,6 +240,11 @@ void ModuleUIManager::CreateBasicInGameUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
+
+	// Only for Debug and Testing
+	rect = RectConstructor(449, 24, 24, 24);
+	AddButton(fMPoint(40, 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"testButton", EVENT_ENUM::NULL_EVENT);
+
 }
 
 void ModuleUIManager::CreatePauseMenu()
@@ -293,7 +298,7 @@ void ModuleUIManager::CreateMainMenu()
 
 //	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 5, (h / (app->win->GetUIScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
 	
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E", { 255, 255,255, 255 }, app->fonts->fonts[1]);
 	
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 40, (h / (app->win->GetUIScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsText", DRAGGABLE::DRAG_OFF, "O P T I O N S");
 	

@@ -18,8 +18,6 @@ public:
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
-
-	bool OnAbove();
 	
 	void OnClick();
 	void HoverFeedback();
@@ -36,8 +34,6 @@ private:
 	bool closeMenu;
 	bool includeFather;
 	bool hoverSound;
-
-	float defaultPosition;
 
 	fMPoint accuratedDrag;
 	EVENT_ENUM eventRecieved;

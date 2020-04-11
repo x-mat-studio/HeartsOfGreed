@@ -7,11 +7,30 @@
 #include "Textures.h"
 #include "Render.h"
 
-Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate,
+Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
+	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
+	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int hitPoints, int recoveryHitPointsRate,
 	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
-	animation(animation),
+	walkLeft(walkLeft),
+	walkLeftUp(walkLeftUp),
+	walkLeftDown(walkLeftDown),
+	walkRightUp(walkRightUp),
+	walkRightDown(walkRightDown),
+	walkRight(walkRight),
+	idleRight(idleRight),
+	idleRightDown(idleRightDown),
+	idleRightUp(idleRightUp),
+	idleLeft(idleLeft),
+	idleLeftUp(idleLeftUp),
+	idleLeftDown(idleLeftDown),
+	punchLeft(punchLeft),
+	punchLeftUp(punchLeftUp),
+	punchLeftDown(punchLeftDown),
+	punchRightUp(punchRightUp),
+	punchRightDown(punchRightDown),
+	punchRight(punchRight),
 
 	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
@@ -37,7 +56,24 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
 	DynamicEntity(position, copy->unitSpeed, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
-	animation(copy->animation),
+	walkLeft(copy->walkLeft),
+	walkLeftUp(copy->walkLeftUp),
+	walkLeftDown(copy->walkLeftDown),
+	walkRightUp(copy->walkRightUp),
+	walkRightDown(copy->walkRightDown),
+	walkRight(copy->walkRight),
+	idleRight(copy->idleRight),
+	idleRightDown(copy->idleRightDown),
+	idleRightUp(copy->idleRightUp),
+	idleLeft(copy->idleLeft),
+	idleLeftUp(copy->idleLeftUp),
+	idleLeftDown(copy->idleLeftDown),
+	punchLeft(copy->punchLeft),
+	punchLeftUp(copy->punchLeftUp),
+	punchLeftDown(copy->punchLeftDown),
+	punchRightUp(copy->punchRightUp),
+	punchRightDown(copy->punchRightDown),
+	punchRight(copy->punchRight),
 
 	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
@@ -61,7 +97,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 {
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
-	currentAnimation = &animation;
+	currentAnimation = &idleRightDown;
 }
 
 
@@ -71,7 +107,25 @@ Enemy::~Enemy()
 
 	inputs.clear();
 
-	animation = Animation();
+	walkLeft = Animation();
+	walkLeftUp = Animation();
+	walkLeftDown = Animation();
+	walkRightUp = Animation();
+	walkRightDown = Animation();
+	walkRight = Animation();
+	idleRight = Animation();
+	idleRightDown = Animation();
+	idleRightUp = Animation();
+	idleLeft = Animation();
+	idleLeftUp = Animation();
+	idleLeftDown = Animation();
+	punchLeft = Animation();
+	punchLeftUp = Animation();
+	punchLeftDown = Animation();
+	punchRightUp = Animation();
+	punchRightDown = Animation();
+	punchRight = Animation();
+	
 }
 
 
@@ -209,7 +263,7 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	Frame currFrame = animation.GetCurrentFrame(dt);
+	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX -offset.x, position.y - currFrame.pivotPositionY - offset.y, &currFrame.frame, false, true, 0, 255, 0, 0);
@@ -477,22 +531,22 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			//currentAnimation = &walkRightUp;
+			currentAnimation = &walkRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
-			//currentAnimation = &walkLeftUp;
+			currentAnimation = &walkLeftUp;
 			break;
 		case FACE_DIR::EAST:
-			//currentAnimation = &walkRight;
+			currentAnimation = &walkRight;
 			break;
 		case FACE_DIR::SOUTH_EAST:
-			//currentAnimation = &walkRightDown;
+			currentAnimation = &walkRightDown;
 			break;
 		case FACE_DIR::SOUTH_WEST:
-			//currentAnimation = &walkLeftDown;
+			currentAnimation = &walkLeftDown;
 			break;
 		case FACE_DIR::WEST:
-			//currentAnimation = &walkLeft;
+			currentAnimation = &walkLeft;
 			break;
 		}
 	}
@@ -502,22 +556,22 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			//currentAnimation = &idleRightUp;
+			currentAnimation = &idleRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
-			//currentAnimation = &idleLeftUp;
+			currentAnimation = &idleLeftUp;
 			break;
 		case FACE_DIR::EAST:
-			//currentAnimation = &idleRight;
+			currentAnimation = &idleRight;
 			break;
 		case FACE_DIR::SOUTH_EAST:
-			//currentAnimation = &idleRightDown;
+			currentAnimation = &idleRightDown;
 			break;
 		case FACE_DIR::SOUTH_WEST:
-			//currentAnimation = &idleLeftDown;
+			currentAnimation = &idleLeftDown;
 			break;
 		case FACE_DIR::WEST:
-			//currentAnimation = &idleLeft;
+			currentAnimation = &idleLeft;
 			break;
 		}
 		break;
@@ -528,22 +582,22 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			//currentAnimation = &idleRightUp;
+			currentAnimation = &punchRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
-			//currentAnimation = &idleLeftUp;
+			currentAnimation = &punchLeftUp;
 			break;
 		case FACE_DIR::EAST:
-			//currentAnimation = &idleRight;
+			currentAnimation = &punchRight;
 			break;
 		case FACE_DIR::SOUTH_EAST:
-			//currentAnimation = &idleRightDown;
+			currentAnimation = &punchRightDown;
 			break;
 		case FACE_DIR::SOUTH_WEST:
-			//currentAnimation = &idleLeftDown;
+			currentAnimation = &punchLeftDown;
 			break;
 		case FACE_DIR::WEST:
-			//currentAnimation = &idleLeft;
+			currentAnimation = &punchLeft;
 			break;
 		}
 		break;
