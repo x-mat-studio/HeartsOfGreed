@@ -27,13 +27,6 @@ enum class AREA_TYPE
 
 };
 
-enum class AREA_EFFECT
-{
-	NO_TYPE = -1,
-
-	GATHERER_SKILL1,
-	MELEE_SKILL1
-};
 
 struct skillArea
 {
@@ -110,6 +103,12 @@ public:
 	void DesactivateGodModeHeroes();
 
 	void KillAllEnemies();
+
+	skillArea* RequestArea(SKILL_ID id, std::vector<iMPoint>* toFill, iMPoint center);
+
+	//This & skill Struct need re-work to accept single target
+	bool ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type, Entity* objective = nullptr);
+
 private:
 
 	void CheckIfStarted();
@@ -123,10 +122,13 @@ private:
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
 	//Area Related
-	bool GenerateArea(skillArea* areaToGenerate, int width, int heigth, int radius);
-	unsigned short* GenerateCircleArea(int radius);
-	unsigned short* GenerateQuadArea(int width, int height);
-	bool RequestArea(AREA_EFFECT callback, std::vector<iMPoint>* toFill);
+	bool BuildArea(skillArea* areaToGenerate, int width, int heigth, int radius);
+	unsigned short* BuildCircleArea(int radius);
+	unsigned short* BuildQuadArea(int width, int height);
+
+	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
+
+
 
 public:
 
@@ -171,7 +173,7 @@ private:
 
 	Turret* testTurret;
 
-	std::unordered_map <AREA_EFFECT, skillArea> skillAreas;
+	std::unordered_map <SKILL_ID, skillArea> skillAreas;
 
 };
 

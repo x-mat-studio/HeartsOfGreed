@@ -108,6 +108,7 @@ public:
 		return(r);
 	}
 
+
 	MAT_Point operator * (const TYPE& v) const
 	{
 		MAT_Point r;

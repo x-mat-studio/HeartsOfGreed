@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "DynamicEntity.h"
 
+
 enum class HERO_STATES
 {
 	UNKNOWN = -1,
@@ -31,7 +32,6 @@ enum class HERO_STATES
 	MAX
 };
 
-
 enum HERO_INPUTS
 {
 	IN_IDLE,
@@ -48,7 +48,7 @@ enum HERO_INPUTS
 	IN_PREPARE_SKILL3,
 	IN_SKILL3,
 	
-	IN_SKILL_CANCELLED,
+	IN_SKILL_CANCEL,
 	IN_SKILL_FINISHED,
 
 	IN_OUT_OF_RANGE,
@@ -59,6 +59,25 @@ enum HERO_INPUTS
 	IN_DEAD
 };
 
+
+
+struct Skill
+{
+	Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target);
+	Skill(const Skill& skill1);
+
+	int dmg;
+
+	ENTITY_ALIGNEMENT target;
+	SKILL_TYPE type;
+	SKILL_ID id;
+
+	// For the Future (?)
+	//EFFECT effect = EFFECT::KNOCKDOWN
+};
+
+struct skillArea;
+
 class Hero : public DynamicEntity
 {
 public:
@@ -68,7 +87,8 @@ public:
 		Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 		int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime);
+		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
+		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
 	~Hero();
@@ -82,10 +102,6 @@ public:
 
 	virtual void OnCollision(Collider* collider);
 
-	virtual bool UseAbility1();
-	virtual bool UseAbility2();
-	virtual bool UseAbility3();
-
 	virtual void LevelUp();
 
 	int RecieveDamage(int damage);
@@ -95,16 +111,23 @@ public:
 
 	void CheckObjecive(Entity* entity);
 	void Draw(float dt);
+	void DrawArea();
 
+	//Skill Related-----------------
 	bool PrepareSkill1();
 	bool PrepareSkill2();
 	bool PrepareSkill3();
 
-	bool ActivateSkill1();
-	bool ActivateSkill2();
-	bool ActivateSkill3();
+	virtual bool ActivateSkill1(iMPoint mouseClick);
+	virtual bool ActivateSkill2();
+	virtual bool ActivateSkill3();
 
-	void CancelSkill();
+	void SkillCanceled();
+	void SkillDone();
+
+	virtual bool PreProcessSkill1();
+	virtual bool PreProcessSkill2();
+	virtual bool PreProcessSkill3();
 
 private:
 	
@@ -191,6 +214,11 @@ public:
 	int framePathfindingCount;
 
 	bool godMode;
+
+	std::vector <iMPoint> currAoE;
+	skillArea* currAreaInfo;
+	Skill skill1;
+
 };
 
 

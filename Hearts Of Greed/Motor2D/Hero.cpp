@@ -8,13 +8,15 @@
 #include "Map.h"
 #include "Player.h"
 
+
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp,
 	Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
+	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
+	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
 
@@ -71,7 +73,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	godMode(false),
 
 	state(HERO_STATES::IDLE),
-
+	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
 	objective(nullptr)
 {
 	currentAnimation = &walkLeft;
@@ -135,11 +137,13 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	state(HERO_STATES::IDLE),
 
-	objective(nullptr)
+	objective(nullptr),
+
+	skill1(copy->skill1)
 {
 	currentAnimation = &walkLeft;
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, true,visionDistance);
+	visionEntity = app->fowManager->CreateFoWEntity(position, true, visionDistance);
 }
 
 
@@ -163,12 +167,14 @@ Hero::~Hero()
 	idleLeft = Animation();
 	idleLeftUp = Animation();
 	idleLeftDown = Animation();
+
+	currAoE.clear();
+	currAreaInfo = nullptr;
 }
 
 
 bool Hero::PreUpdate(float dt)
 {
-
 	return true;
 }
 
@@ -245,30 +251,21 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::SKILL1:
-		UseAbility1();
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
-
-
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:
-
 		break;
 
 	case HERO_STATES::PREPARE_SKILL3:
-
 		break;
 
 	case HERO_STATES::SKILL2:
-		UseAbility2();
-		cooldownHability2 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::SKILL3:
-		UseAbility3();
-		cooldownHability3 += TIME_TRIGGER;
 		break;
 
 	case HERO_STATES::REPAIR:
@@ -288,6 +285,8 @@ bool Hero::PostUpdate(float dt)
 {
 	if (app->debugMode)
 		DebugDraw();
+
+	DrawArea();
 
 	return true;
 }
@@ -338,6 +337,17 @@ void Hero::Draw(float dt)
 	app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 }
 
+void Hero::DrawArea()
+{
+	if (currAreaInfo && currAoE.size() > 0)
+	{
+		for (int i = 0; i < currAoE.size(); i++)
+		{
+			iMPoint pos = app->map->MapToWorld(currAoE[i].x - 1, currAoE[i].y);
+			app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y);
+		}
+	}
+}
 
 bool Hero::CheckAttackRange()
 {
@@ -359,7 +369,7 @@ bool Hero::CheckAttackRange()
 	rect.w = attackRange * 2;
 	rect.h = attackRange * 2;
 
-	
+
 	if (objective->GetCollider()->CheckCollision(rect))
 	{
 		return true;
@@ -440,19 +450,19 @@ void Hero::RecoverEnergy()
 }
 
 
-bool Hero::UseAbility1()
+bool Hero::ActivateSkill1(iMPoint mouseClick)
 {
 	return true;
 }
 
 
-bool Hero::UseAbility2()
+bool Hero::ActivateSkill2()
 {
 	return true;
 }
 
 
-bool Hero::UseAbility3()
+bool Hero::ActivateSkill3()
 {
 	return true;
 }
@@ -460,9 +470,10 @@ bool Hero::UseAbility3()
 
 bool Hero::PrepareSkill1()
 {
-	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
+	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3 && state != HERO_STATES::PREPARE_SKILL1)
 	{
 		inputs.push_back(IN_PREPARE_SKILL1);
+		PreProcessSkill1();
 		return true;
 	}
 
@@ -495,29 +506,12 @@ bool Hero::PrepareSkill3()
 }
 
 
-void Hero::CancelSkill()
+void Hero::SkillCanceled()
 {
-	inputs.push_back(HERO_INPUTS::IN_SKILL_CANCELLED);
+	inputs.push_back(HERO_INPUTS::IN_SKILL_CANCEL);
+
 }
 
-
-bool Hero::ActivateSkill1()
-{
-	
-	return false;
-}
-
-
-bool Hero::ActivateSkill2()
-{
-	return false;
-}
-
-
-bool Hero::ActivateSkill3()
-{
-	return false;
-}
 
 
 void Hero::LevelUp()
@@ -549,13 +543,13 @@ int Hero::RecieveDamage(int damage)
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
-	return GetLevel();	
+	return GetLevel();
 }
 
 
 bool Hero::GetLevel()
 {
-	if ((expToLevelUp * level) <= heroXP) 
+	if ((expToLevelUp * level) <= heroXP)
 	{
 		LevelUp();
 		heroXP = 0;
@@ -754,6 +748,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 				cooldownHability1 += TIME_TRIGGER;
 
+				currAoE.clear();
+				currAreaInfo = nullptr;
+
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
@@ -822,8 +819,11 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCELLED: 
+			case HERO_INPUTS::IN_SKILL_CANCEL:
 			{
+				currAoE.clear();
+				currAreaInfo = nullptr;
+
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
@@ -833,6 +833,15 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				skillFromAttacking = false;
 				break;
 			}
+
+			case HERO_INPUTS::IN_SKILL1:
+			{
+				app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+				skill1TimePassed += TIME_TRIGGER;
+				state = HERO_STATES::SKILL1;
+				break;
+			}
+
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
@@ -846,7 +855,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCELLED: {
+			case HERO_INPUTS::IN_SKILL_CANCEL: {
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -869,7 +878,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCELLED: {
+			case HERO_INPUTS::IN_SKILL_CANCEL: {
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -995,3 +1004,25 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	}
 }
+
+bool Hero::PreProcessSkill1()
+{
+	return false;
+};
+
+bool Hero::PreProcessSkill2()
+{
+	return false;
+};
+
+bool Hero::PreProcessSkill3()
+{
+	return false;
+};
+
+
+Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : id(id), dmg(dmg), type(type), target(target)
+{}
+
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target)
+{}

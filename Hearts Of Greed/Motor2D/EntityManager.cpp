@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "AI.h"
 #include "FoWManager.h"
+#include "Pathfinding.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -70,7 +71,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
+		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 4.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
@@ -136,14 +138,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Generate Areas------------------------------------
 	skillArea gathererSkill1Area;
 	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	GenerateArea(&gathererSkill1Area, 0, 0, 6);
-	skillAreas.insert({ AREA_EFFECT::GATHERER_SKILL1, gathererSkill1Area });
+	BuildArea(&gathererSkill1Area, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1Area });
 
 
 	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
-	GenerateArea(&meleeSkill1Area, 0, 0, 2);
-	skillAreas.insert({ AREA_EFFECT::MELEE_SKILL1, meleeSkill1Area });
+	BuildArea(&meleeSkill1Area, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
 	return ret;
 }
@@ -372,7 +374,7 @@ bool ModuleEntityManager::CleanUp()
 	blueBuilding = nullptr;
 	sampleBase = nullptr;
 
-	for (std::unordered_map<AREA_EFFECT, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
+	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
 		delete it->second.area;
 		it->second.area = nullptr;
@@ -999,20 +1001,20 @@ void ModuleEntityManager::KillAllEnemies()
 	}
 }
 
-bool ModuleEntityManager::GenerateArea(skillArea* areaToGenerate, int width, int height, int radius)
+bool ModuleEntityManager::BuildArea(skillArea* areaToGenerate, int width, int height, int radius)
 {
 	switch (areaToGenerate->form)
 	{
 	case AREA_TYPE::CIRCLE:
 	{
-		areaToGenerate->area = GenerateCircleArea(radius);
+		areaToGenerate->area = BuildCircleArea(radius);
 		areaToGenerate->radius = radius;
 		return true;
 	}
 	break;
 	case AREA_TYPE::QUAD:
 	{
-		areaToGenerate->area = GenerateQuadArea(width, height);
+		areaToGenerate->area = BuildQuadArea(width, height);
 		areaToGenerate->width = width;
 		areaToGenerate->heigth = height;
 		return true;
@@ -1024,7 +1026,7 @@ bool ModuleEntityManager::GenerateArea(skillArea* areaToGenerate, int width, int
 }
 
 
-unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
+unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 {
 	unsigned short* circle = nullptr;
 
@@ -1038,11 +1040,11 @@ unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
 		{
 			if (app->fowManager->InsideCircle(center, { x,y }, radius) == true)
 			{
-				circle[(y * diameter) + x] = 0;
+				circle[(y * diameter) + x] = 1;
 			}
 			else
 			{
-				circle[(y * diameter) + x] = 1;
+				circle[(y * diameter) + x] = 0;
 			}
 		}
 	}
@@ -1050,7 +1052,7 @@ unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
 	return circle;
 }
 
-unsigned short* ModuleEntityManager::GenerateQuadArea(int w, int h)
+unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
 {
 	unsigned short* quad = nullptr;
 
@@ -1067,24 +1069,96 @@ unsigned short* ModuleEntityManager::GenerateQuadArea(int w, int h)
 	return quad;
 }
 
-bool ModuleEntityManager::RequestArea(AREA_EFFECT callback, std::vector <iMPoint>* toFill)
+skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPoint>* toFill, iMPoint center)
 {
-	skillArea* toCheck = nullptr;
-	std::unordered_map<AREA_EFFECT, skillArea> ::iterator it;
+	skillArea* ret = nullptr;
+	std::unordered_map<SKILL_ID, skillArea> ::iterator it;
 
 	for (it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
 		if (it->first == callback)
 		{
+			ret = &it->second;
 			break;
 		}
 	}
 
 	if (it == skillAreas.end())
-		return false;
+		return ret;
 
 	//Here goes a GenerateArea :D have fun
 	//toFill->insert();
 
+	center = app->map->WorldToMap(round(center.x), round(center.y));
+	GenerateDynArea(toFill, ret, center);
 
+	return ret;
+}
+
+void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center)
+{
+	switch (area->form)
+	{
+	case AREA_TYPE::CIRCLE:
+	{
+		int diameter = (area->radius * 2) + 1;
+		iMPoint posCheck = center - area->radius;
+
+		for (int y = 0; y < diameter; y++)
+		{
+			for (int x = 0; x < diameter; x++)
+			{
+				if (area->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
+				{
+					toFill->push_back(posCheck + iMPoint{ x, y });
+				}
+			}
+		}
+	}
+	break;
+	case AREA_TYPE::QUAD:
+	{}
+	break;
+	}
+}
+
+bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type, Entity* objective)
+{
+	bool ret = false;
+
+	switch (type)
+	{
+	case SKILL_TYPE::SINGLE_TARGET:
+	{}
+	break;
+	case SKILL_TYPE::AREA_OF_EFFECT:
+	{
+		pivot = app->map->WorldToMap(pivot.x, pivot.y);
+		int numEntities = entityVector.size();
+		iMPoint entPos;
+		for (int i = 0; i < numEntities; i++)
+		{
+			if (entityVector[i]->GetAlignment() != target)
+				continue;
+
+			entPos = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
+
+			switch (area->form)
+			{
+			case AREA_TYPE::CIRCLE:
+			{
+				if (app->fowManager->InsideCircle(pivot, entPos, area->radius))
+					entityVector[i]->RecieveDamage(dmg);
+			}
+			break;
+			case AREA_TYPE::QUAD:
+			{}
+			break;
+
+			}
+		}
+	}
+	break;
+	}
+	return true;
 }

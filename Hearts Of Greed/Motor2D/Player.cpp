@@ -264,7 +264,6 @@ void ModulePlayer::RightClick()
 
 	}
 
-
 }
 
 
@@ -368,7 +367,8 @@ void ModulePlayer::DoHeroSkills()
 	if (entityComand == true)
 	{
 		entityComand = false;
-		heroesVector[0]->CancelSkill();
+		heroesVector[0]->SkillCanceled();
+
 
 		prepareSkill = false;
 		skill1 = false;
@@ -381,7 +381,7 @@ void ModulePlayer::DoHeroSkills()
 	{
 		if (skill1 == true)
 		{
-			if (heroesVector[0]->ActivateSkill1() == true)
+			if (heroesVector[0]->ActivateSkill1(clickPosition) == true)
 			{
 				skill1 = false;
 				doSkill = false;
