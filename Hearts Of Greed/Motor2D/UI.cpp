@@ -24,7 +24,7 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	hiding_unhiding(false),
 	hidden(false),
 	defaultPosition(worldPosition.x),
-	hideSpeed(50.0f),
+	hideSpeed(150.0f),
 	texture (app->uiManager->GetAtlasTexture())
 
 {}
@@ -119,7 +119,7 @@ bool UI::OnAbove()
 void UI::Hide(float dt)
 {
 
-	float position = worldPosition.x * app->win->GetUIScale();
+	float position = worldPosition.x;
 	bool right;
 
 	if (position > app->win->width / 2)
@@ -133,49 +133,74 @@ void UI::Hide(float dt)
 		{
 			this->worldPosition.x += hideSpeed * dt;
 
-			if (position > (app->win->width / 2))
+			if ((position + (8 * box.w / 10)) > app->win->width)
 			{
-				if ((position + box.w) > app->win->width)
+				hidden = true;
+				hiding_unhiding = false;
+				if (parent != nullptr)
 				{
-					hidden = true;
-					hiding_unhiding = false;
+					parent->hidden = true;
+					parent->hiding_unhiding = false;
+					parent->box.x = 536;
 				}
 			}
 		}
+
 		else if (hiding_unhiding && hidden)
 		{
 			this->worldPosition.x -= hideSpeed * dt;
 
 			if (worldPosition.x <= defaultPosition)
 			{
+				worldPosition.x = defaultPosition;
 				hidden = false;
 				hiding_unhiding = false;
+				if (parent != nullptr)
+				{
+					parent->hidden = false;
+					parent->hiding_unhiding = false;
+					parent->box.x = 555;
+					parent->worldPosition.x = parent->defaultPosition;
+				}
 			}
 		}
 	}
+
 	else 
 	{
 		if (hiding_unhiding && !hidden)
 		{
 			this->worldPosition.x -= hideSpeed * dt;
 
-			if (position < (app->win->width / 2))
+			if ((position + (8 * box.w / 10)) < 0)
 			{
-				if ((position + box.w) < 0)
+				hidden = true;
+				hiding_unhiding = false;
+				if (parent != nullptr)
 				{
-					hidden = true;
-					hiding_unhiding = false;
+					parent->hidden = true;
+					parent->hiding_unhiding = false;
+					parent->box.x = 555;
 				}
 			}
 		}
+
 		else if (hiding_unhiding && hidden)
 		{
 			this->worldPosition.x += hideSpeed * dt;
 
 			if (worldPosition.x >= defaultPosition)
 			{
+				worldPosition.x = defaultPosition;
 				hidden = false;
 				hiding_unhiding = false;
+				if (parent != nullptr)
+				{
+					parent->hidden = false;
+					parent->hiding_unhiding = false;
+					parent->box.x = 536;
+					parent->worldPosition.x = parent->defaultPosition;
+				}
 			}
 		}
 	}

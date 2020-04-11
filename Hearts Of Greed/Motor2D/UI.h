@@ -28,6 +28,7 @@ struct ButtonProperties
 	bool hoverMove;
 	bool closeMenu;
 	bool includeFather;
+	DRAGGABLE draggable;
 };
 
 class UI
