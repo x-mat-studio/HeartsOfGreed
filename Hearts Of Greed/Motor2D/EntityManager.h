@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Entity.h"
 #include <list>
+#include <unordered_map>
 
 class Hero;
 class GathererHero;
@@ -20,21 +21,25 @@ enum class AREA_TYPE
 {
 	NO_TYPE = -1,
 
-	//FORM
 	CIRCLE,
 	QUAD,
 	CONE,
 
-	//CALLBACK
+};
+
+enum class AREA_EFFECT
+{
+	NO_TYPE = -1,
+
 	GATHERER_SKILL1,
 	MELEE_SKILL1
 };
 
 struct skillArea
 {
-	unsigned short* area;
-	AREA_TYPE form;
-	AREA_TYPE callback;
+	unsigned short* area = nullptr;
+	AREA_TYPE form = AREA_TYPE::NO_TYPE;
+	int radius = 0, width = 0, heigth = 0;
 };
 
 enum class SPRITE_POSITION : int
@@ -117,8 +122,11 @@ private:
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
+	//Area Related
+	bool GenerateArea(skillArea* areaToGenerate, int width, int heigth, int radius);
 	unsigned short* GenerateCircleArea(int radius);
 	unsigned short* GenerateQuadArea(int width, int height);
+	bool RequestArea(AREA_EFFECT callback, std::vector<iMPoint>* toFill);
 
 public:
 
@@ -163,8 +171,7 @@ private:
 
 	Turret* testTurret;
 
-	skillArea gathererSkill1Area;
-	skillArea meleeSkill1Area;
+	std::unordered_map <AREA_EFFECT, skillArea> skillAreas;
 
 };
 
