@@ -66,18 +66,27 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
 
+	Animation punchRight = punchRight.PushAnimation(suitman, "punch_right");
+	Animation punchRightUp = punchRightUp.PushAnimation(suitman, "punch_right_up");
+	Animation punchRightDown = punchRightDown.PushAnimation(suitman, "punch_right_down");
+	Animation punchLeft = punchLeft.PushAnimation(suitman, "punch_left");
+	Animation punchLeftUp = punchLeftUp.PushAnimation(suitman, "punch_left_up");
+	Animation punchLeftDown = punchLeftDown.PushAnimation(suitman, "punch_left_down");
+	
+	Animation skill1Right = skill1Right.PushAnimation(suitman, "skill_1_right");
+	Animation skill1RightUp = skill1RightUp.PushAnimation(suitman, "skill_1_right_up");
+	Animation skill1RightDown = skill1RightDown.PushAnimation(suitman, "skill_1_right_down");
+	Animation skill1Left = skill1Left.PushAnimation(suitman, "skill_1_left");
+	Animation skill1LeftUp = skill1LeftUp.PushAnimation(suitman, "skill_1_left_up");
+	Animation skill1LeftDown = skill1LeftDown.PushAnimation(suitman, "skill_1_left_down");
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 4.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
-
-	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
-		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);*/
-
 
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
@@ -119,7 +128,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5000, 0, 250, 1, 1, 25, 100, 50);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building

@@ -104,6 +104,7 @@
     <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MeleeHero.cpp" />
+    <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="FadeToBlack.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MeleeHero.h" />
     <ClInclude Include="FadeToBlack.h" />
+    <ClInclude Include="Minimap.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RangedHero.h" />

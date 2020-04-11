@@ -151,6 +151,9 @@
     <ClCompile Include="IntroScene.cpp">
       <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="Minimap.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -320,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="IntroScene.h">
       <Filter>Desenvolupament  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minimap.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

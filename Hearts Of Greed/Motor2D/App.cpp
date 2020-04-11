@@ -23,6 +23,7 @@
 #include "MainMenuScene.h"
 #include "WinScene.h"
 #include "LoseScene.h"
+#include "Minimap.h"
 
 
 // Constructor
@@ -55,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	testScene = new ModuleTestScene();
 	winScene = new ModuleWinScene();
 	loseScene = new ModuleLoseScene();
+	minimap = new Minimap();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -78,7 +80,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(player);
 	AddModule(ai);
 
-	
+	AddModule(minimap);
+
 	//Fade to black before render
 	AddModule(fadeToBlack);
 	// render last to swap buffer
@@ -144,11 +147,11 @@ bool App::Awake()
 	loadGame = config.first_child().child("load").attribute("fileName").as_string();
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
 	//Set disabled modules here
-	//mainMenu->Disable();
+	mainMenu->Disable();
 	introScene->Disable();
 	winScene->Disable();
 	loseScene->Disable();
-	testScene->Disable();
+	//testScene->Disable();
 	//------
 	PERF_PEEK(pTimer);
 
