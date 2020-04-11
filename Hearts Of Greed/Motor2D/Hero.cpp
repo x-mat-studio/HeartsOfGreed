@@ -12,6 +12,9 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp,
 	Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
+	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
+	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
+	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime) :
@@ -30,6 +33,18 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	idleLeft(idleLeft),
 	idleLeftUp(idleLeftUp),
 	idleLeftDown(idleLeftDown),
+	punchLeft(punchLeft),
+	punchLeftUp(punchLeftUp),
+	punchLeftDown(punchLeftDown),
+	punchRightUp(punchRightUp),
+	punchRightDown(punchRightDown),
+	punchRight(punchRight),
+	skill1Right(skill1Right),
+	skill1RightDown(skill1RightDown),
+	skill1RightUp(skill1RightUp),
+	skill1Left(skill1Left),
+	skill1LeftUp(skill1LeftUp),
+	skill1LeftDown(skill1LeftDown),
 
 	level(level),
 
@@ -95,6 +110,18 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	idleLeft(copy->idleLeft),
 	idleLeftUp(copy->idleLeftUp),
 	idleLeftDown(copy->idleLeftDown),
+	punchLeft(copy->punchLeft),
+	punchLeftUp(copy->punchLeftUp),
+	punchLeftDown(copy->punchLeftDown),
+	punchRightUp(copy->punchRightUp),
+	punchRightDown(copy->punchRightDown),
+	punchRight(copy->punchRight),
+	skill1Right(copy->skill1Right),
+	skill1RightDown(copy->skill1RightDown),
+	skill1RightUp(copy->skill1RightUp),
+	skill1Left(copy->skill1Left),
+	skill1LeftUp(copy->skill1LeftUp),
+	skill1LeftDown(copy->skill1LeftDown),
 
 	level(copy->level),
 	hitPoints(copy->hitPoints),
@@ -163,6 +190,18 @@ Hero::~Hero()
 	idleLeft = Animation();
 	idleLeftUp = Animation();
 	idleLeftDown = Animation();
+	punchLeft = Animation();
+	punchLeftUp = Animation();
+	punchLeftDown = Animation();
+	punchRightUp = Animation();
+	punchRightDown = Animation();
+	punchRight = Animation();
+	skill1Right = Animation();
+	skill1RightUp = Animation();
+	skill1RightDown = Animation();
+	skill1Left = Animation();
+	skill1LeftUp = Animation();
+	skill1LeftDown = Animation();
 }
 
 
@@ -971,22 +1010,22 @@ void Hero::SetAnimation(HERO_STATES currState)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			//currentAnimation = &idleRightUp;
+			currentAnimation = &punchRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
-			//currentAnimation = &idleLeftUp;
+			currentAnimation = &punchLeftUp;
 			break;
 		case FACE_DIR::EAST:
-			//currentAnimation = &idleRight;
+			currentAnimation = &punchRight;
 			break;
 		case FACE_DIR::SOUTH_EAST:
-			//currentAnimation = &idleRightDown;
+			currentAnimation = &punchRightDown;
 			break;
 		case FACE_DIR::SOUTH_WEST:
-			//currentAnimation = &idleLeftDown;
+			currentAnimation = &punchLeftDown;
 			break;
 		case FACE_DIR::WEST:
-			//currentAnimation = &idleLeft;
+			currentAnimation = &punchLeft;
 			break;
 		}
 		break;
