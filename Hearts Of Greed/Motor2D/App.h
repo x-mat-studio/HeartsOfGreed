@@ -34,6 +34,7 @@ class ModuleMainMenuScene;
 class ModuleTestScene;
 class ModuleWinScene;
 class ModuleLoseScene;
+class Minimap;
 
 
 class App
@@ -119,6 +120,7 @@ public:
 	ModuleTestScene*		testScene;
 	ModuleWinScene*			winScene;
 	ModuleLoseScene*		loseScene;
+	Minimap*				minimap;
 
 	uint32_t			frames;
 	

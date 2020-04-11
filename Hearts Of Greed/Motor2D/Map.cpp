@@ -9,6 +9,7 @@
 #include "FoWManager.h"
 #include "EntityManager.h"
 #include "Building.h" //necessary to read buildings from tiled
+#include "Minimap.h"
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -92,16 +93,60 @@ void ModuleMap::Draw()
 }
 
 
+void ModuleMap::DrawMinimap()
+{
+	BROFILER_CATEGORY("DRAW Minimap", Profiler::Color::DarkGoldenRod);
+
+	if (mapLoaded == false)
+		return;
+
+	int f = 0;
+
+	float scale = app->minimap->minimapScaleRelation;
+	float halfWidth = app->minimap->minimapWidth * 0.5f;
+	while (f < data.layers.size())
+	{
+		if (data.layers[f]->name != "Collision") {
+
+			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
+			{
+
+				for (int j = 0; j < data.layers[f]->width; j++)//number of columns
+				{
+					int id = data.layers[f]->gid[Get(j, i, data.layers[f])];
+
+
+					if (id > 0)
+					{
+						float worldX;
+						float worldY;
+						MapToWorldCoords(j, i, data, worldX, worldY);
+
+						worldX += app->render->currentCamX;
+						worldY += app->render->currentCamY;
+						
+						app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX+halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)),scale);
+
+
+					}
+
+				}
+			}
+		}
+		f++;
+	}
+}
+
+
+
 TileSet* ModuleMap::GetTilesetFromTileId(int id) const
 {
 	TileSet* set = nullptr;
 
 	int numTilesets = data.tilesets.size();
 
-
 	for (int i = 0; i < numTilesets; i++)
 	{
-
 
 		if (id < data.tilesets[i]->firstGid)
 		{
@@ -272,6 +317,10 @@ bool ModuleMap::LoadNew(const char* file_name)
 
 
 	mapLoaded = ret;
+
+	if (mapLoaded)
+		app->minimap->LoadMinimap();
+
 	// Clean up the pugui tree
 	mapFile.reset();
 	return ret;
@@ -452,7 +501,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 			if (layer->gid[i] > 0) {
 
-				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
+				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(layer->gid[i]));
 
 				int tilePosAux_x, tilePosAux_y;
 				tilePosAux_x = (i % layer->width);
@@ -461,7 +510,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				colliderRectAux.x = tilePosAux_x * colliderRectAux.w / 2 - tilePosAux_y * colliderRectAux.w / 2;
 				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2;
 				colliderRectAux.w /= 2;
-				
+
 				app->coll->AddCollider(colliderRectAux, COLLIDER_WALL);
 
 			}
@@ -474,7 +523,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 			if (layer->gid[i] > 0) {
 
-				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(i));
+				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(layer->gid[i]));
 
 				int tilePosAux_x, tilePosAux_y;
 				tilePosAux_x = (i % layer->width);
@@ -483,55 +532,55 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				colliderRectAux.x = tilePosAux_x * colliderRectAux.w / 2 - tilePosAux_y * colliderRectAux.w / 2;
 				colliderRectAux.y = tilePosAux_x * colliderRectAux.h / 2 + tilePosAux_y * colliderRectAux.h / 2;
 				colliderRectAux.w /= 2;
-				
+
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
 
 				switch (layer->gid[i])
 				{
-					case 390:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y,ENTITY_ALIGNEMENT::ENEMY);
-						break;
+				case 390:
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
+					break;
 
-					case 391:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
-						break;
+				case 391:
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
+					break;
 
-					case 392:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
-						break;
+				case 392:
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
+					break;
 
-					case 393:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
-						break;
+				case 393:
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
+					break;
 
-					case 394:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
-						break;
+				case 394:
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
+					break;
 
-					case 395:
-						app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
-						break;
+				case 395:
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
+					break;
 
-					case 396:
-						bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-						bld = (Building*)bldgToBe;
-						bld->myDecor = BUILDING_DECOR::ST_01;
-						break;
+				case 396:
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+					bld = (Building*)bldgToBe;
+					bld->myDecor = BUILDING_DECOR::ST_01;
+					break;
 
-					case 397:
-						bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-						bld = (Building*)bldgToBe;
-						bld->myDecor = BUILDING_DECOR::ST_02;
-						break;
+				case 397:
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+					bld = (Building*)bldgToBe;
+					bld->myDecor = BUILDING_DECOR::ST_02;
+					break;
 
-					case 398:
-						bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-						bld = (Building*)bldgToBe;
-						bld->myDecor = BUILDING_DECOR::ST_03;
-						break;
+				case 398:
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+					bld = (Building*)bldgToBe;
+					bld->myDecor = BUILDING_DECOR::ST_03;
+					break;
 
-					default:
-						break;
+				default:
+					break;
 				}
 
 			}
