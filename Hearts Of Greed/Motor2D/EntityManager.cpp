@@ -85,7 +85,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
+		1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 		// Sample Enemy---------------------

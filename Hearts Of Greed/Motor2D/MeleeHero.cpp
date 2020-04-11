@@ -15,8 +15,8 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, level, hitPoints, recoveryHitPointsRate, energyPoints, recoveryEnergyRate,
 		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
-		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime, s
-		kill1Dmg, skill1Id, skill1Type, skill1Target)
+		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
+		skill1Dmg, skill1Id, skill1Type, skill1Target)
 {}
 
 
