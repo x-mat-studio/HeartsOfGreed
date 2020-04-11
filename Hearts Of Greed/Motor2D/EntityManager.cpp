@@ -144,14 +144,17 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
 
 
-	//Generate Areas
-	gathererSkill1Area.area = GenerateCircleArea(6);
+	//Generate Areas------------------------------------
+	skillArea gathererSkill1Area;
 	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	gathererSkill1Area.callback = AREA_TYPE::GATHERER_SKILL1;
+	GenerateArea(&gathererSkill1Area, 0, 0, 6);
+	skillAreas.insert({ AREA_EFFECT::GATHERER_SKILL1, gathererSkill1Area });
 
-	meleeSkill1Area.area = GenerateCircleArea(2);
+
+	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
-	meleeSkill1Area.callback = AREA_TYPE::MELEE_SKILL1;
+	GenerateArea(&meleeSkill1Area, 0, 0, 2);
+	skillAreas.insert({ AREA_EFFECT::MELEE_SKILL1, meleeSkill1Area });
 
 	return ret;
 }
@@ -380,8 +383,13 @@ bool ModuleEntityManager::CleanUp()
 	blueBuilding = nullptr;
 	sampleBase = nullptr;
 
-	delete gathererSkill1Area.area;
-	delete meleeSkill1Area.area;
+	for (std::unordered_map<AREA_EFFECT, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
+	{
+		delete it->second.area;
+		it->second.area = nullptr;
+
+	}
+	skillAreas.clear();
 
 	return true;
 }
@@ -1002,6 +1010,31 @@ void ModuleEntityManager::KillAllEnemies()
 	}
 }
 
+bool ModuleEntityManager::GenerateArea(skillArea* areaToGenerate, int width, int height, int radius)
+{
+	switch (areaToGenerate->form)
+	{
+	case AREA_TYPE::CIRCLE:
+	{
+		areaToGenerate->area = GenerateCircleArea(radius);
+		areaToGenerate->radius = radius;
+		return true;
+	}
+	break;
+	case AREA_TYPE::QUAD:
+	{
+		areaToGenerate->area = GenerateQuadArea(width, height);
+		areaToGenerate->width = width;
+		areaToGenerate->heigth = height;
+		return true;
+	}
+	break;
+	}
+
+	return false;
+}
+
+
 unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
 {
 	unsigned short* circle = nullptr;
@@ -1038,9 +1071,31 @@ unsigned short* ModuleEntityManager::GenerateQuadArea(int w, int h)
 	{
 		for (int x = 0; x < w; x++)
 		{
-			quad[y + x] = 0;
+			quad[y + x] = 1;
 		}
 	}
 
 	return quad;
+}
+
+bool ModuleEntityManager::RequestArea(AREA_EFFECT callback, std::vector <iMPoint>* toFill)
+{
+	skillArea* toCheck = nullptr;
+	std::unordered_map<AREA_EFFECT, skillArea> ::iterator it;
+
+	for (it = skillAreas.begin(); it != skillAreas.end(); it++)
+	{
+		if (it->first == callback)
+		{
+			break;
+		}
+	}
+
+	if (it == skillAreas.end())
+		return false;
+
+	//Here goes a GenerateArea :D have fun
+	//toFill->insert();
+
+
 }

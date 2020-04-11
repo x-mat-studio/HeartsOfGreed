@@ -266,10 +266,10 @@ void Enemy::Draw(float dt)
 	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY - 30, &currFrame.frame, false, true, 0, 255, 0, 0);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX -offset.x, position.y - currFrame.pivotPositionY - offset.y, &currFrame.frame, false, true, 0, 255, 0, 0);
 
 	else
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY - 30, &currFrame.frame);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX - offset.x, position.y - currFrame.pivotPositionY - offset.y, &currFrame.frame);
 
 	DebugDraw();
 }

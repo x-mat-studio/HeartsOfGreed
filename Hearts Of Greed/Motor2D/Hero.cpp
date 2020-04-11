@@ -289,6 +289,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::PREPARE_SKILL1:
 
+
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:

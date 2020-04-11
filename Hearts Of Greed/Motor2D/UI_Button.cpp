@@ -9,12 +9,13 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 	eventRecieved(eventR),
 	eventTriggerer(eventTrigger),
 	closeMenu(menuClosure),
-	includeFather(includeFather),
-	defaultPosition(positionValue.x)
+	includeFather(includeFather)
 {
 
 	if (this->name == "saveButton" || this->name == "loadButton")
 		interactable = false;
+
+	defaultPosition = positionValue.x;
 
 }
 
@@ -38,16 +39,30 @@ bool UI_Button::Update(float dt)
 
 	if (enabled) 
 	{
+
+		if (hiding_unhiding)
+			Hide(dt);
+			
+
 		if (interactable)
 		{
 			if (hover)
 			{
 				HoverFeedback();
 
-				if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
+				if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_UP) 
+				{
 					OnClick();
 
-				
+					// Only for Debug and Testing
+					if (this->name == "testButton")
+					{
+						hiding_unhiding = true;
+					}
+						
+				}
+					
+	
 					if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT)
 					{
 
@@ -85,7 +100,8 @@ bool UI_Button::PostUpdate(float dt)
 	if(enabled)
 		Draw(texture);
 
-	this->worldPosition.x = defaultPosition;
+	if (!hiding_unhiding && !hidden)
+		this->worldPosition.x = defaultPosition;
 
 	return true;
 }
@@ -126,7 +142,8 @@ void UI_Button::HoverFeedback()
 
 	hoverSound = false;
 
-	this->worldPosition.x -= 8;
+	if(!hiding_unhiding && !hidden)
+		this->worldPosition.x -= 8;
 }
 
 void UI_Button::CloseMenu()
