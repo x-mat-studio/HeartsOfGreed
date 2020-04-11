@@ -243,7 +243,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 
 	// Only for Debug and Testing
 	rect = RectConstructor(449, 24, 24, 24);
-	AddButton(fMPoint(20, 20), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"testButton", EVENT_ENUM::NULL_EVENT);
+	AddButton(fMPoint(40, 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"testButton", EVENT_ENUM::NULL_EVENT);
 
 }
 

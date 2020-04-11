@@ -55,8 +55,7 @@ public:
 	bool debugBox;
 	bool hover;
 
-	bool hiding;
-	bool unhiding;
+	bool hiding_unhiding;
 	bool hidden;
 
 	float hideSpeed;

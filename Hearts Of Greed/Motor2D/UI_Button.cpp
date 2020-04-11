@@ -40,7 +40,7 @@ bool UI_Button::Update(float dt)
 	if (enabled) 
 	{
 
-		if (hiding)
+		if (hiding_unhiding)
 			Hide(dt);
 			
 
@@ -57,7 +57,7 @@ bool UI_Button::Update(float dt)
 					// Only for Debug and Testing
 					if (this->name == "testButton")
 					{
-						hiding = true;
+						hiding_unhiding = true;
 					}
 						
 				}
@@ -100,7 +100,7 @@ bool UI_Button::PostUpdate(float dt)
 	if(enabled)
 		Draw(texture);
 
-	if (!hiding && !hidden)
+	if (!hiding_unhiding && !hidden)
 		this->worldPosition.x = defaultPosition;
 
 	return true;
@@ -142,7 +142,7 @@ void UI_Button::HoverFeedback()
 
 	hoverSound = false;
 
-	if(!hiding && !hidden)
+	if(!hiding_unhiding && !hidden)
 		this->worldPosition.x -= 8;
 }
 

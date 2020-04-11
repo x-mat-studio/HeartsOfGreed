@@ -20,7 +20,7 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	interactable(true),
 	hover(false),
 	enabled(true),
-	hiding(false),
+	hiding_unhiding(false),
 	hidden(false),
 	defaultPosition(worldPosition.x),
 	hideSpeed(50.0f),
@@ -99,19 +99,65 @@ void UI::Drag(int x, int y)
 
 void UI::Hide(float dt)
 {
+
 	float position = worldPosition.x * app->win->GetUIScale();
+	bool right;
 
-	this->worldPosition.x += hideSpeed * dt;
+	if (position > app->win->width / 2)
+		right = true;
+	else
+		right = false;
 
-	if (hidden) 
+	if (right) 
 	{
-		if (position > (app->win->width / 2))
+		if (hiding_unhiding && !hidden)
 		{
-			if ((position + box.w) > app->win->width)
-			{		
-				hidden = true;
-				hiding = false;
-			}		
+			this->worldPosition.x += hideSpeed * dt;
+
+			if (position > (app->win->width / 2))
+			{
+				if ((position + box.w) > app->win->width)
+				{
+					hidden = true;
+					hiding_unhiding = false;
+				}
+			}
+		}
+		else if (hiding_unhiding && hidden)
+		{
+			this->worldPosition.x -= hideSpeed * dt;
+
+			if (worldPosition.x <= defaultPosition)
+			{
+				hidden = false;
+				hiding_unhiding = false;
+			}
+		}
+	}
+	else 
+	{
+		if (hiding_unhiding && !hidden)
+		{
+			this->worldPosition.x -= hideSpeed * dt;
+
+			if (position < (app->win->width / 2))
+			{
+				if ((position + box.w) < 0)
+				{
+					hidden = true;
+					hiding_unhiding = false;
+				}
+			}
+		}
+		else if (hiding_unhiding && hidden)
+		{
+			this->worldPosition.x += hideSpeed * dt;
+
+			if (worldPosition.x >= defaultPosition)
+			{
+				hidden = false;
+				hiding_unhiding = false;
+			}
 		}
 	}
 
