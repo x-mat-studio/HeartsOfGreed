@@ -39,6 +39,8 @@ public:
 
 	void RemoveHeroFromVector(Hero* hero);
 
+	iMPoint GetClickPosition();
+
 private:
 	
 	bool HandleInput();
@@ -78,6 +80,7 @@ private:
 
 	bool doSkill;
 
+	bool hasClicked;
 	bool buildMode;
 
 	int resources;

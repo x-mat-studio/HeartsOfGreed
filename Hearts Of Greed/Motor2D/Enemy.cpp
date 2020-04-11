@@ -2,6 +2,7 @@
 #include "App.h"
 #include "AI.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "FoWManager.h"
 #include "Audio.h"
 #include "Textures.h"
@@ -284,7 +285,7 @@ void Enemy::Attack()
 
 void Enemy::Die()
 {
-	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
 	collider->thisEntity = nullptr;
 

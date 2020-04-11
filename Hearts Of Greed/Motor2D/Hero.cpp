@@ -288,9 +288,6 @@ void Hero::StateMachine(float dt)
 		currentAnimation = &idleLeftDown;
 		break;
 
-	case HERO_STATES::SKILL1:
-		break;
-
 	case HERO_STATES::PREPARE_SKILL1:
 		break;
 
@@ -298,6 +295,10 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::PREPARE_SKILL3:
+		break;
+
+	case HERO_STATES::SKILL1:
+		currentAnimation = &idleLeftDown;
 		break;
 
 	case HERO_STATES::SKILL2:
@@ -508,7 +509,7 @@ bool Hero::ActivateSkill3()
 
 bool Hero::PrepareSkill1()
 {
-	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3 && state != HERO_STATES::PREPARE_SKILL1)
+	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
 	{
 		inputs.push_back(IN_PREPARE_SKILL1);
 		PreProcessSkill1();

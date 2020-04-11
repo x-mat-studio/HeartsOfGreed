@@ -8,6 +8,7 @@
 #include "AI.h"
 #include "FoWManager.h"
 #include "Pathfinding.h"
+#include "Input.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -184,6 +185,19 @@ bool ModuleEntityManager::Start()
 	debugPathTexture = app->tex->Load("maps/path.png");
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventRegister(EVENT_ENUM::KILL_ALL_ENEMIES, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_BASE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_BUILDING, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
+	
 
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
@@ -441,7 +455,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = new Turret({ (float)x,(float)y }, testTurret, ENTITY_ALIGNEMENT::PLAYER);
+		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -754,10 +768,67 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 {
+	iMPoint pos;
+
 	switch (eventId)
 	{
 	case EVENT_ENUM::ENTITY_DEAD:
 		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::KILL_ALL_ENEMIES:
+		KillAllEnemies();
+		break;
+
+	case EVENT_ENUM::ACTIVATE_GODMODE_HEROES:
+		ActivateGodModeHeroes();
+		break;
+
+	case EVENT_ENUM::DESACTIVATE_GODMODE_HEROES:
+		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::SPAWN_BASE:
+
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::BLDG_BASE, pos.x, pos.y);
+		break;
+
+
+	case EVENT_ENUM::SPAWN_BUILDING:
+		
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::BUILDING, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_ENEMY:
+		
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::ENEMY, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_GATHERER_HERO:
+		
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_MELEE_HERO:
+		
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_RANGED_HERO:
+		
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_TURRET:
+		
+		app->input->GetMousePosition(pos.x, pos.y);
+		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
 		break;
 	}
 

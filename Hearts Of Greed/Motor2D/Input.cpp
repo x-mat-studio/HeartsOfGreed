@@ -234,6 +234,8 @@ bool ModuleInput::PreUpdate(float dt)
 
 	HandleTextInput();
 
+	HandleDebugKeys();
+
 	return true;
 }
 
@@ -505,4 +507,23 @@ void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
 	}
 
 
+}
+
+
+void ModuleInput::HandleDebugKeys()
+{
+	if (GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_F8) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::KILL_ALL_ENEMIES, EVENT_ENUM::NULL_EVENT);
+	}
 }
