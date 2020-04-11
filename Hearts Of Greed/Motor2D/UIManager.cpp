@@ -14,7 +14,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleUIManager::ModuleUIManager()
+ModuleUIManager::ModuleUIManager() : atlas(nullptr)
 {
 	name.create("UIManager");
 }
@@ -56,8 +56,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 bool ModuleUIManager::Start()
 {
 	bool ret = true;
-
-	LoadAtlas();
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
@@ -123,7 +121,7 @@ bool ModuleUIManager::CleanUp()
 {
 	int numElements = uiVector.size();
 
-	for (int i = 0; i < numElements; i++)
+	for (int i = numElements - 1; i > -1; i--)
 	{
 		RELEASE(uiVector[i]);
 		uiVector[i] = nullptr;
@@ -298,7 +296,7 @@ void ModuleUIManager::CreateMainMenu()
 
 //	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 5, (h / (app->win->GetUIScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
 	
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E", { 255, 255,255, 255 }, app->fonts->fonts[1]);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
 	
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 40, (h / (app->win->GetUIScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsText", DRAGGABLE::DRAG_OFF, "O P T I O N S");
 	
@@ -330,8 +328,10 @@ SDL_Rect ModuleUIManager::RectConstructor(int x, int y, int w, int h)
 
 void ModuleUIManager::LoadAtlas()
 {
-	if(!atlas)
-	atlas = app->tex->Load("spritesheets/atlas.png");
+	if (atlas == nullptr)
+	{
+		atlas = app->tex->Load("spritesheets/atlas.png");
+	}
 }
 
 UI* ModuleUIManager::FindUIByName(char* name)
