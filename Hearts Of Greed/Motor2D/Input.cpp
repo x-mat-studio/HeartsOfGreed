@@ -526,4 +526,41 @@ void ModuleInput::HandleDebugKeys()
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::KILL_ALL_ENEMIES, EVENT_ENUM::NULL_EVENT);
 	}
+
+	if (GetKey(SDL_SCANCODE_KP_1) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BASE, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_2) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BUILDING, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_3) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_4) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_GATHERER_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_5) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_MELEE_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_6) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_RANGED_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_7) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_TURRET, EVENT_ENUM::NULL_EVENT);
+	}
+
+
 }
