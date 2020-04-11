@@ -240,6 +240,11 @@ void ModuleUIManager::CreateBasicInGameUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
+
+	// Only for Debug and Testing
+	rect = RectConstructor(449, 24, 24, 24);
+	AddButton(fMPoint(20, 20), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"testButton", EVENT_ENUM::NULL_EVENT);
+
 }
 
 void ModuleUIManager::CreatePauseMenu()
