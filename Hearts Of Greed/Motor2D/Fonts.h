@@ -40,6 +40,8 @@ public:
 
 public:
 
+	int ingameSize;
+
 	std::vector<_TTF_Font*>	fonts;
 	_TTF_Font* default;
 };

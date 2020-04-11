@@ -2,6 +2,7 @@
 #define __UIMANAGER_H__
 
 #include "Module.h"
+#include "Fonts.h"
 
 #include <list>
 
@@ -36,7 +37,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 });
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
 	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
 	SDL_Texture* GetAtlasTexture() const;
 
@@ -58,7 +59,6 @@ private:
 
 	void CreatePauseMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
-
 
 public:
 
