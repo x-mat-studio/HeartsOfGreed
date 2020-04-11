@@ -1,5 +1,6 @@
 #include "UI.h"
 #include "Render.h"
+#include "Input.h"
 #include "Window.h"
 
 UI::UI()
@@ -96,6 +97,24 @@ bool UI::MouseUnderElement(int x, int y)
 
 void UI::Drag(int x, int y)
 {}
+
+bool UI::OnAbove()
+{
+	bool ret = false;
+
+	SDL_Point mouse;
+	app->input->GetMousePositionRaw(mouse.x, mouse.y);
+
+	mouse.x = (mouse.x) / app->win->GetUIScale();
+	mouse.y = (mouse.y) / app->win->GetUIScale();
+
+	SDL_Rect intersect = { worldPosition.x , worldPosition.y, box.w, box.h };
+
+	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interactable)
+		ret = true;
+
+	return ret;
+}
 
 void UI::Hide(float dt)
 {

@@ -106,23 +106,6 @@ bool UI_Button::PostUpdate(float dt)
 	return true;
 }
 
-bool UI_Button::OnAbove()
-{
-	bool ret = false;
-
-	SDL_Point mouse;
-	app->input->GetMousePositionRaw(mouse.x, mouse.y);
-
-	mouse.x = (mouse.x) / app->win->GetUIScale();
-	mouse.y = (mouse.y) / app->win->GetUIScale();
-
-	SDL_Rect intersect = { worldPosition.x , worldPosition.y, box.w, box.h };
-
-	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interactable)
-		ret = true;
-
-	return ret;
-}
 
 void UI_Button::OnClick()
 {

@@ -18,8 +18,6 @@ public:
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
-
-	bool OnAbove();
 	
 	void OnClick();
 	void HoverFeedback();

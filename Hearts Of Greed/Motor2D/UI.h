@@ -44,6 +44,7 @@ public:
 	bool MouseUnderElement(int x, int y);
 	void Drag(int x, int y);
 	void Hide(float dt);
+	bool OnAbove();
 
 protected:
 
