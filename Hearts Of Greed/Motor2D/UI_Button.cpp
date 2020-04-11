@@ -4,18 +4,25 @@
 #include "Render.h"
 #include "Audio.h"
 
-UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
+UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure, bool includeFather,
+	bool hiding, bool hoverMove, DRAGGABLE draggable, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
+	
 	accuratedDrag({0, 0}),
 	eventRecieved(eventR),
-	eventTriggerer(eventTrigger),
-	closeMenu(menuClosure),
-	includeFather(includeFather)
+	eventTriggerer(eventTrigger)
+
 {
 
 	if (this->name == "saveButton" || this->name == "loadButton")
 		interactable = false;
 
 	defaultPosition = positionValue.x;
+
+	properties.hiding = hiding;
+	properties.hoverMove = hoverMove;
+	properties.closeMenu = menuClosure;
+	properties.includeFather = includeFather;
+	properties.draggable = draggable;
 
 }
 
@@ -41,8 +48,9 @@ bool UI_Button::Update(float dt)
 	{
 
 		if (hiding_unhiding)
+		{
 			Hide(dt);
-			
+		}
 
 		if (interactable)
 		{
@@ -52,14 +60,7 @@ bool UI_Button::Update(float dt)
 
 				if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_UP) 
 				{
-					OnClick();
-
-					// Only for Debug and Testing
-					if (this->name == "testButton")
-					{
-						hiding_unhiding = true;
-					}
-						
+					OnClick(dt);						
 				}
 					
 	
@@ -107,12 +108,18 @@ bool UI_Button::PostUpdate(float dt)
 }
 
 
-void UI_Button::OnClick()
+void UI_Button::OnClick(float dt)
 {
 	app->eventManager->GenerateEvent(eventRecieved, eventTriggerer);
-	if (closeMenu == true)
+	if (properties.closeMenu == true)
 	{
 		CloseMenu();
+	}
+
+	if (properties.hiding == true)
+	{
+		hiding_unhiding = true;
+		app->uiManager->HideElements(this, dt);
 	}
 
 	app->audio->PlayFx(app->uiManager->clickSound);
@@ -131,7 +138,7 @@ void UI_Button::HoverFeedback()
 
 void UI_Button::CloseMenu()
 {
-	app->uiManager->DeleteUI(parent, includeFather);
+	app->uiManager->DeleteUI(parent, properties.includeFather);
 }
 
 void UI_Button::MovingIt(float dt)

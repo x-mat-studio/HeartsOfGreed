@@ -66,6 +66,11 @@ bool UI_Portrait::Update(float dt)
 		portraitVector[i].level->Update(dt);
 	}
 
+	if (hiding_unhiding)
+	{
+		Hide(dt);
+	}
+
 	return true;
 }
 

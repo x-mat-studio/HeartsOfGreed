@@ -15,6 +15,16 @@ UI_Text::~UI_Text()
 {}
 
 
+bool UI_Text::Update(float dt)
+{
+	if (hiding_unhiding)
+	{
+		Hide(dt);
+	}
+
+	return true;
+}
+
 bool UI_Text::PostUpdate(float dt)
 {
 	// We only use directly Blit in the case of Text. We need an NULL SDL_Rect.

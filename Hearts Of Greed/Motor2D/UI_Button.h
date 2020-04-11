@@ -11,7 +11,8 @@ class UI_Button : public UI
 
 public:
 
-	UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
+	UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false,
+		bool hidingVar = false, bool hoverMove = false, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
 	~UI_Button();
 
 	bool Start();
@@ -19,7 +20,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 	
-	void OnClick();
+	void OnClick(float dt);
 	void HoverFeedback();
 	void MovingIt(float dt);
 	
@@ -31,10 +32,9 @@ private:
 	
 private:
 
-	bool closeMenu;
-	bool includeFather;
 	bool hoverSound;
 
+	ButtonProperties properties;
 	fMPoint accuratedDrag;
 	EVENT_ENUM eventRecieved;
 	EVENT_ENUM eventTriggerer;

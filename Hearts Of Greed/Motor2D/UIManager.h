@@ -37,8 +37,10 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
-	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF,
+		char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
+	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false,
+		bool hiding = false, bool hoverMove = false, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
 	SDL_Texture* GetAtlasTexture() const;
 
 	void CreateBasicInGameUI();
@@ -48,6 +50,7 @@ public:
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 	void DeleteUI(UI* father, bool includeFather);
+	void HideElements(UI* father, float dt);
 
 	bool CleanUp();
 

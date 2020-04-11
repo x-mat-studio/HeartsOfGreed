@@ -59,7 +59,6 @@ bool ModuleMainMenuScene::Start()
 	alphaCounter = 0;
 	soundDelay = 0;
 	canon = false;
-	app->uiManager->LoadAtlas();
 
 	app->audio->PlayFx(titleSound, 0, 3, LOUDNESS::QUIET, DIRECTION::LEFT);
 

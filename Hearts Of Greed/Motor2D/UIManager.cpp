@@ -14,7 +14,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleUIManager::ModuleUIManager()
+ModuleUIManager::ModuleUIManager() : atlas(nullptr)
 {
 	name.create("UIManager");
 }
@@ -56,8 +56,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 bool ModuleUIManager::Start()
 {
 	bool ret = true;
-
-	LoadAtlas();
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
@@ -123,7 +121,7 @@ bool ModuleUIManager::CleanUp()
 {
 	int numElements = uiVector.size();
 
-	for (int i = 0; i < numElements; i++)
+	for (int i = numElements - 1; i > -1; i--)
 	{
 		RELEASE(uiVector[i]);
 		uiVector[i] = nullptr;
@@ -168,9 +166,10 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 	return newUI;
 }
 
-UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure, bool includeFather, DRAGGABLE draggable, EVENT_ENUM eventTrigger)
+UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure, bool includeFather,
+	bool hiding, bool hoverMove, DRAGGABLE draggable, EVENT_ENUM eventTrigger)
 {
-	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, menuClosure, includeFather, draggable, eventR, eventTrigger);
+	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, eventR, menuClosure, includeFather, hiding, hoverMove, draggable, eventTrigger);
 	uiVector.push_back(newUI);
 	return newUI;
 }
@@ -231,19 +230,18 @@ void ModuleUIManager::CreateBasicInGameUI()
 	
 	SDL_Rect rect = RectConstructor(0, 0, 0, 0);;
 	uint w(app->win->width), h(app->win->height);
+	UI* father;
 
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
+	rect = RectConstructor(536, 33, 17, 15);
+	father= AddButton(fMPoint(162, h / app->win->GetUIScale() - 174), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
+
 	rect = RectConstructor(221, 317, 162, 174);
-	AddUIElement(fMPoint(0, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
+	AddUIElement(fMPoint(0, h / app->win->GetUIScale() - rect.h), father, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 
 	rect = RectConstructor(449, 24, 24, 24);
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
-
-
-	// Only for Debug and Testing
-	rect = RectConstructor(449, 24, 24, 24);
-	AddButton(fMPoint(40, 40), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"testButton", EVENT_ENUM::NULL_EVENT);
 
 }
 
@@ -298,7 +296,7 @@ void ModuleUIManager::CreateMainMenu()
 
 //	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 5, (h / (app->win->GetUIScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
 	
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E", { 255, 255,255, 255 }, app->fonts->fonts[1]);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"newGameText", DRAGGABLE::DRAG_OFF, "N E W    G A M E");
 	
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 40, (h / (app->win->GetUIScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"optionsText", DRAGGABLE::DRAG_OFF, "O P T I O N S");
 	
@@ -330,8 +328,10 @@ SDL_Rect ModuleUIManager::RectConstructor(int x, int y, int w, int h)
 
 void ModuleUIManager::LoadAtlas()
 {
-	if(!atlas)
-	atlas = app->tex->Load("spritesheets/atlas.png");
+	if (atlas == nullptr)
+	{
+		atlas = app->tex->Load("spritesheets/atlas.png");
+	}
 }
 
 UI* ModuleUIManager::FindUIByName(char* name)
@@ -345,6 +345,21 @@ UI* ModuleUIManager::FindUIByName(char* name)
 			return uiVector[i];
 		}
 	}
+}
+
+void ModuleUIManager::HideElements(UI* father, float dt)
+{
+
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (uiVector[i]->parent == father)
+		{
+			uiVector[i]->hiding_unhiding = true;
+		}
+	}
+
 }
 
 void ModuleUIManager::DeleteUI(UI* father, bool includeFather)

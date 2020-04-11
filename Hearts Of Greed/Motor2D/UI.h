@@ -22,7 +22,14 @@ enum class UI_TYPE
 	UI_NONE
 };
 
-
+struct ButtonProperties
+{
+	bool hiding;
+	bool hoverMove;
+	bool closeMenu;
+	bool includeFather;
+	DRAGGABLE draggable;
+};
 
 class UI
 {
