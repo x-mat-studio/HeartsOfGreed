@@ -243,6 +243,8 @@ void ModuleUIManager::CreateBasicInGameUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
+	rect = RectConstructor(272, 45, 146, 4);
+	AddUIElement(fMPoint(30, 30), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollEx");
 }
 
 void ModuleUIManager::CreatePauseMenu()
