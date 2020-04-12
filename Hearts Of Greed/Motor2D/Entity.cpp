@@ -3,12 +3,13 @@
 #include "Window.h"
 #include "Audio.h"
 #include "App.h"
+#include "Minimap.h"
 
 Entity::Entity()
 {}
 
 
-Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, bool dynamic) :
+Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, int maxHealth, int currentHealth, bool dynamic) :
 
 	position(position),
 	type(type),
@@ -21,12 +22,17 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	
 	collider(collider),
 	visionEntity(nullptr),
+	minimapIcon(nullptr),
 	texture(nullptr),
+
+	hitPointsMax(maxHealth),
+	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
 
 	UIAssigned(false)
-{}
+{
+}
 
 Entity::~Entity()
 {
@@ -40,12 +46,18 @@ Entity::~Entity()
 	texture = nullptr;
 	collider = nullptr;
 
-	if (visionEntity != nullptr && visionEntity!= NULL)
+	if (visionEntity != nullptr)
 	{
 		visionEntity->deleteEntity = true;
 	}
 
-	visionEntity = nullptr;
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+		minimapIcon->minimapPos = nullptr;
+	}
+
+	minimapIcon = nullptr;
 	
 }
 

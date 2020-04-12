@@ -1,13 +1,16 @@
 #include "UI_Healthbar.h"
 
-
-UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
-	maxHealth(nullptr),		// TODO initialize and make them pretty (I'm already recieving the entity with the portraits)
-	currentHealth(nullptr),
+UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	originalWidth(rect.w),
-	previousHealth(NULL)
-
-{}
+	previousHealth(NULL),
+	currentHealth(nullptr)
+{
+	if (entity != nullptr)
+	{
+		maxHealth = &entity->hitPointsMax;
+		currentHealth = &entity->hitPointsCurrent;
+	}
+}
 
 UI_Healthbar::~UI_Healthbar()
 {}
@@ -48,7 +51,7 @@ void UI_Healthbar::HandleInput()
 
 void UI_Healthbar::AdjustHealth()
 {
-	if (currentHealth!= nullptr && *currentHealth != previousHealth)
+	if (currentHealth != nullptr && *currentHealth != previousHealth)
 	{
 		box.w = originalWidth * (*currentHealth) / (*maxHealth);
 	}

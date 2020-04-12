@@ -58,6 +58,8 @@ private:
 	SDL_Rect gathererPortraitRect;
 	SDL_Rect rangedPortraitRect;
 
+	bool no_move;
+
 };
 
 #endif // UI_HEALTHBAR_H

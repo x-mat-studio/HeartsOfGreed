@@ -2,13 +2,14 @@
 #define __UI_HEALTHBAR_H__
 
 #include "UI.h"
+#include "Entity.h"
 
 class UI_Healthbar : public UI
 {
 
 public:
 
-	UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable);
+	UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable);
 	~UI_Healthbar();
 
 	bool Start();

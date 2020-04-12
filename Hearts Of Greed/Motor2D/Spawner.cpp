@@ -2,16 +2,16 @@
 #include "EntityManager.h"
 
 
-Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType) :
+Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, int maxHitPoints, int currentHitPoints) :
 	
-	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, nullptr),
+	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, maxHitPoints, currentHitPoints),
 	spawnerType(spawnerType),
 	entitysToSpawn(0)
 {}
 
 Spawner::Spawner(fMPoint position, Spawner* copy) :
 
-	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, nullptr),
+	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, copy->hitPointsMax, copy->hitPointsCurrent),
 	spawnerType(copy->spawnerType),
 	entitysToSpawn(0)
 {}

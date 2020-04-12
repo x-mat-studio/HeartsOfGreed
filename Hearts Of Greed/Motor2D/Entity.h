@@ -7,6 +7,7 @@
 #include "p2Point.h"
 #include "Animation.h"
 #include "FoWEntity.h"
+#include "Minimap.h"
 
 #define MAX_ENTITY_TYPES 13
 
@@ -75,7 +76,7 @@ class Entity
 public:
 
 	Entity();
-	Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, bool dynamic = false);
+	Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, int maxHealth, int currentHealth, bool dynamic = false);
 	virtual ~Entity();
 
 	virtual bool Start(SDL_Texture* texture);
@@ -118,9 +119,14 @@ public:
 	bool dynamic;
 	bool UIAssigned;
 	FoWEntity* visionEntity;
+	MinimapIcon* minimapIcon;
+	fMPoint position;
+
+	int hitPointsMax;
+	int hitPointsCurrent;
 
 protected:
-	fMPoint position;
+	
 	fMPoint offset;
 	fMPoint center;
 

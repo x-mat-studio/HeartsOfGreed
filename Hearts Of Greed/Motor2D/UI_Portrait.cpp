@@ -8,7 +8,8 @@ UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_
 	healthbarRect(RectConstructor(29, 79, 50, 8)),
 	meleePortraitRect(RectConstructor(561, 149, 68, 52)),
 	gathererPortraitRect(RectConstructor(351, 149, 68, 52)),
-	rangedPortraitRect(RectConstructor(147, 149, 68, 52))
+	rangedPortraitRect(RectConstructor(147, 149, 68, 52)),
+	no_move(true)
 {}
 
 UI_Portrait::~UI_Portrait()
@@ -62,11 +63,30 @@ bool UI_Portrait::Update(float dt)
 
 	for (int i = 0; i < numElem; i++)
 	{
+		if(hiding_unhiding == false)
+		{ 
+			no_move = true;
+		}
+		else if (no_move == true && hiding_unhiding == true)
+		{
+			portraitVector[i].healthbar->hiding_unhiding = true;
+			portraitVector[i].level->hiding_unhiding = true;
+			portraitVector[i].background->hiding_unhiding = true;
+			portraitVector[i].backgroundLevel->hiding_unhiding = true;
+			portraitVector[i].backgroundHealthbar->hiding_unhiding = true;
+			portraitVector[i].portrait->hiding_unhiding = true;
+			no_move = false;
+		}
+
 		portraitVector[i].healthbar->Update(dt);
 		portraitVector[i].level->Update(dt);
+		portraitVector[i].background->Update(dt);
+		portraitVector[i].backgroundLevel->Update(dt);
+		portraitVector[i].backgroundHealthbar->Update(dt);
+		portraitVector[i].portrait->Update(dt);
 	}
 
-	if (hiding_unhiding)
+	if (hiding_unhiding == true)
 	{
 		Hide(dt);
 	}
@@ -110,7 +130,7 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 
 	newPortrait.backgroundHealthbar = new UI_Image(fMPoint (newPortrait.position.x + 18, newPortrait.position.y + 45), this, UI_TYPE::UI_IMG, backgroundHealthbarRect, (P2SString)"backgroundHealthbarPortrait", DRAGGABLE::DRAG_OFF);
 	
-	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", DRAGGABLE::DRAG_OFF);
+	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", entity, DRAGGABLE::DRAG_OFF);
 	
 	SDL_Color color;
 	char level;

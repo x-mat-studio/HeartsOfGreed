@@ -93,6 +93,32 @@ bool UI_Button::Update(float dt)
 		}
 	}
 
+	if (properties.hiding == true)
+	{
+		if (hidden == false && hiding_unhiding == false)
+		{
+			if (worldPosition.x * app->win->GetUIScale() > app->win->width / 2)
+			{
+				box.x = 556;
+			}
+			else
+			{
+				box.x = 540;
+			}
+		}
+		else if (hidden == true && hiding_unhiding == false)
+		{
+			if (worldPosition.x * app->win->GetUIScale() > app->win->width / 2)
+			{
+				box.x = 540;
+			}
+			else
+			{
+				box.x = 556;
+			}
+		}
+	}
+	
 	return true;
 }
 

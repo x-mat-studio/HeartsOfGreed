@@ -25,7 +25,7 @@ class DynamicEntity : public Entity
 {
 public:
 
-	DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2);
+	DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int maxHealth, int currentHealth, int moveRange1, int moveRange2);
 
 	~DynamicEntity();
 
@@ -34,7 +34,7 @@ public:
 	void GroupMovement(float dt);
 
 	bool GeneratePath(float x, float y, int lvl);
-	void DebugDraw();
+	void DebugDraw(int pivotPositionX, int pivotPositionY);
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
 

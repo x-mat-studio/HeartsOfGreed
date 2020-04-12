@@ -16,6 +16,8 @@
 #include "UI_Text.h"
 #include "MainMenuScene.h"
 #include "EventManager.h"
+#include "Minimap.h"
+#include "Render.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -51,11 +53,12 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	app->render->currentCamX = 0;
+	app->render->currentCamY = 0;
 	//Play Music
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 
 	//Load sfx used in this scene
-
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{
 		int w, h;
@@ -89,7 +92,7 @@ bool ModuleTestScene::Start()
 	app->uiManager->CreateBasicInGameUI();
 
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
+	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
 
 
 	//Events register
@@ -198,7 +201,11 @@ bool  ModuleTestScene::Update(float dt)
 				else if (scrollWheel.y != 0)
 				{
 					//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+					if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false)
+					{
+						Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+					}
+					
 				}
 			}
 		}
@@ -289,8 +296,6 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 		app->render->currentCamY = (((app->render->currentCamY - offsetY) * newScale) / currentScale) + offsetY;
 	}
 }
-
-
 void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 {
 	switch (eventId)

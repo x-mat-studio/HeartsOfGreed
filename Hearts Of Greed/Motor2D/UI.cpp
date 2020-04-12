@@ -23,7 +23,7 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	enabled(true),
 	hiding_unhiding(false),
 	hidden(false),
-	defaultPosition(worldPosition.x),
+	defaultPosition(positionValue.x),
 	hideSpeed(150.0f),
 	texture (app->uiManager->GetAtlasTexture())
 
@@ -119,7 +119,7 @@ bool UI::OnAbove()
 void UI::Hide(float dt)
 {
 
-	float position = worldPosition.x;
+	float position = worldPosition.x * app->win->GetUIScale();
 	bool right;
 
 	if (position > app->win->width / 2)
@@ -133,16 +133,11 @@ void UI::Hide(float dt)
 		{
 			this->worldPosition.x += hideSpeed * dt;
 
-			if ((position + (8 * box.w / 10)) > app->win->width)
+			if (((position) + (box.w / 10)) > app->win->width)
 			{
 				hidden = true;
 				hiding_unhiding = false;
-				if (parent != nullptr)
-				{
-					parent->hidden = true;
-					parent->hiding_unhiding = false;
-					parent->box.x = 540;
-				}
+				app->uiManager->StopAll(this, false, true, false);
 			}
 		}
 
@@ -155,13 +150,7 @@ void UI::Hide(float dt)
 				worldPosition.x = defaultPosition;
 				hidden = false;
 				hiding_unhiding = false;
-				if (parent != nullptr)
-				{
-					parent->hidden = false;
-					parent->hiding_unhiding = false;
-					parent->box.x = 556;
-					parent->worldPosition.x = parent->defaultPosition;
-				}
+				app->uiManager->StopAll(this, true, false, false);
 			}
 		}
 	}
@@ -172,16 +161,11 @@ void UI::Hide(float dt)
 		{
 			this->worldPosition.x -= hideSpeed * dt;
 
-			if ((position + (8 * box.w / 10)) < 0)
+			if (((position / 2) + (9 * box.w / 10)) < 0)
 			{
 				hidden = true;
 				hiding_unhiding = false;
-				if (parent != nullptr)
-				{
-					parent->hidden = true;
-					parent->hiding_unhiding = false;
-					parent->box.x = 556;
-				}
+				app->uiManager->StopAll(this, false, true, false);
 			}
 		}
 
@@ -194,13 +178,7 @@ void UI::Hide(float dt)
 				worldPosition.x = defaultPosition;
 				hidden = false;
 				hiding_unhiding = false;
-				if (parent != nullptr)
-				{
-					parent->hidden = false;
-					parent->hiding_unhiding = false;
-					parent->box.x = 540;
-					parent->worldPosition.x = parent->defaultPosition;
-				}
+				app->uiManager->StopAll(this, true, false, false); 
 			}
 		}
 	}

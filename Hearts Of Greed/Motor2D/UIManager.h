@@ -9,6 +9,7 @@
 struct SDL_Texture;
 class UI;
 class UI_Portrait;
+class Entity;
 enum class UI_TYPE;
 
 enum class DRAGGABLE
@@ -37,7 +38,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF,
+	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity = nullptr, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF,
 		char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
 	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false,
 		bool hiding = false, bool hoverMove = false, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
@@ -47,6 +48,8 @@ public:
 	void CreateMainMenu();
 	void CreateOptionsMenu();
 	void CreateEntityPortrait();
+	void CreateShopMenu();
+	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
@@ -56,10 +59,11 @@ public:
 	bool CleanUp();
 
 	void LoadAtlas();
+	UI* FindUIByName(char* name);
 
 private:
 
-	UI* FindUIByName(char* name);
+
 
 	void CreatePauseMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
