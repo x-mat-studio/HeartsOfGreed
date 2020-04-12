@@ -151,11 +151,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Generate Areas------------------------------------
-	skillArea gathererSkill1Area;
-	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1Area, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1Area });
+	skillArea gathererSkill1AreaRange;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 7);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
 
+	skillArea gathererSkill1AreaExplosion;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1_MOUSE, gathererSkill1AreaRange });
 
 	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
@@ -1185,9 +1189,6 @@ skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPo
 	if (it == skillAreas.end())
 		return ret;
 
-	//Here goes a GenerateArea :D have fun
-	//toFill->insert();
-
 	center = app->map->WorldToMap(round(center.x), round(center.y));
 	GenerateDynArea(toFill, ret, center);
 
@@ -1202,6 +1203,7 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	{
 		int diameter = (area->radius * 2) + 1;
 		iMPoint posCheck = center - area->radius;
+		toFill->clear();
 
 		for (int y = 0; y < diameter; y++)
 		{

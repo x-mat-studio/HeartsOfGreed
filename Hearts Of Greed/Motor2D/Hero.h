@@ -117,20 +117,32 @@ public:
 	void DrawArea();
 
 	//Skill Related-----------------
+	// Tells the Hero to get in the launch skill state
 	bool PrepareSkill1();
 	bool PrepareSkill2();
 	bool PrepareSkill3();
 
-	virtual bool ActivateSkill1(iMPoint mouseClick);
+	//Generates Area for the skill
+	virtual bool PreProcessSkill1();
+	virtual bool PreProcessSkill2();
+	virtual bool PreProcessSkill3();
+
+	//Checks if the skill can be launch, if so, launches it
+	virtual bool ActivateSkill1(fMPoint mouseClick);
 	virtual bool ActivateSkill2();
 	virtual bool ActivateSkill3();
+
+	// Tells the manager that a skill has been launched
+	virtual bool ExecuteSkill1();
+	virtual bool ExecuteSkill2();
+	virtual bool ExecuteSkill3();
+
+
 
 	void SkillCanceled();
 	void SkillDone();
 
-	virtual bool PreProcessSkill1();
-	virtual bool PreProcessSkill2();
-	virtual bool PreProcessSkill3();
+
 
 private:
 	
@@ -231,6 +243,9 @@ public:
 	bool godMode;
 
 	std::vector <iMPoint> currAoE;
+	std::vector <iMPoint> suplAoE;
+
+
 	skillArea* currAreaInfo;
 	Skill skill1;
 
