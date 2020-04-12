@@ -56,10 +56,11 @@ public:
 	bool CleanUp();
 
 	void LoadAtlas();
+	UI* FindUIByName(char* name);
 
 private:
 
-	UI* FindUIByName(char* name);
+
 
 	void CreatePauseMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);

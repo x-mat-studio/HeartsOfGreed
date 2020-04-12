@@ -10,6 +10,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Map.h"
 #include "EventManager.h"
+#include "Minimap.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -130,7 +131,10 @@ bool ModulePlayer::PostUpdate(float dt)
 //Handles Player Input
 bool ModulePlayer::HandleInput()
 {
-	if (buildMode == false)
+	int mouseX;
+	int mouseY;
+	app->input->GetMousePositionRaw(mouseX, mouseY);
+	if (buildMode == false && app->minimap->ClickingOnMinimap(mouseX,mouseY)==false)
 	{
 		if (prepareSkill == true || doSkill == true)
 		{

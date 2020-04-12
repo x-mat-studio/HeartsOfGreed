@@ -16,6 +16,7 @@
 #include "UI_Text.h"
 #include "MainMenuScene.h"
 #include "EventManager.h"
+#include "Minimap.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -67,8 +68,8 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x-680, pos.y);
-						//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
 
@@ -186,7 +187,11 @@ bool  ModuleTestScene::Update(float dt)
 				else if (scrollWheel.y != 0)
 				{
 					//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+					if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false)
+					{
+						Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+					}
+					
 				}
 			}
 		}
@@ -272,8 +277,6 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 		app->render->currentCamY = (((app->render->currentCamY - offsetY) * newScale) / currentScale) + offsetY;
 	}
 }
-
-
 void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 {
 	switch (eventId)

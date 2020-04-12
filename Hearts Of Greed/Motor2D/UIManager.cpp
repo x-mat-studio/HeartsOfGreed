@@ -13,6 +13,7 @@
 #include "Window.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Minimap.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -242,10 +243,11 @@ void ModuleUIManager::CreateBasicInGameUI()
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
 	rect = RectConstructor(540, 35, 15, 14);
-	father= AddButton(fMPoint(162, h / app->win->GetUIScale() - 174), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
+	father= AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
 
 	rect = RectConstructor(221, 317, 162, 174);
-	AddUIElement(fMPoint(0, h / app->win->GetUIScale() - rect.h), father, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
+	rect.h = app->minimap->height;
+	AddUIElement(fMPoint(0, (h- rect.h-20) / app->win->GetUIScale() ), father, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 
 	rect = RectConstructor(449, 24, 24, 24);
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
