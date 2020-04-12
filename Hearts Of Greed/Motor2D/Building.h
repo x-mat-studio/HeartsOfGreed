@@ -56,6 +56,7 @@ public:
 
 	void OnCollision(Collider* collider);
 	virtual void Draw(float dt);
+	virtual void MinimapDraw(float scale, float halfWidth);
 
 	void ActivateTransparency();
 	BUILDING_DECOR GetDecor();
