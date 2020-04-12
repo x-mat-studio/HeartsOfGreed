@@ -306,7 +306,7 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	return false;
 }
 
-void DynamicEntity::DebugDraw()
+void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 {
 	//Position --------------------------------------
 	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
