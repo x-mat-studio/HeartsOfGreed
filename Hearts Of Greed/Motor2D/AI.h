@@ -32,6 +32,9 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	int CheckBaseAligmentAttack();
+
+	void CommandSpawners(int base);
+	Spawner* FindNearestSpawner();
 	
 private:
 	fMPoint objectivePos;

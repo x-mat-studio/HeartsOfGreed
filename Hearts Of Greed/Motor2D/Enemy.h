@@ -68,6 +68,12 @@ public:
 
 	void Die();
 
+	int GetHP();
+	int GetAD();
+	int GetAS();
+	int GetVision();
+	int GetRecov();
+
 private:
 
 	void Attack();
@@ -88,14 +94,6 @@ private:
 	void SetAnimation(ENEMY_STATES state);
 
 	void Roar();
-
-public:
-
-	int GetHP();
-	int GetAD();
-	int GetAS();
-	int GetVision();
-	int GetRecov();
 
 private:
 

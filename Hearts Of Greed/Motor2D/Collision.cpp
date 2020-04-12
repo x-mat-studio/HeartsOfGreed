@@ -88,12 +88,19 @@ bool ModuleCollision::Update(float dt)
 	{
 		c1 = colliders[i];
 
+		if (c1->active == false)
+			continue;
+		
+
 		// avoid checking collisions already checked
 		for (uint k = i + 1; k < colliders.size(); ++k)
 		{
 
-
 			c2 = colliders[k];
+
+			if (c2->active == false || c1->active == false)
+				continue;
+			
 
 			if (c1->CheckCollision(c2->rect) == true)
 			{

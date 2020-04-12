@@ -29,6 +29,7 @@ struct Collider
 {
 	SDL_Rect		rect;
 	bool			to_delete = false;
+	bool			active = true;
 	COLLIDER_TYPE	type;
 	Module* callback = nullptr;
 	Entity* thisEntity = nullptr;
@@ -59,6 +60,17 @@ struct Collider
 	void setType(COLLIDER_TYPE type1)
 	{
 		type = type1;
+	}
+
+
+	void Activate()
+	{
+		if (active == true)
+		{
+			active = false;
+		}
+		else
+			active = true;
 	}
 
 

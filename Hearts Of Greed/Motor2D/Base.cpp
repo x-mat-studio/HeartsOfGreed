@@ -83,6 +83,11 @@ Base::~Base()
 
 bool Base::Update(float dt)
 {
+	if (align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		baseAreaAlarm->active = true;
+	}
+	
 	GainResources(dt);
 
 	return true;
@@ -271,7 +276,7 @@ int Base::RecieveDamage(int damage)
 
 	if (hitPointsCurrent > 0)
 	{
-		hitPointsCurrent -= damage*4;
+		hitPointsCurrent -= damage;
 		if (hitPointsCurrent <= 0)
 		{
 			Die();

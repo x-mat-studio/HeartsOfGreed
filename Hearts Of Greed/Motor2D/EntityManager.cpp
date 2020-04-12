@@ -583,8 +583,6 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 			enemy->CheckObjecive(entity);
 		}
 	}
-
-
 }
 
 
@@ -608,7 +606,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 	int numEntities = entityVector.size();
 
-	for (int i = 0; i < numEntities; i++)
+	for (int i = numEntities - 1; i >= 0; i--)
 	{
 		alignement = entityVector[i]->GetAlignment();
 

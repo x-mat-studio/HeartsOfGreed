@@ -72,6 +72,8 @@ bool ModuleTestScene::Start()
 
 		//Test Hero
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x-680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
@@ -343,6 +345,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
 		isNightTime = false;
 		timer = 0;
+		dayNumber++;
 		break;
 
 	case EVENT_ENUM::DEBUG_NIGHT:
@@ -461,6 +464,7 @@ void ModuleTestScene::CalculateTimers(float dt)
 			app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
 			isNightTime = false;
 			timer = 0;
+			dayNumber++;
 		}
 	}
 }
@@ -487,4 +491,10 @@ void ModuleTestScene::DrawNightRect()
 	}
 
 	app->render->DrawQuad(rect, 60, 26, 81, 100, true, false);
+}
+
+
+int ModuleTestScene::GetDayNumber() const
+{
+	return dayNumber;
 }
