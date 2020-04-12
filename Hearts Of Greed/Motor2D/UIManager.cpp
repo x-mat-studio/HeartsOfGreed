@@ -13,6 +13,7 @@
 #include "Window.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Turret.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -341,6 +342,31 @@ void ModuleUIManager::CreateEntityPortrait()
 	SDL_Color std{(255),(255), (255), (255)};
 
 	switch (app->player->focusedEntity->GetType()) {
+	
+	case ENTITY_TYPE::BLDG_TURRET:
+		Turret* turret;
+		turret = (Turret*)app->player->focusedEntity;
+
+		//img portrait
+		rect = RectConstructor(561, 77, 68, 62);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 18, h / app->win->GetUIScale() - rect.h - 2), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+
+		//stats
+
+		sprintf_s(stats, 40, "LVL: %i", turret->GetLvl());
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 35, (h / (app->win->GetUIScale()) - 15)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+
+		sprintf_s(stats, 40, "AD: %i", turret->GetAD());
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 35, (h / (app->win->GetUIScale()) - 30)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+
+		sprintf_s(stats, 40, "Rng: %i", turret->GetRng());
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 35, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+
+		sprintf_s(stats, 40, "AS: %i", turret->GetAS());
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 35, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+
+		break;
+
 
 	case ENTITY_TYPE::HERO_GATHERER:
 

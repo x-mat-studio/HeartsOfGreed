@@ -65,7 +65,12 @@ public:
 	void StateMachine();
 
 	void Draw(float dt);
+public:
 
+	int GetLvl();
+	int GetAD();
+	int GetAS();
+	int GetRng();
 private:
 	int turretLvl;
 	int attackDmg;

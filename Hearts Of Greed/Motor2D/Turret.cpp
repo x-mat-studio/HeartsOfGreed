@@ -123,6 +123,26 @@ void Turret::Draw(float dt)
 	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
 }
 
+int Turret::GetLvl()
+{
+	return turretLvl;
+}
+
+int Turret::GetAD()
+{
+	return attackDmg;
+}
+
+int Turret::GetAS()
+{
+	return attackSpeed;
+}
+
+int Turret::GetRng()
+{
+	return range;
+}
+
 
 bool Turret::CheckAttackRange()
 {
