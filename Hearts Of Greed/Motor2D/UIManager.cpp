@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Turret.h"
+#include "Base.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -50,6 +51,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_SHOP, this);
 
 
 	return ret;
@@ -230,6 +232,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::ENTITY_ON_CLICK:
 		CreateEntityPortrait(); 
 		break;
+
+	case EVENT_ENUM::CREATE_SHOP:
+		CreateShopMenu();
+		break;
 	}
 }
 
@@ -343,6 +349,31 @@ void ModuleUIManager::CreateEntityPortrait()
 
 	switch (app->player->focusedEntity->GetType()) {
 	
+	case ENTITY_TYPE::BLDG_BASE:
+		
+		Base* base;
+		base = (Base*)app->player->focusedEntity;
+
+		//img portrait
+		rect = RectConstructor(634, 78, 68, 62);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 15, h / app->win->GetUIScale() - rect.h - 6), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+		
+		//hp bar
+		rect = RectConstructor(312, 85, 60, 7);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", DRAGGABLE::DRAG_OFF, "HPbar");
+
+		//stats
+		sprintf_s(stats, 40, "HP: %i", base->GetHP());
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 55)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+
+		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		
+		//shop button
+		rect = RectConstructor(480, 62, 32, 32);
+		AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+		break;
+
 	case ENTITY_TYPE::BLDG_TURRET:
 		Turret* turret;
 		turret = (Turret*)app->player->focusedEntity;
@@ -489,6 +520,11 @@ void ModuleUIManager::CreateEntityPortrait()
 	default:
 		break;
 	}
+}
+
+void ModuleUIManager::CreateShopMenu()
+{
+	LOG("YEEEEEEET");
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const

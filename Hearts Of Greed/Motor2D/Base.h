@@ -51,6 +51,10 @@ private:
 
 	void Die();
 
+public:
+	int GetHP();
+	int GetMaxHP();
+	int GetRsrc();
 
 private:
 	int maxTurrets;

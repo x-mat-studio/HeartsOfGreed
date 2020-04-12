@@ -93,7 +93,9 @@ enum class EVENT_ENUM
 	GAME_SCENE_STARTED,
 	RETURN_TO_MAIN_MENU,
 
+	//Portrait related
 	ENTITY_ON_CLICK,
+	CREATE_SHOP,
 
 	NULL_EVENT
 };

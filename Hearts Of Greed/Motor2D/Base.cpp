@@ -288,3 +288,18 @@ void Base::Die()
 
 	ChangeAligment();
 }
+
+int Base::GetHP()
+{
+	return this->hitPointsCurrent;
+}
+
+int Base::GetMaxHP()
+{
+	return this->hitPointsMax;
+}
+
+int Base::GetRsrc()
+{
+	return resourcesProduced;
+}

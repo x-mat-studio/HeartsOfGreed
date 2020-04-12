@@ -47,6 +47,7 @@ public:
 	void CreateMainMenu();
 	void CreateOptionsMenu();
 	void CreateEntityPortrait();
+	void CreateShopMenu();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
