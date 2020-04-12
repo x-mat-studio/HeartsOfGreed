@@ -51,7 +51,7 @@ void ModuleMap::Draw()
 
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != "Collision") {
+		if (data.layers[f]->name != "Collision" && data.layers[f]->name != "BuildingGeneration") {
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
