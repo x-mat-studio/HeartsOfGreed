@@ -20,15 +20,16 @@
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
+	timer(0),
 	camUp(false),
 	camDown(false),
 	camRight(false),
 	camLeft(false),
 	camSprint(false),
 	allowCamMovement(true),
-	menuScene(false)
+	menuScene(false),
+	isNightTime(false)
 {
-
 }
 
 
@@ -40,6 +41,9 @@ ModuleTestScene::~ModuleTestScene()
 
 bool  ModuleTestScene::Awake(pugi::xml_node&)
 {
+	dayTimer = 4;
+	nightTimer = 4;
+
 	return true;
 }
 
@@ -68,7 +72,7 @@ bool ModuleTestScene::Start()
 
 		//Test Hero
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x-680, pos.y);
-						//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
+		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
 
@@ -104,7 +108,11 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
+
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
+	
 
 	return true;
 }
@@ -114,6 +122,8 @@ bool ModuleTestScene::Start()
 bool  ModuleTestScene::PreUpdate(float dt)
 {
 	CheckListener(this);
+
+//	CalculateTimers(dt);
 
 	return true;
 }
@@ -220,6 +230,11 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	bool ret = true;
 
 	app->map->Draw();
+	
+	if (isNightTime)
+	{
+		DrawNightRect();
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
@@ -323,6 +338,19 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RETURN_TO_MAIN_MENU:
 		menuScene = true;
 		break;
+
+	case EVENT_ENUM::DEBUG_DAY:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
+		isNightTime = false;
+		timer = 0;
+		break;
+
+	case EVENT_ENUM::DEBUG_NIGHT:
+		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+		isNightTime = true;
+		timer = 0;
+		break;
+
 	}
 
 }
@@ -409,3 +437,54 @@ bool ModuleTestScene::GetCamMovementActivated() const
 	return allowCamMovement;
 }
 
+
+void ModuleTestScene::CalculateTimers(float dt)
+{
+	if (isNightTime == false)
+	{
+		timer += dt;
+
+		if (timer >= dayTimer)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+			isNightTime = true;
+			timer = 0;
+		}
+	}
+
+	else
+	{
+		timer += dt;
+
+		if (timer >= nightTimer)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
+			isNightTime = false;
+			timer = 0;
+		}
+	}
+}
+
+
+void ModuleTestScene::DrawNightRect()
+{
+	float scale = app->win->GetScale();
+
+	SDL_Rect rect;
+
+	rect.x = 0;
+	rect.y = 0;
+
+	if (scale > 1)
+	{
+		rect.w = app->win->width * scale;
+		rect.h = app->win->height * scale;
+	}
+	else
+	{
+		rect.w = app->win->width / scale;
+		rect.h = app->win->height / scale;
+	}
+
+	app->render->DrawQuad(rect, 60, 26, 81, 100, true, false);
+}

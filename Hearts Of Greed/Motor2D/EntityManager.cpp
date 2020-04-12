@@ -152,11 +152,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Generate Areas------------------------------------
-	skillArea gathererSkill1Area;
-	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1Area, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1Area });
+	skillArea gathererSkill1AreaRange;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 7);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
 
+	skillArea gathererSkill1AreaExplosion;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1_MOUSE, gathererSkill1AreaRange });
 
 	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
@@ -186,6 +190,9 @@ bool ModuleEntityManager::Start()
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
+
+	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
+	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
@@ -813,6 +820,16 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		RemoveDeletedEntities();
 		break;
 
+	case EVENT_ENUM::DAY_START:
+		SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+		SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+		break;
+
+	case EVENT_ENUM::NIGHT_START:
+		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
+		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
+		break;
+
 	case EVENT_ENUM::KILL_ALL_ENEMIES:
 		KillAllEnemies();
 		break;
@@ -1222,9 +1239,6 @@ skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPo
 	if (it == skillAreas.end())
 		return ret;
 
-	//Here goes a GenerateArea :D have fun
-	//toFill->insert();
-
 	center = app->map->WorldToMap(round(center.x), round(center.y));
 	GenerateDynArea(toFill, ret, center);
 
@@ -1239,6 +1253,7 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	{
 		int diameter = (area->radius * 2) + 1;
 		iMPoint posCheck = center - area->radius;
+		toFill->clear();
 
 		for (int y = 0; y < diameter; y++)
 		{
@@ -1258,7 +1273,8 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	}
 }
 
-bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type, Entity* objective)
+bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
+	SKILL_TYPE type, bool hurtYourself,  Entity* objective)
 {
 	bool ret = false;
 
@@ -1269,21 +1285,24 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	break;
 	case SKILL_TYPE::AREA_OF_EFFECT:
 	{
-		pivot = app->map->WorldToMap(pivot.x, pivot.y);
 		int numEntities = entityVector.size();
-		iMPoint entPos;
+		Collider* entColl = nullptr;
+		float halfH = app->map->data.tileHeight * 0.5;
+		float halfW = app->map->data.tileWidth * 0.5;
+		float newRad = sqrt(halfW * halfW + halfH * halfH) * area->radius + 0.5f * area->radius;
+
 		for (int i = 0; i < numEntities; i++)
 		{
 			if (entityVector[i]->GetAlignment() != target)
 				continue;
 
-			entPos = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
+			entColl = entityVector[i]->GetCollider();
 
 			switch (area->form)
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (app->fowManager->InsideCircle(pivot, entPos, area->radius))
+				if (entColl->CheckCollisionCircle(pivot, newRad) || (entityVector[i] == objective && hurtYourself) )
 					entityVector[i]->RecieveDamage(dmg);
 			}
 			break;

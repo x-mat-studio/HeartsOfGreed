@@ -27,6 +27,9 @@ MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT aligne
 
 bool MeleeHero::ActivateSkill1()
 {
+	//if(mouseClick) is anywhere
+
+	inputs.push_back(IN_SKILL1);
 
 	return true;
 }
@@ -45,7 +48,7 @@ bool MeleeHero::ActivateSkill3()
 
 bool MeleeHero::PreProcessSkill1()
 {
-	app->entityManager->RequestArea(SKILL_ID::MELEE_SKILL1, &this->currAoE, this->origin);
+	app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
 	return true;
 }
 

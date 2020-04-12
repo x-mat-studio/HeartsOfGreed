@@ -77,6 +77,8 @@ public:
 	// Get mouse / axis position
 	void GetMousePosition(int& x, int& y);
 	void GetMouseMotion(int& x, int& y);
+
+	fMPoint GetMouseWorld();
 	//Same as GetMousePosition but without the scaling factor
 	void GetMousePositionRaw(int& x, int& y);
 	//Get motion of the scrollwheel in both x (left[negative]/right[positive]) and y (up[positive]/down[negative])axis

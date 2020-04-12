@@ -63,6 +63,7 @@ struct Collider
 
 
 	bool CheckCollision(const SDL_Rect& r) const;
+	bool CheckCollisionCircle(iMPoint c, float radius) const;
 };
 
 
