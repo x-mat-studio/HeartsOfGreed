@@ -184,6 +184,7 @@ bool ModulePlayer::Click()
 
 	if (focusedEntity != nullptr)
 	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		return true;
 	}
 
