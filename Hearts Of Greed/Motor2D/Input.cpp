@@ -463,11 +463,13 @@ void ModuleInput::keyBindingSendEvent(int key, KEY_STATE keyAction)
 	case KEY_STATE::KEY_REPEAT:
 		if (keybindings[key].keyRepeat != nullEvent)
 		app->eventManager->GenerateEvent(keybindings[key].keyRepeat, nullEvent);
+
 		break;
 
 	case KEY_STATE::KEY_UP:
 		if (keybindings[key].keyUp != nullEvent)
 		app->eventManager->GenerateEvent(keybindings[key].keyUp, nullEvent);
+
 		break;
 
 	}
@@ -503,7 +505,6 @@ void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
 		if (mouseBindings[button].keyUp != nullEvent)
 		app->eventManager->GenerateEvent(mouseBindings[button].keyUp, nullEvent);
 		break;
-
 	}
 
 

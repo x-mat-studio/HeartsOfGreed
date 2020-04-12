@@ -5,7 +5,7 @@
 
 
 ModuleFonts::ModuleFonts() : Module(),
-	ingameSize(6)
+	ingameSize(5)
 {
 	name.create("fonts");
 }

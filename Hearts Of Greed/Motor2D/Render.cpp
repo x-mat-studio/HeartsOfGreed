@@ -175,7 +175,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	SDL_Rect rect;
 	
 	if (cameraUse == true) {
-		scale= app->win->GetScale();
+		scale = app->win->GetScale();
 		rect.x = (int)(camera.x * speedX) + x * scale;
 		rect.y = (int)(camera.y * speedY) + y * scale;
 	}
