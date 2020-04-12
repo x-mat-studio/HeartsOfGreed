@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Window.h"
 #include "EntityManager.h"
+#include "EventManager.h"
 #include "UIManager.h"
 #include "UI.h"
 
@@ -21,7 +22,7 @@ Minimap::~Minimap()
 }
 
 
-bool  Minimap::Awake(pugi::xml_node& config)
+bool Minimap::Awake(pugi::xml_node& config)
 {
 	width = config.attribute("width").as_int(1);
 
@@ -38,13 +39,15 @@ bool Minimap::Start()
 
 	bool ret = true;
 
+	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
+
 	return ret;
 
 }
 
 
 // Called each loop iteration
-bool  Minimap::PreUpdate(float dt)
+bool Minimap::PreUpdate(float dt)
 {
 	CheckListener(this);
 	float UIscale = app->win->GetUIScale();
@@ -57,7 +60,7 @@ bool  Minimap::PreUpdate(float dt)
 
 
 // Called each loop iteration
-bool  Minimap::Update(float dt)
+bool Minimap::Update(float dt)
 {
 	CheckListener(this);
 
@@ -88,7 +91,7 @@ bool  Minimap::Update(float dt)
 
 
 // Called each loop iteration
-bool  Minimap::PostUpdate(float dt)
+bool Minimap::PostUpdate(float dt)
 {
 	bool ret = true;
 
@@ -147,27 +150,32 @@ bool  Minimap::PostUpdate(float dt)
 
 
 // Called before quitting
-bool  Minimap::CleanUp()
+bool Minimap::CleanUp()
 {
 	return true;
 }
 
 
-bool  Minimap::Load(pugi::xml_node&)
+bool Minimap::Load(pugi::xml_node&)
 {
 	return true;
 }
 
 
-bool  Minimap::Save(pugi::xml_node&) const
+bool Minimap::Save(pugi::xml_node&) const
 {
 	return true;
 }
 
 
-void Minimap::ExecuteEvent(EVENT_ENUM eventId) const
+void Minimap::ExecuteEvent(EVENT_ENUM eventId)
 {
-
+	switch (eventId)
+	{
+	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
+		CleanUp();
+		break;
+	}
 }
 
 void Minimap::CreateMinimapText()

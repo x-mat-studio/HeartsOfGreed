@@ -40,7 +40,7 @@ public:
 	int height;
 
 private:
-	void ExecuteEvent(EVENT_ENUM eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId);
 	int width;
 	
 
