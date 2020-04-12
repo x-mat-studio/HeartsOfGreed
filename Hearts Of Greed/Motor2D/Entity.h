@@ -75,7 +75,7 @@ class Entity
 public:
 
 	Entity();
-	Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, bool dynamic = false);
+	Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, int maxHealth, int currentHealth, bool dynamic = false);
 	virtual ~Entity();
 
 	virtual bool Start(SDL_Texture* texture);
@@ -118,6 +118,9 @@ public:
 	bool dynamic;
 	bool UIAssigned;
 	FoWEntity* visionEntity;
+
+	int hitPointsMax;
+	int hitPointsCurrent;
 
 protected:
 	fMPoint position;

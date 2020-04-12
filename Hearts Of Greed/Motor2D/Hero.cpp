@@ -16,12 +16,12 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
-	int level, int hitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 15, 30),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 30),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -50,7 +50,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 	level(level),
 
-	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	energyPoints(energyPoints),
 	recoveryEnergyRate(recoveryEnergyRate),
@@ -98,7 +97,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	DynamicEntity(position, copy->unitSpeed, copy->type, alignement, copy->collider, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->unitSpeed, copy->type, alignement, copy->collider, copy->hitPointsMax, copy->hitPointsCurrent, copy->moveRange1, copy->moveRange2),
 
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
@@ -126,7 +125,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill1LeftDown(copy->skill1LeftDown),
 
 	level(copy->level),
-	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	energyPoints(copy->energyPoints),
 	recoveryEnergyRate(copy->recoveryEnergyRate),
@@ -579,10 +577,10 @@ int Hero::RecieveDamage(int damage)
 {
 	int ret = -1;
 
-	if (hitPoints > 0 && godMode == false)
+	if (hitPointsCurrent > 0 && godMode == false)
 	{
-		hitPoints -= damage;
-		if (hitPoints <= 0)
+		hitPointsCurrent -= damage;
+		if (hitPointsCurrent <= 0)
 		{
 			Die();
 			ret = 1;

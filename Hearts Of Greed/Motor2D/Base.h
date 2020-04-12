@@ -18,10 +18,10 @@ class Base : public Building
 public:
 
 	Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter , std::vector <Turret*> baseTurrets, std::vector <Barricade*> baseBarricades, 
-		 Collider* baseArea, int resourcesProduced, float resourcesRate, int hitPoints, int recoveryHitPointsRate, int transparency);
+		 Collider* baseArea, int resourcesProduced, float resourcesRate, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int transparency);
 
 	Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate, 
-		 int hitPoints, int recoveryHitPointsRate, int transparency);
+		int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int transparency);
 
 	Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement);
 

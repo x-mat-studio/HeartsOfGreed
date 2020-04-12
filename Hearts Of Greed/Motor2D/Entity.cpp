@@ -8,7 +8,7 @@ Entity::Entity()
 {}
 
 
-Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, bool dynamic) :
+Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement, Collider* collider, int maxHealth, int currentHealth, bool dynamic) :
 
 	position(position),
 	type(type),
@@ -22,6 +22,9 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	collider(collider),
 	visionEntity(nullptr),
 	texture(nullptr),
+
+	hitPointsMax(maxHealth),
+	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
 
