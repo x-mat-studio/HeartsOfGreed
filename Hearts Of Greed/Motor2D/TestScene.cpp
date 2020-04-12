@@ -17,6 +17,7 @@
 #include "MainMenuScene.h"
 #include "EventManager.h"
 #include "Minimap.h"
+#include "Render.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -52,11 +53,12 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	app->render->currentCamX = 0;
+	app->render->currentCamY = 0;
 	//Play Music
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 
 	//Load sfx used in this scene
-
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
 	{
 		int w, h;

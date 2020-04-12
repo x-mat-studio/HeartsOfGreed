@@ -8,7 +8,7 @@ enum class MINIMAP_ICONS
 {
 	BASE,
 	TURRET,
-	HEROE,
+	HERO,
 	ENEMY,
 	ENEMY_BASE,
 	NONE
@@ -19,12 +19,18 @@ enum class MINIMAP_ICONS
 class MinimapIcon
 {
 public:
+	MinimapIcon(fMPoint* worldPos,MINIMAP_ICONS type);
+	~MinimapIcon();
+	void Draw(SDL_Rect sourceRect);
 public:
-	fMPoint pos;
+
+	fMPoint* minimapPos;
 	MINIMAP_ICONS type;
 
 	bool toDelete;
 };
+
+
 
 class Minimap:public Module
 {
@@ -54,20 +60,21 @@ public:
 	iMPoint WorldToMinimap(int x, int y);
 	iMPoint ScreenToMinimapToWorld(int x, int y);
 
+	MinimapIcon* CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type);
 
 
 public:
 	float minimapScaleRelation;	
 	int minimapWidth;
 	int height;
-
+	iMPoint position;
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 	int width;
 	
+	std::vector<MinimapIcon*> minimapIcons;
 
 	int minimapHeight;
-	iMPoint position;
 
 	SDL_Texture* minimapTexture;
 	SDL_Rect camRect;

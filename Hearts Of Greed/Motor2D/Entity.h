@@ -7,6 +7,7 @@
 #include "p2Point.h"
 #include "Animation.h"
 #include "FoWEntity.h"
+#include "Minimap.h"
 
 #define MAX_ENTITY_TYPES 13
 
@@ -118,9 +119,11 @@ public:
 	bool dynamic;
 	bool UIAssigned;
 	FoWEntity* visionEntity;
+	MinimapIcon* minimapIcon;
+	fMPoint position;
 
 protected:
-	fMPoint position;
+	
 	fMPoint offset;
 	fMPoint center;
 

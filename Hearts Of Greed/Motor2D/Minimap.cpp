@@ -12,6 +12,28 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
+MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type) :toDelete(false), type(type)
+{
+	minimapPos = worldPos;
+}
+
+
+MinimapIcon::~MinimapIcon()
+{
+	minimapPos = nullptr;
+}
+
+void MinimapIcon::Draw(SDL_Rect sourceRect)
+{
+	if (minimapPos != nullptr)
+	{
+		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x, minimapPos->y);
+		float uiscale = app->win->GetUIScale();
+		app->render->Blit(app->uiManager->GetAtlasTexture(), (newpos.x - (sourceRect.w * 0.5f)) / uiscale, (newpos.y - (sourceRect.h * 0.5f)) / uiscale, &sourceRect, false, false);
+	}
+}
+
+
 Minimap::Minimap() :minimapLoaded(false)
 {
 	name = "minimap";
@@ -54,6 +76,21 @@ bool Minimap::PreUpdate(float dt)
 	CheckListener(this);
 	if (minimapLoaded)
 	{
+		//deletes all the icons that request to do so
+		for (int i = 0; i < minimapIcons.size(); i++)
+		{
+			if (minimapIcons[i]->toDelete == true)
+			{
+				delete minimapIcons[i];
+				minimapIcons[i] = nullptr;
+				minimapIcons.erase(minimapIcons.begin() + i);
+				i--;
+			}
+
+		}
+
+
+
 		float UIscale = app->win->GetUIScale();
 		UI* element = app->uiManager->FindUIByName("minimapBackground");
 		position.x = element->worldPosition.x * UIscale + 5;
@@ -70,8 +107,6 @@ bool Minimap::Update(float dt)
 
 	if (minimapLoaded)
 	{
-
-
 		int x;
 		int y;
 		int w;
@@ -106,6 +141,36 @@ bool Minimap::PostUpdate(float dt)
 	{
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 
+		//Draw icons
+		SDL_Rect iconRect = { 0,0,0,0 };
+		for (int i = 0; i < minimapIcons.size(); i++)
+		{
+			switch (minimapIcons[i]->type)
+			{
+			case MINIMAP_ICONS::BASE:
+				iconRect = { 24, 504, 8, 8 };
+				break;
+			case MINIMAP_ICONS::TURRET:
+				iconRect = { 32, 504, 8, 8 };
+				break;
+			case MINIMAP_ICONS::HERO:
+				iconRect = { 16, 504, 8, 8 };
+				break;
+			case MINIMAP_ICONS::ENEMY:
+				iconRect = { 0, 504, 8, 8 };
+				break;
+			case MINIMAP_ICONS::ENEMY_BASE:
+				iconRect = { 8, 504, 8, 8 };
+				break;
+			case MINIMAP_ICONS::NONE:
+				iconRect = { 0, 0, 0, 0 };
+				break;
+			}
+
+			minimapIcons[i]->Draw(iconRect);
+
+		}
+
 
 		//camera rect representation
 		SDL_Rect cam;
@@ -127,26 +192,31 @@ bool Minimap::PostUpdate(float dt)
 		//right
 		if (cam.x + cam.w > position.x + width)
 		{
-			cam.w = position.x + width - cam.x;
+			cam.w = MAX(position.x + width - cam.x, 0);
 		}
 		//bottom
 		if (cam.y + cam.h > position.y + height)
 		{
-			cam.h = position.y + height - cam.y;
+			cam.h = MAX(position.y + height - cam.y, 0);
 		}
 		//left
 		if (cam.x < position.x)
 		{
 			cam.w -= position.x - cam.x;
+			cam.w = MAX(cam.w, 0);
 			cam.x += position.x - cam.x;
 		}
 		if (cam.y < position.y)
 		{
 			cam.h -= position.y - cam.y;
+			cam.h = MAX(cam.h, 0);
 			cam.y += position.y - cam.y;
 		}
 
-
+		cam.x = MAX(cam.x, position.x);
+		cam.x = MIN(cam.x, position.x + width);
+		cam.y = MAX(cam.y, position.y);
+		cam.y = MIN(cam.y, position.y + height);
 
 		app->render->DrawQuad(cam, 255, 255, 255, 255, false, false);
 	}
@@ -159,6 +229,17 @@ bool Minimap::PostUpdate(float dt)
 // Called before quitting
 bool Minimap::CleanUp()
 {
+	int numElements = minimapIcons.size();
+
+	for (int i = 0; i < numElements; i++)
+	{
+		RELEASE(minimapIcons[i]);
+		minimapIcons[i] = nullptr;
+	}
+
+	minimapIcons.clear();
+
+
 	app->tex->UnLoad(minimapTexture);
 	minimapLoaded = false;
 	return true;
@@ -242,4 +323,18 @@ iMPoint Minimap::ScreenToMinimapToWorld(int x, int y) {
 	minimap_position.x = (x - position.x - width * 0.5f) / minimapScaleRelation;
 	minimap_position.y = (y - position.y) / minimapScaleRelation;
 	return minimap_position;
+}
+
+MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type)
+{
+	MinimapIcon* icon = nullptr;
+
+	icon = new MinimapIcon(worldPos, type);
+
+	if (icon != nullptr)
+	{
+		minimapIcons.push_back(icon);
+	}
+
+	return icon;
 }
