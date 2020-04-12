@@ -9,6 +9,8 @@
 #include "EventManager.h"
 #include "UIManager.h"
 #include "UI.h"
+#include "Brofiler/Brofiler/Brofiler.h"
+
 
 Minimap::Minimap() :minimapLoaded(false)
 {
@@ -50,11 +52,13 @@ bool Minimap::Start()
 bool Minimap::PreUpdate(float dt)
 {
 	CheckListener(this);
-	float UIscale = app->win->GetUIScale();
-	UI* element = app->uiManager->FindUIByName("minimapBackground");
-	position.x = element->worldPosition.x*UIscale +5;
-	position.y = element->worldPosition.y*UIscale + 7;
-
+	if (minimapLoaded)
+	{
+		float UIscale = app->win->GetUIScale();
+		UI* element = app->uiManager->FindUIByName("minimapBackground");
+		position.x = element->worldPosition.x * UIscale + 5;
+		position.y = element->worldPosition.y * UIscale + 7;
+	}
 	return true;
 }
 
@@ -64,28 +68,31 @@ bool Minimap::Update(float dt)
 {
 	CheckListener(this);
 
-
-	int x;
-	int y;
-	int w;
-	int h;
-	app->input->GetMousePositionRaw(x, y);
-	app->render->GetCameraMeasures(w, h);
-
-	float scale = app->win->GetScale();
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+	if (minimapLoaded)
 	{
-		if (ClickingOnMinimap(x, y) == true)
+
+
+		int x;
+		int y;
+		int w;
+		int h;
+		app->input->GetMousePositionRaw(x, y);
+		app->render->GetCameraMeasures(w, h);
+
+		float scale = app->win->GetScale();
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			//camera TP
-			iMPoint newCamPos = ScreenToMinimapToWorld(x, y);
+			if (ClickingOnMinimap(x, y) == true)
+			{
+				//camera TP
+				iMPoint newCamPos = ScreenToMinimapToWorld(x, y);
 
-			app->render->currentCamX = -((newCamPos.x * scale) - (w * 0.5f));
-			app->render->currentCamY = -((newCamPos.y * scale) - (h * 0.5f));
+				app->render->currentCamX = -((newCamPos.x * scale) - (w * 0.5f));
+				app->render->currentCamY = -((newCamPos.y * scale) - (h * 0.5f));
 
+			}
 		}
 	}
-
 	return true;
 }
 
@@ -106,15 +113,15 @@ bool Minimap::PostUpdate(float dt)
 		float scale = app->win->GetScale();
 		int w;
 		int h;
-		int x = -(app->render->GetCameraX())/scale;
-		int y = -(app->render->GetCameraY())/scale;
+		int x = -(app->render->GetCameraX()) / scale;
+		int y = -(app->render->GetCameraY()) / scale;
 		app->render->GetCameraMeasures(w, h);
 
 		iMPoint camXY = WorldToMinimap(x, y);
 		cam.x = camXY.x;
 		cam.y = camXY.y;
-		cam.w = w * minimapScaleRelation/scale;
-		cam.h = h * minimapScaleRelation/scale;
+		cam.w = w * minimapScaleRelation / scale;
+		cam.h = h * minimapScaleRelation / scale;
 
 		//rectangle trim
 		//right
@@ -139,9 +146,9 @@ bool Minimap::PostUpdate(float dt)
 			cam.y += position.y - cam.y;
 		}
 
-	
 
-		app->render->DrawQuad(cam, 255, 255, 255, 255, false,false);
+
+		app->render->DrawQuad(cam, 255, 255, 255, 255, false, false);
 	}
 
 
@@ -152,6 +159,8 @@ bool Minimap::PostUpdate(float dt)
 // Called before quitting
 bool Minimap::CleanUp()
 {
+	app->tex->UnLoad(minimapTexture);
+	minimapLoaded = false;
 	return true;
 }
 
@@ -186,9 +195,11 @@ void Minimap::CreateMinimapText()
 
 void Minimap::LoadMinimap()
 {
+	BROFILER_CATEGORY("Load Minimap", Profiler::Color::Red);
+
 	minimapLoaded = true;
 	uint windowWidth, windowHeight;
-	app->win->GetWindowSize(windowWidth, windowHeight);	
+	app->win->GetWindowSize(windowWidth, windowHeight);
 
 	minimapWidth = app->map->data.tileWidth * app->map->data.width;
 	minimapHeight = app->map->data.tileHeight * app->map->data.height;

@@ -4,6 +4,28 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 
+enum class MINIMAP_ICONS
+{
+	BASE,
+	TURRET,
+	HEROE,
+	ENEMY,
+	ENEMY_BASE,
+	NONE
+};
+
+
+
+class MinimapIcon
+{
+public:
+public:
+	fMPoint pos;
+	MINIMAP_ICONS type;
+
+	bool toDelete;
+};
+
 class Minimap:public Module
 {
 public:
@@ -47,8 +69,6 @@ private:
 	int minimapHeight;
 	iMPoint position;
 
-	SDL_Surface* mapSurface;
-	SDL_Renderer* minimapRenderer;
 	SDL_Texture* minimapTexture;
 	SDL_Rect camRect;
 
