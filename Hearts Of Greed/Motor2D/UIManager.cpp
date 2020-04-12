@@ -421,7 +421,7 @@ void ModuleUIManager::CreateEntityPortrait()
 
 
 		//stats
-		sprintf_s(stats, 40, "HP: %i", hero->hitPoints);
+		sprintf_s(stats, 40, "HP: %i", hero->hitPointsCurrent);
 		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 46)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);
@@ -465,7 +465,7 @@ void ModuleUIManager::CreateEntityPortrait()
 
 
 		//stats
-		sprintf_s(stats, 40, "HP: %i", hero->hitPoints);
+		sprintf_s(stats, 40, "HP: %i", hero->hitPointsCurrent);
 		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 46)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);

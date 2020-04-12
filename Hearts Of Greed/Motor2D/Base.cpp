@@ -10,10 +10,10 @@
 
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
-	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int hitPoints, 
+	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int maxHitPoints, int currentHitPoints,
 	       int recoveryHitPointsRate, int transparency) :
 
-	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider, ENTITY_TYPE::BLDG_BASE),
+	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, 0, 0, transparency, collider, ENTITY_TYPE::BLDG_BASE),
 
 	maxTurrets(maxTurrets),
 	maxBarricades(maxBarricades),
@@ -32,9 +32,9 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, Collider* baseArea, int resourcesProduced, float resourcesRate,
-	int hitPoints, int recoveryHitPointsRate, int transparency):
+	int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int transparency):
 
-	Building(position, hitPoints, recoveryHitPointsRate, 0, 0, transparency, collider, ENTITY_TYPE::BLDG_BASE),
+	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, 0, 0, transparency, collider, ENTITY_TYPE::BLDG_BASE),
 
 	maxTurrets(maxTurrets),
 	maxBarricades(maxBarricades),

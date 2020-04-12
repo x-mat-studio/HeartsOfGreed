@@ -38,7 +38,8 @@ class Building : public Entity
 {
 public:
 
-	Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type = ENTITY_TYPE::BUILDING, BUILDING_DECOR decor = BUILDING_DECOR::NONE);
+	Building(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
+		ENTITY_TYPE type = ENTITY_TYPE::BUILDING, BUILDING_DECOR decor = BUILDING_DECOR::NONE);
 
 	Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -78,8 +79,6 @@ public:
 	Base* myBase;
 
 protected:
-	int			hitPointsMax;
-	int			hitPointsCurrent;
 	int			recoveryHitPointsRate;
 
 private:

@@ -25,7 +25,7 @@ class DynamicEntity : public Entity
 {
 public:
 
-	DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2);
+	DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int maxHealth, int currentHealth, int moveRange1, int moveRange2);
 
 	~DynamicEntity();
 

@@ -9,9 +9,9 @@
 #include "Window.h"
 #include "App.h"
 
-DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int moveRange1, int moveRange2) :
+DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTITY_ALIGNEMENT align, Collider* collider, int maxHealth, int currentHealth, int moveRange1, int moveRange2) :
 
-	Entity(position, type, align, collider, true),
+	Entity(position, type, align, collider, maxHealth, currentHealth, true),
 	
 	moveRange1(moveRange1),
 	moveRange2(moveRange2),
