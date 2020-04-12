@@ -130,7 +130,7 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 
 	newPortrait.backgroundHealthbar = new UI_Image(fMPoint (newPortrait.position.x + 18, newPortrait.position.y + 45), this, UI_TYPE::UI_IMG, backgroundHealthbarRect, (P2SString)"backgroundHealthbarPortrait", DRAGGABLE::DRAG_OFF);
 	
-	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", nullptr, DRAGGABLE::DRAG_OFF);
+	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", entity, DRAGGABLE::DRAG_OFF);
 	
 	SDL_Color color;
 	char level;

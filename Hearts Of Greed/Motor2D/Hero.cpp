@@ -326,7 +326,10 @@ void Hero::StateMachine(float dt)
 bool Hero::PostUpdate(float dt)
 {
 	if (app->debugMode)
-		DebugDraw();
+	{
+		Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+		DebugDraw(currFrame.pivotPositionX, currFrame.pivotPositionY);
+	}
 
 	DrawArea();
 
