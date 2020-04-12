@@ -51,14 +51,7 @@ Entity::~Entity()
 		visionEntity->deleteEntity = true;
 	}
 
-	if (minimapIcon != nullptr)
-	{
-		minimapIcon->toDelete = true;
-		minimapIcon->minimapPos = nullptr;
-	}
-
 	minimapIcon = nullptr;
-	
 }
 
 

@@ -322,6 +322,12 @@ void Enemy::Die()
 	{
 		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 	}
+
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+		minimapIcon->minimapPos = nullptr;
+	}
 }
 
 

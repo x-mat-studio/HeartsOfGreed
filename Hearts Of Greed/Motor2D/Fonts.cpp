@@ -5,7 +5,7 @@
 
 
 ModuleFonts::ModuleFonts() : Module(),
-	ingameSize(5)
+ingameSize(5)
 {
 	name.create("fonts");
 }
@@ -29,8 +29,8 @@ bool ModuleFonts::Awake(pugi::xml_node& conf)
 	{
 		const char* path = conf.child("default_font").attribute("file").as_string(DEFAULT_FONT);
 		int size = conf.child("default_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
-		fonts.push_back( Load(path, size));
-		fonts.push_back(Load(path, ingameSize));
+		Load(path, size);
+		Load(path, ingameSize);
 
 		default = fonts[0];
 	}
@@ -47,11 +47,10 @@ bool ModuleFonts::CleanUp()
 	for (int i = 0; i < numFonts; i++)
 	{
 		TTF_CloseFont(fonts[i]);
-		delete fonts[i];
+		LOG("SDL_ttf could not delete! SDL_ttf Error: %s\n", TTF_GetError());
 		fonts[i] = nullptr;
 	}
 
-	fonts.clear(); 
 	TTF_Quit();
 	return true;
 }

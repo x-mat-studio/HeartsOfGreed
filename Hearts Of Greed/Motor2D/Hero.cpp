@@ -204,8 +204,10 @@ Hero::~Hero()
 	skill1Left = Animation();
 	skill1LeftUp = Animation();
 	skill1LeftDown = Animation();
+
 	currAoE.clear();
 	suplAoE.clear();
+
 	currAreaInfo = nullptr;
 }
 
@@ -469,6 +471,12 @@ void Hero::Die()
 	case ENTITY_TYPE::HERO_GATHERER:
 		app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_OUT, EVENT_ENUM::NULL_EVENT);
 		break;
+	}
+
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+		minimapIcon->minimapPos = nullptr;
 	}
 
 	toDelete = true;
