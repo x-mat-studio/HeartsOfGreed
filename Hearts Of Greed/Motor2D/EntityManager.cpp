@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
+#include "Minimap.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -151,11 +152,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Generate Areas------------------------------------
-	skillArea gathererSkill1Area;
-	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1Area, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1Area });
+	skillArea gathererSkill1AreaRange;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 7);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
 
+	skillArea gathererSkill1AreaExplosion;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1_MOUSE, gathererSkill1AreaRange });
 
 	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
@@ -746,6 +751,25 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 }
 
+void ModuleEntityManager::DrawOnlyStaticBuildings()
+{
+	int numEntities = entityVector.size();
+	float scale = app->minimap->minimapScaleRelation;
+	float halfWidth = app->minimap->minimapWidth * 0.5f;
+	
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
+		{
+
+			entityVector[i]->MinimapDraw(scale, halfWidth);
+		}
+		
+	}
+
+}
+
+
 
 void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
 {
@@ -1202,9 +1226,6 @@ skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPo
 	if (it == skillAreas.end())
 		return ret;
 
-	//Here goes a GenerateArea :D have fun
-	//toFill->insert();
-
 	center = app->map->WorldToMap(round(center.x), round(center.y));
 	GenerateDynArea(toFill, ret, center);
 
@@ -1219,6 +1240,7 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	{
 		int diameter = (area->radius * 2) + 1;
 		iMPoint posCheck = center - area->radius;
+		toFill->clear();
 
 		for (int y = 0; y < diameter; y++)
 		{

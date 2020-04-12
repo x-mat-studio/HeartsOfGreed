@@ -119,6 +119,11 @@ Collider* Entity::GetCollider() const
 void Entity::Draw(float dt)
 {}
 
+void Entity::MinimapDraw(float scale, float halfWidth)
+{
+
+}
+
 
 DIRECTION Entity::GetMyDirection()
 {

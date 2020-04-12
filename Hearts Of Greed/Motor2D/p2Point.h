@@ -249,6 +249,14 @@ public:
 		return ((x >= r->x) && (x < (r->x + r->w)) &&
 			(y >= r->y) && (y < (r->y + r->h))) ? true : false;
 	}
+
+	bool InsideCircle(MAT_Point tile, float radius)
+	{
+		float distance_squared = this->DistanceNoSqrt(tile);
+
+		float maxDist = (radius + 0.5f) * (radius + 0.5f);
+		return distance_squared < maxDist;
+	}
 };
 
 typedef MAT_Point<int> iMPoint;

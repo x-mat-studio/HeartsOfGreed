@@ -1,5 +1,7 @@
 #include "GathererHero.h"
 #include "EntityManager.h"
+#include "Map.h"
+#include "Input.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -26,16 +28,18 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 {}
 
 
-bool GathererHero::ActivateSkill1(iMPoint mouseClick)
+bool GathererHero::ActivateSkill1(fMPoint mouseClick)
 {
 	bool ret = false;
 	//Hola soy Marc :)
 
-	//if(mouseClick) is anywhere
+	if (currAreaInfo)
+	{
+		inputs.push_back(IN_SKILL1);
+		ret = true;
+	}
 
-	inputs.push_back(IN_SKILL1);
-
-	return true;
+	return ret;
 }
 
 bool GathererHero::ActivateSkill2()
@@ -52,8 +56,18 @@ bool GathererHero::ActivateSkill3()
 
 bool GathererHero::PreProcessSkill1()
 {
-	if(currAoE.size() == 0)
+	if (currAoE.size() == 0)
+	{
 		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+	}
+
+	iMPoint center = app->map->WorldToMap(position.x, position.y);
+	granadePosLaunch = app->input->GetMouseWorld();
+
+	if (center.InsideCircle(app->map->WorldToMap(granadePosLaunch.x, granadePosLaunch.y), currAreaInfo->radius))
+	{
+		granadeArea = app->entityManager->RequestArea(SKILL_ID::GATHERER_SKILL1_MOUSE, &this->suplAoE, { (int)granadePosLaunch.x, (int)granadePosLaunch.y });
+	}
 
 	return true;
 }
@@ -65,6 +79,26 @@ bool GathererHero::PreProcessSkill2()
 }
 
 bool GathererHero::PreProcessSkill3()
+{
+
+	return true;
+}
+
+bool GathererHero::ExecuteSkill1()
+{
+	if (granadeArea)
+		return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type);
+	else
+		return false;
+}
+
+bool GathererHero::ExecuteSkill2()
+{
+
+	return true;
+}
+
+bool GathererHero::ExecuteSkill3()
 {
 
 	return true;

@@ -6,6 +6,8 @@
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "EventManager.h"
+#include "Window.h"
+#include "Render.h"
 
 #define MAX_KEYS 300
 
@@ -50,11 +52,11 @@ bool ModuleInput::Start()
 	SDL_StopTextInput();
 
 	//configure bindings (will be loaded from xml in the future) TODO
-	AddMouseBinding(SDL_BUTTON_LEFT -1, KEY_STATE::KEY_DOWN, EVENT_ENUM::ENTITY_INTERACTION);
-	AddMouseBinding(SDL_BUTTON_LEFT -1, KEY_STATE::KEY_REPEAT, EVENT_ENUM::SELECT_UNITS);
+	AddMouseBinding(SDL_BUTTON_LEFT - 1, KEY_STATE::KEY_DOWN, EVENT_ENUM::ENTITY_INTERACTION);
+	AddMouseBinding(SDL_BUTTON_LEFT - 1, KEY_STATE::KEY_REPEAT, EVENT_ENUM::SELECT_UNITS);
 	AddMouseBinding(SDL_BUTTON_LEFT - 1, KEY_STATE::KEY_UP, EVENT_ENUM::STOP_SELECTING_UNITS);
-	AddMouseBinding(SDL_BUTTON_RIGHT-1, KEY_STATE::KEY_DOWN, EVENT_ENUM::ENTITY_COMMAND);
-	
+	AddMouseBinding(SDL_BUTTON_RIGHT - 1, KEY_STATE::KEY_DOWN, EVENT_ENUM::ENTITY_COMMAND);
+
 	//Camera bindings
 	AddKeyBinding(SDL_SCANCODE_W, KEY_STATE::KEY_DOWN, EVENT_ENUM::CAMERA_UP);
 	AddKeyBinding(SDL_SCANCODE_W, KEY_STATE::KEY_UP, EVENT_ENUM::STOP_CAMERA_UP);
@@ -282,6 +284,12 @@ void ModuleInput::GetScrollWheelMotion(int& x, int& y)
 	y = mouseWheelMotionY;
 }
 
+fMPoint ModuleInput::GetMouseWorld()
+{
+	return { (-app->render->currentCamX + mouseXRaw) / app->win->GetScale(), (-app->render->currentCamY + mouseYRaw) / app->win->GetScale() };
+}
+
+
 
 void ModuleInput::ActivateTextInput(SDL_Rect& rect)
 {
@@ -449,15 +457,15 @@ void ModuleInput::keyBindingSendEvent(int key, KEY_STATE keyAction)
 	switch (keyAction)
 	{
 	case KEY_STATE::KEY_IDLE:
-		if (keybindings[key].keyIdle!=nullEvent)
+		if (keybindings[key].keyIdle != nullEvent)
 			app->eventManager->GenerateEvent(keybindings[key].keyIdle, nullEvent);
 
 		break;
 
 	case KEY_STATE::KEY_DOWN:
 		if (keybindings[key].keyDown != nullEvent)
-		app->eventManager->GenerateEvent(keybindings[key].keyDown, nullEvent);
-		
+			app->eventManager->GenerateEvent(keybindings[key].keyDown, nullEvent);
+
 		break;
 
 	case KEY_STATE::KEY_REPEAT:
@@ -488,22 +496,22 @@ void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
 	{
 	case KEY_STATE::KEY_IDLE:
 		if (mouseBindings[button].keyIdle != nullEvent)
-		app->eventManager->GenerateEvent(mouseBindings[button].keyIdle, nullEvent);
+			app->eventManager->GenerateEvent(mouseBindings[button].keyIdle, nullEvent);
 		break;
 
-	case KEY_STATE::KEY_DOWN:	
+	case KEY_STATE::KEY_DOWN:
 		if (mouseBindings[button].keyDown != nullEvent)
-		app->eventManager->GenerateEvent(mouseBindings[button].keyDown, nullEvent);
+			app->eventManager->GenerateEvent(mouseBindings[button].keyDown, nullEvent);
 		break;
 
-	case KEY_STATE::KEY_REPEAT:	
+	case KEY_STATE::KEY_REPEAT:
 		if (mouseBindings[button].keyRepeat != nullEvent)
-		app->eventManager->GenerateEvent(mouseBindings[button].keyRepeat, nullEvent);
+			app->eventManager->GenerateEvent(mouseBindings[button].keyRepeat, nullEvent);
 		break;
 
 	case KEY_STATE::KEY_UP:
 		if (mouseBindings[button].keyUp != nullEvent)
-		app->eventManager->GenerateEvent(mouseBindings[button].keyUp, nullEvent);
+			app->eventManager->GenerateEvent(mouseBindings[button].keyUp, nullEvent);
 		break;
 	}
 
