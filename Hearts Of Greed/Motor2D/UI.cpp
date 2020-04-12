@@ -133,7 +133,7 @@ void UI::Hide(float dt)
 		{
 			this->worldPosition.x += hideSpeed * dt;
 
-			if (((position) + (8 * box.w / 10)) > app->win->width)
+			if (((position) + (box.w / 10)) > app->win->width)
 			{
 				hidden = true;
 				hiding_unhiding = false;
@@ -161,7 +161,7 @@ void UI::Hide(float dt)
 		{
 			this->worldPosition.x -= hideSpeed * dt;
 
-			if (((position / 2) + (8 * box.w / 10)) < 0)
+			if (((position / 2) + (9 * box.w / 10)) < 0)
 			{
 				hidden = true;
 				hiding_unhiding = false;
