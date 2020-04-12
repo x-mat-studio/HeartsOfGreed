@@ -67,6 +67,8 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL3, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+
 
 	return true;
 }
@@ -466,6 +468,10 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			prepareSkill = true;
 		}
 		
+		break;
+
+	case EVENT_ENUM::GIVE_RESOURCES:
+		resources += 1000;
 		break;
 	}
 
