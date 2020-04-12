@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<turret>
+	<Animations>
+
+		<crazyIdle name="crazyIdle" frames="6">
+			<frame rposX="1" rposY="179" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+			<frame rposX="78" rposY="180" rwidth="57" rheight="78"  time="0.15f" pivotX="0" pivotY="0"/>
+			<frame rposX="143" rposY="179" rwidth="71" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+			<frame rposX="217" rposY="179" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+			<frame rposX="294" rposY="180" rwidth="59" rheight="78"  time="0.15f" pivotX="0" pivotY="0"/>
+			<frame rposX="361" rposY="179" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+		</crazyIdle>
+
+	</Animations>
+</turret>
