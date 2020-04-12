@@ -141,7 +141,7 @@ void UI::Hide(float dt)
 				{
 					parent->hidden = true;
 					parent->hiding_unhiding = false;
-					parent->box.x = 536;
+					parent->box.x = 540;
 				}
 			}
 		}
@@ -159,7 +159,7 @@ void UI::Hide(float dt)
 				{
 					parent->hidden = false;
 					parent->hiding_unhiding = false;
-					parent->box.x = 555;
+					parent->box.x = 556;
 					parent->worldPosition.x = parent->defaultPosition;
 				}
 			}
@@ -180,7 +180,7 @@ void UI::Hide(float dt)
 				{
 					parent->hidden = true;
 					parent->hiding_unhiding = false;
-					parent->box.x = 555;
+					parent->box.x = 556;
 				}
 			}
 		}
@@ -198,7 +198,7 @@ void UI::Hide(float dt)
 				{
 					parent->hidden = false;
 					parent->hiding_unhiding = false;
-					parent->box.x = 536;
+					parent->box.x = 540;
 					parent->worldPosition.x = parent->defaultPosition;
 				}
 			}

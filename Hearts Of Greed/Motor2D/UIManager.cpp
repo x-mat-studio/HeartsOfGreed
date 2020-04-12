@@ -234,7 +234,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
-	rect = RectConstructor(536, 33, 17, 15);
+	rect = RectConstructor(540, 35, 15, 14);
 	father= AddButton(fMPoint(162, h / app->win->GetUIScale() - 174), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
 
 	rect = RectConstructor(221, 317, 162, 174);
