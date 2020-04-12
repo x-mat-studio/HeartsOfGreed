@@ -409,7 +409,6 @@ void ModuleInput::RemoveKeyBinding(int key)
 void ModuleInput::RemoveSingleMouseBinding(int buttonId, KEY_STATE keyAction)
 {
 
-
 	switch (keyAction)
 	{
 	case KEY_STATE::KEY_IDLE:
@@ -560,6 +559,4 @@ void ModuleInput::HandleDebugKeys()
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_TURRET, EVENT_ENUM::NULL_EVENT);
 	}
-
-
 }

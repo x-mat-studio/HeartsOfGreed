@@ -186,6 +186,9 @@ bool ModuleEntityManager::Start()
 
 	debugPathTexture = app->tex->Load("maps/path.png");
 
+	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
+	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
+
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
@@ -791,6 +794,16 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	{
 	case EVENT_ENUM::ENTITY_DEAD:
 		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::DAY_START:
+		SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+		SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+		break;
+
+	case EVENT_ENUM::NIGHT_START:
+		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
+		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
 		break;
 
 	case EVENT_ENUM::KILL_ALL_ENEMIES:
