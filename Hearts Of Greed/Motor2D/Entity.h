@@ -57,6 +57,7 @@ enum class SKILL_ID : int
 	NO_TYPE = -1,
 
 	GATHERER_SKILL1,
+	GATHERER_SKILL1_MOUSE,
 	MELEE_SKILL1
 };
 
@@ -103,6 +104,7 @@ public:
 
 	void SetToDelete(bool toDelete);
 	virtual void Draw(float dt);	
+	virtual void MinimapDraw(float scale, float halfWidth);
 
 	//Sound related
 	DIRECTION GetMyDirection();

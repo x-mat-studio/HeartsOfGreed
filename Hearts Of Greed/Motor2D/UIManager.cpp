@@ -338,6 +338,8 @@ void ModuleUIManager::CreateEntityPortrait()
 
 	Hero* hero;
 
+	SDL_Color std{(255),(255), (255), (255)};
+
 	switch (app->player->focusedEntity->GetType()) {
 
 	case ENTITY_TYPE::HERO_GATHERER:
@@ -359,30 +361,30 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", hero->hitPoints);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 46)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 30, (h / (app->win->GetUIScale()) - 46)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 36)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 30, (h / (app->win->GetUIScale()) - 36)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 26)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 30, (h / (app->win->GetUIScale()) - 26)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 5)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 16)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Exp", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"portrait", DRAGGABLE::DRAG_OFF, "HERO RANGED");
+		//This does not exist in vertical slice
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
@@ -403,25 +405,25 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", hero->hitPoints);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 46)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 30, (h / (app->win->GetUIScale()) - 46)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 36)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 30, (h / (app->win->GetUIScale()) - 36)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 26)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 30, (h / (app->win->GetUIScale()) - 26)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 5)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 16)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Exp", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -440,21 +442,21 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", enemy->GetHP());
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 55)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, "E: 0");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 25, (h / (app->win->GetUIScale()) - 55)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, "E: 0",std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", enemy->GetAD());
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 40)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %i", enemy->GetAS());
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 25, (h / (app->win->GetUIScale()) - 40)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", enemy->GetVision());
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", enemy->GetRecov());
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 25, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -462,6 +464,7 @@ void ModuleUIManager::CreateEntityPortrait()
 		break;
 	}
 }
+
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const
 { return atlas; }
 

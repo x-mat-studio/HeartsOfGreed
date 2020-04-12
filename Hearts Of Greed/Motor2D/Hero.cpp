@@ -207,6 +207,7 @@ Hero::~Hero()
 	skill1LeftUp = Animation();
 	skill1LeftDown = Animation();
 	currAoE.clear();
+	suplAoE.clear();
 	currAreaInfo = nullptr;
 }
 
@@ -268,10 +269,11 @@ void Hero::StateMachine(float dt)
 		if (attackCooldown == 0)
 		{
 			if (CheckAttackRange() == true)
-			{
+			{	
 				Attack();
 				attackCooldown += TIME_TRIGGER;
-
+				
+				
 				currentAnimation = &walkRight;
 			}
 
@@ -285,10 +287,13 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
-		currentAnimation = &idleLeftDown;
+	
+
+
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
+		PreProcessSkill1();
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:
@@ -383,9 +388,20 @@ void Hero::DrawArea()
 		for (int i = 0; i < currAoE.size(); i++)
 		{
 			iMPoint pos = app->map->MapToWorld(currAoE[i].x - 1, currAoE[i].y);
-			app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y);
+			app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 100);
+		}
+
+		if (suplAoE.size() > 0)
+		{
+			for (int i = 0; i < suplAoE.size(); i++)
+			{
+				iMPoint pos = app->map->MapToWorld(suplAoE[i].x - 1, suplAoE[i].y);
+				app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 200);
+			}
 		}
 	}
+
+
 }
 
 bool Hero::CheckAttackRange()
@@ -489,7 +505,7 @@ void Hero::RecoverEnergy()
 }
 
 
-bool Hero::ActivateSkill1(iMPoint mouseClick)
+bool Hero::ActivateSkill1(fMPoint mouseClick)
 {
 	return true;
 }
@@ -512,7 +528,6 @@ bool Hero::PrepareSkill1()
 	if (state != HERO_STATES::SKILL1 && state != HERO_STATES::SKILL2 && state != HERO_STATES::SKILL3)
 	{
 		inputs.push_back(IN_PREPARE_SKILL1);
-		PreProcessSkill1();
 		return true;
 	}
 
@@ -609,7 +624,11 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 
 		if (attackCooldown >= attackSpeed)
 		{
+			currentAnimation->ResetAnimation();
+
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+			
+
 			attackCooldown = 0;
 		}
 	}
@@ -788,6 +807,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				cooldownHability1 += TIME_TRIGGER;
 
 				currAoE.clear();
+				suplAoE.clear();
 				currAreaInfo = nullptr;
 
 				if (skillFromAttacking == true)
@@ -861,6 +881,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_SKILL_CANCEL:
 			{
 				currAoE.clear();
+				suplAoE.clear();
 				currAreaInfo = nullptr;
 
 				if (skillFromAttacking == true)
@@ -875,7 +896,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_SKILL1:
 			{
-				app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+				ExecuteSkill1();
 				skill1TimePassed += TIME_TRIGGER;
 				state = HERO_STATES::SKILL1;
 				break;
@@ -962,6 +983,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 void Hero::SetAnimation(HERO_STATES currState)
 {
+
 	switch (currState)
 	{
 	case HERO_STATES::MOVE:
@@ -1017,28 +1039,38 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	case HERO_STATES::CHARGING_ATTACK:
 	{
+		currentAnimation->loop = false;
+
 		switch (dir)
 		{
+
 		case FACE_DIR::NORTH_EAST:
 			currentAnimation = &punchRightUp;
+
 			break;
 		case FACE_DIR::NORTH_WEST:
 			currentAnimation = &punchLeftUp;
+
 			break;
 		case FACE_DIR::EAST:
 			currentAnimation = &punchRight;
+
 			break;
 		case FACE_DIR::SOUTH_EAST:
 			currentAnimation = &punchRightDown;
+
 			break;
 		case FACE_DIR::SOUTH_WEST:
 			currentAnimation = &punchLeftDown;
+
 			break;
 		case FACE_DIR::WEST:
 			currentAnimation = &punchLeft;
+	
 			break;
 		}
 		break;
+
 	}
 
 	}
@@ -1055,6 +1087,21 @@ bool Hero::PreProcessSkill2()
 };
 
 bool Hero::PreProcessSkill3()
+{
+	return false;
+};
+
+bool Hero::ExecuteSkill1()
+{
+	return app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+};
+
+bool Hero::ExecuteSkill2()
+{
+	return false;
+};
+
+bool Hero::ExecuteSkill3()
 {
 	return false;
 };

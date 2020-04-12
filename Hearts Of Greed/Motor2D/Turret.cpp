@@ -80,7 +80,7 @@ bool Turret::Update(float dt)
 
 bool Turret::PostUpdate(float dt)
 {
-	//Draw(dt);
+
 	return true;
 }
 
@@ -120,7 +120,7 @@ bool Turret::SearchObjective()
 
 void Turret::Draw(float dt)
 {
-	app->render->Blit(texture, position.x - offset.x, position.y - offset.y, &animation.GetCurrentFrameBox(dt));
+	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
 }
 
 

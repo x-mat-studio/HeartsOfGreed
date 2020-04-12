@@ -74,6 +74,13 @@ public:
 		lastFrame++;
 	}
 
+	bool GetAnimationFrame(int searchFrame) 
+	{
+		if (searchFrame == currentFrame)
+			return true;
+
+		return false;
+	}
 
 	Frame& GetCurrentFrame(float dt)
 	{
@@ -118,7 +125,7 @@ public:
 	void ResetAnimation()
 	{
 		framesPassed = 0;
-		lastFrame = 0;
+		//lastFrame = 0;
 		currentFrame = 0;
 	}
 

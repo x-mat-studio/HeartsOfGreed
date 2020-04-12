@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
+#include "Minimap.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -133,8 +134,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
-		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
-		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
+	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -151,11 +152,15 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	//Generate Areas------------------------------------
-	skillArea gathererSkill1Area;
-	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1Area, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1Area });
+	skillArea gathererSkill1AreaRange;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 7);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
 
+	skillArea gathererSkill1AreaExplosion;
+	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1_MOUSE, gathererSkill1AreaRange });
 
 	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
@@ -749,6 +754,25 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 }
 
+void ModuleEntityManager::DrawOnlyStaticBuildings()
+{
+	int numEntities = entityVector.size();
+	float scale = app->minimap->minimapScaleRelation;
+	float halfWidth = app->minimap->minimapWidth * 0.5f;
+	
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
+		{
+
+			entityVector[i]->MinimapDraw(scale, halfWidth);
+		}
+		
+	}
+
+}
+
+
 
 void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
 {
@@ -958,6 +982,8 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 	case ENTITY_TYPE::BLDG_TURRET:
 
+		/* ¿WHY?
+		
 		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
 
 		x -= rect.w / 2;
@@ -965,7 +991,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);
-		sampleBase->Draw(0);
+		sampleBase->Draw(0);*/
 
 
 		break;
@@ -1213,9 +1239,6 @@ skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPo
 	if (it == skillAreas.end())
 		return ret;
 
-	//Here goes a GenerateArea :D have fun
-	//toFill->insert();
-
 	center = app->map->WorldToMap(round(center.x), round(center.y));
 	GenerateDynArea(toFill, ret, center);
 
@@ -1230,6 +1253,7 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	{
 		int diameter = (area->radius * 2) + 1;
 		iMPoint posCheck = center - area->radius;
+		toFill->clear();
 
 		for (int y = 0; y < diameter; y++)
 		{
@@ -1249,7 +1273,8 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	}
 }
 
-bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type, Entity* objective)
+bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
+	SKILL_TYPE type, bool hurtYourself,  Entity* objective)
 {
 	bool ret = false;
 
@@ -1260,21 +1285,24 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	break;
 	case SKILL_TYPE::AREA_OF_EFFECT:
 	{
-		pivot = app->map->WorldToMap(pivot.x, pivot.y);
 		int numEntities = entityVector.size();
-		iMPoint entPos;
+		Collider* entColl = nullptr;
+		float halfH = app->map->data.tileHeight * 0.5;
+		float halfW = app->map->data.tileWidth * 0.5;
+		float newRad = sqrt(halfW * halfW + halfH * halfH) * area->radius + 0.5f * area->radius;
+
 		for (int i = 0; i < numEntities; i++)
 		{
 			if (entityVector[i]->GetAlignment() != target)
 				continue;
 
-			entPos = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
+			entColl = entityVector[i]->GetCollider();
 
 			switch (area->form)
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (app->fowManager->InsideCircle(pivot, entPos, area->radius))
+				if (entColl->CheckCollisionCircle(pivot, newRad) || (entityVector[i] == objective && hurtYourself) )
 					entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
