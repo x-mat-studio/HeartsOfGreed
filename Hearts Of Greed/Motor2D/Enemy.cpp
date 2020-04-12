@@ -230,6 +230,31 @@ void Enemy::Roar()
 	}
 }
 
+int Enemy::GetHP()
+{
+	return hitPoints;
+}
+
+int Enemy::GetAD()
+{
+	return attackDamage;
+}
+
+int Enemy::GetAS()
+{
+	return attackSpeed;
+}
+
+int Enemy::GetVision()
+{
+	return vision;
+}
+
+int Enemy::GetRecov()
+{
+	return recoveryHitPointsRate;
+}
+
 
 bool Enemy::PostUpdate(float dt)
 {

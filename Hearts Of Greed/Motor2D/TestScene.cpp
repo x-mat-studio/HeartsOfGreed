@@ -192,12 +192,6 @@ bool  ModuleTestScene::Update(float dt)
 		}
 	}
 
-
-
-
-
-
-
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN)
 	{
@@ -216,8 +210,6 @@ bool  ModuleTestScene::Update(float dt)
 			menuScene = false;
 		}
 	}
-
-
 	return true;
 }
 
@@ -342,6 +334,7 @@ void ModuleTestScene::StartDragging(iMPoint mousePos)
 	prevmousePosY = mousePos.y;
 }
 
+
 void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 {
 	iMPoint aux = { 0,0 };
@@ -355,6 +348,7 @@ void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 	prevMousePosX = aux.x;
 	prevmousePosY = aux.y;
 }
+
 
 bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 {

@@ -499,11 +499,26 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 	{
 		col = entityVector[i]->GetCollider();
 
-		if (col != nullptr)
+		//dynamic entities get priority over static entities
+
+		if (col != nullptr && (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() ==  ENTITY_TYPE::ENEMY))
 		{
 			if (mousePos.PointInRect(&col->rect))
 			{
 				return entityVector[i];
+			}
+		}
+	}
+	for (int i = 0; i < numEntities; i++)
+	{
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr) {
+			{
+				if (mousePos.PointInRect(&col->rect))
+				{
+					return entityVector[i];
+				}
 			}
 		}
 	}
