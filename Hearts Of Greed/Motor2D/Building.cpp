@@ -3,12 +3,11 @@
 #include "Textures.h"
 #include "EntityManager.h"
 
-Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type, BUILDING_DECOR decor) :
+Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
+	ENTITY_TYPE type, BUILDING_DECOR decor) :
 
-	Entity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider),
+	Entity(position, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints),
 
-	hitPointsMax(hitPoints),
-	hitPointsCurrent(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	xpOnDeath(xpOnDeath),
 	buildingCost(buildingCost),
@@ -25,10 +24,8 @@ Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, i
 
 Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Entity(position, copy->type, alignement, copy->collider),
+	Entity(position, copy->type, alignement, copy->collider, copy->hitPointsMax, copy->hitPointsCurrent),
 
-	hitPointsMax(copy->hitPointsMax),
-	hitPointsCurrent(copy->hitPointsMax),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	xpOnDeath(copy->xpOnDeath),
 	buildingCost(copy->buildingCost),

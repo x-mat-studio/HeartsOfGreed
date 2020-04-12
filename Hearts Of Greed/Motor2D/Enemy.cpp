@@ -10,10 +10,10 @@
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
-	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int hitPoints, int recoveryHitPointsRate,
-	int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
+	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int maxHitPoints, int currentHitPoints,
+	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, 10, 20),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 10, 20),
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
 	walkLeftDown(walkLeftDown),
@@ -33,7 +33,6 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	punchRightDown(punchRightDown),
 	punchRight(punchRight),
 
-	hitPoints(hitPoints),
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	vision(vision),
 	attackDamage(attackDamage),
@@ -56,7 +55,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 
 Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
-	DynamicEntity(position, copy->unitSpeed, copy->type, align, copy->collider, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->unitSpeed, copy->type, align, copy->collider, copy->hitPointsMax, copy->hitPointsCurrent, copy->moveRange1, copy->moveRange2),
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
 	walkLeftDown(copy->walkLeftDown),
@@ -76,7 +75,6 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	punchRightDown(copy->punchRightDown),
 	punchRight(copy->punchRight),
 
-	hitPoints(copy->hitPoints),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	vision(copy->vision),
 	attackDamage(copy->attackDamage),
@@ -232,7 +230,7 @@ void Enemy::Roar()
 
 int Enemy::GetHP()
 {
-	return hitPoints;
+	return hitPointsCurrent;
 }
 
 int Enemy::GetAD()
@@ -530,12 +528,12 @@ int Enemy::RecieveDamage(int damage)
 {
 	int ret = -1;
 
-	if (hitPoints > 0)
+	if (hitPointsCurrent > 0)
 	{
-		hitPoints -= damage;
+		hitPointsCurrent -= damage;
 		damageTakenTimer = 0.3f;
 
-		if (hitPoints <= 0)
+		if (hitPointsCurrent <= 0)
 		{
 			Die();
 			ret = xpOnDeath;

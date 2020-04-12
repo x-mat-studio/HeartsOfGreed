@@ -4,9 +4,9 @@
 
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& animation, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& animation, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
-	Building(position, hitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
+	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 	animation(animation),
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
@@ -121,6 +121,26 @@ bool Turret::SearchObjective()
 void Turret::Draw(float dt)
 {
 	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+}
+
+int Turret::GetLvl()
+{
+	return turretLvl;
+}
+
+int Turret::GetAD()
+{
+	return attackDmg;
+}
+
+int Turret::GetAS()
+{
+	return attackSpeed;
+}
+
+int Turret::GetRng()
+{
+	return range;
 }
 
 

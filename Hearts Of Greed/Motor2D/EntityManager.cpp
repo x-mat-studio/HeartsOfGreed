@@ -90,7 +90,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
-		1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		1, 100, 100, 1, 50, 1, 20, 5, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 		// Sample Enemy---------------------
@@ -135,12 +135,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
-	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
-	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
+	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 5000, 0, 250, 1, 1, 25, 100, 50);
+	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, buildingCollider);
+	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
@@ -148,7 +148,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 20, 100);
+	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
 
 
 	//Generate Areas------------------------------------
@@ -458,6 +458,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::HERO_GATHERER:
 		ret = new GathererHero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
+		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::HERO);
 		break;
 
 	case ENTITY_TYPE::BUILDING:
@@ -466,6 +467,15 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
+		if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+		{
+			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::TURRET);
+		}
+		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+		{
+			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::TURRET); //TODO CHANGE THIS FOR ENEMY TURRET
+		}
+
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -473,6 +483,15 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_BASE:
 		ret = new Base({ (float)x,(float)y }, sampleBase, alignement);
+		if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+		{
+			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
+		}
+		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+		{
+			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
+		}
+
 		app->ai->PushBase((Base*)ret);
 		break;
 
@@ -481,6 +500,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::ENEMY:
 		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, ENTITY_ALIGNEMENT::ENEMY);
+		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::ENEMY);
 		break;
 
 	default:

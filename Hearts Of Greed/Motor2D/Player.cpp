@@ -10,6 +10,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Map.h"
 #include "EventManager.h"
+#include "Minimap.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -66,6 +67,8 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL3, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
 
 	return true;
@@ -130,7 +133,10 @@ bool ModulePlayer::PostUpdate(float dt)
 //Handles Player Input
 bool ModulePlayer::HandleInput()
 {
-	if (buildMode == false)
+	int mouseX;
+	int mouseY;
+	app->input->GetMousePositionRaw(mouseX, mouseY);
+	if (buildMode == false && app->minimap->ClickingOnMinimap(mouseX,mouseY)==false)
 	{
 		if (prepareSkill == true || doSkill == true)
 		{
@@ -466,6 +472,10 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			prepareSkill = true;
 		}
 		
+		break;
+
+	case EVENT_ENUM::GIVE_RESOURCES:
+		resources += 1000;
 		break;
 	}
 
