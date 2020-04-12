@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Textures.h"
 #include "Window.h"
+#include "EntityManager.h"
 
 Minimap::Minimap():minimapLoaded(false)
 {
@@ -34,6 +35,7 @@ bool Minimap::Start()
 {
 
 	bool ret = true;
+
 	return ret;
 
 }
@@ -96,6 +98,7 @@ void Minimap::ExecuteEvent(EVENT_ENUM eventId) const
 void Minimap::CreateMinimapText()
 {
 	app->map->DrawMinimap();
+	app->entityManager->DrawOnlyStaticBuildings();
 }
 
 void Minimap::LoadMinimap()

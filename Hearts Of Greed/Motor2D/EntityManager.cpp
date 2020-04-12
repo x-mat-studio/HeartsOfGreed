@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
+#include "Minimap.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -133,8 +134,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
-		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
-		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
+	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -503,11 +504,26 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 	{
 		col = entityVector[i]->GetCollider();
 
-		if (col != nullptr)
+		//dynamic entities get priority over static entities
+
+		if (col != nullptr && (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() ==  ENTITY_TYPE::ENEMY))
 		{
 			if (mousePos.PointInRect(&col->rect))
 			{
 				return entityVector[i];
+			}
+		}
+	}
+	for (int i = 0; i < numEntities; i++)
+	{
+		col = entityVector[i]->GetCollider();
+
+		if (col != nullptr) {
+			{
+				if (mousePos.PointInRect(&col->rect))
+				{
+					return entityVector[i];
+				}
 			}
 		}
 	}
@@ -735,6 +751,25 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 }
 
+void ModuleEntityManager::DrawOnlyStaticBuildings()
+{
+	int numEntities = entityVector.size();
+	float scale = app->minimap->minimapScaleRelation;
+	float halfWidth = app->minimap->minimapWidth * 0.5f;
+	
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
+		{
+
+			entityVector[i]->MinimapDraw(scale, halfWidth);
+		}
+		
+	}
+
+}
+
+
 
 void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
 {
@@ -934,6 +969,8 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 	case ENTITY_TYPE::BLDG_TURRET:
 
+		/* ¿WHY?
+		
 		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
 
 		x -= rect.w / 2;
@@ -941,7 +978,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);
-		sampleBase->Draw(0);
+		sampleBase->Draw(0);*/
 
 
 		break;

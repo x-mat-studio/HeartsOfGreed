@@ -104,6 +104,7 @@ public:
 
 	void SetToDelete(bool toDelete);
 	virtual void Draw(float dt);	
+	virtual void MinimapDraw(float scale, float halfWidth);
 
 	//Sound related
 	DIRECTION GetMyDirection();

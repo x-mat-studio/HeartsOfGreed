@@ -1,6 +1,7 @@
 #include "Building.h"
 #include "Render.h"
 #include "Textures.h"
+#include "EntityManager.h"
 
 Building::Building(fMPoint position, int hitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider, ENTITY_TYPE type, BUILDING_DECOR decor) :
 
@@ -111,15 +112,44 @@ void Building::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y, false, true, NULL, transparencyValue);
+		app->render->Blit(texture, position.x, position.y, nullptr, false, true, transparencyValue);
 	}
-
+	 
 	else
 	{
-		app->render->Blit(texture, position.x, position.y);
+		app->render->Blit(texture, position.x, position.y, nullptr, false, true);
 	}
 }
 
+void Building::MinimapDraw(float scale, float halfWidth)
+{
+	float worldX = position.x;
+	float worldY = position.y;
+
+	worldX += app->render->currentCamX;
+	worldY += app->render->currentCamY;
+
+	SDL_Texture* auxTexture = nullptr;
+
+	switch (GetDecor())
+	{
+	case BUILDING_DECOR::ST_01:
+		auxTexture = app->tex->Load("maps/base01.png");
+		break;
+	case BUILDING_DECOR::ST_02:
+		auxTexture = app->tex->Load("maps/base02.png");
+		break;
+	case BUILDING_DECOR::ST_03:
+		auxTexture = app->tex->Load("maps/base03.png");
+		break;
+
+	}
+
+	
+	app->render->MinimapBlit(auxTexture, worldX + halfWidth, worldY, NULL, scale);
+
+	app->tex->UnLoad(auxTexture);
+}
 
 void Building::ActivateTransparency()
 {
