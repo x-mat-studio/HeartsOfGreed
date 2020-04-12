@@ -9,8 +9,8 @@ build:
 
 
 after_build:
-- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed\Release\*.exe"
-- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed\Game\*"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Release\*.exe"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Game\*"
 - 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
 - 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\LICENSE"
 
