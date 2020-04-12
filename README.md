@@ -20,3 +20,11 @@ F7: Window mode.
 F8: Kill all enemies.
 
 F9: Activate/Desactivate collider and pathfinding vision.
+
+KP 1: Spawn base.
+KP 2: Spawn building.
+KP 3: Spawn enemy.
+KP 4: Spawn gatherer hero.
+KP 5: Spawn melee hero.
+KP 6: Spawn ranged hero.
+KP 7: Spawn turret.
