@@ -59,6 +59,7 @@ private:
 
 	void DrawSelectQuad();
 
+
 public:
 	Entity* focusedEntity; //other modules need this for portrait generation
 

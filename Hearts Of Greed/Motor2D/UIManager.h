@@ -47,6 +47,7 @@ public:
 	void CreateMainMenu();
 	void CreateOptionsMenu();
 	void CreateEntityPortrait();
+	void CreateShopMenu();
 	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
@@ -57,10 +58,11 @@ public:
 	bool CleanUp();
 
 	void LoadAtlas();
+	UI* FindUIByName(char* name);
 
 private:
 
-	UI* FindUIByName(char* name);
+
 
 	void CreatePauseMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);

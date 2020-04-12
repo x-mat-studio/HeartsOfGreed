@@ -46,8 +46,9 @@ public:
 
 
 private:
-	
+	void CalculateTimers(float dt);
 	void ExecuteEvent(EVENT_ENUM eventId);
+	void DrawNightRect();
 
 private:
 	int prevMousePosX;
@@ -60,6 +61,13 @@ private:
 	bool camSprint;
 
 	bool allowCamMovement;
+
+	bool isNightTime;
+
+	int dayTimer;
+	int nightTimer;
+
+	float timer;
 
 	bool menuScene;
 };

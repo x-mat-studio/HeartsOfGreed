@@ -28,14 +28,21 @@ public:
 	void CreateMinimapText();
 	void LoadMinimap();
 
+	bool ClickingOnMinimap(int x, int y);
+	iMPoint WorldToMinimap(int x, int y);
+	iMPoint ScreenToMinimapToWorld(int x, int y);
+
+
+
 public:
 	float minimapScaleRelation;	
 	int minimapWidth;
+	int height;
 
 private:
 	void ExecuteEvent(EVENT_ENUM eventId) const;
 	int width;
-	int height;
+	
 
 	int minimapHeight;
 	iMPoint position;
@@ -43,6 +50,7 @@ private:
 	SDL_Surface* mapSurface;
 	SDL_Renderer* minimapRenderer;
 	SDL_Texture* minimapTexture;
+	SDL_Rect camRect;
 
 	bool minimapLoaded;
 

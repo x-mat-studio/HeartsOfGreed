@@ -17,7 +17,7 @@ public:
 
 	GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement);
 
-	bool ActivateSkill1(iMPoint mouseClick);
+	bool ActivateSkill1(fMPoint mouseClick);
 	bool ActivateSkill2();
 	bool ActivateSkill3();
 
@@ -25,8 +25,14 @@ public:
 	bool PreProcessSkill2();
 	bool PreProcessSkill3();
 
+	bool ExecuteSkill1();
+	bool ExecuteSkill2();
+	bool ExecuteSkill3();
 
 	void LevelUp();
+
+	fMPoint granadePosLaunch;
+	skillArea* granadeArea;
 };
 
 

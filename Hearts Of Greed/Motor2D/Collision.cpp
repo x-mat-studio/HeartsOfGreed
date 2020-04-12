@@ -203,3 +203,29 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 {
 	return !((this->rect.x + this->rect.w < r.x || r.x + r.w < this->rect.x) || (this->rect.y + this->rect.h < r.y || r.y + r.h < this->rect.y));
 }
+
+bool Collider::CheckCollisionCircle(iMPoint c, float radius) const
+{
+	float testX = c.x;
+	float testY = c.y;
+
+	if (c.x < rect.x)
+		testX = rect.x;
+	else if (c.x > rect.x + rect.w)
+		testX = rect.x + rect.w;
+	if (c.y < rect.y)
+		testY = rect.y;
+	else if (c.y > rect.y + rect.h)
+		testY = rect.y + rect.h;
+
+	float distX = c.x - testX;
+	float distY = c.y - testY;
+	float distance = sqrt((distX * distX) + (distY * distY));
+
+	if (distance <= radius)
+	{
+		return true;
+	}
+	return false;
+}
+
