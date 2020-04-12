@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
+#include "Minimap.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -730,6 +731,25 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	renderVector.clear();
 
 }
+
+void ModuleEntityManager::DrawOnlyStaticBuildings()
+{
+	int numEntities = entityVector.size();
+	float scale = app->minimap->minimapScaleRelation;
+	float halfWidth = app->minimap->minimapWidth * 0.5f;
+	
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
+		{
+
+			entityVector[i]->MinimapDraw(scale, halfWidth);
+		}
+		
+	}
+
+}
+
 
 
 void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
