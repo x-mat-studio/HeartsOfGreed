@@ -1,5 +1,7 @@
 #include "UI.h"
 #include "Render.h"
+#include "Input.h"
+#include "Window.h"
 
 UI::UI()
 {}
@@ -19,6 +21,10 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	interactable(true),
 	hover(false),
 	enabled(true),
+	hiding_unhiding(false),
+	hidden(false),
+	defaultPosition(worldPosition.x),
+	hideSpeed(150.0f),
 	texture (app->uiManager->GetAtlasTexture())
 
 {}
@@ -38,9 +44,6 @@ bool UI::Start()
 
 bool UI::PreUpdate(float dt)
 {
-
-
-
 	return true;
 }
 
@@ -94,6 +97,115 @@ bool UI::MouseUnderElement(int x, int y)
 
 void UI::Drag(int x, int y)
 {}
+
+bool UI::OnAbove()
+{
+	bool ret = false;
+
+	SDL_Point mouse;
+	app->input->GetMousePositionRaw(mouse.x, mouse.y);
+
+	mouse.x = (mouse.x) / app->win->GetUIScale();
+	mouse.y = (mouse.y) / app->win->GetUIScale();
+
+	SDL_Rect intersect = { worldPosition.x , worldPosition.y, box.w, box.h };
+
+	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interactable)
+		ret = true;
+
+	return ret;
+}
+
+void UI::Hide(float dt)
+{
+
+	float position = worldPosition.x;
+	bool right;
+
+	if (position > app->win->width / 2)
+		right = true;
+	else
+		right = false;
+
+	if (right) 
+	{
+		if (hiding_unhiding && !hidden)
+		{
+			this->worldPosition.x += hideSpeed * dt;
+
+			if ((position + (8 * box.w / 10)) > app->win->width)
+			{
+				hidden = true;
+				hiding_unhiding = false;
+				if (parent != nullptr)
+				{
+					parent->hidden = true;
+					parent->hiding_unhiding = false;
+					parent->box.x = 536;
+				}
+			}
+		}
+
+		else if (hiding_unhiding && hidden)
+		{
+			this->worldPosition.x -= hideSpeed * dt;
+
+			if (worldPosition.x <= defaultPosition)
+			{
+				worldPosition.x = defaultPosition;
+				hidden = false;
+				hiding_unhiding = false;
+				if (parent != nullptr)
+				{
+					parent->hidden = false;
+					parent->hiding_unhiding = false;
+					parent->box.x = 555;
+					parent->worldPosition.x = parent->defaultPosition;
+				}
+			}
+		}
+	}
+
+	else 
+	{
+		if (hiding_unhiding && !hidden)
+		{
+			this->worldPosition.x -= hideSpeed * dt;
+
+			if ((position + (8 * box.w / 10)) < 0)
+			{
+				hidden = true;
+				hiding_unhiding = false;
+				if (parent != nullptr)
+				{
+					parent->hidden = true;
+					parent->hiding_unhiding = false;
+					parent->box.x = 555;
+				}
+			}
+		}
+
+		else if (hiding_unhiding && hidden)
+		{
+			this->worldPosition.x += hideSpeed * dt;
+
+			if (worldPosition.x >= defaultPosition)
+			{
+				worldPosition.x = defaultPosition;
+				hidden = false;
+				hiding_unhiding = false;
+				if (parent != nullptr)
+				{
+					parent->hidden = false;
+					parent->hiding_unhiding = false;
+					parent->box.x = 536;
+					parent->worldPosition.x = parent->defaultPosition;
+				}
+			}
+		}
+	}
+
+}
 
 void UI::Move()
 {}

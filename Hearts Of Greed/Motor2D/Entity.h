@@ -51,6 +51,24 @@ enum class ENTITY_ALIGNEMENT : int
 	MAX_ALIGN
 };
 
+//Provisional
+enum class SKILL_ID : int
+{
+	NO_TYPE = -1,
+
+	GATHERER_SKILL1,
+	MELEE_SKILL1
+};
+
+enum class SKILL_TYPE
+{
+	NO_TYPE = -1,
+
+	SINGLE_TARGET,
+	AREA_OF_EFFECT
+};
+
+
 class Entity
 {
 public:

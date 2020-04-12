@@ -104,6 +104,8 @@ public:
 
 	// Called each loop iteration
 	void Draw();
+	
+	void DrawMinimap();
 
 	// Called before quitting
 	bool CleanUp();

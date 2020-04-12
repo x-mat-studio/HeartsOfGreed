@@ -25,6 +25,11 @@ bool UI_Healthbar::PreUpdate(float dt)
 bool UI_Healthbar::Update(float dt)
 {
 	AdjustHealth();
+	
+	if (hiding_unhiding)
+	{
+		Hide(dt);
+	}
 
 	return true;
 }

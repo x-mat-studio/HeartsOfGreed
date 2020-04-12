@@ -29,6 +29,8 @@ ModulePlayer::ModulePlayer() :
 	skill3(false),
 	prepareSkill(false),
 
+	hasClicked(false),
+
 	doSkill(false),
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
@@ -85,21 +87,6 @@ bool ModulePlayer::PreUpdate(float dt)
 		DesactivateBuildMode();
 	}
 
-
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN)
-	{
-		app->entityManager->ActivateGodModeHeroes();
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN)
-	{
-		app->entityManager->DesactivateGodModeHeroes();
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_STATE::KEY_DOWN)
-	{
-		app->entityManager->KillAllEnemies();
-	}
 
 	CheckListener(this);
 
@@ -161,7 +148,7 @@ bool ModulePlayer::HandleInput()
 			entityInteraction = false;
 			Click();
 		}
-		else if (selectUnits)
+		else if (selectUnits && hasClicked)
 		{
 			Select();
 		}
@@ -186,6 +173,7 @@ bool ModulePlayer::HandleInput()
 bool ModulePlayer::Click()
 {
 	focusedEntity = nullptr;
+	hasClicked = true;
 
 	app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
 
@@ -265,12 +253,13 @@ void ModulePlayer::RightClick()
 
 	}
 
-
 }
 
 
 void ModulePlayer::CommandSkill()
 {
+	hasClicked = false;
+
 	if (heroesVector.empty() == true)
 	{
 		prepareSkill = false;
@@ -369,7 +358,8 @@ void ModulePlayer::DoHeroSkills()
 	if (entityComand == true)
 	{
 		entityComand = false;
-		heroesVector[0]->CancelSkill();
+		heroesVector[0]->SkillCanceled();
+
 
 		prepareSkill = false;
 		skill1 = false;
@@ -380,12 +370,15 @@ void ModulePlayer::DoHeroSkills()
 
 	if (entityInteraction == true)
 	{
+		entityInteraction = false;
+
 		if (skill1 == true)
 		{
-			if (heroesVector[0]->ActivateSkill1() == true)
+			if (heroesVector[0]->ActivateSkill1(clickPosition) == true)
 			{
 				skill1 = false;
 				doSkill = false;
+				selectUnits = false;
 			}
 		}
 
@@ -395,6 +388,7 @@ void ModulePlayer::DoHeroSkills()
 			{
 				skill2 = false;
 				doSkill = false;
+				selectUnits = false;
 			}
 		}
 
@@ -404,6 +398,7 @@ void ModulePlayer::DoHeroSkills()
 			{
 				skill3 = false;
 				doSkill = false;
+				selectUnits = false;
 			}
 		}
 	}
@@ -445,18 +440,32 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::SKILL1:
-		skill1 = true;
-		prepareSkill = true;
+	
+		if (doSkill == false) 
+		{
+			skill1 = true;
+			prepareSkill = true;
+		}
+		
 		break;
 
 	case EVENT_ENUM::SKILL2:
-		skill2 = true;
-		prepareSkill = true;
+
+		if (doSkill == false)
+		{
+			skill2 = true;
+			prepareSkill = true;
+		}
+		
 		break;
 
 	case EVENT_ENUM::SKILL3:
-		skill3 = true;
-		prepareSkill = true;
+		if (doSkill == false)
+		{
+			skill3 = true;
+			prepareSkill = true;
+		}
+		
 		break;
 	}
 
@@ -533,4 +542,10 @@ void ModulePlayer::RemoveHeroFromVector(Hero* hero)
 			return;
 		}
 	}
+}
+
+
+iMPoint ModulePlayer::GetClickPosition()
+{
+	return clickPosition;
 }

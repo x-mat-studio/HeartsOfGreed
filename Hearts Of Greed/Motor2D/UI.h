@@ -22,7 +22,14 @@ enum class UI_TYPE
 	UI_NONE
 };
 
-
+struct ButtonProperties
+{
+	bool hiding;
+	bool hoverMove;
+	bool closeMenu;
+	bool includeFather;
+	DRAGGABLE draggable;
+};
 
 class UI
 {
@@ -43,6 +50,8 @@ public:
 
 	bool MouseUnderElement(int x, int y);
 	void Drag(int x, int y);
+	void Hide(float dt);
+	bool OnAbove();
 
 protected:
 
@@ -53,6 +62,12 @@ public:
 	
 	bool debugBox;
 	bool hover;
+
+	bool hiding_unhiding;
+	bool hidden;
+
+	float hideSpeed;
+	float defaultPosition;
 
 	bool dragging;
 

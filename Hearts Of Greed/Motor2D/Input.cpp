@@ -234,6 +234,8 @@ bool ModuleInput::PreUpdate(float dt)
 
 	HandleTextInput();
 
+	HandleDebugKeys();
+
 	return true;
 }
 
@@ -502,6 +504,62 @@ void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
 		app->eventManager->GenerateEvent(mouseBindings[button].keyUp, nullEvent);
 		break;
 
+	}
+
+
+}
+
+
+void ModuleInput::HandleDebugKeys()
+{
+	if (GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_F8) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::KILL_ALL_ENEMIES, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_1) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BASE, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_2) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BUILDING, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_3) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_4) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_GATHERER_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_5) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_MELEE_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_6) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_RANGED_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_7) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_TURRET, EVENT_ENUM::NULL_EVENT);
 	}
 
 

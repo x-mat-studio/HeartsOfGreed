@@ -21,6 +21,11 @@ bool UI_Scrollbar::PreUpdate(float dt)
 
 bool UI_Scrollbar::Update(float dt)
 {
+	if (hiding_unhiding)
+	{
+		Hide(dt);
+	}
+
 	return true;
 }
 
@@ -61,7 +66,7 @@ bool UI_Scrollbar::GenerateScrollButton()
 	if (!generatedButton) 
 	{
 		SDL_Rect aux = app->uiManager->RectConstructor(449, 24, 24, 24);
-		scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x, this->worldPosition.y), this, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", EVENT_ENUM::NULL_EVENT, false, false, DRAGGABLE::DRAG_X);
+		scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x, this->worldPosition.y), this, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", EVENT_ENUM::NULL_EVENT, false, false, false, false, DRAGGABLE::DRAG_X);
 		scrollButton->worldPosition.y = this->worldPosition.y - scrollButton->box.h / 2 + this->box.h / 2;
 
 		generatedButton = true;

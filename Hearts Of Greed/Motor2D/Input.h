@@ -107,6 +107,7 @@ public:
 private:
 	//	bool TextHasSpace();
 	void HandleTextInput();
+	void HandleDebugKeys();
 
 public:
 	bool inputTexActivated;

@@ -7,6 +7,10 @@
 #include "Collision.h"
 #include "AI.h"
 #include "FoWManager.h"
+#include "Pathfinding.h"
+#include "Input.h"
+#include "Render.h"
+#include "Window.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -65,17 +69,28 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
 	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
 
+	Animation punchRight = punchRight.PushAnimation(suitman, "punch_right");
+	Animation punchRightUp = punchRightUp.PushAnimation(suitman, "punch_right_up");
+	Animation punchRightDown = punchRightDown.PushAnimation(suitman, "punch_right_down");
+	Animation punchLeft = punchLeft.PushAnimation(suitman, "punch_left");
+	Animation punchLeftUp = punchLeftUp.PushAnimation(suitman, "punch_left_up");
+	Animation punchLeftDown = punchLeftDown.PushAnimation(suitman, "punch_left_down");
+	
+	Animation skill1Right = skill1Right.PushAnimation(suitman, "skill_1_right");
+	Animation skill1RightUp = skill1RightUp.PushAnimation(suitman, "skill_1_right_up");
+	Animation skill1RightDown = skill1RightDown.PushAnimation(suitman, "skill_1_right_down");
+	Animation skill1Left = skill1Left.PushAnimation(suitman, "skill_1_left");
+	Animation skill1LeftUp = skill1LeftUp.PushAnimation(suitman, "skill_1_left_up");
+	Animation skill1LeftDown = skill1LeftDown.PushAnimation(suitman, "skill_1_left_down");
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);
-
-	/*sampleGatherer = new Hero(fMPoint{ pos.x, pos.y }, ENTITY_TYPE::HERO_GATHERER, collider, walkLeft, walkLeftUp,
-		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, 1, 100, 1, 50, 1, 20, 5, 60, 20, 5, 20.f, 20.f, 20.f, 15.f, 15.f, 15.f);*/
-
+		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
+		1, 100, 1, 50, 1, 20, 5, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
@@ -117,7 +132,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkRightDown, 5000, 0, 250, 1, 1, 25, 100, 50);
+	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 0, 250, 1, 1, 25, 100, 50);
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY);
 
 	//Test building
@@ -136,14 +153,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Generate Areas------------------------------------
 	skillArea gathererSkill1Area;
 	gathererSkill1Area.form = AREA_TYPE::CIRCLE;
-	GenerateArea(&gathererSkill1Area, 0, 0, 6);
-	skillAreas.insert({ AREA_EFFECT::GATHERER_SKILL1, gathererSkill1Area });
+	BuildArea(&gathererSkill1Area, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1Area });
 
 
 	skillArea meleeSkill1Area;
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
-	GenerateArea(&meleeSkill1Area, 0, 0, 2);
-	skillAreas.insert({ AREA_EFFECT::MELEE_SKILL1, meleeSkill1Area });
+	BuildArea(&meleeSkill1Area, 0, 0, 2);
+	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
 	return ret;
 }
@@ -170,6 +187,19 @@ bool ModuleEntityManager::Start()
 	debugPathTexture = app->tex->Load("maps/path.png");
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventRegister(EVENT_ENUM::KILL_ALL_ENEMIES, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_BASE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_BUILDING, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
+	
 
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
@@ -372,7 +402,7 @@ bool ModuleEntityManager::CleanUp()
 	blueBuilding = nullptr;
 	sampleBase = nullptr;
 
-	for (std::unordered_map<AREA_EFFECT, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
+	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
 		delete it->second.area;
 		it->second.area = nullptr;
@@ -427,7 +457,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = new Turret({ (float)x,(float)y }, testTurret, ENTITY_ALIGNEMENT::PLAYER);
+		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -755,10 +785,81 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 {
+	iMPoint pos;
+
 	switch (eventId)
 	{
 	case EVENT_ENUM::ENTITY_DEAD:
 		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::KILL_ALL_ENEMIES:
+		KillAllEnemies();
+		break;
+
+	case EVENT_ENUM::ACTIVATE_GODMODE_HEROES:
+		ActivateGodModeHeroes();
+		break;
+
+	case EVENT_ENUM::DESACTIVATE_GODMODE_HEROES:
+		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::SPAWN_BASE:
+
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::BLDG_BASE, pos.x, pos.y);
+		break;
+
+
+	case EVENT_ENUM::SPAWN_BUILDING:
+		
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::BUILDING, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_ENEMY:
+		
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::ENEMY, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_GATHERER_HERO:
+		
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_MELEE_HERO:
+		
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_RANGED_HERO:
+		
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_TURRET:
+		
+		app->input->GetMousePositionRaw(pos.x, pos.y);
+		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
 		break;
 	}
 
@@ -1014,20 +1115,20 @@ void ModuleEntityManager::KillAllEnemies()
 	}
 }
 
-bool ModuleEntityManager::GenerateArea(skillArea* areaToGenerate, int width, int height, int radius)
+bool ModuleEntityManager::BuildArea(skillArea* areaToGenerate, int width, int height, int radius)
 {
 	switch (areaToGenerate->form)
 	{
 	case AREA_TYPE::CIRCLE:
 	{
-		areaToGenerate->area = GenerateCircleArea(radius);
+		areaToGenerate->area = BuildCircleArea(radius);
 		areaToGenerate->radius = radius;
 		return true;
 	}
 	break;
 	case AREA_TYPE::QUAD:
 	{
-		areaToGenerate->area = GenerateQuadArea(width, height);
+		areaToGenerate->area = BuildQuadArea(width, height);
 		areaToGenerate->width = width;
 		areaToGenerate->heigth = height;
 		return true;
@@ -1039,7 +1140,7 @@ bool ModuleEntityManager::GenerateArea(skillArea* areaToGenerate, int width, int
 }
 
 
-unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
+unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 {
 	unsigned short* circle = nullptr;
 
@@ -1053,11 +1154,11 @@ unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
 		{
 			if (app->fowManager->InsideCircle(center, { x,y }, radius) == true)
 			{
-				circle[(y * diameter) + x] = 0;
+				circle[(y * diameter) + x] = 1;
 			}
 			else
 			{
-				circle[(y * diameter) + x] = 1;
+				circle[(y * diameter) + x] = 0;
 			}
 		}
 	}
@@ -1065,7 +1166,7 @@ unsigned short* ModuleEntityManager::GenerateCircleArea(int radius)
 	return circle;
 }
 
-unsigned short* ModuleEntityManager::GenerateQuadArea(int w, int h)
+unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
 {
 	unsigned short* quad = nullptr;
 
@@ -1082,24 +1183,96 @@ unsigned short* ModuleEntityManager::GenerateQuadArea(int w, int h)
 	return quad;
 }
 
-bool ModuleEntityManager::RequestArea(AREA_EFFECT callback, std::vector <iMPoint>* toFill)
+skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPoint>* toFill, iMPoint center)
 {
-	skillArea* toCheck = nullptr;
-	std::unordered_map<AREA_EFFECT, skillArea> ::iterator it;
+	skillArea* ret = nullptr;
+	std::unordered_map<SKILL_ID, skillArea> ::iterator it;
 
 	for (it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
 		if (it->first == callback)
 		{
+			ret = &it->second;
 			break;
 		}
 	}
 
 	if (it == skillAreas.end())
-		return false;
+		return ret;
 
 	//Here goes a GenerateArea :D have fun
 	//toFill->insert();
 
+	center = app->map->WorldToMap(round(center.x), round(center.y));
+	GenerateDynArea(toFill, ret, center);
 
+	return ret;
+}
+
+void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center)
+{
+	switch (area->form)
+	{
+	case AREA_TYPE::CIRCLE:
+	{
+		int diameter = (area->radius * 2) + 1;
+		iMPoint posCheck = center - area->radius;
+
+		for (int y = 0; y < diameter; y++)
+		{
+			for (int x = 0; x < diameter; x++)
+			{
+				if (area->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
+				{
+					toFill->push_back(posCheck + iMPoint{ x, y });
+				}
+			}
+		}
+	}
+	break;
+	case AREA_TYPE::QUAD:
+	{}
+	break;
+	}
+}
+
+bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type, Entity* objective)
+{
+	bool ret = false;
+
+	switch (type)
+	{
+	case SKILL_TYPE::SINGLE_TARGET:
+	{}
+	break;
+	case SKILL_TYPE::AREA_OF_EFFECT:
+	{
+		pivot = app->map->WorldToMap(pivot.x, pivot.y);
+		int numEntities = entityVector.size();
+		iMPoint entPos;
+		for (int i = 0; i < numEntities; i++)
+		{
+			if (entityVector[i]->GetAlignment() != target)
+				continue;
+
+			entPos = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
+
+			switch (area->form)
+			{
+			case AREA_TYPE::CIRCLE:
+			{
+				if (app->fowManager->InsideCircle(pivot, entPos, area->radius))
+					entityVector[i]->RecieveDamage(dmg);
+			}
+			break;
+			case AREA_TYPE::QUAD:
+			{}
+			break;
+
+			}
+		}
+	}
+	break;
+	}
+	return true;
 }

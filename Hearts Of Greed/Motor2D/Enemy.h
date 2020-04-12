@@ -42,9 +42,10 @@ class Enemy : public DynamicEntity
 {
 public:
 
-	Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& animation,
-		int hitPoints, int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed,
-		int xpOnDeath);
+	Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
+		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
+		Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int hitPoints, int recoveryHitPointsRate,
+		int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath);
 
 
 	Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align);
@@ -117,11 +118,29 @@ private:
 	Entity* shortTermObjective;
 	fMPoint longTermObjective;
 
-	Animation animation;
+	Animation walkLeft;
+	Animation walkLeftUp;
+	Animation walkLeftDown;
+	Animation walkRightUp;
+	Animation walkRightDown;
+	Animation walkRight;
+	Animation idleRight;
+	Animation idleRightUp;
+	Animation idleRightDown;
+	Animation idleLeft;
+	Animation idleLeftUp;
+	Animation idleLeftDown;
+	Animation punchLeft;
+	Animation punchLeftUp;
+	Animation punchLeftDown;
+	Animation punchRightUp;
+	Animation punchRightDown;
+	Animation punchRight;
+
+	Animation* currentAnimation;
 
 	ENEMY_STATES state;
 	std::vector<ENEMY_INPUTS> inputs;
-	Animation* currentAnimation;
 
 	float damageTakenTimer;
 
