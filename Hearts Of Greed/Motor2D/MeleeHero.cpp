@@ -1,5 +1,6 @@
 #include "MeleeHero.h"
 #include "EntityManager.h"
+#include "Map.h"
 
 MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -48,7 +49,13 @@ bool MeleeHero::ActivateSkill3()
 
 bool MeleeHero::PreProcessSkill1()
 {
-	app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+	if(currAoE.size() == 0)
+	{
+		origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+		app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+	}
+
 	return true;
 }
 
