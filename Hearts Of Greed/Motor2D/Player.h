@@ -57,10 +57,12 @@ private:
 
 	void DrawSelectQuad();
 
+public:
+	Entity* focusedEntity; //other modules need this for portrait generation
+
 private:
 	std::vector <Hero*> heroesVector;
-	Entity* focusedEntity;
-
+	
 	ENTITY_TYPE buildingToBuild;
 
 	iMPoint clickPosition;

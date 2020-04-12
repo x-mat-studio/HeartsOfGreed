@@ -11,7 +11,11 @@
 #include "EntityManager.h"
 #include "Audio.h"
 #include "Window.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "Hero.h"
 #include "Brofiler/Brofiler/Brofiler.h"
+
 
 
 ModuleUIManager::ModuleUIManager()
@@ -46,6 +50,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
 
 
 	return ret;
@@ -208,6 +213,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		// DELETE PORTRAIT			TODO
 		break;
 
+	case EVENT_ENUM::ENTITY_ON_CLICK:
+		CreateEntityPortrait();
+		break;
+
 	case EVENT_ENUM::OPTION_MENU:
 		CreateOptionsMenu();
 		break;
@@ -308,6 +317,147 @@ void ModuleUIManager::CreateOptionsMenu()
 
 
 
+}
+
+void ModuleUIManager::CreateEntityPortrait()
+{
+	
+	uint w(app->win->width), h(app->win->height);
+
+	SDL_Rect rect = RectConstructor(391, 370, 275, 131);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w/2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
+
+	rect = RectConstructor(727, 203, 65, 51);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2*rect.w +12, h / app->win->GetUIScale() - rect.h -5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
+
+	rect = RectConstructor(0, 0, 100, 100);
+
+	static char stats[40];
+
+	switch (app->player->focusedEntity->GetType()) {
+		
+		case ENTITY_TYPE::HERO_GATHERER:
+	
+			Hero* hero;
+			hero = (Hero*)app->player->focusedEntity;
+
+			//img portrait
+			rect = RectConstructor(352, 149, 66, 51);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 10, h / app->win->GetUIScale() - rect.h -2), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
+
+			//health bar
+			rect = RectConstructor(312, 85, 60, 7);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", DRAGGABLE::DRAG_OFF, "HPbar");
+
+			rect = RectConstructor(374, 85, 60, 7);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 50)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", DRAGGABLE::DRAG_OFF, "Ebar");
+
+
+			//stats
+			sprintf_s(stats, 40, "HP: %i", hero->hitPoints);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "E: %i", hero->energyPoints);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 5)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+			
+			break;
+
+		case ENTITY_TYPE::HERO_RANGED:
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"portrait", DRAGGABLE::DRAG_OFF, "HERO RANGED");
+			break;
+
+		case ENTITY_TYPE::HERO_MELEE:
+			Hero* hero;
+			hero = (Hero*)app->player->focusedEntity;
+
+			//img portrait
+			rect = RectConstructor(562, 149, 66, 51);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 10, h / app->win->GetUIScale() - rect.h - 2), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
+
+			//health bar
+			rect = RectConstructor(312, 85, 60, 7);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", DRAGGABLE::DRAG_OFF, "HPbar");
+
+			rect = RectConstructor(374, 85, 60, 7);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 50)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", DRAGGABLE::DRAG_OFF, "Ebar");
+
+
+			//stats
+			sprintf_s(stats, 40, "HP: %i", hero->hitPoints);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "E: %i", hero->energyPoints);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+
+			sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 5)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+
+			break;
+
+		case ENTITY_TYPE::ENEMY:
+
+			Enemy* enemy;
+			enemy = (Enemy*)app->player->focusedEntity;
+
+			//img portrait
+			rect = RectConstructor(894, 116, 70, 79);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 30, h / app->win->GetUIScale() - rect.h - 10), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+			
+			//health bar
+			rect = RectConstructor(219, 83, 122, 16);
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 90, (h / (app->win->GetUIScale()) - 60)), nullptr,UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", DRAGGABLE::DRAG_OFF, "HPbar"); 
+
+			//stats
+			sprintf_s(stats, 40, "HP: %i", enemy->GetHP());
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", DRAGGABLE::DRAG_OFF, stats);
+			
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 65)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"E", DRAGGABLE::DRAG_OFF, "E: 0");
+			
+			sprintf_s(stats, 40, "AD: %i", enemy->GetAD());
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", DRAGGABLE::DRAG_OFF, stats);
+			
+			sprintf_s(stats, 40, "AS: %i", enemy->GetAS());
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", DRAGGABLE::DRAG_OFF, stats);
+			
+			sprintf_s(stats, 40, "Rng: %i", enemy->GetVision());
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 110, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", DRAGGABLE::DRAG_OFF, stats);
+			
+			sprintf_s(stats, 40, "Rec: %i", enemy->GetRecov());
+			AddUIElement(fMPoint(w / app->win->GetUIScale() - 50, (h / (app->win->GetUIScale()) - 25)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", DRAGGABLE::DRAG_OFF, stats);
+	
+			break;
+
+		default:
+			break;
+		}
+	
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const

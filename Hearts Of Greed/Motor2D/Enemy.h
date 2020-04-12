@@ -87,6 +87,15 @@ private:
 	void SetAnimation(ENEMY_STATES state);
 
 	void Roar();
+
+public:
+
+	int GetHP();
+	int GetAD();
+	int GetAS();
+	int GetVision();
+	int GetRecov();
+
 private:
 
 	int hitPoints;
