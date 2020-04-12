@@ -232,7 +232,10 @@ void ModuleUIManager::CreateBasicInGameUI()
 	uint w(app->win->width), h(app->win->height);
 	UI* father;
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
+	rect = RectConstructor(556, 35, 15, 14);
+	father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
+
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), father, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", DRAGGABLE::DRAG_OFF);
 
 	rect = RectConstructor(540, 35, 15, 14);
 	father= AddButton(fMPoint(162, h / app->win->GetUIScale() - 174), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
@@ -387,5 +390,87 @@ void ModuleUIManager::DeleteUI(UI* father, bool includeFather)
 	if (parentId != -1)
 	{
 		uiVector.erase(uiVector.begin() + parentId);
+	}
+}
+
+void ModuleUIManager::StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding)
+{
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (element->parent != nullptr)
+		{
+			if (uiVector[i]->parent == element->parent || uiVector[i] == element->parent || uiVector[i] == element->parent->parent || uiVector[i]->parent == element)
+			{
+				uiVector[i]->hidden = hidden;
+				uiVector[i]->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					uiVector[i]->worldPosition.x = uiVector[i]->defaultPosition;
+				}
+			}
+		}
+		
+		else
+		{
+			if (uiVector[i]->parent == element || (uiVector[i]->parent != nullptr && uiVector[i]->parent->parent == element))
+			{
+				uiVector[i]->hidden = hidden;
+				uiVector[i]->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					uiVector[i]->worldPosition.x = uiVector[i]->defaultPosition;
+				}
+			}
+		}
+
+		if (uiVector[i]->type == UI_TYPE::UI_PORTRAIT)
+		{
+
+			UI_Portrait* portrait = (UI_Portrait*)uiVector[i];
+
+			int numElem = portrait->portraitVector.size();
+
+			for (int i = 0; i < numElem; i++)
+			{
+				portrait->portraitVector[i].background->hidden = hidden;
+				portrait->portraitVector[i].background->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					portrait->portraitVector[i].background->worldPosition.x = portrait->portraitVector[i].background->defaultPosition;
+				}
+				portrait->portraitVector[i].backgroundLevel->hidden = hidden;
+				portrait->portraitVector[i].backgroundLevel->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					portrait->portraitVector[i].backgroundLevel->worldPosition.x = portrait->portraitVector[i].backgroundLevel->defaultPosition;
+				}
+				portrait->portraitVector[i].backgroundHealthbar->hidden = hidden;
+				portrait->portraitVector[i].backgroundHealthbar->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					portrait->portraitVector[i].backgroundHealthbar->worldPosition.x = portrait->portraitVector[i].backgroundHealthbar->defaultPosition;
+				}
+				portrait->portraitVector[i].healthbar->hidden = hidden;
+				portrait->portraitVector[i].healthbar->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					portrait->portraitVector[i].healthbar->worldPosition.x = portrait->portraitVector[i].healthbar->defaultPosition;
+				}
+				portrait->portraitVector[i].portrait->hidden = hidden;
+				portrait->portraitVector[i].portrait->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					portrait->portraitVector[i].portrait->worldPosition.x = portrait->portraitVector[i].portrait->defaultPosition;
+				}
+				portrait->portraitVector[i].level->hidden = hidden;
+				portrait->portraitVector[i].level->hiding_unhiding = hidden_unhiding;
+				if (reposition == true)
+				{
+					portrait->portraitVector[i].level->worldPosition.x = portrait->portraitVector[i].level->defaultPosition;
+				}
+			}
+		}
 	}
 }

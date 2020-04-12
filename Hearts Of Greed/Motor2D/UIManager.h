@@ -47,6 +47,7 @@ public:
 	void CreateMainMenu();
 	void CreateOptionsMenu();
 	void CreateEntityPortrait();
+	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
