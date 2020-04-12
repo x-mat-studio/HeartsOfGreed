@@ -503,7 +503,6 @@ void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
 		if (mouseBindings[button].keyUp != nullEvent)
 		app->eventManager->GenerateEvent(mouseBindings[button].keyUp, nullEvent);
 		break;
-
 	}
 
 
