@@ -268,10 +268,11 @@ void Hero::StateMachine(float dt)
 		if (attackCooldown == 0)
 		{
 			if (CheckAttackRange() == true)
-			{
+			{	
 				Attack();
 				attackCooldown += TIME_TRIGGER;
-
+				
+				
 				currentAnimation = &walkRight;
 			}
 
@@ -285,7 +286,9 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
-		currentAnimation = &idleLeftDown;
+	
+
+
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
@@ -609,7 +612,11 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 
 		if (attackCooldown >= attackSpeed)
 		{
+			currentAnimation->ResetAnimation();
+
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+			
+
 			attackCooldown = 0;
 		}
 	}
@@ -962,6 +969,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 void Hero::SetAnimation(HERO_STATES currState)
 {
+
 	switch (currState)
 	{
 	case HERO_STATES::MOVE:
@@ -1017,28 +1025,38 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	case HERO_STATES::CHARGING_ATTACK:
 	{
+		currentAnimation->loop = false;
+
 		switch (dir)
 		{
+
 		case FACE_DIR::NORTH_EAST:
 			currentAnimation = &punchRightUp;
+
 			break;
 		case FACE_DIR::NORTH_WEST:
 			currentAnimation = &punchLeftUp;
+
 			break;
 		case FACE_DIR::EAST:
 			currentAnimation = &punchRight;
+
 			break;
 		case FACE_DIR::SOUTH_EAST:
 			currentAnimation = &punchRightDown;
+
 			break;
 		case FACE_DIR::SOUTH_WEST:
 			currentAnimation = &punchLeftDown;
+
 			break;
 		case FACE_DIR::WEST:
 			currentAnimation = &punchLeft;
+	
 			break;
 		}
 		break;
+
 	}
 
 	}
