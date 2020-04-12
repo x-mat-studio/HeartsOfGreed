@@ -111,12 +111,12 @@ void Building::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y, false, true, NULL, transparencyValue);
+		app->render->Blit(texture, position.x, position.y, nullptr, false, true, transparencyValue);
 	}
-
+	 
 	else
 	{
-		app->render->Blit(texture, position.x, position.y);
+		app->render->Blit(texture, position.x, position.y, nullptr, false, true);
 	}
 }
 
