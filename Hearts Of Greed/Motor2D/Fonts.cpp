@@ -29,8 +29,8 @@ bool ModuleFonts::Awake(pugi::xml_node& conf)
 	{
 		const char* path = conf.child("default_font").attribute("file").as_string(DEFAULT_FONT);
 		int size = conf.child("default_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
-		fonts[0] = Load(path, size);
-		fonts[1] = Load(path, ingameSize);
+		fonts.push_back( Load(path, size));
+		fonts.push_back(Load(path, ingameSize));
 
 		default = fonts[0];
 	}
@@ -47,6 +47,8 @@ bool ModuleFonts::CleanUp()
 	for (int i = 0; i < numFonts; i++)
 	{
 		TTF_CloseFont(fonts[i]);
+		delete fonts[i];
+		fonts[i] = nullptr;
 	}
 
 	fonts.clear(); 
