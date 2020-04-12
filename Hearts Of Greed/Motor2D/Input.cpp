@@ -535,6 +535,16 @@ void ModuleInput::HandleDebugKeys()
 		app->eventManager->GenerateEvent(EVENT_ENUM::KILL_ALL_ENEMIES, EVENT_ENUM::NULL_EVENT);
 	}
 
+	if (GetKey(SDL_SCANCODE_F10) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_DAY, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_F11) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
+	}
+
 	if (GetKey(SDL_SCANCODE_KP_1) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BASE, EVENT_ENUM::NULL_EVENT);

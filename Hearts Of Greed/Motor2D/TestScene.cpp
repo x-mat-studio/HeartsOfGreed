@@ -108,7 +108,11 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
+
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
+	
 
 	return true;
 }
@@ -119,7 +123,7 @@ bool  ModuleTestScene::PreUpdate(float dt)
 {
 	CheckListener(this);
 
-	CalculateTimers(dt);
+//	CalculateTimers(dt);
 
 	return true;
 }
@@ -334,6 +338,19 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RETURN_TO_MAIN_MENU:
 		menuScene = true;
 		break;
+
+	case EVENT_ENUM::DEBUG_DAY:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
+		isNightTime = false;
+		timer = 0;
+		break;
+
+	case EVENT_ENUM::DEBUG_NIGHT:
+		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+		isNightTime = true;
+		timer = 0;
+		break;
+
 	}
 
 }
