@@ -58,6 +58,9 @@ bool GathererHero::PreProcessSkill1()
 {
 	if (currAoE.size() == 0)
 	{
+		origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+
 		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
 	}
 

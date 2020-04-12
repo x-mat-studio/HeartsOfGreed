@@ -1260,7 +1260,8 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	}
 }
 
-bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type, Entity* objective)
+bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
+	SKILL_TYPE type, bool hurtYourself,  Entity* objective)
 {
 	bool ret = false;
 
@@ -1271,21 +1272,24 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	break;
 	case SKILL_TYPE::AREA_OF_EFFECT:
 	{
-		pivot = app->map->WorldToMap(pivot.x, pivot.y);
 		int numEntities = entityVector.size();
-		iMPoint entPos;
+		Collider* entColl = nullptr;
+		float halfH = app->map->data.tileHeight * 0.5;
+		float halfW = app->map->data.tileWidth * 0.5;
+		float newRad = sqrt(halfW * halfW + halfH * halfH) * area->radius + 0.5f * area->radius;
+
 		for (int i = 0; i < numEntities; i++)
 		{
 			if (entityVector[i]->GetAlignment() != target)
 				continue;
 
-			entPos = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
+			entColl = entityVector[i]->GetCollider();
 
 			switch (area->form)
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (app->fowManager->InsideCircle(pivot, entPos, area->radius))
+				if (entColl->CheckCollisionCircle(pivot, newRad) || (entityVector[i] == objective && hurtYourself) )
 					entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
