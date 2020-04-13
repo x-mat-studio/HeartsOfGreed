@@ -532,7 +532,7 @@ int Enemy::RecieveDamage(int damage)
 			ret = xpOnDeath;
 		}
 		else
-			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
+			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
 	}
 
 	return ret;

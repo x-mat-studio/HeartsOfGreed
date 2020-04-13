@@ -164,9 +164,50 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 	portraitVector.push_back(newPortrait);
 }
 
-void UI_Portrait::DeletePortrait(Portrait portrait)
+void UI_Portrait::DeletePortrait()
 {
-	// TODO
+	int numElem = portraitVector.size();
+
+	bool deleted = false;
+
+	for (int i = 0; i < numElem; i++)
+	{
+		if (portraitVector[i].hero == nullptr || portraitVector[i].hero->toDelete == true)
+		{
+			delete portraitVector[i].background;
+			portraitVector[i].background = nullptr;
+
+			delete portraitVector[i].backgroundLevel;
+			portraitVector[i].backgroundLevel = nullptr;
+
+			delete portraitVector[i].backgroundHealthbar;
+			portraitVector[i].backgroundHealthbar = nullptr;
+
+			delete portraitVector[i].healthbar;
+			portraitVector[i].healthbar = nullptr;
+
+			delete portraitVector[i].portrait;
+			portraitVector[i].portrait = nullptr;
+
+			delete portraitVector[i].level;
+			portraitVector[i].level = nullptr;
+
+			portraitVector[i].hero = nullptr;
+
+			portraitVector.erase(portraitVector.begin() + i);
+
+			deleted = true;
+		}
+		else if (deleted == true)
+		{
+			portraitVector[i].background->worldPosition.y -= 60;
+			portraitVector[i].backgroundLevel->worldPosition.y -= 60;
+			portraitVector[i].backgroundHealthbar->worldPosition.y -= 60;
+			portraitVector[i].healthbar->worldPosition.y -= 60;
+			portraitVector[i].portrait->worldPosition.y -= 60;
+			portraitVector[i].level->worldPosition.y -= 60;
+		}
+	}
 }
 
 void UI_Portrait::Move()

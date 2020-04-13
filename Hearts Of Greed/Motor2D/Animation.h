@@ -12,11 +12,11 @@ class Animation
 public:
 	bool loop = true;
 	Frame frames[MAX_FRAMES];
+	int lastFrame = 0;
 
 private:
 	float framesPassed = 0;
 	int currentFrame = 0;
-	int lastFrame = 0;
 	int loops = 0;
 
 public:
@@ -100,6 +100,11 @@ public:
 		}
 
 
+		return frames[currentFrame];
+	}
+
+	Frame& GetCurrentFrame()
+	{
 		return frames[currentFrame];
 	}
 

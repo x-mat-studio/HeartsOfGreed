@@ -64,8 +64,6 @@ bool Minimap::Start()
 
 	bool ret = true;
 
-	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
-
 	return ret;
 
 }
@@ -261,12 +259,7 @@ bool Minimap::Save(pugi::xml_node&) const
 
 void Minimap::ExecuteEvent(EVENT_ENUM eventId)
 {
-	switch (eventId)
-	{
-	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
-		CleanUp();
-		break;
-	}
+
 }
 
 void Minimap::CreateMinimapText()
