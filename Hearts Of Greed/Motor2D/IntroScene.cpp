@@ -36,18 +36,15 @@ bool ModuleIntroScene::Start()
 	bgAlphaCounter = 255;
 	
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
+	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
 
 
 	//images
-	// gameIcon = app->tex->Load("intro_images/gameIcon.png");
-	// gameTitle = app->tex->Load("intro_images/gameTitle.png");
 	logoXMat = app->tex->Load("intro_images/logoXMat.png");
 	logoBG = app->tex->Load("intro_images/logoBG.png");
 	
 	//sounds
 	logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
-	// titleSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
 
 
 	app->audio->PlayFx(logoSound);
@@ -78,12 +75,6 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MAIN MENU
-	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN) {
-
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
 		ret = false;
@@ -104,7 +95,9 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 		app->render->Blit(logoXMat, 155, 20, false, false, NULL, AlphaCounter);
 	}
 	
-
+	if (AlphaCounter > 250) {
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
+	}
 	return ret;
 }
 
