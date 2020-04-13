@@ -870,7 +870,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DESACTIVATE_GODMODE_HEROES:
-		RemoveDeletedEntities();
+		DesactivateGodModeHeroes();
 		break;
 
 	case EVENT_ENUM::SPAWN_BASE:

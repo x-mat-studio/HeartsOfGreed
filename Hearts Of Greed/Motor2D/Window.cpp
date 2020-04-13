@@ -88,12 +88,12 @@ bool ModuleWindow::Update(float dt)
 	
 	//ONCE we have UI this should be menu events
 	
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN) {
 
 		ChangeResolution(RESOLUTION_MODE::FULLSCREEN);
 
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN) {
 
 		ChangeResolution(RESOLUTION_MODE::STATIC);
 

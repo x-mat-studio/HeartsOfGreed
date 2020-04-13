@@ -352,7 +352,7 @@ bool App::PreUpdate()
 		ret = modules[i]->PreUpdate(dt);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN) {
 
 		debugMode = !debugMode;
 	}

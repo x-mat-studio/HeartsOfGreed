@@ -12,18 +12,19 @@ Link to twitter: https://twitter.com/ii_rts <br>
 F1: Debug texture for Fog of war.
 F2: Reset fog of war.
 F3: Activate/Desactivate Fog of War.
-F4: Activate heroes God mode.
-F5: Desactivate heroes God mode.
 
-F6: Full screen.
-F7: Window mode.
+F4: Full screen.
+F5: Window mode.
 
-F8: Kill all enemies.
+F6: Kill all enemies.
 
-F9: Activate/Desactivate collider and pathfinding vision.
+F7: Activate/Desactivate collider and pathfinding vision.
 
-F10: Desactivate night.
-F11: Activate night.
+F8: Desactivate night.
+F9: Activate night.
+
+F10: Activate heroes God mode.
+F11: Desactivate heroes God mode.
 
 KP 1: Spawn base.
 KP 2: Spawn building.
