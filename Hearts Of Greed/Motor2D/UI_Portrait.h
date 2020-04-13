@@ -33,7 +33,7 @@ public:
 	bool PostUpdate(float dt);
 
 	void CreatePortrait(Hero* entity);
-	void DeletePortrait(Portrait portrait);
+	void DeletePortrait();
 
 private:
 

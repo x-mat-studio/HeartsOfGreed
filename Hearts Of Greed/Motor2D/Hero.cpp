@@ -311,7 +311,6 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::DEAD:
-		Die();
 		break;
 
 	}
@@ -483,6 +482,10 @@ void Hero::Die()
 	}
 
 	toDelete = true;
+
+
+	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+
 }
 
 
@@ -599,7 +602,10 @@ int Hero::RecieveDamage(int damage)
 			Die();
 			ret = 1;
 		}
-
+		else
+		{
+			app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		}
 	}
 
 	return ret;

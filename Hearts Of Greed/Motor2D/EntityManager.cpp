@@ -212,13 +212,18 @@ bool ModuleEntityManager::Start()
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
 
-	//sfx baby
+	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
 	wanamingoGetsHit = app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
 	wanamingoDies = app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
 	wanamingoDies2 = app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
 
+	//Suitman sfx-----
+	suitmanGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetHit.wav");
+	suitmanGetsHit2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
+	suitmanGetsDeath = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
+	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
 
 	return ret;
 }
