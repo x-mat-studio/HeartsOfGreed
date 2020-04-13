@@ -142,6 +142,11 @@ public:
 	int wanamingoDies;
 	int wanamingoDies2;	
 	
+	int suitmanGetsHit;
+	int suitmanGetsHit2;
+	int suitmanGetsDeath;
+	int suitmanGetsDeath2;
+
 	Building* testBuilding;
 
 private:
