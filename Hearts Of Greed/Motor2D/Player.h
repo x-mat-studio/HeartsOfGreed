@@ -62,6 +62,7 @@ private:
 
 public:
 	Entity* focusedEntity; //other modules need this for portrait generation
+	bool doingAction;
 
 private:
 	std::vector <Hero*> heroesVector;

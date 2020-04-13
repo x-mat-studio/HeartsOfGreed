@@ -226,7 +226,7 @@ bool  ModuleTestScene::Update(float dt)
 		app->fadeToBlack->FadeToBlack(this, app->loseScene);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
-	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN || menuScene == true)
+	if(menuScene == true)
 	{
 		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu))
 		{
@@ -269,6 +269,7 @@ bool  ModuleTestScene::CleanUp()
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
 	app->audio->SilenceAll();
+	app->minimap->CleanUp();
 
 	return true;
 }

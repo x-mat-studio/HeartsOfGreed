@@ -8,6 +8,7 @@
 #include "UI_Text.h"
 #include "Render.h"
 #include "Textures.h"
+#include "Window.h"
 #include "Audio.h"
 
 ModuleLoseScene::ModuleLoseScene()
@@ -28,7 +29,7 @@ bool  ModuleLoseScene::Awake(pugi::xml_node&)
 bool ModuleLoseScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"LoseScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Lose Scene /  Press N to go to the Menu");
+	app->uiManager->AddUIElement(fMPoint(10, app->win->height / app->win->GetUIScale() -40), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"message",nullptr, DRAGGABLE::DRAG_OFF, "CLICK ANYWHERE TO CONTINUE");
 
 	youLost = app->tex->Load("intro_images/youLost.png");
 	medalLose = app->tex->Load("intro_images/medalLose.png");
@@ -53,8 +54,8 @@ bool  ModuleLoseScene::Update(float dt)
 {
 	CheckListener(this);
 
-	app->render->Blit(youLost, -42, 0);
-	app->render->Blit(medalLose, 30, 0);
+	app->render->Blit(youLost, -42, 0,NULL, false,false);
+	app->render->Blit(medalLose, 30, 0, NULL, false, false);
 
 	return true;
 }
@@ -64,8 +65,9 @@ bool  ModuleLoseScene::Update(float dt)
 bool  ModuleLoseScene::PostUpdate(float dt)
 {
 	bool ret = true;
-	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MAIN MENU
-	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN) {
+
+	
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) {
 
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
 	}
