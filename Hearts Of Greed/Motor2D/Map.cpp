@@ -535,46 +535,49 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
 
+
+				// 6* because we need to undo offset and isometric conversion. 2*3 = 6.
+
 				switch (layer->gid[i])
 				{
 				case 390:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
 					break;
 
 				case 391:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
 				case 392:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
 					break;
 
 				case 393:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
 					break;
 
 				case 394:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
 				case 395:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
 					break;
 
 				case 396:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_01;
 					break;
 
 				case 397:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_02;
 					break;
 
 				case 398:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_03;
 					break;
