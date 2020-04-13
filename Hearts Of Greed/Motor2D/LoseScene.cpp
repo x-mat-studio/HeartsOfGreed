@@ -54,8 +54,8 @@ bool  ModuleLoseScene::Update(float dt)
 {
 	CheckListener(this);
 
-	app->render->Blit(youLost, -42, 0);
-	app->render->Blit(medalLose, 30, 0);
+	app->render->Blit(youLost, -42, 0,NULL, false,false);
+	app->render->Blit(medalLose, 30, 0, NULL, false, false);
 
 	return true;
 }

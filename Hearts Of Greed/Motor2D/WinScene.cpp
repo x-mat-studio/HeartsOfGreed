@@ -58,8 +58,8 @@ bool  ModuleWinScene::Update(float dt)
 {
 	CheckListener(this);
 
-	app->render->Blit(youWon,0,0);
-	app->render->Blit(medalWin, 50, 0);
+	app->render->Blit(youWon,0,0, NULL, false, false);
+	app->render->Blit(medalWin, 50, 0, NULL, false, false);
 
 	return true;
 }
