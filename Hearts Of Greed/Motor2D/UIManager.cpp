@@ -373,9 +373,11 @@ void ModuleUIManager::CreateEntityPortrait()
 		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
 		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 		
-		//shop button
-		rect = RectConstructor(480, 62, 32, 32);
-		AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {
+			//shop button
+			rect = RectConstructor(480, 62, 32, 32);
+			AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+		}
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
