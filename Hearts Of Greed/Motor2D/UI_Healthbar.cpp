@@ -51,8 +51,10 @@ void UI_Healthbar::HandleInput()
 
 void UI_Healthbar::AdjustHealth()
 {
-	if (currentHealth != nullptr && *currentHealth != previousHealth)
-	{
-		box.w = originalWidth * (*currentHealth) / (*maxHealth);
+	if (previousHealth > 0) {
+		if (currentHealth != nullptr && *currentHealth != previousHealth)
+		{
+			box.w = originalWidth * (*currentHealth) / (*maxHealth);
+		}
 	}
 }

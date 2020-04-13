@@ -75,7 +75,10 @@ bool UI_Portrait::Update(float dt)
 			portraitVector[i].backgroundLevel->hiding_unhiding = true;
 			portraitVector[i].backgroundHealthbar->hiding_unhiding = true;
 			portraitVector[i].portrait->hiding_unhiding = true;
-			no_move = false;
+			if (i == numElem - 1)
+			{
+				no_move = false;
+			}
 		}
 
 		portraitVector[i].healthbar->Update(dt);
