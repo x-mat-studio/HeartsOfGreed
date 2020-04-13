@@ -90,21 +90,14 @@ SDL_Texture* const ModuleTextures::Load(const char* path)
 // Unload texture
 bool ModuleTextures::UnLoad(SDL_Texture* texture)
 {
-	int numTextures = textures.size();
-
-
-	for (int i = 0; i < numTextures; i++)
+	for (int i = 0; i < textures.size(); i++)
 	{
-
-
 		if (texture == textures[i])
 		{
 			SDL_DestroyTexture(textures[i]);
 			textures.erase(textures.begin() + i);
 			return true;
 		}
-
-
 	}
 
 

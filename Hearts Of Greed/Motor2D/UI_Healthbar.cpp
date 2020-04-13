@@ -2,12 +2,13 @@
 
 UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	originalWidth(rect.w),
-	previousHealth(NULL)
+	currentHealth(nullptr)
 {
 	if (entity != nullptr)
 	{
 		maxHealth = &entity->hitPointsMax;
 		currentHealth = &entity->hitPointsCurrent;
+		previousHealth = *currentHealth;
 	}
 }
 
@@ -38,6 +39,8 @@ bool UI_Healthbar::Update(float dt)
 
 bool UI_Healthbar::PostUpdate(float dt)
 {
+	previousHealth = *currentHealth;
+	
 	Draw(texture);
 
 	return true;
@@ -50,8 +53,10 @@ void UI_Healthbar::HandleInput()
 
 void UI_Healthbar::AdjustHealth()
 {
-	if (currentHealth != nullptr && *currentHealth != previousHealth)
-	{
-		box.w = originalWidth * (*currentHealth) / (*maxHealth);
+	if (*currentHealth > 0) {
+		if (currentHealth != nullptr && *currentHealth != previousHealth)
+		{
+			box.w = originalWidth * (*currentHealth) / (*maxHealth);
+		}
 	}
 }

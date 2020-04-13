@@ -51,14 +51,7 @@ Entity::~Entity()
 		visionEntity->deleteEntity = true;
 	}
 
-	if (minimapIcon != nullptr)
-	{
-		minimapIcon->toDelete = true;
-		minimapIcon->minimapPos = nullptr;
-	}
-
 	minimapIcon = nullptr;
-	
 }
 
 
@@ -246,6 +239,8 @@ bool Entity::IsOpositeAlignement(ENTITY_ALIGNEMENT check)
 	{
 		if (check == ENTITY_ALIGNEMENT::PLAYER)
 			return true;
+
+		return false;
 	}
 	break;
 	case ENTITY_ALIGNEMENT::NEUTRAL:
@@ -256,7 +251,7 @@ bool Entity::IsOpositeAlignement(ENTITY_ALIGNEMENT check)
 
 	}
 
-
+	return false;
 }
 
 

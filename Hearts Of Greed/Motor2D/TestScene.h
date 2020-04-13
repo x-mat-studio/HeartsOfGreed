@@ -44,6 +44,7 @@ public:
 	void DeactivateCamMovement();
 	bool GetCamMovementActivated() const;
 
+	int GetDayNumber() const;
 
 private:
 	void CalculateTimers(float dt);
@@ -63,6 +64,8 @@ private:
 	bool allowCamMovement;
 
 	bool isNightTime;
+
+	int dayNumber;
 
 	int dayTimer;
 	int nightTimer;

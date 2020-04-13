@@ -7,6 +7,7 @@
 #include "Audio.h"
 #include "Textures.h"
 #include "Render.h"
+#include "Input.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -124,7 +125,7 @@ Enemy::~Enemy()
 	punchRightUp = Animation();
 	punchRightDown = Animation();
 	punchRight = Animation();
-	
+
 }
 
 
@@ -192,7 +193,10 @@ void Enemy::StateMachine(float dt)
 		if (attackCooldown == 0)
 		{
 			Attack();
-			attackCooldown += 0.1;
+			if (shortTermObjective != nullptr)
+				dir = DetermineDirection(shortTermObjective->position - position);
+
+			attackCooldown += 0.01f;
 		}
 
 		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
@@ -228,30 +232,7 @@ void Enemy::Roar()
 	}
 }
 
-int Enemy::GetHP()
-{
-	return hitPointsCurrent;
-}
 
-int Enemy::GetAD()
-{
-	return attackDamage;
-}
-
-int Enemy::GetAS()
-{
-	return attackSpeed;
-}
-
-int Enemy::GetVision()
-{
-	return vision;
-}
-
-int Enemy::GetRecov()
-{
-	return recoveryHitPointsRate;
-}
 
 
 bool Enemy::PostUpdate(float dt)
@@ -290,12 +271,12 @@ void Enemy::Draw(float dt)
 	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX -offset.x, position.y - currFrame.pivotPositionY - offset.y, &currFrame.frame, false, true, 0, 255, 0, 0);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
 
 	else
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX - offset.x, position.y - currFrame.pivotPositionY - offset.y, &currFrame.frame);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
 
-	DebugDraw();
+	DebugDraw(currFrame.pivotPositionX, currFrame.pivotPositionY);
 }
 
 
@@ -314,13 +295,19 @@ void Enemy::Die()
 
 	int randomCounter = rand() % 2;
 
-	if (randomCounter == 1) 
+	if (randomCounter == 1)
 	{
 		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
 	}
 	else
 	{
 		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+	}
+
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+		minimapIcon->minimapPos = nullptr;
 	}
 }
 
@@ -378,10 +365,20 @@ bool Enemy::CheckAttackRange()
 		return false;
 	}
 
+	if (shortTermObjective->GetAlignment() == align)
+	{
+		shortTermObjective = nullptr;
+		return false;
+	}
 
-	fMPoint point = shortTermObjective->GetPosition();
+	SDL_Rect rect;
+	rect.x = position.x - attackRange;
+	rect.y = position.y - attackRange;
+	rect.w = attackRange * 2;
+	rect.h = attackRange * 2;
 
-	if (point.DistanceManhattan(position) < attackRange)
+
+	if (shortTermObjective->GetCollider()->CheckCollision(rect))
 	{
 		return true;
 	}
@@ -539,7 +536,7 @@ int Enemy::RecieveDamage(int damage)
 			ret = xpOnDeath;
 		}
 		else
-			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
+			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
 	}
 
 	return ret;
@@ -628,4 +625,30 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 	}
 
 	}
+}
+
+
+int Enemy::GetHP()
+{
+	return hitPointsCurrent;
+}
+
+int Enemy::GetAD()
+{
+	return attackDamage;
+}
+
+int Enemy::GetAS()
+{
+	return attackSpeed;
+}
+
+int Enemy::GetVision()
+{
+	return vision;
+}
+
+int Enemy::GetRecov()
+{
+	return recoveryHitPointsRate;
 }

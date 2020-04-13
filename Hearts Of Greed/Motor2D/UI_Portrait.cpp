@@ -75,7 +75,10 @@ bool UI_Portrait::Update(float dt)
 			portraitVector[i].backgroundLevel->hiding_unhiding = true;
 			portraitVector[i].backgroundHealthbar->hiding_unhiding = true;
 			portraitVector[i].portrait->hiding_unhiding = true;
-			no_move = false;
+			if (i == numElem - 1)
+			{
+				no_move = false;
+			}
 		}
 
 		portraitVector[i].healthbar->Update(dt);
@@ -130,7 +133,7 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 
 	newPortrait.backgroundHealthbar = new UI_Image(fMPoint (newPortrait.position.x + 18, newPortrait.position.y + 45), this, UI_TYPE::UI_IMG, backgroundHealthbarRect, (P2SString)"backgroundHealthbarPortrait", DRAGGABLE::DRAG_OFF);
 	
-	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", nullptr, DRAGGABLE::DRAG_OFF);
+	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", entity, DRAGGABLE::DRAG_OFF);
 	
 	SDL_Color color;
 	char level;
@@ -161,9 +164,50 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 	portraitVector.push_back(newPortrait);
 }
 
-void UI_Portrait::DeletePortrait(Portrait portrait)
+void UI_Portrait::DeletePortrait()
 {
-	// TODO
+	int numElem = portraitVector.size();
+
+	bool deleted = false;
+
+	for (int i = 0; i < numElem; i++)
+	{
+		if (portraitVector[i].hero == nullptr || portraitVector[i].hero->toDelete == true)
+		{
+			delete portraitVector[i].background;
+			portraitVector[i].background = nullptr;
+
+			delete portraitVector[i].backgroundLevel;
+			portraitVector[i].backgroundLevel = nullptr;
+
+			delete portraitVector[i].backgroundHealthbar;
+			portraitVector[i].backgroundHealthbar = nullptr;
+
+			delete portraitVector[i].healthbar;
+			portraitVector[i].healthbar = nullptr;
+
+			delete portraitVector[i].portrait;
+			portraitVector[i].portrait = nullptr;
+
+			delete portraitVector[i].level;
+			portraitVector[i].level = nullptr;
+
+			portraitVector[i].hero = nullptr;
+
+			portraitVector.erase(portraitVector.begin() + i);
+
+			deleted = true;
+		}
+		else if (deleted == true)
+		{
+			portraitVector[i].background->worldPosition.y -= 60;
+			portraitVector[i].backgroundLevel->worldPosition.y -= 60;
+			portraitVector[i].backgroundHealthbar->worldPosition.y -= 60;
+			portraitVector[i].healthbar->worldPosition.y -= 60;
+			portraitVector[i].portrait->worldPosition.y -= 60;
+			portraitVector[i].level->worldPosition.y -= 60;
+		}
+	}
 }
 
 void UI_Portrait::Move()

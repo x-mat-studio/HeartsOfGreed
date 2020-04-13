@@ -177,6 +177,12 @@ void Turret::Die()
 {
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 	toDelete = true;
+
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+		minimapIcon->minimapPos = nullptr;
+	}
 }
 
 

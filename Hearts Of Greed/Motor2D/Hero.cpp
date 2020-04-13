@@ -7,6 +7,7 @@
 #include "FoWManager.h"
 #include "Map.h"
 #include "Player.h"
+#include "Input.h"
 
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
@@ -17,7 +18,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
+	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
 
@@ -204,8 +205,10 @@ Hero::~Hero()
 	skill1Left = Animation();
 	skill1LeftUp = Animation();
 	skill1LeftDown = Animation();
+
 	currAoE.clear();
 	suplAoE.clear();
+
 	currAreaInfo = nullptr;
 }
 
@@ -267,12 +270,12 @@ void Hero::StateMachine(float dt)
 		if (attackCooldown == 0)
 		{
 			if (CheckAttackRange() == true)
-			{	
+			{
 				Attack();
+				if (objective != nullptr)
+					dir = DetermineDirection(objective->position - position);
 				attackCooldown += TIME_TRIGGER;
-				
-				
-				currentAnimation = &walkRight;
+
 			}
 
 			else
@@ -285,13 +288,11 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
-	
-
-
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
 		PreProcessSkill1();
+		dir = DetermineDirection(app->input->GetMouseWorld() - position);
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:
@@ -314,7 +315,6 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::DEAD:
-		Die();
 		break;
 
 	}
@@ -326,7 +326,10 @@ void Hero::StateMachine(float dt)
 bool Hero::PostUpdate(float dt)
 {
 	if (app->debugMode)
-		DebugDraw();
+	{
+		Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+		DebugDraw(currFrame.pivotPositionX, currFrame.pivotPositionY);
+	}
 
 	DrawArea();
 
@@ -375,7 +378,15 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+	Frame currFrame;
+
+	if (state == HERO_STATES::CHARGING_ATTACK)
+		currFrame = currentAnimation->GetCurrentFrame();
+	else if(state == HERO_STATES::PREPARE_SKILL1)
+		currFrame = currentAnimation->GetCurrentFrame();
+	else
+		currFrame = currentAnimation->GetCurrentFrame(dt);
+
 	app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 }
 
@@ -468,7 +479,17 @@ void Hero::Die()
 		break;
 	}
 
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+		minimapIcon->minimapPos = nullptr;
+	}
+
 	toDelete = true;
+
+
+	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+
 }
 
 
@@ -585,6 +606,10 @@ int Hero::RecieveDamage(int damage)
 			Die();
 			ret = 1;
 		}
+		else
+		{
+			app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		}
 	}
 
 	return ret;
@@ -619,25 +644,36 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	if (attackCooldown > 0)
 	{
 		attackCooldown += dt;
+		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (attackCooldown >= attackSpeed)
+		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			currentAnimation->ResetAnimation();
 
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
-			
 
 			attackCooldown = 0;
 		}
 	}
 
 
-	if (skill1TimePassed > 0)
+	if (state == HERO_STATES::PREPARE_SKILL1)
 	{
+		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
+
+		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
+		{
+			currentAnimation->GetCurrentFrame(0);
+			currentAnimation->loop = false;
+		}
+	}
+	else if (skill1TimePassed > 0)
+	{	
 		skill1TimePassed += dt;
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
+			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0;
 		}
@@ -781,15 +817,17 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_ATTACK_CHARGED: state = HERO_STATES::ATTACK;					 break;
+			case HERO_INPUTS::IN_ATTACK_CHARGED:currentAnimation->ResetAnimation();  state = HERO_STATES::ATTACK; break;
 
-			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;						 break;
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	 break;
 
-			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
+			case HERO_INPUTS::IN_OUT_OF_RANGE:    state = HERO_STATES::MOVE; break;
 
-			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true; break;
-			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true; break;
-			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_MOVE:    state = HERO_STATES::MOVE;		break;
+
+			case HERO_INPUTS::IN_PREPARE_SKILL1:  state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL3:  state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true;  break;
 
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
 			}
@@ -1044,33 +1082,98 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 		case FACE_DIR::NORTH_EAST:
 			currentAnimation = &punchRightUp;
-
 			break;
+
 		case FACE_DIR::NORTH_WEST:
 			currentAnimation = &punchLeftUp;
-
 			break;
+
 		case FACE_DIR::EAST:
 			currentAnimation = &punchRight;
-
 			break;
+
 		case FACE_DIR::SOUTH_EAST:
 			currentAnimation = &punchRightDown;
-
 			break;
+
 		case FACE_DIR::SOUTH_WEST:
 			currentAnimation = &punchLeftDown;
-
 			break;
+
 		case FACE_DIR::WEST:
 			currentAnimation = &punchLeft;
-	
 			break;
 		}
-		break;
 
+		break;
 	}
 
+		case HERO_STATES::PREPARE_SKILL1:
+		{
+
+			currentAnimation->loop = false;
+
+			switch (dir)
+			{
+				case FACE_DIR::NORTH_EAST:
+					currentAnimation = &skill1RightUp;
+					break;
+
+				case FACE_DIR::NORTH_WEST:
+					currentAnimation = &skill1LeftUp;
+					break;
+
+				case FACE_DIR::EAST:
+					currentAnimation = &skill1Right;
+					break;
+
+				case FACE_DIR::SOUTH_EAST:
+					currentAnimation = &skill1RightDown;
+					break;
+
+				case FACE_DIR::SOUTH_WEST:
+					currentAnimation = &skill1LeftDown;
+					break;
+
+				case FACE_DIR::WEST:
+					currentAnimation = &skill1Left;
+					break;
+			}
+			break;
+		}
+
+		case HERO_STATES::SKILL1:
+		{
+			currentAnimation->loop = false;
+
+			switch (dir)
+			{
+			case FACE_DIR::NORTH_EAST:
+				currentAnimation = &skill1RightUp;
+				break;
+
+			case FACE_DIR::NORTH_WEST:
+				currentAnimation = &skill1LeftUp;
+				break;
+
+			case FACE_DIR::EAST:
+				currentAnimation = &skill1Right;
+				break;
+
+			case FACE_DIR::SOUTH_EAST:
+				currentAnimation = &skill1RightDown;
+				break;
+
+			case FACE_DIR::SOUTH_WEST:
+				currentAnimation = &skill1LeftDown;
+				break;
+
+			case FACE_DIR::WEST:
+				currentAnimation = &skill1Left;
+				break;
+			}
+			break;
+		}
 	}
 }
 

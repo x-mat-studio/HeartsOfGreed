@@ -3,6 +3,8 @@
 #ifndef __AI_H__
 #define __AI_H__
 
+#define ENEMIES_PER_NIGHT 6
+
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
 
@@ -20,6 +22,8 @@ public:
 
 	bool Awake(pugi::xml_node&);
 
+	bool PostUpdate(float dt);
+
 	void OnCollision(Collider*, Collider*);
 
 	fMPoint* GetObjective();
@@ -32,6 +36,10 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	int CheckBaseAligmentAttack();
+
+	void CommandSpawners();
+	Spawner* FindNearestSpawner();
+	int CalculateEnemiesToSpawn();
 	
 private:
 	fMPoint objectivePos;

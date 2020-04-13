@@ -90,7 +90,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
-		1, 100, 100, 1, 50, 1, 20, 5, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		1, 100, 100, 1, 50, 1, 20, 1, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 		// Sample Enemy---------------------
@@ -212,13 +212,18 @@ bool ModuleEntityManager::Start()
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
 
-	//sfx baby
+	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
 	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
 	wanamingoGetsHit = app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
 	wanamingoDies = app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
 	wanamingoDies2 = app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
 
+	//Suitman sfx-----
+	suitmanGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetHit.wav");
+	suitmanGetsHit2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
+	suitmanGetsDeath = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
+	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
 
 	return ret;
 }
@@ -603,8 +608,6 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 			enemy->CheckObjecive(entity);
 		}
 	}
-
-
 }
 
 
@@ -628,7 +631,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 	int numEntities = entityVector.size();
 
-	for (int i = 0; i < numEntities; i++)
+	for (int i = numEntities - 1; i >= 0; i--)
 	{
 		alignement = entityVector[i]->GetAlignment();
 
@@ -675,16 +678,24 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 {
 	int numEntities = entityVector.size();
 
-	float posX, posY, w, h;
+	float w, h;
+
+	Collider* col;
+	fMPoint pos;
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		posX = entityVector[i]->GetPosition().x;
-		posY = entityVector[i]->GetPosition().y;
-		w = entityVector[i]->GetCollider()->rect.w;
-		h = entityVector[i]->GetCollider()->rect.h;
+		pos = entityVector[i]->GetPosition();
+		
+		col = entityVector[i]->GetCollider();
+		if (col != nullptr)
+		{
+			w = col->rect.w;
+			h = col->rect.h;
+		}
+		
 
-		if (app->map->EntityInsideCamera(posX, posY, w, h) == true) {
+		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) {
 
 			assert((int)ENTITY_TYPE::MAX_TYPE == MAX_ENTITY_TYPES);
 

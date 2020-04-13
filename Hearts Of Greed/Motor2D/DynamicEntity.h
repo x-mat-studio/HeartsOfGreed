@@ -34,7 +34,7 @@ public:
 	void GroupMovement(float dt);
 
 	bool GeneratePath(float x, float y, int lvl);
-	void DebugDraw();
+	void DebugDraw(int pivotPositionX, int pivotPositionY);
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
 

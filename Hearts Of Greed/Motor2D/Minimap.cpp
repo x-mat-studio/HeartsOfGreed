@@ -9,6 +9,7 @@
 #include "EventManager.h"
 #include "UIManager.h"
 #include "UI.h"
+#include "Player.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -63,8 +64,6 @@ bool Minimap::Start()
 
 	bool ret = true;
 
-	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
-
 	return ret;
 
 }
@@ -117,7 +116,7 @@ bool Minimap::Update(float dt)
 		float scale = app->win->GetScale();
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			if (ClickingOnMinimap(x, y) == true)
+			if (ClickingOnMinimap(x, y) == true && app->player->doingAction==false)
 			{
 				//camera TP
 				iMPoint newCamPos = ScreenToMinimapToWorld(x, y);
@@ -260,12 +259,7 @@ bool Minimap::Save(pugi::xml_node&) const
 
 void Minimap::ExecuteEvent(EVENT_ENUM eventId)
 {
-	switch (eventId)
-	{
-	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
-		CleanUp();
-		break;
-	}
+
 }
 
 void Minimap::CreateMinimapText()

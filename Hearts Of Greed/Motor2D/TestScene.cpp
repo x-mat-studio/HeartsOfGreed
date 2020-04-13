@@ -23,6 +23,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
 	timer(0),
+	dayNumber(1),
 	camUp(false),
 	camDown(false),
 	camRight(false),
@@ -74,6 +75,8 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x-680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
@@ -82,6 +85,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
+
+
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
 		// Test Turret
 	//	app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, 100, 750);
@@ -126,7 +132,7 @@ bool  ModuleTestScene::PreUpdate(float dt)
 {
 	CheckListener(this);
 
-//	CalculateTimers(dt);
+	//CalculateTimers(dt);
 
 	return true;
 }
@@ -220,7 +226,7 @@ bool  ModuleTestScene::Update(float dt)
 		app->fadeToBlack->FadeToBlack(this, app->loseScene);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
-	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN || menuScene == true)
+	if(menuScene == true)
 	{
 		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu))
 		{
@@ -263,6 +269,7 @@ bool  ModuleTestScene::CleanUp()
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
 	app->audio->SilenceAll();
+	app->minimap->CleanUp();
 
 	return true;
 }
@@ -348,6 +355,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
 		isNightTime = false;
 		timer = 0;
+		dayNumber++;
 		break;
 
 	case EVENT_ENUM::DEBUG_NIGHT:
@@ -466,6 +474,7 @@ void ModuleTestScene::CalculateTimers(float dt)
 			app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
 			isNightTime = false;
 			timer = 0;
+			dayNumber++;
 		}
 	}
 }
@@ -492,4 +501,10 @@ void ModuleTestScene::DrawNightRect()
 	}
 
 	app->render->DrawQuad(rect, 60, 26, 81, 100, true, false);
+}
+
+
+int ModuleTestScene::GetDayNumber() const
+{
+	return dayNumber;
 }
