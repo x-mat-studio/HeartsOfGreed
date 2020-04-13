@@ -4,10 +4,11 @@
 #include "Collision.h"
 #include "Base.h"
 #include "Spawner.h"
+#include "TestScene.h"
 
 ModuleAI::ModuleAI() : Module()
 {
-	name.create("player");
+	name.create("AI");
 }
 
 
@@ -20,6 +21,14 @@ bool ModuleAI::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, this);
+
+	return true;
+}
+
+
+bool ModuleAI::PostUpdate(float dt)
+{
+	CheckListener(this);
 
 	return true;
 }
@@ -69,9 +78,9 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 		if (base != -1) //-1 means no player controlled bases were found
 		{
 			objectivePos = baseVector[base]->GetPosition();
-
 			
-			//call random spawners and spawning x number of monsters
+			//call nearest spawner and spawn x number of monsters
+			CommandSpawners();
 		}
 
 	break;
@@ -120,10 +129,13 @@ void ModuleAI::PushSpawner(Spawner* building)
 }
 
 
-void ModuleAI::CommandSpawners(int base)
+void ModuleAI::CommandSpawners()
 {
 	Spawner* spawner = FindNearestSpawner();
 
+	int enemiesToSpawn = CalculateEnemiesToSpawn();
+
+	spawner->SetNumberToSpawn(enemiesToSpawn);
 
 }
 
@@ -151,4 +163,12 @@ Spawner* ModuleAI::FindNearestSpawner()
 	}
 
 	return ret;
+}
+
+
+int ModuleAI::CalculateEnemiesToSpawn()
+{
+	int days = app->testScene->GetDayNumber();
+
+	return days * ENEMIES_PER_NIGHT;
 }

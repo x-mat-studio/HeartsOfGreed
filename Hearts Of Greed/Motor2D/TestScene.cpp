@@ -23,6 +23,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
 	timer(0),
+	dayNumber(1),
 	camUp(false),
 	camDown(false),
 	camRight(false),
@@ -85,6 +86,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
 
+
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
+
 		// Test Turret
 	//	app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, 100, 750);
 	}
@@ -128,7 +132,7 @@ bool  ModuleTestScene::PreUpdate(float dt)
 {
 	CheckListener(this);
 
-//	CalculateTimers(dt);
+	//CalculateTimers(dt);
 
 	return true;
 }
