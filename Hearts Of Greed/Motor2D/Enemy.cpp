@@ -228,30 +228,7 @@ void Enemy::Roar()
 	}
 }
 
-int Enemy::GetHP()
-{
-	return hitPointsCurrent;
-}
 
-int Enemy::GetAD()
-{
-	return attackDamage;
-}
-
-int Enemy::GetAS()
-{
-	return attackSpeed;
-}
-
-int Enemy::GetVision()
-{
-	return vision;
-}
-
-int Enemy::GetRecov()
-{
-	return recoveryHitPointsRate;
-}
 
 
 bool Enemy::PostUpdate(float dt)
@@ -384,10 +361,20 @@ bool Enemy::CheckAttackRange()
 		return false;
 	}
 
+	if (shortTermObjective->GetAlignment() == align)
+	{
+		shortTermObjective = nullptr;
+		return false;
+	}
 
-	fMPoint point = shortTermObjective->GetPosition();
+	SDL_Rect rect;
+	rect.x = position.x - attackRange;
+	rect.y = position.y - attackRange;
+	rect.w = attackRange * 2;
+	rect.h = attackRange * 2;
 
-	if (point.DistanceManhattan(position) < attackRange)
+
+	if (shortTermObjective->GetCollider()->CheckCollision(rect))
 	{
 		return true;
 	}
@@ -634,4 +621,30 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 	}
 
 	}
+}
+
+
+int Enemy::GetHP()
+{
+	return hitPointsCurrent;
+}
+
+int Enemy::GetAD()
+{
+	return attackDamage;
+}
+
+int Enemy::GetAS()
+{
+	return attackSpeed;
+}
+
+int Enemy::GetVision()
+{
+	return vision;
+}
+
+int Enemy::GetRecov()
+{
+	return recoveryHitPointsRate;
 }

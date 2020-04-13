@@ -29,7 +29,7 @@ ModulePlayer::ModulePlayer() :
 	skill2(false),
 	skill3(false),
 	prepareSkill(false),
-
+	doingAction(false),
 	hasClicked(false),
 
 	doSkill(false),
@@ -136,7 +136,7 @@ bool ModulePlayer::HandleInput()
 	int mouseX;
 	int mouseY;
 	app->input->GetMousePositionRaw(mouseX, mouseY);
-	if (buildMode == false && app->minimap->ClickingOnMinimap(mouseX,mouseY)==false)
+	if (buildMode == false)
 	{
 		if (prepareSkill == true || doSkill == true)
 		{
@@ -146,12 +146,14 @@ bool ModulePlayer::HandleInput()
 		else if (entityComand)
 		{
 			entityComand = false;
+			doingAction = false;
 			RightClick();
 		}
 
 		else if (entityInteraction)
 		{
 			entityInteraction = false;
+			doingAction = false;
 			Click();
 		}
 		else if (selectUnits && hasClicked)
@@ -168,6 +170,7 @@ bool ModulePlayer::HandleInput()
 		if (entityInteraction)
 		{
 			entityInteraction = false;
+			doingAction = false;
 			BuildClick();
 		}
 	}
@@ -427,22 +430,39 @@ bool ModulePlayer::BuildClick()
 
 void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
+	int mouseX;
+	int mouseY;
+	app->input->GetMousePositionRaw(mouseX, mouseY);
+
 	switch (eventId)
 	{
 	case EVENT_ENUM::SELECT_UNITS:
-		selectUnits = true;
+		if (app->minimap->ClickingOnMinimap(mouseX, mouseY) == false)
+		{
+			selectUnits = true;
+			doingAction = true;
+		}
 		break;
 
 	case EVENT_ENUM::STOP_SELECTING_UNITS:
 		selectUnits = false;
+		doingAction = false;
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		entityComand = true;
+		if (app->minimap->ClickingOnMinimap(mouseX, mouseY) == false)
+		{
+			entityComand = true;
+			doingAction = true;
+		}
 		break;
 
 	case EVENT_ENUM::ENTITY_INTERACTION:
-		entityInteraction = true;
+		if (app->minimap->ClickingOnMinimap(mouseX, mouseY) == false)
+		{
+			entityInteraction = true;
+			doingAction = true;
+		}
 		break;
 
 	case EVENT_ENUM::SKILL1:

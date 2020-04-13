@@ -9,6 +9,7 @@
 #include "EventManager.h"
 #include "UIManager.h"
 #include "UI.h"
+#include "Player.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -117,7 +118,7 @@ bool Minimap::Update(float dt)
 		float scale = app->win->GetScale();
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			if (ClickingOnMinimap(x, y) == true)
+			if (ClickingOnMinimap(x, y) == true && app->player->doingAction==false)
 			{
 				//camera TP
 				iMPoint newCamPos = ScreenToMinimapToWorld(x, y);

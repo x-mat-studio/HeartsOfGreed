@@ -798,9 +798,11 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
 
-			case HERO_INPUTS::IN_SKILL1: state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true; break;
-			case HERO_INPUTS::IN_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true; break;
-			case HERO_INPUTS::IN_SKILL3: state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true; break;
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
+
+			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL3: state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true;  break;
 
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
 			}
