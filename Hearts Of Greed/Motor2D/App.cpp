@@ -149,9 +149,9 @@ bool App::Awake()
 	//Set disabled modules here
 	mainMenu->Disable();
 	introScene->Disable();
-	//winScene->Disable();
+	winScene->Disable();
 	loseScene->Disable();
-	testScene->Disable();
+	//testScene->Disable();
 	//------
 	PERF_PEEK(pTimer);
 
