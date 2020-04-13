@@ -678,16 +678,24 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 {
 	int numEntities = entityVector.size();
 
-	float posX, posY, w, h;
+	float w, h;
+
+	Collider* col;
+	fMPoint pos;
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		posX = entityVector[i]->GetPosition().x;
-		posY = entityVector[i]->GetPosition().y;
-		w = entityVector[i]->GetCollider()->rect.w;
-		h = entityVector[i]->GetCollider()->rect.h;
+		pos = entityVector[i]->GetPosition();
+		
+		col = entityVector[i]->GetCollider();
+		if (col != nullptr)
+		{
+			w = col->rect.w;
+			h = col->rect.h;
+		}
+		
 
-		if (app->map->EntityInsideCamera(posX, posY, w, h) == true) {
+		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) {
 
 			assert((int)ENTITY_TYPE::MAX_TYPE == MAX_ENTITY_TYPES);
 
