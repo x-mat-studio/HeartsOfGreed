@@ -95,6 +95,8 @@ bool ModuleUIManager::Update(float dt)
 
 		bool ret = true;
 
+	CheckListener(this);
+
 	int numEntities = uiVector.size();
 
 	for (int i = 0; i < numEntities; i++)
@@ -184,6 +186,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 
 	int eventCheck = 0;
+	UI_Portrait* portrait = nullptr;
 
 	switch (eventId)
 	{
@@ -210,7 +213,9 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::HERO_MELEE_OUT:
 	case EVENT_ENUM::HERO_GATHERER_OUT:
 	case EVENT_ENUM::HERO_RANGED_OUT:
-		// DELETE PORTRAIT			TODO
+		portrait = (UI_Portrait*)FindUIByName("portraitVector");
+		portrait->DeletePortrait();
+		portrait = nullptr;
 		break;
 
 	case EVENT_ENUM::OPTION_MENU:
@@ -364,7 +369,7 @@ void ModuleUIManager::CreateEntityPortrait()
 		
 		//hp bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", nullptr, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", base, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", base->GetHP());
@@ -416,10 +421,10 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", nullptr, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		rect = RectConstructor(374, 85, 60, 7);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 50)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", nullptr, DRAGGABLE::DRAG_OFF, "Ebar");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 50)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", hero, DRAGGABLE::DRAG_OFF, "Ebar");
 
 
 		//stats
@@ -460,10 +465,10 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", nullptr, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		rect = RectConstructor(374, 85, 60, 7);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 50)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", nullptr, DRAGGABLE::DRAG_OFF, "Ebar");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 50)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", hero, DRAGGABLE::DRAG_OFF, "Ebar");
 
 
 		//stats
@@ -501,7 +506,7 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//health bar
 		rect = RectConstructor(219, 83, 122, 16);
-		AddUIElement(fMPoint(w / app->win->GetUIScale() - 90, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", nullptr, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w / app->win->GetUIScale() - 90, (h / (app->win->GetUIScale()) - 60)), nullptr, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", enemy, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", enemy->GetHP());

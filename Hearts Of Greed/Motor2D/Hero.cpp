@@ -316,7 +316,6 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::DEAD:
-		Die();
 		break;
 
 	}
