@@ -17,7 +17,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
+	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
 
@@ -269,12 +269,10 @@ void Hero::StateMachine(float dt)
 		if (attackCooldown == 0)
 		{
 			if (CheckAttackRange() == true)
-			{	
+			{
 				Attack();
 				attackCooldown += TIME_TRIGGER;
-				
-				
-				currentAnimation = &walkRight;
+
 			}
 
 			else
@@ -287,9 +285,6 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
-	
-
-
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
@@ -380,7 +375,13 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+	Frame currFrame;
+
+	if (state == HERO_STATES::CHARGING_ATTACK)
+		currFrame = currentAnimation->GetCurrentFrame();
+	else
+		currFrame = currentAnimation->GetCurrentFrame(dt);
+
 	app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
 }
 
@@ -596,6 +597,7 @@ int Hero::RecieveDamage(int damage)
 			Die();
 			ret = 1;
 		}
+
 	}
 
 	return ret;
@@ -630,13 +632,13 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	if (attackCooldown > 0)
 	{
 		attackCooldown += dt;
+		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (attackCooldown >= attackSpeed)
+		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			currentAnimation->ResetAnimation();
 
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
-			
 
 			attackCooldown = 0;
 		}
@@ -792,17 +794,17 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_ATTACK_CHARGED: state = HERO_STATES::ATTACK;					 break;
+			case HERO_INPUTS::IN_ATTACK_CHARGED:currentAnimation->ResetAnimation();  state = HERO_STATES::ATTACK; break;
 
-			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;						 break;
+			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	 break;
 
-			case HERO_INPUTS::IN_OUT_OF_RANGE:   state = HERO_STATES::MOVE;						 break;
+			case HERO_INPUTS::IN_OUT_OF_RANGE:    state = HERO_STATES::MOVE; break;
 
-			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
+			case HERO_INPUTS::IN_MOVE:    state = HERO_STATES::MOVE;		break;
 
-			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL1:  state = HERO_STATES::PREPARE_SKILL1; skillFromAttacking = true;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2; skillFromAttacking = true;  break;
-			case HERO_INPUTS::IN_PREPARE_SKILL3: state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true;  break;
+			case HERO_INPUTS::IN_PREPARE_SKILL3:  state = HERO_STATES::PREPARE_SKILL3; skillFromAttacking = true;  break;
 
 			case HERO_INPUTS::IN_DEAD:   state = HERO_STATES::DEAD;								 break;
 			}
@@ -1077,7 +1079,7 @@ void Hero::SetAnimation(HERO_STATES currState)
 			break;
 		case FACE_DIR::WEST:
 			currentAnimation = &punchLeft;
-	
+
 			break;
 		}
 		break;
