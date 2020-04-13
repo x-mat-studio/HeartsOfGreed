@@ -7,6 +7,7 @@
 #include "FoWManager.h"
 #include "Map.h"
 #include "Player.h"
+#include "Input.h"
 
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
@@ -271,6 +272,8 @@ void Hero::StateMachine(float dt)
 			if (CheckAttackRange() == true)
 			{
 				Attack();
+				if (objective != nullptr)
+					dir = DetermineDirection(objective->position - position);
 				attackCooldown += TIME_TRIGGER;
 
 			}
@@ -289,6 +292,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::PREPARE_SKILL1:
 		PreProcessSkill1();
+		dir = DetermineDirection(app->input->GetMouseWorld() - position);
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:
@@ -655,7 +659,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	if (state == HERO_STATES::PREPARE_SKILL1)
 	{
 		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
-		
+
 		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
 		{
 			currentAnimation->GetCurrentFrame(0);
@@ -665,7 +669,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	else if (skill1TimePassed > 0)
 	{
 
-	skill1TimePassed += dt;
+		skill1TimePassed += dt;
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
@@ -1017,122 +1021,122 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	switch (currState)
 	{
-		case HERO_STATES::MOVE:
+	case HERO_STATES::MOVE:
+	{
+		switch (dir)
 		{
-			switch (dir)
-			{
-			case FACE_DIR::NORTH_EAST:
-				currentAnimation = &walkRightUp;
-				break;
-			case FACE_DIR::NORTH_WEST:
-				currentAnimation = &walkLeftUp;
-				break;
-			case FACE_DIR::EAST:
-				currentAnimation = &walkRight;
-				break;
-			case FACE_DIR::SOUTH_EAST:
-				currentAnimation = &walkRightDown;
-				break;
-			case FACE_DIR::SOUTH_WEST:
-				currentAnimation = &walkLeftDown;
-				break;
-			case FACE_DIR::WEST:
-				currentAnimation = &walkLeft;
-				break;
-			}
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &walkRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &walkLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &walkRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &walkRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &walkLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &walkLeft;
+			break;
+		}
+	}
+	break;
+	case HERO_STATES::IDLE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &idleLeft;
+			break;
 		}
 		break;
-		case HERO_STATES::IDLE:
+	}
+
+	case HERO_STATES::CHARGING_ATTACK:
+	{
+		currentAnimation->loop = false;
+
+		switch (dir)
 		{
-			switch (dir)
-			{
-			case FACE_DIR::NORTH_EAST:
-				currentAnimation = &idleRightUp;
-				break;
-			case FACE_DIR::NORTH_WEST:
-				currentAnimation = &idleLeftUp;
-				break;
-			case FACE_DIR::EAST:
-				currentAnimation = &idleRight;
-				break;
-			case FACE_DIR::SOUTH_EAST:
-				currentAnimation = &idleRightDown;
-				break;
-			case FACE_DIR::SOUTH_WEST:
-				currentAnimation = &idleLeftDown;
-				break;
-			case FACE_DIR::WEST:
-				currentAnimation = &idleLeft;
-				break;
-			}
+
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &punchRightUp;
 			break;
-		}	
 
-		case HERO_STATES::CHARGING_ATTACK:
-		{
-			currentAnimation->loop = false;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &punchLeftUp;
+			break;
 
-			switch (dir)
-			{
+		case FACE_DIR::EAST:
+			currentAnimation = &punchRight;
+			break;
 
-			case FACE_DIR::NORTH_EAST:
-				currentAnimation = &punchRightUp;
-				break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &punchRightDown;
+			break;
 
-			case FACE_DIR::NORTH_WEST:
-				currentAnimation = &punchLeftUp;
-				break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &punchLeftDown;
+			break;
 
-			case FACE_DIR::EAST:
-				currentAnimation = &punchRight;
-				break;
-
-			case FACE_DIR::SOUTH_EAST:
-				currentAnimation = &punchRightDown;
-				break;
-
-			case FACE_DIR::SOUTH_WEST:
-				currentAnimation = &punchLeftDown;
-				break;
-
-			case FACE_DIR::WEST:
-				currentAnimation = &punchLeft;
-				break;
-			}
-
+		case FACE_DIR::WEST:
+			currentAnimation = &punchLeft;
 			break;
 		}
 
-		case HERO_STATES::PREPARE_SKILL1:
+		break;
+	}
+
+	case HERO_STATES::PREPARE_SKILL1:
+	{
+		switch (dir)
 		{
-			switch (dir)
-			{
-				case FACE_DIR::NORTH_EAST:
-					currentAnimation = &skill1RightUp;
-					break;
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &skill1RightUp;
+			break;
 
-				case FACE_DIR::NORTH_WEST:
-					currentAnimation = &skill1LeftUp;
-					break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &skill1LeftUp;
+			break;
 
-				case FACE_DIR::EAST:
-					currentAnimation = &skill1Right;
-					break;
+		case FACE_DIR::EAST:
+			currentAnimation = &skill1Right;
+			break;
 
-				case FACE_DIR::SOUTH_EAST:
-					currentAnimation = &skill1RightDown;
-					break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &skill1RightDown;
+			break;
 
-				case FACE_DIR::SOUTH_WEST:
-					currentAnimation = &skill1LeftDown;
-					break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &skill1LeftDown;
+			break;
 
-				case FACE_DIR::WEST:
-					currentAnimation = &skill1Left;
-					break;
-			}
+		case FACE_DIR::WEST:
+			currentAnimation = &skill1Left;
 			break;
 		}
+		break;
+	}
 	}
 }
 

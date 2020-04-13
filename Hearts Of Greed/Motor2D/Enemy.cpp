@@ -7,6 +7,7 @@
 #include "Audio.h"
 #include "Textures.h"
 #include "Render.h"
+#include "Input.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -124,7 +125,7 @@ Enemy::~Enemy()
 	punchRightUp = Animation();
 	punchRightDown = Animation();
 	punchRight = Animation();
-	
+
 }
 
 
@@ -192,7 +193,10 @@ void Enemy::StateMachine(float dt)
 		if (attackCooldown == 0)
 		{
 			Attack();
-			attackCooldown += 0.1;
+			if (shortTermObjective != nullptr)
+				dir = DetermineDirection(shortTermObjective->position - position);
+
+			attackCooldown += 0.01f;
 		}
 
 		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
@@ -291,7 +295,7 @@ void Enemy::Die()
 
 	int randomCounter = rand() % 2;
 
-	if (randomCounter == 1) 
+	if (randomCounter == 1)
 	{
 		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
 	}
