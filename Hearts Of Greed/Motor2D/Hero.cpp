@@ -379,6 +379,8 @@ void Hero::Draw(float dt)
 
 	if (state == HERO_STATES::CHARGING_ATTACK)
 		currFrame = currentAnimation->GetCurrentFrame();
+	else if(state == HERO_STATES::PREPARE_SKILL1)
+		currFrame = currentAnimation->GetCurrentFrame();
 	else
 		currFrame = currentAnimation->GetCurrentFrame(dt);
 
@@ -648,7 +650,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	if (state == HERO_STATES::PREPARE_SKILL1)
 	{
 		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
-		
+
 		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
 		{
 			currentAnimation->GetCurrentFrame(0);
@@ -656,12 +658,12 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 	else if (skill1TimePassed > 0)
-	{
-
-	skill1TimePassed += dt;
+	{	
+		skill1TimePassed += dt;
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
+			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0;
 		}
@@ -1098,6 +1100,9 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 		case HERO_STATES::PREPARE_SKILL1:
 		{
+
+			currentAnimation->loop = false;
+
 			switch (dir)
 			{
 				case FACE_DIR::NORTH_EAST:
@@ -1123,6 +1128,39 @@ void Hero::SetAnimation(HERO_STATES currState)
 				case FACE_DIR::WEST:
 					currentAnimation = &skill1Left;
 					break;
+			}
+			break;
+		}
+
+		case HERO_STATES::SKILL1:
+		{
+			currentAnimation->loop = false;
+
+			switch (dir)
+			{
+			case FACE_DIR::NORTH_EAST:
+				currentAnimation = &skill1RightUp;
+				break;
+
+			case FACE_DIR::NORTH_WEST:
+				currentAnimation = &skill1LeftUp;
+				break;
+
+			case FACE_DIR::EAST:
+				currentAnimation = &skill1Right;
+				break;
+
+			case FACE_DIR::SOUTH_EAST:
+				currentAnimation = &skill1RightDown;
+				break;
+
+			case FACE_DIR::SOUTH_WEST:
+				currentAnimation = &skill1LeftDown;
+				break;
+
+			case FACE_DIR::WEST:
+				currentAnimation = &skill1Left;
+				break;
 			}
 			break;
 		}
