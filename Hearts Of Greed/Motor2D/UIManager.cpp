@@ -548,23 +548,51 @@ void ModuleUIManager::CreateShopMenu()
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"shopBackground");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"heroUpgradeText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   U P G R A D E");
+	// Heroes
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroUpgradeText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   U P G R A D E");
 
 	rect = RectConstructor(581, 24, 36, 27);
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroGathererPortrait");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroGathererPortrait");
 
 	rect.x = 619;
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroRangedPortrait");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroRangedPortrait");
 
 	rect.x = 658;
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
 
-	rect = RectConstructor(653, 54, 46, 14);
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererLevelButton", EVENT_ENUM::GATHERER_LEVEL_UP);
+	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of level up in the player / entity manager; also spend the resource (do it only if you have enough)
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererLevelButton", EVENT_ENUM::GATHERER_LEVEL_UP);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedLevelButton", EVENT_ENUM::RANGED_LEVEL_UP);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedLevelButton", EVENT_ENUM::RANGED_LEVEL_UP);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeLevelButton", EVENT_ENUM::MELEE_LEVEL_UP);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeLevelButton", EVENT_ENUM::MELEE_LEVEL_UP);
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroRangedText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+
+	// TODO: add the amount of resources that have to be spent for the levelling up (-x gem icon)
+
+	// Turrets
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 10, h / (app->win->GetUIScale() * 2) - (231 / 2) + 85), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretBuildingText", nullptr, DRAGGABLE::DRAG_OFF, "T U R R E T   B U I L D I N G");
+
+	rect = RectConstructor(696, 12, 34, 40);
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 120, h / (app->win->GetUIScale() * 2) - (231 / 2) + 135), father, UI_TYPE::UI_IMG, rect, (P2SString)"turretPortrait");
+
+	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_PURCHASED);
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 50, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, "Buy");
+
+	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_PURCHASED);
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 152), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretLevelText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+
+	rect = RectConstructor(424, 25, 23, 23);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (231 / 2) - (rect.h / 2)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
 
 }
 

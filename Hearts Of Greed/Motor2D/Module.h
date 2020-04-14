@@ -66,8 +66,8 @@ enum class EVENT_ENUM
 	RANGED_LEVEL_UP,
 	MELEE_LEVEL_UP,
 
-	//Turret Creation
-	TURRET_BUILDED,
+	//Turret Shop Purchase
+	TURRET_PURCHASED,
 
 	NIGHT_START,
 	DAY_START,
