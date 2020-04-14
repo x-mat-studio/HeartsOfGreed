@@ -88,6 +88,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	selected(false),
 	godMode(false),
 	currAreaInfo(nullptr),
+	skillExecutionDelay(false),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
@@ -163,6 +164,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skillFromAttacking(false),
 	selected(false),
 	godMode(false),
+	skillExecutionDelay(false),
 
 	state(HERO_STATES::IDLE),
 
@@ -618,6 +620,9 @@ int Hero::RecieveDamage(int damage)
 		}
 		else
 		{
+			int randomCounter = rand() % 5;
+
+			if(randomCounter == 0)
 			app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
 		}
 	}
@@ -665,18 +670,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-
-	if (state == HERO_STATES::PREPARE_SKILL1)
-	{
-		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
-
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
-		{
-			currentAnimation->GetCurrentFrame(0);
-			currentAnimation->loop = false;
-		}
-	}
-	else if (skill1TimePassed > 0.f)
+	if (skill1TimePassed > 0.f)
 	{
 		skill1TimePassed += dt;
 
@@ -685,6 +679,12 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0.f;
+
+			if (skillExecutionDelay)
+			{
+				ExecuteSkill1();
+				skillExecutionDelay = false;
+			}
 		}
 	}
 
@@ -953,6 +953,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				ExecuteSkill1();
 				skill1TimePassed += TIME_TRIGGER;
 				state = HERO_STATES::SKILL1;
+				skill1Charged = false;
 				break;
 			}
 

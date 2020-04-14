@@ -90,7 +90,17 @@ bool GathererHero::PreProcessSkill3()
 bool GathererHero::ExecuteSkill1()
 {
 	if (granadeArea)
-		return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+	{
+		if (!skillExecutionDelay)
+		{
+			skillExecutionDelay = true;
+			return skillExecutionDelay;
+		}
+		else
+		{
+			return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+		}
+	}
 	else
 		return false;
 }
