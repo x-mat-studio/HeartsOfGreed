@@ -73,6 +73,12 @@ private:
 	float timer;
 
 	bool menuScene;
+
+	float camVel;
+	fMPoint initialCamPos;
+
+	//this variable stores the number of pixels from the screen at which the camera can be moved by the mouse pos
+	iMPoint camMarginMovements;
 };
 
 #endif // __TEST_SCENE_H__

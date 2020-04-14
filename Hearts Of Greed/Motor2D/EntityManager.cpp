@@ -93,6 +93,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
+	suitmandoc.reset();
+
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
@@ -120,6 +122,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftPunch"); //jesus christ 
 	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
 
+	wanamingodoc.reset();
 
 	// Sample Crazy Turret Melee---------------------
 	filename = config.child("load").attribute("docnameTurret").as_string();
@@ -129,6 +132,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
 
+	turretdoc.reset();
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
