@@ -92,13 +92,20 @@ bool GathererHero::PreProcessSkill3()
 
 bool GathererHero::ExecuteSkill1()
 {
-
-	if (granadeArea) 
+	if (granadeArea)
 	{
-		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 6, this->GetMyLoudness(), this->GetMyDirection());
-		app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
-		return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
-	}	
+		if (!skillExecutionDelay)
+		{
+			skillExecutionDelay = true;
+			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 6, this->GetMyLoudness(), this->GetMyDirection());
+			return skillExecutionDelay;
+		}
+		else
+		{
+			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
+			return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+		}
+	}
 	else
 		return false;
 }
