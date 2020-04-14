@@ -154,6 +154,7 @@ bool  ModuleTestScene::Update(float dt)
 {
 	CheckListener(this);
 
+	float camVelAux = camVel;
 	float scale = app->win->GetScale();
 	iMPoint mousePos;
 	iMPoint mouseRaw;
@@ -172,27 +173,27 @@ bool  ModuleTestScene::Update(float dt)
 
 		if (camSprint)
 		{
-			camVel *= 2;
+			camVelAux *= 2;
 			wasdMove = true;
 		}
 		if (camUp)
 		{
-			app->render->currentCamY += camVel * dt;
+			app->render->currentCamY += camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camDown)
 		{
-			app->render->currentCamY -= camVel * dt;
+			app->render->currentCamY -= camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camLeft)
 		{
-			app->render->currentCamX += camVel * dt;
+			app->render->currentCamX += camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camRight)
 		{
-			app->render->currentCamX -= camVel * dt;
+			app->render->currentCamX -= camVelAux * dt;
 			wasdMove = true;
 		}
 
