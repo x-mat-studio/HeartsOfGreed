@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Input.h"
 #include "Render.h"
+#include "Minimap.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -180,6 +181,7 @@ bool ModuleWindow::ChangeResolution(RESOLUTION_MODE newResolution)
 		SDL_SetWindowFullscreen(window, SetResolutionFlag(stateResolution));
 
 		app->render->AssignCameraMeasures();
+		app->minimap->LoadMinimap(); //TODO this has to be loaded by an event every time the window is changed also delete minimap header
 
 		ret = true;
 	}
