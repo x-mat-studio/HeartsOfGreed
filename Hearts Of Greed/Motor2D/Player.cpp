@@ -579,3 +579,8 @@ iMPoint ModulePlayer::GetClickPosition()
 {
 	return clickPosition;
 }
+
+int ModulePlayer::GetResources() const
+{
+	return resources;
+}
