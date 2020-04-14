@@ -87,6 +87,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skillFromAttacking(false),
 	selected(false),
 	godMode(false),
+	currAreaInfo(nullptr),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),

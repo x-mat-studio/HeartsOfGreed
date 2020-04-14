@@ -1337,7 +1337,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad) || (hurtYourself && entityVector[i] == objective) )
+				if (entColl->CheckCollisionCircle(pivot, newRad))
 					entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
