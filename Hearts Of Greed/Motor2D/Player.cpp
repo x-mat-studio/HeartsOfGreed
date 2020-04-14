@@ -74,6 +74,21 @@ bool ModulePlayer::Start()
 	return true;
 }
 
+bool ModulePlayer::CleanUp()
+{
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_COMMAND, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_INTERACTION, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SELECT_UNITS, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::SKILL1, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SKILL2, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SKILL3, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+
+	return true;
+}
 
 // Called each loop iteration
 bool ModulePlayer::PreUpdate(float dt)
