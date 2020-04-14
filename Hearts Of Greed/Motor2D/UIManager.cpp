@@ -388,7 +388,7 @@ void ModuleUIManager::CreateEntityPortrait()
 		
 //		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
 			//shop button
-			rect = RectConstructor(480, 62, 32, 32);
+			rect = RectConstructor(480, 62, 33, 33);
 			AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
 //		}
 		break;
@@ -573,7 +573,7 @@ void ModuleUIManager::CreateShopMenu()
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
 
-	// TODO: add the amount of resources that have to be spent for the levelling up (-x gem icon)
+	// TODO: add the amount of resources that have to be spent for the levelling up under the correspondant button (-x gem icon)
 
 	// Turrets
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 10, h / (app->win->GetUIScale() * 2) - (231 / 2) + 85), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretBuildingText", nullptr, DRAGGABLE::DRAG_OFF, "T U R R E T   B U I L D I N G");

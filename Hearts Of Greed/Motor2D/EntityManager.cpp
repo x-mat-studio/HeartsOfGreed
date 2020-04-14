@@ -266,6 +266,10 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_LEVEL_UP, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_LEVEL_UP, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_LEVEL_UP, this);
 	
 
 	testBuilding->SetTexture(base1Texture);
@@ -911,6 +915,7 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 	iMPoint pos;
+	int entityNum = entityVector.size();
 
 	switch (eventId)
 	{
@@ -995,6 +1000,18 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
 		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::GATHERER_LEVEL_UP:
+
+		break;
+
+	case EVENT_ENUM::RANGED_LEVEL_UP:
+
+		break;
+
+	case EVENT_ENUM::MELEE_LEVEL_UP:
+
 		break;
 	}
 
