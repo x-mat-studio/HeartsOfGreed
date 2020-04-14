@@ -198,8 +198,10 @@ void Enemy::StateMachine(float dt)
 
 			attackCooldown += 0.01f;
 		}
-
-		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
+		else
+		{
+			inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
+		}
 		break;
 
 	case ENEMY_STATES::CHARGING_ATTACK:
@@ -339,8 +341,8 @@ bool Enemy::SearchObjective()
 
 	SDL_Rect rect;
 
-	rect.x = position.x - vision;
-	rect.y = position.y - vision;
+	rect.x = position.x;
+	rect.y = position.y;
 	rect.w = vision * 2;
 	rect.h = vision * 2;
 
@@ -372,8 +374,8 @@ bool Enemy::CheckAttackRange()
 	}
 
 	SDL_Rect rect;
-	rect.x = position.x - attackRange;
-	rect.y = position.y - attackRange;
+	rect.x = position.x;
+	rect.y = position.y;
 	rect.w = attackRange * 2;
 	rect.h = attackRange * 2;
 

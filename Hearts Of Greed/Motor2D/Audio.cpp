@@ -164,7 +164,7 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loud
 		return false;
 
 	if(overrideChannel)
-		Mix_HaltChannel(id);
+		Mix_HaltChannel(channel);
 
 	if (channel > 0 && Mix_Playing(channel) == 0) {
 		ConfigureChannel(channel, loudness, direction);

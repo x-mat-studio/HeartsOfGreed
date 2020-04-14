@@ -248,6 +248,8 @@ public:
 	skillArea* currAreaInfo;
 	Skill skill1;
 
+	float damageTakenTimer;
+
 };
 
 
