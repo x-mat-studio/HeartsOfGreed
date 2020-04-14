@@ -68,8 +68,16 @@
     logoStartingAlphaValue="0"
     logoFinalAlphaValue="255"
     logoTransitionConstant="75"
-    
-    
     />
+
+  <winScene
+    medalPosX="50"
+    medalPosY="0"    
+  />
+
+  <loseScene
+    medalPosX="30"
+    medalPosY="0"
+  />
 
 </config>

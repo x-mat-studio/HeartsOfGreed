@@ -561,7 +561,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		}
 		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
+			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::ENEMY_BASE);
 		}
 
 		app->ai->PushBase((Base*)ret);

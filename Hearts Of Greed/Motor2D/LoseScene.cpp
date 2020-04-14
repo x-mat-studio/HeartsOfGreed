@@ -12,15 +12,21 @@
 #include "Audio.h"
 
 ModuleLoseScene::ModuleLoseScene()
-{}
+{
+	name.create("loseScene");
+}
 
 
 ModuleLoseScene::~ModuleLoseScene()
 {}
 
 
-bool  ModuleLoseScene::Awake(pugi::xml_node&)
+bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 {
+
+	medalPos.x = config.attribute("medalPosX").as_int(0);
+	medalPos.y = config.attribute("medalPosY").as_int(0);
+
 	return true;
 }
 
@@ -55,7 +61,7 @@ bool  ModuleLoseScene::Update(float dt)
 	CheckListener(this);
 
 	app->render->Blit(youLost, -42, 0,NULL, false,false);
-	app->render->Blit(medalLose, 30, 0, NULL, false, false);
+	app->render->Blit(medalLose, medalPos.x, medalPos.y, NULL, false, false);
 
 	return true;
 }

@@ -45,6 +45,8 @@ private:
 	SDL_Texture* youWon;
 	SDL_Texture* medalWin;
 
+	fMPoint medalPos;
+
 	//sounds
 	//int winMusic;
 };
