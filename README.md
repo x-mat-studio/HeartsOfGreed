@@ -74,19 +74,9 @@ KP 7: Spawn turret.
 * [AlexMelenchon](https://github.com/AlexMelenchon)
 
 
-### Juan Hernández Almagro
-* (Retired. Formerly, art)
-* [juanha2](https://github.com/juanha2)
-
-
 ### Adrià Serrano López
 * Audio + Art
 * [adriaserrano97](https://github.com/adriaserrano97)
-
-
-### David Carrasquet Iniesta
-* (Retired. FOrmerly, UI)
-* [davidcarrasquet](https://github.com/davidcarrasquet)
 
 
 ### Oscar Pérez Martín
@@ -106,6 +96,8 @@ https://www.sounds-resource.com/pc_computer/fallout3/
 https://www.sounds-resource.com/pc_computer/fallout2/
 https://www.sounds-resource.com/pc_computer/fallout/
 
+### Thanks to Juan Hernández and David Carrasquet for dorming part of the team during the first sprint of the project and contributing in the wiki creation
+	
 
 	## License:
 MIT License
