@@ -170,7 +170,9 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	objective(nullptr),
 
-	skill1(copy->skill1)
+	skill1(copy->skill1),
+
+	drawingVfx(false)
 {
 	currentAnimation = &walkLeft;
 
@@ -308,7 +310,6 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::SKILL1:
-		currentAnimation = &idleLeftDown;
 		break;
 
 	case HERO_STATES::SKILL2:
@@ -338,6 +339,9 @@ bool Hero::PostUpdate(float dt)
 	}
 
 	DrawArea();
+
+	if(drawingVfx)
+		DrawVfx(dt);
 
 	return true;
 }
@@ -595,12 +599,10 @@ void Hero::SkillCanceled()
 }
 
 
-
 void Hero::LevelUp()
 {
 	return;
 }
-
 
 
 int Hero::RecieveDamage(int damage)
@@ -676,16 +678,16 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
-			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
 			
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
-			skill1TimePassed = 0.f;
 
 			if (skillExecutionDelay)
 			{
 				ExecuteSkill1();
 				skillExecutionDelay = false;
 			}
+
+			skill1TimePassed = 0.f;
 		}
 	}
 
@@ -694,9 +696,13 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	{
 		cooldownHability1 += dt;
 
+		drawingVfx = true;
+
 		if (cooldownHability1 >= skill1RecoverTime)
 		{
 			skill1Charged = true;
+			drawingVfx = false;
+			cooldownHability1 = 0.f;
 		}
 	}
 
@@ -1226,6 +1232,11 @@ bool Hero::ExecuteSkill3()
 {
 	return false;
 };
+
+bool Hero::DrawVfx(float dt)
+{
+	return false;
+}
 
 
 Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : id(id), dmg(dmg), type(type), target(target)
