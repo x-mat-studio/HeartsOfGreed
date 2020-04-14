@@ -25,7 +25,7 @@ public:
 
 
 	bool Start();
-
+	bool CleanUp();
 
 	bool PreUpdate(float dt);
 	bool Update(float dt);
