@@ -93,6 +93,48 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
+
+	filename = config.child("load").attribute("docnameArmoredman").as_string();
+	pugi::xml_document armoredmanDoc;
+	armoredmanDoc.load_file(filename.GetString());
+	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
+
+	/*Animation walkLeft = walkLeft.PushAnimation(suitman, "walk_left");
+	Animation walkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
+	Animation walkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
+	Animation walkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
+	Animation walkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
+	Animation walkRight = walkRight.PushAnimation(suitman, "walk_right");
+
+	Animation idleRight = idleRight.PushAnimation(suitman, "idle_right");
+	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
+	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
+	Animation idleLeft = idleLeft.PushAnimation(suitman, "idle_left");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
+
+	Animation punchRight = punchRight.PushAnimation(suitman, "punch_right");
+	Animation punchRightUp = punchRightUp.PushAnimation(suitman, "punch_right_up");
+	Animation punchRightDown = punchRightDown.PushAnimation(suitman, "punch_right_down");
+	Animation punchLeft = punchLeft.PushAnimation(suitman, "punch_left");
+	Animation punchLeftUp = punchLeftUp.PushAnimation(suitman, "punch_left_up");
+	Animation punchLeftDown = punchLeftDown.PushAnimation(suitman, "punch_left_down");
+
+	Animation skill1Right = skill1Right.PushAnimation(suitman, "skill_1_right");
+	Animation skill1RightUp = skill1RightUp.PushAnimation(suitman, "skill_1_right_up");
+	Animation skill1RightDown = skill1RightDown.PushAnimation(suitman, "skill_1_right_down");
+	Animation skill1Left = skill1Left.PushAnimation(suitman, "skill_1_left");
+	Animation skill1LeftUp = skill1LeftUp.PushAnimation(suitman, "skill_1_left_up");
+	Animation skill1LeftDown = skill1LeftDown.PushAnimation(suitman, "skill_1_left_down");*/
+
+	sampleMelee = new MeleeHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
+		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
+		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+
+
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;

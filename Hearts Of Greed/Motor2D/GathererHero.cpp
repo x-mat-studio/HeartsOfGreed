@@ -126,7 +126,7 @@ void GathererHero::LevelUp()
 {
 
 	hitPointsMax;
-	hitPointsCurrent;		// As it has been comented on both ranged and melee heroes previously, whichever health may be				Ferran, with love, from Ayowa, United States of the Great Country of America! Except I don't like american culture that much, so fuck America, long live Japan, bring me nekos and waifus, and not necessarily in that order >:D
+	hitPointsCurrent;		
 	recoveryHitPointsRate;
 	energyPoints;
 	recoveryEnergyRate;
