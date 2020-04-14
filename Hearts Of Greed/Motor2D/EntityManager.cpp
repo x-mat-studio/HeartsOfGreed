@@ -93,6 +93,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
+	suitmandoc.reset();
+
 
 	filename = config.child("load").attribute("docnameArmoredman").as_string();
 	pugi::xml_document armoredmanDoc;
@@ -135,6 +137,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
+	
+
+
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
@@ -162,6 +167,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftPunch"); //jesus christ 
 	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
 
+	wanamingodoc.reset();
 
 	// Sample Crazy Turret Melee---------------------
 	filename = config.child("load").attribute("docnameTurret").as_string();
@@ -171,15 +177,18 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
 
+	turretdoc.reset();
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
+	Collider* spawnerCollider = new Collider({ 0,0,5,5 }, COLLIDER_RECLUIT_IA, app->ai);
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
 	5000, 5000, 0, 250, 1, 1, 35, 100, 50);
-	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
+
+	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
@@ -367,6 +376,10 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
+				break;
+
+			case ENTITY_TYPE::SPAWNER:
+				entityVector[i]->Start(nullptr);
 				break;
 
 			default:

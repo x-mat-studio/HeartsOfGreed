@@ -264,12 +264,21 @@ void Minimap::ExecuteEvent(EVENT_ENUM eventId)
 
 void Minimap::CreateMinimapText()
 {
+	fMPoint auxCam;
+	auxCam.x = app->render->currentCamX;
+	auxCam.y = app->render->currentCamY;
+	app->render->currentCamX = 0.0f;
+	app->render->currentCamY = 0.0f;
+
 	app->map->DrawMinimap();
 	app->entityManager->DrawOnlyStaticBuildings();
+	app->render->currentCamX = auxCam.x;
+	app->render->currentCamY = auxCam.y;
 }
 
 void Minimap::LoadMinimap()
 {
+
 	BROFILER_CATEGORY("Load Minimap", Profiler::Color::Red);
 
 	minimapLoaded = true;
@@ -286,6 +295,7 @@ void Minimap::LoadMinimap()
 	SDL_SetRenderTarget(app->render->renderer, minimapTexture);
 	CreateMinimapText();
 	SDL_SetRenderTarget(app->render->renderer, NULL);
+	
 }
 
 
