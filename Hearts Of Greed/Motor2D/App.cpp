@@ -151,7 +151,7 @@ bool App::Awake()
 	mainMenu->Disable();
 	winScene->Disable();
 	loseScene->Disable();
-	testScene->Disable();
+	//testScene->Disable();
 	//------
 	PERF_PEEK(pTimer);
 
