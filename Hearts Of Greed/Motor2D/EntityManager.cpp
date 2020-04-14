@@ -90,8 +90,10 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
-		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+
+	suitmandoc.reset();
 
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
@@ -120,6 +122,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftPunch"); //jesus christ 
 	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
 
+	wanamingodoc.reset();
 
 	// Sample Crazy Turret Melee---------------------
 	filename = config.child("load").attribute("docnameTurret").as_string();
@@ -129,6 +132,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
 
+	turretdoc.reset();
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
@@ -225,6 +229,8 @@ bool ModuleEntityManager::Start()
 	suitmanGetsHit2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
 	suitmanGetsDeath = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
 	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
+	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
+	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
 
 	return ret;
 }
@@ -1325,16 +1331,19 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 
 		for (int i = 0; i < numEntities; i++)
 		{
-			if (entityVector[i]->GetAlignment() != target)
+			if (entityVector[i]->GetAlignment() != target && (hurtYourself && entityVector[i] != objective))
 				continue;
 
 			entColl = entityVector[i]->GetCollider();
+
+			if (entColl == nullptr)
+				continue;
 
 			switch (area->form)
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad) || (entityVector[i] == objective && hurtYourself) )
+				if (entColl->CheckCollisionCircle(pivot, newRad))
 					entityVector[i]->RecieveDamage(dmg);
 			}
 			break;

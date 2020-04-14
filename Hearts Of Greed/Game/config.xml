@@ -49,4 +49,15 @@
 	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml"/>
   </entityManager>
 
+  <testScene 
+    camVel="700" 
+    initialCamPosX="500" 
+    initialCamPosY="500"
+    dayTimerSec="4"
+    nightTimerSec="5"
+    freeCamMarginDetectionPixelsX="40"
+    freeCamMarginDetectionPixelsY="30"
+    
+    />    
+
 </config>

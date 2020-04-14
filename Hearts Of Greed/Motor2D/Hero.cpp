@@ -87,6 +87,8 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skillFromAttacking(false),
 	selected(false),
 	godMode(false),
+	currAreaInfo(nullptr),
+	skillExecutionDelay(false),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
@@ -162,6 +164,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skillFromAttacking(false),
 	selected(false),
 	godMode(false),
+	skillExecutionDelay(false),
 
 	state(HERO_STATES::IDLE),
 
@@ -277,10 +280,10 @@ void Hero::StateMachine(float dt)
 				Attack();
 				if (objective != nullptr)
 					dir = DetermineDirection(objective->position - position);
+
 				attackCooldown += TIME_TRIGGER;
 
 			}
-
 			else
 			{
 				inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
@@ -617,6 +620,9 @@ int Hero::RecieveDamage(int damage)
 		}
 		else
 		{
+			int randomCounter = rand() % 5;
+
+			if(randomCounter == 0)
 			app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
 		}
 	}
@@ -664,26 +670,22 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-
-	if (state == HERO_STATES::PREPARE_SKILL1)
-	{
-		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
-
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
-		{
-			currentAnimation->GetCurrentFrame(0);
-			currentAnimation->loop = false;
-		}
-	}
-	else if (skill1TimePassed > 0.f)
+	if (skill1TimePassed > 0.f)
 	{
 		skill1TimePassed += dt;
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
 			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
+			
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0.f;
+
+			if (skillExecutionDelay)
+			{
+				ExecuteSkill1();
+				skillExecutionDelay = false;
+			}
 		}
 	}
 
@@ -861,6 +863,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				currAoE.clear();
 				suplAoE.clear();
 				currAreaInfo = nullptr;
+				currentAnimation->ResetAnimation();
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -951,6 +954,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				ExecuteSkill1();
 				skill1TimePassed += TIME_TRIGGER;
 				state = HERO_STATES::SKILL1;
+				skill1Charged = false;
 				break;
 			}
 
@@ -1227,5 +1231,5 @@ bool Hero::ExecuteSkill3()
 Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : id(id), dmg(dmg), type(type), target(target)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id)
 {}
