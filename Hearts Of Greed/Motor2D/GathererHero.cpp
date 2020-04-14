@@ -73,9 +73,7 @@ bool GathererHero::ActivateSkill3()
 bool GathererHero::PreProcessSkill1()
 {
 	if (currAoE.size() == 0)
-	{
-		//app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
-		
+	{		
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
 
