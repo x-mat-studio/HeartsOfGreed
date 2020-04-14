@@ -147,11 +147,11 @@ bool App::Awake()
 	loadGame = config.first_child().child("load").attribute("fileName").as_string();
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
 	//Set disabled modules here
-	//introScene->Disable();
+	introScene->Disable();
 	mainMenu->Disable();
 	winScene->Disable();
 	loseScene->Disable();
-	testScene->Disable();
+	//testScene->Disable();
 	//------
 	PERF_PEEK(pTimer);
 

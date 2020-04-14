@@ -665,24 +665,14 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-
-	if (state == HERO_STATES::PREPARE_SKILL1)
-	{
-		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
-
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
-		{
-			currentAnimation->GetCurrentFrame(0);
-			currentAnimation->loop = false;
-		}
-	}
-	else if (skill1TimePassed > 0.f)
+if (skill1TimePassed > 0.f)
 	{
 		skill1TimePassed += dt;
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
 			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
+			
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 			skill1TimePassed = 0.f;
 		}
