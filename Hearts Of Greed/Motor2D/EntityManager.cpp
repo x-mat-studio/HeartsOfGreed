@@ -1391,8 +1391,15 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 
 		for (int i = 0; i < numEntities; i++)
 		{
-			if (entityVector[i]->GetAlignment() != target && (hurtYourself && entityVector[i] != objective))
+			if (entityVector[i]->GetAlignment() != target)
+			{
+				if (!hurtYourself && entityVector[i] == objective)
+				{
+					true;
+				}
+				else
 				continue;
+			}
 
 			entColl = entityVector[i]->GetCollider();
 
