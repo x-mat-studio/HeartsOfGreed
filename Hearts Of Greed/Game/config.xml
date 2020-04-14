@@ -58,6 +58,18 @@
     freeCamMarginDetectionPixelsX="40"
     freeCamMarginDetectionPixelsY="30"
     
-    />    
+    />
+
+  <introScene
+    backgroundStartingAlphaValue="255"
+    backgroundFinalAlphaValue="130"
+    backgroundTransitionConstant="50"
+    
+    logoStartingAlphaValue="0"
+    logoFinalAlphaValue="255"
+    logoTransitionConstant="75"
+    
+    
+    />
 
 </config>

@@ -51,9 +51,21 @@ private:
 	//sounds
 	int logoSound;
 	int titleSound;
-	float AlphaCounter; 
+
+	float logoStartingValue;
+	float bgStartingValue;
+
+	float logoAlphaCounter; 
 	float bgAlphaCounter;
 
+	float logoTransitionConst;
+	float bgTransitionConst;
+
+	float logoTopValue;
+	float bgTopValue;
+
+	bool logoValueDown;
+	bool bgValueDown;
 };
 
 #endif // __INTRO_SCENE__
