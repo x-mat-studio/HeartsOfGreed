@@ -262,6 +262,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 void ModuleEntityManager::CheckIfStarted() {
 
 	int numEntities = entityVector.size();
+	ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::UNKNOWN;
 
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -285,10 +286,14 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::HERO_GATHERER:
 				entityVector[i]->Start(suitManTexture);
 				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::BUILDING:
@@ -321,6 +326,17 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::BLDG_TURRET:
 				entityVector[i]->Start(turretTexture);
+
+				alignement = entityVector[i]->GetAlignment();
+
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter());
+				}
+				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+				{
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter()); //TODO CHANGE THIS FOR ENEMY TURRET
+				}
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -328,6 +344,17 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::BLDG_BASE:
 				entityVector[i]->Start(base2Texture);
+
+				alignement = entityVector[i]->GetAlignment();
+
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+				}
+				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+				{
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+				}
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
@@ -476,7 +503,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::HERO_GATHERER:
 		ret = new GathererHero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
-		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::HERO);
 		break;
 
 	case ENTITY_TYPE::BUILDING:
@@ -485,14 +511,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
-		if (alignement == ENTITY_ALIGNEMENT::PLAYER)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::TURRET);
-		}
-		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::TURRET); //TODO CHANGE THIS FOR ENEMY TURRET
-		}
 
 		break;
 
@@ -501,15 +519,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_BASE:
 		ret = new Base({ (float)x,(float)y }, sampleBase, alignement);
-		if (alignement == ENTITY_ALIGNEMENT::PLAYER)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
-		}
-		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
-		}
-
 		app->ai->PushBase((Base*)ret);
 		break;
 
@@ -518,7 +527,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::ENEMY:
 		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, ENTITY_ALIGNEMENT::ENEMY);
-		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::ENEMY);
 		break;
 
 	default:
