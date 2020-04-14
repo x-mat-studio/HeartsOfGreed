@@ -40,7 +40,7 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 	vfxExplosion(copy->vfxExplosion),
 	explosionRect{ 0,0,0,0 }
 {
-	explosionText = app->tex->Load("spritesheets/VFX/explosions.png");
+	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 }
 
 
@@ -117,6 +117,7 @@ bool GathererHero::ExecuteSkill1()
 		{
 			currentVfx = &vfxExplosion;
 			currentVfx->ResetAnimation();
+			currentVfx->loop = false;
 
 			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
 			return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
@@ -164,7 +165,7 @@ bool GathererHero::DrawVfx(float dt)
 	{
 		Frame currFrame = currentVfx->GetCurrentFrame(dt);
 
-		app->render->Blit(explosionText, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame);
+		app->render->Blit(explosionText, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
 
 	}
 
