@@ -41,6 +41,8 @@ public:
 
 	iMPoint GetClickPosition();
 
+	int GetResources() const;
+
 private:
 	
 	bool HandleInput();
