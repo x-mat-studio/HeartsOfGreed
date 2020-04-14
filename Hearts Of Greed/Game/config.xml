@@ -2,11 +2,11 @@
 
 <config>
   <app framerate_cap="30">
-   	<title>Game Development Testbed</title>
-   	<organization>UPC</organization>
-	<load fileName="save_game.xml"></load> 
+    <title>Game Development Testbed</title>
+    <organization>UPC</organization>
+    <load fileName="save_game.xml"></load>
   </app>
-	
+
   <renderer>
     <vsync value="true"/>
     <lerp value="0.085"/>
@@ -23,16 +23,16 @@
   </window>
 
   <audio>
-	<folder>audio/fx/</folder>
-	<fx 	jump="jump_sound.wav" 
-		bomb="bomb.wav"
-	    	button_1="b1.wav" 
-		button_3="b3.wav"
-	   	coin="coin.wav" 
-		option_denied="option_denied.wav"
-	    	powerup="powerup.wav" 
+    <folder>audio/fx/</folder>
+    <fx 	jump="jump_sound.wav"
+      bomb="bomb.wav"
+          button_1="b1.wav"
+      button_3="b3.wav"
+        coin="coin.wav"
+      option_denied="option_denied.wav"
+          powerup="powerup.wav"
 	>
-	</fx>
+    </fx>
   </audio>
 
   <file_system>
@@ -40,13 +40,13 @@
   </file_system>
 
   <map>
-  	<folder>maps/</folder>
+    <folder>maps/</folder>
   </map>
 
   <minimap width="300" posX="0" posY="500"/>
 
   <entityManager>
-	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml"/>
+	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml" docnameArmoredman="armoredman.xml" docnamevfx="Vfx.xml" />
   </entityManager>
 
   <testScene 
@@ -58,6 +58,26 @@
     freeCamMarginDetectionPixelsX="40"
     freeCamMarginDetectionPixelsY="30"
     
-    />    
+    />
+
+  <introScene
+    backgroundStartingAlphaValue="255"
+    backgroundFinalAlphaValue="130"
+    backgroundTransitionConstant="50"
+    
+    logoStartingAlphaValue="0"
+    logoFinalAlphaValue="255"
+    logoTransitionConstant="75"
+    />
+
+  <winScene
+    medalPosX="50"
+    medalPosY="0"    
+  />
+
+  <loseScene
+    medalPosX="30"
+    medalPosY="0"
+  />
 
 </config>

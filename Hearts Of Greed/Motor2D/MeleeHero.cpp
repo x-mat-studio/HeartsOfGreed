@@ -26,7 +26,7 @@ MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT aligne
 	Hero(position, copy, alignement)
 {}
 
-bool MeleeHero::ActivateSkill1()
+bool MeleeHero::ActivateSkill1(fMPoint clickPosition)
 {
 	//if(mouseClick) is anywhere
 
@@ -53,7 +53,7 @@ bool MeleeHero::PreProcessSkill1()
 	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
-		app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
 	}
 
 	return true;

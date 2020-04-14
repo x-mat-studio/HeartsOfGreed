@@ -138,10 +138,11 @@ public:
 	virtual bool ExecuteSkill3();
 
 
+	//This is a placeholder for particles
+	virtual bool DrawVfx(float dt);
+	bool drawingVfx;
 
 	void SkillCanceled();
-	void SkillDone();
-
 
 
 private:
@@ -251,6 +252,7 @@ public:
 	Skill skill1;
 
 	float damageTakenTimer;
+
 
 };
 

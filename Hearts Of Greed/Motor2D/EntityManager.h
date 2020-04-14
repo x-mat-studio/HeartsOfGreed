@@ -10,6 +10,9 @@
 
 class Hero;
 class GathererHero;
+class MeleeHero;
+class RangedHero;
+
 class Building;
 class DynamicEntity;
 class Enemy;
@@ -175,6 +178,7 @@ private:
 	SDL_Texture* enemyTexture;
 
 	GathererHero* sampleGatherer;
+	MeleeHero* sampleMelee;
 
 	Enemy* sampleEnemy;
 

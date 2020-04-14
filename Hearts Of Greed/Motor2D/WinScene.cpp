@@ -13,7 +13,7 @@
 
 ModuleWinScene::ModuleWinScene()
 {
-
+	name.create("winScene");
 }
 
 
@@ -23,8 +23,12 @@ ModuleWinScene::~ModuleWinScene()
 }
 
 
-bool  ModuleWinScene::Awake(pugi::xml_node&)
+bool  ModuleWinScene::Awake(pugi::xml_node&config)
 {
+
+	medalPos.x = config.attribute("medalPosX").as_int(0);
+	medalPos.y = config.attribute("medalPosY").as_int(0);
+
 	return true;
 }
 
@@ -59,7 +63,7 @@ bool  ModuleWinScene::Update(float dt)
 	CheckListener(this);
 
 	app->render->Blit(youWon,0,0, NULL, false, false);
-	app->render->Blit(medalWin, 50, 0, NULL, false, false);
+	app->render->Blit(medalWin, medalPos.x, medalPos.y, NULL, false, false);
 
 	return true;
 }

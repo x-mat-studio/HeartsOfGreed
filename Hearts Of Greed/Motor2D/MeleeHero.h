@@ -18,7 +18,7 @@ public:
 	MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement);
 
 
-	bool ActivateSkill1();
+	bool ActivateSkill1(fMPoint clickPosition);
 	bool ActivateSkill2();
 	bool ActivateSkill3();
 
