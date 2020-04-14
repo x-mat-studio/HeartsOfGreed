@@ -46,12 +46,20 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
+	//Vfx load -----------------------------------
+	P2SString filename = config.child("load").attribute("docnamevfx").as_string();
+	pugi::xml_document vfxDoc;
+	vfxDoc.load_file(filename.GetString());
+	pugi::xml_node explosion = vfxDoc.child("Vfx");
+
+	Animation vfxExplosion = vfxExplosion.PushAnimation(explosion, "explosion");
+
 
 	// Sample Hero Melee---------------------
 	fMPoint pos;
 	pos.create(100, 600);
 
-	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
+	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
@@ -91,7 +99,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
 		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
-		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();

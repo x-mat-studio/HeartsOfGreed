@@ -2,6 +2,8 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Input.h"
+#include "Render.h"
+#include "Textures.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -10,7 +12,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
+	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, Animation& explosion) :
 
 	Hero(position, ENTITY_TYPE::HERO_GATHERER, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
@@ -18,14 +20,28 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 		skill1LeftUp, skill1LeftDown, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, energyPoints, recoveryEnergyRate,
 		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
 		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
-		skill1Dmg, skill1Id, skill1Type, skill1Target)
+		skill1Dmg, skill1Id, skill1Type, skill1Target),
+
+	granadeArea(nullptr),
+
+	vfxExplosion(explosion),
+	currentVfx(nullptr),
+	explosionText(nullptr),
+	explosionRect{0,0,0,0}
 {}
 
 
 GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Hero(position, copy, alignement)
-{}
+	Hero(position, copy, alignement),
+	granadeArea(nullptr),
+
+	currentVfx(nullptr),
+	vfxExplosion(copy->vfxExplosion),
+	explosionRect{ 0,0,0,0 }
+{
+	explosionText = app->tex->Load("spritesheets/VFX/explosions.png");
+}
 
 
 bool GathererHero::ActivateSkill1(fMPoint mouseClick)
@@ -60,7 +76,6 @@ bool GathererHero::PreProcessSkill1()
 	{
 		//app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
 		
-
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
 
@@ -102,6 +117,9 @@ bool GathererHero::ExecuteSkill1()
 		}
 		else
 		{
+			currentVfx = &vfxExplosion;
+			currentVfx->ResetAnimation();
+
 			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
 			return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
 		}
@@ -138,4 +156,20 @@ void GathererHero::LevelUp()
 	unitSpeed;
 	visionDistance;
 
+}
+
+bool GathererHero::DrawVfx(float dt)
+{
+	if (currentVfx == nullptr)
+		return false;
+	else
+	{
+		Frame currFrame = currentVfx->GetCurrentFrame(dt);
+
+		app->render->Blit(explosionText, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame);
+
+	}
+
+
+	return false;
 }
