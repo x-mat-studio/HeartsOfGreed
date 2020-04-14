@@ -277,10 +277,10 @@ void Hero::StateMachine(float dt)
 				Attack();
 				if (objective != nullptr)
 					dir = DetermineDirection(objective->position - position);
+
 				attackCooldown += TIME_TRIGGER;
 
 			}
-
 			else
 			{
 				inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
@@ -861,6 +861,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				currAoE.clear();
 				suplAoE.clear();
 				currAreaInfo = nullptr;
+				currentAnimation->ResetAnimation();
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -1227,5 +1228,5 @@ bool Hero::ExecuteSkill3()
 Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : id(id), dmg(dmg), type(type), target(target)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id)
 {}

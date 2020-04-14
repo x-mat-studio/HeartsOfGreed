@@ -90,7 +90,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
-		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 		// Sample Enemy---------------------
@@ -1325,16 +1325,19 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 
 		for (int i = 0; i < numEntities; i++)
 		{
-			if (entityVector[i]->GetAlignment() != target)
+			if (entityVector[i]->GetAlignment() != target && (hurtYourself && entityVector[i] != objective))
 				continue;
 
 			entColl = entityVector[i]->GetCollider();
+
+			if (entColl == nullptr)
+				continue;
 
 			switch (area->form)
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad) || (entityVector[i] == objective && hurtYourself) )
+				if (entColl->CheckCollisionCircle(pivot, newRad) || (hurtYourself && entityVector[i] == objective) )
 					entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
