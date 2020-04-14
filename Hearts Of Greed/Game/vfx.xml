@@ -1,0 +1,34 @@
+<Vfx>
+	<Animations>
+
+		<explosion name="explosion" frames="25">
+			<frame rposX="0" rposY="0" rwidth="99" rheight="83" time="0.16f" pivotX="48" pivotY="34"/>
+			<frame rposX="99" rposY="0" rwidth="102" rheight="83" time="0.16f" pivotX="51" pivotY="34"/>
+			<frame rposX="200" rposY="0" rwidth="97" rheight="83" time="0.16f" pivotX="43" pivotY="34"/>
+			<frame rposX="297" rposY="0" rwidth="103" rheight="83" time="0.16f" pivotX="51" pivotY="34"/>
+			<frame rposX="399" rposY="0" rwidth="92" rheight="83" time="0.16f" pivotX="46" pivotY="34"/>
+      <frame rposX="0" rposY="83" rwidth="99" rheight="111" time="0.16f" pivotX="48" pivotY="55"/>
+      <frame rposX="99" rposY="83" rwidth="102" rheight="111" time="0.16f" pivotX="51" pivotY="55"/>
+      <frame rposX="200" rposY="83" rwidth="97" rheight="111" time="0.16f" pivotX="43" pivotY="55"/>
+      <frame rposX="297" rposY="83" rwidth="103" rheight="111" time="0.16f" pivotX="51" pivotY="55"/>
+      <frame rposX="399" rposY="83  " rwidth="92" rheight="111" time="0.16f" pivotX="46" pivotY="55"/>
+      <frame rposX="0" rposY="193" rwidth="99" rheight="100" time="0.16f" pivotX="48" pivotY="50"/>
+      <frame rposX="99" rposY="193" rwidth="102" rheight="100" time="0.16f" pivotX="51" pivotY="50"/>
+      <frame rposX="200" rposY="193" rwidth="97" rheight="100" time="0.16f" pivotX="43" pivotY="50"/>
+      <frame rposX="297" rposY="193" rwidth="103" rheight="100" time="0.16f" pivotX="51" pivotY="50"/>
+      <frame rposX="399" rposY="193  " rwidth="92" rheight="100" time="0.16f" pivotX="46" pivotY="50"/>
+      <frame rposX="0" rposY="292" rwidth="99" rheight="102" time="0.16f" pivotX="48" pivotY="51"/>
+      <frame rposX="99" rposY="292" rwidth="102" rheight="102" time="0.16f" pivotX="51" pivotY="51"/>
+      <frame rposX="200" rposY="292" rwidth="97" rheight="102" time="0.16f" pivotX="43" pivotY="51"/>
+      <frame rposX="297" rposY="292" rwidth="103" rheight="102" time="0.16f" pivotX="51" pivotY="51"/>
+      <frame rposX="399" rposY="292 " rwidth="92" rheight="102" time="0.16f" pivotX="46" pivotY="51"/>
+      <frame rposX="0" rposY="393" rwidth="99" rheight="100" time="0.16f" pivotX="48" pivotY="50"/>
+      <frame rposX="99" rposY="393" rwidth="102" rheight="100" time="0.16f" pivotX="51" pivotY="50"/>
+      <frame rposX="200" rposY="393" rwidth="97" rheight="100" time="0.16f" pivotX="43" pivotY="50"/>
+      <frame rposX="297" rposY="393" rwidth="103" rheight="100" time="0.16f" pivotX="51" pivotY="50"/>
+      <frame rposX="399" rposY="393  " rwidth="92" rheight="100" time="0.16f" pivotX="46" pivotY="50"/>
+    </explosion>
+
+	
+	</Animations>
+</Vfx>

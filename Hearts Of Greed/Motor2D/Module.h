@@ -61,6 +61,11 @@ enum class EVENT_ENUM
 	HERO_GATHERER_OUT,
 	HERO_RANGED_OUT,
 
+	// Hero level up
+	GATHERER_LEVEL_UP,
+	RANGED_LEVEL_UP,
+	MELEE_LEVEL_UP,
+
 	//Turret Creation
 	TURRET_BUILDED,
 

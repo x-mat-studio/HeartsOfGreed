@@ -46,55 +46,107 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
+	//Vfx load -----------------------------------
+	P2SString filename = config.child("load").attribute("docnamevfx").as_string();
+	pugi::xml_document vfxDoc;
+	vfxDoc.load_file(filename.GetString());
+	pugi::xml_node explosion = vfxDoc.child("Vfx");
 
-	// Sample Hero Melee---------------------
+	Animation vfxExplosion = vfxExplosion.PushAnimation(explosion, "explosion");
+
+
+	// Sample Hero Gatherer---------------------
 	fMPoint pos;
 	pos.create(100, 600);
 
-	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
+	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
 
-	Animation walkLeft = walkLeft.PushAnimation(suitman, "walk_left");
-	Animation walkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
-	Animation walkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
-	Animation walkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
-	Animation walkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
-	Animation walkRight = walkRight.PushAnimation(suitman, "walk_right");
+	Animation walkLeftG = walkLeftG.PushAnimation(suitman, "walk_left");
+	Animation walkLeftUpG = walkLeftUpG.PushAnimation(suitman, "walk_left_up");
+	Animation walkLeftDownG = walkLeftDownG.PushAnimation(suitman, "walk_left_down");
+	Animation walkRightUpG = walkRightUpG.PushAnimation(suitman, "walk_right_up");
+	Animation walkRightDownG = walkRightDownG.PushAnimation(suitman, "walk_right_down");
+	Animation walkRightG = walkRightG.PushAnimation(suitman, "walk_right");
 
-	Animation idleRight = idleRight.PushAnimation(suitman, "idle_right");
-	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
-	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
-	Animation idleLeft = idleLeft.PushAnimation(suitman, "idle_left");
-	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
-	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
+	Animation idleRightG = idleRightG.PushAnimation(suitman, "idle_right");
+	Animation idleRightUpG = idleRightUpG.PushAnimation(suitman, "idle_right_up");
+	Animation idleRightDownG = idleRightDownG.PushAnimation(suitman, "idle_right_down");
+	Animation idleLeftG = idleLeftG.PushAnimation(suitman, "idle_left");
+	Animation idleLeftUpG = idleLeftUpG.PushAnimation(suitman, "idle_left_up");
+	Animation idleLeftDownG = idleLeftDownG.PushAnimation(suitman, "idle_left_down");
 
-	Animation punchRight = punchRight.PushAnimation(suitman, "punch_right");
-	Animation punchRightUp = punchRightUp.PushAnimation(suitman, "punch_right_up");
-	Animation punchRightDown = punchRightDown.PushAnimation(suitman, "punch_right_down");
-	Animation punchLeft = punchLeft.PushAnimation(suitman, "punch_left");
-	Animation punchLeftUp = punchLeftUp.PushAnimation(suitman, "punch_left_up");
-	Animation punchLeftDown = punchLeftDown.PushAnimation(suitman, "punch_left_down");
+	Animation punchRightG = punchRightG.PushAnimation(suitman, "punch_right");
+	Animation punchRightUpG = punchRightUpG.PushAnimation(suitman, "punch_right_up");
+	Animation punchRightDownG = punchRightDownG.PushAnimation(suitman, "punch_right_down");
+	Animation punchLeftG = punchLeftG.PushAnimation(suitman, "punch_left");
+	Animation punchLeftUpG = punchLeftUpG.PushAnimation(suitman, "punch_left_up");
+	Animation punchLeftDownG = punchLeftDownG.PushAnimation(suitman, "punch_left_down");
 	
-	Animation skill1Right = skill1Right.PushAnimation(suitman, "skill_1_right");
-	Animation skill1RightUp = skill1RightUp.PushAnimation(suitman, "skill_1_right_up");
-	Animation skill1RightDown = skill1RightDown.PushAnimation(suitman, "skill_1_right_down");
-	Animation skill1Left = skill1Left.PushAnimation(suitman, "skill_1_left");
-	Animation skill1LeftUp = skill1LeftUp.PushAnimation(suitman, "skill_1_left_up");
-	Animation skill1LeftDown = skill1LeftDown.PushAnimation(suitman, "skill_1_left_down");
+	Animation skill1RightG = skill1RightG.PushAnimation(suitman, "skill_1_right");
+	Animation skill1RightUpG = skill1RightUpG.PushAnimation(suitman, "skill_1_right_up");
+	Animation skill1RightDownG = skill1RightDownG.PushAnimation(suitman, "skill_1_right_down");
+	Animation skill1LeftG = skill1LeftG.PushAnimation(suitman, "skill_1_left");
+	Animation skill1LeftUpG = skill1LeftUpG.PushAnimation(suitman, "skill_1_left_up");
+	Animation skill1LeftDownG = skill1LeftDownG.PushAnimation(suitman, "skill_1_left_down");
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
-		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
+
+	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeftG, walkLeftUpG,
+		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
+		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
+		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
 		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
-		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
 
+	// Sample Hero Melee---------------------
+	filename = config.child("load").attribute("docnameArmoredman").as_string();
+	pugi::xml_document armoredmanDoc;
+	armoredmanDoc.load_file(filename.GetString());
+	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
+
+	Animation walkLeftM = walkLeftM.PushAnimation(armoredman, "walk_left");
+	Animation walkLeftUpM = walkLeftUpM.PushAnimation(armoredman, "walk_left_up");
+	Animation walkLeftDownM = walkLeftDownM.PushAnimation(armoredman, "walk_left_down");
+	Animation walkRightUpM = walkRightUpM.PushAnimation(armoredman, "walk_right_up");
+	Animation walkRightDownM = walkRightDownM.PushAnimation(armoredman, "walk_right_down");
+	Animation walkRightM = walkRightM.PushAnimation(armoredman, "walk_right");
+
+	Animation idleRightM = idleRightM.PushAnimation(armoredman, "idle_right");
+	Animation idleRightUpM = idleRightUpM.PushAnimation(armoredman, "idle_right_up");
+	Animation idleRightDownM = idleRightDownM.PushAnimation(armoredman, "idle_right_down");
+	Animation idleLeftM = idleLeftM.PushAnimation(armoredman, "idle_left");
+	Animation idleLeftUpM = idleLeftUpM.PushAnimation(armoredman, "idle_left_up");
+	Animation idleLeftDownM = idleLeftDownM.PushAnimation(armoredman, "idle_left_down");
+
+	Animation punchRightM = punchRightM.PushAnimation(armoredman, "punch_right");
+	Animation punchRightUpM = punchRightUpM.PushAnimation(armoredman, "punch_right_up");
+	Animation punchRightDownM = punchRightDownM.PushAnimation(armoredman, "punch_right_down");
+	Animation punchLeftM = punchLeftM.PushAnimation(armoredman, "punch_left");
+	Animation punchLeftUpM = punchLeftUpM.PushAnimation(armoredman, "punch_left_up");
+	Animation punchLeftDownM = punchLeftDownM.PushAnimation(armoredman, "punch_left_down");
+
+	Animation skill1RightM = skill1RightM.PushAnimation(armoredman, "skill_1_right");
+	Animation skill1RightUpM = skill1RightUpM.PushAnimation(armoredman, "skill_1_right_up");
+	Animation skill1RightDownM = skill1RightDownM.PushAnimation(armoredman, "skill_1_right_down");
+	Animation skill1LeftM = skill1LeftM.PushAnimation(armoredman, "skill_1_left");
+	Animation skill1LeftUpM = skill1LeftUpM.PushAnimation(armoredman, "skill_1_left_up");
+	Animation skill1LeftDownM = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
+
+	sampleMelee = new MeleeHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
+		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
+		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
+		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
+		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+
+
+	
 		// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
@@ -136,12 +188,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
+	Collider* spawnerCollider = new Collider({ 0,0,5,5 }, COLLIDER_RECLUIT_IA, app->ai);
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
 	5000, 5000, 0, 250, 1, 1, 35, 100, 50);
-	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
+
+	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
@@ -331,6 +385,10 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::BLDG_BARRICADE:
 				break;
 
+			case ENTITY_TYPE::SPAWNER:
+				entityVector[i]->Start(nullptr);
+				break;
+
 			default:
 				entityVector[i]->started = true;
 				break;
@@ -463,6 +521,8 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
+		ret = new MeleeHero({ (float)x,(float)y }, sampleMelee, ENTITY_ALIGNEMENT::PLAYER);
+		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::HERO);
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
