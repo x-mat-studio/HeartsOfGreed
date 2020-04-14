@@ -250,6 +250,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 	SDL_Rect rect = RectConstructor(0, 0, 0, 0);;
 	uint w(app->win->width), h(app->win->height);
 	UI* father;
+	char resources;
 
 	rect = RectConstructor(556, 35, 15, 14);
 	father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
@@ -266,13 +267,20 @@ void ModuleUIManager::CreateBasicInGameUI()
 	rect = RectConstructor(449, 24, 24, 24);
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
-	rect = RectConstructor(272, 45, 146, 4);
-	AddUIElement(fMPoint(30, 30), nullptr, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"scrollEx");
+	rect = RectConstructor(415, 435, 65, 30);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 99, 0), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceBackground");
+
+	rect = RectConstructor(18, 209, 11, 19);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 93, 7), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
+
+	sprintf_s(&resources, 10, "%d", app->player->GetResources());
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, &resources);
+
 }
 
 void ModuleUIManager::CreatePauseMenu()
 {
-	SDL_Rect rect = RectConstructor(15, 271, 194, 231);;
+	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
 	uint w(app->win->width), h(app->win->height);
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
@@ -378,11 +386,11 @@ void ModuleUIManager::CreateEntityPortrait()
 		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
 		AddUIElement(fMPoint(w / app->win->GetUIScale() - 60, (h / (app->win->GetUIScale()) - 45)), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 		
-		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {
+//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
 			//shop button
 			rect = RectConstructor(480, 62, 32, 32);
 			AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
-		}
+//		}
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
@@ -535,7 +543,29 @@ void ModuleUIManager::CreateEntityPortrait()
 
 void ModuleUIManager::CreateShopMenu()
 {
-	LOG("YEEEEEEET");
+	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
+	uint w(app->win->width), h(app->win->height);
+
+	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"shopBackground");
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"heroUpgradeText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   U P G R A D E");
+
+	rect = RectConstructor(581, 24, 36, 27);
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroGathererPortrait");
+
+	rect.x = 619;
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroRangedPortrait");
+
+	rect.x = 658;
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
+
+	rect = RectConstructor(653, 54, 46, 14);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererLevelButton", EVENT_ENUM::GATHERER_LEVEL_UP);
+
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedLevelButton", EVENT_ENUM::RANGED_LEVEL_UP);
+
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeLevelButton", EVENT_ENUM::MELEE_LEVEL_UP);
+
 }
 
 SDL_Texture* ModuleUIManager::GetAtlasTexture() const
