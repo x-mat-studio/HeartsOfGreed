@@ -33,6 +33,8 @@ ModuleTestScene::ModuleTestScene() :
 	menuScene(false),
 	isNightTime(false)
 {
+	name.create("testScene");
+
 }
 
 
@@ -42,10 +44,19 @@ ModuleTestScene::~ModuleTestScene()
 }
 
 
-bool  ModuleTestScene::Awake(pugi::xml_node&)
+bool  ModuleTestScene::Awake(pugi::xml_node& config)
 {
-	dayTimer = 4;
-	nightTimer = 4;
+
+
+	camVel = config.attribute("camVel").as_float(1);
+	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
+	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
+	dayTimer = config.attribute("dayTimerSec").as_int(1);
+	nightTimer = config.attribute("nightTimerSec").as_int(1);
+
+	camMarginMovements.x = config.attribute("freeCamMarginDetectionPixelsX").as_int(1);
+	camMarginMovements.y = config.attribute("freeCamMarginDetectionPixelsY").as_int(1);
+
 
 	return true;
 }
@@ -54,8 +65,8 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
-	app->render->currentCamX = 0;
-	app->render->currentCamY = 0;
+	app->render->currentCamX = initialCamPos.x;
+	app->render->currentCamY = initialCamPos.y;
 	//Play Music
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 
@@ -75,11 +86,12 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x-680, pos.y);
+
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
+
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
 
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
@@ -121,7 +133,7 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
-	
+
 
 	return true;
 }
@@ -143,8 +155,8 @@ bool  ModuleTestScene::Update(float dt)
 {
 	CheckListener(this);
 
+	float camVelAux = camVel;
 	float scale = app->win->GetScale();
-	float camVel = 700; //TODO LOAD THIS FROM XML
 	iMPoint mousePos;
 	iMPoint mouseRaw;
 	app->input->GetMousePosition(mousePos.x, mousePos.y);
@@ -162,27 +174,27 @@ bool  ModuleTestScene::Update(float dt)
 
 		if (camSprint)
 		{
-			camVel *= 2;
+			camVelAux *= 2;
 			wasdMove = true;
 		}
 		if (camUp)
 		{
-			app->render->currentCamY += camVel * dt;
+			app->render->currentCamY += camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camDown)
 		{
-			app->render->currentCamY -= camVel * dt;
+			app->render->currentCamY -= camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camLeft)
 		{
-			app->render->currentCamX += camVel * dt;
+			app->render->currentCamX += camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camRight)
 		{
-			app->render->currentCamX -= camVel * dt;
+			app->render->currentCamX -= camVelAux * dt;
 			wasdMove = true;
 		}
 
@@ -192,26 +204,29 @@ bool  ModuleTestScene::Update(float dt)
 			//mouse drag / mouse zoom
 			iMPoint scrollWheel;
 			app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-			if (MouseCameraDisplacement(camVel, dt) == false)
+
+			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
 			{
-				if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
-				{
-					StartDragging(mousePos);
-				}
-				else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
-				{
-					Drag(mousePos, scale);
-				}
-				else if (scrollWheel.y != 0)
-				{
-					//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-					if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false)
-					{
-						Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
-					}
-					
-				}
+				StartDragging(mousePos);
 			}
+			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
+			{
+				Drag(mousePos, scale);
+			}
+			else if (scrollWheel.y != 0)
+			{
+				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false)
+				{
+					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+				}
+
+			}
+			else
+			{
+				MouseCameraDisplacement(camVel, dt);
+			}
+
 		}
 	}
 
@@ -226,7 +241,7 @@ bool  ModuleTestScene::Update(float dt)
 		app->fadeToBlack->FadeToBlack(this, app->loseScene);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
-	if(menuScene == true)
+	if (menuScene == true)
 	{
 		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu))
 		{
@@ -243,7 +258,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	bool ret = true;
 
 	app->map->Draw();
-	
+
 	if (isNightTime)
 	{
 		DrawNightRect();
@@ -394,31 +409,30 @@ void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 {
 	bool ret = false;
-	int offset = 30; //TODO THIS OFFSET VALUE (IN PIXELS) FOR THE DETECTION WILL BE LOADED FROM XML IN THE FUTURE
 	iMPoint mouseRaw;
 	uint width;
 	uint height;
 	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
 	app->win->GetWindowSize(width, height);
 
-	if (mouseRaw.x <= offset)
+	if (mouseRaw.x <= camMarginMovements.x)
 	{
 		app->render->currentCamX += camVel * dt;
 		ret = true;
 	}
-	else if (mouseRaw.x >= width - 1 - offset)
+	else if (mouseRaw.x >= width - 1 - camMarginMovements.x)
 	{
 		app->render->currentCamX -= camVel * dt;
 		ret = true;
 	}
 
-	if (mouseRaw.y <= offset)
+	if (mouseRaw.y <= camMarginMovements.y)
 	{
 		app->render->currentCamY += camVel * dt;
 		ret = true;
 
 	}
-	else if (mouseRaw.y >= height - 1 - offset)
+	else if (mouseRaw.y >= height - 1 - camMarginMovements.y)
 	{
 		app->render->currentCamY -= camVel * dt;
 		ret = true;
