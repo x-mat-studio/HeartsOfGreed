@@ -400,7 +400,7 @@ void Hero::DrawArea()
 {
 	if (currAreaInfo && currAoE.size() > 0)
 	{
-		for (int i = 0; i < currAoE.size(); i++)
+		for (uint i = 0; i < currAoE.size(); i++)
 		{
 			iMPoint pos = app->map->MapToWorld(currAoE[i].x - 1, currAoE[i].y);
 			app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 100);
@@ -408,7 +408,7 @@ void Hero::DrawArea()
 
 		if (suplAoE.size() > 0)
 		{
-			for (int i = 0; i < suplAoE.size(); i++)
+			for (uint i = 0; i < suplAoE.size(); i++)
 			{
 				iMPoint pos = app->map->MapToWorld(suplAoE[i].x - 1, suplAoE[i].y);
 				app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 200);
@@ -434,8 +434,8 @@ bool Hero::CheckAttackRange()
 	}
 
 	SDL_Rect rect;
-	rect.x = position.x;
-	rect.y = position.y;
+	rect.x = position.x - attackRange;
+	rect.y = position.y - attackRange;
 	rect.w = attackRange * 2;
 	rect.h = attackRange * 2;
 
@@ -504,7 +504,7 @@ void Hero::CheckObjecive(Entity* entity)
 	if (objective == entity)
 	{
 		path.clear();
-		objective == nullptr;
+		objective = nullptr;
 		SearchForNewObjective();
 
 		inputs.push_back(HERO_INPUTS::IN_MOVE);

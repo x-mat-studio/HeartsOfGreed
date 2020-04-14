@@ -74,12 +74,14 @@ bool Entity::Start(SDL_Texture* texture)
 		app->coll->AddColliderEntity(collider);
 
 		collider->SetPos(position.x, position.y);
+
+		offset.x = (float)collider->rect.w * 0.5f;
+		offset.y = (float)collider->rect.h;
 	}
 
 	started = true;
 
-	offset.x =  (float)collider->rect.w* 0.5f;
-	offset.y =  (float)collider->rect.h;
+
 
 	return true;
 }
@@ -134,7 +136,7 @@ DIRECTION Entity::GetMyDirection()
 {
 	int width = app->win->width; 
 
-	int MidX = (-app->render->GetCameraX() + width / 2);
+	int MidX = (-app->render->GetCameraX() + width * 0.5f);
 	
 	int relativeX = position.x - MidX;
 
@@ -154,22 +156,23 @@ DIRECTION Entity::GetMyDirection()
 
 LOUDNESS Entity::GetMyLoudness()
 {
-	int width = app->win->width; int height = app->win->height;
+	int width = app->win->width;
+	int height = app->win->height;
 
-	int MidX = (-app->render->GetCameraX() + width  /2);
-	int MidY = (-app->render->GetCameraY() + height /2);
+	int MidX = (-app->render->GetCameraX() + width  * 0.5f);
+	int MidY = (-app->render->GetCameraY() + height * 0.5f);
 
 	float SQRDistance = sqrt((position.x - MidX) * (position.x - MidX) + (position.y - MidY) * (position.y - MidY));
 
-	if (SQRDistance < width/4 * app->win->GetScale()) {
+	if (SQRDistance < width *0.25f * app->win->GetScale()) {
 
 		return LOUDNESS::LOUD;
 	}
-	if (SQRDistance < width/3 * app->win->GetScale()) {
+	if (SQRDistance < width *0.33f * app->win->GetScale()) {
 
 		return LOUDNESS::NORMAL;
 	}
-	if (SQRDistance < width/2 * app->win->GetScale()) {
+	if (SQRDistance < width * 0.5f * app->win->GetScale()) {
 
 		return LOUDNESS::QUIET;
 	}

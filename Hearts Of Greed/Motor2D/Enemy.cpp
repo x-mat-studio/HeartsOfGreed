@@ -341,8 +341,8 @@ bool Enemy::SearchObjective()
 
 	SDL_Rect rect;
 
-	rect.x = position.x;
-	rect.y = position.y;
+	rect.x = position.x - vision;
+	rect.y = position.y - vision;
 	rect.w = vision * 2;
 	rect.h = vision * 2;
 
@@ -374,8 +374,8 @@ bool Enemy::CheckAttackRange()
 	}
 
 	SDL_Rect rect;
-	rect.x = position.x;
-	rect.y = position.y;
+	rect.x = position.x - attackRange;
+	rect.y = position.y - attackRange;
 	rect.w = attackRange * 2;
 	rect.h = attackRange * 2;
 

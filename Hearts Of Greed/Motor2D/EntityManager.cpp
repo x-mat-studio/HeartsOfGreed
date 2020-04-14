@@ -942,7 +942,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 
 	DynamicEntity* it;
 
-	for (int i = 0; i < entityVector.size(); ++i)
+	for (uint i = 0; i < entityVector.size(); ++i)
 	{
 		if (!entityVector[i]->dynamic)
 		{
@@ -1112,7 +1112,7 @@ Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thi
 	Entity* ret = nullptr;
 	float currDistance = 0.f;
 
-	for (int i = 0; i < entityVector.size(); ++i)
+	for (uint i = 0; i < entityVector.size(); ++i)
 	{
 		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
 		{

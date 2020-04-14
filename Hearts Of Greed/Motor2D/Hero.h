@@ -3,7 +3,7 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
-#define TIME_TRIGGER 0.001
+#define TIME_TRIGGER 0.001f
 
 #include "Animation.h"
 #include "DynamicEntity.h"
