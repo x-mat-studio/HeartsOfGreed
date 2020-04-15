@@ -13,10 +13,14 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type) :toDelete(false), type(type)
-{
-	minimapPos = worldPos;
-}
+MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet) :
+	
+	toDelete(false),
+	type(type), 
+	offSet(offSet), 
+	minimapPos(worldPos)
+
+{}
 
 
 MinimapIcon::~MinimapIcon()
@@ -28,7 +32,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 {
 	if (minimapPos != nullptr)
 	{
-		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x, minimapPos->y);
+		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x + offSet.x, minimapPos->y + offSet.y);
 		float uiscale = app->win->GetUIScale();
 		app->render->Blit(app->uiManager->GetAtlasTexture(), (newpos.x - (sourceRect.w * 0.5f)) / uiscale, (newpos.y - (sourceRect.h * 0.5f)) / uiscale, &sourceRect, false, false);
 	}
@@ -104,7 +108,7 @@ bool Minimap::Update(float dt)
 {
 	CheckListener(this);
 
-	if (minimapLoaded)
+	if (minimapLoaded==true)
 	{
 		int x;
 		int y;
@@ -136,7 +140,7 @@ bool Minimap::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (minimapLoaded)
+	if (minimapLoaded==true)
 	{
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 
@@ -329,11 +333,11 @@ iMPoint Minimap::ScreenToMinimapToWorld(int x, int y) {
 	return minimap_position;
 }
 
-MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type)
+MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offset)
 {
 	MinimapIcon* icon = nullptr;
 
-	icon = new MinimapIcon(worldPos, type);
+	icon = new MinimapIcon(worldPos, type, offset);
 
 	if (icon != nullptr)
 	{

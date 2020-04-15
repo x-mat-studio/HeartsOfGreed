@@ -16,9 +16,12 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	moveRange1(moveRange1),
 	moveRange2(moveRange2),
 	unitSpeed(speed),
+
 	isMoving(false),
 	current_animation(nullptr),
+
 	toMove{ 0,0 },
+
 	dir(FACE_DIR::SOUTH_EAST)
 {}
 

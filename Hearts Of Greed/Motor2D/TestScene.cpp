@@ -18,6 +18,7 @@
 #include "EventManager.h"
 #include "Minimap.h"
 #include "Render.h"
+#include "Player.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -65,6 +66,9 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	app->player->Enable();
+	app->minimap->Enable();
+
 	app->render->currentCamX = initialCamPos.x;
 	app->render->currentCamY = initialCamPos.y;
 	//Play Music
@@ -284,7 +288,11 @@ bool  ModuleTestScene::CleanUp()
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
 	app->audio->SilenceAll();
-	app->minimap->CleanUp();
+	app->minimap->Disable();
+
+
+	app->player->Disable();
+
 
 	return true;
 }

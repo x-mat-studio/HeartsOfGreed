@@ -29,6 +29,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
+	center {0, 0},
 
 	UIAssigned(false)
 {
@@ -59,13 +60,6 @@ bool Entity::Start(SDL_Texture* texture)
 {
 	this->texture = texture;
 
-	int w;
-	int h;
-
-	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-
-	center.x = w / 2;
-	center.y = h / 2;
 
 	if (collider != nullptr)
 	{
@@ -75,8 +69,11 @@ bool Entity::Start(SDL_Texture* texture)
 
 		collider->SetPos(position.x, position.y);
 
-		offset.x = (float)collider->rect.w * 0.5f;
+		center.x = offset.x = (float)collider->rect.w * 0.5f;
+		
 		offset.y = (float)collider->rect.h;
+
+		center.y = offset.y * 0.5f;
 	}
 
 	started = true;
