@@ -293,6 +293,17 @@ bool ModuleEntityManager::Start()
 	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
 	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
 
+	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
+	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
+	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
+	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+
+	//Armored sfx--------
+	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
+	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
+	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
+	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
+
 	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
 
 	return ret;

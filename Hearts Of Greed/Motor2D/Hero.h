@@ -162,6 +162,8 @@ private:
 
 	void SearchForNewObjective();
 
+	virtual void PlayGenericNoise();
+
 protected:
 	void SetAnimation(HERO_STATES currState);
 
