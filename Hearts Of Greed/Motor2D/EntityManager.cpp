@@ -100,7 +100,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
@@ -143,12 +143,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
 		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 2.65f, 20.f, 20.f, 15.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
 		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
 	
-		// Sample Enemy---------------------
+	// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
@@ -246,6 +246,8 @@ bool ModuleEntityManager::Start()
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
 
+	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
@@ -290,6 +292,8 @@ bool ModuleEntityManager::Start()
 	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
 	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
 	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
+
+	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
 
 	return ret;
 }
@@ -394,7 +398,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter()); //TODO CHANGE THIS FOR ENEMY TURRET
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY_TURRET, entityVector[i]->GetCenter()); //TODO CHANGE THIS FOR ENEMY TURRET
 				}
 				break;
 
@@ -487,6 +491,10 @@ bool ModuleEntityManager::CleanUp()
 
 	app->tex->UnLoad(debugPathTexture);
 
+	app->tex->UnLoad(IAmSelected);
+
+	IAmSelected = nullptr;
+
 	suitManTexture = nullptr;
 	armorMaleTexture = nullptr;
 	combatFemaleTexture = nullptr;
@@ -524,6 +532,7 @@ bool ModuleEntityManager::CleanUp()
 
 	return true;
 }
+
 
 void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 {
@@ -654,12 +663,17 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 		{
 			col = entityVector[i]->GetCollider();
+			
+			Hero* thisHero;
+			thisHero = (Hero*)entityVector[i];
+			thisHero->selected = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					heroPlayerVector->push_back((Hero*)entityVector[i]);
+					thisHero->selected = true;
+					heroPlayerVector->push_back(thisHero);
 				}
 			}
 		}
@@ -806,6 +820,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 
+	selectedVector = movableEntityVector; //Hahahahaha
+
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
 		SPRITE_POSITION pivotEnum = SPRITE_POSITION::BOTH_NULL;
@@ -864,7 +880,27 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	renderVector.clear();
 
+	//icons
+	for (int i = 0; i < selectedVector.size(); i++)
+	{
+		if (selectedVector[i]->visionEntity != nullptr)
+		{
+			if (selectedVector[i]->visionEntity->isVisible)
+			{
+				Hero* thisHero = (Hero*)selectedVector[i];
+				thisHero->DrawSelected();
+			}
+		}
+		else
+		{
+			Hero* thisHero = (Hero*)selectedVector[i];
+			thisHero->DrawSelected();
+		}
+	}
+
+	selectedVector.clear();
 }
+
 
 void ModuleEntityManager::DrawOnlyStaticBuildings()
 {

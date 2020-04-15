@@ -3,7 +3,7 @@
 #ifndef __AI_H__
 #define __AI_H__
 
-#define ENEMIES_PER_NIGHT 6
+#define ENEMIES_PER_NIGHT 5
 
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"

@@ -270,7 +270,12 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+	Frame currFrame;
+
+	if (state == ENEMY_STATES::CHARGING_ATTACK)
+		currFrame = currentAnimation->GetCurrentFrame();
+	else
+		currFrame = currentAnimation->GetCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
@@ -399,7 +404,9 @@ void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		if (attackCooldown >= attackSpeed)
+		currentAnimation->GetCurrentFrame(attackSpeed * dt);
+
+		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			inputs.push_back(ENEMY_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;

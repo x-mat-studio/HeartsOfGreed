@@ -332,6 +332,7 @@ void Hero::StateMachine(float dt)
 
 bool Hero::PostUpdate(float dt)
 {
+	
 	if (app->debugMode)
 	{
 		Frame currFrame = currentAnimation->GetCurrentFrame(dt);
@@ -1231,7 +1232,14 @@ bool Hero::ExecuteSkill2()
 bool Hero::ExecuteSkill3()
 {
 	return false;
-};
+}
+
+void Hero::DrawSelected()
+{
+	if (selected == true) {
+		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+	}
+}
 
 bool Hero::DrawVfx(float dt)
 {
