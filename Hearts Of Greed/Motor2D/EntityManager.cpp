@@ -737,9 +737,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 void ModuleEntityManager::RemoveDeletedEntities()
 {
-	int numEntities = entityVector.size();
-
-	for (int i = 0; i < numEntities; i++)
+	for (int i = 0; i < entityVector.size(); i++)
 	{
 		if (entityVector[i]->toDelete == true)
 		{
@@ -748,6 +746,7 @@ void ModuleEntityManager::RemoveDeletedEntities()
 			delete entityVector[i];
 			entityVector[i] = nullptr;
 			entityVector.erase(entityVector.begin() + i);
+			i--;
 		}
 	}
 

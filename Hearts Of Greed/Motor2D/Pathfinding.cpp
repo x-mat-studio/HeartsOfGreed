@@ -354,7 +354,7 @@ void graphLevel::ConnectNodeToBorder(HierNode* node, Cluster* c, int lvl)
 	for (int i = 0; i < c->clustNodes.size(); i++)
 	{
 		//distanceTo = App->pathfinding->SimpleAPathfinding(node->pos, c->clustNodes[i]->pos, PATH_TYPE::CALCULATE_COST);
-		distanceTo = node->pos.DistanceTo(c->clustNodes[i]->pos);
+		distanceTo = node->pos.DistanceNoSqrt(c->clustNodes[i]->pos);
 
 		node->edges.push_back(new Edge(c->clustNodes[i], distanceTo, EDGE_TYPE::TP_INTRA));
 		c->clustNodes[i]->edges.push_back(new Edge(node, distanceTo, EDGE_TYPE::TP_INTRA));
@@ -586,14 +586,14 @@ float PathNode::CalculateF(const iMPoint& destination)
 		g = parent->g + 1;
 	}
 
-	h = pos.DistanceTo(destination);
+	h = pos.DistanceNoSqrt(destination);
 
 	return g + h;
 }
 
 float HierNode::CalculateF(const iMPoint& destination)
 {
-	h = pos.DistanceTo(destination);
+	h = pos.DistanceNoSqrt(destination);
 
 	return g + h;
 }
@@ -637,7 +637,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 		if (!n1 || !n2)
 			return ret;
 
-		n1->h = n1->pos.DistanceTo(n2->pos);
+		n1->h = n1->pos.DistanceNoSqrt(n2->pos);
 
 		//Abs Path
 		HPAPathfinding(*n1, n2->pos, 1);
@@ -742,7 +742,7 @@ float ModulePathfinding::SimpleAPathfinding(const iMPoint& origin, const iMPoint
 	std::multimap<int, PathNode> open;
 
 	std::vector<PathNode> closed;
-	open.insert(std::pair<int, PathNode>(0, PathNode(0, origin.DistanceTo(destination), origin, nullptr, 0, 0)));
+	open.insert(std::pair<int, PathNode>(0, PathNode(0, origin.DistanceNoSqrt(destination), origin, nullptr, 0, 0)));
 
 	//Analize the current
 	PathNode* curr = nullptr;
@@ -862,7 +862,7 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 			continue;
 		}
 
-		if (!IsStraightPath(startPos, currPos) || startPos.DistanceTo(currPos) > maxPath || (i == pathSize - 1 && pathSize > 0))
+		if (!IsStraightPath(startPos, currPos) || startPos.DistanceNoSqrt(currPos) > maxPath || (i == pathSize - 1 && pathSize > 0))
 		{
 
 			SimpleAPathfinding(startPos, currPos);
