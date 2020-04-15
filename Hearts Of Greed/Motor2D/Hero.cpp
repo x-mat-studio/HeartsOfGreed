@@ -350,6 +350,8 @@ bool Hero::PostUpdate(float dt)
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
+	PlayGenericNoise();
+	
 	if (haveObjective == false)
 	{
 		objective = nullptr;
@@ -360,6 +362,8 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 	}
+
+	
 
 	return false;
 }
@@ -523,6 +527,11 @@ void Hero::CheckObjecive(Entity* entity)
 void Hero::SearchForNewObjective()
 {
 	objective = app->entityManager->SearchUnitsInRange(visionDistance, this);
+}
+
+void Hero::PlayGenericNoise()
+{
+	//Herency only
 }
 
 

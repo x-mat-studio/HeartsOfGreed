@@ -175,6 +175,17 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loud
 			//3rd argument is number of loops. if you want in once, put 0. -1 plays it "infinite" times.
 		}
 	}
+	if (channel < 0) {
+
+		channel = 1;
+
+		while (Mix_Playing(channel) == 1) { 
+			if (channel > 8) { return false; }
+			channel++; 
+		}
+		ConfigureChannel(channel, loudness, direction);
+		Mix_PlayChannel(channel, fx[id - 1], repeat, );
+	}
 	
 	return true;
 }

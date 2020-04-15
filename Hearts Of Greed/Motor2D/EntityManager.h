@@ -140,6 +140,9 @@ public:
 
 	SDL_Texture* IAmSelected;
 	SDL_Texture* debugPathTexture;
+	
+	
+	//Sounds
 	int wanamingoRoar;
 	int wanamingoRoar2;
 	int wanamingoGetsHit;
@@ -155,6 +158,17 @@ public:
 
 	int suitman1Skill2;
 	int armored1Skill2;
+
+	int noise1Suitman;
+	int noise2Suitman;
+	int noise3Suitman;
+	int noise4Suitman;
+
+	int noise1Armored;
+	int noise2Armored;
+	int noise3Armored;
+	int noise4Armored;
+
 
 	Building* testBuilding;
 
