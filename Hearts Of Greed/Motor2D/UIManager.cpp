@@ -344,7 +344,7 @@ void ModuleUIManager::CreateOptionsMenu()
 
 	SDL_Rect rect = RectConstructor(677, 369, 278, 153);
 	uint w(app->win->width), h(app->win->height);
-	UI* father = nullptr;
+	UI* father = nullptr;		// TODO: make event and functionality happen		Also, change the button ON / OFF image depending on fullscreen mode
 
 	father = AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2), (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_IMG, rect, (P2SString)"optionBackground");
 
@@ -354,8 +354,8 @@ void ModuleUIManager::CreateOptionsMenu()
 
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 20, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 75), father, UI_TYPE::UI_TEXT, rect, (P2SString)"fullscreenModeText", nullptr, DRAGGABLE::DRAG_OFF, "Fullscreen mode");
 
-	rect = RectConstructor(424, 25, 23, 23);
-//	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (278 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (153 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::FULLSCREEN, true, true);
+	rect = RectConstructor(739, 27, 23, 23);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (278 / 2) + 20, h / (app->win->GetUIScale() * 2) - (153 / 2) + 100), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"fullscreenButton", EVENT_ENUM::FULLSCREEN_INPUT);
 
 	rect = RectConstructor(424, 25, 23, 23);
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (278 / 2) - (3* rect.w / 4), h / (app->win->GetUIScale() * 2) - (153 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
