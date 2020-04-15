@@ -32,6 +32,8 @@ public:
 
 	void LevelUp();
 
+	void PlayGenericNoise();
+
 };
 
 

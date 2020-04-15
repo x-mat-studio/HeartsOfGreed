@@ -78,14 +78,14 @@ bool MeleeHero::ExecuteSkill1()
 	if (!skillExecutionDelay)
 	{
 		skillExecutionDelay = true;
-		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 8, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+
+		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 		return skillExecutionDelay;
 	}
 	else
 	{
-	
-
-		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, 9, this->GetMyLoudness(), this->GetMyDirection());
+		
 		return app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
 	}
 
@@ -118,5 +118,31 @@ void MeleeHero::LevelUp()
 
 	unitSpeed;
 	visionDistance;
+
+}
+
+void MeleeHero::PlayGenericNoise()
+{
+	
+	int random = rand() % 4 +1;
+
+	switch (random)
+	{
+	case 1:
+		app->audio->PlayFx(app->entityManager->noise1Armored,0,-1, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 2:
+		app->audio->PlayFx(app->entityManager->noise2Armored, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 3:
+		app->audio->PlayFx(app->entityManager->noise3Armored, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 4:
+		app->audio->PlayFx(app->entityManager->noise4Armored, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+
+	default:
+		break;
+	}
 
 }

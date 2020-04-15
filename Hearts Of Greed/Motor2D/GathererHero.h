@@ -31,6 +31,8 @@ public:
 
 	void LevelUp();
 
+	void PlayGenericNoise();
+
 	fMPoint granadePosLaunch;
 	skillArea* granadeArea;
 
