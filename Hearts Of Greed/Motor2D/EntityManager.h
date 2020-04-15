@@ -138,6 +138,7 @@ private:
 
 public:
 
+	SDL_Texture* IAmSelected;
 	SDL_Texture* debugPathTexture;
 	int wanamingoRoar;
 	int wanamingoRoar2;
@@ -149,8 +150,11 @@ public:
 	int suitmanGetsHit2;
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
+
 	int suitman1Skill;
+
 	int suitman1Skill2;
+	int armored1Skill2;
 
 	Building* testBuilding;
 
@@ -163,6 +167,7 @@ private:
 	std::vector <Entity*> renderVector;
 	std::vector <Entity*> movableEntityVector;
 	std::vector <Entity*> buildingVector;
+	std::vector <Entity*> selectedVector;
 
 	SDL_Texture* suitManTexture;
 	SDL_Texture* armorMaleTexture;

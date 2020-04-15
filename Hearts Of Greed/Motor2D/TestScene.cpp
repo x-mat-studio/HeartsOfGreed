@@ -324,6 +324,8 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 		app->render->currentCamY = (((app->render->currentCamY - offsetY) * newScale) / currentScale) + offsetY;
 	}
 }
+
+
 void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 {
 	switch (eventId)
