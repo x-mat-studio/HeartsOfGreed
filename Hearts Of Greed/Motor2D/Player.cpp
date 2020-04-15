@@ -64,6 +64,8 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
+
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL3, this);
@@ -84,6 +86,8 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SKILL2, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SKILL3, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
@@ -507,6 +511,29 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			prepareSkill = true;
 		}
 		
+		break;
+
+	case EVENT_ENUM::HERO_CHANGE_FOCUS:
+	{
+		int numHeroes = heroesVector.size();
+
+		if (numHeroes > 0 )
+		{
+			for (int i = 0; i < numHeroes; i++)
+			{
+				if (focusedEntity == heroesVector[i])
+				{
+					if (i == numHeroes - 1)
+					{
+						focusedEntity = heroesVector[0];
+					}
+					else
+						focusedEntity = heroesVector[i];
+					break;
+				}
+			}
+		}
+	}
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES:

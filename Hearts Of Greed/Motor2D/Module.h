@@ -26,6 +26,7 @@ enum class EVENT_ENUM
 	STOP_SELECTING_UNITS,
 	ENTITY_COMMAND, //aka right click
 	ENTITY_INTERACTION, //aka left click
+	HERO_CHANGE_FOCUS,
 
 	SKILL1,
 	SKILL2,

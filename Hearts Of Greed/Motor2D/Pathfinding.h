@@ -6,7 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
-#define NEARBY_TILES_CHECK 10
+#define NEARBY_TILES_CHECK 5
 
 #include <list>
 #include <vector>
@@ -15,8 +15,8 @@
 #include <unordered_map>
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 4
-#define CLUSTER_SIZE_LVL 10
+#define NODE_MIN_DISTANCE 3
+#define CLUSTER_SIZE_LVL 8
 #define MAX_LEVELS 1
 
 
