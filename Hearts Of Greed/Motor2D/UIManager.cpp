@@ -250,7 +250,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 	SDL_Rect rect = RectConstructor(0, 0, 0, 0);;
 	uint w(app->win->width), h(app->win->height);
 	UI* father;
-	char resources;
+	char resources[10];
 
 	rect = RectConstructor(556, 35, 15, 14);
 	father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
@@ -273,8 +273,8 @@ void ModuleUIManager::CreateBasicInGameUI()
 	rect = RectConstructor(18, 209, 11, 19);
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 93, 7), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
 
-	sprintf_s(&resources, 10, "%d", app->player->GetResources());
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, &resources);
+	sprintf_s(resources, 10, "%d", app->player->GetResources());
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
 
 }
 
