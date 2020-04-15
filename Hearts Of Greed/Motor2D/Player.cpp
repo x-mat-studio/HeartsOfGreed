@@ -169,6 +169,7 @@ bool ModulePlayer::HandleInput()
 		{
 			entityInteraction = false;
 			doingAction = false;
+			focusedEntity = nullptr;
 			Click();
 		}
 		else if (selectUnits && hasClicked)
@@ -196,7 +197,6 @@ bool ModulePlayer::HandleInput()
 
 bool ModulePlayer::Click()
 {
-	focusedEntity = nullptr;
 	hasClicked = true;
 
 	app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
@@ -586,6 +586,15 @@ void ModulePlayer::RemoveHeroFromVector(Hero* hero)
 			heroesVector.erase(heroesVector.begin() + i);
 			return;
 		}
+	}
+}
+
+
+void ModulePlayer::CheckFocusedEntity(Entity* entity)
+{
+	if (focusedEntity == entity)
+	{
+		focusedEntity = nullptr;
 	}
 }
 

@@ -26,6 +26,10 @@ public:
 	bool PreProcessSkill2();
 	bool PreProcessSkill3();
 
+	bool ExecuteSkill1();
+	bool ExecuteSkill2();
+	bool ExecuteSkill3();
+
 	void LevelUp();
 
 };
