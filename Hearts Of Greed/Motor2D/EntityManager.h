@@ -138,6 +138,7 @@ private:
 
 public:
 
+	SDL_Texture* IAmSelected;
 	SDL_Texture* debugPathTexture;
 	int wanamingoRoar;
 	int wanamingoRoar2;
@@ -163,6 +164,7 @@ private:
 	std::vector <Entity*> renderVector;
 	std::vector <Entity*> movableEntityVector;
 	std::vector <Entity*> buildingVector;
+	std::vector <Entity*> selectedVector;
 
 	SDL_Texture* suitManTexture;
 	SDL_Texture* armorMaleTexture;

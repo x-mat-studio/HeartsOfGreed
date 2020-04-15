@@ -137,6 +137,7 @@ public:
 	virtual bool ExecuteSkill2();
 	virtual bool ExecuteSkill3();
 
+	void DrawSelected();
 
 	//This is a placeholder for particles
 	virtual bool DrawVfx(float dt);

@@ -245,6 +245,8 @@ bool ModuleEntityManager::Start()
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
 
+	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
@@ -486,6 +488,10 @@ bool ModuleEntityManager::CleanUp()
 
 	app->tex->UnLoad(debugPathTexture);
 
+	app->tex->UnLoad(IAmSelected);
+
+	IAmSelected = nullptr;
+
 	suitManTexture = nullptr;
 	armorMaleTexture = nullptr;
 	combatFemaleTexture = nullptr;
@@ -523,6 +529,7 @@ bool ModuleEntityManager::CleanUp()
 
 	return true;
 }
+
 
 void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 {
@@ -653,12 +660,17 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 		{
 			col = entityVector[i]->GetCollider();
+			
+			Hero* thisHero;
+			thisHero = (Hero*)entityVector[i];
+			thisHero->selected = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					heroPlayerVector->push_back((Hero*)entityVector[i]);
+					thisHero->selected = true;
+					heroPlayerVector->push_back(thisHero);
 				}
 			}
 		}
@@ -804,6 +816,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 
+	selectedVector = movableEntityVector; //Hahahahaha
+
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
 		SPRITE_POSITION pivotEnum = SPRITE_POSITION::BOTH_NULL;
@@ -862,7 +876,27 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	renderVector.clear();
 
+	//icons
+	for (int i = 0; i < selectedVector.size(); i++)
+	{
+		if (selectedVector[i]->visionEntity != nullptr)
+		{
+			if (selectedVector[i]->visionEntity->isVisible)
+			{
+				Hero* thisHero = (Hero*)selectedVector[i];
+				thisHero->DrawSelected();
+			}
+		}
+		else
+		{
+			Hero* thisHero = (Hero*)selectedVector[i];
+			thisHero->DrawSelected();
+		}
+	}
+
+	selectedVector.clear();
 }
+
 
 void ModuleEntityManager::DrawOnlyStaticBuildings()
 {
