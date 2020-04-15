@@ -71,6 +71,37 @@ bool MeleeHero::PreProcessSkill3()
 	return true;
 }
 
+bool MeleeHero::ExecuteSkill1()
+{
+
+	if (!skillExecutionDelay)
+	{
+		skillExecutionDelay = true;
+		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 8, this->GetMyLoudness(), this->GetMyDirection());
+		return skillExecutionDelay;
+	}
+	else
+	{
+	
+
+		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, 9, this->GetMyLoudness(), this->GetMyDirection());
+		return app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+	}
+
+}
+
+bool MeleeHero::ExecuteSkill2()
+{
+
+	return true;
+}
+
+bool MeleeHero::ExecuteSkill3()
+{
+
+	return true;
+}
+
 void MeleeHero::LevelUp()
 {
 

@@ -149,8 +149,11 @@ public:
 	int suitmanGetsHit2;
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
+
 	int suitman1Skill;
+
 	int suitman1Skill2;
+	int armored1Skill2;
 
 	Building* testBuilding;
 
