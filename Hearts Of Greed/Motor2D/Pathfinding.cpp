@@ -598,8 +598,10 @@ float HierNode::CalculateF(const iMPoint& destination)
 	return g + h;
 }
 
-PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest)
+PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest)
 {
+	BROFILER_CATEGORY("Create Path", Profiler::Color::Black);
+
 	PATH_TYPE ret = PATH_TYPE::NO_TYPE;
 	HierNode* n1, * n2;
 	bool toDeleteN1 = false;
@@ -613,6 +615,16 @@ PATH_TYPE ModulePathfinding::CreatePath(const iMPoint& origin, iMPoint& destinat
 			return ret;
 		else
 			destination = newDest;
+	}
+
+	if (IsWalkable(origin) == false)
+	{
+		iMPoint newDest = CheckNearbyTiles(destination, origin);
+
+		if (newDest == origin || newDest == destination)
+			return ret;
+		else
+			origin = newDest;
 	}
 
 	last_path.clear();
