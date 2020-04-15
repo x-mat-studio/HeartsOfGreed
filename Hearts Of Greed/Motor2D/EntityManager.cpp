@@ -12,6 +12,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Minimap.h"
+#include "Player.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -742,6 +743,7 @@ void ModuleEntityManager::RemoveDeletedEntities()
 		if (entityVector[i]->toDelete == true)
 		{
 			CheckDynamicEntitysObjectives(entityVector[i]);
+			app->player->CheckFocusedEntity(entityVector[i]);
 
 			delete entityVector[i];
 			entityVector[i] = nullptr;
