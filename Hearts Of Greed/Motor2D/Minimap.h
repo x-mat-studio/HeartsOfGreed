@@ -11,6 +11,7 @@ enum class MINIMAP_ICONS
 	HERO,
 	ENEMY,
 	ENEMY_BASE,
+	ENEMY_TURRET,
 	NONE
 };
 

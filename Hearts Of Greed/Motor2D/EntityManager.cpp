@@ -409,7 +409,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter()); //TODO CHANGE THIS FOR ENEMY TURRET
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY_TURRET, entityVector[i]->GetCenter()); //TODO CHANGE THIS FOR ENEMY TURRET
 				}
 				break;
 
