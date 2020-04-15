@@ -108,7 +108,7 @@ bool Minimap::Update(float dt)
 {
 	CheckListener(this);
 
-	if (minimapLoaded)
+	if (minimapLoaded==true)
 	{
 		int x;
 		int y;
@@ -140,7 +140,7 @@ bool Minimap::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (minimapLoaded)
+	if (minimapLoaded==true)
 	{
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 

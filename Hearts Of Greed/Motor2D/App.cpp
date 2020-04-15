@@ -157,6 +157,7 @@ bool App::Awake()
 	
 	//Other
 	player->Disable();
+	minimap->Disable();
 	//-----------------------------------
 	PERF_PEEK(pTimer);
 

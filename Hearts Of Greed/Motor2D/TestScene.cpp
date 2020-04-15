@@ -67,6 +67,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 bool ModuleTestScene::Start()
 {
 	app->player->Enable();
+	app->minimap->Enable();
 
 	app->render->currentCamX = initialCamPos.x;
 	app->render->currentCamY = initialCamPos.y;
@@ -287,7 +288,7 @@ bool  ModuleTestScene::CleanUp()
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
 	app->audio->SilenceAll();
-	app->minimap->CleanUp();
+	app->minimap->Disable();
 
 
 	app->player->Disable();
