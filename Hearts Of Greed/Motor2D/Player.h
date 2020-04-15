@@ -38,6 +38,7 @@ public:
 	void DesactivateBuildMode();
 
 	void RemoveHeroFromVector(Hero* hero);
+	void CheckFocusedEntity(Entity* entity);
 
 	iMPoint GetClickPosition();
 
