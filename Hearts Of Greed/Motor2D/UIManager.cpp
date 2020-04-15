@@ -342,6 +342,16 @@ void ModuleUIManager::CreateMainMenu()
 void ModuleUIManager::CreateOptionsMenu()
 {
 
+	SDL_Rect rect = RectConstructor(677, 369, 278, 153);
+	uint w(app->win->width), h(app->win->height);
+	UI* father = nullptr;
+
+	father = AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2), (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_IMG, rect, (P2SString)"optionBackground");
+
+	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 30, (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_TEXT, rect, (P2SString)"optionText", nullptr, DRAGGABLE::DRAG_OFF, "O P T I O N S");
+
+	rect = RectConstructor(424, 25, 23, 23);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (278 / 2) - (3* rect.w / 4), h / (app->win->GetUIScale() * 2) - (153 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
 
 
 }

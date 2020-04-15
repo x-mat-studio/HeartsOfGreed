@@ -24,11 +24,12 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	Hero(position, copy, alignement)
-{}
+{
+
+}
 
 bool MeleeHero::ActivateSkill1(fMPoint clickPosition)
 {
-	//if(mouseClick) is anywhere
 
 	inputs.push_back(IN_SKILL1);
 
