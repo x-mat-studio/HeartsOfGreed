@@ -151,19 +151,22 @@ bool Minimap::PostUpdate(float dt)
 			switch (minimapIcons[i]->type)
 			{
 			case MINIMAP_ICONS::BASE:
-				iconRect = { 24, 504, 8, 8 };
+				iconRect = { 12, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::TURRET:
-				iconRect = { 32, 504, 8, 8 };
+				iconRect = { 36, 504, 4, 4 };
+				break;
+			case MINIMAP_ICONS::ENEMY_TURRET:
+				iconRect = { 32, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::HERO:
-				iconRect = { 16, 504, 8, 8 };
+				iconRect = { 8, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::ENEMY:
-				iconRect = { 0, 504, 8, 8 };
+				iconRect = { 0, 504, 4, 4};
 				break;
 			case MINIMAP_ICONS::ENEMY_BASE:
-				iconRect = { 8, 504, 8, 8 };
+				iconRect = { 4, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::NONE:
 				iconRect = { 0, 0, 0, 0 };
