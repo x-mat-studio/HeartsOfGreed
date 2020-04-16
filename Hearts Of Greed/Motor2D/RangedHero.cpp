@@ -47,7 +47,7 @@ void RangedHero::LevelUp()
 {
 	
 	hitPointsMax;
-	hitPointsCurrent; // This was included later, I don't know which of both should be increased		Ferran, with love, from my room :D
+	hitPointsCurrent; 
 	recoveryHitPointsRate;
 	energyPoints;
 	recoveryEnergyRate;
