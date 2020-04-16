@@ -5,7 +5,8 @@
 
 #include "Entity.h"
 
-#define FRAMES_PER_PATHFINDING 30
+#define FRAMES_PER_PATHFINDING 100
+#define FRAMES_PER_PATH_REQUEST 30
 
 enum class FACE_DIR : int
 {
@@ -50,6 +51,9 @@ public:
 	int unitSpeed;
 
 	FACE_DIR dir;
+
+	int framesSinceRequest;
+	int framesToRquest;
 
 protected:
 

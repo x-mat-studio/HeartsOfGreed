@@ -98,6 +98,9 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
+
+	int randomCounter = rand() % 250;
+	framesPerPathfinding += randomCounter;
 }
 
 
@@ -248,7 +251,7 @@ bool Enemy::MoveTo(float x, float y)
 
 	framePathfindingCount = 0;
 
-	if (GeneratePath(x, y, 1))
+	if (GeneratePath(x, y, 0))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;

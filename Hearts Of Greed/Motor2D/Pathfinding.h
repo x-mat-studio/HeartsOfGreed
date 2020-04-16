@@ -15,8 +15,8 @@
 #include <unordered_map>
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 3
-#define CLUSTER_SIZE_LVL 8
+#define NODE_MIN_DISTANCE 1
+#define CLUSTER_SIZE_LVL 1
 #define MAX_LEVELS 1
 
 
@@ -69,7 +69,7 @@ struct Entrance
 
 struct Edge
 {
-	Edge(HierNode* dest, int distanceTo, EDGE_TYPE type);
+	Edge(HierNode* dest, float distanceTo, EDGE_TYPE type);
 
 	HierNode* dest;
 	float moveCost;
@@ -185,8 +185,8 @@ private:
 
 	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl);
 
-	std::multimap<int, PathNode>::iterator Find(iMPoint point, std::multimap<int, PathNode>* map);
-	std::multimap<int, HierNode>::iterator Find(iMPoint point, std::multimap<int, HierNode>* map);
+	std::multimap<float, PathNode>::iterator Find(iMPoint point, std::multimap<float, PathNode>* map);
+	std::multimap<float, HierNode>::iterator Find(iMPoint point, std::multimap<float, HierNode>* map);
 	int FindV(iMPoint point, std::vector<PathNode>* vec);
 	int FindV(iMPoint point, std::vector<HierNode>* vec);
 
