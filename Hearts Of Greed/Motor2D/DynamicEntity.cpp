@@ -26,8 +26,11 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 
 	dir(FACE_DIR::SOUTH_EAST)
 {
-	int randomCounter = rand() % FRAMES_PER_PATH_REQUEST;
-	framesToRquest += randomCounter;
+	if (this->align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		int randomCounter = rand() % FRAMES_PER_PATH_REQUEST;
+		framesToRquest += randomCounter;
+	}
 }
 
 DynamicEntity::~DynamicEntity()

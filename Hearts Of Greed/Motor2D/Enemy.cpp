@@ -96,7 +96,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
+	visionEntity = app->fowManager->CreateFoWEntity(position, false); //TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
 
 	int randomCounter = rand() % 50;
@@ -128,7 +128,6 @@ Enemy::~Enemy()
 	punchRightUp = Animation();
 	punchRightDown = Animation();
 	punchRight = Animation();
-
 }
 
 
@@ -236,8 +235,6 @@ void Enemy::Roar()
 
 	}
 }
-
-
 
 
 bool Enemy::PostUpdate(float dt)
