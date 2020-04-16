@@ -62,11 +62,6 @@ bool UI_Button::Update(float dt)
 				{
 					OnClick(dt);						
 				}
-
-				else if (name == "scrollButton" && (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT))
-				{
-					app->eventManager->GenerateEvent(eventRecieved, eventTriggerer);
-				}
 					
 	
 					if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT)
