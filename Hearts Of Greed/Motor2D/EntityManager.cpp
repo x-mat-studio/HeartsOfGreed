@@ -203,7 +203,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
-	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
+	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
 	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
 
 	//Template base

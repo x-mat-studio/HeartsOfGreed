@@ -100,7 +100,6 @@ void Turret::CheckObjecive(Entity* entity)
 bool Turret::SearchObjective()
 {
 	bool ret = false;
-
 	SDL_Rect rect;
 
 	rect.x = position.x - range;
@@ -154,7 +153,6 @@ bool Turret::CheckAttackRange()
 		return false;
 	}
 
-
 	fMPoint point = shortTermObjective->GetPosition();
 
 	if (point.DistanceManhattan(position) < range)
@@ -171,7 +169,8 @@ bool Turret::CheckAttackRange()
 
 void Turret::Attack()
 {
-	LOG("The turret goes brbrbr");
+	if (shortTermObjective)
+		shortTermObjective->RecieveDamage(attackDmg);
 }
 
 
@@ -299,18 +298,67 @@ void Turret::StateMachine()
 		if (attackCD == 0)
 		{
 			Attack();
-			attackCD += 0.001;
-		}
+			if (shortTermObjective != nullptr)
+				dir = DetermineDirection(shortTermObjective->position - position);
 
-		inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
+			attackCD += 0.01f;
+		}
+		else 
+		{
+			inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
+		}
+		
 		break;
 
 	case TURRET_STATES::CHARGING_ATTACK:
+
+
 		break;
 
 	case TURRET_STATES::DEAD:
 		Die();
 		break;
 	}
+}
+
+FACE_DIR Turret::DetermineDirection(fMPoint faceDir)
+{
+	FACE_DIR newDir = dir;
+
+	if (faceDir.x > 0)
+	{
+		if (faceDir.y < -0.1f)
+		{
+			newDir = FACE_DIR::NORTH_EAST;
+
+		}
+		else if (faceDir.y > 0.1f)
+		{
+			newDir = FACE_DIR::SOUTH_EAST;
+		}
+		else
+		{
+			newDir = FACE_DIR::EAST;
+		}
+	}
+	else if (faceDir.x < 0)
+	{
+		if (faceDir.y < -0.1f)
+		{
+			newDir = FACE_DIR::NORTH_WEST;
+		}
+		else if (faceDir.y > 0.1f)
+		{
+			newDir = FACE_DIR::SOUTH_WEST;
+
+		}
+		else
+		{
+			newDir = FACE_DIR::WEST;
+		}
+	}
+
+
+	return newDir;
 }
 
