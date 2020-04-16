@@ -118,6 +118,9 @@ public:
 	bool flip;
 	bool dynamic;
 	bool UIAssigned;
+
+	bool selected_by_player;
+
 	FoWEntity* visionEntity;
 	MinimapIcon* minimapIcon;
 	fMPoint position;

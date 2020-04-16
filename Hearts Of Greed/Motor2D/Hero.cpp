@@ -85,7 +85,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	selected(false),
+	//selected(false),
 	godMode(false),
 	currAreaInfo(nullptr),
 	skillExecutionDelay(false),
@@ -162,7 +162,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	selected(false),
 	godMode(false),
 	skillExecutionDelay(false),
 
@@ -1244,7 +1243,7 @@ bool Hero::ExecuteSkill3()
 
 void Hero::DrawSelected()
 {
-	if (selected == true) {
+	if (selected_by_player == true) {
 		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 	}
 }

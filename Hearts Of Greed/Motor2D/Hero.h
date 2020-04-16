@@ -208,7 +208,7 @@ public:
 	float cooldownHability3;
 
 	Entity* objective;
-	bool selected;
+	//bool selected;
 
 	Animation walkLeft;
 	Animation walkLeftUp;

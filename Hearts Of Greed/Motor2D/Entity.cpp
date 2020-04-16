@@ -24,6 +24,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	visionEntity(nullptr),
 	minimapIcon(nullptr),
 	texture(nullptr),
+	selected_by_player(false),
 
 	hitPointsMax(maxHealth),
 	hitPointsCurrent(currentHealth),
