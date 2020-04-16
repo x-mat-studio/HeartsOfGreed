@@ -85,10 +85,11 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	selected(false),
+	//selected(false),
 	godMode(false),
 	currAreaInfo(nullptr),
 	skillExecutionDelay(false),
+	visionInPx(0.f),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
@@ -162,7 +163,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	selected(false),
 	godMode(false),
 	skillExecutionDelay(false),
 
@@ -178,6 +178,10 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, true, visionDistance);
+
+	float halfH = app->map->data.tileHeight * 0.5;
+	float halfW = app->map->data.tileWidth * 0.5;
+	visionInPx = sqrt(halfW * halfW + halfH * halfH) * visionDistance + 0.5f * visionDistance;
 }
 
 
@@ -250,8 +254,9 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::MOVE:
-		if (!Move(dt))
-			inputs.push_back(HERO_INPUTS::IN_IDLE);
+	{
+		bool hasMoved = false;
+		hasMoved = Move(dt);
 
 		visionEntity->SetNewPosition(position);
 
@@ -270,8 +275,11 @@ void Hero::StateMachine(float dt)
 				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 			}
 		}
+		else if (!hasMoved)
+			inputs.push_back(HERO_INPUTS::IN_IDLE);
 
-		break;
+	}
+	break;
 
 	case HERO_STATES::ATTACK:
 
@@ -300,7 +308,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::PREPARE_SKILL1:
 		PreProcessSkill1();
-		dir = DetermineDirection(app->input->GetMouseWorld() - position);
+		dir = DetermineDirection(app->input->GetMousePosWorld() - position);
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:
@@ -332,7 +340,7 @@ void Hero::StateMachine(float dt)
 
 bool Hero::PostUpdate(float dt)
 {
-	
+
 	if (app->debugMode)
 	{
 		Frame currFrame = currentAnimation->GetCurrentFrame(dt);
@@ -341,7 +349,7 @@ bool Hero::PostUpdate(float dt)
 
 	DrawArea();
 
-	if(drawingVfx)
+	if (drawingVfx)
 		DrawVfx(dt);
 
 	return true;
@@ -351,7 +359,7 @@ bool Hero::PostUpdate(float dt)
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
 	PlayGenericNoise();
-	
+
 	if (haveObjective == false)
 	{
 		objective = nullptr;
@@ -363,7 +371,7 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		return true;
 	}
 
-	
+
 
 	return false;
 }
@@ -482,6 +490,8 @@ void Hero::Attack()
 
 void Hero::Die()
 {
+	toDelete = true;
+
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 
 	switch (type)
@@ -503,9 +513,6 @@ void Hero::Die()
 		minimapIcon->minimapPos = nullptr;
 	}
 
-	toDelete = true;
-
-
 	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 
 }
@@ -526,7 +533,14 @@ void Hero::CheckObjecive(Entity* entity)
 
 void Hero::SearchForNewObjective()
 {
-	objective = app->entityManager->SearchUnitsInRange(visionDistance, this);
+	SDL_Rect rect;
+
+	rect.x = position.x - visionInPx;
+	rect.y = position.y - visionInPx;
+	rect.w = visionInPx * 2;
+	rect.h = visionInPx * 2;
+
+	objective = app->entityManager->SearchEntityRect(&rect, align);
 }
 
 void Hero::PlayGenericNoise()
@@ -634,8 +648,8 @@ int Hero::RecieveDamage(int damage)
 		{
 			int randomCounter = rand() % 5;
 
-			if(randomCounter == 0)
-			app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
+			if (randomCounter == 0)
+				app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
 		}
 	}
 
@@ -688,7 +702,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
-			
+
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
 
 			if (skillExecutionDelay)
@@ -792,7 +806,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
 
-			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
+			case HERO_INPUTS::IN_ATTACK: 
+				attackCooldown += TIME_TRIGGER;
+				state = HERO_STATES::ATTACK;	break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
@@ -813,7 +829,9 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
 
-			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
+			case HERO_INPUTS::IN_ATTACK:
+				attackCooldown += TIME_TRIGGER;
+				state = HERO_STATES::ATTACK;	break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
@@ -1245,7 +1263,7 @@ bool Hero::ExecuteSkill3()
 
 void Hero::DrawSelected()
 {
-	if (selected == true) {
+	if (selected_by_player == true) {
 		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 	}
 }

@@ -5,7 +5,7 @@
 
 #include "Entity.h"
 
-#define FRAMES_PER_PATHFINDING 100
+#define FRAMES_PER_PATHFINDING 40
 #define FRAMES_PER_PATH_REQUEST 30
 
 enum class FACE_DIR : int
@@ -38,6 +38,7 @@ public:
 	void DebugDraw(int pivotPositionX, int pivotPositionY);
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
+	void DestroyPath();
 
 	FACE_DIR DetermineDirection(fMPoint dir);
 
@@ -68,9 +69,9 @@ private:
 
 
 private:
-	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
-	fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
-	fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
+	fMPoint GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
+	fMPoint GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
+	fMPoint GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
 	SDL_Rect GetAnimationRect(float dt);
 
 };

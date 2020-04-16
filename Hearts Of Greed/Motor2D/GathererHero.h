@@ -16,6 +16,7 @@ public:
 		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, Animation& vfxExplosion);
 
 	GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement);
+	~GathererHero();
 
 	bool ActivateSkill1(fMPoint mouseClick);
 	bool ActivateSkill2();
@@ -39,7 +40,6 @@ public:
 	Animation vfxExplosion;
 
 	//This is a placeholder for particles
-	SDL_Texture* explosionText;
 	SDL_Rect explosionRect;
 	Animation* currentVfx;
 	bool DrawVfx(float dt);

@@ -112,6 +112,11 @@ struct generatedPath
 {
 	generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int lvl);
 
+	~generatedPath()
+	{
+		path.clear();
+	}
+
 	std::vector<iMPoint> path;
 	PATH_TYPE type;
 	int lvl;
@@ -178,6 +183,7 @@ public:
 	uchar GetTileAt(const iMPoint& pos) const;
 
 	bool RequestPath(Entity* request, std::vector <iMPoint>* path);
+	bool DeletePath(Entity* request);
 
 private:
 

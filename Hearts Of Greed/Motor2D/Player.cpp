@@ -152,9 +152,7 @@ bool ModulePlayer::PostUpdate(float dt)
 //Handles Player Input
 bool ModulePlayer::HandleInput()
 {
-	int mouseX;
-	int mouseY;
-	app->input->GetMousePositionRaw(mouseX, mouseY);
+
 	if (buildMode == false)
 	{
 		if (prepareSkill == true || doSkill == true)
@@ -184,7 +182,7 @@ bool ModulePlayer::HandleInput()
 
 	else
 	{
-		app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
+		clickPosition= app->input->GetMousePosScreen();
 
 
 		if (entityInteraction)
@@ -203,7 +201,7 @@ bool ModulePlayer::Click()
 {
 	hasClicked = true;
 
-	app->input->GetMousePositionRaw(clickPosition.x, clickPosition.y);
+	clickPosition= app->input->GetMousePosScreen();
 
 	clickPosition.x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
 	clickPosition.y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
@@ -222,9 +220,7 @@ bool ModulePlayer::Click()
 
 void ModulePlayer::Select()
 {
-	iMPoint mousePosition;
-
-	app->input->GetMousePositionRaw(mousePosition.x, mousePosition.y);
+	iMPoint mousePosition = app->input->GetMousePosScreen();
 
 	int rectX;
 	int rectY;
@@ -402,7 +398,7 @@ void ModulePlayer::DoHeroSkills()
 
 		if (skill1 == true)
 		{
-			if (heroesVector[0]->ActivateSkill1(app->input->GetMouseWorld()) == true)
+			if (heroesVector[0]->ActivateSkill1(app->input->GetMousePosWorld()) == true)
 			{
 				skill1 = false;
 				doSkill = false;
@@ -449,14 +445,12 @@ bool ModulePlayer::BuildClick()
 
 void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
-	int mouseX;
-	int mouseY;
-	app->input->GetMousePositionRaw(mouseX, mouseY);
+	iMPoint mouse=	app->input->GetMousePosScreen();
 
 	switch (eventId)
 	{
 	case EVENT_ENUM::SELECT_UNITS:
-		if (app->minimap->ClickingOnMinimap(mouseX, mouseY) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
 		{
 			selectUnits = true;
 			doingAction = true;
@@ -469,7 +463,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		if (app->minimap->ClickingOnMinimap(mouseX, mouseY) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
 		{
 			entityComand = true;
 			doingAction = true;
@@ -477,7 +471,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_INTERACTION:
-		if (app->minimap->ClickingOnMinimap(mouseX, mouseY) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
 		{
 			entityInteraction = true;
 			doingAction = true;

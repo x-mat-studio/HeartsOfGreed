@@ -96,10 +96,10 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
+	visionEntity = app->fowManager->CreateFoWEntity(position, false); //TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
 
-	int randomCounter = rand() % 250;
+	int randomCounter = rand() % 50;
 	framesPerPathfinding += randomCounter;
 }
 
@@ -128,7 +128,6 @@ Enemy::~Enemy()
 	punchRightUp = Animation();
 	punchRightDown = Animation();
 	punchRight = Animation();
-
 }
 
 
@@ -151,6 +150,7 @@ bool Enemy::Update(float dt)
 	GroupMovement(dt);
 
 	Roar();
+	DrawOnSelect();
 	CollisionPosUpdate();
 
 
@@ -237,7 +237,11 @@ void Enemy::Roar()
 	}
 }
 
-
+void Enemy::DrawOnSelect()
+{
+	if(selected_by_player)
+	app->render->Blit(app->entityManager->target, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+}
 
 
 bool Enemy::PostUpdate(float dt)
@@ -299,8 +303,8 @@ void Enemy::Attack()
 
 void Enemy::Die()
 {
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	collider->thisEntity = nullptr;
 
 	int randomCounter = rand() % 2;
@@ -327,8 +331,9 @@ void Enemy::CheckObjecive(Entity* entity)
 	if (shortTermObjective == entity)
 	{
 		path.clear();
+		DestroyPath();
 		shortTermObjective = nullptr;
-		SearchForNewObjective();
+		SearchObjective();
 
 		inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 	}
@@ -392,7 +397,6 @@ bool Enemy::CheckAttackRange()
 	{
 		return true;
 	}
-
 	else
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
@@ -440,14 +444,17 @@ bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 	else
 	{
-		if (SearchObjective() == true)
+		if (framePathfindingCount == framesPerPathfinding)
 		{
-			MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
-		}
+			if (SearchObjective() == true)
+			{
+				MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
+			}
 
-		else if (haveOrders)
-		{
-			MoveTo(longTermObjective.x, longTermObjective.y);
+			else if (haveOrders)
+			{
+				MoveTo(longTermObjective.x, longTermObjective.y);
+			}
 		}
 	}
 

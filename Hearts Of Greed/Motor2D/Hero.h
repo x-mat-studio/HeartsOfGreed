@@ -207,8 +207,10 @@ public:
 	float cooldownHability2;
 	float cooldownHability3;
 
+	float visionInPx;
+
 	Entity* objective;
-	bool selected;
+	//bool selected;
 
 	Animation walkLeft;
 	Animation walkLeftUp;

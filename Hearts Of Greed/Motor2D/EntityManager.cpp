@@ -100,7 +100,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 1, 20, 1, 35, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
@@ -143,7 +143,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
 		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, 100, 100, 1, 40, 1, 20, 1, 45, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 1, 20, 1, 40, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
 		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
@@ -194,17 +194,17 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-	5000, 5000, 0, 250, 1, 1, 35, 100, 50);
+	20, 20, 0, 250, 1, 1, 35, 100, 50);
 
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
+	Collider* buildingCollider = new Collider({ -150,130,460,370 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
-	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle);
+	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -247,6 +247,8 @@ bool ModuleEntityManager::Start()
 	base2Texture = app->tex->Load("maps/base02.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+
+	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -293,18 +295,21 @@ bool ModuleEntityManager::Start()
 	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
 	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
 
-	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
-	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
-	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
-	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
+	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
+	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
+	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
 
 	//Armored sfx--------
-	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
-	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
-	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
-	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
+	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
+	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
+	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
+	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
 
 	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
+
+	//General hero sfx--------
+	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
 
 	return ret;
 }
@@ -503,6 +508,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(debugPathTexture);
 
 	app->tex->UnLoad(IAmSelected);
+	app->tex->UnLoad(explosionText);
 
 	IAmSelected = nullptr;
 
@@ -516,6 +522,8 @@ bool ModuleEntityManager::CleanUp()
 	base2Texture = nullptr;
 
 	turretTexture = nullptr;
+
+	explosionText = nullptr;
 
 	debugPathTexture = nullptr;
 
@@ -677,13 +685,13 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			
 			Hero* thisHero;
 			thisHero = (Hero*)entityVector[i];
-			thisHero->selected = false;
+			thisHero->selected_by_player = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selected = true;
+					thisHero->selected_by_player = true;
 					heroPlayerVector->push_back(thisHero);
 				}
 			}
@@ -741,7 +749,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	{
 		alignement = entityVector[i]->GetAlignment();
 
-		if (alignement != alignementToSearch)
+		if (alignement != alignementToSearch || entityVector[i]->toDelete == true)
 		{
 			continue;
 		}
@@ -831,7 +839,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 
-	selectedVector = movableEntityVector; //Hahahahaha
+	selectedVector = movableEntityVector; 
 
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
@@ -971,8 +979,10 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 {
-	iMPoint pos;
+	iMPoint pos= app->input->GetMousePosScreen();
 	int entityNum = entityVector.size();
+	pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+	pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 
 	switch (eventId)
 	{
@@ -1004,58 +1014,37 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::SPAWN_BASE:
 
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BLDG_BASE, pos.x, pos.y);
 		break;
 
 
 	case EVENT_ENUM::SPAWN_BUILDING:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BUILDING, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_ENEMY:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::ENEMY, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_GATHERER_HERO:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_MELEE_HERO:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_RANGED_HERO:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_TURRET:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
 		break;
 

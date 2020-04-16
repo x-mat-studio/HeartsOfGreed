@@ -74,7 +74,7 @@ bool UI_Button::Update(float dt)
 								dragging = true;
 
 							iMPoint mouseClick = { 0,0 };
-							app->input->GetMousePosition(mouseClick.x, mouseClick.y);
+							app->input->GetMouseRelPosition(mouseClick.x, mouseClick.y);
 							accuratedDrag = { mouseClick.x - (this->worldPosition.x), mouseClick.y - (this->worldPosition.y) };
 						}
 					}
@@ -183,7 +183,7 @@ void UI_Button::MovingIt(float dt)
 {
 
 	iMPoint MousePos = { 0,0 };
-	app->input->GetMousePosition(MousePos.x, MousePos.y);
+	app->input->GetMouseRelPosition(MousePos.x, MousePos.y);
 
 	fMPoint currentPos = this->worldPosition;
 

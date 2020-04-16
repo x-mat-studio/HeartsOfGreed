@@ -5,6 +5,8 @@
 #include "Building.h"
 #include "Collision.h"
 #include "Animation.h"
+#include "DynamicEntity.h"
+
 
 enum class TURRET_STATES
 {
@@ -63,6 +65,8 @@ public:
 	bool ExternalInput(std::vector<TURRET_INPUTS>& inputs, float dt);
 	TURRET_STATES ProcessFsm(std::vector<TURRET_INPUTS>& inputs);
 
+	FACE_DIR DetermineDirection(fMPoint dir);
+
 	void StateMachine();
 
 	void Draw(float dt);
@@ -86,6 +90,8 @@ private:
 	TURRET_STATES state;
 	Animation* currentAnimation;
 	std::vector<TURRET_INPUTS> inputs;
+
+	FACE_DIR dir;
 };
 
 

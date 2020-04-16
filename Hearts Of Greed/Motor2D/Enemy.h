@@ -74,6 +74,7 @@ public:
 	int GetVision();
 	int GetRecov();
 
+	void DrawOnSelect();
 private:
 
 	void Attack();
@@ -94,9 +95,12 @@ private:
 	void SetAnimation(ENEMY_STATES state);
 
 	void Roar();
+	
 
 private:
 
+	bool selected;
+	
 	int recoveryHitPointsRate;
 	int vision;
 

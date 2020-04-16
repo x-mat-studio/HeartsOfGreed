@@ -106,39 +106,40 @@ bool MeleeHero::ExecuteSkill3()
 void MeleeHero::LevelUp()
 {
 
-	hitPointsMax;
-	hitPointsCurrent;		// As said in gatherer, I think, I'm ignorant to which should be upgraded				Ferran, with love, from my room :D
-	recoveryHitPointsRate;
-	energyPoints;
+	hitPointsMax += 15;
+	hitPointsCurrent = hitPointsMax;		
+	recoveryHitPointsRate += 1;
+	energyPoints += 5;
 	recoveryEnergyRate;
 
-	attackDamage;
+	attackDamage += 3;
 	attackSpeed;
 	attackRange;
 
-	unitSpeed;
+	unitSpeed += 5;
 	visionDistance;
 
+	app->audio->PlayFx(app->entityManager->lvlup,0,-1,LOUDNESS::LOUD,DIRECTION::FRONT);
 }
 
 void MeleeHero::PlayGenericNoise()
 {
 	
-	int random = rand() % 4 +1;
+	int random = rand() % 15 +1; 
 
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Armored,0,-1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise1Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Armored, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise2Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Armored, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise3Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Armored, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise4Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 
 	default:

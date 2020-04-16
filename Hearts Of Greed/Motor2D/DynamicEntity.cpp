@@ -26,8 +26,11 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 
 	dir(FACE_DIR::SOUTH_EAST)
 {
-	int randomCounter = rand() % FRAMES_PER_PATH_REQUEST;
-	framesToRquest += randomCounter;
+	if (this->align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		int randomCounter = rand() % FRAMES_PER_PATH_REQUEST;
+		framesToRquest += randomCounter;
+	}
 }
 
 DynamicEntity::~DynamicEntity()
@@ -225,6 +228,7 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 		separationSpeed.y /= spdNorm;
 	}
 
+	colliding_entity_list.clear();
 
 	return separationSpeed;
 }
@@ -271,6 +275,8 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_
 		cohesionSpeed.y = cohesionSpeed.y / norm;
 	}
 
+
+	close_entity_list.clear();
 	return cohesionSpeed;
 }
 
@@ -300,6 +306,8 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 		alignmentSpeed = alignmentSpeed / norm;
 	}
 
+	close_entity_list.clear();
+
 	return alignmentSpeed;
 }
 
@@ -314,8 +322,10 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	{
 		path.clear();
 		app->pathfinding->RequestPath(this, &path);
+
 		if (path.size() > 0)
 			path.erase(path.begin());
+
 		return true;
 	}
 
@@ -349,6 +359,11 @@ void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 		iMPoint pos = app->map->MapToWorld(it->x - 1, it->y);
 		app->render->Blit(debugTex, pos.x, pos.y);
 	}
+}
+
+void DynamicEntity::DestroyPath()
+{
+	app->pathfinding->DeletePath(this);
 }
 
 SDL_Rect DynamicEntity::GetAnimationRect(float dt)
