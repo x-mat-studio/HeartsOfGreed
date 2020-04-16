@@ -351,6 +351,11 @@ void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 	}
 }
 
+void DynamicEntity::DestroyPath()
+{
+	app->pathfinding->DeletePath(this);
+}
+
 SDL_Rect DynamicEntity::GetAnimationRect(float dt)
 {
 	if (current_animation == NULL)

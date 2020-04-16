@@ -965,3 +965,26 @@ int ModulePathfinding::FindV(iMPoint point, std::vector<HierNode>* vec)
 
 	return vec->size();
 }
+
+bool ModulePathfinding::DeletePath(Entity* request)
+{
+	BROFILER_CATEGORY("Destroy Path", Profiler::Color::Khaki);
+
+	if (generatedPaths.size() < 1)
+		return false;
+
+	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
+
+	int maxSize = generatedPaths.size();
+	for (int i = 0; i < maxSize; i++)
+	{
+		if (it->first == request)
+		{
+			generatedPaths.erase(request);
+			return true;
+		}
+		it++;
+	}
+
+	return false;
+}
