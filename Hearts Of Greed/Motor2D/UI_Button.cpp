@@ -23,6 +23,7 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 	properties.closeMenu = menuClosure;
 	properties.includeFather = includeFather;
 	properties.draggable = draggable;
+	properties.scrollbarPositioning = false;
 
 }
 
@@ -64,20 +65,25 @@ bool UI_Button::Update(float dt)
 				}
 					
 	
-					if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT)
+				if (app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_REPEAT)
+				{
+					
+					if (draggable > DRAGGABLE::DRAG_OFF) 
 					{
-
-
-						if (draggable > DRAGGABLE::DRAG_OFF) 
-						{
-							if (draggable > DRAGGABLE::DRAG_OFF)
-								dragging = true;
-
-							iMPoint mouseClick = { 0,0 };
-							app->input->GetMouseRelPosition(mouseClick.x, mouseClick.y);
-							accuratedDrag = { mouseClick.x - (this->worldPosition.x), mouseClick.y - (this->worldPosition.y) };
-						}
+						if (draggable > DRAGGABLE::DRAG_OFF)
+							dragging = true;
+				
+						iMPoint mouseClick = { 0,0 };
+						app->input->GetMouseRelPosition(mouseClick.x, mouseClick.y);
+						accuratedDrag = { mouseClick.x - (this->worldPosition.x), mouseClick.y - (this->worldPosition.y) };
 					}
+				}
+
+				if (name == "scrollButton" && app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
+				{
+					properties.scrollbarPositioning = true;
+				}
+
 			}
 			else
 				hoverSound = true;
@@ -119,6 +125,12 @@ bool UI_Button::Update(float dt)
 		}
 	}
 	
+	if (properties.scrollbarPositioning == true && app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_UP)
+	{
+		app->eventManager->GenerateEvent(eventRecieved, eventTriggerer);
+		properties.scrollbarPositioning = false;
+	}
+
 	return true;
 }
 
