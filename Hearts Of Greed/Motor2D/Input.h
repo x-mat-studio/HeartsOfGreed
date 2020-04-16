@@ -75,15 +75,17 @@ public:
 	bool GetWindowEvent(int code);
 
 	// Get mouse / axis position
-	void GetMousePosition(int& x, int& y);
+	void GetMouseRelPosition(int& x, int& y);
 	void GetMouseMotion(int& x, int& y);
 
 	fMPoint GetMouseWorld();
-	//Same as GetMousePosition but without the scaling factor
-	void GetMousePositionRaw(int& x, int& y);
+	//Same as GetMouseRelPosition but without the scaling factor
+	void GetMouseRelPositionRaw(int& x, int& y);
 	//Get motion of the scrollwheel in both x (left[negative]/right[positive]) and y (up[positive]/down[negative])axis
 	void GetScrollWheelMotion(int& x, int& y);
 
+	fMPoint GetMousePosScaled() const;
+	iMPoint GetMousePosScreen() const;
 
 	void ActivateTextInput(SDL_Rect& rect);
 	void DesactivateTextInput();

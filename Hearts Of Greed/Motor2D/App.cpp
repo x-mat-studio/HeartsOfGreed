@@ -275,13 +275,12 @@ void App::FinishUpdate()
 	uint32 lastFrameMs = frameTime.ReadSec();
 	uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
-	int mouseX, mouseY = 0;
-	input->GetMousePosition(mouseX, mouseY);
+	fMPoint mouse = input->GetMousePosScaled();
 	static char title[256];
 	sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  || Mouse X:%f  Y:%f",
 		app->render->GetCameraX(), app->render->GetCameraY(),
-		(-app->render->currentCamX + mouseX) / app->win->GetScale(),
-		(-app->render->currentCamY + mouseY) / app->win->GetScale()
+		(-app->render->currentCamX + mouse.x) / app->win->GetScale(),
+		(-app->render->currentCamY + mouse.y) / app->win->GetScale()
 	);
 
 	app->win->SetTitle(title);

@@ -163,8 +163,11 @@ bool  ModuleTestScene::Update(float dt)
 	float scale = app->win->GetScale();
 	iMPoint mousePos;
 	iMPoint mouseRaw;
-	app->input->GetMousePosition(mousePos.x, mousePos.y);
-	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
+	SDL_GetMouseState(&mouseRaw.x, &mouseRaw.y);
+
+	mousePos.x = round((float)mouseRaw.x / scale);
+	mousePos.y = round((float)mouseRaw.y / scale);
+
 
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_STATE::KEY_DOWN) //Debug key to lock camera movement
 	{
@@ -419,10 +422,9 @@ void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 {
 	bool ret = false;
-	iMPoint mouseRaw;
+	iMPoint mouseRaw= app->input->GetMousePosScreen();
 	uint width;
 	uint height;
-	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
 	app->win->GetWindowSize(width, height);
 
 	if (mouseRaw.x <= camMarginMovements.x)

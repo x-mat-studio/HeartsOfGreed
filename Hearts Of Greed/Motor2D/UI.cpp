@@ -25,7 +25,7 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	hidden(false),
 	defaultPosition(positionValue.x),
 	hideSpeed(150.0f),
-	texture (app->uiManager->GetAtlasTexture())
+	texture(app->uiManager->GetAtlasTexture())
 
 {}
 
@@ -86,7 +86,7 @@ void UI::Draw(SDL_Texture* texture)
 	}
 
 
-	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, false, false, '\000', 255, 255,255);
+	app->render->Blit(texture, worldPosition.x, worldPosition.y, &box, false, false, '\000', 255, 255, 255);
 
 }
 
@@ -103,7 +103,9 @@ bool UI::OnAbove()
 	bool ret = false;
 
 	SDL_Point mouse;
-	app->input->GetMousePositionRaw(mouse.x, mouse.y);
+	iMPoint mouseAux = app->input->GetMousePosScreen();
+	mouse.x = mouseAux.x;
+	mouse.y = mouseAux.y;
 
 	mouse.x = (mouse.x) / app->win->GetUIScale();
 	mouse.y = (mouse.y) / app->win->GetUIScale();
@@ -127,13 +129,13 @@ void UI::Hide(float dt)
 	else
 		right = false;
 
-	if (right) 
+	if (right)
 	{
 		if (hiding_unhiding && !hidden)
 		{
 			this->worldPosition.x += hideSpeed * dt;
 
-			if (((position) + (box.w / 10)) > app->win->width)
+			if (((position)+(box.w / 10)) > app->win->width)
 			{
 				hidden = true;
 				hiding_unhiding = false;
@@ -155,7 +157,7 @@ void UI::Hide(float dt)
 		}
 	}
 
-	else 
+	else
 	{
 		if (hiding_unhiding && !hidden)
 		{
@@ -178,7 +180,7 @@ void UI::Hide(float dt)
 				worldPosition.x = defaultPosition;
 				hidden = false;
 				hiding_unhiding = false;
-				app->uiManager->StopAll(this, true, false, false); 
+				app->uiManager->StopAll(this, true, false, false);
 			}
 		}
 	}
