@@ -204,7 +204,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);

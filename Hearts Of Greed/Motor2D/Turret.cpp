@@ -67,10 +67,13 @@ bool Turret::PreUpdate(float dt)
 
 bool Turret::Update(float dt)
 {
+
+
 	//check inputs to traverse state matrix
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
+
 
 	StateMachine();
 
@@ -158,7 +161,6 @@ bool Turret::CheckAttackRange()
 	{
 		return true;
 	}
-
 	else
 	{
 		inputs.push_back(TURRET_INPUTS::IN_OUT_OF_RANGE);
@@ -188,6 +190,8 @@ void Turret::Die()
 
 Entity* Turret::EnemyInRange()
 {
+
+
 	return nullptr;
 }
 
@@ -212,6 +216,10 @@ bool Turret::ExternalInput(std::vector<TURRET_INPUTS>& inputs, float dt)
 	if (CheckAttackRange())
 	{
 		inputs.push_back(TURRET_INPUTS::IN_ATTACK);
+	}
+	else 
+	{
+		SearchObjective();
 	}
 
 	return true;
