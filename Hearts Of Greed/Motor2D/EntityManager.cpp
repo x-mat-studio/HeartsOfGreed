@@ -270,9 +270,9 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
-	app->eventManager->EventRegister(EVENT_ENUM::RANGED_LEVEL_UP, this);
-	app->eventManager->EventRegister(EVENT_ENUM::MELEE_LEVEL_UP, this);
-	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_LEVEL_UP, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
 	
 
 	testBuilding->SetTexture(base1Texture);
@@ -1059,15 +1059,15 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
 		break;
 
-	case EVENT_ENUM::GATHERER_LEVEL_UP:
+	case EVENT_ENUM::GATHERER_RESURRECT:
 
 		break;
 
-	case EVENT_ENUM::RANGED_LEVEL_UP:
+	case EVENT_ENUM::RANGED_RESURRECT:
 
 		break;
 
-	case EVENT_ENUM::MELEE_LEVEL_UP:
+	case EVENT_ENUM::MELEE_RESURRECT:
 
 		break;
 	}

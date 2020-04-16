@@ -12,7 +12,7 @@ class UI_Scrollbar : public UI
 
 public:
 
-	UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, float maxValue = 100.00f);
+	UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger, float maxValue = 100.00f);
 	~UI_Scrollbar();
 
 	bool Start();
@@ -29,7 +29,11 @@ private:
 	void ScrollLimit();
 
 private:
+	
 	UI* scrollButton;
+
+	EVENT_ENUM buttonEvent;
+	EVENT_ENUM buttonTrigger;
 
 	bool generatedButton;
 

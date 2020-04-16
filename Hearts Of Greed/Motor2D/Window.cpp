@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Minimap.h"
+#include "EventManager.h"
 #include "SDL/include/SDL.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -62,6 +63,8 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 		ret = ChangeWindow(stateResolution);
 	}
 
+	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
+
 	return ret;
 }
 
@@ -87,7 +90,9 @@ bool ModuleWindow::Update(float dt)
 {
 	bool ret = true; 
 	
-	//ONCE we have UI this should be menu events
+	CheckListener(this);
+
+	//ONCE we have UI this should be menu events		Don't chu worry Adri, I've got you covered. The UI mantle gives warmth to anyone who needs it. Just get under it, and feel how it embraces you like a giant teddy bear		TODO: delete those debug keys
 	
 	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN) {
 
@@ -243,4 +248,21 @@ float  ModuleWindow::AddScale(float addedScale)
 
 
 	return scale;
+}
+
+void ModuleWindow::ExecuteEvent(EVENT_ENUM eventId)
+{
+	switch (eventId)
+	{
+	case EVENT_ENUM::FULLSCREEN_INPUT:
+		if (stateResolution != RESOLUTION_MODE::FULLSCREEN)
+		{
+			ChangeResolution(RESOLUTION_MODE::FULLSCREEN);
+		}
+		else
+		{
+			ChangeResolution(RESOLUTION_MODE::STATIC);
+		}
+		break;
+	}
 }

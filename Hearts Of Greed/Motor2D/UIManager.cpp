@@ -52,6 +52,8 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_SHOP, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 
 
 	return ret;
@@ -154,9 +156,6 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 	case UI_TYPE::UI_IMG:
 		newUI = new UI_Image(positionValue, father, uiType, rect, uiName, dragable);
 		break;
-	case UI_TYPE::UI_SCROLLBAR:
-		newUI = new UI_Scrollbar(positionValue, father, uiType, rect, uiName, dragable);
-		break;
 	case UI_TYPE::UI_HEALTHBAR:
 		newUI = new UI_Healthbar(positionValue, father, uiType, rect, uiName, entity, dragable);
 		break;
@@ -182,11 +181,19 @@ UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType
 	return newUI;
 }
 
+UI* ModuleUIManager::AddScrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, int maxValue, EVENT_ENUM eventTrigger, DRAGGABLE draggable)
+{
+	UI* newUI = new  UI_Scrollbar(positionValue, father, uiType, rect, uiName, draggable, eventR, eventTrigger, maxValue);
+	uiVector.push_back(newUI);
+	return newUI;
+}
+
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 
 	int eventCheck = 0;
 	UI_Portrait* portrait = nullptr;
+	UI_Scrollbar* scrollbar = nullptr;
 
 	switch (eventId)
 	{
@@ -241,6 +248,21 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::CREATE_SHOP:
 		CreateShopMenu();
 		break;
+
+	case EVENT_ENUM::MUSIC_ADJUSTMENT:
+		scrollbar = (UI_Scrollbar*)FindUIByName("musicScrollbar");
+		eventCheck = scrollbar->GetScrollValue();
+		Mix_VolumeMusic(eventCheck);
+		app->audio->musicVolume = eventCheck;
+		scrollbar = nullptr;
+		break;
+
+	case EVENT_ENUM::SFX_ADJUSTMENT:
+		scrollbar = (UI_Scrollbar*)FindUIByName("sfxScrollbar");
+		app->audio->volumeAdjustment = scrollbar->GetScrollValue() - 255;
+		scrollbar = nullptr;
+		break;
+
 	}
 }
 
@@ -350,7 +372,9 @@ void ModuleUIManager::CreateOptionsMenu()
 
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 30, (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_TEXT, rect, (P2SString)"optionText", nullptr, DRAGGABLE::DRAG_OFF, "O P T I O N S");
 
-	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 20, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 25), father, UI_TYPE::UI_TEXT, rect, (P2SString)"audioText", nullptr, DRAGGABLE::DRAG_OFF, "Audio");
+	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 20, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 25), father, UI_TYPE::UI_TEXT, rect, (P2SString)"musicText", nullptr, DRAGGABLE::DRAG_OFF, "Music");
+
+	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 140, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 25), father, UI_TYPE::UI_TEXT, rect, (P2SString)"sfxText", nullptr, DRAGGABLE::DRAG_OFF, "SFX");
 
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 20, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 75), father, UI_TYPE::UI_TEXT, rect, (P2SString)"fullscreenModeText", nullptr, DRAGGABLE::DRAG_OFF, "Fullscreen mode");
 
@@ -361,7 +385,10 @@ void ModuleUIManager::CreateOptionsMenu()
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (278 / 2) - (3* rect.w / 4), h / (app->win->GetUIScale() * 2) - (153 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
 
 	rect = RectConstructor(273, 45, 90, 4);
-	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (278 / 2) + 20, (h / app->win->GetUIScale() / 2) - (153 / 2) + 60), father, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"audioScrollbar");
+	AddScrollbar(fMPoint((w / app->win->GetUIScale() / 2) - (278 / 2) + 20, (h / app->win->GetUIScale() / 2) - (153 / 2) + 60), father, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"musicScrollbar", EVENT_ENUM::MUSIC_ADJUSTMENT, 128.0f);
+
+	AddScrollbar(fMPoint((w / app->win->GetUIScale() / 2) - (278 / 2) + 140, (h / app->win->GetUIScale() / 2) - (153 / 2) + 60), father, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"sfxScrollbar", EVENT_ENUM::SFX_ADJUSTMENT, 455.0f);
+
 }
 
 void ModuleUIManager::CreateEntityPortrait()
@@ -568,7 +595,7 @@ void ModuleUIManager::CreateShopMenu()
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"shopBackground");
 
 	// Heroes
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroUpgradeText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   U P G R A D E");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroResurrectionText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   R E S U R R E C T I O N");
 
 	rect = RectConstructor(581, 24, 36, 27);
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroGathererPortrait");
@@ -580,17 +607,17 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of level up in the player / entity manager; also spend the resource (do it only if you have enough)
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererLevelButton", EVENT_ENUM::GATHERER_LEVEL_UP);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererResurrectButton", EVENT_ENUM::GATHERER_RESURRECT);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedLevelButton", EVENT_ENUM::RANGED_LEVEL_UP);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedResurrectButton", EVENT_ENUM::RANGED_RESURRECT);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeLevelButton", EVENT_ENUM::MELEE_LEVEL_UP);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeResurrectButton", EVENT_ENUM::MELEE_RESURRECT);
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Resurrect");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroRangedText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroRangedResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Resurrect");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Resurrect");
 
 	// TODO: add the amount of resources that have to be spent for the levelling up under the correspondant button (-x gem icon)
 
@@ -647,6 +674,8 @@ UI* ModuleUIManager::FindUIByName(char* name)
 			return uiVector[i];
 		}
 	}
+
+	return nullptr;
 }
 
 void ModuleUIManager::HideElements(UI* father, float dt)

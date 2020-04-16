@@ -7,7 +7,7 @@
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 
-ModuleAudio::ModuleAudio() : Module(), music(NULL)
+ModuleAudio::ModuleAudio() : Module(), music(NULL), volumeAdjustment(-27), musicVolume(NULL)
 {
 	name.create("audio");
 }
@@ -88,6 +88,15 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume)
 		volume = 0;
 	}
 	Mix_VolumeMusic(volume);
+
+	if (volume > 128)
+	{
+		musicVolume = 128;
+	}
+	else
+	{
+		musicVolume = volume;
+	}
 
 	if (!enabled)
 		return false;
@@ -214,13 +223,13 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	switch (loudness)
 	{
 	case LOUDNESS::QUIET:
-		volume = 200;
+		volume = 200 - volumeAdjustment;
 		break;
 	case LOUDNESS::NORMAL:
-		volume = 100;
+		volume = 100 - volumeAdjustment;
 		break;
 	case LOUDNESS::LOUD:
-		volume = 1;
+		volume = 1 - volumeAdjustment;
 		break;
 	default:
 		Mix_HaltChannel(-1); //Someone missused the function
@@ -264,6 +273,15 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 		break;
 	}
 	
+	if (volume > 255)
+	{
+		volume = 255;
+	}
+	else if (volume < 0)
+	{
+		volume = 0;
+	}
+
 	Mix_SetPosition(channel, angle, volume);
 	return ret;
 }
@@ -278,3 +296,4 @@ void ModuleAudio::SilenceAll()
 	SilenceAllChannels(-1);
 	Mix_HaltMusic();
 }
+
