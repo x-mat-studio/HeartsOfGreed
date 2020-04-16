@@ -110,20 +110,19 @@ bool Minimap::Update(float dt)
 
 	if (minimapLoaded==true)
 	{
-		int x;
-		int y;
+		iMPoint mousePos = app->input->GetMousePosScreen();
 		int w;
 		int h;
-		app->input->GetMousePositionRaw(x, y);
+		
 		app->render->GetCameraMeasures(w, h);
 
 		float scale = app->win->GetScale();
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			if (ClickingOnMinimap(x, y) == true && app->player->doingAction==false)
+			if (ClickingOnMinimap(mousePos.x, mousePos.y) == true && app->player->doingAction==false)
 			{
 				//camera TP
-				iMPoint newCamPos = ScreenToMinimapToWorld(x, y);
+				iMPoint newCamPos = ScreenToMinimapToWorld(mousePos.x, mousePos.y);
 
 				app->render->currentCamX = -((newCamPos.x * scale) - (w * 0.5f));
 				app->render->currentCamY = -((newCamPos.y * scale) - (h * 0.5f));

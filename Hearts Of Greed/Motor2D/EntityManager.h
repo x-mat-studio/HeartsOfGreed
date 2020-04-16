@@ -141,7 +141,8 @@ public:
 	SDL_Texture* IAmSelected;
 	SDL_Texture* target;
 	SDL_Texture* debugPathTexture;
-	
+	SDL_Texture* explosionText;
+
 	
 	//Sounds
 	int wanamingoRoar;

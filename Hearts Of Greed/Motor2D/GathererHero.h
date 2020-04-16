@@ -40,7 +40,6 @@ public:
 	Animation vfxExplosion;
 
 	//This is a placeholder for particles
-	SDL_Texture* explosionText;
 	SDL_Rect explosionRect;
 	Animation* currentVfx;
 	bool DrawVfx(float dt);

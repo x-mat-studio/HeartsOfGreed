@@ -400,7 +400,6 @@ bool Enemy::CheckAttackRange()
 	{
 		return true;
 	}
-
 	else
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);

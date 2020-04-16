@@ -258,19 +258,36 @@ bool ModuleInput::GetWindowEvent(EVENT_WINDOW ev)
 }
 
 
-void ModuleInput::GetMousePosition(int& x, int& y)
+void ModuleInput::GetMouseRelPosition(int& x, int& y)
 {
 	x = mouseX;
 	y = mouseY;
 }
 
 
-void ModuleInput::GetMousePositionRaw(int& x, int& y)
+void ModuleInput::GetMouseRelPositionRaw(int& x, int& y)
 {
 	x = mouseXRaw;
 	y = mouseYRaw;
 }
 
+fMPoint ModuleInput::GetMousePosScaled() const
+{
+	float scale =app->win->GetScale();
+	iMPoint aux;
+	fMPoint ret;
+	SDL_GetMouseState(&aux.x, &aux.y);
+	ret.x = round((float)aux.x / scale);
+	ret.y = round((float)aux.y / scale);
+	return ret;
+}
+
+iMPoint ModuleInput::GetMousePosScreen() const
+{
+	iMPoint ret;
+	SDL_GetMouseState(&ret.x, &ret.y);
+	return ret;
+}
 
 void ModuleInput::GetMouseMotion(int& x, int& y)
 {

@@ -203,8 +203,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
-	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle);
+	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -247,7 +247,8 @@ bool ModuleEntityManager::Start()
 	base2Texture = app->tex->Load("maps/base02.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
-	target = app->tex->Load("spritesheets/VFX/target.png");
+
+	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -507,10 +508,9 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(debugPathTexture);
 
 	app->tex->UnLoad(IAmSelected);
-	app->tex->UnLoad(target);
+	app->tex->UnLoad(explosionText);
 
 	IAmSelected = nullptr;
-	target = nullptr;
 
 	suitManTexture = nullptr;
 	armorMaleTexture = nullptr;
@@ -522,6 +522,8 @@ bool ModuleEntityManager::CleanUp()
 	base2Texture = nullptr;
 
 	turretTexture = nullptr;
+
+	explosionText = nullptr;
 
 	debugPathTexture = nullptr;
 
@@ -683,27 +685,14 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			
 			Hero* thisHero;
 			thisHero = (Hero*)entityVector[i];
-			thisHero->selected_by_player = false;
+			thisHero->selected = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selected_by_player = true;
+					thisHero->selected = true;
 					heroPlayerVector->push_back(thisHero);
-				}
-			}
-		}
-
-		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
-			col = entityVector[i]->GetCollider();
-			entityVector[i]->selected_by_player = false;
-		
-			if (col != nullptr)
-			{
-				if (col->CheckCollision(selection))
-				{
-					entityVector[i]->selected_by_player = true;
 				}
 			}
 		}
@@ -850,7 +839,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 
-	selectedVector = movableEntityVector; 
+	selectedVector = movableEntityVector; //Hahahahaha
 
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
@@ -911,41 +900,20 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	renderVector.clear();
 
 	//icons
-	
 	for (int i = 0; i < selectedVector.size(); i++)
 	{
-		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)) {
-
-			if (selectedVector[i]->visionEntity != nullptr)
-			{
-				if (selectedVector[i]->visionEntity->isVisible)
-				{
-					Hero* thisHero = (Hero*)selectedVector[i];
-					thisHero->DrawSelected();
-				}
-			}
-			else
+		if (selectedVector[i]->visionEntity != nullptr)
+		{
+			if (selectedVector[i]->visionEntity->isVisible)
 			{
 				Hero* thisHero = (Hero*)selectedVector[i];
 				thisHero->DrawSelected();
 			}
 		}
-	
-		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
-			
-			if (selectedVector[i]->visionEntity != nullptr)
-			{
-				if (selectedVector[i]->visionEntity->isVisible)
-				{
-					Enemy* thisEnemy = (Enemy*)selectedVector[i];
-					thisEnemy->DrawOnSelect();
-				}
-			}
-			else
-			{
-				Enemy* thisEnemy = (Enemy*)selectedVector[i];
-				thisEnemy->DrawOnSelect();
-			}
+		else
+		{
+			Hero* thisHero = (Hero*)selectedVector[i];
+			thisHero->DrawSelected();
 		}
 	}
 
@@ -1011,8 +979,10 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 {
-	iMPoint pos;
+	iMPoint pos= app->input->GetMousePosScreen();
 	int entityNum = entityVector.size();
+	pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+	pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 
 	switch (eventId)
 	{
@@ -1044,58 +1014,37 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::SPAWN_BASE:
 
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BLDG_BASE, pos.x, pos.y);
 		break;
 
 
 	case EVENT_ENUM::SPAWN_BUILDING:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BUILDING, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_ENEMY:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::ENEMY, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_GATHERER_HERO:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_MELEE_HERO:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_RANGED_HERO:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_TURRET:
 		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
 		break;
 
