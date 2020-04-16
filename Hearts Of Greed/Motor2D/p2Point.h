@@ -19,6 +19,9 @@ public:
 	MAT_Point()
 	{}
 
+	~MAT_Point()
+	{}
+
 	MAT_Point(const MAT_Point<TYPE>& v)
 	{
 		this->x = v.x;

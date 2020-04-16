@@ -444,8 +444,11 @@ Cluster::Cluster(const Cluster& clust) :
 	width(clust.width), height(clust.height), pos(clust.pos)
 {}
 
-generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int lvl) : path(vector), type(type), lvl(lvl)
-{}
+generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int lvl) : type(type), lvl(lvl)
+{
+	this->path.swap(vector);
+	vector.clear();
+}
 
 
 //---------------------------------------------------
@@ -657,8 +660,13 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 		ret = PATH_TYPE::SIMPLE;
 	}
 
+	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.find(pathRequest);
+	if (it != generatedPaths.end())
+	{
+		it->second.path.clear();
+		generatedPaths.erase(pathRequest);
+	}
 
-	generatedPaths.erase(pathRequest);
 	generatedPaths.insert({ pathRequest, generatedPath(last_path, ret, maxLvl) });
 
 
@@ -774,6 +782,8 @@ float ModulePathfinding::SimpleAPathfinding(const iMPoint& origin, const iMPoint
 
 			std::reverse(last_path.begin(), last_path.end());
 
+			adjList.clear();
+
 			return closed.back().g;
 		}
 
@@ -887,7 +897,10 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 
 	}
 
-	return generatedPath;
+	if (generatedPath != nullptr)
+		generatedPath->clear();
+
+	return true;
 }
 
 bool ModulePathfinding::IsStraightPath(iMPoint from, iMPoint to)

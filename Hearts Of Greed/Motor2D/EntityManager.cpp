@@ -248,6 +248,8 @@ bool ModuleEntityManager::Start()
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
 
+	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
+
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
@@ -503,6 +505,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(debugPathTexture);
 
 	app->tex->UnLoad(IAmSelected);
+	app->tex->UnLoad(explosionText);
 
 	IAmSelected = nullptr;
 
@@ -516,6 +519,8 @@ bool ModuleEntityManager::CleanUp()
 	base2Texture = nullptr;
 
 	turretTexture = nullptr;
+
+	explosionText = nullptr;
 
 	debugPathTexture = nullptr;
 
