@@ -169,6 +169,7 @@ public:
 	int noise3Armored;
 	int noise4Armored;
 
+	int lvlup;
 
 	Building* testBuilding;
 
