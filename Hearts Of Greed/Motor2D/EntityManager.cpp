@@ -685,13 +685,13 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			
 			Hero* thisHero;
 			thisHero = (Hero*)entityVector[i];
-			thisHero->selected = false;
+			thisHero->selected_by_player = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selected = true;
+					thisHero->selected_by_player = true;
 					heroPlayerVector->push_back(thisHero);
 				}
 			}
