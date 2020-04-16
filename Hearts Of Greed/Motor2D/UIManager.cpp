@@ -821,7 +821,7 @@ void ModuleUIManager::DisableHealthBars()
 			currHB= (UI_Healthbar*)uiVector[i];
 
 			if (currHB != nullptr)
-				currHB->ThisEntityDeath();
+				currHB->EntityDeath();
 		}
 	}
 }
