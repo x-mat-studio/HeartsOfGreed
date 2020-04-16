@@ -139,6 +139,7 @@ private:
 public:
 
 	SDL_Texture* IAmSelected;
+	SDL_Texture* target;
 	SDL_Texture* debugPathTexture;
 	
 	

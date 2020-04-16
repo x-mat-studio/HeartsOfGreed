@@ -247,6 +247,7 @@ bool ModuleEntityManager::Start()
 	base2Texture = app->tex->Load("maps/base02.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+	target = app->tex->Load("spritesheets/VFX/target.png");
 
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -506,8 +507,10 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(debugPathTexture);
 
 	app->tex->UnLoad(IAmSelected);
+	app->tex->UnLoad(target);
 
 	IAmSelected = nullptr;
+	target = nullptr;
 
 	suitManTexture = nullptr;
 	armorMaleTexture = nullptr;
@@ -680,14 +683,27 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			
 			Hero* thisHero;
 			thisHero = (Hero*)entityVector[i];
-			thisHero->selected = false;
+			thisHero->selected_by_player = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selected = true;
+					thisHero->selected_by_player = true;
 					heroPlayerVector->push_back(thisHero);
+				}
+			}
+		}
+
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+		
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
 				}
 			}
 		}
@@ -834,7 +850,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 
-	selectedVector = movableEntityVector; //Hahahahaha
+	selectedVector = movableEntityVector; 
 
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
@@ -895,20 +911,41 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	renderVector.clear();
 
 	//icons
+	
 	for (int i = 0; i < selectedVector.size(); i++)
 	{
-		if (selectedVector[i]->visionEntity != nullptr)
-		{
-			if (selectedVector[i]->visionEntity->isVisible)
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)) {
+
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
+			}
+			else
 			{
 				Hero* thisHero = (Hero*)selectedVector[i];
 				thisHero->DrawSelected();
 			}
 		}
-		else
-		{
-			Hero* thisHero = (Hero*)selectedVector[i];
-			thisHero->DrawSelected();
+	
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+			else
+			{
+				Enemy* thisEnemy = (Enemy*)selectedVector[i];
+				thisEnemy->DrawOnSelect();
+			}
 		}
 	}
 
