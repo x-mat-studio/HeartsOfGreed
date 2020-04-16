@@ -14,7 +14,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int maxHitPoints, int currentHitPoints,
 	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 10, 20),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 25),
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
 	walkLeftDown(walkLeftDown),
@@ -326,7 +326,7 @@ void Enemy::Die()
 }
 
 
-void Enemy::CheckObjecive(Entity* entity)
+void Enemy::CheckObjective(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{

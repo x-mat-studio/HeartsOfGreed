@@ -112,7 +112,7 @@ public:
 	bool GetExperience(int xp);
 	bool GetLevel();
 
-	void CheckObjecive(Entity* entity);
+	void CheckObjective(Entity* entity);
 	void Draw(float dt);
 	void DrawArea();
 

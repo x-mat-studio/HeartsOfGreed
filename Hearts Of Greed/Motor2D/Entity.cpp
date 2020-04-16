@@ -306,3 +306,9 @@ int Entity::RecieveDamage(int damage)
 	return -1;
 }
 
+void Entity::CheckObjective(Entity* deleted)
+{
+	return;
+}
+
+

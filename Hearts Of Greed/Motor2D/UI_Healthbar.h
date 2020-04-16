@@ -16,6 +16,7 @@ public:
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
+	void EntityDeath();
 
 private:
 

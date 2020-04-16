@@ -10,6 +10,7 @@ struct SDL_Texture;
 class UI;
 class UI_Portrait;
 class Entity;
+class UI_Healthbar;
 enum class UI_TYPE;
 
 enum class DRAGGABLE
@@ -69,6 +70,8 @@ private:
 
 	void CreatePauseMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
+
+	void DisableHealthBars();
 
 public:
 

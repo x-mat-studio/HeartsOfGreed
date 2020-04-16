@@ -22,7 +22,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 30),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -518,7 +518,7 @@ void Hero::Die()
 }
 
 
-void Hero::CheckObjecive(Entity* entity)
+void Hero::CheckObjective(Entity* entity)
 {
 	if (objective == entity)
 	{

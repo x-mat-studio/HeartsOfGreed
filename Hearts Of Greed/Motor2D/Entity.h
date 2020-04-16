@@ -89,6 +89,7 @@ public:
 	virtual Collider* GetCollider() const;
 
 	virtual int RecieveDamage(int damage);
+	virtual void CheckObjective(Entity* deleted);
 
 	fMPoint GetPosition();
 	fMPoint GetCenter();

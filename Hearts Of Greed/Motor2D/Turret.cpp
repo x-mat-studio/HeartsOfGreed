@@ -92,7 +92,7 @@ void Turret::CheckObjecive(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{
-		shortTermObjective == nullptr;
+		shortTermObjective = nullptr;
 	}
 }
 

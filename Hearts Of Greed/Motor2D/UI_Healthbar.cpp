@@ -13,6 +13,12 @@ UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SD
 		currentHealth = &entity->hitPointsCurrent;
 		previousHealth = *currentHealth;
 	}
+	else
+	{
+		maxHealth = nullptr;
+		currentHealth = nullptr;
+		previousHealth = 0;
+	}
 }
 
 UI_Healthbar::~UI_Healthbar()
@@ -65,17 +71,22 @@ bool UI_Healthbar::PostUpdate(float dt)
 }
 
 void UI_Healthbar::HandleInput()
-{
-
-}
+{}
 
 void UI_Healthbar::AdjustHealth()
 {
-	if (currentHealth != nullptr) {
-
+	if (currentHealth != nullptr) 
+	{
 		if (*currentHealth > 0 && *currentHealth != previousHealth && *maxHealth > 0)
 		{
 			box.w = originalWidth * (*currentHealth) / (*maxHealth);
 		}
 	}
+}
+
+void UI_Healthbar::EntityDeath()
+{
+	this->entity = nullptr;
+	this->currentHealth = nullptr;
+	this->maxHealth = nullptr;
 }

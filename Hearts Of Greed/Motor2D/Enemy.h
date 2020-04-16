@@ -60,7 +60,7 @@ public:
 
 	void OnCollision(Collider* collider);
 
-	void CheckObjecive(Entity* entity);
+	void CheckObjective(Entity* entity);
 
 	bool MoveTo(float x, float y);
 
