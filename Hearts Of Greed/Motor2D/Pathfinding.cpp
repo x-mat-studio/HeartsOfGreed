@@ -390,6 +390,9 @@ void graphLevel::deleteNode(HierNode* toDelete, int maxLvl)
 {
 	BROFILER_CATEGORY("Delete Node", Profiler::Color::DarkViolet);
 
+	if (toDelete == nullptr || maxLvl < 1)
+		return;
+
 	Cluster* c = nullptr;
 
 	for (int l = 1; l <= maxLvl; l++)
@@ -401,13 +404,38 @@ void graphLevel::deleteNode(HierNode* toDelete, int maxLvl)
 
 		for (int i = 0; i < c->clustNodes.size(); i++)
 		{
+			for (int j = 0; j < c->clustNodes[i]->edges.size(); j++)
+			{
+				if (c->clustNodes[i]->edges[j]->dest == toDelete)
+				{
+					c->clustNodes[i]->edges[j]->dest = nullptr;
+					delete c->clustNodes[i]->edges[j];
+
+					c->clustNodes[i]->edges.erase(c->clustNodes[i]->edges.begin() + j);
+					break;
+				}
+			}
+		}
+
+		for (int i = 0; i < c->clustNodes.size(); i++)
+		{
 			if (c->clustNodes[i]->pos == toDelete->pos)
 			{
-				toDelete->edges.clear();
+				for (int j = 0; j < toDelete->edges.size(); j++)
+				{
+					c->clustNodes[i]->edges[j]->dest = nullptr;
+					delete c->clustNodes[i]->edges[j];
+
+				}
+
 				c->clustNodes.erase(c->clustNodes.begin() + i);
+				toDelete->edges.clear();
+				delete toDelete;
 				break;
 			}
 		}
+
+
 	}
 }
 

@@ -255,7 +255,7 @@ bool Enemy::MoveTo(float x, float y)
 
 	framePathfindingCount = 0;
 
-	if (GeneratePath(x, y, 0))
+	if (GeneratePath(x, y, 1))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;
