@@ -98,6 +98,9 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
+
+	int randomCounter = rand() % 50;
+	framesPerPathfinding += randomCounter;
 }
 
 
@@ -248,7 +251,7 @@ bool Enemy::MoveTo(float x, float y)
 
 	framePathfindingCount = 0;
 
-	if (GeneratePath(x, y, 1))
+	if (GeneratePath(x, y, 0))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;
@@ -296,8 +299,8 @@ void Enemy::Attack()
 
 void Enemy::Die()
 {
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	collider->thisEntity = nullptr;
 
 	int randomCounter = rand() % 2;
@@ -324,8 +327,9 @@ void Enemy::CheckObjecive(Entity* entity)
 	if (shortTermObjective == entity)
 	{
 		path.clear();
+		DestroyPath();
 		shortTermObjective = nullptr;
-		SearchForNewObjective();
+		SearchObjective();
 
 		inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 	}
@@ -437,14 +441,17 @@ bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 	else
 	{
-		if (SearchObjective() == true)
+		if (framePathfindingCount == framesPerPathfinding)
 		{
-			MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
-		}
+			if (SearchObjective() == true)
+			{
+				MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
+			}
 
-		else if (haveOrders)
-		{
-			MoveTo(longTermObjective.x, longTermObjective.y);
+			else if (haveOrders)
+			{
+				MoveTo(longTermObjective.x, longTermObjective.y);
+			}
 		}
 	}
 

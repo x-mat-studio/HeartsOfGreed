@@ -744,7 +744,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	{
 		alignement = entityVector[i]->GetAlignment();
 
-		if (alignement != alignementToSearch)
+		if (alignement != alignementToSearch || entityVector[i]->toDelete == true)
 		{
 			continue;
 		}

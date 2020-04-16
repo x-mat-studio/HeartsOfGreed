@@ -5,7 +5,8 @@
 
 #include "Entity.h"
 
-#define FRAMES_PER_PATHFINDING 30
+#define FRAMES_PER_PATHFINDING 40
+#define FRAMES_PER_PATH_REQUEST 30
 
 enum class FACE_DIR : int
 {
@@ -37,6 +38,7 @@ public:
 	void DebugDraw(int pivotPositionX, int pivotPositionY);
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
+	void DestroyPath();
 
 	FACE_DIR DetermineDirection(fMPoint dir);
 
@@ -50,6 +52,9 @@ public:
 	int unitSpeed;
 
 	FACE_DIR dir;
+
+	int framesSinceRequest;
+	int framesToRquest;
 
 protected:
 

@@ -27,7 +27,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 	vfxExplosion(explosion),
 	currentVfx(nullptr),
 	explosionText(nullptr),
-	explosionRect{0,0,0,0}
+	explosionRect{ 0,0,0,0 }
 {}
 
 
@@ -43,6 +43,21 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 }
 
+GathererHero::~GathererHero()
+{
+	app->tex->UnLoad(explosionText);
+	explosionText = nullptr;
+
+	currentVfx = nullptr;
+
+	vfxExplosion = Animation();
+
+	granadeArea = nullptr;
+
+
+	currentVfx = nullptr;
+
+}
 
 bool GathererHero::ActivateSkill1(fMPoint mouseClick)
 {
@@ -73,7 +88,7 @@ bool GathererHero::ActivateSkill3()
 bool GathererHero::PreProcessSkill1()
 {
 	if (currAoE.size() == 0)
-	{		
+	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
 
@@ -143,7 +158,7 @@ void GathererHero::LevelUp()
 {
 
 	hitPointsMax;
-	hitPointsCurrent;		
+	hitPointsCurrent;
 	recoveryHitPointsRate;
 	energyPoints;
 	recoveryEnergyRate;

@@ -16,6 +16,7 @@ public:
 		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, Animation& vfxExplosion);
 
 	GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement);
+	~GathererHero();
 
 	bool ActivateSkill1(fMPoint mouseClick);
 	bool ActivateSkill2();

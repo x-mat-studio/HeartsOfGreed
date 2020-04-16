@@ -482,6 +482,8 @@ void Hero::Attack()
 
 void Hero::Die()
 {
+	toDelete = true;
+
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 
 	switch (type)
@@ -502,9 +504,6 @@ void Hero::Die()
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
 	}
-
-	toDelete = true;
-
 
 	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 

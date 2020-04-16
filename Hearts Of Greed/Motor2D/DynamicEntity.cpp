@@ -21,9 +21,14 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	current_animation(nullptr),
 
 	toMove{ 0,0 },
+	framesSinceRequest(0),
+	framesToRquest(FRAMES_PER_PATH_REQUEST),
 
 	dir(FACE_DIR::SOUTH_EAST)
-{}
+{
+	int randomCounter = rand() % FRAMES_PER_PATH_REQUEST;
+	framesToRquest += randomCounter;
+}
 
 DynamicEntity::~DynamicEntity()
 {
@@ -43,14 +48,19 @@ bool DynamicEntity::Move(float dt)
 	fMPoint pathSpeed = { 0,0 };
 	fMPoint nextPoint = { 0,0 };
 
-	if (path.size() < 2)
+	if (framesSinceRequest >= framesToRquest)
+	{
 		app->pathfinding->RequestPath(this, &path);
+		framesSinceRequest = 0;
+	}
 
 	if (path.size() > 0)
 	{
 		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
 
 		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
+
+		framesSinceRequest++;
 	}
 	dir = DetermineDirection(pathSpeed);
 
@@ -74,6 +84,7 @@ bool DynamicEntity::Move(float dt)
 	{
 		return true;
 	}
+
 
 	return false;
 }
@@ -121,6 +132,8 @@ FACE_DIR DynamicEntity::DetermineDirection(fMPoint faceDir)
 
 void DynamicEntity::GroupMovement(float dt)
 {
+	BROFILER_CATEGORY("Group Mov.", Profiler::Color::BlanchedAlmond);
+
 
 	toMove = { 0,0 };
 	// ----------------------------------------------------------------
@@ -336,6 +349,11 @@ void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 		iMPoint pos = app->map->MapToWorld(it->x - 1, it->y);
 		app->render->Blit(debugTex, pos.x, pos.y);
 	}
+}
+
+void DynamicEntity::DestroyPath()
+{
+	app->pathfinding->DeletePath(this);
 }
 
 SDL_Rect DynamicEntity::GetAnimationRect(float dt)
