@@ -194,7 +194,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-	5000, 5000, 0, 250, 1, 1, 35, 100, 50);
+	20, 20, 0, 250, 1, 1, 35, 100, 50);
 
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
@@ -295,18 +295,21 @@ bool ModuleEntityManager::Start()
 	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
 	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
 
-	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
-	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
-	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
-	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
+	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
+	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
+	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
 
 	//Armored sfx--------
-	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
-	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
-	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
-	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
+	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
+	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
+	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
+	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
 
 	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
+
+	//General hero sfx--------
+	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
 
 	return ret;
 }

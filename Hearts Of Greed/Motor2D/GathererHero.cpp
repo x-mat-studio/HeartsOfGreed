@@ -161,25 +161,26 @@ void GathererHero::LevelUp()
 	unitSpeed;
 	visionDistance;
 
+	app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
 }
 
 void GathererHero::PlayGenericNoise()
 {
-	int random = rand() % 4 + 1;
+	int random = rand() % 15 + 1;
 
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise1Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise2Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise3Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise4Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 
 	default:
