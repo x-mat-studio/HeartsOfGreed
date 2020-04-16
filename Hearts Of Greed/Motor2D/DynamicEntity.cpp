@@ -225,6 +225,7 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 		separationSpeed.y /= spdNorm;
 	}
 
+	colliding_entity_list.clear();
 
 	return separationSpeed;
 }
@@ -271,6 +272,8 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_
 		cohesionSpeed.y = cohesionSpeed.y / norm;
 	}
 
+
+	close_entity_list.clear();
 	return cohesionSpeed;
 }
 
@@ -300,6 +303,8 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 		alignmentSpeed = alignmentSpeed / norm;
 	}
 
+	close_entity_list.clear();
+
 	return alignmentSpeed;
 }
 
@@ -314,8 +319,10 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	{
 		path.clear();
 		app->pathfinding->RequestPath(this, &path);
+
 		if (path.size() > 0)
 			path.erase(path.begin());
+
 		return true;
 	}
 

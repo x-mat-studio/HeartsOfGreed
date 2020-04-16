@@ -203,8 +203,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
-	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle);
+	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -247,6 +247,8 @@ bool ModuleEntityManager::Start()
 	base2Texture = app->tex->Load("maps/base02.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+
+	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
 	//turretTexture = nullptr;
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -506,6 +508,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(debugPathTexture);
 
 	app->tex->UnLoad(IAmSelected);
+	app->tex->UnLoad(explosionText);
 
 	IAmSelected = nullptr;
 
@@ -519,6 +522,8 @@ bool ModuleEntityManager::CleanUp()
 	base2Texture = nullptr;
 
 	turretTexture = nullptr;
+
+	explosionText = nullptr;
 
 	debugPathTexture = nullptr;
 

@@ -26,7 +26,6 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 
 	vfxExplosion(explosion),
 	currentVfx(nullptr),
-	explosionText(nullptr),
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -39,24 +38,16 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 	currentVfx(nullptr),
 	vfxExplosion(copy->vfxExplosion),
 	explosionRect{ 0,0,0,0 }
-{
-	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
-}
+{}
 
 GathererHero::~GathererHero()
 {
-	app->tex->UnLoad(explosionText);
-	explosionText = nullptr;
-
 	currentVfx = nullptr;
 
 	vfxExplosion = Animation();
 
 	granadeArea = nullptr;
-
-
 	currentVfx = nullptr;
-
 }
 
 bool GathererHero::ActivateSkill1(fMPoint mouseClick)
@@ -205,7 +196,7 @@ bool GathererHero::DrawVfx(float dt)
 	{
 		Frame currFrame = currentVfx->GetCurrentFrame(dt);
 
-		app->render->Blit(explosionText, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
+		app->render->Blit(app->entityManager->explosionText, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
 
 	}
 
