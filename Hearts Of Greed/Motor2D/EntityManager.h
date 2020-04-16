@@ -140,7 +140,8 @@ public:
 
 	SDL_Texture* IAmSelected;
 	SDL_Texture* debugPathTexture;
-	
+	SDL_Texture* explosionText;
+
 	
 	//Sounds
 	int wanamingoRoar;
@@ -169,6 +170,7 @@ public:
 	int noise3Armored;
 	int noise4Armored;
 
+	int lvlup;
 
 	Building* testBuilding;
 

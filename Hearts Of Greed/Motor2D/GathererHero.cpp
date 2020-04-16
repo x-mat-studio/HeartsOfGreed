@@ -26,7 +26,6 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 
 	vfxExplosion(explosion),
 	currentVfx(nullptr),
-	explosionText(nullptr),
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -39,24 +38,16 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 	currentVfx(nullptr),
 	vfxExplosion(copy->vfxExplosion),
 	explosionRect{ 0,0,0,0 }
-{
-	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
-}
+{}
 
 GathererHero::~GathererHero()
 {
-	app->tex->UnLoad(explosionText);
-	explosionText = nullptr;
-
 	currentVfx = nullptr;
 
 	vfxExplosion = Animation();
 
 	granadeArea = nullptr;
-
-
 	currentVfx = nullptr;
-
 }
 
 bool GathererHero::ActivateSkill1(fMPoint mouseClick)
@@ -170,25 +161,26 @@ void GathererHero::LevelUp()
 	unitSpeed;
 	visionDistance;
 
+	app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
 }
 
 void GathererHero::PlayGenericNoise()
 {
-	int random = rand() % 4 + 1;
+	int random = rand() % 15 + 1;
 
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise1Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise2Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise3Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Suitman, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->noise4Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 		break;
 
 	default:
@@ -204,7 +196,7 @@ bool GathererHero::DrawVfx(float dt)
 	{
 		Frame currFrame = currentVfx->GetCurrentFrame(dt);
 
-		app->render->Blit(explosionText, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
+		app->render->Blit(app->entityManager->explosionText, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
 
 	}
 

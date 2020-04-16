@@ -112,6 +112,11 @@ struct generatedPath
 {
 	generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int lvl);
 
+	~generatedPath()
+	{
+		path.clear();
+	}
+
 	std::vector<iMPoint> path;
 	PATH_TYPE type;
 	int lvl;
