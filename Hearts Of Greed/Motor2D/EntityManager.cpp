@@ -839,7 +839,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
 
-	selectedVector = movableEntityVector; //Hahahahaha
+	selectedVector = movableEntityVector; 
 
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{

@@ -148,17 +148,17 @@ bool GathererHero::ExecuteSkill3()
 void GathererHero::LevelUp()
 {
 
-	hitPointsMax;
-	hitPointsCurrent;
+	hitPointsMax += 5;
+	hitPointsCurrent = hitPointsMax;
 	recoveryHitPointsRate;
-	energyPoints;
-	recoveryEnergyRate;
+	energyPoints += 10;
+	recoveryEnergyRate += 1;
 
-	attackDamage;
+	attackDamage += 2;
 	attackSpeed;
 	attackRange;
 
-	unitSpeed;
+	unitSpeed += 6;
 	visionDistance;
 
 	app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
