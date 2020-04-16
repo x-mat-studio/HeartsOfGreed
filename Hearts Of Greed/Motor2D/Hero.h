@@ -210,7 +210,7 @@ public:
 	float visionInPx;
 
 	Entity* objective;
-	bool selected;
+	//bool selected;
 
 	Animation walkLeft;
 	Animation walkLeftUp;

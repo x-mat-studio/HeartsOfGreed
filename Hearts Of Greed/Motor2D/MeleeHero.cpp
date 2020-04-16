@@ -106,17 +106,17 @@ bool MeleeHero::ExecuteSkill3()
 void MeleeHero::LevelUp()
 {
 
-	hitPointsMax;
-	hitPointsCurrent;		// As said in gatherer, I think, I'm ignorant to which should be upgraded				Ferran, with love, from my room :D
-	recoveryHitPointsRate;
-	energyPoints;
+	hitPointsMax += 15;
+	hitPointsCurrent = hitPointsMax;		
+	recoveryHitPointsRate += 1;
+	energyPoints += 5;
 	recoveryEnergyRate;
 
-	attackDamage;
+	attackDamage += 3;
 	attackSpeed;
 	attackRange;
 
-	unitSpeed;
+	unitSpeed += 5;
 	visionDistance;
 
 	app->audio->PlayFx(app->entityManager->lvlup,0,-1,LOUDNESS::LOUD,DIRECTION::FRONT);

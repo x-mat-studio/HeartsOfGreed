@@ -150,6 +150,7 @@ bool Enemy::Update(float dt)
 	GroupMovement(dt);
 
 	Roar();
+	DrawOnSelect();
 	CollisionPosUpdate();
 
 
@@ -234,6 +235,12 @@ void Enemy::Roar()
 		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
+}
+
+void Enemy::DrawOnSelect()
+{
+	if(selected_by_player)
+	app->render->Blit(app->entityManager->target, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
 
@@ -390,7 +397,6 @@ bool Enemy::CheckAttackRange()
 	{
 		return true;
 	}
-
 	else
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
