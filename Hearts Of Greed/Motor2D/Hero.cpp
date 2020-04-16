@@ -300,7 +300,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::PREPARE_SKILL1:
 		PreProcessSkill1();
-		dir = DetermineDirection(app->input->GetMouseWorld() - position);
+		dir = DetermineDirection(app->input->GetMousePosWorld() - position);
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:

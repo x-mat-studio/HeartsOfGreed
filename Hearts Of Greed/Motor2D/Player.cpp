@@ -398,7 +398,7 @@ void ModulePlayer::DoHeroSkills()
 
 		if (skill1 == true)
 		{
-			if (heroesVector[0]->ActivateSkill1(app->input->GetMouseWorld()) == true)
+			if (heroesVector[0]->ActivateSkill1(app->input->GetMousePosWorld()) == true)
 			{
 				skill1 = false;
 				doSkill = false;

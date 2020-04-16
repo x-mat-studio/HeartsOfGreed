@@ -87,7 +87,7 @@ bool GathererHero::PreProcessSkill1()
 	}
 
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
-	granadePosLaunch = app->input->GetMouseWorld();
+	granadePosLaunch = app->input->GetMousePosWorld();
 
 	if (center.InsideCircle(app->map->WorldToMap(granadePosLaunch.x, granadePosLaunch.y), currAreaInfo->radius))
 	{

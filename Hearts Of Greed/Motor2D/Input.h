@@ -29,10 +29,10 @@ enum class KEY_STATE
 
 struct EventsOnKeyPress
 {
-	EVENT_ENUM keyIdle		=	EVENT_ENUM::NULL_EVENT;
-	EVENT_ENUM keyDown		=	EVENT_ENUM::NULL_EVENT;
-	EVENT_ENUM keyRepeat	=	EVENT_ENUM::NULL_EVENT;
-	EVENT_ENUM keyUp		=	EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyIdle = EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyDown = EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyRepeat = EVENT_ENUM::NULL_EVENT;
+	EVENT_ENUM keyUp = EVENT_ENUM::NULL_EVENT;
 };
 
 class ModuleInput : public Module
@@ -78,14 +78,16 @@ public:
 	void GetMouseRelPosition(int& x, int& y);
 	void GetMouseMotion(int& x, int& y);
 
-	fMPoint GetMouseWorld();
+
 	//Same as GetMouseRelPosition but without the scaling factor
 	void GetMouseRelPositionRaw(int& x, int& y);
 	//Get motion of the scrollwheel in both x (left[negative]/right[positive]) and y (up[positive]/down[negative])axis
 	void GetScrollWheelMotion(int& x, int& y);
 
+	// functions to get the mouse position
 	fMPoint GetMousePosScaled() const;
 	iMPoint GetMousePosScreen() const;
+	fMPoint GetMousePosWorld()const;
 
 	void ActivateTextInput(SDL_Rect& rect);
 	void DesactivateTextInput();
@@ -97,7 +99,7 @@ public:
 	void AddKeyBinding(int key, KEY_STATE keyAction, EVENT_ENUM event);
 	void AddMouseBinding(int buttonId, KEY_STATE buttonAction, EVENT_ENUM event);
 
-	
+
 	void RemoveSingleKeyBinding(int key, KEY_STATE keyAction);
 	void RemoveKeyBinding(int key);
 	void RemoveSingleMouseBinding(int buttonId, KEY_STATE keyAction);

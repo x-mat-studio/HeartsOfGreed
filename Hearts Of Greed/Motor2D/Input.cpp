@@ -302,9 +302,14 @@ void ModuleInput::GetScrollWheelMotion(int& x, int& y)
 	y = mouseWheelMotionY;
 }
 
-fMPoint ModuleInput::GetMouseWorld()
+fMPoint ModuleInput::GetMousePosWorld() const
 {
-	return { (-app->render->currentCamX + mouseXRaw) / app->win->GetScale(), (-app->render->currentCamY + mouseYRaw) / app->win->GetScale() };
+	float scale = app->win->GetScale();
+	iMPoint mouseAux = GetMousePosScreen();
+	fMPoint ret;
+	ret.x = (-app->render->currentCamX + mouseAux.x) / scale;
+	ret.y = (-app->render->currentCamY + mouseAux.y) / scale;
+	return ret;
 }
 
 
