@@ -75,6 +75,8 @@ bool ModulePlayer::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::TURRET_PURCHASED, this);
+
 
 	return true;
 }
@@ -460,6 +462,8 @@ bool ModulePlayer::BuildClick()
 
 	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
 
+	DesactivateBuildMode();
+
 	return true;
 }
 
@@ -553,6 +557,10 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::GIVE_RESOURCES:
 		resources += 1000;
+		break;
+
+	case EVENT_ENUM::TURRET_PURCHASED:
+		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
 		break;
 	}
 

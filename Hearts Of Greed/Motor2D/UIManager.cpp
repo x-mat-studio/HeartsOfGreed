@@ -443,6 +443,7 @@ void ModuleUIManager::CreateEntityPortrait()
 					//shop button
 		rect = RectConstructor(480, 62, 33, 33);
 		AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+		lastShop = base;
 		//		}
 		break;
 
@@ -613,18 +614,18 @@ void ModuleUIManager::CreateShopMenu()
 	rect.x = 658;
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
 
-	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of level up in the player / entity manager; also spend the resource (do it only if you have enough)
+	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of resurrecting in the player / entity manager; also spend the resource (do it only if you have enough)
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererResurrectButton", EVENT_ENUM::GATHERER_RESURRECT);
 
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedResurrectButton", EVENT_ENUM::RANGED_RESURRECT);
 
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeResurrectButton", EVENT_ENUM::MELEE_RESURRECT);
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Resurrect");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 28, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 80, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroRangedResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Resurrect");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 78, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroRangedResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Resurrect");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 128, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
 	// TODO: add the amount of resources that have to be spent for the levelling up under the correspondant button (-x gem icon)
 
@@ -634,13 +635,13 @@ void ModuleUIManager::CreateShopMenu()
 	rect = RectConstructor(696, 12, 34, 40);
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 120, h / (app->win->GetUIScale() * 2) - (231 / 2) + 135), father, UI_TYPE::UI_IMG, rect, (P2SString)"turretPortrait");
 
-	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
+	rect = RectConstructor(653, 54, 46, 14);	// TODO ONLY SPEND RESOURCES IF YOU HAVE THEM
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_PURCHASED);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 50, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, "Buy");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_PURCHASED);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 152), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretLevelText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
 
