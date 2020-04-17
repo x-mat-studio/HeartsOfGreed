@@ -88,7 +88,7 @@ bool Turret::PostUpdate(float dt)
 }
 
 
-void Turret::CheckObjecive(Entity* entity)
+void Turret::CheckObjective(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{

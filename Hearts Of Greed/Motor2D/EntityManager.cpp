@@ -227,6 +227,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	BuildArea(&meleeSkill1Area, 0, 0, 2);
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
+	skillArea baseConstruction;
+	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
+	BuildArea(&baseConstruction, 0, 0, 10);
+	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
+
 	return ret;
 }
 
