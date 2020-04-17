@@ -100,7 +100,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, 100, 100, 1, 40, 1, 20, 1, 35, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 35, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
@@ -143,7 +143,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
 		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, 100, 100, 1, 40, 1, 20, 1, 40, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 40, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
 		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
@@ -250,6 +250,11 @@ bool ModuleEntityManager::Start()
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
+	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
+	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
+	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+
+	deco3Selected = app->tex->Load("maps/base03_selected.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
 	target = app->tex->Load("spritesheets/VFX/target.png");
@@ -401,6 +406,7 @@ void ModuleEntityManager::CheckIfStarted() {
 					break;
 				case BUILDING_DECOR::ST_03:
 					DecorTex = buildingTexture;
+					bld->selectedTexture = deco3Selected;
 					break;
 				default:
 					DecorTex = base1Texture;
@@ -430,18 +436,23 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
-				entityVector[i]->Start(base2Texture);
-
+				
+				Base* auxBase; auxBase = (Base*)entityVector[i];
 				alignement = entityVector[i]->GetAlignment();
 
-				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
 				{
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->Start(base2Texture);
+					auxBase->selectedTexture = base2TextureSelected;
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->Start(base2TextureEnemy);
+					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
+
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
@@ -507,9 +518,14 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(combatFemaleTexture);	combatFemaleTexture = nullptr;
 	app->tex->UnLoad(enemyTexture);			enemyTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);		buildingTexture = nullptr;
-	app->tex->UnLoad(base1Texture);			base1Texture = nullptr;
-	app->tex->UnLoad(base2Texture);			base2Texture = nullptr;
+	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
+
+	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 
 	app->tex->UnLoad(turretTexture);		turretTexture = nullptr;
 
@@ -727,6 +743,18 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			}
 		}
 		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
+				}
+			}
+		}
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE) {
 			col = entityVector[i]->GetCollider();
 			entityVector[i]->selected_by_player = false;
 

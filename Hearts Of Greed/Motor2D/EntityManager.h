@@ -194,7 +194,13 @@ private:
 
 	
 	SDL_Texture* base1Texture;
+
 	SDL_Texture* base2Texture;
+	SDL_Texture* base2TextureEnemy;
+	SDL_Texture* base2TextureSelected;
+	SDL_Texture* base2TextureSelectedEnemy;
+
+	SDL_Texture* deco3Selected;
 
 	SDL_Texture* turretTexture;
 

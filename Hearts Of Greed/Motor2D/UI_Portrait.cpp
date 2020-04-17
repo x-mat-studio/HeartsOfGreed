@@ -2,13 +2,13 @@
 
 UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	nextVectorPosition(positionValue.y),
-	backgroundRect(RectConstructor(643, 145, 72, 56)),
-	backgroundHealthbarRect(RectConstructor(34, 22, 52, 10)),
-	backgroundLevelRect(RectConstructor(55, 210, 18, 18)),
-	healthbarRect(RectConstructor(29, 79, 50, 8)),
-	meleePortraitRect(RectConstructor(561, 149, 68, 52)),
-	gathererPortraitRect(RectConstructor(351, 149, 68, 52)),
-	rangedPortraitRect(RectConstructor(147, 149, 68, 52)),
+	backgroundRect{ 643, 145, 72, 56 },
+	backgroundHealthbarRect{ 34, 22, 52, 10 },
+	backgroundLevelRect{55, 210, 18, 18},
+	healthbarRect{ 29, 79, 50, 8 },
+	meleePortraitRect{ 561, 149, 68, 52 },
+	gathererPortraitRect{ 351, 149, 68, 52 },
+	rangedPortraitRect{ 147, 149, 68, 52 },
 	no_move(true)
 {}
 
@@ -116,9 +116,7 @@ bool UI_Portrait::PostUpdate(float dt)
 }
 
 void UI_Portrait::HandleInput()
-{
-
-}
+{}
 
 void UI_Portrait::CreatePortrait(Hero* entity)
 {
@@ -225,12 +223,4 @@ void UI_Portrait::ReWriteLevelTexture()
 	// TODO
 }
 
-SDL_Rect UI_Portrait::RectConstructor(int x, int y, int w, int h)
-{
-	SDL_Rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = w;
-	rect.h = h;
-	return rect;
-}
+

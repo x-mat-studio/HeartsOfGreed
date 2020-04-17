@@ -1,22 +1,31 @@
 #include "UI_Healthbar.h"
 #include "Player.h"
 
-UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
+UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable, bool isEnergy) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	originalWidth(rect.w),
-	currentHealth(nullptr),
-	entity(entity)
+	entity(entity),
+	isEnergy(isEnergy)
 {
 	if (entity != nullptr)
 	{
-		maxHealth = &entity->hitPointsMax;
-		currentHealth = &entity->hitPointsCurrent;
-		previousHealth = *currentHealth;
+		if (!this->isEnergy)
+		{
+			maxValue = &entity->hitPointsMax;
+			currentValue = &entity->hitPointsCurrent;
+			previousValue = -1;
+		}
+		else
+		{
+			maxValue = &entity->hitPointsMax;
+			currentValue = &entity->hitPointsCurrent;
+			previousValue = -1;
+		}
 	}
 	else
 	{
-		maxHealth = nullptr;
-		currentHealth = nullptr;
-		previousHealth = 0;
+		maxValue = nullptr;
+		currentValue = nullptr;
+		previousValue = 0;
 	}
 }
 
@@ -35,8 +44,6 @@ bool UI_Healthbar::PreUpdate(float dt)
 
 bool UI_Healthbar::Update(float dt)
 {
-	AdjustHealth();
-	
 	if (hiding_unhiding)
 	{
 		Hide(dt);
@@ -47,11 +54,10 @@ bool UI_Healthbar::Update(float dt)
 
 bool UI_Healthbar::PostUpdate(float dt)
 {
-
 	if (entity != nullptr)
 	{
-		previousHealth = *currentHealth;
-
+		AdjustValue();
+		previousValue = *currentValue;
 		Draw(texture);
 	}
 
@@ -61,13 +67,13 @@ bool UI_Healthbar::PostUpdate(float dt)
 void UI_Healthbar::HandleInput()
 {}
 
-void UI_Healthbar::AdjustHealth()
+void UI_Healthbar::AdjustValue()
 {
-	if (currentHealth != nullptr) 
+	if (currentValue != nullptr) 
 	{
-		if (*currentHealth > 0 && *currentHealth != previousHealth && *maxHealth > 0)
+		if (*currentValue > 0 && *currentValue != previousValue && *maxValue > 0)
 		{
-			box.w = originalWidth * (*currentHealth) / (*maxHealth);
+			box.w = originalWidth * (*currentValue) / (*maxValue);
 		}
 	}
 }
@@ -75,6 +81,6 @@ void UI_Healthbar::AdjustHealth()
 void UI_Healthbar::EntityDeath()
 {
 	this->entity = nullptr;
-	this->currentHealth = nullptr;
-	this->maxHealth = nullptr;
+	this->currentValue = nullptr;
+	this->maxValue = nullptr;
 }
