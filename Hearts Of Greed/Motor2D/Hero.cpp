@@ -258,7 +258,7 @@ bool Hero::Update(float dt)
 	}
 
 	
-	LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
+	// LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
 	// LOG("RECOVERY: %f ", feelingSecure);
 
 	CollisionPosUpdate();
