@@ -8,7 +8,8 @@ UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rec
 		color = {100, 100, 100};
 
 	texture = app->fonts->Print(text, color, font);
-	
+	
+
 }
 
 UI_Text::~UI_Text()

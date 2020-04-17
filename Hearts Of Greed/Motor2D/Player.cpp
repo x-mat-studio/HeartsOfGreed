@@ -12,6 +12,7 @@
 #include "EventManager.h"
 #include "Minimap.h"
 #include "Base.h"
+#include "UIManager.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -116,7 +117,6 @@ bool ModulePlayer::PreUpdate(float dt)
 	{
 		DesactivateBuildMode();
 	}
-
 
 	CheckListener(this);
 
@@ -345,7 +345,7 @@ void ModulePlayer::PrepareHeroSkills()
 
 	if (skill1 == true)
 	{
-		if (heroesVector[0]->skill1Charged == true)
+		if (heroesVector[0]->skill1Charged == true && (heroesVector[0]->energyPoints >= heroesVector[0]->skill1Cost))
 		{
 			doSkill = heroesVector[0]->PrepareSkill1();
 			prepareSkill = !doSkill;
@@ -471,7 +471,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::SELECT_UNITS:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			selectUnits = true;
 			doingAction = true;
@@ -484,7 +484,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			entityComand = true;
 			doingAction = true;
@@ -492,7 +492,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_INTERACTION:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			entityInteraction = true;
 			doingAction = true;
@@ -652,6 +652,11 @@ void ModulePlayer::CheckFocusedEntity(Entity* entity)
 	{
 		focusedEntity = nullptr;
 	}
+}
+
+Entity* ModulePlayer::GetFocusedEntity()
+{
+	return focusedEntity;
 }
 
 

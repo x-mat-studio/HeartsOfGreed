@@ -12,6 +12,7 @@ class UI_Portrait;
 class Entity;
 class UI_Healthbar;
 enum class UI_TYPE;
+class Entity;
 
 enum class DRAGGABLE
 {
@@ -60,6 +61,7 @@ public:
 	void HideElements(UI* father, float dt);
 
 	bool CleanUp();
+	bool MouseOnUI(iMPoint& mouse);
 
 	void LoadAtlas();
 	UI* FindUIByName(char* name);
@@ -84,7 +86,7 @@ private:
 	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
 	UI_Portrait* portraitPointer;
-
+	Entity* focusedEnt;
 	
 
 };

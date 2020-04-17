@@ -46,6 +46,8 @@ public:
 
 	int GetResources() const;
 
+	Entity* GetFocusedEntity();
+
 private:
 	
 	bool HandleInput();

@@ -70,9 +70,9 @@ bool UI_Scrollbar::GenerateScrollButton()
 		{
 			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + (app->audio->musicVolume * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
 		}
-		scrollButton->box.w /= 2;
-		scrollButton->box.h /= 2;
-		scrollButton->worldPosition.y = this->worldPosition.y - scrollButton->box.h / 2 + this->box.h / 2;
+		scrollButton->box.w *= 0.5f;
+		scrollButton->box.h *= 0.5f;
+		scrollButton->worldPosition.y = this->worldPosition.y - scrollButton->box.h * 0.5f + this->box.h * 0.5f;
 		scrollButton->hidden = true;
 
 		generatedButton = true;
