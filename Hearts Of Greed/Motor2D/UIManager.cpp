@@ -304,7 +304,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 	sprintf_s(resources, 10, "%d", app->player->GetResources());
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
 
-	rect = RectConstructor(391, 370, 275, 131);
+	rect = RectConstructor(391, 435, 275, 67);
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
 
 	rect = RectConstructor(727, 203, 65, 51);
@@ -834,8 +834,8 @@ bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
 	{
 		if (uiVector[i]->parent == nullptr)
 		{
-			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && uiVector[i]->worldPosition.x * app->win->GetUIScale() + uiVector[i]->box.w >= mouse.x &&
-				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && uiVector[i]->worldPosition.y * app->win->GetUIScale() + uiVector[i]->box.h >= mouse.y)
+			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiVector[i]->worldPosition.x + uiVector[i]->box.w) *app->win->GetUIScale() >= mouse.x &&
+				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiVector[i]->worldPosition.y + uiVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
 			{
 				return true;
 			}
