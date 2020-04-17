@@ -61,6 +61,7 @@ bool Turret::Start()
 
 bool Turret::PreUpdate(float dt)
 {
+	transparent = false;
 	return true;
 }
 
@@ -122,7 +123,13 @@ bool Turret::SearchObjective()
 
 void Turret::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+	if (transparent)
+	{
+		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), false, true, transparencyValue);
+	}
+	else
+		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+			
 }
 
 int Turret::GetLvl()

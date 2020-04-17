@@ -204,7 +204,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50, 160);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -250,7 +250,7 @@ bool ModuleEntityManager::Start()
 
 	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
-	//turretTexture = nullptr;
+
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
@@ -279,6 +279,8 @@ bool ModuleEntityManager::Start()
 
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
+
+	testTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -1130,17 +1132,15 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
-
-		/* ¿WHY?
-
-		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+		
+		rect = testTurret->GetCollider()->rect;
 
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		sampleBase->ActivateTransparency();
-		sampleBase->SetPosition(x, y);
-		sampleBase->Draw(0);*/
+		testTurret->ActivateTransparency();
+		testTurret->SetPosition(x, y);
+		testTurret->Draw(0.0000001);
 
 
 		break;

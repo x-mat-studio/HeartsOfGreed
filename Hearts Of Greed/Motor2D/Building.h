@@ -81,14 +81,14 @@ public:
 protected:
 	int			recoveryHitPointsRate;
 
-private:
+	bool		transparent;
 	int			transparencyValue;
 
+private:
 	
 	int			xpOnDeath;
 	int			buildingCost;
 
-	bool		transparent;
 	bool		selected;
 };
 
