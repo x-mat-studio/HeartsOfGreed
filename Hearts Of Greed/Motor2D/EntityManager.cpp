@@ -252,6 +252,7 @@ bool ModuleEntityManager::Start()
 	base2Texture = app->tex->Load("maps/base02.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+	target = app->tex->Load("spritesheets/VFX/target.png");
 
 	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
@@ -501,38 +502,22 @@ bool ModuleEntityManager::CleanUp()
 {
 	DeleteAllEntities();
 
-	app->tex->UnLoad(suitManTexture);
-	app->tex->UnLoad(armorMaleTexture);
-	app->tex->UnLoad(combatFemaleTexture);
-	app->tex->UnLoad(enemyTexture);
+	app->tex->UnLoad(suitManTexture);		suitManTexture = nullptr;
+	app->tex->UnLoad(armorMaleTexture);		armorMaleTexture = nullptr;
+	app->tex->UnLoad(combatFemaleTexture);	combatFemaleTexture = nullptr;
+	app->tex->UnLoad(enemyTexture);			enemyTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);
-	app->tex->UnLoad(base1Texture);
-	app->tex->UnLoad(base2Texture);
+	app->tex->UnLoad(buildingTexture);		buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);			base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);			base2Texture = nullptr;
 
-	app->tex->UnLoad(turretTexture);
+	app->tex->UnLoad(turretTexture);		turretTexture = nullptr;
 
-	app->tex->UnLoad(debugPathTexture);
+	app->tex->UnLoad(debugPathTexture);		debugPathTexture = nullptr;
 
-	app->tex->UnLoad(IAmSelected);
-	app->tex->UnLoad(explosionText);
-
-	IAmSelected = nullptr;
-
-	suitManTexture = nullptr;
-	armorMaleTexture = nullptr;
-	combatFemaleTexture = nullptr;
-	enemyTexture = nullptr;
-
-	buildingTexture = nullptr;
-	base1Texture = nullptr;
-	base2Texture = nullptr;
-
-	turretTexture = nullptr;
-
-	explosionText = nullptr;
-
-	debugPathTexture = nullptr;
+	app->tex->UnLoad(IAmSelected);			IAmSelected = nullptr;
+	app->tex->UnLoad(explosionText);		explosionText = nullptr;
+	app->tex->UnLoad(target);				target = nullptr;
 
 	RELEASE(sampleGatherer);
 	RELEASE(sampleEnemy);
@@ -741,6 +726,18 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 				}
 			}
 		}
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
+				}
+			}
+		}
 	}
 }
 
@@ -935,21 +932,48 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	//icons
 	for (int i = 0; i < selectedVector.size(); i++)
 	{
-		if (selectedVector[i]->visionEntity != nullptr)
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED))
 		{
-			if (selectedVector[i]->visionEntity->isVisible)
+
+			if (selectedVector[i]->visionEntity != nullptr)
 			{
-				Hero* thisHero = (Hero*)selectedVector[i];
-				thisHero->DrawSelected();
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
 			}
 		}
-		else
-		{
-			Hero* thisHero = (Hero*)selectedVector[i];
-			thisHero->DrawSelected();
-		}
-	}
 
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY) 
+		{
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+		}
+		
+	}	
 	selectedVector.clear();
 }
 
@@ -1082,7 +1106,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GATHERER_RESURRECT:
-
+		// TODO REVIVE HEROES FUNCTION
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:

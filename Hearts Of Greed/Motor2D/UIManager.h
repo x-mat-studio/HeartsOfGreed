@@ -61,6 +61,7 @@ public:
 	void HideElements(UI* father, float dt);
 
 	bool CleanUp();
+	bool MouseOnUI(iMPoint& mouse);
 
 	void LoadAtlas();
 	UI* FindUIByName(char* name);

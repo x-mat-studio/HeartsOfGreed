@@ -4,8 +4,7 @@
 UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	originalWidth(rect.w),
 	currentHealth(nullptr),
-	entity(entity),
-	entityBuffer(entity)
+	entity(entity)
 {
 	if (entity != nullptr)
 	{
@@ -48,23 +47,12 @@ bool UI_Healthbar::Update(float dt)
 
 bool UI_Healthbar::PostUpdate(float dt)
 {
-	if (parent->name == "portraitBG")
-	{
-		entityBuffer = app->player->focusedEntity;
-	}
 
-	if (entity == entityBuffer)
+	if (entity != nullptr)
 	{
 		previousHealth = *currentHealth;
 
 		Draw(texture);
-	}
-	else
-	{
-		if (parent->name == "portraitBG")
-		{
-			app->uiManager->DeleteUI(parent, false);
-		}
 	}
 
 	return true;
