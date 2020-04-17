@@ -1,5 +1,6 @@
 #include "UI_Text.h"
 #include "Render.h"
+#include "Textures.h"
 
 UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, char* text, SDL_Color color, _TTF_Font* font) : UI(positionValue, father, uiType, rect, uiName, draggable)
 {
@@ -13,7 +14,10 @@ UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rec
 }
 
 UI_Text::~UI_Text()
-{}
+{
+	app->tex->UnLoad(texture);
+	texture = nullptr;
+}
 
 
 bool UI_Text::Update(float dt)

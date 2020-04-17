@@ -4,7 +4,9 @@ UI_Image::UI_Image(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect r
 {}
 
 UI_Image::~UI_Image()
-{}
+{
+	texture = nullptr;
+}
 
 bool UI_Image::Update(float dt)
 {

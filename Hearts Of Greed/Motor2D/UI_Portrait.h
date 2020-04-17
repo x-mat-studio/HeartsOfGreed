@@ -41,7 +41,6 @@ private:
 	void Move();
 	void CheckLevel();
 	void ReWriteLevelTexture();
-	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 public:
 

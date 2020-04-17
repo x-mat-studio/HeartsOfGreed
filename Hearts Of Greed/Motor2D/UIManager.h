@@ -52,8 +52,10 @@ public:
 	void CreateMainMenu();
 	void CreateOptionsMenu();
 	void CreateEntityPortrait();
+	void CreateEntityPortraitChilds();
 	void CreateShopMenu();
 	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
+	void UpdateFocusPortrait();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
@@ -87,6 +89,7 @@ private:
 	SDL_Texture* atlas;
 	UI_Portrait* portraitPointer;
 	Entity* focusedEnt;
+	UI* focusedPortrait;
 	
 
 };
