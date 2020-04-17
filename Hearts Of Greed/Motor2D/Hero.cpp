@@ -358,7 +358,7 @@ bool Hero::PostUpdate(float dt)
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
-	PlayGenericNoise();
+	
 
 	if (haveObjective == false)
 	{
@@ -531,6 +531,7 @@ void Hero::CheckObjective(Entity* entity)
 	}
 }
 
+
 void Hero::SearchForNewObjective()
 {
 	SDL_Rect rect;
@@ -542,6 +543,7 @@ void Hero::SearchForNewObjective()
 
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 }
+
 
 void Hero::PlayGenericNoise()
 {
@@ -804,11 +806,11 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(); break;
 
 			case HERO_INPUTS::IN_ATTACK: 
 				attackCooldown += TIME_TRIGGER;
-				state = HERO_STATES::ATTACK;	break;
+				state = HERO_STATES::ATTACK;	PlayGenericNoise(); break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
@@ -830,6 +832,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
 
 			case HERO_INPUTS::IN_ATTACK:
+				PlayGenericNoise();
 				attackCooldown += TIME_TRIGGER;
 				state = HERO_STATES::ATTACK;	break;
 
@@ -850,7 +853,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_CHARGING_ATTACK:state = HERO_STATES::CHARGING_ATTACK;			 break;
 
-			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;								 break;
+			case HERO_INPUTS::IN_MOVE:  PlayGenericNoise(); state = HERO_STATES::MOVE;								 break;
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
 
