@@ -133,17 +133,17 @@ void Entity::MinimapDraw(float scale, float halfWidth)
 DIRECTION Entity::GetMyDirection()
 {
 	int width = app->win->width; 
-
-	int MidX = (-app->render->GetCameraX() + width * 0.5f);
+	float scale = app->win->GetScale();
+	int MidX = (-app->render->currentCamX + (width * 0.5f))/scale;
 	
-	int relativeX = position.x - MidX;
+	int relativeX = (position.x - MidX)*scale;
 
-	if (relativeX > 120) {
+	if (relativeX > width*0.33f) {
 
 		return DIRECTION::RIGHT;
 	}
 
-	if (relativeX < -120) {
+	if (relativeX < -width * 0.33f) {
 
 		return DIRECTION::LEFT;
 	}
@@ -154,30 +154,47 @@ DIRECTION Entity::GetMyDirection()
 
 LOUDNESS Entity::GetMyLoudness()
 {
+	int ret = LOUDNESS::SILENCE;
+
+	float scale = app->win->GetScale();
 	int width = app->win->width;
 	int height = app->win->height;
 
-	int MidX = (-app->render->GetCameraX() + width  * 0.5f);
-	int MidY = (-app->render->GetCameraY() + height * 0.5f);
+	int MidX = (-app->render->currentCamX + (width* 0.5f))  /scale;
+	int MidY = (-app->render->currentCamY + (height* 0.5f)) /scale;
 
 	float SQRDistance = sqrt((position.x - MidX) * (position.x - MidX) + (position.y - MidY) * (position.y - MidY));
 
-	if (SQRDistance < width *0.25f * app->win->GetScale()) {
+	if (SQRDistance < width *0.25f) 
+	{
 
-		return LOUDNESS::LOUD;
+		ret = LOUDNESS::LOUD;
 	}
-	if (SQRDistance < width *0.33f * app->win->GetScale()) {
+	else if (SQRDistance < width *0.33f) 
+	{
 
-		return LOUDNESS::NORMAL;
+		ret = LOUDNESS::NORMAL;
 	}
-	if (SQRDistance < width * 0.5f * app->win->GetScale()) {
+	else if (SQRDistance < width * 0.5f) 
+	{
 
-		return LOUDNESS::QUIET;
+		ret = LOUDNESS::QUIET;
 	}
 	
+	//distance from camera loudness
+	if (scale >= 2)
+	{
+		ret -= 1;
+	}
+	else if (scale <= 0.5)
+	{
+		ret += 1;
+	}
 
-	return LOUDNESS::SILENCE;
+	ret = MAX(LOUDNESS::LOUD, ret);
+	ret = MIN(LOUDNESS::SILENCE, ret);
 
+	return (LOUDNESS)ret;
 }
 
 

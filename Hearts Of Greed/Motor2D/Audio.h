@@ -23,10 +23,10 @@ enum class DIRECTION {
 	FRONT_LEFT
 };
 
-enum class LOUDNESS {
-	QUIET,
-	NORMAL,
+enum LOUDNESS {
 	LOUD,
+	NORMAL,	
+	QUIET,
 	SILENCE
 };
 
