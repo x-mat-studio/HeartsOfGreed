@@ -77,6 +77,8 @@ bool MeleeHero::ExecuteSkill1()
 
 	if (!skillExecutionDelay)
 	{
+		energyPoints -= skill1Cost;
+
 		skillExecutionDelay = true;
 		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
 

@@ -94,11 +94,6 @@ void Building::BeingRepaired()
 }
 
 
-void Building::RecoverHealth()
-{
-	this->hitPointsCurrent += this->recoveryHitPointsRate;
-}
-
 
 void Building::Contruct()
 {

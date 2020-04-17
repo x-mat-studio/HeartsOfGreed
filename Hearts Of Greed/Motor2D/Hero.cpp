@@ -79,6 +79,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
 	feelingSecure(0),
+	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
@@ -162,6 +163,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
 	feelingSecure(0),
+	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
@@ -258,7 +260,7 @@ bool Hero::Update(float dt)
 	}
 
 	
-	// LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
+	LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
 	// LOG("RECOVERY: %f ", feelingSecure);
 
 	CollisionPosUpdate();

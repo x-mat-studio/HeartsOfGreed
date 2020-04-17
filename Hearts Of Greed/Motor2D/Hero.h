@@ -188,6 +188,8 @@ public:
 
 	bool gettingAttacked;
 
+	int skill1Cost;
+
 	float attackSpeed;
 	float skill1RecoverTime;
 	float skill2RecoverTime;

@@ -78,6 +78,8 @@ bool GathererHero::ActivateSkill3()
 
 bool GathererHero::PreProcessSkill1()
 {
+
+
 	if (currAoE.size() == 0)
 	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
@@ -115,6 +117,7 @@ bool GathererHero::ExecuteSkill1()
 	{
 		if (!skillExecutionDelay)
 		{
+			energyPoints -= skill1Cost;
 			skillExecutionDelay = true;
 			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 6, this->GetMyLoudness(), this->GetMyDirection());
 			return skillExecutionDelay;

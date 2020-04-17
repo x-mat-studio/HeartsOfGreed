@@ -345,7 +345,7 @@ void ModulePlayer::PrepareHeroSkills()
 
 	if (skill1 == true)
 	{
-		if (heroesVector[0]->skill1Charged == true)
+		if (heroesVector[0]->skill1Charged == true && (heroesVector[0]->energyPoints >= heroesVector[0]->skill1Cost))
 		{
 			doSkill = heroesVector[0]->PrepareSkill1();
 			prepareSkill = !doSkill;

@@ -66,11 +66,8 @@ private:
 	void ChangeBuildingState(BUILDING_STATE state);
 
 	void BeingRepaired();
-	void RecoverHealth();
 
 	void Contruct();
-
-
 
 public:
 
