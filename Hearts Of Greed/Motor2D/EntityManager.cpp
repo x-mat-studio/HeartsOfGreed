@@ -250,6 +250,11 @@ bool ModuleEntityManager::Start()
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
+	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
+	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
+	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+
+	deco3Selected = app->tex->Load("maps/base03_selected.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
 	target = app->tex->Load("spritesheets/VFX/target.png");
@@ -401,6 +406,7 @@ void ModuleEntityManager::CheckIfStarted() {
 					break;
 				case BUILDING_DECOR::ST_03:
 					DecorTex = buildingTexture;
+					bld->selectedTexture = deco3Selected;
 					break;
 				default:
 					DecorTex = base1Texture;
@@ -430,18 +436,23 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
-				entityVector[i]->Start(base2Texture);
-
+				
+				Base* auxBase; auxBase = (Base*)entityVector[i];
 				alignement = entityVector[i]->GetAlignment();
 
-				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
 				{
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->Start(base2Texture);
+					auxBase->selectedTexture = base2TextureSelected;
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->Start(base2TextureEnemy);
+					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
+
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
@@ -507,9 +518,14 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(combatFemaleTexture);	combatFemaleTexture = nullptr;
 	app->tex->UnLoad(enemyTexture);			enemyTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);		buildingTexture = nullptr;
-	app->tex->UnLoad(base1Texture);			base1Texture = nullptr;
-	app->tex->UnLoad(base2Texture);			base2Texture = nullptr;
+	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
+
+	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 
 	app->tex->UnLoad(turretTexture);		turretTexture = nullptr;
 
@@ -727,6 +743,18 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			}
 		}
 		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
+				}
+			}
+		}
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE) {
 			col = entityVector[i]->GetCollider();
 			entityVector[i]->selected_by_player = false;
 

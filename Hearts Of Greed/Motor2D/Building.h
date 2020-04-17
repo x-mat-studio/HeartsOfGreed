@@ -5,6 +5,7 @@
 
 #include "Entity.h"
 
+
 class Core;
 class UpgradeCenter;
 class Turret;
@@ -77,6 +78,7 @@ public:
 	BUILDING_STATE	currentState;
 	BUILDING_DECOR myDecor;
 	Base* myBase;
+	SDL_Texture* selectedTexture;
 
 protected:
 	int			recoveryHitPointsRate;

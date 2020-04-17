@@ -14,7 +14,7 @@ Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int
 	transparencyValue(transparency),
 
 	myBase(nullptr),
-
+	selectedTexture(nullptr),
 	transparent(false),
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN),
@@ -31,9 +31,9 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 	buildingCost(copy->buildingCost),
 	transparencyValue(copy->transparencyValue),
 	myDecor(copy->myDecor),
+	selectedTexture(copy->selectedTexture),
 
 	myBase(nullptr),
-
 	transparent(false),
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
@@ -107,14 +107,27 @@ void Building::Contruct()
 
 void Building::Draw(float dt)
 {
-	if (transparent)
+	if (selected_by_player)
 	{
-		app->render->Blit(texture, position.x, position.y, nullptr, false, true, transparencyValue);
+		if (transparent) 
+		{
+			app->render->Blit(selectedTexture, position.x, position.y, nullptr, false, true, transparencyValue);
+		}
+		else
+		{
+			app->render->Blit(selectedTexture, position.x, position.y, nullptr, false, true);
+		}
 	}
-	 
-	else
+	else 
 	{
-		app->render->Blit(texture, position.x, position.y, nullptr, false, true);
+		if (transparent)
+		{
+			app->render->Blit(texture, position.x, position.y, nullptr, false, true, transparencyValue);
+		}
+		else
+		{
+			app->render->Blit(texture, position.x, position.y, nullptr, false, true);
+		}
 	}
 }
 

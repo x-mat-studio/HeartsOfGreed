@@ -257,6 +257,7 @@ bool Base::RessurectHero(ENTITY_TYPE heroType)
 
 void Base::GainResources(float dt)
 {
+
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		resourcesCooldown += dt;
