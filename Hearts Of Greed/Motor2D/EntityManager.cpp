@@ -632,6 +632,44 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 }
 
 
+Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
+{
+	switch (type)
+	{
+	case ENTITY_TYPE::SPAWNER:
+		return sampleSpawner;
+		break;
+
+	case ENTITY_TYPE::HERO_MELEE:
+		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_GATHERER:
+		return sampleGatherer;
+		break;
+
+	case ENTITY_TYPE::ENEMY:
+		return sampleEnemy;
+		break;
+
+	case ENTITY_TYPE::BUILDING:
+		return testBuilding;
+		break;
+
+	case ENTITY_TYPE::BLDG_TURRET:
+		return testTurret;
+		break;
+
+	case ENTITY_TYPE::BLDG_BASE:
+		return sampleBase;
+		break;
+
+	default:
+		return nullptr;
+		break;
+	}
+}
+
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {

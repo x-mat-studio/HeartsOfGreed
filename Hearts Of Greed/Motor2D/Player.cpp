@@ -436,6 +436,10 @@ bool ModulePlayer::BuildClick()
 	int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
 	int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
 
+	SDL_Rect rect = app->entityManager->GetSample(buildingToBuild)->GetCollider()->rect;
+
+	x -= rect.w / 2;
+	y -= rect.h / 2;
 
 	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
 
