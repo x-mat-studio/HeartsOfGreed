@@ -53,7 +53,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	void CheckObjecive(Entity* entity);
+	void CheckObjective(Entity* entity);
 	bool SearchObjective();
 	bool CheckAttackRange();
 	void Attack();
