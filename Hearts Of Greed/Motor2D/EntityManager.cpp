@@ -204,7 +204,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50, 160);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -226,6 +226,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
 	BuildArea(&meleeSkill1Area, 0, 0, 2);
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
+
+	skillArea baseConstruction;
+	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
+	BuildArea(&baseConstruction, 0, 0, 10);
+	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
 
 	return ret;
 }
@@ -250,7 +255,7 @@ bool ModuleEntityManager::Start()
 
 	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
-	//turretTexture = nullptr;
+
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
@@ -279,6 +284,8 @@ bool ModuleEntityManager::Start()
 
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
+
+	testTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -629,6 +636,44 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	return ret;
 }
 
+
+Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
+{
+	switch (type)
+	{
+	case ENTITY_TYPE::SPAWNER:
+		return sampleSpawner;
+		break;
+
+	case ENTITY_TYPE::HERO_MELEE:
+		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_GATHERER:
+		return sampleGatherer;
+		break;
+
+	case ENTITY_TYPE::ENEMY:
+		return sampleEnemy;
+		break;
+
+	case ENTITY_TYPE::BUILDING:
+		return testBuilding;
+		break;
+
+	case ENTITY_TYPE::BLDG_TURRET:
+		return testTurret;
+		break;
+
+	case ENTITY_TYPE::BLDG_BASE:
+		return sampleBase;
+		break;
+
+	default:
+		return nullptr;
+		break;
+	}
+}
 
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
@@ -1130,17 +1175,15 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
-
-		/* ¿WHY?
-
-		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+		
+		rect = testTurret->GetCollider()->rect;
 
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		sampleBase->ActivateTransparency();
-		sampleBase->SetPosition(x, y);
-		sampleBase->Draw(0);*/
+		testTurret->ActivateTransparency();
+		testTurret->SetPosition(x, y);
+		testTurret->Draw(0.0000001);
 
 
 		break;

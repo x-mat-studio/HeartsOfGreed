@@ -78,6 +78,7 @@ public:
 
 
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
+	Entity* GetSample(ENTITY_TYPE);
 
 
 	void RemoveDeletedEntities();
