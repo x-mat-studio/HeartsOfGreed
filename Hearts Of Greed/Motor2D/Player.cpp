@@ -78,6 +78,7 @@ bool ModulePlayer::Start()
 	return true;
 }
 
+
 bool ModulePlayer::CleanUp()
 {
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_COMMAND, this);
@@ -100,6 +101,7 @@ bool ModulePlayer::CleanUp()
 	return true;
 }
 
+
 // Called each loop iteration
 bool ModulePlayer::PreUpdate(float dt)
 {
@@ -107,7 +109,7 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
-		ActivateBuildMode(ENTITY_TYPE::BLDG_BASE, nullptr);
+		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, nullptr);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
@@ -594,8 +596,6 @@ bool ModulePlayer::UseResources(int cost)
 
 bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 {
-	if (contrBase == nullptr)
-		return false;
 	
 	contrAreaInfo = nullptr;
 	constrArea.clear();
@@ -605,10 +605,13 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 		buildMode = true;
 		buildingToBuild = building;
 
-		iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().x));
-		origin = app->map->MapToWorld(origin.x, origin.y);
+		if (contrBase != nullptr)
+		{
+			iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().x));
+			origin = app->map->MapToWorld(origin.x, origin.y);
 
-		contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
+			contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
+		}
 		return true;
 	}
 
