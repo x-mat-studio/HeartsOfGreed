@@ -120,8 +120,8 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	if (focusedEnt != nullptr)
 	{
-		if(SDL_GetTicks() % 2 == 0)
-		UpdateFocusPortrait();
+		if (SDL_GetTicks() % 2 == 0)
+			UpdateFocusPortrait();
 	}
 
 	int numEntities = uiVector.size();
@@ -444,7 +444,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 	switch (focusedEnt->GetType())
 	{
 	case ENTITY_TYPE::BLDG_BASE:
-	{
+	
 		Base* base;
 		base = (Base*)focusedEnt;
 
@@ -466,7 +466,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
 					//shop button
 		rect = RectConstructor(480, 62, 33, 33);
-		AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+		AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
 		lastShop = base;
 		//		}
 		break;
@@ -865,7 +865,7 @@ bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
 	{
 		if (uiVector[i]->parent == nullptr)
 		{
-			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiVector[i]->worldPosition.x + uiVector[i]->box.w) *app->win->GetUIScale() >= mouse.x &&
+			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiVector[i]->worldPosition.x + uiVector[i]->box.w) * app->win->GetUIScale() >= mouse.x &&
 				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiVector[i]->worldPosition.y + uiVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
 			{
 				return true;
