@@ -30,7 +30,6 @@ private:
 	int previousHealth;
 	int originalWidth;
 	Entity* entity;
-	Entity* entityBuffer;
 
 };
 

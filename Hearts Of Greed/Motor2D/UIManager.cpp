@@ -244,6 +244,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_ON_CLICK:
+		DeleteUI(FindUIByName("portraitBG"), false);
 		CreateEntityPortrait();
 		break;
 
