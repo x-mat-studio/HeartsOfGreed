@@ -654,6 +654,11 @@ void ModulePlayer::CheckFocusedEntity(Entity* entity)
 	}
 }
 
+Entity* ModulePlayer::GetFocusedEntity()
+{
+	return focusedEntity;
+}
+
 
 iMPoint ModulePlayer::GetClickPosition()
 {

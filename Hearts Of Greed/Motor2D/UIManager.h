@@ -12,6 +12,7 @@ class UI_Portrait;
 class Entity;
 class UI_Healthbar;
 enum class UI_TYPE;
+class Entity;
 
 enum class DRAGGABLE
 {
@@ -84,7 +85,7 @@ private:
 	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
 	UI_Portrait* portraitPointer;
-
+	Entity* focusedEnt;
 	
 
 };
