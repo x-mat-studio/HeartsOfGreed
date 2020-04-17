@@ -227,6 +227,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	BuildArea(&meleeSkill1Area, 0, 0, 2);
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
+	skillArea baseConstruction;
+	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
+	BuildArea(&baseConstruction, 0, 0, 10);
+	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
+
 	return ret;
 }
 
@@ -631,6 +636,44 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	return ret;
 }
 
+
+Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
+{
+	switch (type)
+	{
+	case ENTITY_TYPE::SPAWNER:
+		return sampleSpawner;
+		break;
+
+	case ENTITY_TYPE::HERO_MELEE:
+		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_GATHERER:
+		return sampleGatherer;
+		break;
+
+	case ENTITY_TYPE::ENEMY:
+		return sampleEnemy;
+		break;
+
+	case ENTITY_TYPE::BUILDING:
+		return testBuilding;
+		break;
+
+	case ENTITY_TYPE::BLDG_TURRET:
+		return testTurret;
+		break;
+
+	case ENTITY_TYPE::BLDG_BASE:
+		return sampleBase;
+		break;
+
+	default:
+		return nullptr;
+		break;
+	}
+}
 
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
