@@ -61,6 +61,7 @@ bool Turret::Start()
 
 bool Turret::PreUpdate(float dt)
 {
+	transparent = false;
 	return true;
 }
 
@@ -88,7 +89,7 @@ bool Turret::PostUpdate(float dt)
 }
 
 
-void Turret::CheckObjecive(Entity* entity)
+void Turret::CheckObjective(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{
@@ -122,7 +123,13 @@ bool Turret::SearchObjective()
 
 void Turret::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+	if (transparent)
+	{
+		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), false, true, transparencyValue);
+	}
+	else
+		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+			
 }
 
 int Turret::GetLvl()

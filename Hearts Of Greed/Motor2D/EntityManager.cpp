@@ -204,7 +204,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50, 160);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -227,6 +227,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	BuildArea(&meleeSkill1Area, 0, 0, 2);
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
+	skillArea baseConstruction;
+	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
+	BuildArea(&baseConstruction, 0, 0, 10);
+	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
+
 	return ret;
 }
 
@@ -247,10 +252,11 @@ bool ModuleEntityManager::Start()
 	base2Texture = app->tex->Load("maps/base02.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+	target = app->tex->Load("spritesheets/VFX/target.png");
 
 	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
-	//turretTexture = nullptr;
+
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
@@ -279,6 +285,8 @@ bool ModuleEntityManager::Start()
 
 	testBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
+
+	testTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -494,38 +502,22 @@ bool ModuleEntityManager::CleanUp()
 {
 	DeleteAllEntities();
 
-	app->tex->UnLoad(suitManTexture);
-	app->tex->UnLoad(armorMaleTexture);
-	app->tex->UnLoad(combatFemaleTexture);
-	app->tex->UnLoad(enemyTexture);
+	app->tex->UnLoad(suitManTexture);		suitManTexture = nullptr;
+	app->tex->UnLoad(armorMaleTexture);		armorMaleTexture = nullptr;
+	app->tex->UnLoad(combatFemaleTexture);	combatFemaleTexture = nullptr;
+	app->tex->UnLoad(enemyTexture);			enemyTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);
-	app->tex->UnLoad(base1Texture);
-	app->tex->UnLoad(base2Texture);
+	app->tex->UnLoad(buildingTexture);		buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);			base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);			base2Texture = nullptr;
 
-	app->tex->UnLoad(turretTexture);
+	app->tex->UnLoad(turretTexture);		turretTexture = nullptr;
 
-	app->tex->UnLoad(debugPathTexture);
+	app->tex->UnLoad(debugPathTexture);		debugPathTexture = nullptr;
 
-	app->tex->UnLoad(IAmSelected);
-	app->tex->UnLoad(explosionText);
-
-	IAmSelected = nullptr;
-
-	suitManTexture = nullptr;
-	armorMaleTexture = nullptr;
-	combatFemaleTexture = nullptr;
-	enemyTexture = nullptr;
-
-	buildingTexture = nullptr;
-	base1Texture = nullptr;
-	base2Texture = nullptr;
-
-	turretTexture = nullptr;
-
-	explosionText = nullptr;
-
-	debugPathTexture = nullptr;
+	app->tex->UnLoad(IAmSelected);			IAmSelected = nullptr;
+	app->tex->UnLoad(explosionText);		explosionText = nullptr;
+	app->tex->UnLoad(target);				target = nullptr;
 
 	RELEASE(sampleGatherer);
 	RELEASE(sampleEnemy);
@@ -630,6 +622,44 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 }
 
 
+Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
+{
+	switch (type)
+	{
+	case ENTITY_TYPE::SPAWNER:
+		return sampleSpawner;
+		break;
+
+	case ENTITY_TYPE::HERO_MELEE:
+		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_GATHERER:
+		return sampleGatherer;
+		break;
+
+	case ENTITY_TYPE::ENEMY:
+		return sampleEnemy;
+		break;
+
+	case ENTITY_TYPE::BUILDING:
+		return testBuilding;
+		break;
+
+	case ENTITY_TYPE::BLDG_TURRET:
+		return testTurret;
+		break;
+
+	case ENTITY_TYPE::BLDG_BASE:
+		return sampleBase;
+		break;
+
+	default:
+		return nullptr;
+		break;
+	}
+}
+
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {
@@ -693,6 +723,18 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 				{
 					thisHero->selected_by_player = true;
 					heroPlayerVector->push_back(thisHero);
+				}
+			}
+		}
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
 				}
 			}
 		}
@@ -890,21 +932,48 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	//icons
 	for (int i = 0; i < selectedVector.size(); i++)
 	{
-		if (selectedVector[i]->visionEntity != nullptr)
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED))
 		{
-			if (selectedVector[i]->visionEntity->isVisible)
+
+			if (selectedVector[i]->visionEntity != nullptr)
 			{
-				Hero* thisHero = (Hero*)selectedVector[i];
-				thisHero->DrawSelected();
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
 			}
 		}
-		else
-		{
-			Hero* thisHero = (Hero*)selectedVector[i];
-			thisHero->DrawSelected();
-		}
-	}
 
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY) 
+		{
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+		}
+		
+	}	
 	selectedVector.clear();
 }
 
@@ -1037,7 +1106,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GATHERER_RESURRECT:
-
+		// TODO REVIVE HEROES FUNCTION
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:
@@ -1130,17 +1199,15 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
-
-		/* ¿WHY?
-
-		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+		
+		rect = testTurret->GetCollider()->rect;
 
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		sampleBase->ActivateTransparency();
-		sampleBase->SetPosition(x, y);
-		sampleBase->Draw(0);*/
+		testTurret->ActivateTransparency();
+		testTurret->SetPosition(x, y);
+		testTurret->Draw(0.0000001);
 
 
 		break;

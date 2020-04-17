@@ -19,7 +19,7 @@
 #include "UI_Healthbar.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-ModuleUIManager::ModuleUIManager() : atlas(nullptr)
+ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr)
 {
 	name.create("UIManager");
 }
@@ -123,6 +123,11 @@ bool ModuleUIManager::PostUpdate(float dt)
 	for (int i = 0; i < numEntities; i++)
 	{
 		uiVector[i]->PostUpdate(dt);
+	}
+
+	if (focusedEnt != nullptr)
+	{
+		true;
 	}
 
 	return ret;
@@ -244,6 +249,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_ON_CLICK:
+		DeleteUI(FindUIByName("portraitBG"), false);
 		CreateEntityPortrait();
 		break;
 
@@ -303,6 +309,12 @@ void ModuleUIManager::CreateBasicInGameUI()
 
 	sprintf_s(resources, 10, "%d", app->player->GetResources());
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
+
+	rect = RectConstructor(391, 435, 275, 67);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
+
+	rect = RectConstructor(727, 203, 65, 51);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 12, h / app->win->GetUIScale() - rect.h - 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
 
 }
 
@@ -399,16 +411,12 @@ void ModuleUIManager::CreateOptionsMenu()
 
 void ModuleUIManager::CreateEntityPortrait()
 {
+	focusedEnt = app->player->GetFocusedEntity();
+
 	uint w(app->win->width), h(app->win->height);
-	UI* father = nullptr;
+	UI* father = FindUIByName("portraitBG");
 
-	SDL_Rect rect = RectConstructor(391, 370, 275, 131);
-	father = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
-
-	rect = RectConstructor(727, 203, 65, 51);
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 12, h / app->win->GetUIScale() - rect.h - 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
-
-	rect = RectConstructor(0, 0, 100, 100);
+	SDL_Rect rect = RectConstructor(0, 0, 100, 100);
 
 	static char stats[40];
 
@@ -416,10 +424,10 @@ void ModuleUIManager::CreateEntityPortrait()
 
 	SDL_Color std{ (255),(255), (255), (255) };
 
-	switch (app->player->focusedEntity->GetType()) {
-
+	switch (app->player->focusedEntity->GetType())
+	{
 	case ENTITY_TYPE::BLDG_BASE:
-
+	{
 		Base* base;
 		base = (Base*)app->player->focusedEntity;
 
@@ -440,17 +448,17 @@ void ModuleUIManager::CreateEntityPortrait()
 
 		//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
 					//shop button
-		rect = RectConstructor(480, 62, 33, 33);
+		rect = { 480, 62, 33, 33 };
 		AddButton(fMPoint(w / app->win->GetUIScale() - rect.w - 5, (h / (app->win->GetUIScale())) - 35), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
-		//		}
-		break;
+	}
+	break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		Turret* turret;
 		turret = (Turret*)app->player->focusedEntity;
 
 		//img portrait
-		rect = RectConstructor(561, 77, 68, 62);
+		rect = { 561, 77, 68, 62 };
 		AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 18, h / app->win->GetUIScale() - rect.h - 2), father, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
 
 		//stats
@@ -818,10 +826,29 @@ void ModuleUIManager::DisableHealthBars()
 	{
 		if (uiVector[i]->type == UI_TYPE::UI_HEALTHBAR)
 		{
-			currHB= (UI_Healthbar*)uiVector[i];
+			currHB = (UI_Healthbar*)uiVector[i];
 
 			if (currHB != nullptr)
 				currHB->EntityDeath();
 		}
 	}
+}
+
+bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
+{
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (uiVector[i]->parent == nullptr)
+		{
+			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiVector[i]->worldPosition.x + uiVector[i]->box.w) *app->win->GetUIScale() >= mouse.x &&
+				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiVector[i]->worldPosition.y + uiVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

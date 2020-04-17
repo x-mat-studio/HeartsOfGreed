@@ -223,7 +223,7 @@ bool  ModuleTestScene::Update(float dt)
 			else if (scrollWheel.y != 0)
 			{
 				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false)
+				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false && app->uiManager->MouseOnUI(mouseRaw) == false)
 				{
 					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
 				}

@@ -11,6 +11,8 @@
 #include "Entity.h"
 
 class Hero;
+class Base;
+struct skillArea;
 
 class ModulePlayer : public Module
 {
@@ -34,7 +36,7 @@ public:
 	void AddResources(int gain);
 	bool UseResources(int cost);
 
-	bool ActivateBuildMode(ENTITY_TYPE building);
+	bool ActivateBuildMode(ENTITY_TYPE building, Base* contrBase);
 	void DesactivateBuildMode();
 
 	void RemoveHeroFromVector(Hero* hero);
@@ -43,6 +45,8 @@ public:
 	iMPoint GetClickPosition();
 
 	int GetResources() const;
+
+	Entity* GetFocusedEntity();
 
 private:
 	
@@ -91,6 +95,9 @@ private:
 	bool buildMode;
 
 	int resources;
+
+	skillArea* contrAreaInfo;
+	std::vector <iMPoint> constrArea;
 };
 
 

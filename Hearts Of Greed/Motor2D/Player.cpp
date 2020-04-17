@@ -11,6 +11,8 @@
 #include "Map.h"
 #include "EventManager.h"
 #include "Minimap.h"
+#include "Base.h"
+#include "UIManager.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -31,6 +33,7 @@ ModulePlayer::ModulePlayer() :
 	prepareSkill(false),
 	doingAction(false),
 	hasClicked(false),
+	contrAreaInfo(nullptr),
 
 	doSkill(false),
 
@@ -76,6 +79,7 @@ bool ModulePlayer::Start()
 	return true;
 }
 
+
 bool ModulePlayer::CleanUp()
 {
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_COMMAND, this);
@@ -91,8 +95,13 @@ bool ModulePlayer::CleanUp()
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
+	contrAreaInfo = nullptr;
+	constrArea.clear();
+
+
 	return true;
 }
+
 
 // Called each loop iteration
 bool ModulePlayer::PreUpdate(float dt)
@@ -101,14 +110,13 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
-		ActivateBuildMode(ENTITY_TYPE::BLDG_BASE);
+		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, nullptr);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
 	{
 		DesactivateBuildMode();
 	}
-
 
 	CheckListener(this);
 
@@ -142,6 +150,15 @@ bool ModulePlayer::PostUpdate(float dt)
 		int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
 
 		app->entityManager->PlayerBuildPreview(x, y, buildingToBuild);
+
+		if (contrAreaInfo && constrArea.size() > 0)
+		{
+			for (uint i = 0; i < constrArea.size(); i++)
+			{
+				iMPoint pos = app->map->MapToWorld(constrArea[i].x - 1, constrArea[i].y);
+				app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 100);
+			}
+		}
 	}
 
 	DrawSelectQuad();
@@ -436,6 +453,10 @@ bool ModulePlayer::BuildClick()
 	int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
 	int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
 
+	SDL_Rect rect = app->entityManager->GetSample(buildingToBuild)->GetCollider()->rect;
+
+	x -= rect.w / 2;
+	y -= rect.h / 2;
 
 	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
 
@@ -450,7 +471,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::SELECT_UNITS:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			selectUnits = true;
 			doingAction = true;
@@ -463,7 +484,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			entityComand = true;
 			doingAction = true;
@@ -471,7 +492,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_INTERACTION:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			entityInteraction = true;
 			doingAction = true;
@@ -573,13 +594,24 @@ bool ModulePlayer::UseResources(int cost)
 }
 
 
-bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building)
+bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 {
+	
+	contrAreaInfo = nullptr;
+	constrArea.clear();
+	
 	if (buildMode == false || (building != ENTITY_TYPE::BLDG_TURRET && building != ENTITY_TYPE::BLDG_UPGRADE_CENTER && building != ENTITY_TYPE::BLDG_BARRICADE && building != ENTITY_TYPE::BUILDING))
 	{
 		buildMode = true;
 		buildingToBuild = building;
 
+		if (contrBase != nullptr)
+		{
+			iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().x));
+			origin = app->map->MapToWorld(origin.x, origin.y);
+
+			contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
+		}
 		return true;
 	}
 
@@ -593,6 +625,9 @@ void ModulePlayer::DesactivateBuildMode()
 {
 	buildMode = false;
 	buildingToBuild = ENTITY_TYPE::UNKNOWN;
+
+	contrAreaInfo = nullptr;
+	constrArea.clear();
 }
 
 
@@ -617,6 +652,11 @@ void ModulePlayer::CheckFocusedEntity(Entity* entity)
 	{
 		focusedEntity = nullptr;
 	}
+}
+
+Entity* ModulePlayer::GetFocusedEntity()
+{
+	return focusedEntity;
 }
 
 
