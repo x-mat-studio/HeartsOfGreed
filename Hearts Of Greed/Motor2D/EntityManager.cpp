@@ -1037,7 +1037,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GATHERER_RESURRECT:
-
+		// TODO REVIVE HEROES FUNCTION
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:

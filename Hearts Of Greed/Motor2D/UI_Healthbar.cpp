@@ -63,7 +63,7 @@ bool UI_Healthbar::PostUpdate(float dt)
 	{
 		if (parent->name == "portraitBG")
 		{
-			app->uiManager->DeleteUI(parent, false);
+			app->uiManager->DeleteUI(parent, false); // TODO It would probably be cleaner to send a signal of this element and a variable to delete it at the postupdate
 		}
 	}
 

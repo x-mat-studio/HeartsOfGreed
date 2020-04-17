@@ -304,6 +304,12 @@ void ModuleUIManager::CreateBasicInGameUI()
 	sprintf_s(resources, 10, "%d", app->player->GetResources());
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
 
+	rect = RectConstructor(391, 370, 275, 131);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
+
+	rect = RectConstructor(727, 203, 65, 51);
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 12, h / app->win->GetUIScale() - rect.h - 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
+
 }
 
 void ModuleUIManager::CreatePauseMenu()
@@ -400,15 +406,9 @@ void ModuleUIManager::CreateOptionsMenu()
 void ModuleUIManager::CreateEntityPortrait()
 {
 	uint w(app->win->width), h(app->win->height);
-	UI* father = nullptr;
+	UI* father = FindUIByName("portraitBG");
 
-	SDL_Rect rect = RectConstructor(391, 370, 275, 131);
-	father = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
-
-	rect = RectConstructor(727, 203, 65, 51);
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 12, h / app->win->GetUIScale() - rect.h - 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
-
-	rect = RectConstructor(0, 0, 100, 100);
+	SDL_Rect rect = RectConstructor(0, 0, 100, 100);
 
 	static char stats[40];
 
@@ -818,10 +818,29 @@ void ModuleUIManager::DisableHealthBars()
 	{
 		if (uiVector[i]->type == UI_TYPE::UI_HEALTHBAR)
 		{
-			currHB= (UI_Healthbar*)uiVector[i];
+			currHB = (UI_Healthbar*)uiVector[i];
 
 			if (currHB != nullptr)
 				currHB->EntityDeath();
 		}
 	}
+}
+
+bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
+{
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (uiVector[i]->parent == nullptr)
+		{
+			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && uiVector[i]->worldPosition.x * app->win->GetUIScale() + uiVector[i]->box.w >= mouse.x &&
+				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && uiVector[i]->worldPosition.y * app->win->GetUIScale() + uiVector[i]->box.h >= mouse.y)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
