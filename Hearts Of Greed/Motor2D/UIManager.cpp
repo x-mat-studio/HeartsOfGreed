@@ -49,6 +49,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREDIT_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
@@ -250,7 +251,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::CREDIT_MENU:
-		// CREATE CREDIT WINDOW		TODO
+		CreateCreditMenu();
 		break;
 
 	case EVENT_ENUM::PAUSE_GAME:
@@ -422,6 +423,18 @@ void ModuleUIManager::CreateOptionsMenu()
 	AddScrollbar(fMPoint((w / app->win->GetUIScale() / 2) - (278 / 2) + 20, (h / app->win->GetUIScale() / 2) - (153 / 2) + 60), father, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"musicScrollbar", EVENT_ENUM::MUSIC_ADJUSTMENT, 128.0f);
 
 	AddScrollbar(fMPoint((w / app->win->GetUIScale() / 2) - (278 / 2) + 140, (h / app->win->GetUIScale() / 2) - (153 / 2) + 60), father, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"sfxScrollbar", EVENT_ENUM::SFX_ADJUSTMENT, 455.0f);
+
+}
+
+void ModuleUIManager::CreateCreditMenu()
+{
+	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
+	uint w(app->win->width), h(app->win->height);
+
+	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+	
+	rect = RectConstructor(424, 25, 23, 23);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (231 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
 
 }
 
@@ -663,8 +676,6 @@ void ModuleUIManager::CreateShopMenu()
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 128, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroMeleeResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
-	// TODO: add the amount of resources that have to be spent for the levelling up under the correspondant button (-x gem icon)
-
 	// Turrets
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 10, h / (app->win->GetUIScale() * 2) - (231 / 2) + 85), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretBuildingText", nullptr, DRAGGABLE::DRAG_OFF, "T U R R E T   B U I L D I N G");
 
@@ -675,6 +686,10 @@ void ModuleUIManager::CreateShopMenu()
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_PURCHASED);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 50, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, "Buy");
+
+	// TODO: read the actual amount of resources that turret prize costs when the variable is added				// It'd be cool if text got gray if the option was not usable (maybe add a variable to text constructor that is a condition, not a bool, since it may be dynamic, like resources)
+
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, "- 120");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED);
