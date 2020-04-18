@@ -157,6 +157,9 @@ public:
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
 
+	int buildingGetsHit;
+	int buildingGetsHit2;
+
 	int suitman1Skill;
 
 	int suitman1Skill2;

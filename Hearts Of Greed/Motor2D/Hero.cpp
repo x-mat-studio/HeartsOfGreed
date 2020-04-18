@@ -297,7 +297,7 @@ void Hero::StateMachine(float dt)
 			else if (framePathfindingCount == framesPerPathfinding)
 			{
 				fMPoint pos = objective->GetPosition();
-				fMPoint offSet = objective->GetCenter();
+				fMPoint offSet = objective->GetOffset();
 
 				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 			}
@@ -1197,7 +1197,6 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	case HERO_STATES::CHARGING_ATTACK:
 	{
-		currentAnimation->loop = false;
 
 		switch (dir)
 		{
@@ -1226,15 +1225,13 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &punchLeft;
 			break;
 		}
+		currentAnimation->loop = false;
 
 		break;
 	}
 
 	case HERO_STATES::PREPARE_SKILL1:
 	{
-
-		currentAnimation->loop = false;
-
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
@@ -1261,12 +1258,14 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &skill1Left;
 			break;
 		}
+
+		currentAnimation->loop = false;
+
 		break;
 	}
 
 	case HERO_STATES::SKILL1:
 	{
-		currentAnimation->loop = false;
 
 		switch (dir)
 		{
@@ -1295,6 +1294,9 @@ void Hero::SetAnimation(HERO_STATES currState)
 			break;
 		}
 		break;
+
+		currentAnimation->loop = false;
+
 	}
 	}
 }

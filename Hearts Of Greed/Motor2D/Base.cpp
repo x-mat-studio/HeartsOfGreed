@@ -283,6 +283,15 @@ int Base::RecieveDamage(int damage)
 			Die();
 		}
 	}
+	else
+	{
+		int randomCounter = rand() % 10;
+
+		if (randomCounter == 0)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
+		else if (randomCounter == 9)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
+	}
 
 	return 0;
 }
