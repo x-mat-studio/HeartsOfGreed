@@ -112,9 +112,7 @@ bool ModuleUIManager::Update(float dt)
 
 	CheckListener(this);
 
-	int numEntities = uiVector.size();
-
-	for (int i = 0; i < numEntities; i++)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->Update(dt);
 	}
@@ -135,9 +133,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 			UpdateFocusPortrait();
 	}
 
-	int numEntities = uiVector.size();
-
-	for (int i = 0; i < numEntities; i++)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->PostUpdate(dt);
 	}
