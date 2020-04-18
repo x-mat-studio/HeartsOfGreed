@@ -173,7 +173,7 @@ void Enemy::StateMachine(float dt)
 
 		if (Move(dt) == true)
 		{
-			if (shortTermObjective == nullptr)
+			if (shortTermObjective == nullptr && !haveOrders)
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 			}
