@@ -243,7 +243,7 @@ void Enemy::Roar()
 void Enemy::DrawOnSelect()
 {
 	if(selected_by_player)
-	app->render->Blit(app->entityManager->target, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+	app->render->Blit(app->entityManager->targetedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
 

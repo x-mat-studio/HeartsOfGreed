@@ -139,10 +139,10 @@ private:
 
 public:
 
-	SDL_Texture* IAmSelected;
-	SDL_Texture* target;
+	SDL_Texture* selectedTexture;
+	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
-	SDL_Texture* explosionText;
+	SDL_Texture* explosionTexture;
 
 	
 	//Sounds
@@ -176,8 +176,6 @@ public:
 	int noise4Armored;
 
 	int lvlup;
-
-	Building* testBuilding;
 
 private:
 
@@ -216,12 +214,13 @@ private:
 
 	Spawner* sampleSpawner;
 
-	Building* blueBuilding;
+	Building* testBuilding;
 	Base* sampleBase;
 
 	Turret* testTurret;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
+
 
 };
 

@@ -268,10 +268,10 @@ bool ModuleEntityManager::Start()
 
 	deco3Selected = app->tex->Load("maps/base03_selected.png");
 
-	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
-	target = app->tex->Load("spritesheets/VFX/target.png");
+	selectedTexture = app->tex->Load("spritesheets/VFX/selected.png");
+	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
 
-	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
+	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
 
 
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -527,12 +527,13 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 bool ModuleEntityManager::CleanUp()
 {
+	LOG("Entity Manager Clean Up");
 	DeleteAllEntities();
 
-	app->tex->UnLoad(suitManTexture);		suitManTexture = nullptr;
-	app->tex->UnLoad(armorMaleTexture);		armorMaleTexture = nullptr;
-	app->tex->UnLoad(combatFemaleTexture);	combatFemaleTexture = nullptr;
-	app->tex->UnLoad(enemyTexture);			enemyTexture = nullptr;
+	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
+	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
+	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
+	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
 
 	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
 	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
@@ -543,26 +544,23 @@ bool ModuleEntityManager::CleanUp()
 
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 
-	app->tex->UnLoad(turretTexture);		turretTexture = nullptr;
+	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
 
-	app->tex->UnLoad(debugPathTexture);		debugPathTexture = nullptr;
+	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
 
-	app->tex->UnLoad(IAmSelected);			IAmSelected = nullptr;
-	app->tex->UnLoad(explosionText);		explosionText = nullptr;
-	app->tex->UnLoad(target);				target = nullptr;
+	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
+	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
+	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
 
-	RELEASE(sampleGatherer);
 	RELEASE(sampleEnemy);
 	RELEASE(sampleSpawner);
 	RELEASE(testBuilding);
-	RELEASE(blueBuilding);
 	RELEASE(sampleBase);
 
 	sampleGatherer = nullptr;
 	sampleEnemy = nullptr;
 	sampleSpawner = nullptr;
 	testBuilding = nullptr;
-	blueBuilding = nullptr;
 	sampleBase = nullptr;
 
 	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
@@ -572,6 +570,27 @@ bool ModuleEntityManager::CleanUp()
 
 	}
 	skillAreas.clear();
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::KILL_ALL_ENEMIES, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_BASE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_BUILDING, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
 
 	return true;
 }
@@ -692,42 +711,37 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 	}
 }
 
+
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {
-	int numEntities = entityVector.size();
+	Entity* ret = nullptr;
 
 	Collider* col;
+	ENTITY_TYPE type;
 
+	int numEntities = entityVector.size();
+	
 	for (int i = 0; i < numEntities; i++)
 	{
+		type = entityVector[i]->GetType();
 		col = entityVector[i]->GetCollider();
 
 		//dynamic entities get priority over static entities
-
-		if (col != nullptr && (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY))
+		if (mousePos.PointInRect(&col->rect))
 		{
-			if (mousePos.PointInRect(&col->rect))
+			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED ))
 			{
+
 				return entityVector[i];
 			}
-		}
-	}
-	for (int i = 0; i < numEntities; i++)
-	{
-		col = entityVector[i]->GetCollider();
 
-		if (col != nullptr) {
-			{
-				if (mousePos.PointInRect(&col->rect))
-				{
-					return entityVector[i];
-				}
-			}
+			ret = entityVector[i];
 		}
 	}
 
-	return nullptr;
+
+	return ret;
 }
 
 
@@ -738,10 +752,13 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 	heroPlayerVector->clear();
 
 	Collider* col;
+	ENTITY_TYPE type;
 
 	for (int i = 0; i < numHeroes; i++)
 	{
-		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_MELEE)
 		{
 			col = entityVector[i]->GetCollider();
 
@@ -1063,7 +1080,6 @@ void ModuleEntityManager::DrawOnlyStaticBuildings()
 }
 
 
-
 void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
 {
 	if (low < high)
@@ -1233,7 +1249,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -1265,7 +1281,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		
+
 		rect = testTurret->GetCollider()->rect;
 
 		x -= rect.w * 0.5f;
@@ -1308,6 +1324,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 }
 
+
 void ModuleEntityManager::DeleteAllEntities()
 {
 	int numEntities = entityVector.size();
@@ -1320,6 +1337,7 @@ void ModuleEntityManager::DeleteAllEntities()
 
 	entityVector.clear();
 }
+
 
 Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 {
@@ -1354,6 +1372,7 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 
 	return hero;
 }
+
 
 Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thisUnit)
 {
@@ -1436,6 +1455,7 @@ void ModuleEntityManager::KillAllEnemies()
 	}
 }
 
+
 bool ModuleEntityManager::BuildArea(skillArea* areaToGenerate, int width, int height, int radius)
 {
 	switch (areaToGenerate->form)
@@ -1487,6 +1507,7 @@ unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 	return circle;
 }
 
+
 unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
 {
 	unsigned short* quad = nullptr;
@@ -1503,6 +1524,7 @@ unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
 
 	return quad;
 }
+
 
 skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPoint>* toFill, iMPoint center)
 {
@@ -1526,6 +1548,7 @@ skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPo
 
 	return ret;
 }
+
 
 void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center)
 {
@@ -1554,6 +1577,7 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	break;
 	}
 }
+
 
 int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
 	SKILL_TYPE type, bool hurtYourself, Entity* objective)

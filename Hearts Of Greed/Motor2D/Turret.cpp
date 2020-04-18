@@ -169,7 +169,7 @@ int Turret::GetRng()
 void Turret::DrawSelected()
 {
 	if (selected_by_player == true)
-		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
 

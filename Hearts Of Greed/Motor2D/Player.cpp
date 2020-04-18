@@ -136,7 +136,6 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	HandleInput();
 
-
 	return true;
 }
 
@@ -217,7 +216,7 @@ bool ModulePlayer::HandleInput()
 			entityInteraction = false;
 			doingAction = false;
 			focusedEntity = nullptr;
-			Click();
+			LeftClick();
 		}
 		else if (selectUnits && hasClicked)
 		{
@@ -251,15 +250,45 @@ bool ModulePlayer::Click()
 	clickPosition.x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
 	clickPosition.y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
 
+	return false;
+}
+
+
+void ModulePlayer::LeftClick()
+{
+	Click();
+
 	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
 
 	if (focusedEntity != nullptr)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
-		return true;
+	}
+}
+
+
+void ModulePlayer::RightClick()
+{
+	if (heroesVector.empty())
+		return;
+
+	bool enemyFound;
+
+	Click();
+
+	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition);
+	
+
+	int numHeroes = heroesVector.size();
+
+	for (int i = 0; i < numHeroes; i++)
+	{
+		enemyFound = heroesVector[i]->LockOn(obj);
+
+		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
+
 	}
 
-	return false;
 }
 
 
@@ -299,30 +328,16 @@ void ModulePlayer::Select()
 
 	selectRect = { rectX,rectY, rectW,rectH };
 
+	
 	app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
 
-}
-
-
-void ModulePlayer::RightClick()
-{
-	if (heroesVector.empty())
-		return;
-
-	Click();
-	bool enemyFound;
-
-	int numHeroes = heroesVector.size();
-
-	for (int i = 0; i < numHeroes; i++)
+	if (heroesVector.empty() == false)
 	{
-		enemyFound = heroesVector[i]->LockOn(focusedEntity);
-
-		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
-
+		focusedEntity = heroesVector[0];
 	}
 
 }
+
 
 
 void ModulePlayer::CommandSkill()
