@@ -99,7 +99,7 @@ private:
 
 	int resources;
 
-	skillArea* contrAreaInfo;
+	skillArea* constrAreaInfo;
 	std::vector <iMPoint> constrArea;
 	fMPoint baseDrawCenter;
 	iMPoint buildingPrevPosition;
