@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="30">
-    <title>Game Development Testbed</title>
+    <title>Hearts of Greed</title>
     <organization>UPC</organization>
     <load fileName="save_game.xml"></load>
   </app>
@@ -30,8 +30,7 @@
       button_3="b3.wav"
         coin="coin.wav"
       option_denied="option_denied.wav"
-          powerup="powerup.wav"
-	>
+          powerup="powerup.wav">
     </fx>
   </audio>
 
@@ -54,9 +53,9 @@
     initialCamPosX="500" 
     initialCamPosY="500"
     dayTimerSec="4"
-    nightTimerSec="5"
-    freeCamMarginDetectionPixelsX="40"
-    freeCamMarginDetectionPixelsY="30"
+    nightTimerSec="5" 
+    freeCamMarginDetectionPixelsX="20"
+    freeCamMarginDetectionPixelsY="15"
     
     />
 
