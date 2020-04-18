@@ -440,6 +440,7 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
 				{
+
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter());
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
@@ -458,14 +459,16 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
 				{
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
 					entityVector[i]->Start(base2Texture);
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					
 					auxBase->selectedTexture = base2TextureSelected;
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
-				{
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+				{					
 					entityVector[i]->Start(base2TextureEnemy);
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					
 					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
 
