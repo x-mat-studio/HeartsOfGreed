@@ -10,6 +10,7 @@
 
 #include "Entity.h"
 
+
 class Hero;
 class Base;
 struct skillArea;
@@ -42,6 +43,7 @@ public:
 	iMPoint GetClickPosition();
 
 	int GetResources() const;
+	int GetTurretCost() const;
 
 	Entity* GetFocusedEntity();
 
@@ -59,6 +61,7 @@ private:
 	void DoHeroSkills();
 
 	bool BuildClick();
+	void SubstractBuildResources();
 
 	void ExecuteEvent(EVENT_ENUM eventId);
 
@@ -98,6 +101,8 @@ private:
 	std::vector <iMPoint> constrArea;
 	fMPoint baseDrawCenter;
 	iMPoint buildingPrevPosition;
+
+	int turretCost;
 };
 
 
