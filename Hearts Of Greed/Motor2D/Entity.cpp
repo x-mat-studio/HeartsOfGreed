@@ -70,11 +70,12 @@ bool Entity::Start(SDL_Texture* texture)
 
 		collider->SetPos(position.x, position.y);
 
-		center.x = offset.x = (float)collider->rect.w * 0.5f;
+		offset.x = (float)collider->rect.w * 0.5f;
 		
 		offset.y = (float)collider->rect.h;
 
-		center.y = offset.y * 0.5f;
+		center.x = (float)collider->rect.w * 0.5f;;
+		center.y = (float)collider->rect.h * 0.5f;
 	}
 
 	started = true;
