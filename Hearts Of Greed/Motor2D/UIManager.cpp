@@ -428,14 +428,41 @@ void ModuleUIManager::CreateOptionsMenu()
 
 void ModuleUIManager::CreateCreditMenu()
 {
+	//TODO ADRI: FLESH OUT
+	
 	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
 	uint w(app->win->width), h(app->win->height);
+	uint originX = w / (app->win->GetUIScale() * 2) - (rect.w / 2); uint originY = h / (app->win->GetUIScale() * 2) - (rect.h / 2);
 
-	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+	UI* father = AddUIElement(fMPoint(originX, originY), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
 	
 	rect = RectConstructor(424, 25, 23, 23);
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (231 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
+	
+	
+	//logo
+	rect = RectConstructor(563, 237, 117, 122);
+	AddUIElement(fMPoint(originX + 40, originY + 50), father, UI_TYPE::UI_IMG, rect, (P2SString)"logocredit");
 
+	//names
+
+	AddUIElement(fMPoint(originX + 5, originY + 0), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits1", nullptr, DRAGGABLE::DRAG_OFF, "Aaron Guerrero Cruz");
+	AddUIElement(fMPoint(originX + 15, originY + 10), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits1.2", nullptr, DRAGGABLE::DRAG_OFF, "Lead");
+
+	AddUIElement(fMPoint(originX + 5, originY + 35), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits2", nullptr, DRAGGABLE::DRAG_OFF, "Jose Luis Redondo Tello");
+	AddUIElement(fMPoint(originX + 15, originY + 45), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits2.2", nullptr, DRAGGABLE::DRAG_OFF, "Code");
+
+	AddUIElement(fMPoint(originX + 5, originY + 70), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits3", nullptr, DRAGGABLE::DRAG_OFF, "Ferran-Roger Basart i Bosch");
+	AddUIElement(fMPoint(originX + 15, originY + 80), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits3.2", nullptr, DRAGGABLE::DRAG_OFF, "Management + UI");
+
+	AddUIElement(fMPoint(originX + 5, originY + 105), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits4", nullptr, DRAGGABLE::DRAG_OFF, "Alex Melenchon Maza");
+	AddUIElement(fMPoint(originX + 15, originY + 115), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits4.2", nullptr, DRAGGABLE::DRAG_OFF, "Design");
+
+	AddUIElement(fMPoint(originX + 5, originY + 140), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits5", nullptr, DRAGGABLE::DRAG_OFF, "Adria Serrano Lopez");
+	AddUIElement(fMPoint(originX + 15, originY + 150), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits5.2", nullptr, DRAGGABLE::DRAG_OFF, "Audio + Art");
+
+	AddUIElement(fMPoint(originX + 5, originY + 175), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits6", nullptr, DRAGGABLE::DRAG_OFF, "Oscar Perez Martin");
+	AddUIElement(fMPoint(originX + 15, originY + 185), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits6.2", nullptr, DRAGGABLE::DRAG_OFF, "QA");
 }
 
 void ModuleUIManager::CreateEntityPortrait()
