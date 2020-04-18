@@ -87,8 +87,17 @@ bool MeleeHero::ExecuteSkill1()
 	}
 	else
 	{
-		
-		return app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+	
+		int ret = 0;
+
+		ret =  app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+
+		if (ret > 0)
+		{
+			GetExperience(ret);
+		}
+
+		return true;
 	}
 
 }

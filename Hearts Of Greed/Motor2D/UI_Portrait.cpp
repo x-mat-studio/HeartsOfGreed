@@ -219,11 +219,12 @@ void UI_Portrait::Move()
 void Portrait::ChangeLvl(int newlvl)
 {
 	this->lvl = newlvl;
-	char bufferText [10] ;
+	char bufferText [10];
 
-	sscanf_s(bufferText, "%d", &lvl);
+	sprintf_s(bufferText, 10, "%d", newlvl);
 
 	this->level->LoadNewTexture(bufferText, app->fonts->fonts[0]);
+
 }
 
 

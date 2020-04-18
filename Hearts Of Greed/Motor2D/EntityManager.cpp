@@ -1517,10 +1517,10 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	}
 }
 
-bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
+int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
 	SKILL_TYPE type, bool hurtYourself, Entity* objective)
 {
-	bool ret = false;
+	int ret = -1;
 
 	switch (type)
 	{
@@ -1529,6 +1529,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	break;
 	case SKILL_TYPE::AREA_OF_EFFECT:
 	{
+		ret = 0;
 		int numEntities = entityVector.size();
 		Collider* entColl = nullptr;
 		float halfH = app->map->data.tileHeight * 0.5;
@@ -1557,7 +1558,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 			case AREA_TYPE::CIRCLE:
 			{
 				if (entColl->CheckCollisionCircle(pivot, newRad))
-					entityVector[i]->RecieveDamage(dmg);
+					ret += entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
 			case AREA_TYPE::QUAD:
@@ -1569,5 +1570,5 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	}
 	break;
 	}
-	return true;
+	return ret;
 }

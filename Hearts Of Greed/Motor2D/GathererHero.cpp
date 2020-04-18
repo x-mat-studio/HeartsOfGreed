@@ -127,7 +127,17 @@ bool GathererHero::ExecuteSkill1()
 			currentVfx->loop = false;
 
 			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
-			return app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+
+
+			int ret = 0;
+
+			ret =  app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+
+			if (ret >= 0)
+			{
+				GetExperience(ret);
+				return true;
+			}
 		}
 	}
 	else
