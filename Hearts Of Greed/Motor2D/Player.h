@@ -19,12 +19,9 @@ class ModulePlayer : public Module
 public:
 	ModulePlayer();
 
-
 	~ModulePlayer();
 
-
 	bool Awake(pugi::xml_node&);
-
 
 	bool Start();
 	bool CleanUp();
@@ -52,6 +49,7 @@ private:
 
 	void Select();
 	bool Click();
+	void LeftClick();
 	void RightClick();
 
 	void CommandSkill();

@@ -678,39 +678,33 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 // Checks if there is an entity in the mouse Click position 
 Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 {
-	int numEntities = entityVector.size();
+	Entity* ret = nullptr;
 
 	Collider* col;
+	ENTITY_TYPE type;
 
+	int numEntities = entityVector.size();
+	
 	for (int i = 0; i < numEntities; i++)
 	{
+		type = entityVector[i]->GetType();
 		col = entityVector[i]->GetCollider();
 
 		//dynamic entities get priority over static entities
-
-		if (col != nullptr && (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY))
+		if (mousePos.PointInRect(&col->rect))
 		{
-			if (mousePos.PointInRect(&col->rect))
+			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED ))
 			{
+
 				return entityVector[i];
 			}
-		}
-	}
-	for (int i = 0; i < numEntities; i++)
-	{
-		col = entityVector[i]->GetCollider();
 
-		if (col != nullptr) {
-			{
-				if (mousePos.PointInRect(&col->rect))
-				{
-					return entityVector[i];
-				}
-			}
+			ret = entityVector[i];
 		}
 	}
 
-	return nullptr;
+
+	return ret;
 }
 
 
@@ -721,10 +715,13 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 	heroPlayerVector->clear();
 
 	Collider* col;
+	ENTITY_TYPE type;
 
 	for (int i = 0; i < numHeroes; i++)
 	{
-		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_MELEE)
 		{
 			col = entityVector[i]->GetCollider();
 
@@ -1143,7 +1140,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -1175,7 +1172,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		
+
 		rect = testTurret->GetCollider()->rect;
 
 		x -= rect.w / 2;
