@@ -2,8 +2,8 @@
 #define __UI_TEXT_H__
 
 #include "UI.h"
-#include "Fonts.h"
 
+struct _TTF_Font;
 class UI_Text : public UI
 
 {
@@ -14,6 +14,8 @@ public:
 
 	bool Update(float dt);
 	bool PostUpdate(float dt);
+
+	void LoadNewTexture(char* newtext, _TTF_Font* newFont);
 
 private:
 

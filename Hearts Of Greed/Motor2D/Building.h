@@ -5,6 +5,7 @@
 
 #include "Entity.h"
 
+
 class Core;
 class UpgradeCenter;
 class Turret;
@@ -66,17 +67,15 @@ private:
 	void ChangeBuildingState(BUILDING_STATE state);
 
 	void BeingRepaired();
-	void RecoverHealth();
 
 	void Contruct();
-
-
 
 public:
 
 	BUILDING_STATE	currentState;
 	BUILDING_DECOR myDecor;
 	Base* myBase;
+	SDL_Texture* selectedTexture;
 
 protected:
 	int			recoveryHitPointsRate;

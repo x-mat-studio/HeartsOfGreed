@@ -47,7 +47,6 @@ bool UI_Button::Update(float dt)
 
 	if (enabled) 
 	{
-
 		if (hiding_unhiding)
 		{
 			Hide(dt);
@@ -103,7 +102,7 @@ bool UI_Button::Update(float dt)
 	{
 		if (hidden == false && hiding_unhiding == false)
 		{
-			if (worldPosition.x * app->win->GetUIScale() > app->win->width / 2)
+			if (worldPosition.x * app->win->GetUIScale() > app->win->width * 0.5f)
 			{
 				box.x = 556;
 			}
@@ -114,7 +113,7 @@ bool UI_Button::Update(float dt)
 		}
 		else if (hidden == true && hiding_unhiding == false)
 		{
-			if (worldPosition.x * app->win->GetUIScale() > app->win->width / 2)
+			if (worldPosition.x * app->win->GetUIScale() > app->win->width * 0.5f)
 			{
 				box.x = 540;
 			}
@@ -188,7 +187,7 @@ void UI_Button::HoverFeedback()
 
 void UI_Button::CloseMenu()
 {
-	app->uiManager->DeleteUI(parent, properties.includeFather);
+	app->uiManager->DeleteUIChilds(parent, properties.includeFather);
 }
 
 void UI_Button::MovingIt(float dt)

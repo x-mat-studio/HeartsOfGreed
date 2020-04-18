@@ -313,6 +313,8 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 
 bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 {
+	BROFILER_CATEGORY("Generate Path", Profiler::Color::Aquamarine);
+
 	iMPoint goal = { 0,0 };
 
 	origin = app->map->WorldToMap(round(position.x), round(position.y));
@@ -370,12 +372,7 @@ SDL_Rect DynamicEntity::GetAnimationRect(float dt)
 {
 	if (current_animation == NULL)
 	{
-		SDL_Rect rec;
-		rec.x = 0;
-		rec.y = 0;
-		rec.w = 0;
-		rec.h = 0;
-		return rec;
+		return { 0,0,0,0 };
 	}
 	else
 	{

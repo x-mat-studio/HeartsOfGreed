@@ -9,7 +9,7 @@ class UI_Healthbar : public UI
 
 public:
 
-	UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable);
+	UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable, bool isEnergy = false);
 	~UI_Healthbar();
 
 	bool Start();
@@ -21,16 +21,17 @@ public:
 private:
 
 	void HandleInput();
-	void AdjustHealth();
+	void AdjustValue();
 
 private:
 
-	int* maxHealth;
-	int* currentHealth;
-	int previousHealth;
+	int* maxValue;
+	int* currentValue;
+	int previousValue;
 	int originalWidth;
 	Entity* entity;
-	Entity* entityBuffer;
+
+	bool isEnergy;
 
 };
 

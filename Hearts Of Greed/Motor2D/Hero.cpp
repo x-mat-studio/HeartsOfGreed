@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Input.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
@@ -17,7 +18,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
@@ -52,6 +53,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	level(level),
 
 	recoveryHitPointsRate(recoveryHitPointsRate),
+	maxEnergyPoints(maxEnergyPoints),
 	energyPoints(energyPoints),
 	recoveryEnergyRate(recoveryEnergyRate),
 
@@ -77,10 +79,15 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
+	feelingSecure(0),
+	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
+	recoveringHealth(0),
+	recoveringEnergy(0),
 
+	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
@@ -132,6 +139,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	level(copy->level),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	energyPoints(copy->energyPoints),
+	maxEnergyPoints(copy->maxEnergyPoints),
 	recoveryEnergyRate(copy->recoveryEnergyRate),
 	attackDamage(copy->attackDamage),
 	attackSpeed(copy->attackSpeed),
@@ -155,16 +163,22 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
+	feelingSecure(0),
+	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
+	recoveringHealth(0),
+	recoveringEnergy(0),
 
+	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
 	godMode(false),
 	skillExecutionDelay(false),
+	currAreaInfo(nullptr),
 
 	state(HERO_STATES::IDLE),
 
@@ -233,12 +247,25 @@ bool Hero::PreUpdate(float dt)
 
 bool Hero::Update(float dt)
 {
+	BROFILER_CATEGORY("Hero Update", Profiler::Color::Blue);
+
 	//check inputs to traverse state matrix
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
 	GroupMovement(dt);
+
+	FeelingSecure(dt);
+	if(!gettingAttacked)
+	{
+		RecoverHealth(dt);
+		RecoverEnergy(dt);
+	}
+
+	
+	//LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
+	// LOG("RECOVERY: %f ", feelingSecure);
 
 	CollisionPosUpdate();
 
@@ -270,7 +297,7 @@ void Hero::StateMachine(float dt)
 			else if (framePathfindingCount == framesPerPathfinding)
 			{
 				fMPoint pos = objective->GetPosition();
-				fMPoint offSet = objective->GetCenter();
+				fMPoint offSet = objective->GetOffset();
 
 				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 			}
@@ -301,6 +328,7 @@ void Hero::StateMachine(float dt)
 		}
 		else
 			inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
+
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
@@ -545,21 +573,54 @@ void Hero::SearchForNewObjective()
 }
 
 
+void Hero::FeelingSecure(float dt)
+{
+	if (gettingAttacked)
+	{
+		feelingSecure += 1.00f * dt;
+
+		if (feelingSecure >= 5)
+		{
+			gettingAttacked = false;
+			feelingSecure = 0;
+		}
+	}
+}
+
+
 void Hero::PlayGenericNoise()
 {
 	//Herency only
 }
 
 
-void Hero::RecoverHealth()
+void Hero::RecoverHealth(float dt)
 {
+	if (!gettingAttacked && (hitPointsMax > hitPointsCurrent))
+	{
+		recoveringHealth += 1.00f * dt;
 
+		if (recoveringHealth >= 2)
+		{
+			hitPointsCurrent += recoveryHitPointsRate;
+			recoveringHealth = 0;
+		}
+	}
 }
 
 
-void Hero::RecoverEnergy()
+void Hero::RecoverEnergy(float dt)
 {
+	if (!gettingAttacked && (maxEnergyPoints > energyPoints))
+	{
+		recoveringEnergy += 1.00f * dt;
 
+		if (recoveringEnergy >= 2)
+		{
+			energyPoints += recoveryEnergyRate;
+			recoveringEnergy = 0;
+		}
+	}
 }
 
 
@@ -634,6 +695,8 @@ void Hero::LevelUp()
 int Hero::RecieveDamage(int damage)
 {
 	int ret = -1;
+	gettingAttacked = true;
+	feelingSecure = 0;
 
 	if (hitPointsCurrent > 0 && godMode == false)
 	{
@@ -673,6 +736,8 @@ bool Hero::GetLevel()
 	{
 		LevelUp();
 		heroXP = 0;
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
+		level++;
 		return true;
 	}
 
@@ -688,7 +753,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		attackCooldown += dt;
 		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			currentAnimation->ResetAnimation();
 
@@ -1132,7 +1197,6 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	case HERO_STATES::CHARGING_ATTACK:
 	{
-		currentAnimation->loop = false;
 
 		switch (dir)
 		{
@@ -1161,15 +1225,13 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &punchLeft;
 			break;
 		}
+		currentAnimation->loop = false;
 
 		break;
 	}
 
 	case HERO_STATES::PREPARE_SKILL1:
 	{
-
-		currentAnimation->loop = false;
-
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
@@ -1196,12 +1258,14 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &skill1Left;
 			break;
 		}
+
+		currentAnimation->loop = false;
+
 		break;
 	}
 
 	case HERO_STATES::SKILL1:
 	{
-		currentAnimation->loop = false;
 
 		switch (dir)
 		{
@@ -1230,6 +1294,9 @@ void Hero::SetAnimation(HERO_STATES currState)
 			break;
 		}
 		break;
+
+		currentAnimation->loop = false;
+
 	}
 	}
 }
@@ -1251,7 +1318,15 @@ bool Hero::PreProcessSkill3()
 
 bool Hero::ExecuteSkill1()
 {
-	return app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+	int ret = 0;
+
+	ret =  app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+
+	if (ret > 0)
+	{
+		GetExperience(ret);
+	}
+	return true;
 };
 
 bool Hero::ExecuteSkill2()
@@ -1266,9 +1341,8 @@ bool Hero::ExecuteSkill3()
 
 void Hero::DrawSelected()
 {
-	if (selected_by_player == true) {
+	if (selected_by_player == true) 
 		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
-	}
 }
 
 bool Hero::DrawVfx(float dt)

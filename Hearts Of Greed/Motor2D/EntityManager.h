@@ -111,7 +111,7 @@ public:
 	skillArea* RequestArea(SKILL_ID id, std::vector<iMPoint>* toFill, iMPoint center);
 
 	//This & skill Struct need re-work to accept single target
-	bool ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr);
+	int ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr);
 
 	//function used for minimap
 	void DrawOnlyStaticBuildings();
@@ -157,6 +157,9 @@ public:
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
 
+	int buildingGetsHit;
+	int buildingGetsHit2;
+
 	int suitman1Skill;
 
 	int suitman1Skill2;
@@ -194,7 +197,13 @@ private:
 
 	
 	SDL_Texture* base1Texture;
+
 	SDL_Texture* base2Texture;
+	SDL_Texture* base2TextureEnemy;
+	SDL_Texture* base2TextureSelected;
+	SDL_Texture* base2TextureSelectedEnemy;
+
+	SDL_Texture* deco3Selected;
 
 	SDL_Texture* turretTexture;
 

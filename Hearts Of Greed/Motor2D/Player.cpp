@@ -12,6 +12,7 @@
 #include "EventManager.h"
 #include "Minimap.h"
 #include "Base.h"
+#include "UIManager.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -35,6 +36,7 @@ ModulePlayer::ModulePlayer() :
 	contrAreaInfo(nullptr),
 
 	doSkill(false),
+	buildingPrevPosition{0,0},
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
@@ -73,6 +75,8 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL3, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::TURRET_PURCHASED, this);
 
 
 	return true;
@@ -142,14 +146,20 @@ bool ModulePlayer::PostUpdate(float dt)
 
 	CheckListener(this);
 
-	if (buildMode == true)
+	if (buildMode == true && contrAreaInfo)
 	{
-		int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
-		int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+		iMPoint center = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
+		fMPoint wBuildPos = app->input->GetMousePosWorld();
+		iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-		app->entityManager->PlayerBuildPreview(x, y, buildingToBuild);
+		if (center.InsideCircle(mBuildPos, contrAreaInfo->radius))
+		{
+			buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
+		}
 
-		if (contrAreaInfo && constrArea.size() > 0)
+		app->entityManager->PlayerBuildPreview(buildingPrevPosition.x, buildingPrevPosition.y, buildingToBuild);
+
+		if (constrArea.size() > 0)
 		{
 			for (uint i = 0; i < constrArea.size(); i++)
 			{
@@ -359,7 +369,7 @@ void ModulePlayer::PrepareHeroSkills()
 
 	if (skill1 == true)
 	{
-		if (heroesVector[0]->skill1Charged == true)
+		if (heroesVector[0]->skill1Charged == true && (heroesVector[0]->energyPoints >= heroesVector[0]->skill1Cost))
 		{
 			doSkill = heroesVector[0]->PrepareSkill1();
 			prepareSkill = !doSkill;
@@ -468,10 +478,12 @@ bool ModulePlayer::BuildClick()
 
 	SDL_Rect rect = app->entityManager->GetSample(buildingToBuild)->GetCollider()->rect;
 
-	x -= rect.w / 2;
-	y -= rect.h / 2;
+	x -= rect.w * 0.5f;
+	y -= rect.h;
 
 	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
+
+	DesactivateBuildMode();
 
 	return true;
 }
@@ -484,7 +496,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::SELECT_UNITS:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			selectUnits = true;
 			doingAction = true;
@@ -497,7 +509,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			entityComand = true;
 			doingAction = true;
@@ -505,7 +517,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_INTERACTION:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
 		{
 			entityInteraction = true;
 			doingAction = true;
@@ -567,6 +579,14 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::GIVE_RESOURCES:
 		resources += 1000;
 		break;
+
+	case EVENT_ENUM::TURRET_PURCHASED:
+		if (resources >= 120)	// TODO Change this to an actual variable turretPrize or something
+		{
+			ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
+			resources -= 120;
+		}
+		break;
 	}
 
 
@@ -597,8 +617,6 @@ bool ModulePlayer::UseResources(int cost)
 {
 	if (cost > resources)
 		return false;
-
-
 	else
 	{
 		resources -= cost;
@@ -620,7 +638,10 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 
 		if (contrBase != nullptr)
 		{
-			iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().x));
+			baseDrawCenter = contrBase->GetPosition() + contrBase->GetCenter();
+			baseDrawCenter.y += app->map->data.tileHeight;
+
+			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
 			contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
@@ -641,6 +662,8 @@ void ModulePlayer::DesactivateBuildMode()
 
 	contrAreaInfo = nullptr;
 	constrArea.clear();
+	baseDrawCenter = { 0,0 };
+	buildingPrevPosition = { 0,0 };
 }
 
 
@@ -665,6 +688,11 @@ void ModulePlayer::CheckFocusedEntity(Entity* entity)
 	{
 		focusedEntity = nullptr;
 	}
+}
+
+Entity* ModulePlayer::GetFocusedEntity()
+{
+	return focusedEntity;
 }
 
 

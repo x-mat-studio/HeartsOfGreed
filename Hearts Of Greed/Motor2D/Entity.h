@@ -94,6 +94,7 @@ public:
 
 	fMPoint GetPosition();
 	fMPoint GetCenter();
+	fMPoint GetOffset();
 	void SetPosition(int x, int y);
 
 	void SetTexture(SDL_Texture* texture);

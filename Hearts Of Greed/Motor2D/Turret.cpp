@@ -1,6 +1,8 @@
 #include "Turret.h"
 #include "EntityManager.h"
 #include "Render.h"
+#include "Map.h"
+#include "FoWManager.h"
 
 
 
@@ -34,11 +36,14 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	attackCD(0),
 
+
 	shortTermObjective(nullptr),
 	haveOrders(false),
 
 	state(TURRET_STATES::IDLE)
-{}
+{
+	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5); //TODO: un-hardcode this "5"
+}
 
 
 Turret::~Turret()
@@ -68,8 +73,6 @@ bool Turret::PreUpdate(float dt)
 
 bool Turret::Update(float dt)
 {
-
-
 	//check inputs to traverse state matrix
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
@@ -84,7 +87,18 @@ bool Turret::Update(float dt)
 
 bool Turret::PostUpdate(float dt)
 {
+	if (app->debugMode)
+	{
+		//Position --------------------------------------
+		app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
 
+		fMPoint nextPoint = { 0,0 };
+		iMPoint origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+
+		app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
+
+	}
 	return true;
 }
 
@@ -150,6 +164,12 @@ int Turret::GetAS()
 int Turret::GetRng()
 {
 	return range;
+}
+
+void Turret::DrawSelected()
+{
+	if (selected_by_player == true)
+		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
 

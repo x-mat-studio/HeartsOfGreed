@@ -17,6 +17,9 @@ struct Portrait
 	UI_Image* backgroundHealthbar;
 	UI_Text* level;
 	Hero* hero;
+	int lvl = 1;
+
+	void ChangeLvl(int newlvl);
 };
 
 class UI_Portrait : public UI
@@ -39,9 +42,6 @@ private:
 
 	void HandleInput();
 	void Move();
-	void CheckLevel();
-	void ReWriteLevelTexture();
-	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 public:
 

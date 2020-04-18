@@ -69,6 +69,7 @@ enum class EVENT_ENUM
 
 	//Turret Shop Purchase
 	TURRET_PURCHASED,
+	TURRET_UPGRADED,
 
 	NIGHT_START,
 	DAY_START,

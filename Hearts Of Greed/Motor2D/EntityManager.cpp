@@ -100,7 +100,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, 100, 100, 1, 40, 1, 20, 1, 35, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 35, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
@@ -143,7 +143,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
 		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, 100, 100, 1, 40, 1, 20, 1, 40, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 40, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
 		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
@@ -183,7 +183,19 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	turretdoc.load_file(filename.GetString());
 	pugi::xml_node turret = turretdoc.child("turret");
 
-	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
+	Animation turretIdleRight = turretIdleRight.PushAnimation(turret, "turretIdleRight"); //goes up then bumps right
+	Animation turretIdleRightUp = turretIdleRightUp.PushAnimation(turret, "turretIdleRightUp"); //bumps left
+	Animation turretIdleRightDown = turretIdleRightDown.PushAnimation(turret, "turretIdleRightDown"); //bumps right
+	Animation turretIdleLeft = turretIdleLeft.PushAnimation(turret, "turretIdleLeft"); //bumps left
+	Animation turretIdleLeftUp = turretIdleLeftUp.PushAnimation(turret, "turretIdleLeftUp"); //bumps right
+	Animation turretIdleLeftDown = turretIdleLeftDown.PushAnimation(turret, "turretIdleLeftDown"); //bumps right
+
+	Animation turretShootingRight = turretShootingRight.PushAnimation(turret, "turretShootingRight"); //goes up then bumps right
+	Animation turretShootingRightUp = turretShootingRightUp.PushAnimation(turret, "turretShootingRightUp"); //bumps left
+	Animation turretShootingRightDown = turretShootingRightDown.PushAnimation(turret, "turretShootingRightDown"); //bumps right
+	Animation turretShootingLeft = turretShootingLeft.PushAnimation(turret, "turretShootingLeft"); //bumps left
+	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turret, "turretShootingLeftUp"); //bumps right
+	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turret, "turretShootingLeftDown"); //bumps right
 
 	turretdoc.reset();
 
@@ -199,12 +211,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,460,370 }, COLLIDER_VISIBILITY, this);
+	Collider* buildingCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle, 100, 100, 5, 100, 50, 160);
+	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleLeft, 100, 100, 5, 100, 50, 160);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -228,8 +240,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
 	skillArea baseConstruction;
-	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&baseConstruction, 0, 0, 10);
+	baseConstruction.form = AREA_TYPE::CIRCLE;
+	BuildArea(&baseConstruction, 0, 0, 8);
 	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
 
 	return ret;
@@ -250,8 +262,14 @@ bool ModuleEntityManager::Start()
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
+	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
+	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
+	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+
+	deco3Selected = app->tex->Load("maps/base03_selected.png");
 
 	IAmSelected = app->tex->Load("spritesheets/VFX/selected.png");
+	target = app->tex->Load("spritesheets/VFX/target.png");
 
 	explosionText = app->tex->Load("spritesheets/VFX/explosion.png");
 
@@ -306,6 +324,10 @@ bool ModuleEntityManager::Start()
 	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
 	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
 	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+
+	//Buildings sfx--------
+	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
+	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
 
 	//Armored sfx--------
 	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
@@ -400,6 +422,7 @@ void ModuleEntityManager::CheckIfStarted() {
 					break;
 				case BUILDING_DECOR::ST_03:
 					DecorTex = buildingTexture;
+					bld->selectedTexture = deco3Selected;
 					break;
 				default:
 					DecorTex = base1Texture;
@@ -429,18 +452,23 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
-				entityVector[i]->Start(base2Texture);
-
+				
+				Base* auxBase; auxBase = (Base*)entityVector[i];
 				alignement = entityVector[i]->GetAlignment();
 
-				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
 				{
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->Start(base2Texture);
+					auxBase->selectedTexture = base2TextureSelected;
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->Start(base2TextureEnemy);
+					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
+
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
@@ -501,38 +529,27 @@ bool ModuleEntityManager::CleanUp()
 {
 	DeleteAllEntities();
 
-	app->tex->UnLoad(suitManTexture);
-	app->tex->UnLoad(armorMaleTexture);
-	app->tex->UnLoad(combatFemaleTexture);
-	app->tex->UnLoad(enemyTexture);
+	app->tex->UnLoad(suitManTexture);		suitManTexture = nullptr;
+	app->tex->UnLoad(armorMaleTexture);		armorMaleTexture = nullptr;
+	app->tex->UnLoad(combatFemaleTexture);	combatFemaleTexture = nullptr;
+	app->tex->UnLoad(enemyTexture);			enemyTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);
-	app->tex->UnLoad(base1Texture);
-	app->tex->UnLoad(base2Texture);
+	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
 
-	app->tex->UnLoad(turretTexture);
+	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 
-	app->tex->UnLoad(debugPathTexture);
+	app->tex->UnLoad(turretTexture);		turretTexture = nullptr;
 
-	app->tex->UnLoad(IAmSelected);
-	app->tex->UnLoad(explosionText);
+	app->tex->UnLoad(debugPathTexture);		debugPathTexture = nullptr;
 
-	IAmSelected = nullptr;
-
-	suitManTexture = nullptr;
-	armorMaleTexture = nullptr;
-	combatFemaleTexture = nullptr;
-	enemyTexture = nullptr;
-
-	buildingTexture = nullptr;
-	base1Texture = nullptr;
-	base2Texture = nullptr;
-
-	turretTexture = nullptr;
-
-	explosionText = nullptr;
-
-	debugPathTexture = nullptr;
+	app->tex->UnLoad(IAmSelected);			IAmSelected = nullptr;
+	app->tex->UnLoad(explosionText);		explosionText = nullptr;
+	app->tex->UnLoad(target);				target = nullptr;
 
 	RELEASE(sampleGatherer);
 	RELEASE(sampleEnemy);
@@ -738,6 +755,30 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 				}
 			}
 		}
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
+				}
+			}
+		}
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET) {
+			col = entityVector[i]->GetCollider();
+			entityVector[i]->selected_by_player = false;
+
+			if (col != nullptr)
+			{
+				if (col->CheckCollision(selection))
+				{
+					entityVector[i]->selected_by_player = true;
+				}
+			}
+		}
 	}
 }
 
@@ -848,15 +889,16 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			case ENTITY_TYPE::BUILDING:
 			case ENTITY_TYPE::BLDG_BARRICADE:
 			case ENTITY_TYPE::BLDG_BASE:
-			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 				//case ENTITY_TYPE::BLDG_CORE:	CORE_CONSTRUCTOR_NEEDED
 				buildingVector.push_back(entityVector[i]);
 				break;
+			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::ENEMY:
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
+		
 				movableEntityVector.push_back(entityVector[i]);
 				break;
 
@@ -932,21 +974,69 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	//icons
 	for (int i = 0; i < selectedVector.size(); i++)
 	{
-		if (selectedVector[i]->visionEntity != nullptr)
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED))
 		{
-			if (selectedVector[i]->visionEntity->isVisible)
+
+			if (selectedVector[i]->visionEntity != nullptr)
 			{
-				Hero* thisHero = (Hero*)selectedVector[i];
-				thisHero->DrawSelected();
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
 			}
 		}
-		else
-		{
-			Hero* thisHero = (Hero*)selectedVector[i];
-			thisHero->DrawSelected();
-		}
-	}
 
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET))
+		{
+
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Turret* thisTurret = (Turret*)selectedVector[i];
+					thisTurret->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Turret* thisTurret = (Turret*)selectedVector[i];
+					thisTurret->DrawSelected();
+				}
+			}
+		}
+
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY) 
+		{
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+		}
+		
+	}	
 	selectedVector.clear();
 }
 
@@ -1079,7 +1169,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GATHERER_RESURRECT:
-
+		// TODO REVIVE HEROES FUNCTION
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:
@@ -1175,8 +1265,8 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 		rect = testTurret->GetCollider()->rect;
 
-		x -= rect.w / 2;
-		y -= rect.h / 2;
+		x -= rect.w * 0.5f;
+		y -= rect.h;
 
 		testTurret->ActivateTransparency();
 		testTurret->SetPosition(x, y);
@@ -1462,10 +1552,10 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	}
 }
 
-bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
+int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
 	SKILL_TYPE type, bool hurtYourself, Entity* objective)
 {
-	bool ret = false;
+	int ret = -1;
 
 	switch (type)
 	{
@@ -1474,6 +1564,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	break;
 	case SKILL_TYPE::AREA_OF_EFFECT:
 	{
+		ret = 0;
 		int numEntities = entityVector.size();
 		Collider* entColl = nullptr;
 		float halfH = app->map->data.tileHeight * 0.5;
@@ -1484,7 +1575,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 		{
 			if (entityVector[i]->GetAlignment() != target)
 			{
-				if (!hurtYourself && entityVector[i] == objective)
+				if (hurtYourself && entityVector[i] == objective)
 				{
 					true;
 				}
@@ -1502,7 +1593,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 			case AREA_TYPE::CIRCLE:
 			{
 				if (entColl->CheckCollisionCircle(pivot, newRad))
-					entityVector[i]->RecieveDamage(dmg);
+					ret += entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
 			case AREA_TYPE::QUAD:
@@ -1514,5 +1605,5 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	}
 	break;
 	}
-	return true;
+	return ret;
 }

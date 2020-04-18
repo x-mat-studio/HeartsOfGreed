@@ -11,7 +11,10 @@ class UI;
 class UI_Portrait;
 class Entity;
 class UI_Healthbar;
+class Base;
+class UI_Text;
 enum class UI_TYPE;
+class Entity;
 
 enum class DRAGGABLE
 {
@@ -53,38 +56,48 @@ public:
 	void CreateEntityPortrait();
 	void CreateShopMenu();
 	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
+	void UpdateFocusPortrait();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
-	void DeleteUI(UI* father, bool includeFather);
+	void DeleteUIChilds(UI* father, bool includeFather);
 	void HideElements(UI* father, float dt);
 
 	bool CleanUp();
+	bool MouseOnUI(iMPoint& mouse);
 
 	void LoadAtlas();
 	UI* FindUIByName(char* name);
 
 private:
-
-
-
 	void CreatePauseMenu();
+	void CreateCreditMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DisableHealthBars();
+	void CheckFocusEntity();
+	void UpdateResources(int newResources);
+
+	void CreateEntityPortraitChilds();
+
 
 public:
 
 	int hoverSound;
 	int clickSound;
 
+	Base* lastShop;
 
 private:
 
 	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
 	UI_Portrait* portraitPointer;
+	Entity* focusedEnt;
+	UI* focusedPortrait;
 
+	UI* currResources;
+	int screenResources;
 	
 
 };
