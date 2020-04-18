@@ -98,8 +98,6 @@ private:
 	
 
 private:
-
-	bool selected;
 	
 	int recoveryHitPointsRate;
 	int vision;

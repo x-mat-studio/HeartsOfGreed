@@ -13,6 +13,8 @@ public:
 	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints);
 	Spawner(fMPoint position, Spawner* copy);
 
+	~Spawner();
+
 	void Spawn();
 	void SetNumberToSpawn(int number);
 

@@ -9,6 +9,7 @@ Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int m
 	entitysToSpawn(0)
 {}
 
+
 Spawner::Spawner(fMPoint position, Spawner* copy) :
 
 	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, copy->collider, copy->hitPointsMax, copy->hitPointsCurrent),
@@ -17,6 +18,11 @@ Spawner::Spawner(fMPoint position, Spawner* copy) :
 {
 	collider->SetPos(position.x, position.y);
 }
+
+
+Spawner::~Spawner()
+{}
+
 
 bool Spawner::PreUpdate(float dt)
 {

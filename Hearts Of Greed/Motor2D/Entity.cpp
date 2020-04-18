@@ -19,20 +19,21 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	started(false),
 	toDelete(false),
 	flip(false),
+	selectedByPlayer(false),
+	UIAssigned(false),
 	
 	collider(collider),
+
 	visionEntity(nullptr),
 	minimapIcon(nullptr),
 	texture(nullptr),
-	selected_by_player(false),
 
 	hitPointsMax(maxHealth),
 	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
-	center {0, 0},
-
-	UIAssigned(false)
+	center {0, 0}
+	
 {
 }
 
@@ -46,14 +47,12 @@ Entity::~Entity()
 	
 
 	texture = nullptr;
-	collider = nullptr;
 
-	if (visionEntity != nullptr)
-	{
-		visionEntity->deleteEntity = true;
-	}
+	visionEntity = nullptr;
 
 	minimapIcon = nullptr;
+
+	selectedByPlayer = false;
 }
 
 

@@ -108,6 +108,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 Enemy::~Enemy()
 {
 	shortTermObjective = nullptr;
+	currentAnimation = nullptr;
 
 	inputs.clear();
 
@@ -242,7 +243,7 @@ void Enemy::Roar()
 
 void Enemy::DrawOnSelect()
 {
-	if(selected_by_player)
+	if(selectedByPlayer)
 	app->render->Blit(app->entityManager->targetedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
@@ -325,6 +326,12 @@ void Enemy::Die()
 	{
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
+	}
+
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
 	}
 }
 

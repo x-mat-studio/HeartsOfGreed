@@ -42,6 +42,12 @@ public:
 
 	FACE_DIR DetermineDirection(fMPoint dir);
 
+private:
+	fMPoint GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
+	fMPoint GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
+	fMPoint GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
+	SDL_Rect GetAnimationRect(float dt);
+
 public:
 	bool isMoving;
 
@@ -61,18 +67,14 @@ protected:
 	iMPoint origin, mouse;
 	Animation* current_animation;
 	std::vector <iMPoint> path;
-	std::vector<DynamicEntity*> closeEntityList;
-	std::vector<DynamicEntity*> collidingEntityList;
+	std::vector<DynamicEntity*> closeEntityVector;
+	std::vector<DynamicEntity*> collidingEntityVector;
 
 private:
 	fMPoint toMove;
 
 
-private:
-	fMPoint GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
-	fMPoint GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
-	fMPoint GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
-	SDL_Rect GetAnimationRect(float dt);
+
 
 };
 

@@ -204,6 +204,8 @@ Hero::~Hero()
 	app->player->RemoveHeroFromVector(this);
 
 	objective = nullptr;
+	currAreaInfo = nullptr;
+	currentAnimation = nullptr;
 
 	inputs.clear();
 
@@ -234,8 +236,6 @@ Hero::~Hero()
 
 	currAoE.clear();
 	suplAoE.clear();
-
-	currAreaInfo = nullptr;
 }
 
 
@@ -539,6 +539,12 @@ void Hero::Die()
 	{
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
+	}
+
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
 	}
 
 	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
@@ -1341,7 +1347,7 @@ bool Hero::ExecuteSkill3()
 
 void Hero::DrawSelected()
 {
-	if (selected_by_player == true) 
+	if (selectedByPlayer == true) 
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 

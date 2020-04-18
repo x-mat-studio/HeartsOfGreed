@@ -769,38 +769,38 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 
 			Hero* thisHero;
 			thisHero = (Hero*)entityVector[i];
-			thisHero->selected_by_player = false;
+			thisHero->selectedByPlayer = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selected_by_player = true;
+					thisHero->selectedByPlayer = true;
 					heroPlayerVector->push_back(thisHero);
 				}
 			}
 		}
 		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
 			col = entityVector[i]->GetCollider();
-			entityVector[i]->selected_by_player = false;
+			entityVector[i]->selectedByPlayer = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					entityVector[i]->selected_by_player = true;
+					entityVector[i]->selectedByPlayer = true;
 				}
 			}
 		}
 		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET) {
 			col = entityVector[i]->GetCollider();
-			entityVector[i]->selected_by_player = false;
+			entityVector[i]->selectedByPlayer = false;
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					entityVector[i]->selected_by_player = true;
+					entityVector[i]->selectedByPlayer = true;
 				}
 			}
 		}

@@ -43,6 +43,11 @@ public:
 	void ChangeAligment();
 
 	int RecieveDamage(int damage);
+
+	int GetHP();
+	int GetMaxHP();
+	int GetRsrc();
+
 private:
 	
 	void DisableTurrets();
@@ -51,12 +56,8 @@ private:
 
 	void Die();
 
-public:
-	int GetHP();
-	int GetMaxHP();
-	int GetRsrc();
-
 private:
+
 	int maxTurrets;
 	int maxBarricades;
 	Collider* baseAreaAlarm; //if this seems odd, ask Jose -Adri

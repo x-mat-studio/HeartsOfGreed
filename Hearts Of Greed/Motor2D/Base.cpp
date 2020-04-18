@@ -79,7 +79,14 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
 
 Base::~Base()
-{}
+{
+	baseAreaAlarm = nullptr;
+
+	baseUpgradeCenter = nullptr;
+
+	turretsVector.clear();
+	barricadesVector.clear();
+}
 
 
 bool Base::Update(float dt)

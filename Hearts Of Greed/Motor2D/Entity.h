@@ -122,7 +122,7 @@ public:
 	bool dynamic;
 	bool UIAssigned;
 
-	bool selected_by_player;
+	bool selectedByPlayer;
 
 	FoWEntity* visionEntity;
 	MinimapIcon* minimapIcon;

@@ -33,11 +33,15 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	}
 }
 
+
 DynamicEntity::~DynamicEntity()
 {
-	if (path.size() > 0)
-		path.clear();
+	path.clear();
+	closeEntityVector.clear();
+	collidingEntityVector.clear();
+
 }
+
 
 bool DynamicEntity::Move(float dt)
 {
@@ -141,14 +145,14 @@ void DynamicEntity::GroupMovement(float dt)
 	toMove = { 0,0 };
 	// ----------------------------------------------------------------
 
-	app->entityManager->GetEntityNeighbours(&closeEntityList, &collidingEntityList, this);
+	app->entityManager->GetEntityNeighbours(&closeEntityVector, &collidingEntityVector, this);
 
 	//---------------------------------------------------------------- 
 	fMPoint separationSpeed;
 
-	if (!collidingEntityList.empty())
+	if (!collidingEntityVector.empty())
 	{
-		separationSpeed = GetSeparationSpeed(collidingEntityList, position);
+		separationSpeed = GetSeparationSpeed(collidingEntityVector, position);
 	}
 	else
 	{
@@ -159,9 +163,9 @@ void DynamicEntity::GroupMovement(float dt)
 	// ---------------------------------------------------------------- 
 
 	fMPoint cohesionSpeed = { 0,0 };
-	if (!closeEntityList.empty())
+	if (!closeEntityVector.empty())
 	{
-		cohesionSpeed = GetCohesionSpeed(closeEntityList, position);
+		cohesionSpeed = GetCohesionSpeed(closeEntityVector, position);
 	}
 	else
 	{
@@ -172,9 +176,9 @@ void DynamicEntity::GroupMovement(float dt)
 	//---------------------------------------------------------------- 
 
 	fMPoint alignmentSpeed = { 0,0 };
-	if (!closeEntityList.empty() && (abs(toMove.x) > 0 || abs(toMove.y) > 0))
+	if (!closeEntityVector.empty() && (abs(toMove.x) > 0 || abs(toMove.y) > 0))
 	{
-		alignmentSpeed = GetDirectionSpeed(closeEntityList);
+		alignmentSpeed = GetDirectionSpeed(closeEntityVector);
 	}
 	else
 	{

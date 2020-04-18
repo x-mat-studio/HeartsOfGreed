@@ -44,14 +44,25 @@ public:
 
 	Turret(int turretLvl, int attackDmg, int attackSpeed, int range,fMPoint position, Collider* collider, Animation& animation, int maxHitPoints = 100, int currentHitPoints = 100,
 		int recoveryHitPointsRate=5, int xpOnDeath=100, int buildingCost=50, int transparency = 0);
+
 	Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement);
+
 	~Turret();
 
 
-	bool Start();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
+
+	void Draw(float dt);
+
+	int GetLvl();
+	int GetAD();
+	int GetAS();
+	int GetRng();
+	void DrawSelected();
+
+private:
 
 	void CheckObjective(Entity* entity);
 	bool SearchObjective();
@@ -69,14 +80,6 @@ public:
 
 	void StateMachine();
 
-	void Draw(float dt);
-public:
-
-	int GetLvl();
-	int GetAD();
-	int GetAS();
-	int GetRng();
-	void DrawSelected();
 private:
 	int turretLvl;
 	int attackDmg;
@@ -84,8 +87,6 @@ private:
 	float attackCD;
 	int range;
 
-
-	bool haveOrders;
 	Entity* shortTermObjective;
 	Animation animation;
 	TURRET_STATES state;

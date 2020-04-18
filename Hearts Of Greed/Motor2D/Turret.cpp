@@ -18,7 +18,6 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	attackCD(0),
 	
 	shortTermObjective(nullptr),
-	haveOrders(false),
 
 	state(TURRET_STATES::IDLE)
 {}
@@ -38,7 +37,6 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 
 	shortTermObjective(nullptr),
-	haveOrders(false),
 
 	state(TURRET_STATES::IDLE)
 {
@@ -49,18 +47,11 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 Turret::~Turret()
 {
 	shortTermObjective = nullptr;
+	currentAnimation = nullptr;
 
 	inputs.clear();
 
 	animation = Animation();
-}
-
-
-bool Turret::Start()
-{
-
-
-	return true;
 }
 
 
@@ -168,7 +159,7 @@ int Turret::GetRng()
 
 void Turret::DrawSelected()
 {
-	if (selected_by_player == true)
+	if (selectedByPlayer == true)
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
@@ -210,6 +201,12 @@ void Turret::Die()
 	{
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
+	}
+
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
 	}
 }
 

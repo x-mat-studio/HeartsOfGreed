@@ -52,6 +52,8 @@ void Building::Destroy()
 
 Building::~Building()
 {
+	myBase = nullptr;
+	selectedTexture = nullptr;
 }
 
 
@@ -102,7 +104,7 @@ void Building::Contruct()
 
 void Building::Draw(float dt)
 {
-	if (selected_by_player)
+	if (selectedByPlayer)
 	{
 		if (transparent) 
 		{

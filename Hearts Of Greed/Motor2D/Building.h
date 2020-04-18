@@ -46,10 +46,12 @@ public:
 
 	Building();
 
+	virtual ~Building();
+
 	void Destroy();
 
 	//Destructor
-	~Building();
+	
 
 	// Called each loop iteration
 	bool PreUpdate(float dt);
