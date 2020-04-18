@@ -76,6 +76,7 @@ public:
 	int GetAD();
 	int GetAS();
 	int GetRng();
+	void DrawSelected();
 private:
 	int turretLvl;
 	int attackDmg;

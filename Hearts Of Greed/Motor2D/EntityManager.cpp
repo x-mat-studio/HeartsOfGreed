@@ -770,7 +770,7 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 				}
 			}
 		}
-		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE) {
+		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET) {
 			col = entityVector[i]->GetCollider();
 			entityVector[i]->selected_by_player = false;
 
@@ -892,15 +892,16 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			case ENTITY_TYPE::BUILDING:
 			case ENTITY_TYPE::BLDG_BARRICADE:
 			case ENTITY_TYPE::BLDG_BASE:
-			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 				//case ENTITY_TYPE::BLDG_CORE:	CORE_CONSTRUCTOR_NEEDED
 				buildingVector.push_back(entityVector[i]);
 				break;
+			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::ENEMY:
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
+		
 				movableEntityVector.push_back(entityVector[i]);
 				break;
 
@@ -993,6 +994,27 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 				{
 					Hero* thisHero = (Hero*)selectedVector[i];
 					thisHero->DrawSelected();
+				}
+			}
+		}
+
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET))
+		{
+
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Turret* thisTurret = (Turret*)selectedVector[i];
+					thisTurret->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Turret* thisTurret = (Turret*)selectedVector[i];
+					thisTurret->DrawSelected();
 				}
 			}
 		}

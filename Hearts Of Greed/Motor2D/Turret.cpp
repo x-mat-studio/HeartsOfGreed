@@ -2,6 +2,7 @@
 #include "EntityManager.h"
 #include "Render.h"
 #include "Map.h"
+#include "FoWManager.h"
 
 
 
@@ -35,11 +36,14 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	attackCD(0),
 
+
 	shortTermObjective(nullptr),
 	haveOrders(false),
 
 	state(TURRET_STATES::IDLE)
-{}
+{
+	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5); //TODO: un-hardcode this "5"
+}
 
 
 Turret::~Turret()
@@ -160,6 +164,12 @@ int Turret::GetAS()
 int Turret::GetRng()
 {
 	return range;
+}
+
+void Turret::DrawSelected()
+{
+	if (selected_by_player == true)
+		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
 
