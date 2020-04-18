@@ -19,7 +19,7 @@
 #include "UI_Healthbar.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr)
+ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0)
 {
 	name.create("UIManager");
 }
@@ -87,6 +87,16 @@ bool ModuleUIManager::PreUpdate(float dt)
 	for (int i = 0; i < numEntities; i++)
 	{
 		uiVector[i]->PreUpdate(dt);
+	}
+
+	if (currResources != nullptr)
+	{
+		int newResources = app->player->GetResources();
+
+		if (screenResources != newResources)
+		{
+			UpdateResources(newResources);
+		}
 	}
 
 	return true;
@@ -312,8 +322,9 @@ void ModuleUIManager::CreateBasicInGameUI()
 	rect = RectConstructor(18, 209, 11, 19);
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 93, 7), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
 
-	sprintf_s(resources, 10, "%d", app->player->GetResources());
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
+	screenResources = app->player->GetResources();
+	sprintf_s(resources, 10, "%d", screenResources);
+	currResources = AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
 
 	rect = RectConstructor(391, 435, 275, 67);
 	focusedPortrait = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
@@ -436,17 +447,17 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 {
 	BROFILER_CATEGORY("Create UI Childs", Profiler::Color::Green);
 
-	uint w(app->win->width / app->win->GetUIScale()) , h(app->win->height / app->win->GetUIScale());
+	uint w(app->win->width / app->win->GetUIScale()), h(app->win->height / app->win->GetUIScale());
 	SDL_Color std{ (255),(255), (255), (255) };
 	SDL_Rect rect = { 0, 0, 100, 100 };
-	static char stats[40];
+	static char stats[10];
 
 	Hero* hero = nullptr;
 
 	switch (focusedEnt->GetType())
 	{
 	case ENTITY_TYPE::BLDG_BASE:
-	
+
 		Base* base;
 		base = (Base*)focusedEnt;
 
@@ -456,14 +467,14 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//hp bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w  - 60, (h  - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", base, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", base, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", base->GetHP());
-		AddUIElement(fMPoint(w  - 60, (h  - 55)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 55)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
-		AddUIElement(fMPoint(w  - 60, (h  - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
 					//shop button
@@ -479,21 +490,21 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = { 561, 77, 68, 62 };
-		AddUIElement(fMPoint(w  - 2 * rect.w + 18, h  - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 18, h - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
 
 		//stats
 
 		sprintf_s(stats, 40, "LVL: %i", turret->GetLvl());
-		AddUIElement(fMPoint(w  - 35, (h - 15)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 35, (h - 15)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", turret->GetAD());
-		AddUIElement(fMPoint(w  - 35, (h - 30)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 35, (h - 30)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", turret->GetRng());
-		AddUIElement(fMPoint(w - 35, (h  - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 35, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %i", turret->GetAS());
-		AddUIElement(fMPoint(w  - 35, (h  - 60)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 35, (h - 60)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -509,33 +520,33 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w  - 60, (h  - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "", hero, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "", hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		rect = RectConstructor(374, 85, 60, 7);
-		AddUIElement(fMPoint(w  - 60, (h  - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "", hero, DRAGGABLE::DRAG_OFF, "Ebar");
+		AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "", hero, DRAGGABLE::DRAG_OFF, "Ebar");
 
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", hero->hitPointsCurrent);
-		AddUIElement(fMPoint(w  - 60, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);
-		AddUIElement(fMPoint(w  - 30, (h  - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
-		AddUIElement(fMPoint(w  - 60, (h  - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
-		AddUIElement(fMPoint(w  - 30, (h  - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
-		AddUIElement(fMPoint(w- 60, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
-		AddUIElement(fMPoint(w  - 30, (h  - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
-		AddUIElement(fMPoint(w  - 60, (h - 16)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 16)), focusedPortrait, UI_TYPE::UI_TEXT, rect, "", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -549,11 +560,11 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = RectConstructor(562, 149, 66, 51);
-		AddUIElement(fMPoint(w  - 2 * rect.w + 10, h / app->win->GetUIScale() - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 10, h / app->win->GetUIScale() - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w  - 60, (h  - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", hero, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		rect = RectConstructor(374, 85, 60, 7);
 		AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"Ebar", hero, DRAGGABLE::DRAG_OFF, "Ebar");
@@ -561,25 +572,25 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", hero->hitPointsCurrent);
-		AddUIElement(fMPoint(w - 60, (h  - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);
-		AddUIElement(fMPoint(w  - 30, (h  - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"E", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"E", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
-		AddUIElement(fMPoint(w  - 60, (h  - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
-		AddUIElement(fMPoint(w - 30, (h  - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
-		AddUIElement(fMPoint(w  - 60, (h  - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
-		AddUIElement(fMPoint(w  - 30, (h  - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
-		AddUIElement(fMPoint(w  - 60, (h  - 16)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Exp", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 16)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Exp", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -590,27 +601,27 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = RectConstructor(894, 116, 70, 79);
-		AddUIElement(fMPoint(w  - 2 * rect.w + 30, h  - rect.h - 10), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 30, h - rect.h - 10), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
 
 		//health bar
 		rect = RectConstructor(219, 83, 122, 16);
-		AddUIElement(fMPoint(w  - 90, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", enemy, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w - 90, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", enemy, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", enemy->GetHP());
-		AddUIElement(fMPoint(w  - 60, (h  - 55)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 55)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", enemy->GetAD());
-		AddUIElement(fMPoint(w  - 60, (h - 40)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 40)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %i", enemy->GetAS());
-		AddUIElement(fMPoint(w  - 25, (h  - 40)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 25, (h - 40)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", enemy->GetVision());
-		AddUIElement(fMPoint(w  - 60, (h  - 25)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 25)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", enemy->GetRecov());
-		AddUIElement(fMPoint(w  - 25, (h  - 25)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 25, (h - 25)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rec", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -860,7 +871,7 @@ void ModuleUIManager::DisableHealthBars()
 
 void ModuleUIManager::CheckFocusEntity()
 {
-	if(focusedEnt != nullptr && focusedEnt->toDelete == true)
+	if (focusedEnt != nullptr && focusedEnt->toDelete == true)
 	{
 		DeleteUIChilds(focusedPortrait, false, UI_TYPE::UI_NONE);
 		focusedEnt = nullptr;
@@ -896,4 +907,15 @@ void ModuleUIManager::UpdateFocusPortrait()
 	{
 		CreateEntityPortraitChilds();
 	}
+}
+
+void ModuleUIManager::UpdateResources(int newResources)
+{
+	this->screenResources = newResources;
+	char bufferText[10];
+
+	sprintf_s(bufferText, 10, "%d", newResources);
+
+	UI_Text* updateResources = (UI_Text*)currResources;
+	updateResources->LoadNewTexture(bufferText, app->fonts->fonts[0]);
 }

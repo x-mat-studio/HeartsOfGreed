@@ -12,6 +12,7 @@ class UI_Portrait;
 class Entity;
 class UI_Healthbar;
 class Base;
+class UI_Text;
 enum class UI_TYPE;
 class Entity;
 
@@ -53,7 +54,6 @@ public:
 	void CreateMainMenu();
 	void CreateOptionsMenu();
 	void CreateEntityPortrait();
-	void CreateEntityPortraitChilds();
 	void CreateShopMenu();
 	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
 	void UpdateFocusPortrait();
@@ -70,14 +70,15 @@ public:
 	UI* FindUIByName(char* name);
 
 private:
-
-
-
 	void CreatePauseMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DisableHealthBars();
 	void CheckFocusEntity();
+	void UpdateResources(int newResources);
+
+	void CreateEntityPortraitChilds();
+
 
 public:
 
@@ -93,6 +94,9 @@ private:
 	UI_Portrait* portraitPointer;
 	Entity* focusedEnt;
 	UI* focusedPortrait;
+
+	UI* currResources;
+	int screenResources;
 	
 
 };
