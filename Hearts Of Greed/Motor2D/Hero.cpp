@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Input.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
@@ -177,6 +178,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skillFromAttacking(false),
 	godMode(false),
 	skillExecutionDelay(false),
+	currAreaInfo(nullptr),
 
 	state(HERO_STATES::IDLE),
 
@@ -245,6 +247,8 @@ bool Hero::PreUpdate(float dt)
 
 bool Hero::Update(float dt)
 {
+	BROFILER_CATEGORY("Hero Update", Profiler::Color::Blue);
+
 	//check inputs to traverse state matrix
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
@@ -260,7 +264,7 @@ bool Hero::Update(float dt)
 	}
 
 	
-	LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
+	//LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
 	// LOG("RECOVERY: %f ", feelingSecure);
 
 	CollisionPosUpdate();
@@ -324,6 +328,7 @@ void Hero::StateMachine(float dt)
 		}
 		else
 			inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
+
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
@@ -731,6 +736,8 @@ bool Hero::GetLevel()
 	{
 		LevelUp();
 		heroXP = 0;
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
+		level++;
 		return true;
 	}
 
@@ -746,7 +753,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		attackCooldown += dt;
 		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			currentAnimation->ResetAnimation();
 

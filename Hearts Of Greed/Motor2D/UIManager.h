@@ -59,7 +59,7 @@ public:
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
-	void DeleteUI(UI* father, bool includeFather);
+	void DeleteUIChilds(UI* father, bool includeFather, UI_TYPE typeToDelete);
 	void HideElements(UI* father, float dt);
 
 	bool CleanUp();
@@ -76,6 +76,7 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DisableHealthBars();
+	void CheckFocusEntity();
 
 public:
 

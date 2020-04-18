@@ -121,7 +121,6 @@ void MeleeHero::LevelUp()
 	unitSpeed += 5;
 	visionDistance;
 
-	app->audio->PlayFx(app->entityManager->lvlup,0,-1,LOUDNESS::LOUD,DIRECTION::FRONT);
 }
 
 void MeleeHero::PlayGenericNoise()

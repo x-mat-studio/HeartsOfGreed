@@ -1539,7 +1539,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 		{
 			if (entityVector[i]->GetAlignment() != target)
 			{
-				if (!hurtYourself && entityVector[i] == objective)
+				if (hurtYourself && entityVector[i] == objective)
 				{
 					true;
 				}

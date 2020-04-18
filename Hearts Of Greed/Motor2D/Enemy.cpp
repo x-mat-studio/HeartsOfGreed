@@ -8,6 +8,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Input.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -141,6 +142,8 @@ bool Enemy::PreUpdate(float dt)
 
 bool Enemy::Update(float dt)
 {
+	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Blue);
+
 	//check inputs to traverse state matrix
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
@@ -413,7 +416,7 @@ void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			inputs.push_back(ENEMY_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;

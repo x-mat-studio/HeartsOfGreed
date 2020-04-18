@@ -78,8 +78,6 @@ bool GathererHero::ActivateSkill3()
 
 bool GathererHero::PreProcessSkill1()
 {
-
-
 	if (currAoE.size() == 0)
 	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
@@ -164,7 +162,6 @@ void GathererHero::LevelUp()
 	unitSpeed += 6;
 	visionDistance;
 
-	app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
 }
 
 void GathererHero::PlayGenericNoise()

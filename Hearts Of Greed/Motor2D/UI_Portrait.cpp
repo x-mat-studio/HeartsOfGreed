@@ -51,6 +51,11 @@ bool UI_Portrait::PreUpdate(float dt)
 	{
 		portraitVector[i].healthbar->PreUpdate(dt);
 		portraitVector[i].level->PreUpdate(dt);
+
+		if (portraitVector[i].lvl != portraitVector[i].hero->level)
+		{
+			portraitVector[i].ChangeLvl(portraitVector[i].hero->level);
+		}
 	}
 
 	return true;
@@ -209,18 +214,17 @@ void UI_Portrait::DeletePortrait()
 }
 
 void UI_Portrait::Move()
+{}
+
+void Portrait::ChangeLvl(int newlvl)
 {
-	// TODO
+	this->lvl = newlvl;
+	char bufferText [10] ;
+
+	sscanf_s(bufferText, "%d", &lvl);
+
+	this->level->LoadNewTexture(bufferText, app->fonts->fonts[0]);
 }
 
-void UI_Portrait::CheckLevel()
-{
-	// TODO
-}
-
-void UI_Portrait::ReWriteLevelTexture()
-{
-	// TODO
-}
 
 

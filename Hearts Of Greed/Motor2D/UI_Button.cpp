@@ -187,7 +187,7 @@ void UI_Button::HoverFeedback()
 
 void UI_Button::CloseMenu()
 {
-	app->uiManager->DeleteUI(parent, properties.includeFather);
+	app->uiManager->DeleteUIChilds(parent, properties.includeFather, UI_TYPE::UI_NONE);
 }
 
 void UI_Button::MovingIt(float dt)
