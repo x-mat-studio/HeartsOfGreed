@@ -206,8 +206,7 @@ bool GathererHero::DrawVfx(float dt)
 	{
 		Frame currFrame = currentVfx->GetCurrentFrame(dt);
 
-		app->render->Blit(app->entityManager->explosionText, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
-
+		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
 	}
 
 
