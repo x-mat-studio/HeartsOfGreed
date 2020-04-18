@@ -98,6 +98,8 @@ private:
 
 	skillArea* contrAreaInfo;
 	std::vector <iMPoint> constrArea;
+	fMPoint baseDrawCenter;
+	iMPoint buildingPrevPosition;
 };
 
 

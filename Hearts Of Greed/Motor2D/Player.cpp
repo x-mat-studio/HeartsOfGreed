@@ -36,6 +36,7 @@ ModulePlayer::ModulePlayer() :
 	contrAreaInfo(nullptr),
 
 	doSkill(false),
+	buildingPrevPosition{0,0},
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
@@ -146,14 +147,20 @@ bool ModulePlayer::PostUpdate(float dt)
 
 	CheckListener(this);
 
-	if (buildMode == true)
+	if (buildMode == true && contrAreaInfo)
 	{
-		int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
-		int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+		iMPoint center = app->map->WorldToMap(baseDrawCenter.x, baseDrawCenter.y);
+		fMPoint wBuildPos = app->input->GetMousePosWorld();
+		iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-		app->entityManager->PlayerBuildPreview(x, y, buildingToBuild);
+		if (center.InsideCircle(mBuildPos, contrAreaInfo->radius))
+		{
+			buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
+		}
 
-		if (contrAreaInfo && constrArea.size() > 0)
+		app->entityManager->PlayerBuildPreview(buildingPrevPosition.x, buildingPrevPosition.y, buildingToBuild);
+
+		if (constrArea.size() > 0)
 		{
 			for (uint i = 0; i < constrArea.size(); i++)
 			{
@@ -452,13 +459,13 @@ void ModulePlayer::DoHeroSkills()
 bool ModulePlayer::BuildClick()
 {
 	//Needs more work
-	int x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
-	int y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
+	int x = buildingPrevPosition.x;
+	int y = buildingPrevPosition.y;
 
 	SDL_Rect rect = app->entityManager->GetSample(buildingToBuild)->GetCollider()->rect;
 
-	x -= rect.w / 2;
-	y -= rect.h / 2;
+	x -= rect.w * 0.5f;
+	y -= rect.h;
 
 	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
 
@@ -592,8 +599,6 @@ bool ModulePlayer::UseResources(int cost)
 {
 	if (cost > resources)
 		return false;
-
-
 	else
 	{
 		resources -= cost;
@@ -615,7 +620,9 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 
 		if (contrBase != nullptr)
 		{
-			iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().x));
+			baseDrawCenter = contrBase->GetCenter();
+
+			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
 			contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
@@ -636,6 +643,8 @@ void ModulePlayer::DesactivateBuildMode()
 
 	contrAreaInfo = nullptr;
 	constrArea.clear();
+	baseDrawCenter = { 0,0 };
+	buildingPrevPosition = { 0,0 };
 }
 
 

@@ -228,7 +228,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
 
 	skillArea baseConstruction;
-	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
+	baseConstruction.form = AREA_TYPE::CIRCLE;
 	BuildArea(&baseConstruction, 0, 0, 10);
 	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
 
@@ -1230,8 +1230,8 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 		
 		rect = testTurret->GetCollider()->rect;
 
-		x -= rect.w / 2;
-		y -= rect.h / 2;
+		x -= rect.w * 0.5f;
+		y -= rect.h;
 
 		testTurret->ActivateTransparency();
 		testTurret->SetPosition(x, y);
