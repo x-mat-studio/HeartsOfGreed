@@ -207,6 +207,8 @@ private:
 
 	SDL_Texture* enemyTexture;
 
+	//Samples
+
 	GathererHero* sampleGatherer;
 	MeleeHero* sampleMelee;
 
@@ -214,10 +216,10 @@ private:
 
 	Spawner* sampleSpawner;
 
-	Building* testBuilding;
+	Building* sampleBuilding;
 	Base* sampleBase;
 
-	Turret* testTurret;
+	Turret* sampleTurret;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
 

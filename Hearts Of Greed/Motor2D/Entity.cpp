@@ -80,8 +80,6 @@ bool Entity::Start(SDL_Texture* texture)
 
 	started = true;
 
-
-
 	return true;
 }
 

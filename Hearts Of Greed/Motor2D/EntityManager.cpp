@@ -212,11 +212,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
-	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
+	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleLeft, 100, 100, 5, 100, 50, 160);
+	sampleTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleLeft, 100, 100, 5, 100, 50, 160);
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
@@ -300,10 +300,10 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
 
 
-	testBuilding->SetTexture(base1Texture);
+	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
 
-	testTurret->SetTexture(turretTexture);
+	sampleTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -555,16 +555,16 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
 	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
 
-	RELEASE(sampleEnemy);
-	RELEASE(sampleSpawner);
-	RELEASE(testBuilding);
-	RELEASE(sampleBase);
+	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
+	RELEASE(sampleMelee);							sampleMelee = nullptr;
 
-	sampleGatherer = nullptr;
-	sampleEnemy = nullptr;
-	sampleSpawner = nullptr;
-	testBuilding = nullptr;
-	sampleBase = nullptr;
+	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
+	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
+
+	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
+	RELEASE(sampleBase);							sampleBase = nullptr;
+	RELEASE(sampleTurret);							sampleTurret = nullptr;
+	
 
 	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
@@ -573,6 +573,11 @@ bool ModuleEntityManager::CleanUp()
 
 	}
 	skillAreas.clear();
+
+	renderVector.clear();
+	movableEntityVector.clear();
+	buildingVector.clear();
+	selectedVector.clear();
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
@@ -640,11 +645,11 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BUILDING:
-		ret = new Building({ (float)x,(float)y }, testBuilding, alignement);
+		ret = new Building({ (float)x,(float)y }, sampleBuilding, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
+		ret = new Turret({ (float)x,(float)y }, sampleTurret, alignement);
 
 		break;
 
@@ -697,11 +702,11 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 		break;
 
 	case ENTITY_TYPE::BUILDING:
-		return testBuilding;
+		return sampleBuilding;
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		return testTurret;
+		return sampleTurret;
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:
@@ -1272,27 +1277,27 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 	{
 	case ENTITY_TYPE::BUILDING:
 
-		SDL_QueryTexture(testBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+		SDL_QueryTexture(sampleBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
 
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		testBuilding->ActivateTransparency();
-		testBuilding->SetPosition(x, y);
-		testBuilding->Draw(0);
+		sampleBuilding->ActivateTransparency();
+		sampleBuilding->SetPosition(x, y);
+		sampleBuilding->Draw(0);
 		break;
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
 
-		rect = testTurret->GetCollider()->rect;
+		rect = sampleTurret->GetCollider()->rect;
 
 		x -= rect.w * 0.5f;
 		y -= rect.h;
 
-		testTurret->ActivateTransparency();
-		testTurret->SetPosition(x, y);
-		testTurret->Draw(0.0000001);
+		sampleTurret->ActivateTransparency();
+		sampleTurret->SetPosition(x, y);
+		sampleTurret->Draw(0.0000001);
 
 
 		break;
