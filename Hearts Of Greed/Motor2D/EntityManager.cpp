@@ -313,6 +313,10 @@ bool ModuleEntityManager::Start()
 	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
 	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
 
+	//Buildings sfx--------
+	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
+	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
+
 	//Armored sfx--------
 	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
 	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
