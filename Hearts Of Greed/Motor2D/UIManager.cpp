@@ -671,6 +671,7 @@ void ModuleUIManager::CreateShopMenu()
 {
 	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
 	uint w(app->win->width), h(app->win->height);
+	static char cost[40];
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"shopBackground");
 
@@ -706,13 +707,13 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 120, h / (app->win->GetUIScale() * 2) - (231 / 2) + 135), father, UI_TYPE::UI_IMG, rect, (P2SString)"turretPortrait");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO ONLY SPEND RESOURCES IF YOU HAVE THEM
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_PURCHASED);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_CONSTRUCT);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 50, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, "Buy");
 
 	// TODO: read the actual amount of resources that turret prize costs when the variable is added				// It'd be cool if text got gray if the option was not usable (maybe add a variable to text constructor that is a condition, not a bool, since it may be dynamic, like resources)
-
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, "- 120");
+	sprintf_s(cost, 40, "- %i", app->player->GetTurretCost());
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, cost );
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED);

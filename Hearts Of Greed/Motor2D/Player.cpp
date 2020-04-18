@@ -54,7 +54,7 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-
+	turretCost = 95;
 	return true;
 }
 
@@ -76,7 +76,7 @@ bool ModulePlayer::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
-	app->eventManager->EventRegister(EVENT_ENUM::TURRET_PURCHASED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
 
 
 	return true;
@@ -114,6 +114,11 @@ bool ModulePlayer::PreUpdate(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
 		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, nullptr);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_STATE::KEY_DOWN) // For debug purposes
+	{
+		resources += 1000;
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
@@ -469,9 +474,23 @@ bool ModulePlayer::BuildClick()
 
 	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
 
+	SubstractBuildResources();
 	DesactivateBuildMode();
 
 	return true;
+}
+
+void ModulePlayer::SubstractBuildResources()
+{
+	switch (buildingToBuild)
+	{
+	case ENTITY_TYPE::BLDG_TURRET:
+	{
+		resources -= turretCost;
+	}
+	break;
+	}
+
 }
 
 
@@ -566,12 +585,15 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		resources += 1000;
 		break;
 
-	case EVENT_ENUM::TURRET_PURCHASED:
-		if (resources >= 120)	// TODO Change this to an actual variable turretPrize or something
+	case EVENT_ENUM::TURRET_CONSTRUCT:
+		if (resources >= turretCost)
 		{
 			ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
-			resources -= 120;
 		}
+		break;
+
+	case EVENT_ENUM::TURRET_PURCHASE:
+		resources -= turretCost;
 		break;
 	}
 
@@ -691,3 +713,9 @@ int ModulePlayer::GetResources() const
 {
 	return resources;
 }
+
+int ModulePlayer::GetTurretCost() const
+{
+	return turretCost;
+}
+
