@@ -149,7 +149,7 @@ bool ModulePlayer::PostUpdate(float dt)
 
 	if (buildMode == true && contrAreaInfo)
 	{
-		iMPoint center = app->map->WorldToMap(baseDrawCenter.x, baseDrawCenter.y);
+		iMPoint center = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 		fMPoint wBuildPos = app->input->GetMousePosWorld();
 		iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
@@ -624,9 +624,10 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 
 		if (contrBase != nullptr)
 		{
-			baseDrawCenter = contrBase->GetCenter();
+			baseDrawCenter = contrBase->GetPosition() + contrBase->GetCenter();
+			baseDrawCenter.y += app->map->data.tileHeight;
 
-			iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().y));
+			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
 			contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
