@@ -278,19 +278,18 @@ int Base::RecieveDamage(int damage)
 	if (hitPointsCurrent > 0)
 	{
 		hitPointsCurrent -= damage;
+
+		int randomCounter = rand() % 10;
+
+		if (randomCounter == 0)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
+		else if (randomCounter == 9)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
+
 		if (hitPointsCurrent <= 0)
 		{
 			Die();
 		}
-	}
-	else
-	{
-		int randomCounter = rand() % 10;
-
-		if (randomCounter == 0)
-			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
-		else if (randomCounter == 9)
-			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection(), true);
 	}
 
 	return 0;

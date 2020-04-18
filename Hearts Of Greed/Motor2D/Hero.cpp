@@ -1341,9 +1341,8 @@ bool Hero::ExecuteSkill3()
 
 void Hero::DrawSelected()
 {
-	if (selected_by_player == true) {
+	if (selected_by_player == true) 
 		app->render->Blit(app->entityManager->IAmSelected, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
-	}
 }
 
 bool Hero::DrawVfx(float dt)

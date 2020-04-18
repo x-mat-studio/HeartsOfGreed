@@ -318,17 +318,17 @@ void ModuleUIManager::CreateBasicInGameUI()
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
 	rect = RectConstructor(415, 435, 65, 30);
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 99, 0), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceBackground");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 65, h / app->win->GetUIScale() - 97), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceBackground");
 
 	rect = RectConstructor(18, 209, 11, 19);
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 93, 7), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 59, h / app->win->GetUIScale() - 90), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
 
 	screenResources = app->player->GetResources();
 	sprintf_s(resources, 10, "%d", screenResources);
-	currResources = AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
+	currResources = AddUIElement(fMPoint(w / app->win->GetUIScale() - 41, h / app->win->GetUIScale() - 94), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
 
-	rect = RectConstructor(391, 435, 275, 67);
-	focusedPortrait = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
+	rect = RectConstructor(400, 435, 139, 67);
+	focusedPortrait = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
 
 	rect = RectConstructor(727, 203, 65, 51);
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 12, h / app->win->GetUIScale() - rect.h - 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
@@ -428,14 +428,41 @@ void ModuleUIManager::CreateOptionsMenu()
 
 void ModuleUIManager::CreateCreditMenu()
 {
+	//TODO ADRI: FLESH OUT
+	
 	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
 	uint w(app->win->width), h(app->win->height);
+	uint originX = w / (app->win->GetUIScale() * 2) - (rect.w / 2); uint originY = h / (app->win->GetUIScale() * 2) - (rect.h / 2);
 
-	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+	UI* father = AddUIElement(fMPoint(originX, originY), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
 	
 	rect = RectConstructor(424, 25, 23, 23);
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (231 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
+	
+	
+	//logo
+	rect = RectConstructor(563, 237, 117, 122);
+	AddUIElement(fMPoint(originX + 40, originY + 50), father, UI_TYPE::UI_IMG, rect, (P2SString)"logocredit");
 
+	//names
+
+	AddUIElement(fMPoint(originX + 5, originY + 0), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits1", nullptr, DRAGGABLE::DRAG_OFF, "Aaron Guerrero Cruz");
+	AddUIElement(fMPoint(originX + 15, originY + 10), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits1.2", nullptr, DRAGGABLE::DRAG_OFF, "Lead");
+
+	AddUIElement(fMPoint(originX + 5, originY + 35), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits2", nullptr, DRAGGABLE::DRAG_OFF, "Jose Luis Redondo Tello");
+	AddUIElement(fMPoint(originX + 15, originY + 45), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits2.2", nullptr, DRAGGABLE::DRAG_OFF, "Code");
+
+	AddUIElement(fMPoint(originX + 5, originY + 70), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits3", nullptr, DRAGGABLE::DRAG_OFF, "Ferran-Roger Basart i Bosch");
+	AddUIElement(fMPoint(originX + 15, originY + 80), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits3.2", nullptr, DRAGGABLE::DRAG_OFF, "Management + UI");
+
+	AddUIElement(fMPoint(originX + 5, originY + 105), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits4", nullptr, DRAGGABLE::DRAG_OFF, "Alex Melenchon Maza");
+	AddUIElement(fMPoint(originX + 15, originY + 115), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits4.2", nullptr, DRAGGABLE::DRAG_OFF, "Design");
+
+	AddUIElement(fMPoint(originX + 5, originY + 140), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits5", nullptr, DRAGGABLE::DRAG_OFF, "Adria Serrano Lopez");
+	AddUIElement(fMPoint(originX + 15, originY + 150), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits5.2", nullptr, DRAGGABLE::DRAG_OFF, "Audio + Art");
+
+	AddUIElement(fMPoint(originX + 5, originY + 175), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits6", nullptr, DRAGGABLE::DRAG_OFF, "Oscar Perez Martin");
+	AddUIElement(fMPoint(originX + 15, originY + 185), father, UI_TYPE::UI_TEXT, rect, (P2SString)"credits6.2", nullptr, DRAGGABLE::DRAG_OFF, "QA");
 }
 
 void ModuleUIManager::CreateEntityPortrait()
@@ -489,12 +516,11 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		sprintf_s(stats, 20, "Rsrc: %i", base->GetRsrc());
 		AddUIElement(fMPoint(w - 60, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
-		//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
-					//shop button
-		rect = { 480, 62, 33, 33 };
-		AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
-		lastShop = base;
-		//		}
+		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {
+			rect = { 480, 62, 33, 33 };
+			AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+			lastShop = base;
+		}
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
