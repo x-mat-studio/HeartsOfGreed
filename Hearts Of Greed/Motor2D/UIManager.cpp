@@ -20,7 +20,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
-lastShop(nullptr),portraitPointer(nullptr)
+lastShop(nullptr), portraitPointer(nullptr)
 {
 	name.create("UIManager");
 }
@@ -113,7 +113,7 @@ bool ModuleUIManager::Update(float dt)
 
 	CheckListener(this);
 
-	for (int i = 0; i < uiVector.size(); i++)
+	for (uint i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->Update(dt);
 	}
@@ -128,13 +128,8 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
-	if (focusedEnt != nullptr)
-	{
-		if (SDL_GetTicks() % 2 == 0)
-			UpdateFocusPortrait();
-	}
 
-	for (int i = 0; i < uiVector.size(); i++)
+	for (uint i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->PostUpdate(dt);
 	}
@@ -147,7 +142,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 //// Called before quitting
 bool ModuleUIManager::CleanUp()
 {
-	for (int i = 0; i < uiVector.size(); i++)
+	for (uint i = 0; i < uiVector.size(); i++)
 	{
 		RELEASE(uiVector[i]);
 		uiVector[i] = nullptr;
@@ -426,17 +421,17 @@ void ModuleUIManager::CreateOptionsMenu()
 void ModuleUIManager::CreateCreditMenu()
 {
 	//TODO ADRI: FLESH OUT
-	
+
 	SDL_Rect rect = RectConstructor(15, 271, 194, 231);
 	uint w(app->win->width), h(app->win->height);
 	uint originX = w / (app->win->GetUIScale() * 2) - (rect.w / 2); uint originY = h / (app->win->GetUIScale() * 2) - (rect.h / 2);
 
 	UI* father = AddUIElement(fMPoint(originX, originY), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
-	
+
 	rect = RectConstructor(424, 25, 23, 23);
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (231 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
-	
-	
+
+
 	//logo
 	rect = RectConstructor(563, 237, 117, 122);
 	AddUIElement(fMPoint(originX + 40, originY + 50), father, UI_TYPE::UI_IMG, rect, (P2SString)"logocredit");
@@ -494,9 +489,8 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 	switch (focusedEnt->GetType())
 	{
 	case ENTITY_TYPE::BLDG_BASE:
-
-		Base* base;
-		base = (Base*)focusedEnt;
+	{
+		Base* base = (Base*)focusedEnt;
 
 		//img portrait
 		rect = RectConstructor(634, 78, 68, 62);
@@ -513,11 +507,13 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
 		AddUIElement(fMPoint(w - 60, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
-		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {
+		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
+		{
 			rect = { 480, 62, 33, 33 };
-			AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+			AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP, false, false, false, true);
 			lastShop = base;
 		}
+	}
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
@@ -596,7 +592,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = RectConstructor(562, 149, 66, 51);
-		AddUIElement(fMPoint(w - 2 * rect.w + 10, h  - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 10, h - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
@@ -713,7 +709,7 @@ void ModuleUIManager::CreateShopMenu()
 
 	// TODO: read the actual amount of resources that turret prize costs when the variable is added				// It'd be cool if text got gray if the option was not usable (maybe add a variable to text constructor that is a condition, not a bool, since it may be dynamic, like resources)
 	sprintf_s(cost, 40, "- %i", app->player->GetTurretCost());
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, cost );
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, cost);
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED);
@@ -779,7 +775,7 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 
 	int parentId = -1;
 
-	for (int i = 0; i < uiVector.size(); i++)
+	for (uint i = 0; i < uiVector.size(); i++)
 	{
 		if (uiVector[i]->parent == father)
 		{
@@ -941,6 +937,7 @@ void ModuleUIManager::UpdateFocusPortrait()
 	{
 		CreateEntityPortraitChilds();
 	}
+
 }
 
 void ModuleUIManager::UpdateResources(int newResources)
