@@ -19,7 +19,8 @@
 #include "UI_Healthbar.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0)
+ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
+lastShop(nullptr),portraitPointer(nullptr)
 {
 	name.create("UIManager");
 }
@@ -77,9 +78,9 @@ bool ModuleUIManager::Start()
 // Called each loop iteration
 bool ModuleUIManager::PreUpdate(float dt)
 {
-	BROFILER_CATEGORY("UI Manager Pre-Update", Profiler::Color::Purple)
+	BROFILER_CATEGORY("UI Manager Pre-Update", Profiler::Color::Purple);
 
-		bool ret = true;
+	bool ret = true;
 
 	CheckListener(this);
 
@@ -112,9 +113,7 @@ bool ModuleUIManager::Update(float dt)
 
 	CheckListener(this);
 
-	int numEntities = uiVector.size();
-
-	for (int i = 0; i < numEntities; i++)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->Update(dt);
 	}
@@ -135,9 +134,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 			UpdateFocusPortrait();
 	}
 
-	int numEntities = uiVector.size();
-
-	for (int i = 0; i < numEntities; i++)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->PostUpdate(dt);
 	}
@@ -150,9 +147,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 //// Called before quitting
 bool ModuleUIManager::CleanUp()
 {
-	int numElements = uiVector.size();
-
-	for (int i = numElements - 1; i > -1; i--)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		RELEASE(uiVector[i]);
 		uiVector[i] = nullptr;
@@ -162,6 +157,8 @@ bool ModuleUIManager::CleanUp()
 
 	portraitPointer = nullptr;
 	focusedEnt = nullptr;
+	focusedPortrait = nullptr;
+	currResources = nullptr;
 
 	return true;
 }
@@ -263,7 +260,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_ON_CLICK:
-		DeleteUIChilds(focusedPortrait, false, UI_TYPE::UI_NONE);
+		DeleteUIChilds(focusedPortrait, false);
 		focusedEnt = nullptr;
 		CreateEntityPortrait();
 		break;
@@ -318,17 +315,17 @@ void ModuleUIManager::CreateBasicInGameUI()
 	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
 
 	rect = RectConstructor(415, 435, 65, 30);
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 99, 0), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceBackground");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 65, h / app->win->GetUIScale() - 97), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceBackground");
 
 	rect = RectConstructor(18, 209, 11, 19);
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 93, 7), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 59, h / app->win->GetUIScale() - 90), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceIcon");
 
 	screenResources = app->player->GetResources();
 	sprintf_s(resources, 10, "%d", screenResources);
-	currResources = AddUIElement(fMPoint(w / app->win->GetUIScale() - 64, 3), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
+	currResources = AddUIElement(fMPoint(w / app->win->GetUIScale() - 41, h / app->win->GetUIScale() - 94), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"resourceText", nullptr, DRAGGABLE::DRAG_OFF, resources);
 
-	rect = RectConstructor(391, 435, 275, 67);
-	focusedPortrait = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w / 2, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
+	rect = RectConstructor(400, 435, 139, 67);
+	focusedPortrait = AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w, h / app->win->GetUIScale() - rect.h), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"portraitBG");
 
 	rect = RectConstructor(727, 203, 65, 51);
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 2 * rect.w + 12, h / app->win->GetUIScale() - rect.h - 5), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"imgBG");
@@ -478,7 +475,7 @@ void ModuleUIManager::CreateEntityPortrait()
 	else
 	{
 		focusedEnt = nullptr;
-		DeleteUIChilds(focusedPortrait, false, UI_TYPE::UI_NONE);
+		DeleteUIChilds(focusedPortrait, false);
 	}
 
 }
@@ -490,7 +487,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 	uint w(app->win->width / app->win->GetUIScale()), h(app->win->height / app->win->GetUIScale());
 	SDL_Color std{ (255),(255), (255), (255) };
 	SDL_Rect rect = { 0, 0, 100, 100 };
-	static char stats[20];
+	static char stats[40];
 
 	Hero* hero = nullptr;
 
@@ -510,18 +507,17 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", base, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
-		sprintf_s(stats, 20, "HP: %i", base->GetHP());
+		sprintf_s(stats, 40, "HP: %i", base->GetHP());
 		AddUIElement(fMPoint(w - 60, (h - 55)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
-		sprintf_s(stats, 20, "Rsrc: %i", base->GetRsrc());
+		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
 		AddUIElement(fMPoint(w - 60, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
-		//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON
-					//shop button
-		rect = { 480, 62, 33, 33 };
-		AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
-		lastShop = base;
-		//		}
+		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {
+			rect = { 480, 62, 33, 33 };
+			AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP);
+			lastShop = base;
+		}
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
@@ -600,7 +596,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = RectConstructor(562, 149, 66, 51);
-		AddUIElement(fMPoint(w - 2 * rect.w + 10, h / app->win->GetUIScale() - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 10, h  - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"heroImg");
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
@@ -735,12 +731,7 @@ SDL_Texture* ModuleUIManager::GetAtlasTexture() const
 
 SDL_Rect ModuleUIManager::RectConstructor(int x, int y, int w, int h)
 {
-	SDL_Rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = w;
-	rect.h = h;
-	return rect;
+	return { x,y,w,h };
 }
 
 void ModuleUIManager::LoadAtlas()
@@ -781,7 +772,7 @@ void ModuleUIManager::HideElements(UI* father, float dt)
 
 }
 
-void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather, UI_TYPE typeToDelete)
+void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 {
 	BROFILER_CATEGORY("Delete UI Childs", Profiler::Color::Green);
 
@@ -789,7 +780,7 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather, UI_TYPE typ
 
 	for (int i = 0; i < uiVector.size(); i++)
 	{
-		if (uiVector[i]->parent == father && (typeToDelete == UI_TYPE::UI_NONE || uiVector[i]->type == typeToDelete))
+		if (uiVector[i]->parent == father)
 		{
 			RELEASE(uiVector[i]);
 			uiVector[i] = nullptr;
@@ -915,7 +906,7 @@ void ModuleUIManager::CheckFocusEntity()
 {
 	if (focusedEnt != nullptr && focusedEnt->toDelete == true)
 	{
-		DeleteUIChilds(focusedPortrait, false, UI_TYPE::UI_NONE);
+		DeleteUIChilds(focusedPortrait, false);
 		focusedEnt = nullptr;
 	}
 }
@@ -943,7 +934,7 @@ void ModuleUIManager::UpdateFocusPortrait()
 {
 	BROFILER_CATEGORY("Update Focus Portrait", Profiler::Color::Green);
 
-	DeleteUIChilds(focusedPortrait, false, UI_TYPE::UI_NONE);
+	DeleteUIChilds(focusedPortrait, false);
 
 	if (focusedEnt->toDelete == false)
 	{

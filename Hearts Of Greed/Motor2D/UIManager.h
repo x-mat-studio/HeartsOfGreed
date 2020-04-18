@@ -60,7 +60,7 @@ public:
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
-	void DeleteUIChilds(UI* father, bool includeFather, UI_TYPE typeToDelete);
+	void DeleteUIChilds(UI* father, bool includeFather);
 	void HideElements(UI* father, float dt);
 
 	bool CleanUp();

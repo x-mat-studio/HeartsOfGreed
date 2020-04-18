@@ -16,8 +16,11 @@ UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rec
 
 UI_Text::~UI_Text()
 {
-	app->tex->UnLoad(texture);
-	texture = nullptr;
+	if (texture != nullptr)
+	{
+		app->tex->UnLoad(texture);
+		texture = nullptr;
+	}
 }
 
 

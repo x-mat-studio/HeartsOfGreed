@@ -74,6 +74,7 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	y -= baseAreaAlarm->rect.h * 0.25;
 
 	baseAreaAlarm->SetPos(x, y);
+
 }
 
 

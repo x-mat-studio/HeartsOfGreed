@@ -211,7 +211,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,460,370 }, COLLIDER_VISIBILITY, this);
+	Collider* buildingCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
 	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
@@ -241,7 +241,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	skillArea baseConstruction;
 	baseConstruction.form = AREA_TYPE::CIRCLE;
-	BuildArea(&baseConstruction, 0, 0, 10);
+	BuildArea(&baseConstruction, 0, 0, 8);
 	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
 
 	return ret;
