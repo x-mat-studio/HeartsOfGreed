@@ -11,6 +11,7 @@ class UI;
 class UI_Portrait;
 class Entity;
 class UI_Healthbar;
+class Base;
 enum class UI_TYPE;
 class Entity;
 
@@ -83,6 +84,7 @@ public:
 	int hoverSound;
 	int clickSound;
 
+	Base* lastShop;
 
 private:
 
