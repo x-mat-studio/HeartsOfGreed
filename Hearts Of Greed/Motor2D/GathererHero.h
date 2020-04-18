@@ -34,6 +34,8 @@ public:
 
 	void PlayGenericNoise();
 
+private:
+
 	fMPoint granadePosLaunch;
 	skillArea* granadeArea;
 

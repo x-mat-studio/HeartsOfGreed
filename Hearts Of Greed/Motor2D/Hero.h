@@ -94,7 +94,8 @@ public:
 		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
-	~Hero();
+
+	virtual ~Hero();
 
 	bool MoveTo(int x, int y, bool haveObjective = true);
 	bool LockOn(Entity*);

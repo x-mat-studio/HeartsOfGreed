@@ -721,7 +721,7 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 
 
 // Checks if there is an entity in the mouse Click position 
-Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
+Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 {
 	Entity* ret = nullptr;
 
@@ -740,15 +740,34 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
 		{
 			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED ))
 			{
+				if (focus == true)
+				{
+					for (int j = i + 1; j < numEntities; j++)
+					{
+						entityVector[j]->selectedByPlayer = false;
+					}
 
+					entityVector[i]->selectedByPlayer = true;
+				}
+				
 				return entityVector[i];
 			}
 
 			ret = entityVector[i];
 		}
+
+		else
+		{
+			if (focus == true)
+				entityVector[i]->selectedByPlayer = false;
+		}
 	}
 
-
+	if (ret != nullptr && focus == true)
+	{
+		ret->selectedByPlayer = true;
+	}
+	
 	return ret;
 }
 
@@ -772,7 +791,6 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 
 			Hero* thisHero;
 			thisHero = (Hero*)entityVector[i];
-			thisHero->selectedByPlayer = false;
 
 			if (col != nullptr)
 			{
@@ -780,30 +798,6 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 				{
 					thisHero->selectedByPlayer = true;
 					heroPlayerVector->push_back(thisHero);
-				}
-			}
-		}
-		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY) {
-			col = entityVector[i]->GetCollider();
-			entityVector[i]->selectedByPlayer = false;
-
-			if (col != nullptr)
-			{
-				if (col->CheckCollision(selection))
-				{
-					entityVector[i]->selectedByPlayer = true;
-				}
-			}
-		}
-		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE || entityVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET) {
-			col = entityVector[i]->GetCollider();
-			entityVector[i]->selectedByPlayer = false;
-
-			if (col != nullptr)
-			{
-				if (col->CheckCollision(selection))
-				{
-					entityVector[i]->selectedByPlayer = true;
 				}
 			}
 		}

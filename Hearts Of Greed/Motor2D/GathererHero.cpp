@@ -42,9 +42,9 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 
 GathererHero::~GathererHero()
 {
-	currentVfx = nullptr;
-
 	vfxExplosion = Animation();
+
+	currentVfx = nullptr;
 
 	granadeArea = nullptr;
 	currentVfx = nullptr;
