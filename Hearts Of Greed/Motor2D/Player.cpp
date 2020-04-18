@@ -622,7 +622,7 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 		{
 			baseDrawCenter = contrBase->GetCenter();
 
-			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
+			iMPoint origin = app->map->WorldToMap(round(contrBase->GetCenter().x), round(contrBase->GetCenter().y));
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
 			contrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);

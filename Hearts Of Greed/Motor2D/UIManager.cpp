@@ -450,7 +450,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 	uint w(app->win->width / app->win->GetUIScale()), h(app->win->height / app->win->GetUIScale());
 	SDL_Color std{ (255),(255), (255), (255) };
 	SDL_Rect rect = { 0, 0, 100, 100 };
-	static char stats[10];
+	static char stats[20];
 
 	Hero* hero = nullptr;
 
@@ -470,10 +470,10 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", base, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
-		sprintf_s(stats, 40, "HP: %i", base->GetHP());
+		sprintf_s(stats, 20, "HP: %i", base->GetHP());
 		AddUIElement(fMPoint(w - 60, (h - 55)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"HP", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
-		sprintf_s(stats, 40, "Rsrc: %i", base->GetRsrc());
+		sprintf_s(stats, 20, "Rsrc: %i", base->GetRsrc());
 		AddUIElement(fMPoint(w - 60, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rsrc", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		//		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) {		TODO: TAKE COMMENTS OUT AFTER TESTING THE SHOP BUTTON

@@ -210,6 +210,10 @@ fMPoint Entity::GetCenter()
 	return center;
 }
 
+fMPoint Entity::GetOffset()
+{
+	return  offset;
+}
 
 void Entity::SetPosition(int x, int y)
 {
