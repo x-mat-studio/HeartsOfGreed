@@ -71,6 +71,7 @@ public:
 
 private:
 	void CreatePauseMenu();
+	void CreateCreditMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DisableHealthBars();

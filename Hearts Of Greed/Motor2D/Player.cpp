@@ -567,7 +567,11 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::TURRET_PURCHASED:
-		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
+		if (resources >= 120)	// TODO Change this to an actual variable turretPrize or something
+		{
+			ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
+			resources -= 120;
+		}
 		break;
 	}
 
