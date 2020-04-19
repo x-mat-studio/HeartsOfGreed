@@ -799,6 +799,11 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 					thisHero->selectedByPlayer = true;
 					heroPlayerVector->push_back(thisHero);
 				}
+				else
+				{
+					thisHero->selectedByPlayer = false;
+				}
+
 			}
 		}
 	}
