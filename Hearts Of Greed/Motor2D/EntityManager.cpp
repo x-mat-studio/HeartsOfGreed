@@ -216,7 +216,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	sampleTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+	sampleTurret = new Turret(1, 5, 2, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
 		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown, 100, 100, 5, 100, 50, 160);
 
 	//Template base
@@ -329,6 +329,7 @@ bool ModuleEntityManager::Start()
 	//Buildings sfx--------
 	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
 	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
+	turretShooting = app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
 
 	//Armored sfx--------
 	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");

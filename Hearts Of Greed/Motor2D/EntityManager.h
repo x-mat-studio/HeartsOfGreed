@@ -160,6 +160,8 @@ public:
 	int buildingGetsHit;
 	int buildingGetsHit2;
 
+	int turretShooting;
+
 	int suitman1Skill;
 
 	int suitman1Skill2;
