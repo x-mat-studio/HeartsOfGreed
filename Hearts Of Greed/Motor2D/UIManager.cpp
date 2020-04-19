@@ -997,7 +997,7 @@ void ModuleUIManager::UpdateFocusPortrait()
 
 	DeleteUIChilds(focusedPortrait, false);
 
-	focusedEnt = app->player.g
+	focusedEnt = app->player->GetFocusedEntity();
 
 	if (focusedEnt != nullptr && focusedEnt->toDelete == false)
 	{
