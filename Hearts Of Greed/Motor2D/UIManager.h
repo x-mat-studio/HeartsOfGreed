@@ -95,6 +95,7 @@ private:
 	UI_Portrait* portraitPointer;
 	Entity* focusedEnt;
 	UI* focusedPortrait;
+	UI* createdInGameMenu;
 
 	UI* currResources;
 	int screenResources;

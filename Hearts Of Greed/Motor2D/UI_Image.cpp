@@ -15,12 +15,18 @@ bool UI_Image::Update(float dt)
 		Hide(dt);
 	}
 
+	if (parent != nullptr)
+	{
+		enabled = parent->enabled;
+	}
+
 	return true;
 }
 
 bool UI_Image::PostUpdate(float dt)
 {
-	Draw(texture);
+	if (enabled)
+		Draw(texture);
 
 	return true;
 }

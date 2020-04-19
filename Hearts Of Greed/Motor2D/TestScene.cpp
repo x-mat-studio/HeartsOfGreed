@@ -271,10 +271,10 @@ bool  ModuleTestScene::PostUpdate(float dt)
 		DrawNightRect();
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
+	//if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
-		ret = false;
-	}
+	//	ret = false;
+	//}
 
 
 	return ret;
