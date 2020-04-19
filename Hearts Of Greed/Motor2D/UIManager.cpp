@@ -818,6 +818,23 @@ UI* ModuleUIManager::FindUIByName(char* name)
 	return nullptr;
 }
 
+UI* ModuleUIManager::FindbyParent(UI* parent)
+{
+	int numEntities = uiVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (uiVector[i]->parent == parent)
+		{
+			return uiVector[i];
+		}
+	}
+
+	return nullptr;
+}
+
+
+
 void ModuleUIManager::HideElements(UI* father, float dt)
 {
 

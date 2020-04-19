@@ -297,10 +297,13 @@ void Hero::StateMachine(float dt)
 
 			else if (framePathfindingCount == framesPerPathfinding)
 			{
-				fMPoint pos = objective->GetPosition();
-				fMPoint offSet = objective->GetOffset();
+				if (objective != nullptr)
+				{
+					fMPoint pos = objective->GetPosition();
+					fMPoint offSet = objective->GetOffset();
 
-				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+				}
 			}
 		}
 		else if (!hasMoved)
