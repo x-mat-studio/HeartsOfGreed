@@ -195,6 +195,29 @@ void Turret::DrawSelected()
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
+int Turret::RecieveDamage(int damage)
+{
+
+	if (hitPointsCurrent > 0)
+	{
+		hitPointsCurrent -= damage;
+
+		int randomCounter = rand() % 10;
+
+		if (randomCounter == 0)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
+		else if (randomCounter == 9)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
+
+		if (hitPointsCurrent <= 0)
+		{
+			Die();
+		}
+	}
+
+	return 0;
+}
+
 
 bool Turret::CheckAttackRange()
 {
@@ -363,7 +386,7 @@ void Turret::StateMachine()
 		{
 			Attack();
 			if (shortTermObjective != nullptr)
-				dir = DetermineDirection(shortTermObjective->position - position);
+				dir = DetermineDirection(shortTermObjective->position - position - offset);
 
 			attackCD += 0.01f;
 		}

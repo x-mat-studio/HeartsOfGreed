@@ -61,7 +61,11 @@ public:
 	int GetAD();
 	int GetAS();
 	int GetRng();
+
 	void DrawSelected();
+
+	int RecieveDamage(int damage);
+
 
 private:
 
