@@ -256,12 +256,19 @@ bool ModulePlayer::Click()
 
 void ModulePlayer::LeftClick()
 {
+	ENTITY_TYPE type;
 	Click();
 
 	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
 
 	if (focusedEntity != nullptr)
 	{
+		type = focusedEntity->GetType();
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		{
+			heroesVector.clear();
+			heroesVector.push_back((Hero*)focusedEntity);
+		}
 		app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 	}
 }
@@ -286,7 +293,6 @@ void ModulePlayer::RightClick()
 		enemyFound = heroesVector[i]->LockOn(obj);
 
 		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
-
 	}
 
 }
@@ -328,8 +334,12 @@ void ModulePlayer::Select()
 
 	selectRect = { rectX,rectY, rectW,rectH };
 
+	if (rectW > 10 || rectH > 10)
+	{
+		app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
+	}
 	
-	app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
+
 
 	if (heroesVector.empty() == false)
 	{
@@ -379,7 +389,6 @@ void ModulePlayer::CommandSkill()
 		DoHeroSkills();
 	}
 
-
 }
 
 
@@ -399,7 +408,6 @@ void ModulePlayer::PrepareHeroSkills()
 			prepareSkill = false;
 			skill1 = false;
 		}
-
 	}
 
 	else if (skill2 == true)
@@ -424,7 +432,6 @@ void ModulePlayer::PrepareHeroSkills()
 		{
 			doSkill = heroesVector[0]->PrepareSkill3();
 			prepareSkill = !doSkill;
-
 		}
 
 		else
@@ -433,7 +440,6 @@ void ModulePlayer::PrepareHeroSkills()
 			skill3 = false;
 		}
 	}
-
 }
 
 
@@ -492,8 +498,10 @@ void ModulePlayer::DoHeroSkills()
 
 bool ModulePlayer::BuildClick()
 {
+	int x, y;
 
-	int x(0), y(0);
+	x = 0;
+	y = 0;
 
 	if (buildingPrevPosition.x != INT_MIN)
 	{
@@ -518,6 +526,7 @@ bool ModulePlayer::BuildClick()
 
 	return true;
 }
+
 
 void ModulePlayer::SubstractBuildResources()
 {
