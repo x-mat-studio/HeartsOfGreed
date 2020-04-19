@@ -272,6 +272,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::CREATE_SHOP:
+		app->audio->PlayFx(clickSound, 0, 2);
 		CreateShopMenu();
 		break;
 
