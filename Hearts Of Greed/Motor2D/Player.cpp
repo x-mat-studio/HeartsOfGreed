@@ -18,14 +18,15 @@ ModulePlayer::ModulePlayer() :
 
 	Module(),
 
-	focusedEntity(nullptr),
-
 	resources(0),
 	selectRect{ 0,0,0,0 },
 
 	selectUnits(false),
 	entityComand(false),
 	entityInteraction(false),
+
+	focusedHero(0),
+
 	buildMode(false),
 	skill1(false),
 	skill2(false),
@@ -33,10 +34,12 @@ ModulePlayer::ModulePlayer() :
 	prepareSkill(false),
 	doingAction(false),
 	hasClicked(false),
-	constrAreaInfo(nullptr),
-
 	doSkill(false),
-	buildingPrevPosition{INT_MIN,INT_MIN},
+
+	constrAreaInfo(nullptr),
+	focusedEntity(nullptr),
+
+	buildingPrevPosition{ INT_MIN,INT_MIN },
 	baseDrawCenter{ FLT_MIN, FLT_MIN },
 	turretCost(0),
 
@@ -209,7 +212,7 @@ bool ModulePlayer::HandleInput()
 		{
 			CommandSkill();
 		}
-		
+
 		else if (entityComand)
 		{
 			entityComand = false;
@@ -232,7 +235,7 @@ bool ModulePlayer::HandleInput()
 
 	else
 	{
-		clickPosition= app->input->GetMousePosScreen();
+		clickPosition = app->input->GetMousePosScreen();
 
 
 		if (entityInteraction)
@@ -251,7 +254,7 @@ bool ModulePlayer::Click()
 {
 	hasClicked = true;
 
-	clickPosition= app->input->GetMousePosScreen();
+	clickPosition = app->input->GetMousePosScreen();
 
 	clickPosition.x = (-app->render->currentCamX + clickPosition.x) / app->win->GetScale();
 	clickPosition.y = (-app->render->currentCamY + clickPosition.y) / app->win->GetScale();
@@ -290,7 +293,7 @@ void ModulePlayer::RightClick()
 	Click();
 
 	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false);
-	
+
 	int numHeroes = heroesVector.size();
 
 	for (int i = 0; i < numHeroes; i++)
@@ -343,44 +346,21 @@ void ModulePlayer::Select()
 	{
 		app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
 	}
-	
 
 
 	if (heroesVector.empty() == false)
 	{
 		focusedEntity = heroesVector[0];
 	}
-
 }
-
 
 
 void ModulePlayer::CommandSkill()
 {
 	hasClicked = false;
 
-	if (heroesVector.empty() == true)
-	{
-		prepareSkill = false;
-		skill1 = false;
-		skill2 = false;
-		skill3 = false;
-		doSkill = false;
-
+	if (CheckFocusedHero() == false)
 		return;
-	}
-
-	else
-		if (heroesVector[0] == nullptr)
-		{
-			prepareSkill = false;
-			skill1 = false;
-			skill2 = false;
-			skill3 = false;
-			doSkill = false;
-
-			return;
-		}
 
 
 	if (prepareSkill == true)
@@ -402,9 +382,9 @@ void ModulePlayer::PrepareHeroSkills()
 
 	if (skill1 == true)
 	{
-		if (heroesVector[0]->skill1Charged == true && (heroesVector[0]->energyPoints >= heroesVector[0]->skill1Cost))
+		if (heroesVector[focusedHero]->skill1Charged == true && (heroesVector[focusedHero]->energyPoints >= heroesVector[focusedHero]->skill1Cost))
 		{
-			doSkill = heroesVector[0]->PrepareSkill1();
+			doSkill = heroesVector[focusedHero]->PrepareSkill1();
 			prepareSkill = !doSkill;
 		}
 
@@ -417,9 +397,9 @@ void ModulePlayer::PrepareHeroSkills()
 
 	else if (skill2 == true)
 	{
-		if (heroesVector[0]->skill2Charged == true)
+		if (heroesVector[focusedHero]->skill2Charged == true)
 		{
-			doSkill = heroesVector[0]->PrepareSkill2();
+			doSkill = heroesVector[focusedHero]->PrepareSkill2();
 			prepareSkill = !doSkill;
 		}
 
@@ -433,9 +413,9 @@ void ModulePlayer::PrepareHeroSkills()
 
 	else if (skill3 == true)
 	{
-		if (heroesVector[0]->skill3Charged == true)
+		if (heroesVector[focusedHero]->skill3Charged == true)
 		{
-			doSkill = heroesVector[0]->PrepareSkill3();
+			doSkill = heroesVector[focusedHero]->PrepareSkill3();
 			prepareSkill = !doSkill;
 		}
 
@@ -453,7 +433,7 @@ void ModulePlayer::DoHeroSkills()
 	if (entityComand == true)
 	{
 		entityComand = false;
-		heroesVector[0]->SkillCanceled();
+		heroesVector[focusedHero]->SkillCanceled();
 
 
 		prepareSkill = false;
@@ -469,7 +449,7 @@ void ModulePlayer::DoHeroSkills()
 
 		if (skill1 == true)
 		{
-			if (heroesVector[0]->ActivateSkill1(app->input->GetMousePosWorld()) == true)
+			if (heroesVector[focusedHero]->ActivateSkill1(app->input->GetMousePosWorld()) == true)
 			{
 				skill1 = false;
 				doSkill = false;
@@ -479,7 +459,7 @@ void ModulePlayer::DoHeroSkills()
 
 		else if (skill2 == true)
 		{
-			if (heroesVector[0]->ActivateSkill2() == true)
+			if (heroesVector[focusedHero]->ActivateSkill2() == true)
 			{
 				skill2 = false;
 				doSkill = false;
@@ -489,7 +469,7 @@ void ModulePlayer::DoHeroSkills()
 
 		else if (skill3 == true)
 		{
-			if (heroesVector[0]->ActivateSkill3() == true)
+			if (heroesVector[focusedHero]->ActivateSkill3() == true)
 			{
 				skill3 = false;
 				doSkill = false;
@@ -549,7 +529,7 @@ void ModulePlayer::SubstractBuildResources()
 
 void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
-	iMPoint mouse=	app->input->GetMousePosScreen();
+	iMPoint mouse = app->input->GetMousePosScreen();
 
 	switch (eventId)
 	{
@@ -558,12 +538,14 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			selectUnits = true;
 			doingAction = true;
+			focusedHero = 0;
 		}
 		break;
 
 	case EVENT_ENUM::STOP_SELECTING_UNITS:
 		selectUnits = false;
 		doingAction = false;
+		focusedHero = 0;
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
@@ -583,13 +565,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::SKILL1:
-	
-		if (doSkill == false) 
+
+		if (doSkill == false)
 		{
 			skill1 = true;
 			prepareSkill = true;
 		}
-		
+
 		break;
 
 	case EVENT_ENUM::SKILL2:
@@ -599,7 +581,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			skill2 = true;
 			prepareSkill = true;
 		}
-		
+
 		break;
 
 	case EVENT_ENUM::SKILL3:
@@ -608,31 +590,26 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			skill3 = true;
 			prepareSkill = true;
 		}
-		
+
 		break;
 
 	case EVENT_ENUM::HERO_CHANGE_FOCUS:
 	{
-		int numHeroes = heroesVector.size();
-
-		/*if (numHeroes > 0 )
+		if (prepareSkill == false && doSkill == false)
 		{
-			for (int i = 0; i < numHeroes; i++)
+			int numHeroes = heroesVector.size();
+
+			if (numHeroes - 1 > focusedHero)
 			{
-				if (focusedEntity == heroesVector[i])
-				{
-					if (i == numHeroes - 1)
-					{
-						focusedEntity = heroesVector[0];
-					}
-					else
-						focusedEntity = heroesVector[i];
-					break;
-				}
+				focusedHero++;
 			}
-		}*/
+			else
+			{
+				focusedHero = 0;
+			}
+		}
 	}
-		break;
+	break;
 
 	case EVENT_ENUM::GIVE_RESOURCES:
 		resources += 1000;
@@ -695,10 +672,10 @@ bool ModulePlayer::UseResources(int cost)
 
 bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 {
-	
+
 	constrAreaInfo = nullptr;
 	constrArea.clear();
-	
+
 	if (buildMode == false || (building != ENTITY_TYPE::BLDG_TURRET && building != ENTITY_TYPE::BLDG_UPGRADE_CENTER && building != ENTITY_TYPE::BLDG_BARRICADE && building != ENTITY_TYPE::BUILDING))
 	{
 		buildMode = true;
@@ -761,6 +738,45 @@ void ModulePlayer::CheckFocusedEntity(Entity* entity)
 		focusedEntity = nullptr;
 	}
 }
+
+
+bool ModulePlayer::CheckFocusedHero()
+{
+	if (heroesVector.size() <= focusedHero)
+	{
+		if (heroesVector.empty())
+		{
+			prepareSkill = false;
+			skill1 = false;
+			skill2 = false;
+			skill3 = false;
+			doSkill = false;
+			return false;
+		}
+
+		else
+		{
+			focusedHero = 0;
+			return true;
+		}
+
+	}
+
+	else
+		if (heroesVector[focusedHero] == nullptr)
+		{
+			prepareSkill = false;
+			skill1 = false;
+			skill2 = false;
+			skill3 = false;
+			doSkill = false;
+
+			return false;
+		}
+		else
+			return true;
+}
+
 
 Entity* ModulePlayer::GetFocusedEntity()
 {
