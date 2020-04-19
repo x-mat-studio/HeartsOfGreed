@@ -854,12 +854,18 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 {
 	BROFILER_CATEGORY("Delete UI Childs", Profiler::Color::Green);
 
+	if (father == nullptr)
+		return;
+
 	int parentId = -1;
 
 	for (int i = 0; i < uiVector.size(); i++)
 	{
 		if (uiVector[i]->parent == father)
 		{
+			app->uiManager->DeleteUIChilds(uiVector[i], false);
+
+
 			RELEASE(uiVector[i]);
 			uiVector[i] = nullptr;
 
@@ -874,6 +880,9 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 
 	if (parentId != -1)
 	{
+		if (createdInGameMenu == uiVector[parentId])
+			createdInGameMenu = createdInGameMenu->parent;
+
 		RELEASE(uiVector[parentId]);
 		uiVector[parentId] = nullptr;
 		uiVector.erase(uiVector.begin() + parentId);

@@ -51,7 +51,6 @@ bool UI_Button::PreUpdate(float dt)
 
 bool UI_Button::Update(float dt)
 {
-
 	if (enabled) 
 	{
 		if (hiding_unhiding)
