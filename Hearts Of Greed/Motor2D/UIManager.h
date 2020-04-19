@@ -80,6 +80,8 @@ private:
 
 	void CreateEntityPortraitChilds();
 
+	void UnregisterEvents();
+
 
 public:
 
