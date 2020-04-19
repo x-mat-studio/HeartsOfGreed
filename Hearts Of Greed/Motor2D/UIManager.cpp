@@ -134,6 +134,10 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
+	if (focusedEnt != nullptr && focusedPortrait != nullptr)
+	{
+		UpdateFocusPortrait();
+	}
 
 	for (uint i = 0; i < uiVector.size(); i++)
 	{
@@ -305,21 +309,30 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::EXIT_MENUS:
-		if (createdInGameMenu != nullptr && !app->player->IsBuilding())
+		if (createdInGameMenu != nullptr)
 		{
-			if (createdInGameMenu->parent == createdInGameMenu)
+			if (!app->player->IsBuilding())
 			{
+				if (createdInGameMenu->parent == createdInGameMenu)
+				{
 
-				DeleteUIChilds(createdInGameMenu, true);
-				createdInGameMenu = nullptr;
-			}
-			else
-			{
-				UI* previousMenu = createdInGameMenu->parent;
-				DeleteUIChilds(createdInGameMenu, true);
-				createdInGameMenu = previousMenu;
+					DeleteUIChilds(createdInGameMenu, true);
+					createdInGameMenu = nullptr;
+					app->SetPause(false);
+				}
+				else
+				{
+					UI* previousMenu = createdInGameMenu->parent;
+					DeleteUIChilds(createdInGameMenu, true);
+					createdInGameMenu = previousMenu;
+				}
 			}
 		}
+		else if (app->player->IsEnabled())
+		{
+			CreatePauseMenu();
+		}
+
 		break;
 
 	}
@@ -397,6 +410,7 @@ void ModuleUIManager::CreatePauseMenu()
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 48, height + 184), father, UI_TYPE::UI_TEXT, rect, (P2SString)"mainMenuText", nullptr, DRAGGABLE::DRAG_OFF, "M A I N    M E N U");
 
+	app->SetPause(true);
 }
 
 void ModuleUIManager::CreateMainMenu()
