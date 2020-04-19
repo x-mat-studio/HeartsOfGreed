@@ -233,6 +233,11 @@ bool ModulePlayer::HandleInput()
 		{
 			Select();
 		}
+
+		if (heroesVector.empty() == false && focusedHero < heroesVector.size())
+		{
+			focusedEntity = heroesVector[focusedHero];
+		}
 	}
 
 	else
@@ -269,6 +274,8 @@ void ModulePlayer::LeftClick()
 {
 	ENTITY_TYPE type;
 	Click();
+
+	heroesVector.clear();
 
 	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
 
@@ -350,10 +357,7 @@ void ModulePlayer::Select()
 	}
 
 
-	if (heroesVector.empty() == false)
-	{
-		focusedEntity = heroesVector[0];
-	}
+
 }
 
 
@@ -363,6 +367,7 @@ void ModulePlayer::CommandSkill()
 
 	if (CheckFocusedHero() == false)
 		return;
+
 
 
 	if (prepareSkill == true)

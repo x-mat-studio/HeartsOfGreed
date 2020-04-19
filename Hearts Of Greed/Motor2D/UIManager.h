@@ -68,6 +68,7 @@ public:
 
 	void LoadAtlas();
 	UI* FindUIByName(char* name);
+	UI* FindbyParent(UI* parent);
 
 private:
 	void CreatePauseMenu();

@@ -79,8 +79,9 @@ bool UI_Button::Update(float dt)
 						if (draggable > DRAGGABLE::DRAG_OFF)
 							dragging = true;
 				
-						iMPoint mouseClick = { 0,0 };
-						app->input->GetMouseRelPosition(mouseClick.x, mouseClick.y);
+						iMPoint mouseClick = app->input->GetMousePosScreen();
+						mouseClick.x *= 0.5f;
+						mouseClick.y *= 0.5f;
 						accuratedDrag = { mouseClick.x - (this->worldPosition.x), mouseClick.y - (this->worldPosition.y) };
 					}
 				}
@@ -199,11 +200,9 @@ void UI_Button::CloseMenu()
 
 void UI_Button::MovingIt(float dt)
 {
-
-	iMPoint MousePos = { 0,0 };
-	app->input->GetMouseRelPosition(MousePos.x, MousePos.y);
-
-	fMPoint currentPos = this->worldPosition;
+	iMPoint MousePos = app->input->GetMousePosScreen();
+	MousePos.x *= 0.5f;
+	MousePos.y *= 0.5f;
 
 	if (draggable == DRAGGABLE::DRAG_X)
 		this->worldPosition.x += ((MousePos.x - this->worldPosition.x) - accuratedDrag.x);	
