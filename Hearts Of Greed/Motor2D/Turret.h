@@ -61,7 +61,11 @@ public:
 	int GetAD();
 	int GetAS();
 	int GetRng();
+
 	void DrawSelected();
+
+	int RecieveDamage(int damage);
+
 
 private:
 
@@ -104,7 +108,6 @@ private:
 	Animation shootingLeftDown;
 
 	Entity* shortTermObjective;
-	Animation animation;
 	TURRET_STATES state;
 	Animation* currentAnimation;
 	std::vector<TURRET_INPUTS> inputs;

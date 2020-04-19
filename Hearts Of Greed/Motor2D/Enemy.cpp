@@ -93,7 +93,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	damageTakenTimer(0.f),
 
 	haveOrders(false),
-
+	
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related

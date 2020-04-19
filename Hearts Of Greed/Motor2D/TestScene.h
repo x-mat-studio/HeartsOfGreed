@@ -43,6 +43,7 @@ public:
 	void ActivateCamMovement();
 	void DeactivateCamMovement();
 	bool GetCamMovementActivated() const;
+	void ConstrainCameraToBorders();
 
 	int GetDayNumber() const;
 
@@ -76,6 +77,9 @@ private:
 
 	float camVel;
 	fMPoint initialCamPos;
+
+	iMPoint mapBordersUpperLeftCorner;
+	iMPoint mapBordersBottomRightCorner;
 
 	//this variable stores the number of pixels from the screen at which the camera can be moved by the mouse pos
 	iMPoint camMarginMovements;

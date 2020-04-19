@@ -24,7 +24,6 @@ ModuleInput::~ModuleInput()
 {
 	delete[] keyboard;
 	delete[] keybindings;
-
 }
 
 // Called before render is available

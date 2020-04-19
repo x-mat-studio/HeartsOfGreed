@@ -59,6 +59,13 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	camMarginMovements.y = config.attribute("freeCamMarginDetectionPixelsY").as_int(1);
 
 
+	mapBordersUpperLeftCorner.x = config.attribute("mapBordersUpperLeftCornerX").as_int(0);
+	mapBordersUpperLeftCorner.y = config.attribute("mapBordersUpperLeftCornerY").as_int(0);
+
+	mapBordersBottomRightCorner.x = config.attribute("mapBordersBottomRightCornerX").as_int(0);
+	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
+
+
 	return true;
 }
 
@@ -106,7 +113,7 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
 		// Test Turret
-	   app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x - 900, pos.y - 120, ENTITY_ALIGNEMENT::PLAYER);
+		app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x - 900, pos.y - 120, ENTITY_ALIGNEMENT::PLAYER);
 	}
 
 	app->uiManager->CreateBasicInGameUI();
@@ -235,6 +242,7 @@ bool  ModuleTestScene::Update(float dt)
 			}
 
 		}
+		ConstrainCameraToBorders();
 	}
 
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
@@ -422,7 +430,7 @@ void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 {
 	bool ret = false;
-	iMPoint mouseRaw= app->input->GetMousePosScreen();
+	iMPoint mouseRaw = app->input->GetMousePosScreen();
 	uint width;
 	uint height;
 	app->win->GetWindowSize(width, height);
@@ -533,4 +541,45 @@ void ModuleTestScene::DrawNightRect()
 int ModuleTestScene::GetDayNumber() const
 {
 	return dayNumber;
+}
+
+void ModuleTestScene::ConstrainCameraToBorders()
+{
+	float scale = app->win->GetScale();
+	fMPoint cam;
+	int halfCamW;
+	int halfCamH;
+	uint auxW;
+	uint auxH;
+	app->win->GetWindowSize(auxW, auxH);
+
+	halfCamW = auxW * 0.5f;
+	halfCamH = auxH * 0.5f;
+	cam.x = -app->render->currentCamX;
+	cam.y = -app->render->currentCamY;
+
+	fMPoint camCenterPoint;
+	camCenterPoint.x = (cam.x + halfCamW) / scale;
+	camCenterPoint.y = (cam.y + halfCamH) / scale;
+
+	//camera limits
+
+	if (camCenterPoint.x < mapBordersUpperLeftCorner.x)
+	{
+		app->render->currentCamX = -(mapBordersUpperLeftCorner.x * scale) + halfCamW;
+	}
+	else if (camCenterPoint.x > mapBordersBottomRightCorner.x)
+	{
+		app->render->currentCamX = -(mapBordersBottomRightCorner.x * scale) + halfCamW;
+	}
+
+	if (camCenterPoint.y < mapBordersUpperLeftCorner.y)
+	{
+		app->render->currentCamY = -(mapBordersUpperLeftCorner.y * scale) + halfCamH;
+	}
+	else if (camCenterPoint.y > mapBordersBottomRightCorner.y)
+	{
+		app->render->currentCamY = -(mapBordersBottomRightCorner.y * scale) + halfCamH;
+	}
+
 }

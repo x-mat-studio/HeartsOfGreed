@@ -291,7 +291,6 @@ void ModulePlayer::RightClick()
 
 	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false);
 	
-
 	int numHeroes = heroesVector.size();
 
 	for (int i = 0; i < numHeroes; i++)

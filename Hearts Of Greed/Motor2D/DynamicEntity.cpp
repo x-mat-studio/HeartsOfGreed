@@ -340,6 +340,11 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 {
+	if (!app->debugMode)
+	{
+		return;
+	}
+
 	//Position --------------------------------------
 	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
 
@@ -351,11 +356,6 @@ void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 
 
 	// Debug pathfinding ------------------------------
-
-	if (!app->debugMode)
-	{
-		return;
-	}
 
 	SDL_Texture* debugTex = app->entityManager->debugPathTexture;
 

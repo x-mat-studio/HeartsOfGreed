@@ -134,6 +134,10 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
+	if (focusedEnt != nullptr && focusedPortrait != nullptr)
+	{
+		UpdateFocusPortrait();
+	}
 
 	for (uint i = 0; i < uiVector.size(); i++)
 	{
@@ -268,6 +272,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::CREATE_SHOP:
+		app->audio->PlayFx(clickSound, 0, 2);
 		CreateShopMenu();
 		break;
 
@@ -305,21 +310,30 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::EXIT_MENUS:
-		if (createdInGameMenu != nullptr && !app->player->IsBuilding())
+		if (createdInGameMenu != nullptr)
 		{
-			if (createdInGameMenu->parent == createdInGameMenu)
+			if (!app->player->IsBuilding())
 			{
+				if (createdInGameMenu->parent == createdInGameMenu)
+				{
 
-				DeleteUIChilds(createdInGameMenu, true);
-				createdInGameMenu = nullptr;
-			}
-			else
-			{
-				UI* previousMenu = createdInGameMenu->parent;
-				DeleteUIChilds(createdInGameMenu, true);
-				createdInGameMenu = previousMenu;
+					DeleteUIChilds(createdInGameMenu, true);
+					createdInGameMenu = nullptr;
+					app->SetPause(false);
+				}
+				else
+				{
+					UI* previousMenu = createdInGameMenu->parent;
+					DeleteUIChilds(createdInGameMenu, true);
+					createdInGameMenu = previousMenu;
+				}
 			}
 		}
+		else if (app->player->IsEnabled())
+		{
+			CreatePauseMenu();
+		}
+
 		break;
 
 	}
@@ -333,20 +347,20 @@ void ModuleUIManager::CreateBasicInGameUI()
 	UI* father;
 	char resources[10];
 
-	rect = RectConstructor(556, 35, 15, 14);
-	father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
+	//	  rect = RectConstructor(556, 35, 15, 14);
+	//    father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), father, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", nullptr, DRAGGABLE::DRAG_OFF);
-
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", nullptr, DRAGGABLE::DRAG_OFF);
+	
 	rect = RectConstructor(540, 35, 15, 14);
-	father = AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true);
+	father = AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	rect = RectConstructor(221, 317, 162, 174);
 	rect.h = app->minimap->height;
 	AddUIElement(fMPoint(0, (h - rect.h - 20) / app->win->GetUIScale()), father, UI_TYPE::UI_IMG, rect, (P2SString)"minimapBackground");
 
 	rect = RectConstructor(449, 24, 24, 24);
-	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME);
+	AddButton(fMPoint(w / app->win->GetUIScale() - (1.25f) * rect.w, (1.25f) * rect.w - rect.w), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"pauseButton", EVENT_ENUM::PAUSE_GAME, false, false, false, false);
 
 	rect = RectConstructor(415, 435, 65, 30);
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 65, h / app->win->GetUIScale() - 97), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"resourceBackground");
@@ -397,6 +411,7 @@ void ModuleUIManager::CreatePauseMenu()
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 48, height + 184), father, UI_TYPE::UI_TEXT, rect, (P2SString)"mainMenuText", nullptr, DRAGGABLE::DRAG_OFF, "M A I N    M E N U");
 
+	app->SetPause(true);
 }
 
 void ModuleUIManager::CreateMainMenu()
@@ -446,10 +461,10 @@ void ModuleUIManager::CreateOptionsMenu()
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 20, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 75), father, UI_TYPE::UI_TEXT, rect, (P2SString)"fullscreenModeText", nullptr, DRAGGABLE::DRAG_OFF, "Fullscreen mode");
 
 	rect = RectConstructor(739, 27, 23, 23);
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (278 / 2) + 20, h / (app->win->GetUIScale() * 2) - (153 / 2) + 100), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"fullscreenButton", EVENT_ENUM::FULLSCREEN_INPUT);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (278 / 2) + 20, h / (app->win->GetUIScale() * 2) - (153 / 2) + 100), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"fullscreenButton", EVENT_ENUM::FULLSCREEN_INPUT, false, false, false, false);
 
 	rect = RectConstructor(424, 25, 23, 23);
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (278 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (153 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (278 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (153 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true, false, false);
 
 	rect = RectConstructor(273, 45, 90, 4);
 	AddScrollbar(fMPoint((w / app->win->GetUIScale() / 2) - (278 / 2) + 20, (h / app->win->GetUIScale() / 2) - (153 / 2) + 60), father, UI_TYPE::UI_SCROLLBAR, rect, (P2SString)"musicScrollbar", EVENT_ENUM::MUSIC_ADJUSTMENT, 128.0f);
@@ -469,7 +484,7 @@ void ModuleUIManager::CreateCreditMenu()
 	UI* father = AddUIElement(fMPoint(originX, originY), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
 
 	rect = RectConstructor(424, 25, 23, 23);
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (231 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (3 * rect.w / 4), h / (app->win->GetUIScale() * 2) - (231 / 2) - (1 * rect.h / 4)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true, false, false);
 
 
 	//logo
@@ -550,7 +565,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		if (base->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
 		{
 			rect = { 480, 62, 33, 33 };
-			AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP, false, false, false, true);
+			AddButton(fMPoint(w - rect.w - 5, (h)-35), focusedPortrait, UI_TYPE::UI_BUTTON, rect, (P2SString)"S H O P", EVENT_ENUM::CREATE_SHOP, false, false, false, false);
 			lastShop = base;
 		}
 	}
@@ -562,21 +577,25 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = { 561, 77, 68, 62 };
-		AddUIElement(fMPoint(w - 2 * rect.w + 18, h - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 10, h - rect.h - 1), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+
+		//hp bar
+		rect = RectConstructor(312, 85, 60, 7);
+		AddUIElement(fMPoint(w - 62, (h - 64)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", turret, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
 
 		sprintf_s(stats, 40, "LVL: %i", turret->GetLvl());
-		AddUIElement(fMPoint(w - 35, (h - 15)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 15)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", turret->GetAD());
-		AddUIElement(fMPoint(w - 35, (h - 30)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 30)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", turret->GetRng());
-		AddUIElement(fMPoint(w - 35, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %i", turret->GetAS());
-		AddUIElement(fMPoint(w - 35, (h - 60)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 60)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -724,11 +743,11 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of resurrecting in the player / entity manager; also spend the resource (do it only if you have enough)
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererResurrectButton", EVENT_ENUM::GATHERER_RESURRECT);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererResurrectButton", EVENT_ENUM::GATHERER_RESURRECT, false, false, false, false);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedResurrectButton", EVENT_ENUM::RANGED_RESURRECT);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedResurrectButton", EVENT_ENUM::RANGED_RESURRECT, false, false, false, false);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeResurrectButton", EVENT_ENUM::MELEE_RESURRECT);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeResurrectButton", EVENT_ENUM::MELEE_RESURRECT, false, false, false, false);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 28, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
@@ -743,7 +762,7 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 120, h / (app->win->GetUIScale() * 2) - (231 / 2) + 135), father, UI_TYPE::UI_IMG, rect, (P2SString)"turretPortrait");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO ONLY SPEND RESOURCES IF YOU HAVE THEM
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_CONSTRUCT);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 120), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretPurchaseButton", EVENT_ENUM::TURRET_CONSTRUCT, false, false, false, false);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 50, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, "Buy");
 
@@ -752,12 +771,12 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, cost);
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED, false, false, false, false);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 152), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretLevelText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
 
 	rect = RectConstructor(424, 25, 23, 23);
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (231 / 2) - (rect.h / 2)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (231 / 2) - (rect.h / 2)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true, false, false);
 
 }
 

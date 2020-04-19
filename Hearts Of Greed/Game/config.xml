@@ -57,6 +57,11 @@
     freeCamMarginDetectionPixelsX="20"
     freeCamMarginDetectionPixelsY="15"
     
+    mapBordersUpperLeftCornerX="-1450"
+    mapBordersUpperLeftCornerY="0"
+    mapBordersBottomRightCornerX="1500"
+    mapBordersBottomRightCornerY="1550"
+    
     />
 
   <introScene
