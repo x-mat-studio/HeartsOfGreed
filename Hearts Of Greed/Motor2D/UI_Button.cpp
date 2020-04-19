@@ -39,6 +39,11 @@ bool UI_Button::PreUpdate(float dt)
 {
 	hover = OnAbove();
 
+	if (parent != nullptr)
+	{
+		enabled = parent->enabled;
+	}
+
 	return true;
 }
 
