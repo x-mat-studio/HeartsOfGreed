@@ -165,6 +165,28 @@ bool ModuleUIManager::CleanUp()
 	currResources = nullptr;
 	createdInGameMenu = nullptr;
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_MELEE_CREATED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_GATHERER_CREATED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RANGED_CREATED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::OPTION_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREDIT_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::PAUSE_GAME, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_SHOP, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_MENU, this);
+
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
+
 	return true;
 }
 
