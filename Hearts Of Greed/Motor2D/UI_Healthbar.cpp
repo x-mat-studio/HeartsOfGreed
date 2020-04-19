@@ -1,17 +1,18 @@
 #include "UI_Healthbar.h"
 #include "Player.h"
+#include "Hero.h"
 
-UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable, bool isEnergy) : UI(positionValue, father, uiType, rect, uiName, draggable),
+UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	originalWidth(rect.w),
-	entity(entity),
-	isEnergy(isEnergy)
+	entity(entity)
 {
 	if (entity != nullptr)
 	{
-		if (!this->isEnergy)
+		if (this->name == "Ebar")
 		{
-			maxValue = &entity->hitPointsMax;
-			currentValue = &entity->hitPointsCurrent;
+			Hero* hero = (Hero*)entity;
+			maxValue = &hero->maxEnergyPoints;
+			currentValue = &hero->energyPoints;
 			previousValue = -1;
 		}
 		else

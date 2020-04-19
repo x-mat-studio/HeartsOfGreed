@@ -74,6 +74,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 bool ModuleUIManager::Start()
 {
 	bool ret = true;
+	uiVector.reserve(70);
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
@@ -134,17 +135,15 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
-	if (focusedEnt != nullptr && focusedPortrait != nullptr)
-	{
-		UpdateFocusPortrait();
-	}
-
 	for (uint i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->PostUpdate(dt);
 	}
 
-
+	if (focusedPortrait != nullptr)
+	{
+		UpdateFocusPortrait();
+	}
 
 	return ret;
 }
@@ -266,6 +265,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_ON_CLICK:
+		if(focusedPortrait != nullptr)
 		DeleteUIChilds(focusedPortrait, false);
 		focusedEnt = nullptr;
 		CreateEntityPortrait();
@@ -315,16 +315,14 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				if (createdInGameMenu->parent == createdInGameMenu)
 				{
-
 					DeleteUIChilds(createdInGameMenu, true);
 					createdInGameMenu = nullptr;
 					app->SetPause(false);
 				}
 				else
 				{
-					UI* previousMenu = createdInGameMenu->parent;
 					DeleteUIChilds(createdInGameMenu, true);
-					createdInGameMenu = previousMenu;
+					createdInGameMenu = nullptr;
 				}
 			}
 		}
@@ -829,7 +827,7 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 
 	int parentId = -1;
 
-	for (uint i = 0; i < uiVector.size(); i++)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		if (uiVector[i]->parent == father)
 		{
@@ -987,7 +985,7 @@ void ModuleUIManager::UpdateFocusPortrait()
 
 	DeleteUIChilds(focusedPortrait, false);
 
-	if (focusedEnt->toDelete == false)
+	if (focusedEnt != nullptr && focusedEnt->toDelete == false)
 	{
 		CreateEntityPortraitChilds();
 	}

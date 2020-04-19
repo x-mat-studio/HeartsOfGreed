@@ -12,8 +12,6 @@ uint64 PerfectTimer::frequency = 0;
 // ---------------------------------------------
 PerfectTimer::PerfectTimer()
 {
-	// TODO 2: Fill Constructor, Start(),ReadMs() and ReadTicks() methods
-	// they are simple, one line each!
 	if (frequency == 0)
 		frequency = SDL_GetPerformanceFrequency();
 

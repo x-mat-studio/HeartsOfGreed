@@ -32,7 +32,10 @@ ModuleTestScene::ModuleTestScene() :
 	camSprint(false),
 	allowCamMovement(true),
 	menuScene(false),
-	isNightTime(false)
+	isNightTime(false),
+	dayTimer(0),
+	nightTimer(0),
+	camVel(0.f)
 {
 	name.create("testScene");
 
@@ -92,27 +95,26 @@ bool ModuleTestScene::Start()
 		//Test Hero
 
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-
-		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
-
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
 
 
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
-		// Test Turret
-	   app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x - 900, pos.y - 120, ENTITY_ALIGNEMENT::PLAYER);
+		//Spawners------------------
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1270, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+
+		//Debug
+		//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
+
 	}
 
 	app->uiManager->CreateBasicInGameUI();
 
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
+	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, {0,0,0,0}, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
 
 
 	//Events register

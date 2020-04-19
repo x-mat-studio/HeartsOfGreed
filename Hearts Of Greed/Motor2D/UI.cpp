@@ -30,7 +30,9 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 {}
 
 UI::~UI()
-{}
+{
+	parent = nullptr;
+}
 
 
 bool UI::Start()
