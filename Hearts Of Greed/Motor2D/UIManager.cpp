@@ -614,7 +614,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "", hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		rect = RectConstructor(374, 85, 60, 7);
-		AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "", hero, DRAGGABLE::DRAG_OFF, "Ebar");
+		AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, "Ebar", hero, DRAGGABLE::DRAG_OFF, "Ebar");
 
 
 		//stats
