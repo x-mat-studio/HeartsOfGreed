@@ -42,8 +42,9 @@ class Turret : public Building
 
 public:
 
-	Turret(int turretLvl, int attackDmg, int attackSpeed, int range,fMPoint position, Collider* collider, Animation& animation, int maxHitPoints = 100, int currentHitPoints = 100,
-		int recoveryHitPointsRate=5, int xpOnDeath=100, int buildingCost=50, int transparency = 0);
+	Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+		Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
+		Animation& shootingLeftDown, int maxHitPoints = 100, int currentHitPoints = 100, int recoveryHitPointsRate=5, int xpOnDeath=100, int buildingCost=50, int transparency = 0);
 
 	Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -76,6 +77,7 @@ private:
 	bool ExternalInput(std::vector<TURRET_INPUTS>& inputs, float dt);
 	TURRET_STATES ProcessFsm(std::vector<TURRET_INPUTS>& inputs);
 
+	void Turret::SetAnimation(TURRET_STATES state);
 	FACE_DIR DetermineDirection(fMPoint dir);
 
 	void StateMachine();
@@ -86,6 +88,20 @@ private:
 	int attackSpeed;
 	float attackCD;
 	int range;
+
+
+	Animation idleRight;
+	Animation idleRightUp;
+	Animation idleRightDown;
+	Animation idleLeft;
+	Animation idleLeftUp;
+	Animation idleLeftDown;
+	Animation shootingRight;
+	Animation shootingRightUp;
+	Animation shootingRightDown;
+	Animation shootingLeft;
+	Animation shootingLeftUp;
+	Animation shootingLeftDown;
 
 	Entity* shortTermObjective;
 	Animation animation;
