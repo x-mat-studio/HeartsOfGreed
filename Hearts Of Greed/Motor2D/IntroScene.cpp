@@ -120,7 +120,8 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) 
+	{
 
 		ret = false;
 	}

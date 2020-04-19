@@ -20,7 +20,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
-lastShop(nullptr), portraitPointer(nullptr)
+lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr)
 {
 	name.create("UIManager");
 }
@@ -58,6 +58,12 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_MENU, this);
+
+
+	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
 
 
 	return ret;
@@ -154,6 +160,7 @@ bool ModuleUIManager::CleanUp()
 	focusedEnt = nullptr;
 	focusedPortrait = nullptr;
 	currResources = nullptr;
+	createdInGameMenu = nullptr;
 
 	return true;
 }
@@ -283,6 +290,38 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		CheckFocusEntity();
 		break;
 
+	case EVENT_ENUM::HIDE_MENU:
+		if (createdInGameMenu != nullptr)
+		{
+			createdInGameMenu->enabled = false;
+		}
+		break;
+
+	case EVENT_ENUM::UNHIDE_MENU:
+		if (createdInGameMenu != nullptr)
+		{
+			createdInGameMenu->enabled = true;
+		}
+		break;
+
+	case EVENT_ENUM::EXIT_MENUS:
+		if (createdInGameMenu != nullptr && !app->player->IsBuilding())
+		{
+			if (createdInGameMenu->parent == createdInGameMenu)
+			{
+
+				DeleteUIChilds(createdInGameMenu, true);
+				createdInGameMenu = nullptr;
+			}
+			else
+			{
+				UI* previousMenu = createdInGameMenu->parent;
+				DeleteUIChilds(createdInGameMenu, true);
+				createdInGameMenu = previousMenu;
+			}
+		}
+		break;
+
 	}
 }
 
@@ -294,11 +333,11 @@ void ModuleUIManager::CreateBasicInGameUI()
 	UI* father;
 	char resources[10];
 
-	rect = RectConstructor(556, 35, 15, 14);
-	father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
+	//	  rect = RectConstructor(556, 35, 15, 14);
+	//    father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), father, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", nullptr, DRAGGABLE::DRAG_OFF);
-
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, (P2SString)"portraitVector", nullptr, DRAGGABLE::DRAG_OFF);
+	
 	rect = RectConstructor(540, 35, 15, 14);
 	father = AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"minimapHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
@@ -333,6 +372,7 @@ void ModuleUIManager::CreatePauseMenu()
 	uint w(app->win->width), h(app->win->height);
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"pauseMenuBackground");
+	createdInGameMenu = father;
 
 	int height = h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 8;
 
@@ -395,7 +435,7 @@ void ModuleUIManager::CreateOptionsMenu()
 	uint w(app->win->width), h(app->win->height);
 	UI* father = nullptr;		// TODO: make event and functionality happen		Also, change the button ON / OFF image depending on fullscreen mode
 
-	father = AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2), (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_IMG, rect, (P2SString)"optionBackground");
+	createdInGameMenu = father = AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2), (h / app->win->GetUIScale() / 2) - (rect.h / 2)), createdInGameMenu, UI_TYPE::UI_IMG, rect, (P2SString)"optionBackground");
 
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 30, (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_TEXT, rect, (P2SString)"optionText", nullptr, DRAGGABLE::DRAG_OFF, "O P T I O N S");
 
@@ -514,7 +554,7 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 			lastShop = base;
 		}
 	}
-		break;
+	break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		Turret* turret;
@@ -670,7 +710,7 @@ void ModuleUIManager::CreateShopMenu()
 	static char cost[40];
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"shopBackground");
-
+	createdInGameMenu = father;
 	// Heroes
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroResurrectionText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   R E S U R R E C T I O N");
 

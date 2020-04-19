@@ -58,6 +58,8 @@ void UI::CleanUp()
 
 void UI::Draw(SDL_Texture* texture)
 {
+	if (!enabled)
+		return;
 
 	if (hover && interactable && this->type == UI_TYPE::UI_BUTTON)
 	{
