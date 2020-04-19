@@ -12,7 +12,12 @@ public:
 
 	bool Start();
 	bool PostUpdate(float dt);
+	bool CleanUp();
+
 	bool FadeToBlack(Module* moduleOff, Module* moduleOn, float time = 2.0f);
+
+private:
+	void ExecuteEvent(EVENT_ENUM eventId);
 
 private:
 

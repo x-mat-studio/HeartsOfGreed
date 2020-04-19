@@ -250,12 +250,12 @@ bool  ModuleTestScene::Update(float dt)
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->winScene);
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE LOSE SCENE
 	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_STATE::KEY_DOWN)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->loseScene);
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_LOSE, EVENT_ENUM::NULL_EVENT);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
 	if (menuScene == true)

@@ -119,6 +119,10 @@ enum class EVENT_ENUM
 	ENTITY_ON_CLICK,
 	CREATE_SHOP,
 
+	//End game
+	GAME_WIN,
+	GAME_LOSE,
+
 	NULL_EVENT
 };
 
