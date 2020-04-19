@@ -69,6 +69,7 @@ private:
 
 	void DrawSelectQuad();
 
+	bool CheckFocusedHero();
 
 public:
 	Entity* focusedEntity; //other modules need this for portrait generation
@@ -86,6 +87,8 @@ private:
 	bool selectUnits;
 	bool entityComand;
 	bool entityInteraction;
+	
+	int focusedHero;
 
 	bool skill1;
 	bool skill2;
@@ -107,8 +110,6 @@ private:
 
 
 	int turretCost;
-
-	int focusedHero;
 };
 
 
