@@ -70,11 +70,11 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
 
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
-
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL3, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
@@ -82,6 +82,7 @@ bool ModulePlayer::Start()
 
 
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
+
 
 
 	return true;
@@ -615,7 +616,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	{
 		int numHeroes = heroesVector.size();
 
-		if (numHeroes > 0 )
+		/*if (numHeroes > 0 )
 		{
 			for (int i = 0; i < numHeroes; i++)
 			{
@@ -630,7 +631,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 					break;
 				}
 			}
-		}
+		}*/
 	}
 		break;
 
