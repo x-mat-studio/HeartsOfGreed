@@ -27,7 +27,7 @@
 
 
 // Constructor
-App::App(int argc, char* args[]) : argc(argc), args(args)
+App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 {
 	PERF_START(pTimer);
 
@@ -531,4 +531,19 @@ bool App::SavegameNow() const
 	data.reset();
 	wantToSave = false;
 	return ret;
+}
+
+bool App::SetPause(bool newPause)
+{
+	if(newPause != paused)
+	{
+		paused = !paused;
+	}
+
+	return paused;
+}
+
+bool App::GetPause()
+{
+	return paused;
 }

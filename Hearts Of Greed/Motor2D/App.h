@@ -71,6 +71,8 @@ public:
 	void LoadGame();
 	void SaveGame() const;
 	
+	bool SetPause(bool pause);
+	bool GetPause();
 
 private:
 
@@ -157,6 +159,8 @@ private:
 	mutable bool		wantToSave;
 
 	float				dt;
+
+	bool				paused;
 };
 
 extern App* app; 
