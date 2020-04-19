@@ -81,6 +81,9 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
 
 
+	app->eventManager->EventRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
+
+
 	return true;
 }
 
@@ -101,6 +104,8 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
 
 	constrAreaInfo = nullptr;
@@ -634,6 +639,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::TURRET_PURCHASE:
 		resources -= turretCost;
 		break;
+
+	case EVENT_ENUM::EXIT_CONSTRUCTION_MODE:
+		if (buildMode)
+		{
+			DesactivateBuildMode();
+		}
+		break;
 	}
 
 
@@ -683,6 +695,8 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 		buildMode = true;
 		buildingToBuild = building;
 
+		app->eventManager->GenerateEvent(EVENT_ENUM::HIDE_MENU, EVENT_ENUM::NULL_EVENT);
+
 		if (contrBase != nullptr)
 		{
 			baseDrawCenter = contrBase->GetPosition() + contrBase->GetCenter();
@@ -706,6 +720,8 @@ void ModulePlayer::DesactivateBuildMode()
 {
 	buildMode = false;
 	buildingToBuild = ENTITY_TYPE::UNKNOWN;
+	app->eventManager->GenerateEvent(EVENT_ENUM::UNHIDE_MENU, EVENT_ENUM::NULL_EVENT);
+
 
 	constrAreaInfo = nullptr;
 	constrArea.clear();
@@ -752,6 +768,12 @@ int ModulePlayer::GetResources() const
 {
 	return resources;
 }
+
+bool ModulePlayer::IsBuilding() const
+{
+	return buildMode;
+}
+
 
 int ModulePlayer::GetTurretCost() const
 {

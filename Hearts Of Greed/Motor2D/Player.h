@@ -45,6 +45,8 @@ public:
 	int GetResources() const;
 	int GetTurretCost() const;
 
+	bool IsBuilding() const;
+
 	Entity* GetFocusedEntity();
 
 private:
