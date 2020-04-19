@@ -153,10 +153,10 @@ bool Minimap::PostUpdate(float dt)
 				iconRect = { 12, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::TURRET:
-				iconRect = { 36, 504, 4, 4 };
+				iconRect = { 20, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::ENEMY_TURRET:
-				iconRect = { 32, 504, 4, 4 };
+				iconRect = { 16, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::HERO:
 				iconRect = { 8, 504, 4, 4 };

@@ -143,7 +143,7 @@ bool UI_Button::PostUpdate(float dt)
 	if(enabled)
 		Draw(texture);
 
-	if (!hiding_unhiding && !hidden)
+	if (properties.hoverMove && !hiding_unhiding && !hidden)
 		this->worldPosition.x = defaultPosition;
 
 	return true;
@@ -186,7 +186,7 @@ void UI_Button::HoverFeedback()
 
 	hoverSound = false;
 
-	if(!hiding_unhiding && !hidden)
+	if(properties.hoverMove && !hiding_unhiding && !hidden)
 		this->worldPosition.x -= 8;
 }
 

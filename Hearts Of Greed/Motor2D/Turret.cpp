@@ -6,9 +6,25 @@
 
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& animation, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
+	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
 	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
+
+	shootingLeft(shootingLeft),
+	shootingLeftUp(shootingLeftUp),
+	shootingLeftDown(shootingLeftDown),
+	shootingRightUp(shootingRightUp),
+	shootingRightDown(shootingRightDown),
+	shootingRight(shootingRight),
+	idleRight(idleRight),
+	idleRightDown(idleRightDown),
+	idleRightUp(idleRightUp),
+	idleLeft(idleLeft),
+	idleLeftUp(idleLeftUp),
+	idleLeftDown(idleLeftDown),
+
 	animation(animation),
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
@@ -27,6 +43,20 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	Building(position, copy, alignement),
 
+
+	shootingLeft(copy->shootingLeft),
+	shootingLeftUp(copy->shootingLeftUp),
+	shootingLeftDown(copy->shootingLeftDown),
+	shootingRightUp(copy->shootingRightUp),
+	shootingRightDown(copy->shootingRightDown),
+	shootingRight(copy->shootingRight),
+	idleRight(copy->idleRight),
+	idleRightDown(copy->idleRightDown),
+	idleRightUp(copy->idleRightUp),
+	idleLeft(copy->idleLeft),
+	idleLeftUp(copy->idleLeftUp),
+	idleLeftDown(copy->idleLeftDown),
+
 	animation(copy->animation),
 	turretLvl(copy->turretLvl),
 	attackDmg(copy->attackDmg),
@@ -40,7 +70,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	state(TURRET_STATES::IDLE)
 {
-	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5); //TODO: un-hardcode this "5"
+	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
 }
 
 
@@ -386,3 +416,59 @@ FACE_DIR Turret::DetermineDirection(fMPoint faceDir)
 	return newDir;
 }
 
+void Turret::SetAnimation(TURRET_STATES state)
+{
+	switch (state)
+	{
+	case TURRET_STATES::IDLE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &idleLeft;
+			break;
+		}
+	}
+	break;
+	case TURRET_STATES::ATTACK:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &shootingRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &shootingLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &shootingRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &shootingRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &shootingLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &shootingLeft;
+			break;
+		}
+		break;
+	}
+	}
+}
