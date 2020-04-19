@@ -315,7 +315,29 @@ void Base::Die()
 {
 	hitPointsCurrent = hitPointsMax;
 
+	ChangeTexturesOnDeath();
+
 	ChangeAligment();
+}
+
+void Base::ChangeTexturesOnDeath()
+{
+	switch (this->GetAlignment()) { //change texture
+
+	case ENTITY_ALIGNEMENT::ENEMY:
+		this->texture = app->entityManager->base2Texture;
+		this->selectedTexture = app->entityManager->base2TextureSelected;
+		break;
+
+	case ENTITY_ALIGNEMENT::PLAYER:
+		this->texture = app->entityManager->base2TextureEnemy;
+		this->selectedTexture = app->entityManager->base2TextureSelectedEnemy;
+		break;
+
+	default:
+		break;
+
+	}
 }
 
 int Base::GetHP()

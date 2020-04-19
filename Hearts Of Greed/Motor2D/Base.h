@@ -59,6 +59,7 @@ private:
 	void GainResources(float dt);
 
 	void Die();
+	void ChangeTexturesOnDeath();
 
 private:
 
