@@ -200,6 +200,9 @@ void UI_Portrait::DeletePortrait()
 			portraitVector.erase(portraitVector.begin() + i);
 
 			deleted = true;
+			nextVectorPosition -= 60;
+			numElem = portraitVector.size();
+			i--;
 		}
 		else if (deleted == true)
 		{
