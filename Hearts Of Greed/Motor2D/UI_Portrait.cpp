@@ -1,4 +1,6 @@
 #include "UI_Portrait.h"
+#include "Render.h"
+#include "Window.h"
 
 UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	nextVectorPosition(positionValue.y),
@@ -98,7 +100,6 @@ bool UI_Portrait::Update(float dt)
 	{
 		Hide(dt);
 	}
-
 	return true;
 }
 
@@ -115,6 +116,17 @@ bool UI_Portrait::PostUpdate(float dt)
 		portraitVector[i].backgroundHealthbar->PostUpdate(dt);
 		portraitVector[i].healthbar->PostUpdate(dt);
 		portraitVector[i].level->PostUpdate(dt);
+		
+		if (portraitVector[i].hero != nullptr) {
+
+			if (portraitVector[i].hero->selectedByPlayer == true) {
+
+				SDL_Rect posPLS{ this->portraitVector[i].portrait->worldPosition.x * app->win->GetUIScale() , this->portraitVector[i].portrait->worldPosition.y * app->win->GetUIScale(), this->portraitVector[i].portrait->box.w * app->win->GetUIScale(),this->portraitVector[i].portrait->box.h * app->win->GetUIScale() };
+				app->render->DrawQuad(posPLS, 120, 100, 10, 80, true, false);
+			}
+
+		}
+		
 	}
 
 	return true;
