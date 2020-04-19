@@ -17,6 +17,7 @@
 #include "Turret.h"
 #include "Base.h"
 #include "UI_Healthbar.h"
+#include "Base.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
@@ -74,7 +75,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 bool ModuleUIManager::Start()
 {
 	bool ret = true;
-	uiVector.reserve(70);
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
@@ -198,9 +198,9 @@ UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiT
 }
 
 UI* ModuleUIManager::AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure, bool includeFather,
-	bool hiding, bool hoverMove, DRAGGABLE draggable, EVENT_ENUM eventTrigger)
+	bool hiding, bool hoverMove, DRAGGABLE draggable, EVENT_ENUM eventTrigger, bool interactable)
 {
-	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, eventR, menuClosure, includeFather, hiding, hoverMove, draggable, eventTrigger);
+	UI* newUI = new UI_Button(positionValue, father, uiType, rect, uiName, eventR, menuClosure, includeFather, hiding, hoverMove, draggable, eventTrigger, interactable);
 	uiVector.push_back(newUI);
 	return newUI;
 }
@@ -322,8 +322,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 				}
 				else
 				{
+					UI* newMenu = createdInGameMenu->parent;
 					DeleteUIChilds(createdInGameMenu, true);
-					createdInGameMenu = nullptr;
+					createdInGameMenu = newMenu;
+					newMenu = nullptr;
 				}
 			}
 		}
@@ -741,11 +743,11 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 130, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroMeleePortrait");
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of resurrecting in the player / entity manager; also spend the resource (do it only if you have enough)
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererResurrectButton", EVENT_ENUM::GATHERER_RESURRECT, false, false, false, false);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 25, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroGathererResurrectButton", EVENT_ENUM::GATHERER_RESURRECT, false, false, false, false, DRAGGABLE::DRAG_OFF, EVENT_ENUM::NULL_EVENT, false);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedResurrectButton", EVENT_ENUM::RANGED_RESURRECT, false, false, false, false);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 75, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroRangedResurrectButton", EVENT_ENUM::RANGED_RESURRECT, false, false, false, false, DRAGGABLE::DRAG_OFF, EVENT_ENUM::NULL_EVENT, false);
 
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeResurrectButton", EVENT_ENUM::MELEE_RESURRECT, false, false, false, false);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 125, h / (app->win->GetUIScale() * 2) - (231 / 2) + 65), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"heroMeleeResurrectButton", EVENT_ENUM::MELEE_RESURRECT, false, false, false, false, DRAGGABLE::DRAG_OFF, EVENT_ENUM::NULL_EVENT, false);
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 28, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroGathererResurrectText", nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
@@ -764,14 +766,19 @@ void ModuleUIManager::CreateShopMenu()
 
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 50, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, "Buy");
 
+	if (lastShop != nullptr)
+	{
+		sprintf_s(cost, 40, "Max. %i",lastShop->GetmaxTurrets());
+		AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 95, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPurchaseText", nullptr, DRAGGABLE::DRAG_OFF, cost);
+	}
 	// TODO: read the actual amount of resources that turret prize costs when the variable is added				// It'd be cool if text got gray if the option was not usable (maybe add a variable to text constructor that is a condition, not a bool, since it may be dynamic, like resources)
 	sprintf_s(cost, 40, "- %i", app->player->GetTurretCost());
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 130), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretPriceText", nullptr, DRAGGABLE::DRAG_OFF, cost);
 
 	rect = RectConstructor(653, 54, 46, 14);	// TODO Actually read the event of enabling the turret building mode; also spend the resource (do it only if you have enough)
-	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 160), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED, false, false, false, false);
+	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 40, h / (app->win->GetUIScale() * 2) - (231 / 2) + 170), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"turretLevelButton", EVENT_ENUM::TURRET_UPGRADED, false, false, false, false, DRAGGABLE::DRAG_OFF, EVENT_ENUM::NULL_EVENT, false);
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 152), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretLevelText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 45, h / (app->win->GetUIScale() * 2) - (231 / 2) + 162), father, UI_TYPE::UI_TEXT, rect, (P2SString)"turretLevelText", nullptr, DRAGGABLE::DRAG_OFF, "Lvl up");
 
 	rect = RectConstructor(424, 25, 23, 23);
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) + (194 / 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (231 / 2) - (rect.h / 2)), father, UI_TYPE::UI_BUTTON, rect, (P2SString)"closeButton", EVENT_ENUM::NULL_EVENT, true, true, false, false);
@@ -989,6 +996,8 @@ void ModuleUIManager::UpdateFocusPortrait()
 	BROFILER_CATEGORY("Update Focus Portrait", Profiler::Color::Green);
 
 	DeleteUIChilds(focusedPortrait, false);
+
+	focusedEnt = app->player->GetFocusedEntity();
 
 	if (focusedEnt != nullptr && focusedEnt->toDelete == false)
 	{

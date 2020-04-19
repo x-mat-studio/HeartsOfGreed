@@ -106,6 +106,8 @@ private:
 	std::vector <iMPoint> constrArea;
 	fMPoint baseDrawCenter;
 	iMPoint buildingPrevPosition;
+	Base* baseInBuild;
+
 
 	int turretCost;
 };

@@ -378,8 +378,7 @@ bool Hero::PostUpdate(float dt)
 
 	DrawArea();
 
-	if (drawingVfx)
-		DrawVfx(dt);
+
 
 	return true;
 }
@@ -443,6 +442,8 @@ void Hero::Draw(float dt)
 	else
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255);
 
+	if (drawingVfx)
+		DrawVfx(dt);
 }
 
 void Hero::DrawArea()

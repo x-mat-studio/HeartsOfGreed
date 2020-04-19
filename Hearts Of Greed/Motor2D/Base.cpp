@@ -124,7 +124,6 @@ bool Base::AddTurret(Turret* turret)
 	if (turretsVector.size() == maxTurrets)
 		return false;
 
-
 	else
 	{
 		turretsVector.push_back(turret);
@@ -132,6 +131,14 @@ bool Base::AddTurret(Turret* turret)
 	}
 }
 
+bool Base::TurretCapacityExceed()
+{
+	if (turretsVector.size() >= maxTurrets)
+	{
+		return false;
+	}
+	return true;
+}
 
 bool Base::AddBarricade(Barricade* barricade)
 {
@@ -324,4 +331,14 @@ int Base::GetMaxHP()
 int Base::GetRsrc()
 {
 	return resourcesProduced;
+}
+
+int Base::GetcurrentTurrets()
+{
+	return turretsVector.size();
+}
+
+int Base::GetmaxTurrets()
+{
+	return maxTurrets;
 }

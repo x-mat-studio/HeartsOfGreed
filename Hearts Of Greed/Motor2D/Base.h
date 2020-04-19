@@ -33,6 +33,8 @@ public:
 	bool AddBarricade(Barricade* barricade);
 	bool AddUpgradeCenter(UpgradeCenter* upgradeCenter);
 
+	bool TurretCapacityExceed();
+
 	void RemoveTurret(Turret* turret);
 	void RemoveBarricade(Barricade* barricade);
 	void RemoveUpgradeCenter();
@@ -47,6 +49,8 @@ public:
 	int GetHP();
 	int GetMaxHP();
 	int GetRsrc();
+	int GetcurrentTurrets();
+	int GetmaxTurrets();
 
 private:
 	
