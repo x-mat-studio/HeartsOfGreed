@@ -263,9 +263,6 @@ bool Hero::Update(float dt)
 		RecoverEnergy(dt);
 	}
 
-	
-	//LOG("VIDA: %d || ENERGIA: %d", hitPointsCurrent, energyPoints);
-	// LOG("RECOVERY: %f ", feelingSecure);
 
 	CollisionPosUpdate();
 
@@ -285,7 +282,11 @@ void Hero::StateMachine(float dt)
 		bool hasMoved = false;
 		hasMoved = Move(dt);
 
-		visionEntity->SetNewPosition(position);
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetNewPosition(position);
+		}
+		
 
 		if (objective != nullptr)
 		{

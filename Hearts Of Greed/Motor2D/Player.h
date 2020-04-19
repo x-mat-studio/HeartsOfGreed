@@ -105,6 +105,8 @@ private:
 	iMPoint buildingPrevPosition;
 
 	int turretCost;
+
+	int focusedHero;
 };
 
 

@@ -192,18 +192,29 @@ void Enemy::StateMachine(float dt)
 		else
 			inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 
-		visionEntity->SetNewPosition(position);
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetNewPosition(position);
+		}
 		break;
 
 	case ENEMY_STATES::ATTACK:
 
 		if (attackCooldown == 0)
 		{
-			Attack();
-			if (shortTermObjective != nullptr)
-				dir = DetermineDirection(shortTermObjective->position - position);
+			if (Attack() == true)
+			{
+				if (shortTermObjective != nullptr)
+					dir = DetermineDirection(shortTermObjective->position - position);
 
-			attackCooldown += 0.01f;
+				attackCooldown += 0.01f;
+			}
+			else
+			{
+				inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
+			}
+			
 		}
 		else
 		{
@@ -243,8 +254,8 @@ void Enemy::Roar()
 
 void Enemy::DrawOnSelect()
 {
-	if(selectedByPlayer)
-	app->render->Blit(app->entityManager->targetedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+	if (selectedByPlayer)
+		app->render->Blit(app->entityManager->targetedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
 
@@ -298,10 +309,30 @@ void Enemy::Draw(float dt)
 }
 
 
-void Enemy::Attack()
+bool Enemy::Attack()
 {
-	if (shortTermObjective)
-		shortTermObjective->RecieveDamage(attackDamage);
+	if (shortTermObjective != nullptr)
+	{
+		if (shortTermObjective->GetAlignment() == align)
+		{
+			path.clear();
+			DestroyPath();
+			shortTermObjective = nullptr;
+			SearchObjective();
+
+			inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
+
+			return false;
+		}
+
+		else
+		{
+			shortTermObjective->RecieveDamage(attackDamage);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 
@@ -389,6 +420,7 @@ bool Enemy::CheckAttackRange()
 	{
 		return false;
 	}
+
 
 	if (shortTermObjective->GetAlignment() == align)
 	{
@@ -515,6 +547,10 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 			switch (lastInput)
 			{
 			case ENEMY_INPUTS::IN_CHARGING_ATTACK: state = ENEMY_STATES::CHARGING_ATTACK;	break;
+
+			case ENEMY_INPUTS::IN_OBJECTIVE_DONE:  state = ENEMY_STATES::IDLE;				break;
+
+			case ENEMY_INPUTS::IN_OUT_OF_RANGE:    state = ENEMY_STATES::MOVE;				break;
 
 			case ENEMY_INPUTS::IN_DEAD:			   state = ENEMY_STATES::DEAD;				break;
 			}

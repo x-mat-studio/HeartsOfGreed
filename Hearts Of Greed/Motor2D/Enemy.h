@@ -77,7 +77,7 @@ public:
 	void DrawOnSelect();
 private:
 
-	void Attack();
+	bool Attack();
 
 	void RecoverHealth();
 
