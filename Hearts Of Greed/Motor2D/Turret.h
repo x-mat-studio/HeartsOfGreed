@@ -104,7 +104,6 @@ private:
 	Animation shootingLeftDown;
 
 	Entity* shortTermObjective;
-	Animation animation;
 	TURRET_STATES state;
 	Animation* currentAnimation;
 	std::vector<TURRET_INPUTS> inputs;

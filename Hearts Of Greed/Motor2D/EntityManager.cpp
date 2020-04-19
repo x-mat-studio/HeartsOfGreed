@@ -216,7 +216,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Test Turret
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	sampleTurret = new Turret(1, 2, 3, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+	sampleTurret = new Turret(1, 5, 2, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
 		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown, 100, 100, 5, 100, 50, 160);
 
 	//Template base
@@ -329,6 +329,7 @@ bool ModuleEntityManager::Start()
 	//Buildings sfx--------
 	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
 	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
+	turretShooting = app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
 
 	//Armored sfx--------
 	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
@@ -454,7 +455,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
-				
+
 				Base* auxBase; auxBase = (Base*)entityVector[i];
 				alignement = entityVector[i]->GetAlignment();
 
@@ -462,14 +463,14 @@ void ModuleEntityManager::CheckIfStarted() {
 				{
 					entityVector[i]->Start(base2Texture);
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
-					
+
 					auxBase->selectedTexture = base2TextureSelected;
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
-				{					
+				{
 					entityVector[i]->Start(base2TextureEnemy);
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
-					
+
 					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
 
@@ -500,7 +501,6 @@ bool ModuleEntityManager::Update(float dt)
 
 	int numEntities = entityVector.size();
 
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->Update(dt);
@@ -516,14 +516,13 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
 
 	int numEntities = entityVector.size();
-
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PostUpdate(dt);
 	}
 
 	SpriteOrdering(dt);
+
 
 	return true;
 }
@@ -565,7 +564,7 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
-	
+
 
 	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
@@ -730,7 +729,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 	ENTITY_TYPE type;
 
 	int numEntities = entityVector.size();
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		type = entityVector[i]->GetType();
@@ -739,7 +738,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 		//dynamic entities get priority over static entities
 		if (mousePos.PointInRect(&col->rect))
 		{
-			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED ))
+			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED))
 			{
 				if (focus == true)
 				{
@@ -750,7 +749,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 
 					entityVector[i]->selectedByPlayer = true;
 				}
-				
+
 				return entityVector[i];
 			}
 
@@ -768,7 +767,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 	{
 		ret->selectedByPlayer = true;
 	}
-	
+
 	return ret;
 }
 
@@ -921,7 +920,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
-		
+
 				movableEntityVector.push_back(entityVector[i]);
 				break;
 
@@ -1039,7 +1038,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			}
 		}
 
-		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY) 
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY)
 		{
 			if (selectedVector[i]->visionEntity != nullptr)
 			{
@@ -1058,8 +1057,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 				}
 			}
 		}
-		
-	}	
+
+	}
 	selectedVector.clear();
 }
 
@@ -1252,7 +1251,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}

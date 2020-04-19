@@ -25,7 +25,6 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	idleLeftUp(idleLeftUp),
 	idleLeftDown(idleLeftDown),
 
-	animation(animation),
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
 	attackSpeed(attackSpeed),
@@ -57,7 +56,6 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	idleLeftUp(copy->idleLeftUp),
 	idleLeftDown(copy->idleLeftDown),
 
-	animation(copy->animation),
 	turretLvl(copy->turretLvl),
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
@@ -70,6 +68,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	state(TURRET_STATES::IDLE)
 {
+	currentAnimation = &idleRightDown;
 	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
 }
 
@@ -81,7 +80,6 @@ Turret::~Turret()
 
 	inputs.clear();
 
-	animation = Animation();
 }
 
 
@@ -129,6 +127,9 @@ void Turret::CheckObjective(Entity* entity)
 	if (shortTermObjective == entity)
 	{
 		shortTermObjective = nullptr;
+
+		SearchObjective();
+		inputs.push_back(TURRET_INPUTS::IN_IDLE);
 	}
 }
 
@@ -160,11 +161,10 @@ void Turret::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), false, true, transparencyValue);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
-			
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));		
 }
 
 int Turret::GetLvl()
@@ -307,6 +307,12 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 			{
 			case TURRET_INPUTS::IN_CHARGING_ATTACK:		state = TURRET_STATES::CHARGING_ATTACK;	break;
 
+			case TURRET_INPUTS::IN_OBJECTIVE_DONE:		state = TURRET_STATES::IDLE;			break;
+
+			case TURRET_INPUTS::IN_OUT_OF_RANGE:		state = TURRET_STATES::IDLE;			break;
+
+			case TURRET_INPUTS::IN_IDLE:				state = TURRET_STATES::IDLE;			break;
+
 			case TURRET_INPUTS::IN_DEAD:			    state = TURRET_STATES::DEAD;			break;
 			}
 		}	break;
@@ -321,6 +327,8 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 			case TURRET_INPUTS::IN_OBJECTIVE_DONE:  state = TURRET_STATES::IDLE;				break;
 
 			case TURRET_INPUTS::IN_OUT_OF_RANGE:	state = TURRET_STATES::IDLE;				break;
+
+			case TURRET_INPUTS::IN_IDLE:			state = TURRET_STATES::IDLE;				break;
 
 			case TURRET_INPUTS::IN_DEAD:			state = TURRET_STATES::DEAD;				break;
 			}
@@ -366,6 +374,7 @@ void Turret::StateMachine()
 
 	case TURRET_STATES::CHARGING_ATTACK:
 
+		app->audio->PlayFx(app->entityManager->turretShooting, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
 
 		break;
 
@@ -373,6 +382,8 @@ void Turret::StateMachine()
 		Die();
 		break;
 	}
+
+	SetAnimation(state);
 }
 
 FACE_DIR Turret::DetermineDirection(fMPoint faceDir)
