@@ -577,21 +577,25 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = { 561, 77, 68, 62 };
-		AddUIElement(fMPoint(w - 2 * rect.w + 18, h - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+		AddUIElement(fMPoint(w - 2 * rect.w + 10, h - rect.h - 1), focusedPortrait, UI_TYPE::UI_IMG, rect, (P2SString)"enemyImg");
+
+		//hp bar
+		rect = RectConstructor(312, 85, 60, 7);
+		AddUIElement(fMPoint(w - 62, (h - 64)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, (P2SString)"HPbar", turret, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		//stats
 
 		sprintf_s(stats, 40, "LVL: %i", turret->GetLvl());
-		AddUIElement(fMPoint(w - 35, (h - 15)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 15)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"lvl", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", turret->GetAD());
-		AddUIElement(fMPoint(w - 35, (h - 30)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 30)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AD", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", turret->GetRng());
-		AddUIElement(fMPoint(w - 35, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 45)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"Rng", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %i", turret->GetAS());
-		AddUIElement(fMPoint(w - 35, (h - 60)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 45, (h - 60)), focusedPortrait, UI_TYPE::UI_TEXT, rect, (P2SString)"AS", nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
