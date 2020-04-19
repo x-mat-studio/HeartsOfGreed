@@ -137,7 +137,6 @@ void UI_Portrait::HandleInput()
 
 void UI_Portrait::CreatePortrait(Hero* entity)
 {
-
 	Portrait newPortrait;
 	newPortrait.position.x = worldPosition.x;
 	newPortrait.position.y = nextVectorPosition;
@@ -151,12 +150,13 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", entity, DRAGGABLE::DRAG_OFF);
 	
 	SDL_Color color;
-	char level;
+	char level [10];
 	color.r = 255;
 	color.b = 255;
 	color.g = 255;
-	sprintf_s(&level, 10, "%d", entity->level);
-	newPortrait.level = new UI_Text(fMPoint(newPortrait.position.x + 5, newPortrait.position.y + 34), this, UI_TYPE::UI_TEXT, healthbarRect, (P2SString)"textPortrait", DRAGGABLE::DRAG_OFF, &level, color);
+
+	sprintf_s(level, 10, "%d", entity->level);
+	newPortrait.level = new UI_Text(fMPoint(newPortrait.position.x + 5, newPortrait.position.y + 34), this, UI_TYPE::UI_TEXT, healthbarRect, (P2SString)"textPortrait", DRAGGABLE::DRAG_OFF, level, color);
 
 	switch (entity->GetType())
 	{

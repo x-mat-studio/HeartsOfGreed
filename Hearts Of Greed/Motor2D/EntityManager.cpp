@@ -221,7 +221,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	//Template base
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
+	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 3, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
 
 
 	//Generate Areas------------------------------------

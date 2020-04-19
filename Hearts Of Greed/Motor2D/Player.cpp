@@ -13,6 +13,7 @@
 #include "Minimap.h"
 #include "Base.h"
 #include "UIManager.h"
+#include "Base.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -34,6 +35,7 @@ ModulePlayer::ModulePlayer() :
 	doingAction(false),
 	hasClicked(false),
 	constrAreaInfo(nullptr),
+	baseInBuild(nullptr),
 
 	doSkill(false),
 	buildingPrevPosition{INT_MIN,INT_MIN},
@@ -525,7 +527,19 @@ bool ModulePlayer::BuildClick()
 	x -= rect.w * 0.5f;
 	y -= rect.h;
 
-	app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
+	if (baseInBuild != nullptr)
+	{
+		switch (buildingToBuild)
+		{
+		case ENTITY_TYPE::BLDG_TURRET:
+			baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+			break;
+		}
+	}
+	else
+		app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
+
+
 	SubstractBuildResources();
 	DesactivateBuildMode();
 
@@ -639,7 +653,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
-		if (resources >= turretCost)
+		if (resources >= turretCost && app->uiManager->lastShop->TurretCapacityExceed())
 		{
 			ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
 		}
@@ -703,12 +717,13 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 	{
 		buildMode = true;
 		buildingToBuild = building;
+		baseInBuild = contrBase;
 
 		app->eventManager->GenerateEvent(EVENT_ENUM::HIDE_MENU, EVENT_ENUM::NULL_EVENT);
 
-		if (contrBase != nullptr)
+		if (baseInBuild != nullptr)
 		{
-			baseDrawCenter = contrBase->GetPosition() + contrBase->GetCenter();
+			baseDrawCenter = baseInBuild->GetPosition() + baseInBuild->GetCenter();
 			baseDrawCenter.y += app->map->data.tileHeight;
 
 			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
@@ -731,7 +746,7 @@ void ModulePlayer::DesactivateBuildMode()
 	buildingToBuild = ENTITY_TYPE::UNKNOWN;
 	app->eventManager->GenerateEvent(EVENT_ENUM::UNHIDE_MENU, EVENT_ENUM::NULL_EVENT);
 
-
+	baseInBuild = nullptr;
 	constrAreaInfo = nullptr;
 	constrArea.clear();
 	baseDrawCenter = { FLT_MIN,FLT_MIN };

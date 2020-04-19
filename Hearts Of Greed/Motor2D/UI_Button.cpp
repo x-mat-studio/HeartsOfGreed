@@ -5,7 +5,7 @@
 #include "Audio.h"
 
 UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure, bool includeFather,
-	bool hiding, bool hoverMove, DRAGGABLE draggable, EVENT_ENUM eventTrigger) : UI(positionValue, father, uiType, rect, uiName, draggable),
+	bool hiding, bool hoverMove, DRAGGABLE draggable, EVENT_ENUM eventTrigger,  bool interactable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	
 	accuratedDrag({0, 0}),
 	eventRecieved(eventR),
@@ -24,6 +24,8 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 	properties.includeFather = includeFather;
 	properties.draggable = draggable;
 	properties.scrollbarPositioning = false;
+
+	this->interactable = interactable;
 
 }
 
