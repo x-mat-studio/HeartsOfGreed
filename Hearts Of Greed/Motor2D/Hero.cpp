@@ -282,7 +282,11 @@ void Hero::StateMachine(float dt)
 		bool hasMoved = false;
 		hasMoved = Move(dt);
 
-		visionEntity->SetNewPosition(position);
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetNewPosition(position);
+		}
+		
 
 		if (objective != nullptr)
 		{

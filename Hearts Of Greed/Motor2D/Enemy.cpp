@@ -192,7 +192,11 @@ void Enemy::StateMachine(float dt)
 		else
 			inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 
-		visionEntity->SetNewPosition(position);
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetNewPosition(position);
+		}
 		break;
 
 	case ENEMY_STATES::ATTACK:
