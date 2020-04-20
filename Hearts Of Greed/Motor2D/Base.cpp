@@ -305,7 +305,7 @@ int Base::RecieveDamage(int damage)
 		if (randomCounter == 0)
 			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
 		else if (randomCounter == 9)
-			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
 
 		if (hitPointsCurrent <= 0)
 		{
