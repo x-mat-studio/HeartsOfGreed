@@ -1004,7 +1004,7 @@ bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (uiVector[i]->parent == nullptr)
+		if (uiVector[i]->parent == nullptr && uiVector[i]->enabled)
 		{
 			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiVector[i]->worldPosition.x + uiVector[i]->box.w) * app->win->GetUIScale() >= mouse.x &&
 				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiVector[i]->worldPosition.y + uiVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
