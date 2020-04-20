@@ -16,18 +16,20 @@ public:
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
+	void EntityDeath();
 
 private:
 
 	void HandleInput();
-	void AdjustHealth();
+	void AdjustValue();
 
 private:
 
-	int* maxHealth;
-	int* currentHealth;
-	int previousHealth;
+	int* maxValue;
+	int* currentValue;
+	int previousValue;
 	int originalWidth;
+	Entity* entity;
 
 };
 

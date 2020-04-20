@@ -1,5 +1,7 @@
 #include "TestScene.h"
+
 #include "App.h"
+
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
@@ -18,6 +20,8 @@
 #include "EventManager.h"
 #include "Minimap.h"
 #include "Render.h"
+#include "Player.h"
+#include "AI.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -31,8 +35,14 @@ ModuleTestScene::ModuleTestScene() :
 	camSprint(false),
 	allowCamMovement(true),
 	menuScene(false),
-	isNightTime(false)
+	isNightTime(false),
+	dayTimer(0),
+	nightTimer(0),
+	camVel(0.f),
+	fadeTime(0)
 {
+	name.create("testScene");
+
 }
 
 
@@ -42,10 +52,28 @@ ModuleTestScene::~ModuleTestScene()
 }
 
 
-bool  ModuleTestScene::Awake(pugi::xml_node&)
+bool  ModuleTestScene::Awake(pugi::xml_node& config)
 {
-	dayTimer = 4;
-	nightTimer = 4;
+
+
+	camVel = config.attribute("camVel").as_float(1);
+	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
+	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
+	dayTimer = config.attribute("dayTimerSec").as_int(1);
+	nightTimer = config.attribute("nightTimerSec").as_int(1);
+
+	camMarginMovements.x = config.attribute("freeCamMarginDetectionPixelsX").as_int(1);
+	camMarginMovements.y = config.attribute("freeCamMarginDetectionPixelsY").as_int(1);
+
+
+	mapBordersUpperLeftCorner.x = config.attribute("mapBordersUpperLeftCornerX").as_int(0);
+	mapBordersUpperLeftCorner.y = config.attribute("mapBordersUpperLeftCornerY").as_int(0);
+
+	mapBordersBottomRightCorner.x = config.attribute("mapBordersBottomRightCornerX").as_int(0);
+	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
+	
+	fadeTime = config.attribute("fadeTime").as_float(0);
+
 
 	return true;
 }
@@ -54,8 +82,11 @@ bool  ModuleTestScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
-	app->render->currentCamX = 0;
-	app->render->currentCamY = 0;
+	app->player->Enable();
+	app->minimap->Enable();
+
+	app->render->currentCamX = initialCamPos.x;
+	app->render->currentCamY = initialCamPos.y;
 	//Play Music
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 
@@ -75,28 +106,28 @@ bool ModuleTestScene::Start()
 		pos.create(100, 600);
 
 		//Test Hero
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x-680, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-		//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y-500);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 664, pos.y);
 
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
 
 
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
-		// Test Turret
-	//	app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, 100, 750);
+		//Spawners------------------
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1270, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+
+		//Debug
+		//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
+
 	}
 
 	app->uiManager->CreateBasicInGameUI();
 
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
+	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, {0,0,0,0}, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
 
 
 	//Events register
@@ -121,7 +152,8 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
-	
+
+	isNightTime = false;
 
 	return true;
 }
@@ -132,6 +164,8 @@ bool  ModuleTestScene::PreUpdate(float dt)
 {
 	CheckListener(this);
 
+
+	//VERTICAL SLICE
 	//CalculateTimers(dt);
 
 	return true;
@@ -143,12 +177,15 @@ bool  ModuleTestScene::Update(float dt)
 {
 	CheckListener(this);
 
+	float camVelAux = camVel;
 	float scale = app->win->GetScale();
-	float camVel = 700; //TODO LOAD THIS FROM XML
 	iMPoint mousePos;
 	iMPoint mouseRaw;
-	app->input->GetMousePosition(mousePos.x, mousePos.y);
-	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
+	SDL_GetMouseState(&mouseRaw.x, &mouseRaw.y);
+
+	mousePos.x = round((float)mouseRaw.x / scale);
+	mousePos.y = round((float)mouseRaw.y / scale);
+
 
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_STATE::KEY_DOWN) //Debug key to lock camera movement
 	{
@@ -162,27 +199,27 @@ bool  ModuleTestScene::Update(float dt)
 
 		if (camSprint)
 		{
-			camVel *= 2;
+			camVelAux *= 2;
 			wasdMove = true;
 		}
 		if (camUp)
 		{
-			app->render->currentCamY += camVel * dt;
+			app->render->currentCamY += camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camDown)
 		{
-			app->render->currentCamY -= camVel * dt;
+			app->render->currentCamY -= camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camLeft)
 		{
-			app->render->currentCamX += camVel * dt;
+			app->render->currentCamX += camVelAux * dt;
 			wasdMove = true;
 		}
 		if (camRight)
 		{
-			app->render->currentCamX -= camVel * dt;
+			app->render->currentCamX -= camVelAux * dt;
 			wasdMove = true;
 		}
 
@@ -192,43 +229,47 @@ bool  ModuleTestScene::Update(float dt)
 			//mouse drag / mouse zoom
 			iMPoint scrollWheel;
 			app->input->GetScrollWheelMotion(scrollWheel.x, scrollWheel.y);
-			if (MouseCameraDisplacement(camVel, dt) == false)
+
+			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
 			{
-				if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
-				{
-					StartDragging(mousePos);
-				}
-				else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
-				{
-					Drag(mousePos, scale);
-				}
-				else if (scrollWheel.y != 0)
-				{
-					//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-					if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false)
-					{
-						Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
-					}
-					
-				}
+				StartDragging(mousePos);
 			}
+			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
+			{
+				Drag(mousePos, scale);
+			}
+			else if (scrollWheel.y != 0)
+			{
+				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
+				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false && app->uiManager->MouseOnUI(mouseRaw) == false)
+				{
+					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+				}
+
+			}
+			else
+			{
+				MouseCameraDisplacement(camVel, dt);
+			}
+
 		}
+		ConstrainCameraToBorders();
 	}
 
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE WIN SCENE
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->winScene);
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE LOSE SCENE
 	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_STATE::KEY_DOWN)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->loseScene);
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_LOSE, EVENT_ENUM::NULL_EVENT);
 	}
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
-	if(menuScene == true)
+	if (menuScene == true)
 	{
-		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu))
+		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2))
 		{
 			menuScene = false;
 		}
@@ -243,16 +284,16 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	bool ret = true;
 
 	app->map->Draw();
-	
+
 	if (isNightTime)
 	{
 		DrawNightRect();
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
+	//if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
-		ret = false;
-	}
+	//	ret = false;
+	//}
 
 
 	return ret;
@@ -264,12 +305,17 @@ bool  ModuleTestScene::CleanUp()
 {
 	app->pathfinding->CleanUp();
 	app->uiManager->CleanUp();
-	app->entityManager->DeleteAllEntities();
+	app->entityManager->ResetEntityManager();
 	app->coll->CleanUp();
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
 	app->audio->SilenceAll();
-	app->minimap->CleanUp();
+	app->minimap->Disable();
+
+
+	app->player->Disable();
+	app->ai->ResetAI();
+
 
 	return true;
 }
@@ -301,6 +347,8 @@ void ModuleTestScene::Zoom(float addZoomAmount, int windowTargetCenterX, int win
 		app->render->currentCamY = (((app->render->currentCamY - offsetY) * newScale) / currentScale) + offsetY;
 	}
 }
+
+
 void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 {
 	switch (eventId)
@@ -394,31 +442,29 @@ void ModuleTestScene::Drag(iMPoint mousePos, float scale)
 bool ModuleTestScene::MouseCameraDisplacement(float camVel, float dt)
 {
 	bool ret = false;
-	int offset = 30; //TODO THIS OFFSET VALUE (IN PIXELS) FOR THE DETECTION WILL BE LOADED FROM XML IN THE FUTURE
-	iMPoint mouseRaw;
+	iMPoint mouseRaw = app->input->GetMousePosScreen();
 	uint width;
 	uint height;
-	app->input->GetMousePositionRaw(mouseRaw.x, mouseRaw.y);
 	app->win->GetWindowSize(width, height);
 
-	if (mouseRaw.x <= offset)
+	if (mouseRaw.x <= camMarginMovements.x)
 	{
 		app->render->currentCamX += camVel * dt;
 		ret = true;
 	}
-	else if (mouseRaw.x >= width - 1 - offset)
+	else if (mouseRaw.x >= width - 1 - camMarginMovements.x)
 	{
 		app->render->currentCamX -= camVel * dt;
 		ret = true;
 	}
 
-	if (mouseRaw.y <= offset)
+	if (mouseRaw.y <= camMarginMovements.y)
 	{
 		app->render->currentCamY += camVel * dt;
 		ret = true;
 
 	}
-	else if (mouseRaw.y >= height - 1 - offset)
+	else if (mouseRaw.y >= height - 1 - camMarginMovements.y)
 	{
 		app->render->currentCamY -= camVel * dt;
 		ret = true;
@@ -507,4 +553,51 @@ void ModuleTestScene::DrawNightRect()
 int ModuleTestScene::GetDayNumber() const
 {
 	return dayNumber;
+}
+
+void ModuleTestScene::ConstrainCameraToBorders()
+{
+	float scale = app->win->GetScale();
+	fMPoint cam;
+	int halfCamW;
+	int halfCamH;
+	uint auxW;
+	uint auxH;
+	app->win->GetWindowSize(auxW, auxH);
+
+	halfCamW = auxW * 0.5f;
+	halfCamH = auxH * 0.5f;
+	cam.x = -app->render->currentCamX;
+	cam.y = -app->render->currentCamY;
+
+	fMPoint camCenterPoint;
+	camCenterPoint.x = (cam.x + halfCamW) / scale;
+	camCenterPoint.y = (cam.y + halfCamH) / scale;
+
+	//camera limits
+
+	if (camCenterPoint.x < mapBordersUpperLeftCorner.x)
+	{
+		app->render->currentCamX = -(mapBordersUpperLeftCorner.x * scale) + halfCamW;
+	}
+	else if (camCenterPoint.x > mapBordersBottomRightCorner.x)
+	{
+		app->render->currentCamX = -(mapBordersBottomRightCorner.x * scale) + halfCamW;
+	}
+
+	if (camCenterPoint.y < mapBordersUpperLeftCorner.y)
+	{
+		app->render->currentCamY = -(mapBordersUpperLeftCorner.y * scale) + halfCamH;
+	}
+	else if (camCenterPoint.y > mapBordersBottomRightCorner.y)
+	{
+		app->render->currentCamY = -(mapBordersBottomRightCorner.y * scale) + halfCamH;
+	}
+
+}
+
+
+bool ModuleTestScene::IsNight() const
+{
+	return isNightTime;
 }

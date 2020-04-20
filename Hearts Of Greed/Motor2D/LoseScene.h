@@ -45,8 +45,14 @@ private:
 	SDL_Texture* youLost;
 	SDL_Texture* medalLose;
 
+
+	fMPoint medalPos;
+
 	//sounds
 	//int winMusic;
+
+
+	float fadeTime;
 
 };
 

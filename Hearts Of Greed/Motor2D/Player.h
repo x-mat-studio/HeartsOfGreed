@@ -10,22 +10,22 @@
 
 #include "Entity.h"
 
+
 class Hero;
+class Base;
+struct skillArea;
 
 class ModulePlayer : public Module
 {
 public:
 	ModulePlayer();
 
-
 	~ModulePlayer();
-
 
 	bool Awake(pugi::xml_node&);
 
-
 	bool Start();
-
+	bool CleanUp();
 
 	bool PreUpdate(float dt);
 	bool Update(float dt);
@@ -34,12 +34,20 @@ public:
 	void AddResources(int gain);
 	bool UseResources(int cost);
 
-	bool ActivateBuildMode(ENTITY_TYPE building);
+	bool ActivateBuildMode(ENTITY_TYPE building, Base* contrBase);
 	void DesactivateBuildMode();
 
 	void RemoveHeroFromVector(Hero* hero);
+	void CheckFocusedEntity(Entity* entity);
 
 	iMPoint GetClickPosition();
+
+	int GetResources() const;
+	int GetTurretCost() const;
+
+	bool IsBuilding() const;
+
+	Entity* GetFocusedEntity();
 
 private:
 	
@@ -47,6 +55,7 @@ private:
 
 	void Select();
 	bool Click();
+	void LeftClick();
 	void RightClick();
 
 	void CommandSkill();
@@ -54,11 +63,13 @@ private:
 	void DoHeroSkills();
 
 	bool BuildClick();
+	void SubstractBuildResources();
 
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void DrawSelectQuad();
 
+	bool CheckFocusedHero();
 
 public:
 	Entity* focusedEntity; //other modules need this for portrait generation
@@ -76,6 +87,8 @@ private:
 	bool selectUnits;
 	bool entityComand;
 	bool entityInteraction;
+	
+	int focusedHero;
 
 	bool skill1;
 	bool skill2;
@@ -88,6 +101,15 @@ private:
 	bool buildMode;
 
 	int resources;
+
+	skillArea* constrAreaInfo;
+	std::vector <iMPoint> constrArea;
+	fMPoint baseDrawCenter;
+	iMPoint buildingPrevPosition;
+	Base* baseInBuild;
+
+
+	int turretCost;
 };
 
 

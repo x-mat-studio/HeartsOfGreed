@@ -27,7 +27,7 @@
 
 
 // Constructor
-App::App(int argc, char* args[]) : argc(argc), args(args)
+App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 {
 	PERF_START(pTimer);
 
@@ -73,8 +73,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(loseScene);
 	AddModule(introScene);
 	AddModule(coll);
-	AddModule(fowManager);
 	AddModule(entityManager);
+	AddModule(fowManager);
 	AddModule(uiManager);
 	AddModule(pathfinding);
 	AddModule(player);
@@ -146,13 +146,19 @@ bool App::Awake()
 
 	loadGame = config.first_child().child("load").attribute("fileName").as_string();
 	saveGame = config.first_child().child("load").attribute("fileName").as_string();
-	//Set disabled modules here
+	//Set disabled modules here-------------
+	
+	//Scenes
 	//introScene->Disable();
 	mainMenu->Disable();
 	winScene->Disable();
 	loseScene->Disable();
 	testScene->Disable();
-	//------
+	
+	//Other
+	player->Disable();
+	minimap->Disable();
+	//-----------------------------------
 	PERF_PEEK(pTimer);
 
 	return ret;
@@ -269,13 +275,12 @@ void App::FinishUpdate()
 	uint32 lastFrameMs = frameTime.ReadSec();
 	uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
-	int mouseX, mouseY = 0;
-	input->GetMousePosition(mouseX, mouseY);
+	fMPoint mouse = input->GetMousePosScaled();
 	static char title[256];
 	sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  || Mouse X:%f  Y:%f",
 		app->render->GetCameraX(), app->render->GetCameraY(),
-		(-app->render->currentCamX + mouseX) / app->win->GetScale(),
-		(-app->render->currentCamY + mouseY) / app->win->GetScale()
+		(-app->render->currentCamX + mouse.x) / app->win->GetScale(),
+		(-app->render->currentCamY + mouse.y) / app->win->GetScale()
 	);
 
 	app->win->SetTitle(title);
@@ -352,7 +357,7 @@ bool App::PreUpdate()
 		ret = modules[i]->PreUpdate(dt);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_STATE::KEY_DOWN) {
 
 		debugMode = !debugMode;
 	}
@@ -526,4 +531,19 @@ bool App::SavegameNow() const
 	data.reset();
 	wantToSave = false;
 	return ret;
+}
+
+bool App::SetPause(bool newPause)
+{
+	if(newPause != paused)
+	{
+		paused = !paused;
+	}
+
+	return paused;
+}
+
+bool App::GetPause()
+{
+	return paused;
 }

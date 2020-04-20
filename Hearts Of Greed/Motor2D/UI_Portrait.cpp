@@ -1,14 +1,16 @@
 #include "UI_Portrait.h"
+#include "Render.h"
+#include "Window.h"
 
 UI_Portrait::UI_Portrait(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	nextVectorPosition(positionValue.y),
-	backgroundRect(RectConstructor(643, 145, 72, 56)),
-	backgroundHealthbarRect(RectConstructor(34, 22, 52, 10)),
-	backgroundLevelRect(RectConstructor(55, 210, 18, 18)),
-	healthbarRect(RectConstructor(29, 79, 50, 8)),
-	meleePortraitRect(RectConstructor(561, 149, 68, 52)),
-	gathererPortraitRect(RectConstructor(351, 149, 68, 52)),
-	rangedPortraitRect(RectConstructor(147, 149, 68, 52)),
+	backgroundRect{ 643, 145, 72, 56 },
+	backgroundHealthbarRect{ 34, 22, 52, 10 },
+	backgroundLevelRect{55, 210, 18, 18},
+	healthbarRect{ 29, 79, 50, 8 },
+	meleePortraitRect{ 561, 149, 68, 52 },
+	gathererPortraitRect{ 351, 149, 68, 52 },
+	rangedPortraitRect{ 147, 149, 68, 52 },
 	no_move(true)
 {}
 
@@ -51,6 +53,11 @@ bool UI_Portrait::PreUpdate(float dt)
 	{
 		portraitVector[i].healthbar->PreUpdate(dt);
 		portraitVector[i].level->PreUpdate(dt);
+
+		if (portraitVector[i].lvl != portraitVector[i].hero->level)
+		{
+			portraitVector[i].ChangeLvl(portraitVector[i].hero->level);
+		}
 	}
 
 	return true;
@@ -93,7 +100,6 @@ bool UI_Portrait::Update(float dt)
 	{
 		Hide(dt);
 	}
-
 	return true;
 }
 
@@ -104,25 +110,45 @@ bool UI_Portrait::PostUpdate(float dt)
 
 	for (int i = 0; i < numElem; i++)
 	{
+		if(portraitVector[i].background != nullptr)
 		portraitVector[i].background->PostUpdate(dt);
+
+		if (portraitVector[i].portrait != nullptr)
 		portraitVector[i].portrait->PostUpdate(dt);
+
+		if (portraitVector[i].backgroundLevel != nullptr)
 		portraitVector[i].backgroundLevel->PostUpdate(dt);
+
+		if (portraitVector[i].backgroundHealthbar != nullptr)
 		portraitVector[i].backgroundHealthbar->PostUpdate(dt);
+
+		if (portraitVector[i].healthbar != nullptr)
 		portraitVector[i].healthbar->PostUpdate(dt);
+
+		if (portraitVector[i].level != nullptr)
 		portraitVector[i].level->PostUpdate(dt);
+		
+		if (portraitVector[i].hero != nullptr) 
+		{
+
+			if (portraitVector[i].hero->selectedByPlayer == true) 
+			{
+				SDL_Rect portPos{ this->portraitVector[i].portrait->worldPosition.x * app->win->GetUIScale() , this->portraitVector[i].portrait->worldPosition.y * app->win->GetUIScale(), this->portraitVector[i].portrait->box.w * app->win->GetUIScale(),this->portraitVector[i].portrait->box.h * app->win->GetUIScale() };
+				app->render->DrawQuad(portPos, 120, 100, 10, 80, true, false);
+			}
+
+		}
+		
 	}
 
 	return true;
 }
 
 void UI_Portrait::HandleInput()
-{
-
-}
+{}
 
 void UI_Portrait::CreatePortrait(Hero* entity)
 {
-
 	Portrait newPortrait;
 	newPortrait.position.x = worldPosition.x;
 	newPortrait.position.y = nextVectorPosition;
@@ -136,12 +162,13 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", entity, DRAGGABLE::DRAG_OFF);
 	
 	SDL_Color color;
-	char level;
+	char level [10];
 	color.r = 255;
 	color.b = 255;
 	color.g = 255;
-	sprintf_s(&level, 10, "%d", entity->level);
-	newPortrait.level = new UI_Text(fMPoint(newPortrait.position.x + 5, newPortrait.position.y + 34), this, UI_TYPE::UI_TEXT, healthbarRect, (P2SString)"textPortrait", DRAGGABLE::DRAG_OFF, &level, color);
+
+	sprintf_s(level, 10, "%d", entity->level);
+	newPortrait.level = new UI_Text(fMPoint(newPortrait.position.x + 5, newPortrait.position.y + 34), this, UI_TYPE::UI_TEXT, healthbarRect, (P2SString)"textPortrait", DRAGGABLE::DRAG_OFF, level, color);
 
 	switch (entity->GetType())
 	{
@@ -155,7 +182,6 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, meleePortraitRect, (P2SString)"meleePortrait", DRAGGABLE::DRAG_OFF);
 		break;
 	default:
-		assert(0 == 1);
 		break;
 	}
 
@@ -197,6 +223,9 @@ void UI_Portrait::DeletePortrait()
 			portraitVector.erase(portraitVector.begin() + i);
 
 			deleted = true;
+			nextVectorPosition -= 60;
+			numElem = portraitVector.size();
+			i--;
 		}
 		else if (deleted == true)
 		{
@@ -211,26 +240,18 @@ void UI_Portrait::DeletePortrait()
 }
 
 void UI_Portrait::Move()
+{}
+
+void Portrait::ChangeLvl(int newlvl)
 {
-	// TODO
+	this->lvl = newlvl;
+	char bufferText [10];
+
+	sprintf_s(bufferText, 10, "%d", newlvl);
+
+	this->level->LoadNewTexture(bufferText, nullptr);
+
 }
 
-void UI_Portrait::CheckLevel()
-{
-	// TODO
-}
 
-void UI_Portrait::ReWriteLevelTexture()
-{
-	// TODO
-}
 
-SDL_Rect UI_Portrait::RectConstructor(int x, int y, int w, int h)
-{
-	SDL_Rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = w;
-	rect.h = h;
-	return rect;
-}

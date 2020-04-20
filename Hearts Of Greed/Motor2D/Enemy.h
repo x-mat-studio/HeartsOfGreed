@@ -60,7 +60,7 @@ public:
 
 	void OnCollision(Collider* collider);
 
-	void CheckObjecive(Entity* entity);
+	void CheckObjective(Entity* entity);
 
 	bool MoveTo(float x, float y);
 
@@ -74,9 +74,10 @@ public:
 	int GetVision();
 	int GetRecov();
 
+	void DrawOnSelect();
 private:
 
-	void Attack();
+	bool Attack();
 
 	void RecoverHealth();
 
@@ -94,9 +95,10 @@ private:
 	void SetAnimation(ENEMY_STATES state);
 
 	void Roar();
+	
 
 private:
-
+	
 	int recoveryHitPointsRate;
 	int vision;
 

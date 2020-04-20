@@ -11,9 +11,9 @@
 #include "UI_Text.h"
 
 
-ModuleIntroScene::ModuleIntroScene()
+ModuleIntroScene::ModuleIntroScene() : bgValueDown(false), logoValueDown(false)
 {
-
+	name.create("introScene");
 }
 
 
@@ -23,8 +23,54 @@ ModuleIntroScene::~ModuleIntroScene()
 }
 
 
-bool  ModuleIntroScene::Awake(pugi::xml_node&)
+bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 {
+	logoStartingValue = config.attribute("logoStartingAlphaValue").as_float(0);
+	logoStartingValue = MAX(logoStartingValue, 0);
+	logoStartingValue = MIN(logoStartingValue, 255);
+
+	bgStartingValue = config.attribute("backgroundStartingAlphaValue").as_float(0);;
+	bgStartingValue = MAX(bgStartingValue, 0);
+	bgStartingValue = MIN(bgStartingValue, 255);
+
+	logoTopValue = config.attribute("logoFinalAlphaValue").as_float(0);
+	logoTopValue = MAX(logoTopValue, 0);
+	logoTopValue = MIN(logoTopValue, 255);
+
+	bgTopValue = config.attribute("backgroundFinalAlphaValue").as_float(0);
+	bgTopValue = MAX(bgTopValue, 0);
+	bgTopValue = MIN(bgTopValue, 255);
+
+	logoTransitionConst = abs(config.attribute("logoTransitionConstant").as_float(0));
+	logoTransitionConst = MAX(logoTransitionConst, 1);
+	logoTransitionConst = MIN(logoTransitionConst, 255);
+
+	bgTransitionConst = abs(config.attribute("backgroundTransitionConstant").as_float(0));
+	bgTransitionConst = MAX(bgTransitionConst, 1);
+	bgTransitionConst = MIN(bgTransitionConst, 255);
+
+
+	if (logoTopValue - logoStartingValue < 0)
+	{
+		logoTransitionConst *= -1;
+		logoValueDown = true;
+	}
+	else if (logoTopValue - logoStartingValue == 0)
+	{
+		logoTransitionConst = 0;
+	}
+
+
+	if (bgTopValue - bgStartingValue < 0)
+	{
+		bgTransitionConst *= -1;
+		bgValueDown = true;
+	}
+	else if (bgTopValue - bgStartingValue == 0)
+	{
+		bgTransitionConst = 0;
+	}
+
 	return true;
 }
 
@@ -32,9 +78,9 @@ bool  ModuleIntroScene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool ModuleIntroScene::Start()
 {
-	AlphaCounter = 0;
-	bgAlphaCounter = 255;
-	
+	logoAlphaCounter = logoStartingValue;
+	bgAlphaCounter = bgStartingValue;
+
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
 
@@ -42,7 +88,7 @@ bool ModuleIntroScene::Start()
 	//images
 	logoXMat = app->tex->Load("intro_images/logoXMat.png");
 	logoBG = app->tex->Load("intro_images/logoBG.png");
-	
+
 	//sounds
 	logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
 
@@ -75,27 +121,48 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) 
+	{
 
 		ret = false;
 	}
-	if (AlphaCounter < 250) {
 
-		AlphaCounter += dt * 75;
+	logoAlphaCounter += dt * logoTransitionConst;
+
+
+	bgAlphaCounter += dt * bgTransitionConst;
+
+
+	app->render->Blit(logoBG, 0, 0, false, false, false, bgAlphaCounter);
+
+
+
+	if (logoValueDown == true)
+	{
+		logoAlphaCounter = MAX(logoAlphaCounter, logoTopValue);
 	}
-	if (bgAlphaCounter > 130) {
-
-		bgAlphaCounter -= dt * 50;
+	else
+	{
+		logoAlphaCounter = MIN(logoAlphaCounter, logoTopValue);
 	}
 
-	app->render->Blit(logoBG, 0, 0, false, false,false,bgAlphaCounter);
-
-	if (AlphaCounter > 1) {
-		
-		app->render->Blit(logoXMat, 155, 20, false, false, NULL, AlphaCounter);
+	if (bgValueDown == true)
+	{
+		bgAlphaCounter = MAX(bgAlphaCounter, bgTopValue);
 	}
-	
-	if (AlphaCounter > 250) {
+	else
+	{
+		bgAlphaCounter = MIN(bgAlphaCounter, bgTopValue);
+	}
+
+
+	if (logoAlphaCounter > 1) {
+
+		app->render->Blit(logoXMat, 155, 20, false, false, NULL, logoAlphaCounter);
+	}
+
+	if (logoAlphaCounter == logoTopValue && bgAlphaCounter == bgTopValue)
+	{
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
 	}
 	return ret;
@@ -109,8 +176,8 @@ bool  ModuleIntroScene::CleanUp()
 	app->tex->UnLoad(logoBG);
 	logoXMat = nullptr;
 	logoBG = nullptr;
-	
-	
+
+
 	app->uiManager->CleanUp();
 
 	return true;

@@ -8,13 +8,14 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Input.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int maxHitPoints, int currentHitPoints,
 	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 10, 20),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 25),
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
 	walkLeftDown(walkLeftDown),
@@ -96,14 +97,18 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, false, 3);//TODO this is going to be the enemy vision distance
+	visionEntity = app->fowManager->CreateFoWEntity(position, false); //TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
+
+	int randomCounter = rand() % 20;
+	framesPerPathfinding += randomCounter;
 }
 
 
 Enemy::~Enemy()
 {
 	shortTermObjective = nullptr;
+	currentAnimation = nullptr;
 
 	inputs.clear();
 
@@ -125,7 +130,6 @@ Enemy::~Enemy()
 	punchRightUp = Animation();
 	punchRightDown = Animation();
 	punchRight = Animation();
-
 }
 
 
@@ -139,6 +143,8 @@ bool Enemy::PreUpdate(float dt)
 
 bool Enemy::Update(float dt)
 {
+	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Blue);
+
 	//check inputs to traverse state matrix
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
@@ -148,6 +154,7 @@ bool Enemy::Update(float dt)
 	GroupMovement(dt);
 
 	Roar();
+	DrawOnSelect();
 	CollisionPosUpdate();
 
 
@@ -167,7 +174,7 @@ void Enemy::StateMachine(float dt)
 
 		if (Move(dt) == true)
 		{
-			if (shortTermObjective == nullptr)
+			if (shortTermObjective == nullptr && !haveOrders)
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 			}
@@ -176,7 +183,7 @@ void Enemy::StateMachine(float dt)
 				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
-					fMPoint offSet = shortTermObjective->GetCenter();
+					fMPoint offSet = shortTermObjective->GetOffset();
 
 					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
 				}
@@ -185,21 +192,39 @@ void Enemy::StateMachine(float dt)
 		else
 			inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 
-		visionEntity->SetNewPosition(position);
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetNewPosition(position);
+		}
 		break;
 
 	case ENEMY_STATES::ATTACK:
 
 		if (attackCooldown == 0)
 		{
-			Attack();
-			if (shortTermObjective != nullptr)
-				dir = DetermineDirection(shortTermObjective->position - position);
+			if (CheckAttackRange() == true)
+			{
+				if (Attack() == true)
+				{
 
-			attackCooldown += 0.01f;
+					if (shortTermObjective != nullptr)
+						dir = DetermineDirection(shortTermObjective->position - position);
+
+					attackCooldown += 0.01f;
+
+				}
+			}
+			else
+			{
+				inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
+			}
+
 		}
-
-		inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
+		else
+		{
+			inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
+		}
 		break;
 
 	case ENEMY_STATES::CHARGING_ATTACK:
@@ -222,7 +247,7 @@ void Enemy::Roar()
 
 	if (randomCounter == 997) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
 	if (randomCounter == 998) {
@@ -232,7 +257,11 @@ void Enemy::Roar()
 	}
 }
 
-
+void Enemy::DrawOnSelect()
+{
+	if (selectedByPlayer)
+		app->render->Blit(app->entityManager->targetedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+}
 
 
 bool Enemy::PostUpdate(float dt)
@@ -268,7 +297,12 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+	Frame currFrame;
+
+	if (state == ENEMY_STATES::CHARGING_ATTACK)
+		currFrame = currentAnimation->GetCurrentFrame();
+	else
+		currFrame = currentAnimation->GetCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
@@ -280,28 +314,48 @@ void Enemy::Draw(float dt)
 }
 
 
-void Enemy::Attack()
+bool Enemy::Attack()
 {
-	if (shortTermObjective)
-		shortTermObjective->RecieveDamage(attackDamage);
+	if (shortTermObjective != nullptr)
+	{
+		if (shortTermObjective->GetAlignment() == align)
+		{
+			path.clear();
+			DestroyPath();
+			shortTermObjective = nullptr;
+			SearchObjective();
+
+			inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
+
+			return false;
+		}
+
+		else
+		{
+			shortTermObjective->RecieveDamage(attackDamage);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 
 void Enemy::Die()
 {
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	collider->thisEntity = nullptr;
 
 	int randomCounter = rand() % 2;
 
 	if (randomCounter == 1)
 	{
-		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
 	}
 	else
 	{
-		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
 	}
 
 	if (minimapIcon != nullptr)
@@ -309,16 +363,23 @@ void Enemy::Die()
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
 	}
+
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 }
 
 
-void Enemy::CheckObjecive(Entity* entity)
+void Enemy::CheckObjective(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{
 		path.clear();
+		DestroyPath();
 		shortTermObjective = nullptr;
-		SearchForNewObjective();
+		SearchObjective();
 
 		inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 	}
@@ -365,6 +426,7 @@ bool Enemy::CheckAttackRange()
 		return false;
 	}
 
+
 	if (shortTermObjective->GetAlignment() == align)
 	{
 		shortTermObjective = nullptr;
@@ -382,7 +444,6 @@ bool Enemy::CheckAttackRange()
 	{
 		return true;
 	}
-
 	else
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
@@ -397,7 +458,9 @@ void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		if (attackCooldown >= attackSpeed)
+		currentAnimation->GetCurrentFrame(attackSpeed * dt);
+
+		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			inputs.push_back(ENEMY_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
@@ -428,14 +491,17 @@ bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 	else
 	{
-		if (SearchObjective() == true)
+		if (framePathfindingCount == framesPerPathfinding)
 		{
-			MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
-		}
+			if (SearchObjective() == true)
+			{
+				MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
+			}
 
-		else if (haveOrders)
-		{
-			MoveTo(longTermObjective.x, longTermObjective.y);
+			else if (haveOrders)
+			{
+				MoveTo(longTermObjective.x, longTermObjective.y);
+			}
 		}
 	}
 
@@ -487,6 +553,10 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 			{
 			case ENEMY_INPUTS::IN_CHARGING_ATTACK: state = ENEMY_STATES::CHARGING_ATTACK;	break;
 
+			case ENEMY_INPUTS::IN_OBJECTIVE_DONE:  state = ENEMY_STATES::IDLE;				break;
+
+			case ENEMY_INPUTS::IN_OUT_OF_RANGE:    state = ENEMY_STATES::MOVE;				break;
+
 			case ENEMY_INPUTS::IN_DEAD:			   state = ENEMY_STATES::DEAD;				break;
 			}
 		}	break;
@@ -536,7 +606,7 @@ int Enemy::RecieveDamage(int damage)
 			ret = xpOnDeath;
 		}
 		else
-			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
+			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
 	}
 
 	return ret;

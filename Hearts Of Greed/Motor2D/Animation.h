@@ -95,7 +95,7 @@ public:
 
 		if (currentFrame >= lastFrame)
 		{
-			currentFrame = (loop) ? 0.0f : lastFrame - 1;
+			currentFrame = (loop) ? 0 : lastFrame - 1;
 			loops++;
 		}
 
@@ -106,6 +106,11 @@ public:
 	Frame& GetCurrentFrame()
 	{
 		return frames[currentFrame];
+	}
+
+	int GetCurrentFrameNum()
+	{
+		return currentFrame;
 	}
 
 

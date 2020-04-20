@@ -12,6 +12,8 @@
 #include "Render.h"
 #include "Window.h"
 #include "Minimap.h"
+#include "Player.h"
+#include "TestScene.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -46,54 +48,108 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
+	//Vfx load -----------------------------------
+	P2SString filename = config.child("load").attribute("docnamevfx").as_string();
+	pugi::xml_document vfxDoc;
+	vfxDoc.load_file(filename.GetString());
+	pugi::xml_node explosion = vfxDoc.child("Vfx");
 
-	// Sample Hero Melee---------------------
+	Animation vfxExplosion = vfxExplosion.PushAnimation(explosion, "explosion");
+
+
+	// Sample Hero Gatherer---------------------
 	fMPoint pos;
 	pos.create(100, 600);
 
-	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
+	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
 
-	Animation walkLeft = walkLeft.PushAnimation(suitman, "walk_left");
-	Animation walkLeftUp = walkLeftUp.PushAnimation(suitman, "walk_left_up");
-	Animation walkLeftDown = walkLeftDown.PushAnimation(suitman, "walk_left_down");
-	Animation walkRightUp = walkRightUp.PushAnimation(suitman, "walk_right_up");
-	Animation walkRightDown = walkRightDown.PushAnimation(suitman, "walk_right_down");
-	Animation walkRight = walkRight.PushAnimation(suitman, "walk_right");
+	Animation walkLeftG = walkLeftG.PushAnimation(suitman, "walk_left");
+	Animation walkLeftUpG = walkLeftUpG.PushAnimation(suitman, "walk_left_up");
+	Animation walkLeftDownG = walkLeftDownG.PushAnimation(suitman, "walk_left_down");
+	Animation walkRightUpG = walkRightUpG.PushAnimation(suitman, "walk_right_up");
+	Animation walkRightDownG = walkRightDownG.PushAnimation(suitman, "walk_right_down");
+	Animation walkRightG = walkRightG.PushAnimation(suitman, "walk_right");
 
-	Animation idleRight = idleRight.PushAnimation(suitman, "idle_right");
-	Animation idleRightUp = idleRightUp.PushAnimation(suitman, "idle_right_up");
-	Animation idleRightDown = idleRightDown.PushAnimation(suitman, "idle_right_down");
-	Animation idleLeft = idleLeft.PushAnimation(suitman, "idle_left");
-	Animation idleLeftUp = idleLeftUp.PushAnimation(suitman, "idle_left_up");
-	Animation idleLeftDown = idleLeftDown.PushAnimation(suitman, "idle_left_down");
+	Animation idleRightG = idleRightG.PushAnimation(suitman, "idle_right");
+	Animation idleRightUpG = idleRightUpG.PushAnimation(suitman, "idle_right_up");
+	Animation idleRightDownG = idleRightDownG.PushAnimation(suitman, "idle_right_down");
+	Animation idleLeftG = idleLeftG.PushAnimation(suitman, "idle_left");
+	Animation idleLeftUpG = idleLeftUpG.PushAnimation(suitman, "idle_left_up");
+	Animation idleLeftDownG = idleLeftDownG.PushAnimation(suitman, "idle_left_down");
 
-	Animation punchRight = punchRight.PushAnimation(suitman, "punch_right");
-	Animation punchRightUp = punchRightUp.PushAnimation(suitman, "punch_right_up");
-	Animation punchRightDown = punchRightDown.PushAnimation(suitman, "punch_right_down");
-	Animation punchLeft = punchLeft.PushAnimation(suitman, "punch_left");
-	Animation punchLeftUp = punchLeftUp.PushAnimation(suitman, "punch_left_up");
-	Animation punchLeftDown = punchLeftDown.PushAnimation(suitman, "punch_left_down");
-	
-	Animation skill1Right = skill1Right.PushAnimation(suitman, "skill_1_right");
-	Animation skill1RightUp = skill1RightUp.PushAnimation(suitman, "skill_1_right_up");
-	Animation skill1RightDown = skill1RightDown.PushAnimation(suitman, "skill_1_right_down");
-	Animation skill1Left = skill1Left.PushAnimation(suitman, "skill_1_left");
-	Animation skill1LeftUp = skill1LeftUp.PushAnimation(suitman, "skill_1_left_up");
-	Animation skill1LeftDown = skill1LeftDown.PushAnimation(suitman, "skill_1_left_down");
+	Animation punchRightG = punchRightG.PushAnimation(suitman, "punch_right");
+	Animation punchRightUpG = punchRightUpG.PushAnimation(suitman, "punch_right_up");
+	Animation punchRightDownG = punchRightDownG.PushAnimation(suitman, "punch_right_down");
+	Animation punchLeftG = punchLeftG.PushAnimation(suitman, "punch_left");
+	Animation punchLeftUpG = punchLeftUpG.PushAnimation(suitman, "punch_left_up");
+	Animation punchLeftDownG = punchLeftDownG.PushAnimation(suitman, "punch_left_down");
+
+	Animation skill1RightG = skill1RightG.PushAnimation(suitman, "skill_1_right");
+	Animation skill1RightUpG = skill1RightUpG.PushAnimation(suitman, "skill_1_right_up");
+	Animation skill1RightDownG = skill1RightDownG.PushAnimation(suitman, "skill_1_right_down");
+	Animation skill1LeftG = skill1LeftG.PushAnimation(suitman, "skill_1_left");
+	Animation skill1LeftUpG = skill1LeftUpG.PushAnimation(suitman, "skill_1_left_up");
+	Animation skill1LeftDownG = skill1LeftDownG.PushAnimation(suitman, "skill_1_left_down");
 
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeft, walkLeftUp,
-		walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
-		idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-		skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown,
-		1, 100, 100, 1, 50, 1, 20, 1, 60, 100, 5, 3.f, 20.f, 20.f, 15.f, 15.f, 15.f,
-		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
-		// Sample Enemy---------------------
+	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeftG, walkLeftUpG,
+		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
+		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
+		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 45, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
+		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
+
+	suitmandoc.reset();
+
+	// Sample Hero Melee---------------------
+	filename = config.child("load").attribute("docnameArmoredman").as_string();
+	pugi::xml_document armoredmanDoc;
+	armoredmanDoc.load_file(filename.GetString());
+	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
+
+	Animation walkLeftM = walkLeftM.PushAnimation(armoredman, "walk_left");
+	Animation walkLeftUpM = walkLeftUpM.PushAnimation(armoredman, "walk_left_up");
+	Animation walkLeftDownM = walkLeftDownM.PushAnimation(armoredman, "walk_left_down");
+	Animation walkRightUpM = walkRightUpM.PushAnimation(armoredman, "walk_right_up");
+	Animation walkRightDownM = walkRightDownM.PushAnimation(armoredman, "walk_right_down");
+	Animation walkRightM = walkRightM.PushAnimation(armoredman, "walk_right");
+
+	Animation idleRightM = idleRightM.PushAnimation(armoredman, "idle_right");
+	Animation idleRightUpM = idleRightUpM.PushAnimation(armoredman, "idle_right_up");
+	Animation idleRightDownM = idleRightDownM.PushAnimation(armoredman, "idle_right_down");
+	Animation idleLeftM = idleLeftM.PushAnimation(armoredman, "idle_left");
+	Animation idleLeftUpM = idleLeftUpM.PushAnimation(armoredman, "idle_left_up");
+	Animation idleLeftDownM = idleLeftDownM.PushAnimation(armoredman, "idle_left_down");
+
+	Animation punchRightM = punchRightM.PushAnimation(armoredman, "punch_right");
+	Animation punchRightUpM = punchRightUpM.PushAnimation(armoredman, "punch_right_up");
+	Animation punchRightDownM = punchRightDownM.PushAnimation(armoredman, "punch_right_down");
+	Animation punchLeftM = punchLeftM.PushAnimation(armoredman, "punch_left");
+	Animation punchLeftUpM = punchLeftUpM.PushAnimation(armoredman, "punch_left_up");
+	Animation punchLeftDownM = punchLeftDownM.PushAnimation(armoredman, "punch_left_down");
+
+	Animation skill1RightM = skill1RightM.PushAnimation(armoredman, "skill_1_right");
+	Animation skill1RightUpM = skill1RightUpM.PushAnimation(armoredman, "skill_1_right_up");
+	Animation skill1RightDownM = skill1RightDownM.PushAnimation(armoredman, "skill_1_right_down");
+	Animation skill1LeftM = skill1LeftM.PushAnimation(armoredman, "skill_1_left");
+	Animation skill1LeftUpM = skill1LeftUpM.PushAnimation(armoredman, "skill_1_left_up");
+	Animation skill1LeftDownM = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
+
+	sampleMelee = new MeleeHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
+		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
+		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
+		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 45, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
+		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+
+
+
+	// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
@@ -120,6 +176,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftPunch"); //jesus christ 
 	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
 
+	wanamingodoc.reset();
 
 	// Sample Crazy Turret Melee---------------------
 	filename = config.child("load").attribute("docnameTurret").as_string();
@@ -127,28 +184,46 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	turretdoc.load_file(filename.GetString());
 	pugi::xml_node turret = turretdoc.child("turret");
 
-	Animation turretCrazyIdle = turretCrazyIdle.PushAnimation(turret, "crazyIdle"); // looks good
+	Animation turretIdleRight = turretIdleRight.PushAnimation(turret, "turretIdleRight"); //goes up then bumps right
+	Animation turretIdleRightUp = turretIdleRightUp.PushAnimation(turret, "turretIdleRightUp"); //bumps left
+	Animation turretIdleRightDown = turretIdleRightDown.PushAnimation(turret, "turretIdleRightDown"); //bumps right
+	Animation turretIdleLeft = turretIdleLeft.PushAnimation(turret, "turretIdleLeft"); //bumps left
+	Animation turretIdleLeftUp = turretIdleLeftUp.PushAnimation(turret, "turretIdleLeftUp"); //bumps right
+	Animation turretIdleLeftDown = turretIdleLeftDown.PushAnimation(turret, "turretIdleLeftDown"); //bumps right
 
+	Animation turretShootingRight = turretShootingRight.PushAnimation(turret, "turretShootingRight"); //goes up then bumps right
+	Animation turretShootingRightUp = turretShootingRightUp.PushAnimation(turret, "turretShootingRightUp"); //bumps left
+	Animation turretShootingRightDown = turretShootingRightDown.PushAnimation(turret, "turretShootingRightDown"); //bumps right
+	Animation turretShootingLeft = turretShootingLeft.PushAnimation(turret, "turretShootingLeft"); //bumps left
+	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turret, "turretShootingLeftUp"); //bumps right
+	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turret, "turretShootingLeftDown"); //bumps right
+
+	turretdoc.reset();
 
 	//Enemy collider and spawner
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
+	Collider* spawnerCollider = new Collider({ 0,0,5,5 }, COLLIDER_RECLUIT_IA, app->ai);
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
-	enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
-	enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight, 5000, 5000, 0, 250, 1, 1, 25, 100, 50);
-	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
+		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
+		20, 20, 0, 250, 1, 1, 35, 100, 50);
+
+	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
+	Collider* buildingCollider = new Collider({ -150,130,430, 330}, COLLIDER_VISIBILITY, this);
+	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
-	Collider* turretCollider = new Collider({ 150,130,350,280 }, COLLIDER_VISIBILITY, this);
-	testTurret = new Turret(1, 2, 3, 4, fMPoint{ 0, 0 }, turretCollider, turretCrazyIdle);
+	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
+	sampleTurret = new Turret(1, 5, 2, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown, 150, 150, 5, 100, 50, 160);
 
 	//Template base
+	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 5, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
+	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, 3, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
 
 
 	//Generate Areas------------------------------------
@@ -166,6 +241,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
 	BuildArea(&meleeSkill1Area, 0, 0, 2);
 	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
+
+	skillArea baseConstruction;
+	baseConstruction.form = AREA_TYPE::CIRCLE;
+	BuildArea(&baseConstruction, 0, 0, 8);
+	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
 
 	return ret;
 }
@@ -185,8 +265,18 @@ bool ModuleEntityManager::Start()
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
+	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
+	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
+	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
 
-	//turretTexture = nullptr;
+	deco3Selected = app->tex->Load("maps/base03_selected.png");
+
+	selectedTexture = app->tex->Load("spritesheets/VFX/selected.png");
+	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
+
+	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
+
+
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	debugPathTexture = app->tex->Load("maps/path.png");
@@ -207,10 +297,16 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
-	
 
-	testBuilding->SetTexture(base1Texture);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
+
+
+	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
+
+	sampleTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -224,6 +320,29 @@ bool ModuleEntityManager::Start()
 	suitmanGetsHit2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
 	suitmanGetsDeath = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
 	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
+	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
+	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
+
+	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
+	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
+	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
+	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+
+	//Buildings sfx--------
+	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
+	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
+	turretShooting = app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
+
+	//Armored sfx--------
+	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
+	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
+	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
+	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
+
+	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
+
+	//General hero sfx--------
+	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
 
 	return ret;
 }
@@ -253,6 +372,7 @@ bool ModuleEntityManager::PreUpdate(float dt)
 void ModuleEntityManager::CheckIfStarted() {
 
 	int numEntities = entityVector.size();
+	ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::UNKNOWN;
 
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -266,6 +386,8 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::HERO_MELEE:
 				entityVector[i]->Start(armorMaleTexture);
 				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_CREATED, EVENT_ENUM::NULL_EVENT);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::HERO_RANGED:
@@ -276,10 +398,14 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::HERO_GATHERER:
 				entityVector[i]->Start(suitManTexture);
 				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::BUILDING:
@@ -300,6 +426,7 @@ void ModuleEntityManager::CheckIfStarted() {
 					break;
 				case BUILDING_DECOR::ST_03:
 					DecorTex = buildingTexture;
+					bld->selectedTexture = deco3Selected;
 					break;
 				default:
 					DecorTex = base1Texture;
@@ -312,16 +439,50 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::BLDG_TURRET:
 				entityVector[i]->Start(turretTexture);
+
+				alignement = entityVector[i]->GetAlignment();
+
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				{
+
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter());
+				}
+				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+				{
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY_TURRET, entityVector[i]->GetCenter()); //TODO CHANGE THIS FOR ENEMY TURRET
+				}
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
-				entityVector[i]->Start(base2Texture);
+
+				Base* auxBase; auxBase = (Base*)entityVector[i];
+				alignement = entityVector[i]->GetAlignment();
+
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
+				{
+					entityVector[i]->Start(base2Texture);
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+
+					auxBase->selectedTexture = base2TextureSelected;
+				}
+				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+				{
+					entityVector[i]->Start(base2TextureEnemy);
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+
+					auxBase->selectedTexture = base2TextureSelectedEnemy;
+				}
+
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
+				break;
+
+			case ENTITY_TYPE::SPAWNER:
+				entityVector[i]->Start(nullptr);
 				break;
 
 			default:
@@ -342,7 +503,6 @@ bool ModuleEntityManager::Update(float dt)
 
 	int numEntities = entityVector.size();
 
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->Update(dt);
@@ -358,8 +518,6 @@ bool ModuleEntityManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
 
 	int numEntities = entityVector.size();
-
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->PostUpdate(dt);
@@ -367,53 +525,48 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 	SpriteOrdering(dt);
 
+
 	return true;
 }
 
 
 bool ModuleEntityManager::CleanUp()
 {
+	LOG("Entity Manager Clean Up");
 	DeleteAllEntities();
 
-	app->tex->UnLoad(suitManTexture);
-	app->tex->UnLoad(armorMaleTexture);
-	app->tex->UnLoad(combatFemaleTexture);
-	app->tex->UnLoad(enemyTexture);
+	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
+	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
+	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
+	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);
-	app->tex->UnLoad(base1Texture);
-	app->tex->UnLoad(base2Texture);
+	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
 
-	app->tex->UnLoad(turretTexture);
+	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 
-	app->tex->UnLoad(debugPathTexture);
+	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
 
-	suitManTexture = nullptr;
-	armorMaleTexture = nullptr;
-	combatFemaleTexture = nullptr;
-	enemyTexture = nullptr;
+	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
 
-	buildingTexture = nullptr;
-	base1Texture = nullptr;
-	base2Texture = nullptr;
+	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
+	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
+	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
 
-	turretTexture = nullptr;
+	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
+	RELEASE(sampleMelee);							sampleMelee = nullptr;
 
-	debugPathTexture = nullptr;
+	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
+	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
 
-	RELEASE(sampleGatherer);
-	RELEASE(sampleEnemy);
-	RELEASE(sampleSpawner);
-	RELEASE(testBuilding);
-	RELEASE(blueBuilding);
-	RELEASE(sampleBase);
+	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
+	RELEASE(sampleBase);							sampleBase = nullptr;
+	RELEASE(sampleTurret);							sampleTurret = nullptr;
 
-	sampleGatherer = nullptr;
-	sampleEnemy = nullptr;
-	sampleSpawner = nullptr;
-	testBuilding = nullptr;
-	blueBuilding = nullptr;
-	sampleBase = nullptr;
 
 	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
@@ -423,8 +576,35 @@ bool ModuleEntityManager::CleanUp()
 	}
 	skillAreas.clear();
 
+	renderVector.clear();
+	movableEntityVector.clear();
+	buildingVector.clear();
+	selectedVector.clear();
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::KILL_ALL_ENEMIES, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_BASE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_BUILDING, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
+
 	return true;
 }
+
 
 void ModuleEntityManager::OnCollision(Collider* c1, Collider* c2)
 {
@@ -456,6 +636,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
+		ret = new MeleeHero({ (float)x,(float)y }, sampleMelee, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
@@ -463,23 +644,14 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::HERO_GATHERER:
 		ret = new GathererHero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
-		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::HERO);
 		break;
 
 	case ENTITY_TYPE::BUILDING:
-		ret = new Building({ (float)x,(float)y }, testBuilding, alignement);
+		ret = new Building({ (float)x,(float)y }, sampleBuilding, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_TURRET:
-		ret = new Turret({ (float)x,(float)y }, testTurret, alignement);
-		if (alignement == ENTITY_ALIGNEMENT::PLAYER)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::TURRET);
-		}
-		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::TURRET); //TODO CHANGE THIS FOR ENEMY TURRET
-		}
+		ret = new Turret({ (float)x,(float)y }, sampleTurret, alignement);
 
 		break;
 
@@ -488,15 +660,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_BASE:
 		ret = new Base({ (float)x,(float)y }, sampleBase, alignement);
-		if (alignement == ENTITY_ALIGNEMENT::PLAYER)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
-		}
-		else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
-		{
-			ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::BASE);
-		}
-
 		app->ai->PushBase((Base*)ret);
 		break;
 
@@ -505,7 +668,6 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::ENEMY:
 		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, ENTITY_ALIGNEMENT::ENEMY);
-		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::ENEMY);
 		break;
 
 	default:
@@ -521,42 +683,94 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 }
 
 
-// Checks if there is an entity in the mouse Click position 
-Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos)
+Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 {
-	int numEntities = entityVector.size();
+	switch (type)
+	{
+	case ENTITY_TYPE::SPAWNER:
+		return sampleSpawner;
+		break;
+
+	case ENTITY_TYPE::HERO_MELEE:
+		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_GATHERER:
+		return sampleGatherer;
+		break;
+
+	case ENTITY_TYPE::ENEMY:
+		return sampleEnemy;
+		break;
+
+	case ENTITY_TYPE::BUILDING:
+		return sampleBuilding;
+		break;
+
+	case ENTITY_TYPE::BLDG_TURRET:
+		return sampleTurret;
+		break;
+
+	case ENTITY_TYPE::BLDG_BASE:
+		return sampleBase;
+		break;
+
+	default:
+		return nullptr;
+		break;
+	}
+}
+
+
+// Checks if there is an entity in the mouse Click position 
+Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
+{
+	Entity* ret = nullptr;
 
 	Collider* col;
+	ENTITY_TYPE type;
+
+	int numEntities = entityVector.size();
 
 	for (int i = 0; i < numEntities; i++)
 	{
+		type = entityVector[i]->GetType();
 		col = entityVector[i]->GetCollider();
 
 		//dynamic entities get priority over static entities
-
-		if (col != nullptr && (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() ==  ENTITY_TYPE::ENEMY))
+		if (mousePos.PointInRect(&col->rect))
 		{
-			if (mousePos.PointInRect(&col->rect))
+			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED))
 			{
+				if (focus == true)
+				{
+					for (int j = i + 1; j < numEntities; j++)
+					{
+						entityVector[j]->selectedByPlayer = false;
+					}
+
+					entityVector[i]->selectedByPlayer = true;
+				}
+
 				return entityVector[i];
 			}
+
+			ret = entityVector[i];
+		}
+
+		else
+		{
+			if (focus == true)
+				entityVector[i]->selectedByPlayer = false;
 		}
 	}
-	for (int i = 0; i < numEntities; i++)
+
+	if (ret != nullptr && focus == true)
 	{
-		col = entityVector[i]->GetCollider();
-
-		if (col != nullptr) {
-			{
-				if (mousePos.PointInRect(&col->rect))
-				{
-					return entityVector[i];
-				}
-			}
-		}
+		ret->selectedByPlayer = true;
 	}
 
-	return nullptr;
+	return ret;
 }
 
 
@@ -567,19 +781,31 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 	heroPlayerVector->clear();
 
 	Collider* col;
+	ENTITY_TYPE type;
 
 	for (int i = 0; i < numHeroes; i++)
 	{
-		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_MELEE)
 		{
 			col = entityVector[i]->GetCollider();
+
+			Hero* thisHero;
+			thisHero = (Hero*)entityVector[i];
 
 			if (col != nullptr)
 			{
 				if (col->CheckCollision(selection))
 				{
-					heroPlayerVector->push_back((Hero*)entityVector[i]);
+					thisHero->selectedByPlayer = true;
+					heroPlayerVector->push_back(thisHero);
 				}
+				else
+				{
+					thisHero->selectedByPlayer = false;
+				}
+
 			}
 		}
 	}
@@ -594,19 +820,7 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		type = entityVector[i]->GetType();
-
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
-		{
-			Hero* hero = (Hero*)entityVector[i];
-			hero->CheckObjecive(entity);
-		}
-
-		else if (type == ENTITY_TYPE::ENEMY)
-		{
-			Enemy* enemy = (Enemy*)entityVector[i];
-			enemy->CheckObjecive(entity);
-		}
+		entityVector[i]->CheckObjective(entity);
 	}
 }
 
@@ -635,7 +849,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	{
 		alignement = entityVector[i]->GetAlignment();
 
-		if (alignement != alignementToSearch)
+		if (alignement != alignementToSearch || entityVector[i]->toDelete == true)
 		{
 			continue;
 		}
@@ -657,19 +871,76 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 void ModuleEntityManager::RemoveDeletedEntities()
 {
-	int numEntities = entityVector.size();
+	ENTITY_TYPE type;
 
-	for (int i = 0; i < numEntities; i++)
+	for (int i = 0; i < entityVector.size(); i++)
 	{
 		if (entityVector[i]->toDelete == true)
 		{
 			CheckDynamicEntitysObjectives(entityVector[i]);
+			app->player->CheckFocusedEntity(entityVector[i]);
+
+			type = entityVector[i]->GetType();
 
 			delete entityVector[i];
 			entityVector[i] = nullptr;
 			entityVector.erase(entityVector.begin() + i);
+			
+			i--;
+
+			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+			{
+				SearchHeroesAlive();
+			}
+
+			//VERTICAL SLICE
+			if (type == ENTITY_TYPE::ENEMY)
+			{
+				SearchEnemiesAlive();
+			}
 		}
 	}
+
+}
+
+
+void ModuleEntityManager::SearchHeroesAlive()
+{
+	ENTITY_TYPE type;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+			return;
+	}
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_LOSE, EVENT_ENUM::NULL_EVENT);
+}
+
+
+void ModuleEntityManager::SearchEnemiesAlive()
+{
+	ENTITY_TYPE type;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::ENEMY)
+			return;
+	}
+
+	if (app->testScene->IsNight() == true)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
+	}
+	
 
 }
 
@@ -680,39 +951,40 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	float w, h;
 
-	Collider* col;
-	fMPoint pos;
+	Collider* col = nullptr;
+	fMPoint pos{0,0};
 
 	for (int i = 0; i < numEntities; i++)
 	{
 		pos = entityVector[i]->GetPosition();
-		
+
 		col = entityVector[i]->GetCollider();
 		if (col != nullptr)
 		{
 			w = col->rect.w;
 			h = col->rect.h;
 		}
-		
 
-		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) {
 
-			assert((int)ENTITY_TYPE::MAX_TYPE == MAX_ENTITY_TYPES);
+		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) 
+		{
+			//If a Entity Type is added, update the switch :D
 
 			switch (entityVector[i]->GetType())
 			{
 			case ENTITY_TYPE::BUILDING:
 			case ENTITY_TYPE::BLDG_BARRICADE:
 			case ENTITY_TYPE::BLDG_BASE:
-			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 				//case ENTITY_TYPE::BLDG_CORE:	CORE_CONSTRUCTOR_NEEDED
 				buildingVector.push_back(entityVector[i]);
 				break;
+			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::ENEMY:
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
+
 				movableEntityVector.push_back(entityVector[i]);
 				break;
 
@@ -724,6 +996,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	EntityQuickSort(movableEntityVector, 0, movableEntityVector.size());
 	EntityQuickSort(buildingVector, 0, buildingVector.size());
+
+	selectedVector = movableEntityVector;
 
 	while (buildingVector.size() != 0 || movableEntityVector.size() != 0)
 	{
@@ -783,14 +1057,82 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	renderVector.clear();
 
+	//icons
+	for (int i = 0; i < selectedVector.size(); i++)
+	{
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED))
+		{
+
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Hero* thisHero = (Hero*)selectedVector[i];
+					thisHero->DrawSelected();
+				}
+			}
+		}
+
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::BLDG_TURRET))
+		{
+
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Turret* thisTurret = (Turret*)selectedVector[i];
+					thisTurret->DrawSelected();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Turret* thisTurret = (Turret*)selectedVector[i];
+					thisTurret->DrawSelected();
+				}
+			}
+		}
+
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		{
+			if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+			else if (selectedVector[i]->visionEntity != nullptr)
+			{
+				if (selectedVector[i]->visionEntity->isVisible)
+				{
+					Enemy* thisEnemy = (Enemy*)selectedVector[i];
+					thisEnemy->DrawOnSelect();
+				}
+			}
+		}
+
+	}
+	selectedVector.clear();
 }
+
 
 void ModuleEntityManager::DrawOnlyStaticBuildings()
 {
 	int numEntities = entityVector.size();
 	float scale = app->minimap->minimapScaleRelation;
 	float halfWidth = app->minimap->minimapWidth * 0.5f;
-	
+
 	for (int i = 0; i < numEntities; i++)
 	{
 		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
@@ -798,11 +1140,10 @@ void ModuleEntityManager::DrawOnlyStaticBuildings()
 
 			entityVector[i]->MinimapDraw(scale, halfWidth);
 		}
-		
+
 	}
 
 }
-
 
 
 void ModuleEntityManager::EntityQuickSort(std::vector<Entity*>& vector, int low, int high)
@@ -843,7 +1184,10 @@ int ModuleEntityManager::EntityPartition(std::vector<Entity*>& vector, int low, 
 
 void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 {
-	iMPoint pos;
+	iMPoint pos = app->input->GetMousePosScreen();
+	int entityNum = entityVector.size();
+	pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
+	pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 
 	switch (eventId)
 	{
@@ -870,64 +1214,55 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DESACTIVATE_GODMODE_HEROES:
-		RemoveDeletedEntities();
+		DesactivateGodModeHeroes();
 		break;
 
 	case EVENT_ENUM::SPAWN_BASE:
 
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
 		AddEntity(ENTITY_TYPE::BLDG_BASE, pos.x, pos.y);
 		break;
 
 
 	case EVENT_ENUM::SPAWN_BUILDING:
-		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+
 		AddEntity(ENTITY_TYPE::BUILDING, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_ENEMY:
-		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+
 		AddEntity(ENTITY_TYPE::ENEMY, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_GATHERER_HERO:
-		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+
 		AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_MELEE_HERO:
-		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+
 		AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_RANGED_HERO:
-		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+
 		AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_TURRET:
-		
-		app->input->GetMousePositionRaw(pos.x, pos.y);
-		pos.x = (-app->render->currentCamX + pos.x) / app->win->GetScale();
-		pos.y = (-app->render->currentCamY + pos.y) / app->win->GetScale();
+
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::GATHERER_RESURRECT:
+		// TODO REVIVE HEROES FUNCTION
+		break;
+
+	case EVENT_ENUM::RANGED_RESURRECT:
+
+		break;
+
+	case EVENT_ENUM::MELEE_RESURRECT:
+
 		break;
 	}
 
@@ -941,7 +1276,7 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 
 	DynamicEntity* it;
 
-	for (int i = 0; i < entityVector.size(); ++i)
+	for (uint i = 0; i < entityVector.size(); ++i)
 	{
 		if (!entityVector[i]->dynamic)
 		{
@@ -1000,29 +1335,27 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 	{
 	case ENTITY_TYPE::BUILDING:
 
-		SDL_QueryTexture(testBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+		SDL_QueryTexture(sampleBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
 
 		x -= rect.w / 2;
 		y -= rect.h / 2;
 
-		testBuilding->ActivateTransparency();
-		testBuilding->SetPosition(x, y);
-		testBuilding->Draw(0);
+		sampleBuilding->ActivateTransparency();
+		sampleBuilding->SetPosition(x, y);
+		sampleBuilding->Draw(0);
 		break;
 
 
 	case ENTITY_TYPE::BLDG_TURRET:
 
-		/* ¿WHY?
-		
-		SDL_QueryTexture(testTurret->GetTexture(), NULL, NULL, &rect.w, &rect.h);
+		rect = sampleTurret->GetCollider()->rect;
 
-		x -= rect.w / 2;
-		y -= rect.h / 2;
+		x -= rect.w * 0.5f;
+		y -= rect.h;
 
-		sampleBase->ActivateTransparency();
-		sampleBase->SetPosition(x, y);
-		sampleBase->Draw(0);*/
+		sampleTurret->ActivateTransparency();
+		sampleTurret->SetPosition(x, y);
+		sampleTurret->Draw(0.0000001);
 
 
 		break;
@@ -1057,6 +1390,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 }
 
+
 void ModuleEntityManager::DeleteAllEntities()
 {
 	int numEntities = entityVector.size();
@@ -1069,6 +1403,7 @@ void ModuleEntityManager::DeleteAllEntities()
 
 	entityVector.clear();
 }
+
 
 Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 {
@@ -1104,6 +1439,7 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 	return hero;
 }
 
+
 Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thisUnit)
 {
 	fMPoint pos = thisUnit->GetPosition();
@@ -1111,7 +1447,7 @@ Entity* ModuleEntityManager::SearchUnitsInRange(float checkdistance, Entity* thi
 	Entity* ret = nullptr;
 	float currDistance = 0.f;
 
-	for (int i = 0; i < entityVector.size(); ++i)
+	for (uint i = 0; i < entityVector.size(); ++i)
 	{
 		if (entityVector[i] != thisUnit && thisUnit->IsOpositeAlignement(entityVector[i]->GetAlignment()) && !entityVector[i]->toDelete)
 		{
@@ -1185,6 +1521,7 @@ void ModuleEntityManager::KillAllEnemies()
 	}
 }
 
+
 bool ModuleEntityManager::BuildArea(skillArea* areaToGenerate, int width, int height, int radius)
 {
 	switch (areaToGenerate->form)
@@ -1236,6 +1573,7 @@ unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 	return circle;
 }
 
+
 unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
 {
 	unsigned short* quad = nullptr;
@@ -1252,6 +1590,7 @@ unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
 
 	return quad;
 }
+
 
 skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPoint>* toFill, iMPoint center)
 {
@@ -1275,6 +1614,7 @@ skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPo
 
 	return ret;
 }
+
 
 void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center)
 {
@@ -1304,10 +1644,11 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 	}
 }
 
-bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
-	SKILL_TYPE type, bool hurtYourself,  Entity* objective)
+
+int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
+	SKILL_TYPE type, bool hurtYourself, Entity* objective)
 {
-	bool ret = false;
+	int ret = -1;
 
 	switch (type)
 	{
@@ -1316,6 +1657,7 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	break;
 	case SKILL_TYPE::AREA_OF_EFFECT:
 	{
+		ret = 0;
 		int numEntities = entityVector.size();
 		Collider* entColl = nullptr;
 		float halfH = app->map->data.tileHeight * 0.5;
@@ -1325,16 +1667,24 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 		for (int i = 0; i < numEntities; i++)
 		{
 			if (entityVector[i]->GetAlignment() != target)
-				continue;
+			{
+				if (!hurtYourself || entityVector[i] != objective)
+				{
+					continue;
+				}
+			}
 
 			entColl = entityVector[i]->GetCollider();
+
+			if (entColl == nullptr)
+				continue;
 
 			switch (area->form)
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad) || (entityVector[i] == objective && hurtYourself) )
-					entityVector[i]->RecieveDamage(dmg);
+				if (entColl->CheckCollisionCircle(pivot, newRad))
+					ret += entityVector[i]->RecieveDamage(dmg);
 			}
 			break;
 			case AREA_TYPE::QUAD:
@@ -1346,5 +1696,16 @@ bool ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, 
 	}
 	break;
 	}
-	return true;
+	return ret;
+}
+
+
+void ModuleEntityManager::ResetEntityManager()
+{
+	DeleteAllEntities();
+
+	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+
+	app->fowManager->DeleteAllFoWEntites();
 }

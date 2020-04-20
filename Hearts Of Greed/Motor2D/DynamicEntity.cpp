@@ -16,17 +16,31 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	moveRange1(moveRange1),
 	moveRange2(moveRange2),
 	unitSpeed(speed),
+
 	isMoving(false),
-	current_animation(nullptr),
+
 	toMove{ 0,0 },
+	framesSinceRequest(0),
+	framesToRquest(FRAMES_PER_PATH_REQUEST),
+
 	dir(FACE_DIR::SOUTH_EAST)
-{}
+{
+	if (this->align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		int randomCounter = rand() % FRAMES_PER_PATH_REQUEST;
+		framesToRquest += randomCounter;
+	}
+}
+
 
 DynamicEntity::~DynamicEntity()
 {
-	if (path.size() > 0)
-		path.clear();
+	path.clear();
+	closeEntityVector.clear();
+	collidingEntityVector.clear();
+
 }
+
 
 bool DynamicEntity::Move(float dt)
 {
@@ -40,14 +54,19 @@ bool DynamicEntity::Move(float dt)
 	fMPoint pathSpeed = { 0,0 };
 	fMPoint nextPoint = { 0,0 };
 
-	if (path.size() < 2)
+	if (framesSinceRequest >= framesToRquest)
+	{
 		app->pathfinding->RequestPath(this, &path);
+		framesSinceRequest = 0;
+	}
 
 	if (path.size() > 0)
 	{
 		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
 
 		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
+
+		framesSinceRequest++;
 	}
 	dir = DetermineDirection(pathSpeed);
 
@@ -71,6 +90,7 @@ bool DynamicEntity::Move(float dt)
 	{
 		return true;
 	}
+
 
 	return false;
 }
@@ -118,18 +138,20 @@ FACE_DIR DynamicEntity::DetermineDirection(fMPoint faceDir)
 
 void DynamicEntity::GroupMovement(float dt)
 {
+	BROFILER_CATEGORY("Group Mov.", Profiler::Color::BlanchedAlmond);
+
 
 	toMove = { 0,0 };
 	// ----------------------------------------------------------------
 
-	app->entityManager->GetEntityNeighbours(&closeEntityList, &collidingEntityList, this);
+	app->entityManager->GetEntityNeighbours(&closeEntityVector, &collidingEntityVector, this);
 
 	//---------------------------------------------------------------- 
 	fMPoint separationSpeed;
 
-	if (!collidingEntityList.empty())
+	if (!collidingEntityVector.empty())
 	{
-		separationSpeed = GetSeparationSpeed(collidingEntityList, position);
+		separationSpeed = GetSeparationSpeed(collidingEntityVector, position);
 	}
 	else
 	{
@@ -140,9 +162,9 @@ void DynamicEntity::GroupMovement(float dt)
 	// ---------------------------------------------------------------- 
 
 	fMPoint cohesionSpeed = { 0,0 };
-	if (!closeEntityList.empty())
+	if (!closeEntityVector.empty())
 	{
-		cohesionSpeed = GetCohesionSpeed(closeEntityList, position);
+		cohesionSpeed = GetCohesionSpeed(closeEntityVector, position);
 	}
 	else
 	{
@@ -153,9 +175,9 @@ void DynamicEntity::GroupMovement(float dt)
 	//---------------------------------------------------------------- 
 
 	fMPoint alignmentSpeed = { 0,0 };
-	if (!closeEntityList.empty() && (abs(toMove.x) > 0 || abs(toMove.y) > 0))
+	if (!closeEntityVector.empty() && (abs(toMove.x) > 0 || abs(toMove.y) > 0))
 	{
-		alignmentSpeed = GetDirectionSpeed(closeEntityList);
+		alignmentSpeed = GetDirectionSpeed(closeEntityVector);
 	}
 	else
 	{
@@ -209,6 +231,7 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 		separationSpeed.y /= spdNorm;
 	}
 
+	colliding_entity_list.clear();
 
 	return separationSpeed;
 }
@@ -255,6 +278,8 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_
 		cohesionSpeed.y = cohesionSpeed.y / norm;
 	}
 
+
+	close_entity_list.clear();
 	return cohesionSpeed;
 }
 
@@ -284,22 +309,28 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 		alignmentSpeed = alignmentSpeed / norm;
 	}
 
+	close_entity_list.clear();
+
 	return alignmentSpeed;
 }
 
 bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 {
+	BROFILER_CATEGORY("Generate Path", Profiler::Color::Aquamarine);
+
 	iMPoint goal = { 0,0 };
 
 	origin = app->map->WorldToMap(round(position.x), round(position.y));
 	goal = app->map->WorldToMap(x, y);
 
-	if (app->pathfinding->CreatePath(origin, goal, 1, this) != PATH_TYPE::NO_TYPE)
+	if (app->pathfinding->CreatePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
 	{
 		path.clear();
 		app->pathfinding->RequestPath(this, &path);
+
 		if (path.size() > 0)
 			path.erase(path.begin());
+
 		return true;
 	}
 
@@ -308,6 +339,11 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 {
+	if (!app->debugMode)
+	{
+		return;
+	}
+
 	//Position --------------------------------------
 	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
 
@@ -320,36 +356,17 @@ void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 
 	// Debug pathfinding ------------------------------
 
-	if (!app->debugMode)
-	{
-		return;
-	}
-
-	SDL_Texture* debugTex = app->entityManager->debugPathTexture;
-
 	std::vector<iMPoint>* path = &this->path;
 	for (std::vector<iMPoint>::iterator it = path->begin(); it != path->end(); ++it)
 	{
 		iMPoint pos = app->map->MapToWorld(it->x - 1, it->y);
-		app->render->Blit(debugTex, pos.x, pos.y);
+		app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y);
 	}
 }
 
-SDL_Rect DynamicEntity::GetAnimationRect(float dt)
+void DynamicEntity::DestroyPath()
 {
-	if (current_animation == NULL)
-	{
-		SDL_Rect rec;
-		rec.x = 0;
-		rec.y = 0;
-		rec.w = 0;
-		rec.h = 0;
-		return rec;
-	}
-	else
-	{
-		return current_animation->GetCurrentFrameBox(dt);
-	}
+	app->pathfinding->DeletePath(this);
 }
 
 void DynamicEntity::Draw(float dt)

@@ -1,13 +1,30 @@
 #include "Turret.h"
 #include "EntityManager.h"
 #include "Render.h"
+#include "Map.h"
+#include "FoWManager.h"
 
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& animation, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
+	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
 	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
-	animation(animation),
+
+	shootingLeft(shootingLeft),
+	shootingLeftUp(shootingLeftUp),
+	shootingLeftDown(shootingLeftDown),
+	shootingRightUp(shootingRightUp),
+	shootingRightDown(shootingRightDown),
+	shootingRight(shootingRight),
+	idleRight(idleRight),
+	idleRightDown(idleRightDown),
+	idleRightUp(idleRightUp),
+	idleLeft(idleLeft),
+	idleLeftUp(idleLeftUp),
+	idleLeftDown(idleLeftDown),
+
 	turretLvl(turretLvl),
 	attackDmg(attackDmg),
 	attackSpeed(attackSpeed),
@@ -16,17 +33,31 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	attackCD(0),
 	
 	shortTermObjective(nullptr),
-	haveOrders(false),
 
 	state(TURRET_STATES::IDLE)
-{}
+{
+	currentAnimation = &idleRightDown;
+}
 
 
 Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	Building(position, copy, alignement),
 
-	animation(copy->animation),
+
+	shootingLeft(copy->shootingLeft),
+	shootingLeftUp(copy->shootingLeftUp),
+	shootingLeftDown(copy->shootingLeftDown),
+	shootingRightUp(copy->shootingRightUp),
+	shootingRightDown(copy->shootingRightDown),
+	shootingRight(copy->shootingRight),
+	idleRight(copy->idleRight),
+	idleRightDown(copy->idleRightDown),
+	idleRightUp(copy->idleRightUp),
+	idleLeft(copy->idleLeft),
+	idleLeftUp(copy->idleLeftUp),
+	idleLeftDown(copy->idleLeftDown),
+
 	turretLvl(copy->turretLvl),
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
@@ -34,33 +65,29 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	attackCD(0),
 
+
 	shortTermObjective(nullptr),
-	haveOrders(false),
 
 	state(TURRET_STATES::IDLE)
-{}
+{
+	currentAnimation = &idleRightDown;
+	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
+}
 
 
 Turret::~Turret()
 {
 	shortTermObjective = nullptr;
+	currentAnimation = nullptr;
 
 	inputs.clear();
 
-	animation = Animation();
-}
-
-
-bool Turret::Start()
-{
-
-
-	return true;
 }
 
 
 bool Turret::PreUpdate(float dt)
 {
+	transparent = false;
 	return true;
 }
 
@@ -72,6 +99,7 @@ bool Turret::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
+
 	StateMachine();
 
 	return true;
@@ -80,16 +108,30 @@ bool Turret::Update(float dt)
 
 bool Turret::PostUpdate(float dt)
 {
+	if (app->debugMode)
+	{
+		//Position --------------------------------------
+		app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
 
+		fMPoint nextPoint = { 0,0 };
+		iMPoint origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+
+		app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
+
+	}
 	return true;
 }
 
 
-void Turret::CheckObjecive(Entity* entity)
+void Turret::CheckObjective(Entity* entity)
 {
 	if (shortTermObjective == entity)
 	{
-		shortTermObjective == nullptr;
+		shortTermObjective = nullptr;
+
+		SearchObjective();
+		inputs.push_back(TURRET_INPUTS::IN_IDLE);
 	}
 }
 
@@ -97,7 +139,6 @@ void Turret::CheckObjecive(Entity* entity)
 bool Turret::SearchObjective()
 {
 	bool ret = false;
-
 	SDL_Rect rect;
 
 	rect.x = position.x - range;
@@ -120,7 +161,12 @@ bool Turret::SearchObjective()
 
 void Turret::Draw(float dt)
 {
-	app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt));
+	if (transparent)
+	{
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue);
+	}
+	else
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));		
 }
 
 int Turret::GetLvl()
@@ -143,6 +189,35 @@ int Turret::GetRng()
 	return range;
 }
 
+void Turret::DrawSelected()
+{
+	if (selectedByPlayer == true)
+		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+}
+
+int Turret::RecieveDamage(int damage)
+{
+
+	if (hitPointsCurrent > 0)
+	{
+		hitPointsCurrent -= damage;
+
+		int randomCounter = rand() % 10;
+
+		if (randomCounter == 0)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
+		else if (randomCounter == 9)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
+
+		if (hitPointsCurrent <= 0)
+		{
+			Die();
+		}
+	}
+
+	return 0;
+}
+
 
 bool Turret::CheckAttackRange()
 {
@@ -151,14 +226,12 @@ bool Turret::CheckAttackRange()
 		return false;
 	}
 
-
 	fMPoint point = shortTermObjective->GetPosition();
 
 	if (point.DistanceManhattan(position) < range)
 	{
 		return true;
 	}
-
 	else
 	{
 		inputs.push_back(TURRET_INPUTS::IN_OUT_OF_RANGE);
@@ -169,7 +242,8 @@ bool Turret::CheckAttackRange()
 
 void Turret::Attack()
 {
-	LOG("The turret goes brbrbr");
+	if (shortTermObjective)
+		shortTermObjective->RecieveDamage(attackDmg);
 }
 
 
@@ -183,11 +257,19 @@ void Turret::Die()
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
 	}
+
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 }
 
 
 Entity* Turret::EnemyInRange()
 {
+
+
 	return nullptr;
 }
 
@@ -212,6 +294,10 @@ bool Turret::ExternalInput(std::vector<TURRET_INPUTS>& inputs, float dt)
 	if (CheckAttackRange())
 	{
 		inputs.push_back(TURRET_INPUTS::IN_ATTACK);
+	}
+	else 
+	{
+		SearchObjective();
 	}
 
 	return true;
@@ -246,6 +332,12 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 			{
 			case TURRET_INPUTS::IN_CHARGING_ATTACK:		state = TURRET_STATES::CHARGING_ATTACK;	break;
 
+			case TURRET_INPUTS::IN_OBJECTIVE_DONE:		state = TURRET_STATES::IDLE;			break;
+
+			case TURRET_INPUTS::IN_OUT_OF_RANGE:		state = TURRET_STATES::IDLE;			break;
+
+			case TURRET_INPUTS::IN_IDLE:				state = TURRET_STATES::IDLE;			break;
+
 			case TURRET_INPUTS::IN_DEAD:			    state = TURRET_STATES::DEAD;			break;
 			}
 		}	break;
@@ -260,6 +352,8 @@ TURRET_STATES Turret::ProcessFsm(std::vector<TURRET_INPUTS>& inputs)
 			case TURRET_INPUTS::IN_OBJECTIVE_DONE:  state = TURRET_STATES::IDLE;				break;
 
 			case TURRET_INPUTS::IN_OUT_OF_RANGE:	state = TURRET_STATES::IDLE;				break;
+
+			case TURRET_INPUTS::IN_IDLE:			state = TURRET_STATES::IDLE;				break;
 
 			case TURRET_INPUTS::IN_DEAD:			state = TURRET_STATES::DEAD;				break;
 			}
@@ -291,18 +385,126 @@ void Turret::StateMachine()
 		if (attackCD == 0)
 		{
 			Attack();
-			attackCD += 0.001;
-		}
+			if (shortTermObjective != nullptr)
+				dir = DetermineDirection(shortTermObjective->position - position - offset);
 
-		inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
+			attackCD += 0.01f;
+		}
+		else 
+		{
+			inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
+		}
+		
 		break;
 
 	case TURRET_STATES::CHARGING_ATTACK:
+
+		app->audio->PlayFx(app->entityManager->turretShooting, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
+
 		break;
 
 	case TURRET_STATES::DEAD:
 		Die();
 		break;
 	}
+
+	SetAnimation(state);
 }
 
+FACE_DIR Turret::DetermineDirection(fMPoint faceDir)
+{
+	FACE_DIR newDir = dir;
+
+	if (faceDir.x > 0)
+	{
+		if (faceDir.y < -0.1f)
+		{
+			newDir = FACE_DIR::NORTH_EAST;
+
+		}
+		else if (faceDir.y > 0.1f)
+		{
+			newDir = FACE_DIR::SOUTH_EAST;
+		}
+		else
+		{
+			newDir = FACE_DIR::EAST;
+		}
+	}
+	else if (faceDir.x < 0)
+	{
+		if (faceDir.y < -0.1f)
+		{
+			newDir = FACE_DIR::NORTH_WEST;
+		}
+		else if (faceDir.y > 0.1f)
+		{
+			newDir = FACE_DIR::SOUTH_WEST;
+
+		}
+		else
+		{
+			newDir = FACE_DIR::WEST;
+		}
+	}
+
+
+	return newDir;
+}
+
+void Turret::SetAnimation(TURRET_STATES state)
+{
+	switch (state)
+	{
+	case TURRET_STATES::IDLE:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &idleRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &idleLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &idleRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &idleRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &idleLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &idleLeft;
+			break;
+		}
+	}
+	break;
+	case TURRET_STATES::ATTACK:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &shootingRightUp;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &shootingLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &shootingRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &shootingRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &shootingLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &shootingLeft;
+			break;
+		}
+		break;
+	}
+	}
+}

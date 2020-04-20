@@ -3,7 +3,7 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
-#define TIME_TRIGGER 0.001
+#define TIME_TRIGGER 0.001f
 
 #include "Animation.h"
 #include "DynamicEntity.h"
@@ -88,13 +88,14 @@ public:
 		Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
-		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
-	~Hero();
+
+	virtual ~Hero();
 
 	bool MoveTo(int x, int y, bool haveObjective = true);
 	bool LockOn(Entity*);
@@ -112,7 +113,7 @@ public:
 	bool GetExperience(int xp);
 	bool GetLevel();
 
-	void CheckObjecive(Entity* entity);
+	void CheckObjective(Entity* entity);
 	void Draw(float dt);
 	void DrawArea();
 
@@ -137,11 +138,13 @@ public:
 	virtual bool ExecuteSkill2();
 	virtual bool ExecuteSkill3();
 
+	void DrawSelected();
 
+	//This is a placeholder for particles
+	virtual bool DrawVfx(float dt);
+	bool drawingVfx;
 
 	void SkillCanceled();
-	void SkillDone();
-
 
 
 private:
@@ -150,8 +153,8 @@ private:
 	void Attack();
 	void Die();
 
-	void RecoverHealth();
-	void RecoverEnergy();
+	void RecoverHealth(float dt);
+	void RecoverEnergy(float dt);
 
 	void InternalInput(std::vector<HERO_INPUTS>& inputs, float dt);
 	HERO_STATES ProcessFsm(std::vector<HERO_INPUTS>& inputs);
@@ -159,6 +162,10 @@ private:
 	void StateMachine(float dt);
 
 	void SearchForNewObjective();
+
+	void FeelingSecure(float dt);
+
+	virtual void PlayGenericNoise();
 
 protected:
 	void SetAnimation(HERO_STATES currState);
@@ -170,10 +177,19 @@ public:
 
 	int recoveryHitPointsRate;
 	int energyPoints;
+	int maxEnergyPoints;
 	int recoveryEnergyRate;
+
+	float recoveringHealth;
+	float recoveringEnergy;
+	float feelingSecure;
 
 	int attackDamage;
 	int attackRange;
+
+	bool gettingAttacked;
+
+	int skill1Cost;
 
 	float attackSpeed;
 	float skill1RecoverTime;
@@ -194,6 +210,8 @@ public:
 	bool skill2Charged;
 	bool skill3Charged;
 
+	bool skillExecutionDelay;
+
 	int visionDistance;
 
 	float attackCooldown;
@@ -201,8 +219,10 @@ public:
 	float cooldownHability2;
 	float cooldownHability3;
 
+	float visionInPx;
+
 	Entity* objective;
-	bool selected;
+	//bool selected;
 
 	Animation walkLeft;
 	Animation walkLeftUp;
@@ -247,6 +267,9 @@ public:
 
 	skillArea* currAreaInfo;
 	Skill skill1;
+
+	float damageTakenTimer;
+
 
 };
 

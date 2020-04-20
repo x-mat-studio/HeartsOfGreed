@@ -34,6 +34,9 @@ bool ModuleFonts::Awake(pugi::xml_node& conf)
 
 		default = fonts[0];
 	}
+	if (default == nullptr)
+		return false;
+
 
 	return ret;
 }
@@ -76,14 +79,14 @@ TTF_Font* const ModuleFonts::Load(const char* path, int size)
 // Print text using font
 SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 {
-	SDL_Texture* ret = NULL;
+	SDL_Texture* ret = nullptr;
 
 	if (font == nullptr)
 		font = default;
 
 	SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped((font) ? font : font, text, color, app->win->width);
 
-	if (surface == NULL)
+	if (surface == nullptr)
 	{
 		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
@@ -97,7 +100,7 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 }
 
 // calculate size of a text
-bool ModuleFonts::CalcSize(const char* text, int& width, int& height, _TTF_Font* font) const
+bool ModuleFonts::CalcSize(const char* text, int& width, int& height, TTF_Font* font) const
 {
 	if (font == NULL)
 		font = default;

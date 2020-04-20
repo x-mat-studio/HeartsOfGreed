@@ -95,6 +95,7 @@ bool ModuleTextures::UnLoad(SDL_Texture* texture)
 		if (texture == textures[i])
 		{
 			SDL_DestroyTexture(textures[i]);
+			textures[i] = nullptr;
 			textures.erase(textures.begin() + i);
 			return true;
 		}
@@ -108,6 +109,7 @@ bool ModuleTextures::UnLoad(SDL_Texture* texture)
 // Translate a surface into a texture
 SDL_Texture* const ModuleTextures::LoadSurface(SDL_Surface* surface)
 {
+
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
 
 

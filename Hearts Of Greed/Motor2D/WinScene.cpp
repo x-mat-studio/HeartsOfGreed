@@ -11,9 +11,9 @@
 #include "UI_Text.h"
 #include "Window.h"
 
-ModuleWinScene::ModuleWinScene()
+ModuleWinScene::ModuleWinScene(): fadeTime(0)
 {
-
+	name.create("winScene");
 }
 
 
@@ -23,8 +23,13 @@ ModuleWinScene::~ModuleWinScene()
 }
 
 
-bool  ModuleWinScene::Awake(pugi::xml_node&)
+bool  ModuleWinScene::Awake(pugi::xml_node&config)
 {
+
+	medalPos.x = config.attribute("medalPosX").as_int(0);
+	medalPos.y = config.attribute("medalPosY").as_int(0);
+	fadeTime = config.attribute("fadeTime").as_float(0);
+
 	return true;
 }
 
@@ -59,7 +64,7 @@ bool  ModuleWinScene::Update(float dt)
 	CheckListener(this);
 
 	app->render->Blit(youWon,0,0, NULL, false, false);
-	app->render->Blit(medalWin, 50, 0, NULL, false, false);
+	app->render->Blit(medalWin, medalPos.x, medalPos.y, NULL, false, false);
 
 	return true;
 }
@@ -72,7 +77,7 @@ bool  ModuleWinScene::PostUpdate(float dt)
 
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) {
 
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {

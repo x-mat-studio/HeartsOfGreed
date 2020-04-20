@@ -4,7 +4,9 @@ UI_Image::UI_Image(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect r
 {}
 
 UI_Image::~UI_Image()
-{}
+{
+	texture = nullptr;
+}
 
 bool UI_Image::Update(float dt)
 {
@@ -13,12 +15,18 @@ bool UI_Image::Update(float dt)
 		Hide(dt);
 	}
 
+	if (parent != nullptr)
+	{
+		enabled = parent->enabled;
+	}
+
 	return true;
 }
 
 bool UI_Image::PostUpdate(float dt)
 {
-	Draw(texture);
+	if (enabled && texture != nullptr)
+		Draw(texture);
 
 	return true;
 }

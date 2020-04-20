@@ -1,14 +1,32 @@
 #include "UI_Healthbar.h"
+#include "Player.h"
+#include "Hero.h"
 
 UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE draggable) : UI(positionValue, father, uiType, rect, uiName, draggable),
 	originalWidth(rect.w),
-	currentHealth(nullptr)
+	entity(entity)
 {
 	if (entity != nullptr)
 	{
-		maxHealth = &entity->hitPointsMax;
-		currentHealth = &entity->hitPointsCurrent;
-		previousHealth = *currentHealth;
+		if (this->name == "Ebar")
+		{
+			Hero* hero = (Hero*)entity;
+			maxValue = &hero->maxEnergyPoints;
+			currentValue = &hero->energyPoints;
+			previousValue = -1;
+		}
+		else
+		{
+			maxValue = &entity->hitPointsMax;
+			currentValue = &entity->hitPointsCurrent;
+			previousValue = -1;
+		}
+	}
+	else
+	{
+		maxValue = nullptr;
+		currentValue = nullptr;
+		previousValue = 0;
 	}
 }
 
@@ -27,8 +45,6 @@ bool UI_Healthbar::PreUpdate(float dt)
 
 bool UI_Healthbar::Update(float dt)
 {
-	AdjustHealth();
-	
 	if (hiding_unhiding)
 	{
 		Hide(dt);
@@ -39,24 +55,33 @@ bool UI_Healthbar::Update(float dt)
 
 bool UI_Healthbar::PostUpdate(float dt)
 {
-	previousHealth = *currentHealth;
-	
-	Draw(texture);
+	if (entity != nullptr)
+	{
+		AdjustValue();
+		previousValue = *currentValue;
+		Draw(texture);
+	}
 
 	return true;
 }
 
 void UI_Healthbar::HandleInput()
-{
+{}
 
-}
-
-void UI_Healthbar::AdjustHealth()
+void UI_Healthbar::AdjustValue()
 {
-	if (*currentHealth > 0) {
-		if (currentHealth != nullptr && *currentHealth != previousHealth)
+	if (currentValue != nullptr) 
+	{
+		if (*currentValue > 0 && *currentValue != previousValue && *maxValue > 0)
 		{
-			box.w = originalWidth * (*currentHealth) / (*maxHealth);
+			box.w = originalWidth * (*currentValue) / (*maxValue);
 		}
 	}
+}
+
+void UI_Healthbar::EntityDeath()
+{
+	this->entity = nullptr;
+	this->currentValue = nullptr;
+	this->maxValue = nullptr;
 }

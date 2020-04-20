@@ -58,6 +58,10 @@ public:
 
 	float  AddScale(float addedScale);
 
+private:
+
+	void ExecuteEvent(EVENT_ENUM eventId);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

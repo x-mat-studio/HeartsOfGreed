@@ -10,6 +10,9 @@
 
 class Hero;
 class GathererHero;
+class MeleeHero;
+class RangedHero;
+
 class Building;
 class DynamicEntity;
 class Enemy;
@@ -75,15 +78,20 @@ public:
 
 
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
+	Entity* GetSample(ENTITY_TYPE);
 
 
 	void RemoveDeletedEntities();
 	void DeleteAllEntities();
 
 
-	Entity* CheckEntityOnClick(iMPoint mousePos);
+	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
+
+
+	void SearchHeroesAlive();
+	void SearchEnemiesAlive();
 
 
 	Entity* SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT alig);
@@ -107,10 +115,12 @@ public:
 	skillArea* RequestArea(SKILL_ID id, std::vector<iMPoint>* toFill, iMPoint center);
 
 	//This & skill Struct need re-work to accept single target
-	bool ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr);
+	int ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr);
 
 	//function used for minimap
 	void DrawOnlyStaticBuildings();
+
+	void ResetEntityManager();
 
 private:
 
@@ -135,7 +145,13 @@ private:
 
 public:
 
+	SDL_Texture* selectedTexture;
+	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
+	SDL_Texture* explosionTexture;
+
+	
+	//Sounds
 	int wanamingoRoar;
 	int wanamingoRoar2;
 	int wanamingoGetsHit;
@@ -147,7 +163,33 @@ public:
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
 
-	Building* testBuilding;
+	int buildingGetsHit;
+	int buildingGetsHit2;
+
+	int turretShooting;
+
+	int suitman1Skill;
+
+	int suitman1Skill2;
+	int armored1Skill2;
+
+	int noise1Suitman;
+	int noise2Suitman;
+	int noise3Suitman;
+	int noise4Suitman;
+
+	int noise1Armored;
+	int noise2Armored;
+	int noise3Armored;
+	int noise4Armored;
+
+	int lvlup;
+
+	//public textures
+	SDL_Texture* base2Texture;
+	SDL_Texture* base2TextureEnemy;
+	SDL_Texture* base2TextureSelected;
+	SDL_Texture* base2TextureSelectedEnemy;
 
 private:
 
@@ -158,6 +200,7 @@ private:
 	std::vector <Entity*> renderVector;
 	std::vector <Entity*> movableEntityVector;
 	std::vector <Entity*> buildingVector;
+	std::vector <Entity*> selectedVector;
 
 	SDL_Texture* suitManTexture;
 	SDL_Texture* armorMaleTexture;
@@ -166,24 +209,31 @@ private:
 
 	
 	SDL_Texture* base1Texture;
-	SDL_Texture* base2Texture;
+
+	
+
+	SDL_Texture* deco3Selected;
 
 	SDL_Texture* turretTexture;
 
 	SDL_Texture* enemyTexture;
 
+	//Samples
+
 	GathererHero* sampleGatherer;
+	MeleeHero* sampleMelee;
 
 	Enemy* sampleEnemy;
 
 	Spawner* sampleSpawner;
 
-	Building* blueBuilding;
+	Building* sampleBuilding;
 	Base* sampleBase;
 
-	Turret* testTurret;
+	Turret* sampleTurret;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
+
 
 };
 

@@ -5,6 +5,7 @@
 
 #include "Entity.h"
 
+
 class Core;
 class UpgradeCenter;
 class Turret;
@@ -45,10 +46,12 @@ public:
 
 	Building();
 
+	virtual ~Building();
+
 	void Destroy();
 
 	//Destructor
-	~Building();
+	
 
 	// Called each loop iteration
 	bool PreUpdate(float dt);
@@ -66,29 +69,27 @@ private:
 	void ChangeBuildingState(BUILDING_STATE state);
 
 	void BeingRepaired();
-	void RecoverHealth();
 
 	void Contruct();
-
-
 
 public:
 
 	BUILDING_STATE	currentState;
 	BUILDING_DECOR myDecor;
 	Base* myBase;
+	SDL_Texture* selectedTexture;
 
 protected:
 	int			recoveryHitPointsRate;
 
-private:
+	bool		transparent;
 	int			transparencyValue;
 
+private:
 	
 	int			xpOnDeath;
 	int			buildingCost;
 
-	bool		transparent;
 	bool		selected;
 };
 

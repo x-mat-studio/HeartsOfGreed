@@ -51,7 +51,7 @@ void ModuleMap::Draw()
 
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != "Collision" && data.layers[f]->name != "BuildingGeneration") {
+		if (data.layers[f]->name != (P2SString)"Collision" && data.layers[f]->name != (P2SString)"BuildingGeneration") {
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
@@ -106,7 +106,7 @@ void ModuleMap::DrawMinimap()
 	float halfWidth = app->minimap->minimapWidth * 0.5f;
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != "Collision") {
+		if (data.layers[f]->name != (P2SString)"Collision") {
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
@@ -124,8 +124,8 @@ void ModuleMap::DrawMinimap()
 
 						worldX += app->render->currentCamX;
 						worldY += app->render->currentCamY;
-						
-						app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX+halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)),scale);
+
+						app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
 
 
 					}
@@ -494,7 +494,8 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
 
-	if (layer->name == "Collision") {
+	if (layer->name == P2SString("Collision")) 
+	{
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
@@ -516,7 +517,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 			}
 		}
 	}
-	if (layer->name == "BuildingGeneration") {
+	if (layer->name == (P2SString)"BuildingGeneration") {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
@@ -763,8 +764,8 @@ bool ModuleMap::InsideCamera(float& posX, float& posY) const {
 	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
 	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
 
-	if ((posX > (up_left_cam_cornerX - (data.tileWidth * scale)) / scale && posX < down_right_cam_cornerX / scale) &&
-		((posY > (up_left_cam_cornerY - (data.tileWidth * scale)) / scale) && posY < down_right_cam_cornerY / scale)) {
+	if ((posX > (up_left_cam_cornerX / scale) - data.tileWidth && posX < down_right_cam_cornerX / scale) &&
+		(posY > (up_left_cam_cornerY / scale) - data.tileWidth && posY < down_right_cam_cornerY / scale)) {
 		return true;
 	}
 }

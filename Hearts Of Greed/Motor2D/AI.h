@@ -3,7 +3,7 @@
 #ifndef __AI_H__
 #define __AI_H__
 
-#define ENEMIES_PER_NIGHT 6
+#define ENEMIES_PER_NIGHT 5
 
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
@@ -20,9 +20,11 @@ public:
 	ModuleAI();
 	~ModuleAI();
 
-	bool Awake(pugi::xml_node&);
+	bool Start();
 
 	bool PostUpdate(float dt);
+
+	bool CleanUp();
 
 	void OnCollision(Collider*, Collider*);
 
@@ -31,6 +33,7 @@ public:
 	void PushBase(Base* building);
 	void PushSpawner(Spawner* spawner);
 
+	void ResetAI();
 private:
 	void CreateSelectionCollider(Collider*);
 	void ExecuteEvent(EVENT_ENUM eventId);

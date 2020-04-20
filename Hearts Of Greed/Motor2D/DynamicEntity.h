@@ -5,7 +5,8 @@
 
 #include "Entity.h"
 
-#define FRAMES_PER_PATHFINDING 30
+#define FRAMES_PER_PATHFINDING 20
+#define FRAMES_PER_PATH_REQUEST 30
 
 enum class FACE_DIR : int
 {
@@ -37,8 +38,14 @@ public:
 	void DebugDraw(int pivotPositionX, int pivotPositionY);
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
+	void DestroyPath();
 
 	FACE_DIR DetermineDirection(fMPoint dir);
+
+private:
+	fMPoint GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
+	fMPoint GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
+	fMPoint GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
 
 public:
 	bool isMoving;
@@ -51,23 +58,21 @@ public:
 
 	FACE_DIR dir;
 
+	int framesSinceRequest;
+	int framesToRquest;
+
 protected:
 
 	iMPoint origin, mouse;
-	Animation* current_animation;
 	std::vector <iMPoint> path;
-	std::vector<DynamicEntity*> closeEntityList;
-	std::vector<DynamicEntity*> collidingEntityList;
+	std::vector<DynamicEntity*> closeEntityVector;
+	std::vector<DynamicEntity*> collidingEntityVector;
 
 private:
 	fMPoint toMove;
 
 
-private:
-	fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
-	fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
-	fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>collidingEntityList, fMPoint position);
-	SDL_Rect GetAnimationRect(float dt);
+
 
 };
 

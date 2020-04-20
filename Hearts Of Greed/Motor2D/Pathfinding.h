@@ -6,7 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
-#define NEARBY_TILES_CHECK 10
+#define NEARBY_TILES_CHECK 8
 
 #include <list>
 #include <vector>
@@ -15,8 +15,8 @@
 #include <unordered_map>
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 4
-#define CLUSTER_SIZE_LVL 10
+#define NODE_MIN_DISTANCE 2
+#define CLUSTER_SIZE_LVL 4
 #define MAX_LEVELS 1
 
 
@@ -46,6 +46,7 @@ struct Cluster
 	Cluster();
 	Cluster(int width, int height, iMPoint& pos);
 	Cluster(const Cluster& clust);
+	~Cluster() { clustNodes.clear(); }
 
 	iMPoint pos;
 	int width, height;
@@ -69,7 +70,7 @@ struct Entrance
 
 struct Edge
 {
-	Edge(HierNode* dest, int distanceTo, EDGE_TYPE type);
+	Edge(HierNode* dest, float distanceTo, EDGE_TYPE type);
 
 	HierNode* dest;
 	float moveCost;
@@ -111,6 +112,11 @@ enum class PATH_TYPE
 struct generatedPath
 {
 	generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int lvl);
+
+	~generatedPath()
+	{
+		path.clear();
+	}
 
 	std::vector<iMPoint> path;
 	PATH_TYPE type;
@@ -167,7 +173,7 @@ public:
 
 	void SetMap(uint width, uint height, uchar* data);
 
-	PATH_TYPE CreatePath(const iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
+	PATH_TYPE CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
 
 	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination) const;
 
@@ -178,6 +184,7 @@ public:
 	uchar GetTileAt(const iMPoint& pos) const;
 
 	bool RequestPath(Entity* request, std::vector <iMPoint>* path);
+	bool DeletePath(Entity* request);
 
 private:
 
@@ -185,8 +192,8 @@ private:
 
 	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl);
 
-	std::multimap<int, PathNode>::iterator Find(iMPoint point, std::multimap<int, PathNode>* map);
-	std::multimap<int, HierNode>::iterator Find(iMPoint point, std::multimap<int, HierNode>* map);
+	std::multimap<float, PathNode>::iterator Find(iMPoint point, std::multimap<float, PathNode>* map);
+	std::multimap<float, HierNode>::iterator Find(iMPoint point, std::multimap<float, HierNode>* map);
 	int FindV(iMPoint point, std::vector<PathNode>* vec);
 	int FindV(iMPoint point, std::vector<HierNode>* vec);
 

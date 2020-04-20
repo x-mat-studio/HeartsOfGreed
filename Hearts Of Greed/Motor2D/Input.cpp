@@ -24,7 +24,6 @@ ModuleInput::~ModuleInput()
 {
 	delete[] keyboard;
 	delete[] keybindings;
-
 }
 
 // Called before render is available
@@ -68,6 +67,10 @@ bool ModuleInput::Start()
 	AddKeyBinding(SDL_SCANCODE_D, KEY_STATE::KEY_UP, EVENT_ENUM::STOP_CAMERA_RIGHT);
 	AddKeyBinding(SDL_SCANCODE_LSHIFT, KEY_STATE::KEY_DOWN, EVENT_ENUM::CAMERA_SPRINT);
 	AddKeyBinding(SDL_SCANCODE_LSHIFT, KEY_STATE::KEY_UP, EVENT_ENUM::STOP_CAMERA_SPRINT);
+	AddKeyBinding(SDL_SCANCODE_TAB, KEY_STATE::KEY_DOWN, EVENT_ENUM::HERO_CHANGE_FOCUS);
+
+	AddKeyBinding(SDL_SCANCODE_ESCAPE, KEY_STATE::KEY_DOWN, EVENT_ENUM::EXIT_MENUS);
+	AddKeyBinding(SDL_SCANCODE_ESCAPE, KEY_STATE::KEY_UP, EVENT_ENUM::EXIT_CONSTRUCTION_MODE);
 
 	//Skill bindings
 	AddKeyBinding(SDL_SCANCODE_E, KEY_STATE::KEY_DOWN, EVENT_ENUM::SKILL1);
@@ -257,19 +260,36 @@ bool ModuleInput::GetWindowEvent(EVENT_WINDOW ev)
 }
 
 
-void ModuleInput::GetMousePosition(int& x, int& y)
+void ModuleInput::GetMouseRelPosition(int& x, int& y)
 {
 	x = mouseX;
 	y = mouseY;
 }
 
 
-void ModuleInput::GetMousePositionRaw(int& x, int& y)
+void ModuleInput::GetMouseRelPositionRaw(int& x, int& y)
 {
 	x = mouseXRaw;
 	y = mouseYRaw;
 }
 
+fMPoint ModuleInput::GetMousePosScaled() const
+{
+	float scale =app->win->GetScale();
+	iMPoint aux;
+	fMPoint ret;
+	SDL_GetMouseState(&aux.x, &aux.y);
+	ret.x = round((float)aux.x / scale);
+	ret.y = round((float)aux.y / scale);
+	return ret;
+}
+
+iMPoint ModuleInput::GetMousePosScreen() const
+{
+	iMPoint ret;
+	SDL_GetMouseState(&ret.x, &ret.y);
+	return ret;
+}
 
 void ModuleInput::GetMouseMotion(int& x, int& y)
 {
@@ -284,9 +304,14 @@ void ModuleInput::GetScrollWheelMotion(int& x, int& y)
 	y = mouseWheelMotionY;
 }
 
-fMPoint ModuleInput::GetMouseWorld()
+fMPoint ModuleInput::GetMousePosWorld() const
 {
-	return { (-app->render->currentCamX + mouseXRaw) / app->win->GetScale(), (-app->render->currentCamY + mouseYRaw) / app->win->GetScale() };
+	float scale = app->win->GetScale();
+	iMPoint mouseAux = GetMousePosScreen();
+	fMPoint ret;
+	ret.x = (-app->render->currentCamX + mouseAux.x) / scale;
+	ret.y = (-app->render->currentCamY + mouseAux.y) / scale;
+	return ret;
 }
 
 
@@ -520,27 +545,28 @@ void ModuleInput::mouseBindingSendEvent(int button, KEY_STATE keyAction)
 
 void ModuleInput::HandleDebugKeys()
 {
-	if (GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN)
-	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
-	}
 
-	if (GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN)
-	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
-	}
-
-	if (GetKey(SDL_SCANCODE_F8) == KEY_STATE::KEY_DOWN)
+	if (GetKey(SDL_SCANCODE_F6) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::KILL_ALL_ENEMIES, EVENT_ENUM::NULL_EVENT);
 	}
 
+	if (GetKey(SDL_SCANCODE_F11) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
+	}
+
 	if (GetKey(SDL_SCANCODE_F10) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_F8) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_DAY, EVENT_ENUM::NULL_EVENT);
 	}
 
-	if (GetKey(SDL_SCANCODE_F11) == KEY_STATE::KEY_DOWN)
+	if (GetKey(SDL_SCANCODE_F9) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
 	}

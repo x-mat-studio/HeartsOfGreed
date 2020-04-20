@@ -43,8 +43,10 @@ public:
 	void ActivateCamMovement();
 	void DeactivateCamMovement();
 	bool GetCamMovementActivated() const;
+	void ConstrainCameraToBorders();
 
 	int GetDayNumber() const;
+	bool IsNight() const;
 
 private:
 	void CalculateTimers(float dt);
@@ -73,6 +75,18 @@ private:
 	float timer;
 
 	bool menuScene;
+
+	float camVel;
+	fMPoint initialCamPos;
+
+	iMPoint mapBordersUpperLeftCorner;
+	iMPoint mapBordersBottomRightCorner;
+
+	//this variable stores the number of pixels from the screen at which the camera can be moved by the mouse pos
+	iMPoint camMarginMovements;
+
+	float fadeTime;
+
 };
 
 #endif // __TEST_SCENE_H__

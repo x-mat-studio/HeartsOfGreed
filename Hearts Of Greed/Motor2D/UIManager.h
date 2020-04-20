@@ -10,7 +10,11 @@ struct SDL_Texture;
 class UI;
 class UI_Portrait;
 class Entity;
+class UI_Healthbar;
+class Base;
+class UI_Text;
 enum class UI_TYPE;
+class Entity;
 
 enum class DRAGGABLE
 {
@@ -39,9 +43,11 @@ public:
 	bool PostUpdate(float dt);
 
 	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity = nullptr, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF,
-		char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
+		char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, TTF_Font* font = nullptr);
 	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false,
-		bool hiding = false, bool hoverMove = false, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT);
+		bool hiding = false, bool hoverMove = true, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT, bool interactable = true);
+	UI* AddScrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, int maxValue = 100.00f,
+		EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF);
 	SDL_Texture* GetAtlasTexture() const;
 
 	void CreateBasicInGameUI();
@@ -50,36 +56,52 @@ public:
 	void CreateEntityPortrait();
 	void CreateShopMenu();
 	void StopAll(UI* element, bool reposition, bool hidden, bool hidden_unhiding);
+	void UpdateFocusPortrait();
 
 	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
-	void DeleteUI(UI* father, bool includeFather);
+	void DeleteUIChilds(UI* father, bool includeFather);
 	void HideElements(UI* father, float dt);
 
 	bool CleanUp();
+	bool MouseOnUI(iMPoint& mouse);
 
 	void LoadAtlas();
 	UI* FindUIByName(char* name);
+	UI* FindbyParent(UI* parent);
 
 private:
-
-
-
 	void CreatePauseMenu();
+	void CreateCreditMenu();
 	void ExecuteEvent(EVENT_ENUM eventId);
+
+	void DisableHealthBars();
+	void CheckFocusEntity();
+	void UpdateResources(int newResources);
+
+	void CreateEntityPortraitChilds();
+
+	void UnregisterEvents();
+
 
 public:
 
 	int hoverSound;
 	int clickSound;
 
+	Base* lastShop;
 
 private:
 
 	std::vector<UI*> uiVector;
 	SDL_Texture* atlas;
 	UI_Portrait* portraitPointer;
+	Entity* focusedEnt;
+	UI* focusedPortrait;
+	UI* createdInGameMenu;
 
+	UI* currResources;
+	int screenResources;
 	
 
 };

@@ -23,10 +23,10 @@ enum class DIRECTION {
 	FRONT_LEFT
 };
 
-enum class LOUDNESS {
-	QUIET,
-	NORMAL,
+enum LOUDNESS {
 	LOUD,
+	NORMAL,	
+	QUIET,
 	SILENCE
 };
 
@@ -67,9 +67,11 @@ public:
 	bool ConfigureChannel(unsigned int channel,LOUDNESS loudness, DIRECTION direction);
 
 	void SilenceAllChannels(int id);
+
 	void SilenceAll();
 
 private:
+
 	P2SString fxFolder;
 
 	_Mix_Music* music;
@@ -77,6 +79,12 @@ private:
 	int sfxList[MAX_SFX];
 	
 	std::vector<Mix_Chunk*>	fx;  //We need a Array of Numbers: sfx are stored as unsigned int
+
+public:
+
+	int volumeAdjustment;
+	int musicVolume;
+
 };
 
 #endif // __AUDIO_H__

@@ -33,6 +33,8 @@ public:
 	bool AddBarricade(Barricade* barricade);
 	bool AddUpgradeCenter(UpgradeCenter* upgradeCenter);
 
+	bool TurretCapacityExceed();
+
 	void RemoveTurret(Turret* turret);
 	void RemoveBarricade(Barricade* barricade);
 	void RemoveUpgradeCenter();
@@ -43,6 +45,13 @@ public:
 	void ChangeAligment();
 
 	int RecieveDamage(int damage);
+
+	int GetHP();
+	int GetMaxHP();
+	int GetRsrc();
+	int GetcurrentTurrets();
+	int GetmaxTurrets();
+
 private:
 	
 	void DisableTurrets();
@@ -50,13 +59,10 @@ private:
 	void GainResources(float dt);
 
 	void Die();
-
-public:
-	int GetHP();
-	int GetMaxHP();
-	int GetRsrc();
+	void ChangeTexturesOnDeath();
 
 private:
+
 	int maxTurrets;
 	int maxBarricades;
 	Collider* baseAreaAlarm; //if this seems odd, ask Jose -Adri

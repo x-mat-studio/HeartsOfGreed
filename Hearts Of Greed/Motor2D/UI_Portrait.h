@@ -9,14 +9,19 @@
 
 struct Portrait
 {
-	fMPoint position;
-	UI_Image* background;
-	UI_Image* portrait;
-	UI_Healthbar* healthbar;
-	UI_Image* backgroundLevel;
-	UI_Image* backgroundHealthbar;
-	UI_Text* level;
-	Hero* hero;
+	fMPoint position = {0,0};
+	UI_Image* background = nullptr;
+	UI_Image* portrait = nullptr;
+	UI_Healthbar* healthbar = nullptr;
+	UI_Image* backgroundLevel = nullptr;
+	UI_Image* backgroundHealthbar = nullptr;
+	UI_Text* level = nullptr;
+	Hero* hero = nullptr;
+	int lvl = 1;
+
+	~Portrait() {};
+
+	void ChangeLvl(int newlvl);
 };
 
 class UI_Portrait : public UI
@@ -39,9 +44,6 @@ private:
 
 	void HandleInput();
 	void Move();
-	void CheckLevel();
-	void ReWriteLevelTexture();
-	SDL_Rect RectConstructor(int x, int y, int w, int h);
 
 public:
 

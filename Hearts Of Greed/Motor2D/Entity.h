@@ -59,7 +59,8 @@ enum class SKILL_ID : int
 
 	GATHERER_SKILL1,
 	GATHERER_SKILL1_MOUSE,
-	MELEE_SKILL1
+	MELEE_SKILL1,
+	BASE_AREA
 };
 
 enum class SKILL_TYPE
@@ -89,9 +90,11 @@ public:
 	virtual Collider* GetCollider() const;
 
 	virtual int RecieveDamage(int damage);
+	virtual void CheckObjective(Entity* deleted);
 
 	fMPoint GetPosition();
 	fMPoint GetCenter();
+	fMPoint GetOffset();
 	void SetPosition(int x, int y);
 
 	void SetTexture(SDL_Texture* texture);
@@ -118,6 +121,9 @@ public:
 	bool flip;
 	bool dynamic;
 	bool UIAssigned;
+
+	bool selectedByPlayer;
+
 	FoWEntity* visionEntity;
 	MinimapIcon* minimapIcon;
 	fMPoint position;

@@ -19,8 +19,11 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	started(false),
 	toDelete(false),
 	flip(false),
+	selectedByPlayer(false),
+	UIAssigned(false),
 	
 	collider(collider),
+
 	visionEntity(nullptr),
 	minimapIcon(nullptr),
 	texture(nullptr),
@@ -29,8 +32,8 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
-
-	UIAssigned(false)
+	center {0, 0}
+	
 {
 }
 
@@ -44,14 +47,12 @@ Entity::~Entity()
 	
 
 	texture = nullptr;
-	collider = nullptr;
 
-	if (visionEntity != nullptr)
-	{
-		visionEntity->deleteEntity = true;
-	}
+	visionEntity = nullptr;
 
 	minimapIcon = nullptr;
+
+	selectedByPlayer = false;
 }
 
 
@@ -59,13 +60,6 @@ bool Entity::Start(SDL_Texture* texture)
 {
 	this->texture = texture;
 
-	int w;
-	int h;
-
-	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-
-	center.x = w / 2;
-	center.y = h / 2;
 
 	if (collider != nullptr)
 	{
@@ -74,12 +68,16 @@ bool Entity::Start(SDL_Texture* texture)
 		app->coll->AddColliderEntity(collider);
 
 		collider->SetPos(position.x, position.y);
+
+		offset.x = (float)collider->rect.w * 0.5f;
+		
+		offset.y = (float)collider->rect.h;
+
+		center.x = (float)collider->rect.w * 0.5f;;
+		center.y = (float)collider->rect.h * 0.5f;
 	}
 
 	started = true;
-
-	offset.x =  (float)collider->rect.w* 0.5f;
-	offset.y =  (float)collider->rect.h;
 
 	return true;
 }
@@ -133,17 +131,17 @@ void Entity::MinimapDraw(float scale, float halfWidth)
 DIRECTION Entity::GetMyDirection()
 {
 	int width = app->win->width; 
-
-	int MidX = (-app->render->GetCameraX() + width / 2);
+	float scale = app->win->GetScale();
+	int MidX = (-app->render->currentCamX + (width * 0.5f))/scale;
 	
-	int relativeX = position.x - MidX;
+	int relativeX = (position.x - MidX)*scale;
 
-	if (relativeX > 120) {
+	if (relativeX > width*0.33f) {
 
 		return DIRECTION::RIGHT;
 	}
 
-	if (relativeX < -120) {
+	if (relativeX < -width * 0.33f) {
 
 		return DIRECTION::LEFT;
 	}
@@ -154,29 +152,47 @@ DIRECTION Entity::GetMyDirection()
 
 LOUDNESS Entity::GetMyLoudness()
 {
-	int width = app->win->width; int height = app->win->height;
+	int ret = LOUDNESS::SILENCE;
 
-	int MidX = (-app->render->GetCameraX() + width  /2);
-	int MidY = (-app->render->GetCameraY() + height /2);
+	float scale = app->win->GetScale();
+	int width = app->win->width;
+	int height = app->win->height;
+
+	int MidX = (-app->render->currentCamX + (width* 0.5f))  /scale;
+	int MidY = (-app->render->currentCamY + (height* 0.5f)) /scale;
 
 	float SQRDistance = sqrt((position.x - MidX) * (position.x - MidX) + (position.y - MidY) * (position.y - MidY));
 
-	if (SQRDistance < width/4 * app->win->GetScale()) {
+	if (SQRDistance < width *0.25f) 
+	{
 
-		return LOUDNESS::LOUD;
+		ret = LOUDNESS::LOUD;
 	}
-	if (SQRDistance < width/3 * app->win->GetScale()) {
+	else if (SQRDistance < width *0.33f) 
+	{
 
-		return LOUDNESS::NORMAL;
+		ret = LOUDNESS::NORMAL;
 	}
-	if (SQRDistance < width/2 * app->win->GetScale()) {
+	else if (SQRDistance < width * 0.5f) 
+	{
 
-		return LOUDNESS::QUIET;
+		ret = LOUDNESS::QUIET;
 	}
 	
+	//distance from camera loudness
+	if (scale >= 2)
+	{
+		ret -= 1;
+	}
+	else if (scale <= 0.5)
+	{
+		ret += 1;
+	}
 
-	return LOUDNESS::SILENCE;
+	ret = MAX(LOUDNESS::LOUD, ret);
+	ret = MIN(LOUDNESS::SILENCE, ret);
 
+	return (LOUDNESS)ret;
 }
 
 
@@ -192,6 +208,10 @@ fMPoint Entity::GetCenter()
 	return center;
 }
 
+fMPoint Entity::GetOffset()
+{
+	return  offset;
+}
 
 void Entity::SetPosition(int x, int y)
 {
@@ -304,4 +324,10 @@ int Entity::RecieveDamage(int damage)
 {
 	return -1;
 }
+
+void Entity::CheckObjective(Entity* deleted)
+{
+	return;
+}
+
 

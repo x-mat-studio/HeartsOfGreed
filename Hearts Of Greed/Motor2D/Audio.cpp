@@ -7,7 +7,7 @@
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 
-ModuleAudio::ModuleAudio() : Module(), music(NULL)
+ModuleAudio::ModuleAudio() : Module(), music(NULL), volumeAdjustment(-27), musicVolume(NULL)
 {
 	name.create("audio");
 }
@@ -89,6 +89,15 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume)
 	}
 	Mix_VolumeMusic(volume);
 
+	if (volume > 128)
+	{
+		musicVolume = 128;
+	}
+	else
+	{
+		musicVolume = volume;
+	}
+
 	if (!enabled)
 		return false;
 
@@ -164,7 +173,7 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loud
 		return false;
 
 	if(overrideChannel)
-		Mix_HaltChannel(id);
+		Mix_HaltChannel(channel);
 
 	if (channel > 0 && Mix_Playing(channel) == 0) {
 		ConfigureChannel(channel, loudness, direction);
@@ -174,6 +183,17 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loud
 			//Input explanation: first argument is channel, -1  meanining first free channel. Second argument is a pointer to the chunk to play.
 			//3rd argument is number of loops. if you want in once, put 0. -1 plays it "infinite" times.
 		}
+	}
+	if (channel < 0) {
+
+		channel = 1;
+
+		while (Mix_Playing(channel) == 1) { 
+			if (channel > 8) { return false; }
+			channel++; 
+		}
+		ConfigureChannel(channel, loudness, direction);
+		Mix_PlayChannel(channel, fx[id - 1], repeat, );
 	}
 	
 	return true;
@@ -203,13 +223,13 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 	switch (loudness)
 	{
 	case LOUDNESS::QUIET:
-		volume = 200;
+		volume = 200 - volumeAdjustment;
 		break;
 	case LOUDNESS::NORMAL:
-		volume = 100;
+		volume = 100 - volumeAdjustment;
 		break;
 	case LOUDNESS::LOUD:
-		volume = 1;
+		volume = 1 - volumeAdjustment;
 		break;
 	default:
 		Mix_HaltChannel(-1); //Someone missused the function
@@ -253,6 +273,15 @@ bool ModuleAudio::ConfigureChannel(unsigned int channel, LOUDNESS loudness, DIRE
 		break;
 	}
 	
+	if (volume > 255)
+	{
+		volume = 255;
+	}
+	else if (volume < 0)
+	{
+		volume = 0;
+	}
+
 	Mix_SetPosition(channel, angle, volume);
 	return ret;
 }
@@ -267,3 +296,4 @@ void ModuleAudio::SilenceAll()
 	SilenceAllChannels(-1);
 	Mix_HaltMusic();
 }
+

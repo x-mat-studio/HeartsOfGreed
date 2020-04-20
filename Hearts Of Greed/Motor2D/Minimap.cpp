@@ -13,10 +13,14 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type) :toDelete(false), type(type)
-{
-	minimapPos = worldPos;
-}
+MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet) :
+	
+	toDelete(false),
+	type(type), 
+	offSet(offSet), 
+	minimapPos(worldPos)
+
+{}
 
 
 MinimapIcon::~MinimapIcon()
@@ -28,7 +32,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 {
 	if (minimapPos != nullptr)
 	{
-		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x, minimapPos->y);
+		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x + offSet.x, minimapPos->y + offSet.y);
 		float uiscale = app->win->GetUIScale();
 		app->render->Blit(app->uiManager->GetAtlasTexture(), (newpos.x - (sourceRect.w * 0.5f)) / uiscale, (newpos.y - (sourceRect.h * 0.5f)) / uiscale, &sourceRect, false, false);
 	}
@@ -88,8 +92,6 @@ bool Minimap::PreUpdate(float dt)
 
 		}
 
-
-
 		float UIscale = app->win->GetUIScale();
 		UI* element = app->uiManager->FindUIByName("minimapBackground");
 		position.x = element->worldPosition.x * UIscale + 5;
@@ -104,22 +106,21 @@ bool Minimap::Update(float dt)
 {
 	CheckListener(this);
 
-	if (minimapLoaded)
+	if (minimapLoaded==true)
 	{
-		int x;
-		int y;
+		iMPoint mousePos = app->input->GetMousePosScreen();
 		int w;
 		int h;
-		app->input->GetMousePositionRaw(x, y);
+		
 		app->render->GetCameraMeasures(w, h);
 
 		float scale = app->win->GetScale();
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			if (ClickingOnMinimap(x, y) == true && app->player->doingAction==false)
+			if (ClickingOnMinimap(mousePos.x, mousePos.y) == true && app->player->doingAction==false)
 			{
 				//camera TP
-				iMPoint newCamPos = ScreenToMinimapToWorld(x, y);
+				iMPoint newCamPos = ScreenToMinimapToWorld(mousePos.x, mousePos.y);
 
 				app->render->currentCamX = -((newCamPos.x * scale) - (w * 0.5f));
 				app->render->currentCamY = -((newCamPos.y * scale) - (h * 0.5f));
@@ -136,7 +137,7 @@ bool Minimap::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (minimapLoaded)
+	if (minimapLoaded==true)
 	{
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 
@@ -147,19 +148,22 @@ bool Minimap::PostUpdate(float dt)
 			switch (minimapIcons[i]->type)
 			{
 			case MINIMAP_ICONS::BASE:
-				iconRect = { 24, 504, 8, 8 };
+				iconRect = { 12, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::TURRET:
-				iconRect = { 32, 504, 8, 8 };
+				iconRect = { 20, 504, 4, 4 };
+				break;
+			case MINIMAP_ICONS::ENEMY_TURRET:
+				iconRect = { 16, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::HERO:
-				iconRect = { 16, 504, 8, 8 };
+				iconRect = { 8, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::ENEMY:
-				iconRect = { 0, 504, 8, 8 };
+				iconRect = { 0, 504, 4, 4};
 				break;
 			case MINIMAP_ICONS::ENEMY_BASE:
-				iconRect = { 8, 504, 8, 8 };
+				iconRect = { 4, 504, 4, 4 };
 				break;
 			case MINIMAP_ICONS::NONE:
 				iconRect = { 0, 0, 0, 0 };
@@ -264,12 +268,21 @@ void Minimap::ExecuteEvent(EVENT_ENUM eventId)
 
 void Minimap::CreateMinimapText()
 {
+	fMPoint auxCam;
+	auxCam.x = app->render->currentCamX;
+	auxCam.y = app->render->currentCamY;
+	app->render->currentCamX = 0.0f;
+	app->render->currentCamY = 0.0f;
+
 	app->map->DrawMinimap();
 	app->entityManager->DrawOnlyStaticBuildings();
+	app->render->currentCamX = auxCam.x;
+	app->render->currentCamY = auxCam.y;
 }
 
 void Minimap::LoadMinimap()
 {
+
 	BROFILER_CATEGORY("Load Minimap", Profiler::Color::Red);
 
 	minimapLoaded = true;
@@ -286,6 +299,7 @@ void Minimap::LoadMinimap()
 	SDL_SetRenderTarget(app->render->renderer, minimapTexture);
 	CreateMinimapText();
 	SDL_SetRenderTarget(app->render->renderer, NULL);
+	
 }
 
 
@@ -319,11 +333,11 @@ iMPoint Minimap::ScreenToMinimapToWorld(int x, int y) {
 	return minimap_position;
 }
 
-MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type)
+MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offset)
 {
 	MinimapIcon* icon = nullptr;
 
-	icon = new MinimapIcon(worldPos, type);
+	icon = new MinimapIcon(worldPos, type, offset);
 
 	if (icon != nullptr)
 	{

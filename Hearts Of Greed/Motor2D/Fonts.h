@@ -12,7 +12,6 @@
 #define DEFAULT_FONT_SIZE 8
 
 struct SDL_Texture;
-struct _TTF_Font;
 
 class ModuleFonts : public Module
 {
@@ -30,20 +29,20 @@ public:
 	bool CleanUp();
 
 	// Load Font
-	_TTF_Font* const Load(const char* path, int size = 12);
+	TTF_Font* const Load(const char* path, int size = 12);
 
 	// Create a surface from text
-	SDL_Texture* Print(const char* text, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = NULL);
+	SDL_Texture* Print(const char* text, SDL_Color color = { 255, 255, 255, 255 }, TTF_Font* font = NULL);
 
-	bool CalcSize(const char* text, int& width, int& height, _TTF_Font* font = NULL) const;
+	bool CalcSize(const char* text, int& width, int& height, TTF_Font* font = NULL) const;
 
 
 public:
 
 	int ingameSize;
 
-	std::vector<_TTF_Font*>	fonts;
-	_TTF_Font* default;
+	std::vector<TTF_Font*>	fonts;
+	TTF_Font* default;
 };
 
 

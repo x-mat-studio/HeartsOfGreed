@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Input.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
 Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
@@ -17,12 +18,12 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int energyPoints, int recoveryEnergyRate,
+	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 30),
+	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -52,6 +53,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	level(level),
 
 	recoveryHitPointsRate(recoveryHitPointsRate),
+	maxEnergyPoints(maxEnergyPoints),
 	energyPoints(energyPoints),
 	recoveryEnergyRate(recoveryEnergyRate),
 
@@ -76,16 +78,25 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill3TimePassed(0),
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
+	damageTakenTimer(0.f),
+	feelingSecure(0),
+	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
+	recoveringHealth(0),
+	recoveringEnergy(0),
 
+	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	selected(false),
+	//selected(false),
 	godMode(false),
+	currAreaInfo(nullptr),
+	skillExecutionDelay(false),
+	visionInPx(0.f),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
@@ -128,6 +139,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	level(copy->level),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	energyPoints(copy->energyPoints),
+	maxEnergyPoints(copy->maxEnergyPoints),
 	recoveryEnergyRate(copy->recoveryEnergyRate),
 	attackDamage(copy->attackDamage),
 	attackSpeed(copy->attackSpeed),
@@ -150,26 +162,40 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill3TimePassed(0),
 	framePathfindingCount(0),
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
+	damageTakenTimer(0.f),
+	feelingSecure(0),
+	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
+	recoveringHealth(0),
+	recoveringEnergy(0),
 
+	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	selected(false),
 	godMode(false),
+	skillExecutionDelay(false),
+	currAreaInfo(nullptr),
 
 	state(HERO_STATES::IDLE),
 
 	objective(nullptr),
 
-	skill1(copy->skill1)
+	skill1(copy->skill1),
+
+	drawingVfx(false)
 {
 	currentAnimation = &walkLeft;
+
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, true, visionDistance);
+
+	float halfH = app->map->data.tileHeight * 0.5;
+	float halfW = app->map->data.tileWidth * 0.5;
+	visionInPx = sqrt(halfW * halfW + halfH * halfH) * visionDistance + 0.5f * visionDistance;
 }
 
 
@@ -178,6 +204,8 @@ Hero::~Hero()
 	app->player->RemoveHeroFromVector(this);
 
 	objective = nullptr;
+	currAreaInfo = nullptr;
+	currentAnimation = nullptr;
 
 	inputs.clear();
 
@@ -209,7 +237,7 @@ Hero::~Hero()
 	currAoE.clear();
 	suplAoE.clear();
 
-	currAreaInfo = nullptr;
+
 }
 
 
@@ -221,12 +249,22 @@ bool Hero::PreUpdate(float dt)
 
 bool Hero::Update(float dt)
 {
+	BROFILER_CATEGORY("Hero Update", Profiler::Color::Blue);
+
 	//check inputs to traverse state matrix
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
 	GroupMovement(dt);
+
+	FeelingSecure(dt);
+	if (!gettingAttacked)
+	{
+		RecoverHealth(dt);
+		RecoverEnergy(dt);
+	}
+
 
 	CollisionPosUpdate();
 
@@ -242,10 +280,15 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::MOVE:
-		if (!Move(dt))
-			inputs.push_back(HERO_INPUTS::IN_IDLE);
+	{
+		bool hasMoved = false;
+		hasMoved = Move(dt);
 
-		visionEntity->SetNewPosition(position);
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetNewPosition(position);
+		}
+
 
 		if (objective != nullptr)
 		{
@@ -256,43 +299,53 @@ void Hero::StateMachine(float dt)
 
 			else if (framePathfindingCount == framesPerPathfinding)
 			{
-				fMPoint pos = objective->GetPosition();
-				fMPoint offSet = objective->GetCenter();
+				if (objective != nullptr)
+				{
+					fMPoint pos = objective->GetPosition();
+					fMPoint offSet = objective->GetOffset();
 
-				MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+				}
 			}
 		}
+		else if (!hasMoved)
+			inputs.push_back(HERO_INPUTS::IN_IDLE);
 
-		break;
+	}
+	break;
 
 	case HERO_STATES::ATTACK:
 
-		if (attackCooldown == 0)
+		if (attackCooldown == 0.f)
 		{
 			if (CheckAttackRange() == true)
 			{
 				Attack();
 				if (objective != nullptr)
 					dir = DetermineDirection(objective->position - position);
+
 				attackCooldown += TIME_TRIGGER;
 
 			}
-
 			else
 			{
 				inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
 			}
 		}
+		else
+			inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 
-		inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
+		if (attackCooldown == 0.f)
+			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
 		PreProcessSkill1();
-		dir = DetermineDirection(app->input->GetMouseWorld() - position);
+		dir = DetermineDirection(app->input->GetMousePosWorld() - position);
 		break;
 
 	case HERO_STATES::PREPARE_SKILL2:
@@ -302,7 +355,6 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::SKILL1:
-		currentAnimation = &idleLeftDown;
 		break;
 
 	case HERO_STATES::SKILL2:
@@ -325,6 +377,7 @@ void Hero::StateMachine(float dt)
 
 bool Hero::PostUpdate(float dt)
 {
+
 	if (app->debugMode)
 	{
 		Frame currFrame = currentAnimation->GetCurrentFrame(dt);
@@ -333,12 +386,16 @@ bool Hero::PostUpdate(float dt)
 
 	DrawArea();
 
+
+
 	return true;
 }
 
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
+
+
 	if (haveObjective == false)
 	{
 		objective = nullptr;
@@ -349,6 +406,8 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 	}
+
+
 
 	return false;
 }
@@ -380,21 +439,26 @@ void Hero::Draw(float dt)
 {
 	Frame currFrame;
 
-	if (state == HERO_STATES::CHARGING_ATTACK)
-		currFrame = currentAnimation->GetCurrentFrame();
-	else if(state == HERO_STATES::PREPARE_SKILL1)
+	if (state == HERO_STATES::CHARGING_ATTACK || state == HERO_STATES::PREPARE_SKILL1)
 		currFrame = currentAnimation->GetCurrentFrame();
 	else
 		currFrame = currentAnimation->GetCurrentFrame(dt);
 
-	app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame);
+	if (damageTakenTimer > 0.f)
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
+
+	else
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255);
+
+	if (drawingVfx)
+		DrawVfx(dt);
 }
 
 void Hero::DrawArea()
 {
 	if (currAreaInfo && currAoE.size() > 0)
 	{
-		for (int i = 0; i < currAoE.size(); i++)
+		for (uint i = 0; i < currAoE.size(); i++)
 		{
 			iMPoint pos = app->map->MapToWorld(currAoE[i].x - 1, currAoE[i].y);
 			app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 100);
@@ -402,7 +466,7 @@ void Hero::DrawArea()
 
 		if (suplAoE.size() > 0)
 		{
-			for (int i = 0; i < suplAoE.size(); i++)
+			for (uint i = 0; i < suplAoE.size(); i++)
 			{
 				iMPoint pos = app->map->MapToWorld(suplAoE[i].x - 1, suplAoE[i].y);
 				app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y, NULL, false, true, 200);
@@ -464,6 +528,8 @@ void Hero::Attack()
 
 void Hero::Die()
 {
+	toDelete = true;
+
 	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
 
 	switch (type)
@@ -485,20 +551,22 @@ void Hero::Die()
 		minimapIcon->minimapPos = nullptr;
 	}
 
-	toDelete = true;
+	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
 
-
-	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
-
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 }
 
 
-void Hero::CheckObjecive(Entity* entity)
+void Hero::CheckObjective(Entity* entity)
 {
 	if (objective == entity)
 	{
 		path.clear();
-		objective == nullptr;
+		objective = nullptr;
 		SearchForNewObjective();
 
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
@@ -506,21 +574,68 @@ void Hero::CheckObjecive(Entity* entity)
 	}
 }
 
+
 void Hero::SearchForNewObjective()
 {
-	objective = app->entityManager->SearchUnitsInRange(visionDistance, this);
+	SDL_Rect rect;
+
+	rect.x = position.x - visionInPx;
+	rect.y = position.y - visionInPx;
+	rect.w = visionInPx * 2;
+	rect.h = visionInPx * 2;
+
+	objective = app->entityManager->SearchEntityRect(&rect, align);
 }
 
 
-void Hero::RecoverHealth()
+void Hero::FeelingSecure(float dt)
 {
+	if (gettingAttacked)
+	{
+		feelingSecure += 1.00f * dt;
 
+		if (feelingSecure >= 5)
+		{
+			gettingAttacked = false;
+			feelingSecure = 0;
+		}
+	}
 }
 
 
-void Hero::RecoverEnergy()
+void Hero::PlayGenericNoise()
 {
+	//Herency only
+}
 
+
+void Hero::RecoverHealth(float dt)
+{
+	if (!gettingAttacked && (hitPointsMax > hitPointsCurrent))
+	{
+		recoveringHealth += 1.00f * dt;
+
+		if (recoveringHealth >= 2)
+		{
+			hitPointsCurrent += recoveryHitPointsRate;
+			recoveringHealth = 0;
+		}
+	}
+}
+
+
+void Hero::RecoverEnergy(float dt)
+{
+	if (!gettingAttacked && (maxEnergyPoints > energyPoints))
+	{
+		recoveringEnergy += 1.00f * dt;
+
+		if (recoveringEnergy >= 2)
+		{
+			energyPoints += recoveryEnergyRate;
+			recoveringEnergy = 0;
+		}
+	}
 }
 
 
@@ -586,21 +701,24 @@ void Hero::SkillCanceled()
 }
 
 
-
 void Hero::LevelUp()
 {
 	return;
 }
 
 
-
 int Hero::RecieveDamage(int damage)
 {
 	int ret = -1;
+	gettingAttacked = true;
+	feelingSecure = 0;
 
 	if (hitPointsCurrent > 0 && godMode == false)
 	{
 		hitPointsCurrent -= damage;
+
+		damageTakenTimer = 0.3f;
+
 		if (hitPointsCurrent <= 0)
 		{
 			Die();
@@ -608,7 +726,10 @@ int Hero::RecieveDamage(int damage)
 		}
 		else
 		{
-			app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+			int randomCounter = rand() % 5;
+
+			if (randomCounter == 0)
+				app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 4, this->GetMyLoudness(), this->GetMyDirection(), true);
 		}
 	}
 
@@ -630,6 +751,8 @@ bool Hero::GetLevel()
 	{
 		LevelUp();
 		heroXP = 0;
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
+		level++;
 		return true;
 	}
 
@@ -640,68 +763,69 @@ bool Hero::GetLevel()
 //Here goes all timers
 void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 {
-	//TODO: This needs syncro w/ the animations
-	if (attackCooldown > 0)
+	if (attackCooldown > 0.f)
 	{
 		attackCooldown += dt;
+
 		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
 			currentAnimation->ResetAnimation();
 
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+			attackCooldown = 0.f;
 
-			attackCooldown = 0;
 		}
+
 	}
 
-
-	if (state == HERO_STATES::PREPARE_SKILL1)
+	if (skill1TimePassed > 0.f)
 	{
-		inputs.push_back(HERO_INPUTS::IN_PREPARE_SKILL1);
-
-		if (&currentAnimation->GetCurrentFrame() == &currentAnimation->frames[currentAnimation->lastFrame - 3])
-		{
-			currentAnimation->GetCurrentFrame(0);
-			currentAnimation->loop = false;
-		}
-	}
-	else if (skill1TimePassed > 0)
-	{	
 		skill1TimePassed += dt;
 
 		if (skill1TimePassed >= skill1ExecutionTime)
 		{
-			//inputs.push_back(HERO_INPUTS::IN_SKILL1);
+
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
-			skill1TimePassed = 0;
+
+			if (skillExecutionDelay)
+			{
+				ExecuteSkill1();
+				skillExecutionDelay = false;
+			}
+
+			skill1TimePassed = 0.f;
 		}
 	}
 
 
-	if (cooldownHability1 > 0)
+	if (cooldownHability1 > 0.f)
 	{
 		cooldownHability1 += dt;
+
+		drawingVfx = true;
 
 		if (cooldownHability1 >= skill1RecoverTime)
 		{
 			skill1Charged = true;
+			drawingVfx = false;
+			cooldownHability1 = 0.f;
 		}
 	}
 
-	if (skill2TimePassed > 0)
+	if (skill2TimePassed > 0.f)
 	{
 		skill2TimePassed += dt;
 
 		if (skill2TimePassed >= skill2ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
-			skill2TimePassed = 0;
+			skill2TimePassed = 0.f;
 		}
 	}
 
-	if (cooldownHability2 > 0)
+	if (cooldownHability2 > 0.f)
 	{
 		cooldownHability2 += dt;
 
@@ -711,18 +835,18 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-	if (skill3TimePassed > 0)
+	if (skill3TimePassed > 0.f)
 	{
 		skill3TimePassed += dt;
 
 		if (skill3TimePassed >= skill3ExecutionTime)
 		{
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
-			skill3TimePassed = 0;
+			skill3TimePassed = 0.f;
 		}
 	}
 
-	if (cooldownHability3 > 0)
+	if (cooldownHability3 > 0.f)
 	{
 		cooldownHability3 += dt;
 
@@ -736,6 +860,14 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	if (framePathfindingCount < framesPerPathfinding)
 	{
 		framePathfindingCount++;
+	}
+
+	if (damageTakenTimer > 0.f)
+	{
+		damageTakenTimer -= dt;
+
+		if (damageTakenTimer <= 0.f)
+			damageTakenTimer = 0.f;
 	}
 }
 
@@ -756,9 +888,11 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(); break;
 
-			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
+			case HERO_INPUTS::IN_ATTACK:
+				attackCooldown += TIME_TRIGGER;
+				state = HERO_STATES::ATTACK;	PlayGenericNoise(); break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
@@ -779,7 +913,10 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
 
-			case HERO_INPUTS::IN_ATTACK: state = HERO_STATES::ATTACK;	break;
+			case HERO_INPUTS::IN_ATTACK:
+				PlayGenericNoise();
+				attackCooldown += TIME_TRIGGER;
+				state = HERO_STATES::ATTACK;	break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
@@ -798,7 +935,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_CHARGING_ATTACK:state = HERO_STATES::CHARGING_ATTACK;			 break;
 
-			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;								 break;
+			case HERO_INPUTS::IN_MOVE:  PlayGenericNoise(); state = HERO_STATES::MOVE;								 break;
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
 
@@ -845,6 +982,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				currAoE.clear();
 				suplAoE.clear();
 				currAreaInfo = nullptr;
+				currentAnimation->ResetAnimation();
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -935,6 +1073,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				ExecuteSkill1();
 				skill1TimePassed += TIME_TRIGGER;
 				state = HERO_STATES::SKILL1;
+				skill1Charged = false;
 				break;
 			}
 
@@ -1075,7 +1214,6 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 	case HERO_STATES::CHARGING_ATTACK:
 	{
-		currentAnimation->loop = false;
 
 		switch (dir)
 		{
@@ -1105,75 +1243,82 @@ void Hero::SetAnimation(HERO_STATES currState)
 			break;
 		}
 
+		currentAnimation->loop = false;
+
 		break;
 	}
 
-		case HERO_STATES::PREPARE_SKILL1:
+	case HERO_STATES::PREPARE_SKILL1:
+	{
+		switch (dir)
 		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &skill1RightUp;
+			break;
 
-			currentAnimation->loop = false;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &skill1LeftUp;
+			break;
 
-			switch (dir)
-			{
-				case FACE_DIR::NORTH_EAST:
-					currentAnimation = &skill1RightUp;
-					break;
+		case FACE_DIR::EAST:
+			currentAnimation = &skill1Right;
+			break;
 
-				case FACE_DIR::NORTH_WEST:
-					currentAnimation = &skill1LeftUp;
-					break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &skill1RightDown;
+			break;
 
-				case FACE_DIR::EAST:
-					currentAnimation = &skill1Right;
-					break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &skill1LeftDown;
+			break;
 
-				case FACE_DIR::SOUTH_EAST:
-					currentAnimation = &skill1RightDown;
-					break;
-
-				case FACE_DIR::SOUTH_WEST:
-					currentAnimation = &skill1LeftDown;
-					break;
-
-				case FACE_DIR::WEST:
-					currentAnimation = &skill1Left;
-					break;
-			}
+		case FACE_DIR::WEST:
+			currentAnimation = &skill1Left;
 			break;
 		}
 
-		case HERO_STATES::SKILL1:
+		if (currentAnimation->GetCurrentFrameNum() > 0)
+			currentAnimation->ResetAnimation();
+
+		currentAnimation->loop = false;
+
+		break;
+	}
+
+	case HERO_STATES::SKILL1:
+	{
+
+		switch (dir)
 		{
-			currentAnimation->loop = false;
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &skill1RightUp;
+			break;
 
-			switch (dir)
-			{
-			case FACE_DIR::NORTH_EAST:
-				currentAnimation = &skill1RightUp;
-				break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &skill1LeftUp;
+			break;
 
-			case FACE_DIR::NORTH_WEST:
-				currentAnimation = &skill1LeftUp;
-				break;
+		case FACE_DIR::EAST:
+			currentAnimation = &skill1Right;
+			break;
 
-			case FACE_DIR::EAST:
-				currentAnimation = &skill1Right;
-				break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &skill1RightDown;
+			break;
 
-			case FACE_DIR::SOUTH_EAST:
-				currentAnimation = &skill1RightDown;
-				break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &skill1LeftDown;
+			break;
 
-			case FACE_DIR::SOUTH_WEST:
-				currentAnimation = &skill1LeftDown;
-				break;
-
-			case FACE_DIR::WEST:
-				currentAnimation = &skill1Left;
-				break;
-			}
+		case FACE_DIR::WEST:
+			currentAnimation = &skill1Left;
 			break;
 		}
+		break;
+
+		currentAnimation->loop = false;
+
+	}
 	}
 }
 
@@ -1194,7 +1339,15 @@ bool Hero::PreProcessSkill3()
 
 bool Hero::ExecuteSkill1()
 {
-	return app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+	int ret = 0;
+
+	ret = app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+
+	if (ret > 0)
+	{
+		GetExperience(ret);
+	}
+	return true;
 };
 
 bool Hero::ExecuteSkill2()
@@ -1205,11 +1358,22 @@ bool Hero::ExecuteSkill2()
 bool Hero::ExecuteSkill3()
 {
 	return false;
-};
+}
+
+void Hero::DrawSelected()
+{
+	if (selectedByPlayer == true)
+		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+}
+
+bool Hero::DrawVfx(float dt)
+{
+	return false;
+}
 
 
 Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : id(id), dmg(dmg), type(type), target(target)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id)
 {}

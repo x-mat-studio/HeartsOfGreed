@@ -2,11 +2,11 @@
 
 <config>
   <app framerate_cap="30">
-   	<title>Game Development Testbed</title>
-   	<organization>UPC</organization>
-	<load fileName="save_game.xml"></load> 
+    <title>Hearts of Greed</title>
+    <organization>UPC</organization>
+    <load fileName="save_game.xml"></load>
   </app>
-	
+
   <renderer>
     <vsync value="true"/>
     <lerp value="0.085"/>
@@ -23,16 +23,15 @@
   </window>
 
   <audio>
-	<folder>audio/fx/</folder>
-	<fx 	jump="jump_sound.wav" 
-		bomb="bomb.wav"
-	    	button_1="b1.wav" 
-		button_3="b3.wav"
-	   	coin="coin.wav" 
-		option_denied="option_denied.wav"
-	    	powerup="powerup.wav" 
-	>
-	</fx>
+    <folder>audio/fx/</folder>
+    <fx 	jump="jump_sound.wav"
+      bomb="bomb.wav"
+          button_1="b1.wav"
+      button_3="b3.wav"
+        coin="coin.wav"
+      option_denied="option_denied.wav"
+          powerup="powerup.wav">
+    </fx>
   </audio>
 
   <file_system>
@@ -40,13 +39,54 @@
   </file_system>
 
   <map>
-  	<folder>maps/</folder>
+    <folder>maps/</folder>
   </map>
 
   <minimap width="300" posX="0" posY="500"/>
 
   <entityManager>
-	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml"/>
+	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml" docnameArmoredman="armoredman.xml" docnamevfx="Vfx.xml" />
   </entityManager>
+
+  <testScene 
+    fadeTime="1.0"
+    camVel="700" 
+    initialCamPosX="-1650" 
+    initialCamPosY="800"
+    dayTimerSec="4"
+    nightTimerSec="5" 
+    freeCamMarginDetectionPixelsX="20"
+    freeCamMarginDetectionPixelsY="15"
+    
+    mapBordersUpperLeftCornerX="-1450"
+    mapBordersUpperLeftCornerY="0"
+    mapBordersBottomRightCornerX="1500"
+    mapBordersBottomRightCornerY="1550"
+    
+    />
+  
+  <menuScene fadeTime="1.0"/>
+  
+  <introScene
+    backgroundStartingAlphaValue="255"
+    backgroundFinalAlphaValue="130"
+    backgroundTransitionConstant="50"
+    
+    logoStartingAlphaValue="0"
+    logoFinalAlphaValue="255"
+    logoTransitionConstant="75"
+    />
+
+  <winScene
+    fadeTime="1.0"
+    medalPosX="50"
+    medalPosY="0"    
+  />
+
+  <loseScene
+    fadeTime="1.0"
+    medalPosX="30"
+    medalPosY="0"
+  />
 
 </config>

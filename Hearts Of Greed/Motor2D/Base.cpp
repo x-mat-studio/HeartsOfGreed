@@ -8,6 +8,9 @@
 #include "EntityManager.h"
 #include "Player.h"
 
+//VERTICAL SLICE PURPOSES
+#include "EventManager.h"
+
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
 	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int maxHitPoints, int currentHitPoints,
@@ -74,11 +77,19 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	y -= baseAreaAlarm->rect.h * 0.25;
 
 	baseAreaAlarm->SetPos(x, y);
+
 }
 
 
 Base::~Base()
-{}
+{
+	baseAreaAlarm = nullptr;
+
+	baseUpgradeCenter = nullptr;
+
+	turretsVector.clear();
+	barricadesVector.clear();
+}
 
 
 bool Base::Update(float dt)
@@ -116,7 +127,6 @@ bool Base::AddTurret(Turret* turret)
 	if (turretsVector.size() == maxTurrets)
 		return false;
 
-
 	else
 	{
 		turretsVector.push_back(turret);
@@ -124,6 +134,14 @@ bool Base::AddTurret(Turret* turret)
 	}
 }
 
+bool Base::TurretCapacityExceed()
+{
+	if (turretsVector.size() >= maxTurrets)
+	{
+		return false;
+	}
+	return true;
+}
 
 bool Base::AddBarricade(Barricade* barricade)
 {
@@ -199,6 +217,9 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
+
+		//VERTICAL SLICE PURPOSES
+		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
 	}
 
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
@@ -257,6 +278,7 @@ bool Base::RessurectHero(ENTITY_TYPE heroType)
 
 void Base::GainResources(float dt)
 {
+
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		resourcesCooldown += dt;
@@ -277,6 +299,14 @@ int Base::RecieveDamage(int damage)
 	if (hitPointsCurrent > 0)
 	{
 		hitPointsCurrent -= damage;
+
+		int randomCounter = rand() % 10;
+
+		if (randomCounter == 0)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
+		else if (randomCounter == 9)
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
+
 		if (hitPointsCurrent <= 0)
 		{
 			Die();
@@ -291,7 +321,29 @@ void Base::Die()
 {
 	hitPointsCurrent = hitPointsMax;
 
+	ChangeTexturesOnDeath();
+
 	ChangeAligment();
+}
+
+void Base::ChangeTexturesOnDeath()
+{
+	switch (this->GetAlignment()) { //change texture
+
+	case ENTITY_ALIGNEMENT::ENEMY:
+		this->texture = app->entityManager->base2Texture;
+		this->selectedTexture = app->entityManager->base2TextureSelected;
+		break;
+
+	case ENTITY_ALIGNEMENT::PLAYER:
+		this->texture = app->entityManager->base2TextureEnemy;
+		this->selectedTexture = app->entityManager->base2TextureSelectedEnemy;
+		break;
+
+	default:
+		break;
+
+	}
 }
 
 int Base::GetHP()
@@ -307,4 +359,14 @@ int Base::GetMaxHP()
 int Base::GetRsrc()
 {
 	return resourcesProduced;
+}
+
+int Base::GetcurrentTurrets()
+{
+	return turretsVector.size();
+}
+
+int Base::GetmaxTurrets()
+{
+	return maxTurrets;
 }
