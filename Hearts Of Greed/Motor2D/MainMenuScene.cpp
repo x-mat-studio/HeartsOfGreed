@@ -54,7 +54,7 @@ bool ModuleMainMenuScene::Start()
 	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
 	
 
-	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 15.0F, 200);
+	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 1.0f, 200);
 
 	alphaCounter = 0;
 	soundDelay = 0;

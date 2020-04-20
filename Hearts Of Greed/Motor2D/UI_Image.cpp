@@ -25,7 +25,7 @@ bool UI_Image::Update(float dt)
 
 bool UI_Image::PostUpdate(float dt)
 {
-	if (enabled)
+	if (enabled && texture != nullptr)
 		Draw(texture);
 
 	return true;
