@@ -46,6 +46,7 @@ public:
 	void ConstrainCameraToBorders();
 
 	int GetDayNumber() const;
+	bool IsNight() const;
 
 private:
 	void CalculateTimers(float dt);

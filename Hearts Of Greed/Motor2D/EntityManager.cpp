@@ -13,6 +13,7 @@
 #include "Window.h"
 #include "Minimap.h"
 #include "Player.h"
+#include "TestScene.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -869,6 +870,8 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 void ModuleEntityManager::RemoveDeletedEntities()
 {
+	ENTITY_TYPE type;
+
 	for (int i = 0; i < entityVector.size(); i++)
 	{
 		if (entityVector[i]->toDelete == true)
@@ -876,12 +879,67 @@ void ModuleEntityManager::RemoveDeletedEntities()
 			CheckDynamicEntitysObjectives(entityVector[i]);
 			app->player->CheckFocusedEntity(entityVector[i]);
 
+			type = entityVector[i]->GetType();
+
 			delete entityVector[i];
 			entityVector[i] = nullptr;
 			entityVector.erase(entityVector.begin() + i);
+			
 			i--;
+
+			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+			{
+				SearchHeroesAlive();
+			}
+
+			//VERTICAL SLICE
+			if (type == ENTITY_TYPE::ENEMY)
+			{
+				SearchEnemiesAlive();
+			}
 		}
 	}
+
+}
+
+
+void ModuleEntityManager::SearchHeroesAlive()
+{
+	ENTITY_TYPE type;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+			return;
+	}
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_LOSE, EVENT_ENUM::NULL_EVENT);
+}
+
+
+void ModuleEntityManager::SearchEnemiesAlive()
+{
+	ENTITY_TYPE type;
+
+	int numEntities = entityVector.size();
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		type = entityVector[i]->GetType();
+
+		if (type == ENTITY_TYPE::ENEMY)
+			return;
+	}
+
+	if (app->testScene->IsNight() == true)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
+	}
+	
 
 }
 

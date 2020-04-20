@@ -147,6 +147,7 @@ bool ModuleTestScene::Start()
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
 
+	isNightTime = false;
 
 	return true;
 }
@@ -584,4 +585,10 @@ void ModuleTestScene::ConstrainCameraToBorders()
 		app->render->currentCamY = -(mapBordersBottomRightCorner.y * scale) + halfCamH;
 	}
 
+}
+
+
+bool ModuleTestScene::IsNight() const
+{
+	return isNightTime;
 }

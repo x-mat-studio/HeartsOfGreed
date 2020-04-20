@@ -90,6 +90,10 @@ public:
 	void CheckDynamicEntitysObjectives(Entity* entity);
 
 
+	void SearchHeroesAlive();
+	void SearchEnemiesAlive();
+
+
 	Entity* SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT alig);
 
 
