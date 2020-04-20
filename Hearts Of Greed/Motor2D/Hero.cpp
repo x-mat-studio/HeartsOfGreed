@@ -765,15 +765,19 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	if (attackCooldown > 0.f)
 	{
 		attackCooldown += dt;
-		currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (state == HERO_STATES::CHARGING_ATTACK || state == HERO_STATES::ATTACK)
 		{
-			currentAnimation->ResetAnimation();
+			currentAnimation->GetCurrentFrame(attackSpeed * dt);
 
-			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
-			attackCooldown = 0.f;
+			if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
+			{
+				currentAnimation->ResetAnimation();
 
+				inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+				attackCooldown = 0.f;
+
+			}
 		}
 	}
 
@@ -1272,6 +1276,8 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &skill1Left;
 			break;
 		}
+		if(currentAnimation->GetCurrentFrameNum() > 0)
+			currentAnimation->ResetAnimation();
 
 		currentAnimation->loop = false;
 

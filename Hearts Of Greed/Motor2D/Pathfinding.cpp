@@ -497,6 +497,8 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 		retPos.y++;
 		retNeg.y--;
 
+
+		//Diagonals
 		if (IsWalkable(retNeg) && retNeg.DistanceNoSqrt(ret) < currDistance)
 		{
 			currDistance = retNeg.DistanceNoSqrt(ret);
@@ -508,6 +510,35 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 			currDistance = retPos.DistanceNoSqrt(ret);
 			ret = retPos;
 		}
+
+		// Y
+		if (IsWalkable({0,retPos.y }) && retPos.DistanceNoSqrt({ 0,retPos.y }) < currDistance)
+		{
+			currDistance = retPos.DistanceNoSqrt(ret);
+			ret = retPos;
+		}
+
+		if (IsWalkable({ 0,retNeg.y }) && retPos.DistanceNoSqrt({ 0,retNeg.y }) < currDistance)
+		{
+			currDistance = retPos.DistanceNoSqrt(ret);
+			ret = retPos;
+		}
+
+		
+		// X
+		if (IsWalkable({ retPos.x,0 }) && retPos.DistanceNoSqrt({ retPos.x,0 }) < currDistance)
+		{
+			currDistance = retPos.DistanceNoSqrt(ret);
+			ret = retPos;
+		}
+
+		if (IsWalkable({ retNeg.x,0 }) && retPos.DistanceNoSqrt({ retNeg.x,0 }) < currDistance)
+		{
+			currDistance = retPos.DistanceNoSqrt(ret);
+			ret = retPos;
+		}
+
+
 	}
 
 	return ret;

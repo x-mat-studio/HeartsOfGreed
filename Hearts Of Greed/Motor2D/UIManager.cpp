@@ -168,7 +168,7 @@ bool ModuleUIManager::CleanUp()
 	return true;
 }
 
-UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE dragable, char* text, SDL_Color color, _TTF_Font* font)
+UI* ModuleUIManager::AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity, DRAGGABLE dragable, char* text, SDL_Color color, TTF_Font* font)
 {
 	UI* newUI = nullptr;
 
@@ -863,6 +863,7 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 	{
 		if (uiVector[i]->parent == father)
 		{
+			if(includeFather)
 			app->uiManager->DeleteUIChilds(uiVector[i], false);
 
 
@@ -1041,6 +1042,7 @@ void ModuleUIManager::UpdateResources(int newResources)
 
 	UI_Text* updateResources = (UI_Text*)currResources;
 	updateResources->LoadNewTexture(bufferText, app->fonts->fonts[0]);
+
 }
 
 void ModuleUIManager::UnregisterEvents()
