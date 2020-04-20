@@ -47,6 +47,7 @@ private:
 
 	fMPoint medalPos;
 
+	float fadeTime;
 	//sounds
 	//int winMusic;
 };

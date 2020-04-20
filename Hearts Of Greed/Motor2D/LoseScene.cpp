@@ -11,7 +11,7 @@
 #include "Window.h"
 #include "Audio.h"
 
-ModuleLoseScene::ModuleLoseScene()
+ModuleLoseScene::ModuleLoseScene():fadeTime(0)
 {
 	name.create("loseScene");
 }
@@ -26,6 +26,7 @@ bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 
 	medalPos.x = config.attribute("medalPosX").as_int(0);
 	medalPos.y = config.attribute("medalPosY").as_int(0);
+	fadeTime = config.attribute("fadeTime").as_float(0);
 
 	return true;
 }
@@ -40,7 +41,7 @@ bool ModuleLoseScene::Start()
 	youLost = app->tex->Load("intro_images/youLost.png");
 	medalLose = app->tex->Load("intro_images/medalLose.png");
 
-	app->audio->PlayMusic("audio/music/youLost.ogg", 15.0F, 200);
+	app->audio->PlayMusic("audio/music/youLost.ogg", fadeTime, 200);
 
 	return true;
 }
@@ -75,7 +76,7 @@ bool  ModuleLoseScene::PostUpdate(float dt)
 	
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) {
 
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {

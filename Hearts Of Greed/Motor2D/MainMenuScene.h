@@ -63,6 +63,9 @@ private:
 	bool canon;
 	float soundDelay;
 
+	float fadeTime;
+
+
 };
 
 #endif // __MAIN_MENU_SCENE__

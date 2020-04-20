@@ -38,7 +38,8 @@ ModuleTestScene::ModuleTestScene() :
 	isNightTime(false),
 	dayTimer(0),
 	nightTimer(0),
-	camVel(0.f)
+	camVel(0.f),
+	fadeTime(0)
 {
 	name.create("testScene");
 
@@ -70,6 +71,8 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 
 	mapBordersBottomRightCorner.x = config.attribute("mapBordersBottomRightCornerX").as_int(0);
 	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
+	
+	fadeTime = config.attribute("fadeTime").as_float(0);
 
 
 	return true;
@@ -266,7 +269,7 @@ bool  ModuleTestScene::Update(float dt)
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
 	if (menuScene == true)
 	{
-		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu))
+		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2))
 		{
 			menuScene = false;
 		}

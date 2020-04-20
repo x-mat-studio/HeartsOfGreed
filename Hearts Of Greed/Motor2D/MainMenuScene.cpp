@@ -11,9 +11,9 @@
 #include "UI_Text.h"
 #include "EventManager.h"
 
-ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1)
+ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1), fadeTime(0)
 {
-
+	name.create("menuScene");
 }
 
 
@@ -23,7 +23,7 @@ ModuleMainMenuScene::~ModuleMainMenuScene()
 }
 
 
-bool  ModuleMainMenuScene::Awake(pugi::xml_node&)
+bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
 {
 
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME, this);
@@ -33,6 +33,7 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&)
 
 	//sounds
 	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
+	fadeTime = config.attribute("fadeTime").as_float(0);
 
 	return true;
 }
@@ -52,7 +53,7 @@ bool ModuleMainMenuScene::Start()
 	gameTitle = app->tex->Load("intro_images/gameTitle.png");
 	BG = app->tex->Load("intro_images/MainMenuBG.png");
 
-	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 1.0f, 200);
+	app->audio->PlayMusic("audio/music/IntroMenu.ogg", fadeTime, 200);
 
 	alphaCounter = 0;
 	soundDelay = 0;
@@ -110,7 +111,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) 
 	{
 
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f))
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene,fadeTime*2))
 		{
 			changeScene = false;
 		}
@@ -118,7 +119,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 
 	if (changeSceneContinue == 0)
 	{
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene, 2.0f)==true)
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2)==true)
 		{
 			changeSceneContinue = 1;
 		}

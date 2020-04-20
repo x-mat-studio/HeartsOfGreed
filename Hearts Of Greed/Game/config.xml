@@ -49,6 +49,7 @@
   </entityManager>
 
   <testScene 
+    fadeTime="1.0"
     camVel="700" 
     initialCamPosX="-1650" 
     initialCamPosY="800"
@@ -63,7 +64,9 @@
     mapBordersBottomRightCornerY="1550"
     
     />
-
+  
+  <menuScene fadeTime="1.0"/>
+  
   <introScene
     backgroundStartingAlphaValue="255"
     backgroundFinalAlphaValue="130"
@@ -75,11 +78,13 @@
     />
 
   <winScene
+    fadeTime="1.0"
     medalPosX="50"
     medalPosY="0"    
   />
 
   <loseScene
+    fadeTime="1.0"
     medalPosX="30"
     medalPosY="0"
   />
