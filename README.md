@@ -1,4 +1,4 @@
-# HEARTS OF GREED
+﻿# HEARTS OF GREED
 
 Hearts of Greed is a commando-like RTS game in which you'll have to resist the attack of a hostile alien force. Use your select few hero units, your bases, turrets and upgrades to stand your ground and conquer enemy territory. 
 During the day, press on, be agressive and try to defeat the enemy. However, once night comes... go back to your base and defend from the incoming attacks. It's not your time to shine.
@@ -30,19 +30,19 @@ Click on anything:		Select
 ### Debug Options (only in-game):
 
 0: Give resources to player.
-4: Enter debug build mode for player.
+4: Toggle debug build mode for player.
 9: Activate/Deactivate camera movement by mouse.
-F1: Debug texture for Fog of war.
-F2: Reset fog of war.
-F3: Activate/Deactivate Fog of War.
-F4: Activate heroes God mode.
-F5: Deactivate heroes God mode.
-F6: Full screen.
-F7: Window mode.
-F8: Kill all enemies.
-F9: Activate/Deactivate collider and pathfinding vision.
-F10: Deactivate night.
-F11: Activate night.
+F1: Debug texture for Fog of war (only visible when on Fog of War mode).
+F2: Reset fog of war(only visible when on Fog of War mode).
+F3: Activate/Deactivate Fog of War mode.
+F4: Full screen.
+F5: Window mode.
+F6: Kill all enemies.
+F7: Activate/Deactivate collider and pathfinding vision.
+F8: Deactivate night.
+F9: Activate night.
+F10: Activate heroes God mode.
+F11: Deactivate heroes God mode.
 
 KP 1: Spawn base.
 KP 2: Spawn decorative building.
