@@ -103,8 +103,9 @@ void ModuleEventManager::FireEvent(EVENT_ENUM eventId) const
 
 }
 
-EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger) const
+EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger)
 {
+	EVENT_ENUM ret= EVENT_ENUM::NULL_EVENT;
 
 	int numElem = eventVector.size();
 
@@ -112,11 +113,13 @@ EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger) const
 	{
 		if (eventVector[i].idTrigger == eventTrigger)
 		{
-			return eventVector[i].id;
+			ret= eventVector[i].id;
+			eventVector.erase(eventVector.begin() + i);
+			break;
 		}
 	}
 	
-	return EVENT_ENUM::NULL_EVENT;
+	return ret;
 }
 
 //returns true if the event has been registered or if the new listener has been added, else returns false
