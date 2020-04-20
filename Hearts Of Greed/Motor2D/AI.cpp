@@ -117,9 +117,9 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 int ModuleAI::CheckBaseAligmentAttack()
 {
 	int numBases = baseVector.size();
-	int i = 0;
+	
 
-	for (i; i < numBases; i++)
+	for (int i = numBases-1; i >= 0; i--)
 	{
 		if (ENTITY_ALIGNEMENT::PLAYER == baseVector[i]->GetAlignment())
 		{
