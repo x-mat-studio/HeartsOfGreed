@@ -108,8 +108,6 @@ EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger)
 {
 	EVENT_ENUM ret= EVENT_ENUM::NULL_EVENT;
 
-	EVENT_ENUM ret = EVENT_ENUM::NULL_EVENT;
-
 	int numElem = eventVector.size();
 
 	for (int i = 0; i < numElem; i++)

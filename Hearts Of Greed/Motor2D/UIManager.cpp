@@ -1046,7 +1046,7 @@ void ModuleUIManager::UpdateResources(int newResources)
 	sprintf_s(bufferText, 10, "%d", newResources);
 
 	UI_Text* updateResources = (UI_Text*)currResources;
-	updateResources->LoadNewTexture(bufferText, app->fonts->fonts[0]);
+	updateResources->LoadNewTexture(bufferText, nullptr);
 
 }
 
