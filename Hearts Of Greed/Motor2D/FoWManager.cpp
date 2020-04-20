@@ -165,13 +165,7 @@ bool ModuleFoWManager::CleanUp()
 	bool ret = true;
 	DeleteFoWMap();
 
-	int numElements = fowEntities.size();
-
-	for (int i = 0; i < numElements; i++)
-	{
-		RELEASE(fowEntities[i]);
-		fowEntities[i] = nullptr;
-	}
+	DeleteAllFoWEntites();
 
 	fowEntities.clear();
 
@@ -189,6 +183,16 @@ bool ModuleFoWManager::CleanUp()
 	return ret;
 }
 
+void ModuleFoWManager::DeleteAllFoWEntites()
+{
+	for (int i = 0; i < fowEntities.size(); i++)
+	{
+		RELEASE(fowEntities[i]);
+		fowEntities[i] = nullptr;
+	}
+
+	fowEntities.clear();
+}
 
 void ModuleFoWManager::ResetFoWMap()
 {

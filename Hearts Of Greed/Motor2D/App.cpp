@@ -149,11 +149,11 @@ bool App::Awake()
 	//Set disabled modules here-------------
 	
 	//Scenes
-	introScene->Disable();
+	//introScene->Disable();
 	mainMenu->Disable();
 	winScene->Disable();
 	loseScene->Disable();
-	//testScene->Disable();
+	testScene->Disable();
 	
 	//Other
 	player->Disable();
