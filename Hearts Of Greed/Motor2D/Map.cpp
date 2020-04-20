@@ -51,7 +51,7 @@ void ModuleMap::Draw()
 
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != "Collision" && data.layers[f]->name != "BuildingGeneration") {
+		if (data.layers[f]->name != (P2SString)"Collision" && data.layers[f]->name != (P2SString)"BuildingGeneration") {
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
@@ -106,7 +106,7 @@ void ModuleMap::DrawMinimap()
 	float halfWidth = app->minimap->minimapWidth * 0.5f;
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != "Collision") {
+		if (data.layers[f]->name != (P2SString)"Collision") {
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
@@ -494,7 +494,8 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
 
-	if (layer->name == "Collision") {
+	if (layer->name == P2SString("Collision")) 
+	{
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
@@ -516,7 +517,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 			}
 		}
 	}
-	if (layer->name == "BuildingGeneration") {
+	if (layer->name == (P2SString)"BuildingGeneration") {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
