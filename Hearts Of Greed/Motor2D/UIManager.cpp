@@ -403,15 +403,15 @@ void ModuleUIManager::CreatePauseMenu()
 
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), height + 179), father, UI_TYPE::UI_BUTTON, rect, P2SString("mainMenuButton"), EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, true, true);
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 32, height + 5), father, UI_TYPE::UI_TEXT, rect, P2SString("resumeText"), nullptr, DRAGGABLE::DRAG_OFF, "RresumaGame");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 32, height + 5), father, UI_TYPE::UI_TEXT, rect, P2SString("resumeText"), nullptr, DRAGGABLE::DRAG_OFF, "R E S U M E  G A M E");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 43, height + 49), father, UI_TYPE::UI_TEXT, rect, P2SString("saveText"), nullptr, DRAGGABLE::DRAG_OFF, "SaveGame");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 43, height + 49), father, UI_TYPE::UI_TEXT, rect, P2SString("saveText"), nullptr, DRAGGABLE::DRAG_OFF, "S A V E  G A M E");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 43, height + 94), father, UI_TYPE::UI_TEXT, rect, P2SString("loadText"), nullptr, DRAGGABLE::DRAG_OFF, "LoadGame");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 43, height + 94), father, UI_TYPE::UI_TEXT, rect, P2SString("loadText"), nullptr, DRAGGABLE::DRAG_OFF, "L O A D  G A M E");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 58, height + 139), father, UI_TYPE::UI_TEXT, rect, P2SString("optionText"), nullptr, DRAGGABLE::DRAG_OFF, "Options");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 58, height + 139), father, UI_TYPE::UI_TEXT, rect, P2SString("optionText"), nullptr, DRAGGABLE::DRAG_OFF, "O P T I O N S");
 
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 48, height + 184), father, UI_TYPE::UI_TEXT, rect, P2SString("mainMenuText"), nullptr, DRAGGABLE::DRAG_OFF, "MainMenu");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 48, height + 184), father, UI_TYPE::UI_TEXT, rect, P2SString("mainMenuText"), nullptr, DRAGGABLE::DRAG_OFF, "M A I N  M E N U");
 
 	app->SetPause(true);
 }
@@ -435,13 +435,13 @@ void ModuleUIManager::CreateMainMenu()
 
 	//	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 5, (h / (app->win->GetUIScale() * 4)) + 5), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"continueText", DRAGGABLE::DRAG_OFF, "C O N T I N U E    G A M E");
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("newGameText"), nullptr, DRAGGABLE::DRAG_OFF, "NewGame");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 35, (h / (app->win->GetUIScale() * 4)) + 45), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("newGameText"), nullptr, DRAGGABLE::DRAG_OFF, "N E W  G A M E");
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 40, (h / (app->win->GetUIScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("optionsText"), nullptr, DRAGGABLE::DRAG_OFF, "Options");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 40, (h / (app->win->GetUIScale() * 4)) + 85), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("optionsText"), nullptr, DRAGGABLE::DRAG_OFF, "O P T I O N S");
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 42, (h / (app->win->GetUIScale() * 4)) + 125), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("creditsText"), nullptr, DRAGGABLE::DRAG_OFF, "Credits");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 42, (h / (app->win->GetUIScale() * 4)) + 125), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("creditsText"), nullptr, DRAGGABLE::DRAG_OFF, "C R E D I T S");
 
-	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 30, (h / (app->win->GetUIScale() * 4)) + 165), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("exitGameText"), nullptr, DRAGGABLE::DRAG_OFF, "ExitGame");
+	AddUIElement(fMPoint(w / app->win->GetUIScale() - rect.w + 30, (h / (app->win->GetUIScale() * 4)) + 165), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("exitGameText"), nullptr, DRAGGABLE::DRAG_OFF, "E X I T    G A M E");
 
 }
 
@@ -733,7 +733,7 @@ void ModuleUIManager::CreateShopMenu()
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, P2SString("shopBackground"));
 	createdInGameMenu = father;
 	// Heroes
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 3, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, P2SString("heroResurrectionText"), nullptr, DRAGGABLE::DRAG_OFF, "HeroRsurect");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 3, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, P2SString("heroResurrectionText"), nullptr, DRAGGABLE::DRAG_OFF, "H E R O   R E S U R R E C T I O N");
 
 	rect = RectConstructor(581, 24, 36, 27);
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, P2SString("heroGathererPortrait"));
@@ -758,7 +758,7 @@ void ModuleUIManager::CreateShopMenu()
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 128, h / (app->win->GetUIScale() * 2) - (231 / 2) + 57), father, UI_TYPE::UI_TEXT, rect, P2SString("heroMeleeResurrectText"), nullptr, DRAGGABLE::DRAG_OFF, "Revive");
 
 	// Turrets
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 10, h / (app->win->GetUIScale() * 2) - (231 / 2) + 85), father, UI_TYPE::UI_TEXT, rect, P2SString("turretBuildingText"), nullptr, DRAGGABLE::DRAG_OFF, "TurretBuilding");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 10, h / (app->win->GetUIScale() * 2) - (231 / 2) + 85), father, UI_TYPE::UI_TEXT, rect, P2SString("turretBuildingText"), nullptr, DRAGGABLE::DRAG_OFF, "T U R R E T   B U I L D I N G");
 
 	rect = RectConstructor(696, 12, 34, 40);
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 120, h / (app->win->GetUIScale() * 2) - (231 / 2) + 135), father, UI_TYPE::UI_IMG, rect, P2SString("turretPortrait"));
