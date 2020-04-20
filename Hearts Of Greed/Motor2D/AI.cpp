@@ -16,7 +16,8 @@ ModuleAI::~ModuleAI()
 {}
 
 
-bool ModuleAI::Awake(pugi::xml_node& config)
+
+bool ModuleAI::Start()
 {
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
@@ -29,6 +30,19 @@ bool ModuleAI::Awake(pugi::xml_node& config)
 bool ModuleAI::PostUpdate(float dt)
 {
 	CheckListener(this);
+
+	return true;
+}
+
+
+bool ModuleAI::CleanUp()
+{
+	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, this);
+
+	baseVector.clear();
+	spawnerVector.clear();
 
 	return true;
 }
@@ -77,7 +91,7 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 
 		if (base != -1) //-1 means no player controlled bases were found
 		{
-			objectivePos = baseVector[base]->GetPosition();
+			objectivePos = baseVector[base]->GetPosition() + baseVector[base]->GetCenter();
 			
 			//call nearest spawner and spawn x number of monsters
 			CommandSpawners();
@@ -171,4 +185,11 @@ int ModuleAI::CalculateEnemiesToSpawn()
 	int days = app->testScene->GetDayNumber();
 
 	return days * ENEMIES_PER_NIGHT;
+}
+
+
+void ModuleAI::ResetAI()
+{
+	baseVector.clear();
+	spawnerVector.clear();
 }

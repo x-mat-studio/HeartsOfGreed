@@ -108,6 +108,11 @@ public:
 		return frames[currentFrame];
 	}
 
+	int GetCurrentFrameNum()
+	{
+		return currentFrame;
+	}
+
 
 	SDL_Rect& GetCurrentFrameBox(float dt)
 	{

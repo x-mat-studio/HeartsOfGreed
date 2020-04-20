@@ -93,14 +93,14 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	damageTakenTimer(0.f),
 
 	haveOrders(false),
-	
+
 	state(ENEMY_STATES::IDLE)
 {
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, false); //TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
 
-	int randomCounter = rand() % 50;
+	int randomCounter = rand() % 20;
 	framesPerPathfinding += randomCounter;
 }
 
@@ -150,8 +150,8 @@ bool Enemy::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
-	StateMachine(dt);
 	GroupMovement(dt);
+	StateMachine(dt);
 
 	Roar();
 	DrawOnSelect();
@@ -203,18 +203,23 @@ void Enemy::StateMachine(float dt)
 
 		if (attackCooldown == 0)
 		{
-			if (Attack() == true)
+			if (CheckAttackRange() == true)
 			{
-				if (shortTermObjective != nullptr)
-					dir = DetermineDirection(shortTermObjective->position - position);
+				if (Attack() == true)
+				{
 
-				attackCooldown += 0.01f;
+					if (shortTermObjective != nullptr)
+						dir = DetermineDirection(shortTermObjective->position - position);
+
+					attackCooldown += 0.01f;
+
+				}
 			}
 			else
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
 			}
-			
+
 		}
 		else
 		{

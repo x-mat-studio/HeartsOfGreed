@@ -1,5 +1,7 @@
 #include "TestScene.h"
+
 #include "App.h"
+
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
@@ -19,6 +21,7 @@
 #include "Minimap.h"
 #include "Render.h"
 #include "Player.h"
+#include "AI.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -158,6 +161,8 @@ bool  ModuleTestScene::PreUpdate(float dt)
 {
 	CheckListener(this);
 
+
+	//VERTICAL SLICE
 	//CalculateTimers(dt);
 
 	return true;
@@ -297,7 +302,7 @@ bool  ModuleTestScene::CleanUp()
 {
 	app->pathfinding->CleanUp();
 	app->uiManager->CleanUp();
-	app->entityManager->DeleteAllEntities();
+	app->entityManager->ResetEntityManager();
 	app->coll->CleanUp();
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
@@ -306,6 +311,7 @@ bool  ModuleTestScene::CleanUp()
 
 
 	app->player->Disable();
+	app->ai->ResetAI();
 
 
 	return true;
