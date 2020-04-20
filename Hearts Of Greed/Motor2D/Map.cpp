@@ -518,7 +518,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 			}
 		}
 	}
-	if (layer->name == P2SString(BuildingGeneration")) {
+	if (layer->name == P2SString("BuildingGeneration")) {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
