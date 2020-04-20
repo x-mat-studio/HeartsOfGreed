@@ -119,6 +119,8 @@ bool ModulePlayer::CleanUp()
 
 	heroesVector.clear();
 
+	resources = 0;
+
 	return true;
 }
 
@@ -519,6 +521,7 @@ bool ModulePlayer::BuildClick()
 		switch (buildingToBuild)
 		{
 		case ENTITY_TYPE::BLDG_TURRET:
+
 			baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
 			break;
 		}

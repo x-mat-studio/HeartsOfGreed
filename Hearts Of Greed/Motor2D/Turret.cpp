@@ -3,6 +3,7 @@
 #include "Render.h"
 #include "Map.h"
 #include "FoWManager.h"
+#include "Base.h"
 
 
 
@@ -262,6 +263,11 @@ void Turret::Die()
 	{
 		visionEntity->deleteEntity = true;
 		visionEntity = nullptr;
+	}
+
+	if (myBase != nullptr)
+	{
+		myBase->RemoveTurret(this);
 	}
 }
 

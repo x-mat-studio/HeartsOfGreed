@@ -130,6 +130,7 @@ bool Base::AddTurret(Turret* turret)
 	else
 	{
 		turretsVector.push_back(turret);
+		turret->myBase = this;
 		return true;
 	}
 }
@@ -181,7 +182,6 @@ void Base::RemoveTurret(Turret* turret)
 	{
 		if (turretsVector[i] == turret)
 		{
-			delete turretsVector[i];
 			turretsVector.erase(turretsVector.begin() + i);
 		}
 	}
@@ -197,7 +197,6 @@ void Base::RemoveBarricade(Barricade* barricade)
 	{
 		if (barricadesVector[i] == barricade)
 		{
-			delete barricadesVector[i];
 			barricadesVector.erase(barricadesVector.begin() + i);
 		}
 	}
