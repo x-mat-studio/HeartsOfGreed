@@ -1697,3 +1697,12 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 	}
 	return ret;
 }
+
+
+void ModuleEntityManager::ResetEntityManager()
+{
+	DeleteAllEntities();
+
+	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+}

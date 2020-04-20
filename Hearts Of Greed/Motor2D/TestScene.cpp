@@ -302,7 +302,7 @@ bool  ModuleTestScene::CleanUp()
 {
 	app->pathfinding->CleanUp();
 	app->uiManager->CleanUp();
-	app->entityManager->DeleteAllEntities();
+	app->entityManager->ResetEntityManager();
 	app->coll->CleanUp();
 	app->map->CleanUp();
 	app->fowManager->DeleteFoWMap();
