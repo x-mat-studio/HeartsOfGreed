@@ -1026,8 +1026,9 @@ void ModuleUIManager::UpdateFocusPortrait()
 
 	focusedEnt = app->player->GetFocusedEntity();
 
-	if (focusedEnt != nullptr && focusedEnt->toDelete == false)
+	if (focusedEnt != nullptr )
 	{
+		if(focusedEnt->toDelete == false)
 		CreateEntityPortraitChilds();
 	}
 
