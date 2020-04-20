@@ -561,7 +561,7 @@ bool ModulePathfinding::IsWalkable(const iMPoint& pos) const
 
 uchar ModulePathfinding::GetTileAt(const iMPoint& pos) const
 {
-	if (CheckBoundaries(pos))
+	if (CheckBoundaries(pos) && walkabilityMap)
 		return walkabilityMap[(pos.y * width) + pos.x];
 
 	return INVALID_WALK_CODE;

@@ -1704,7 +1704,10 @@ void ModuleEntityManager::ResetEntityManager()
 {
 	DeleteAllEntities();
 
+	if(buildingTexture != nullptr)
 	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+
+	if (base1Texture != nullptr)
 	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
 
 	app->fowManager->DeleteAllFoWEntites();

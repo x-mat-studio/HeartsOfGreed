@@ -21,7 +21,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
-lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr)
+lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr), clickSound(-1), hoverSound(-1)
 {
 	name.create("UIManager");
 }
@@ -159,8 +159,6 @@ bool ModuleUIManager::CleanUp()
 	}
 
 	uiVector.clear();
-
-	DeleteUIChilds(focusedPortrait, true);
 
 	portraitPointer = nullptr;
 	focusedEnt = nullptr;
@@ -518,7 +516,7 @@ void ModuleUIManager::CreateCreditMenu()
 
 void ModuleUIManager::CreateEntityPortrait()
 {
-	if (portraitPointer == nullptr)
+	if (focusedPortrait == nullptr)
 		return;
 
 	focusedEnt = app->player->GetFocusedEntity();
@@ -1043,7 +1041,7 @@ void ModuleUIManager::UpdateResources(int newResources)
 	this->screenResources = newResources;
 	char bufferText[10];
 
-	sprintf_s(bufferText, 10, "%d", newResources);
+	sprintf_s(bufferText, 10, "%i", newResources);
 
 	UI_Text* updateResources = (UI_Text*)currResources;
 	updateResources->LoadNewTexture(bufferText, nullptr);
