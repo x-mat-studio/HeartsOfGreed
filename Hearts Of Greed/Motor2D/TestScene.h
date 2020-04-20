@@ -84,6 +84,9 @@ private:
 
 	//this variable stores the number of pixels from the screen at which the camera can be moved by the mouse pos
 	iMPoint camMarginMovements;
+
+	float fadeTime;
+
 };
 
 #endif // __TEST_SCENE_H__

@@ -49,6 +49,7 @@ bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 	bgTransitionConst = MAX(bgTransitionConst, 1);
 	bgTransitionConst = MIN(bgTransitionConst, 255);
 
+
 	if (logoTopValue - logoStartingValue < 0)
 	{
 		logoTransitionConst *= -1;
