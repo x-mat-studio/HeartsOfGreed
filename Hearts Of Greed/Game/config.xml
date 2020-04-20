@@ -50,8 +50,8 @@
 
   <testScene 
     camVel="700" 
-    initialCamPosX="500" 
-    initialCamPosY="500"
+    initialCamPosX="-1650" 
+    initialCamPosY="800"
     dayTimerSec="4"
     nightTimerSec="5" 
     freeCamMarginDetectionPixelsX="20"
