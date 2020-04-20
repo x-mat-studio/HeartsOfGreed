@@ -42,7 +42,7 @@ bool UI_Text::Update(float dt)
 bool UI_Text::PostUpdate(float dt)
 {
 	// We only use directly Blit in the case of Text. We need an NULL SDL_Rect.
-	if (enabled)
+	if (enabled && texture != nullptr)
 		app->render->Blit(texture, worldPosition.x, worldPosition.y, nullptr, false, false, 0.0f, 255, 255, 255);
 
 	return true;
@@ -53,7 +53,9 @@ void UI_Text::HandleInput()
 
 void UI_Text::LoadNewTexture(char* newtext, _TTF_Font* newFont)
 {
-	app->tex->UnLoad(texture);
+	if (texture != nullptr)
+		app->tex->UnLoad(texture);
+
 	SDL_Color color{ 255,255,255 };
 
 	if (this->name == "saveText" || this->name == "loadText")
