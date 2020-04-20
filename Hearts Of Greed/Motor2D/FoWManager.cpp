@@ -101,6 +101,10 @@ bool ModuleFoWManager::PreUpdate(float dt)
 			delete fowEntities[i];
 			fowEntities[i] = nullptr;
 			fowEntities.erase(fowEntities.begin() + i);
+			if (fowMap != nullptr)
+			{
+				UpdateFoWMap();
+			}
 			i--;
 		}
 
