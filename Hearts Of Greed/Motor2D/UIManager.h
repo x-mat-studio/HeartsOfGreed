@@ -43,7 +43,7 @@ public:
 	bool PostUpdate(float dt);
 
 	UI* AddUIElement(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, Entity* entity = nullptr, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF,
-		char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
+		char* text = nullptr, SDL_Color color = { 255, 255, 255, 255 }, TTF_Font* font = nullptr);
 	UI* AddButton(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, bool menuClosure = false, bool includeFather = false,
 		bool hiding = false, bool hoverMove = true, DRAGGABLE draggable = DRAGGABLE::DRAG_OFF, EVENT_ENUM eventTrigger = EVENT_ENUM::NULL_EVENT, bool interactable = true);
 	UI* AddScrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, EVENT_ENUM eventR, int maxValue = 100.00f,

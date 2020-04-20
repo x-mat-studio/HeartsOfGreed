@@ -91,7 +91,7 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 
 		if (base != -1) //-1 means no player controlled bases were found
 		{
-			objectivePos = baseVector[base]->GetPosition();
+			objectivePos = baseVector[base]->GetPosition() + baseVector[base]->GetCenter();
 			
 			//call nearest spawner and spawn x number of monsters
 			CommandSpawners();

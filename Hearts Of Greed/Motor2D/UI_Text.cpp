@@ -3,12 +3,13 @@
 #include "Textures.h"
 #include "Fonts.h"
 
-UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, char* text, SDL_Color color, _TTF_Font* font) : UI(positionValue, father, uiType, rect, uiName, draggable)
+UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, char* text, SDL_Color color, TTF_Font* font) : UI(positionValue, father, uiType, rect, uiName, draggable)
 {
 
 	if (this->name == "saveText" || this->name == "loadText")
 		color = { 100, 100, 100 };
 
+	if(text != nullptr)
 	texture = app->fonts->Print(text, color, font);
 
 
@@ -51,7 +52,7 @@ bool UI_Text::PostUpdate(float dt)
 void UI_Text::HandleInput()
 {}
 
-void UI_Text::LoadNewTexture(char* newtext, _TTF_Font* newFont)
+void UI_Text::LoadNewTexture(char* newtext, TTF_Font* newFont)
 {
 	if (texture != nullptr)
 		app->tex->UnLoad(texture);
