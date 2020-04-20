@@ -117,6 +117,8 @@ bool ModulePlayer::CleanUp()
 	constrAreaInfo = nullptr;
 	constrArea.clear();
 
+	heroesVector.clear();
+
 	return true;
 }
 

@@ -150,8 +150,8 @@ bool Enemy::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
-	GroupMovement(dt);
 	StateMachine(dt);
+	GroupMovement(dt);
 
 	Roar();
 	DrawOnSelect();

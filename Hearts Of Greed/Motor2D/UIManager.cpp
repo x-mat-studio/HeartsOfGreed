@@ -150,13 +150,17 @@ bool ModuleUIManager::PostUpdate(float dt)
 //// Called before quitting
 bool ModuleUIManager::CleanUp()
 {
-	for (uint i = 0; i < uiVector.size(); i++)
+	for (int i = 0; i < uiVector.size(); i++)
 	{
 		RELEASE(uiVector[i]);
 		uiVector[i] = nullptr;
+		uiVector.erase(uiVector.begin() + i);
+		i--;
 	}
 
 	uiVector.clear();
+
+	DeleteUIChilds(focusedPortrait, true);
 
 	portraitPointer = nullptr;
 	focusedEnt = nullptr;

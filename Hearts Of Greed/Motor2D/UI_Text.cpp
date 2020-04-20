@@ -9,9 +9,8 @@ UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rec
 	if (this->name == "saveText" || this->name == "loadText")
 		color = { 100, 100, 100 };
 
-	if(text != nullptr)
-	texture = app->fonts->Print(text, color, font);
-
+	if (text != nullptr)
+		texture = app->fonts->Print(text, color, font);
 
 }
 

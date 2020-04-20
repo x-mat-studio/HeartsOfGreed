@@ -31,6 +31,9 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&)
 	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREDIT_MENU, this);
 
+	//sounds
+	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
+
 	return true;
 }
 
@@ -44,15 +47,10 @@ bool ModuleMainMenuScene::Start()
 
 	app->uiManager->CreateMainMenu();
 
-
 	//images
 	gameIcon = app->tex->Load("intro_images/gameIcon.png");
 	gameTitle = app->tex->Load("intro_images/gameTitle.png");
 	BG = app->tex->Load("intro_images/MainMenuBG.png");
-
-	//sounds
-	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
-	
 
 	app->audio->PlayMusic("audio/music/IntroMenu.ogg", 1.0f, 200);
 

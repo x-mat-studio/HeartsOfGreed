@@ -19,6 +19,8 @@ struct Portrait
 	Hero* hero = nullptr;
 	int lvl = 1;
 
+	~Portrait() {};
+
 	void ChangeLvl(int newlvl);
 };
 
