@@ -731,7 +731,7 @@ void ModuleUIManager::CreateShopMenu()
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, (P2SString)"shopBackground");
 	createdInGameMenu = father;
 	// Heroes
-	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 10, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroResurrectionText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   R E S U R R E C T I O N");
+	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 3, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, (P2SString)"heroResurrectionText", nullptr, DRAGGABLE::DRAG_OFF, "H E R O   R E S U R R E C T I O N");
 
 	rect = RectConstructor(581, 24, 36, 27);
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 30, h / (app->win->GetUIScale() * 2) - (231 / 2) + 35), father, UI_TYPE::UI_IMG, rect, (P2SString)"heroGathererPortrait");

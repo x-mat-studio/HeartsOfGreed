@@ -337,7 +337,7 @@ void Hero::StateMachine(float dt)
 
 	case HERO_STATES::CHARGING_ATTACK:
 		if (attackCooldown == 0.f)
-			inputs.push_back(HERO_INPUTS::IN_ATTACK);
+			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 
 		break;
 
