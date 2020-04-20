@@ -237,11 +237,7 @@ Hero::~Hero()
 	currAoE.clear();
 	suplAoE.clear();
 
-	if (visionEntity != nullptr)
-	{
-		visionEntity->deleteEntity = true;
-		visionEntity = nullptr;
-	}
+
 }
 
 
@@ -555,10 +551,13 @@ void Hero::Die()
 		minimapIcon->minimapPos = nullptr;
 	}
 
-
-
 	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 }
 
 
@@ -768,19 +767,17 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		if (state == HERO_STATES::CHARGING_ATTACK || state == HERO_STATES::ATTACK)
+		currentAnimation->GetCurrentFrame(attackSpeed * dt);
+
+		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
 		{
-			currentAnimation->GetCurrentFrame(attackSpeed * dt);
+			currentAnimation->ResetAnimation();
 
-			if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
-			{
-				currentAnimation->ResetAnimation();
+			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+			attackCooldown = 0.f;
 
-				inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
-				attackCooldown = 0.f;
-
-			}
 		}
+
 	}
 
 	if (skill1TimePassed > 0.f)
@@ -1245,6 +1242,7 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &punchLeft;
 			break;
 		}
+
 		currentAnimation->loop = false;
 
 		break;
@@ -1278,7 +1276,8 @@ void Hero::SetAnimation(HERO_STATES currState)
 			currentAnimation = &skill1Left;
 			break;
 		}
-		if(currentAnimation->GetCurrentFrameNum() > 0)
+
+		if (currentAnimation->GetCurrentFrameNum() > 0)
 			currentAnimation->ResetAnimation();
 
 		currentAnimation->loop = false;

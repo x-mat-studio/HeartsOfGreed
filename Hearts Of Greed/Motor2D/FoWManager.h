@@ -68,6 +68,7 @@ public:
 
 	bool InsideCircle(iMPoint center, iMPoint tile, float radius);
 
+
 private:
 	unsigned short* GenerateCircle(int radius);
 	unsigned short* GenerateCircleBorders(int radius,unsigned short* mask);

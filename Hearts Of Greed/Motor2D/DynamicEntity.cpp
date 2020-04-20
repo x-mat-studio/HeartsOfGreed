@@ -18,7 +18,6 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	unitSpeed(speed),
 
 	isMoving(false),
-	current_animation(nullptr),
 
 	toMove{ 0,0 },
 	framesSinceRequest(0),
@@ -357,31 +356,17 @@ void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
 
 	// Debug pathfinding ------------------------------
 
-	SDL_Texture* debugTex = app->entityManager->debugPathTexture;
-
 	std::vector<iMPoint>* path = &this->path;
 	for (std::vector<iMPoint>::iterator it = path->begin(); it != path->end(); ++it)
 	{
 		iMPoint pos = app->map->MapToWorld(it->x - 1, it->y);
-		app->render->Blit(debugTex, pos.x, pos.y);
+		app->render->Blit(app->entityManager->debugPathTexture, pos.x, pos.y);
 	}
 }
 
 void DynamicEntity::DestroyPath()
 {
 	app->pathfinding->DeletePath(this);
-}
-
-SDL_Rect DynamicEntity::GetAnimationRect(float dt)
-{
-	if (current_animation == NULL)
-	{
-		return { 0,0,0,0 };
-	}
-	else
-	{
-		return current_animation->GetCurrentFrameBox(dt);
-	}
 }
 
 void DynamicEntity::Draw(float dt)

@@ -108,6 +108,7 @@ bool ModuleTextures::UnLoad(SDL_Texture* texture)
 // Translate a surface into a texture
 SDL_Texture* const ModuleTextures::LoadSurface(SDL_Surface* surface)
 {
+
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
 
 

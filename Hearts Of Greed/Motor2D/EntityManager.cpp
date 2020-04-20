@@ -951,8 +951,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 
 	float w, h;
 
-	Collider* col;
-	fMPoint pos;
+	Collider* col = nullptr;
+	fMPoint pos{0,0};
 
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -966,9 +966,9 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 		}
 
 
-		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) {
-
-			assert((int)ENTITY_TYPE::MAX_TYPE == MAX_ENTITY_TYPES);
+		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) 
+		{
+			//If a Entity Type is added, update the switch :D
 
 			switch (entityVector[i]->GetType())
 			{
@@ -1706,4 +1706,6 @@ void ModuleEntityManager::ResetEntityManager()
 
 	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
 	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+
+	app->fowManager->DeleteAllFoWEntites();
 }

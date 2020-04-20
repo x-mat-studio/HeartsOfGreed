@@ -97,6 +97,7 @@ void ModuleEventManager::FireEvent(EVENT_ENUM eventId) const
 			{
 				listeners[i]->AddEvent(eventId);
 			}
+			listeners.clear();
 		}
 	}
 

@@ -182,7 +182,6 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, meleePortraitRect, (P2SString)"meleePortrait", DRAGGABLE::DRAG_OFF);
 		break;
 	default:
-		assert(0 == 1);
 		break;
 	}
 

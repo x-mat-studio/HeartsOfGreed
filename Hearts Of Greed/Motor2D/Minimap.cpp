@@ -92,8 +92,6 @@ bool Minimap::PreUpdate(float dt)
 
 		}
 
-
-
 		float UIscale = app->win->GetUIScale();
 		UI* element = app->uiManager->FindUIByName("minimapBackground");
 		position.x = element->worldPosition.x * UIscale + 5;
