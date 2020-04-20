@@ -153,13 +153,13 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 	newPortrait.position.x = worldPosition.x;
 	newPortrait.position.y = nextVectorPosition;
 	
-	newPortrait.background = new UI_Image(newPortrait.position, this, UI_TYPE::UI_IMG, backgroundRect, (P2SString)"backgroundPortrait", DRAGGABLE::DRAG_OFF);
+	newPortrait.background = new UI_Image(newPortrait.position, this, UI_TYPE::UI_IMG, backgroundRect, P2SString("backgroundPortrait"), DRAGGABLE::DRAG_OFF);
 	
-	newPortrait.backgroundLevel = new UI_Image(fMPoint (newPortrait.position.x, newPortrait.position.y + 38), this, UI_TYPE::UI_IMG, backgroundLevelRect, (P2SString)"backgroundLevelPortrait", DRAGGABLE::DRAG_OFF);
+	newPortrait.backgroundLevel = new UI_Image(fMPoint (newPortrait.position.x, newPortrait.position.y + 38), this, UI_TYPE::UI_IMG, backgroundLevelRect, P2SString("backgroundLevelPortrait"), DRAGGABLE::DRAG_OFF);
 
-	newPortrait.backgroundHealthbar = new UI_Image(fMPoint (newPortrait.position.x + 18, newPortrait.position.y + 45), this, UI_TYPE::UI_IMG, backgroundHealthbarRect, (P2SString)"backgroundHealthbarPortrait", DRAGGABLE::DRAG_OFF);
+	newPortrait.backgroundHealthbar = new UI_Image(fMPoint (newPortrait.position.x + 18, newPortrait.position.y + 45), this, UI_TYPE::UI_IMG, backgroundHealthbarRect, P2SString("backgroundHealthbarPortrait"), DRAGGABLE::DRAG_OFF);
 	
-	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, (P2SString)"healthbarPortrait", entity, DRAGGABLE::DRAG_OFF);
+	newPortrait.healthbar = new UI_Healthbar(fMPoint(newPortrait.position.x + 19, newPortrait.position.y + 46), this, UI_TYPE::UI_HEALTHBAR, healthbarRect, P2SString("healthbarPortrait"), entity, DRAGGABLE::DRAG_OFF);
 	
 	SDL_Color color;
 	char level [10];
@@ -168,18 +168,18 @@ void UI_Portrait::CreatePortrait(Hero* entity)
 	color.g = 255;
 
 	sprintf_s(level, 10, "%d", entity->level);
-	newPortrait.level = new UI_Text(fMPoint(newPortrait.position.x + 5, newPortrait.position.y + 34), this, UI_TYPE::UI_TEXT, healthbarRect, (P2SString)"textPortrait", DRAGGABLE::DRAG_OFF, level, color);
+	newPortrait.level = new UI_Text(fMPoint(newPortrait.position.x + 5, newPortrait.position.y + 34), this, UI_TYPE::UI_TEXT, healthbarRect, P2SString("textPortrait"), DRAGGABLE::DRAG_OFF, level, color);
 
 	switch (entity->GetType())
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
-		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, gathererPortraitRect, (P2SString)"gathererProtrait", DRAGGABLE::DRAG_OFF);
+		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, gathererPortraitRect, P2SString("gathererProtrait"), DRAGGABLE::DRAG_OFF);
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
-		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, rangedPortraitRect, (P2SString)"rangedPortrait", DRAGGABLE::DRAG_OFF);
+		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, rangedPortraitRect, P2SString("rangedPortrait"), DRAGGABLE::DRAG_OFF);
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
-		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, meleePortraitRect, (P2SString)"meleePortrait", DRAGGABLE::DRAG_OFF);
+		newPortrait.portrait = new UI_Image(fMPoint(newPortrait.position.x + 2, newPortrait.position.y + 3), this, UI_TYPE::UI_IMG, meleePortraitRect, P2SString("meleePortrait"), DRAGGABLE::DRAG_OFF);
 		break;
 	default:
 		break;

@@ -36,7 +36,7 @@ bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 bool ModuleLoseScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(10, app->win->height / app->win->GetUIScale() -40), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"message",nullptr, DRAGGABLE::DRAG_OFF, "CLICK ANYWHERE TO CONTINUE");
+	app->uiManager->AddUIElement(fMPoint(10, app->win->height / app->win->GetUIScale() -40), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("message"),nullptr, DRAGGABLE::DRAG_OFF, "CLICK ANYWHERE TO CONTINUE");
 
 	youLost = app->tex->Load("intro_images/youLost.png");
 	medalLose = app->tex->Load("intro_images/medalLose.png");

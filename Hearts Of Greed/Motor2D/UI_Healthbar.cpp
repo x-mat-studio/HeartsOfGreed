@@ -8,7 +8,7 @@ UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SD
 {
 	if (entity != nullptr)
 	{
-		if (this->name == "Ebar")
+		if (this->name == P2SString("Ebar"))
 		{
 			Hero* hero = (Hero*)entity;
 			maxValue = &hero->maxEnergyPoints;

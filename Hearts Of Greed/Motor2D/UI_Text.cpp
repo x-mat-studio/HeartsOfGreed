@@ -58,7 +58,7 @@ void UI_Text::LoadNewTexture(char* newtext, TTF_Font* newFont)
 
 	SDL_Color color{ 255,255,255 };
 
-	if (this->name == (P2SString)"saveText" || this->name == (P2SString)"loadText")
+	if (this->name == P2SString("saveText") || this->name == P2SString("loadText"))
 		color = { 100, 100, 100 };
 
 	texture = app->fonts->Print(newtext, color, newFont);

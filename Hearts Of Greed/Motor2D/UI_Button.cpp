@@ -9,11 +9,12 @@ UI_Button::UI_Button(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect
 	
 	accuratedDrag({0, 0}),
 	eventRecieved(eventR),
-	eventTriggerer(eventTrigger)
+	eventTriggerer(eventTrigger),
+	hoverSound(-1)
 
 {
 
-	if (this->name == "saveButton" || this->name == "loadButton")
+	if (this->name == P2SString("saveButton") || this->name == P2SString("loadButton"))
 		interactable = false;
 
 	defaultPosition = positionValue.x;
@@ -85,7 +86,7 @@ bool UI_Button::Update(float dt)
 					}
 				}
 
-				if (name == "scrollButton" && app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
+				if (name == P2SString("scrollButton") && app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
 				{
 					properties.scrollbarPositioning = true;
 				}
@@ -166,7 +167,7 @@ void UI_Button::OnClick(float dt)
 		app->uiManager->HideElements(this, dt);
 	}
 
-	if (name == "fullscreenButton")
+	if (name == P2SString("fullscreenButton"))
 	{
 		if (box.x == 739)
 		{
