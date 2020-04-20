@@ -16,7 +16,11 @@ Spawner::Spawner(fMPoint position, Spawner* copy) :
 	spawnerType(copy->spawnerType),
 	entitysToSpawn(0)
 {
-	collider->SetPos(position.x, position.y);
+	int x, y;
+	x = position.x + copy->collider->rect.w * 0.5f;
+	y = position.y - copy->collider->rect.h * 0.5f;
+
+	collider->SetPos(x, y);
 }
 
 
@@ -26,13 +30,11 @@ Spawner::~Spawner()
 
 bool Spawner::PreUpdate(float dt)
 {
-	collider->active = false;
 
 	if (entitysToSpawn > 0)
 	{
 		Spawn();
 
-		collider->active = true;
 		entitysToSpawn--;
 	}
 
@@ -48,5 +50,5 @@ void Spawner::SetNumberToSpawn(int number)
 
 void Spawner::Spawn()
 {
-	app->entityManager->AddEntity(spawnerType, position.x, position.y, ENTITY_ALIGNEMENT::ENEMY);
+	app->entityManager->AddEntity(spawnerType, position.x, position.y + collider->rect.h, ENTITY_ALIGNEMENT::ENEMY);
 }
