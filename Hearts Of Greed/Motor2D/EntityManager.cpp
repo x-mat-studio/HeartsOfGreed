@@ -212,7 +212,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
+	Collider* buildingCollider = new Collider({ -150,130,430, 330}, COLLIDER_VISIBILITY, this);
 	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
@@ -221,8 +221,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown, 150, 150, 5, 100, 50, 160);
 
 	//Template base
+	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, buildingCollider, 3, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
+	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, 3, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
 
 
 	//Generate Areas------------------------------------
