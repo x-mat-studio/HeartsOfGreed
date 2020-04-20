@@ -483,25 +483,34 @@ generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int l
 
 iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination)const
 {
+	iMPoint retNeg = destination;
+	iMPoint retPos = destination;
+
 	iMPoint ret = destination;
+	float currDistance = FLT_MAX;
 
 	for (int i = 0; i < NEARBY_TILES_CHECK; i++)
 	{
-		if (ret.x < origin.x)
-			ret.x++;
-		else if (ret.x > origin.x)
-			ret.x--;
+		retPos.x++;
+		retNeg.x--;
 
-		if (ret.y < origin.y)
-			ret.y++;
-		else if (ret.y > origin.y)
-			ret.y--;
+		retPos.y++;
+		retNeg.y--;
 
-		if (IsWalkable(ret))
-			return ret;
+		if (IsWalkable(retNeg) && retNeg.DistanceNoSqrt(ret) < currDistance)
+		{
+			currDistance = retNeg.DistanceNoSqrt(ret);
+			ret = retNeg;
+		}
+
+		if (IsWalkable(retPos) && retPos.DistanceNoSqrt(ret) < currDistance)
+		{
+			currDistance = retPos.DistanceNoSqrt(ret);
+			ret = retPos;
+		}
 	}
 
-	return destination;
+	return ret;
 }
 
 bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const

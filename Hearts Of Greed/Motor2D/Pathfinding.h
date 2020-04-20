@@ -6,7 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
-#define NEARBY_TILES_CHECK 5
+#define NEARBY_TILES_CHECK 3
 
 #include <list>
 #include <vector>
