@@ -247,7 +247,7 @@ void Enemy::Roar()
 
 	if (randomCounter == 997) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
 	if (randomCounter == 998) {
@@ -351,11 +351,11 @@ void Enemy::Die()
 
 	if (randomCounter == 1)
 	{
-		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
 	}
 	else
 	{
-		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
 	}
 
 	if (minimapIcon != nullptr)
@@ -606,7 +606,7 @@ int Enemy::RecieveDamage(int damage)
 			ret = xpOnDeath;
 		}
 		else
-			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
+			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
 	}
 
 	return ret;

@@ -15,7 +15,7 @@ struct Properties
 };
 struct MapLayer
 {
-	P2SString name = "";
+	P2SString name;
 	uint width = 0u;
 	uint height = 0u;
 	uint* gid = nullptr;

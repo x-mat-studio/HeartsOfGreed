@@ -276,7 +276,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::CREATE_SHOP:
-		app->audio->PlayFx(clickSound, 0, 2);
+		app->audio->PlayFx(clickSound, 0, -1);
 		CreateShopMenu();
 		break;
 
@@ -1046,7 +1046,7 @@ void ModuleUIManager::UpdateResources(int newResources)
 	sprintf_s(bufferText, 10, "%d", newResources);
 
 	UI_Text* updateResources = (UI_Text*)currResources;
-	updateResources->LoadNewTexture(bufferText, app->fonts->fonts[0]);
+	updateResources->LoadNewTexture(bufferText, nullptr);
 
 }
 

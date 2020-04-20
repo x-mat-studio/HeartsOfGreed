@@ -51,6 +51,9 @@ private:
 	//sounds
 	//int winMusic;
 
+
+	float fadeTime;
+
 };
 
 #endif // __LOSE_SCENE__

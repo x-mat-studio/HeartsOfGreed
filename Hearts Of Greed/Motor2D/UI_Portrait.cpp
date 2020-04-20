@@ -249,7 +249,7 @@ void Portrait::ChangeLvl(int newlvl)
 
 	sprintf_s(bufferText, 10, "%d", newlvl);
 
-	this->level->LoadNewTexture(bufferText, app->fonts->fonts[0]);
+	this->level->LoadNewTexture(bufferText, nullptr);
 
 }
 

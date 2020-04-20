@@ -5,8 +5,8 @@
 
 UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, char* text, SDL_Color color, TTF_Font* font) : UI(positionValue, father, uiType, rect, uiName, draggable)
 {
-
-	if (this->name == "saveText" || this->name == "loadText")
+	
+	if (this->name == P2SString("saveText") || this->name == P2SString("loadText"))
 		color = { 100, 100, 100 };
 
 	if (text != nullptr)
@@ -58,7 +58,7 @@ void UI_Text::LoadNewTexture(char* newtext, TTF_Font* newFont)
 
 	SDL_Color color{ 255,255,255 };
 
-	if (this->name == "saveText" || this->name == "loadText")
+	if (this->name == (P2SString)"saveText" || this->name == (P2SString)"loadText")
 		color = { 100, 100, 100 };
 
 	texture = app->fonts->Print(newtext, color, newFont);

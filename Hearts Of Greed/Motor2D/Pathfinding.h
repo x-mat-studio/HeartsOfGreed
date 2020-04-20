@@ -46,6 +46,7 @@ struct Cluster
 	Cluster();
 	Cluster(int width, int height, iMPoint& pos);
 	Cluster(const Cluster& clust);
+	~Cluster() { clustNodes.clear(); }
 
 	iMPoint pos;
 	int width, height;

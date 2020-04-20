@@ -291,6 +291,8 @@ void graphLevel::buildClusters(int lvl)
 	int clustSize = CLUSTER_SIZE_LVL * lvl;
 
 	std::vector <Cluster> clusterVector;
+	this->lvlClusters.push_back(clusterVector);
+
 	int width = app->pathfinding->width;
 	int height = app->pathfinding->height;
 
@@ -311,11 +313,10 @@ void graphLevel::buildClusters(int lvl)
 				c.height = clustSize;
 
 			c.pos = { i,k };
-			clusterVector.push_back(Cluster(c));
+			lvlClusters[lvl-1].push_back(Cluster(c));
 		}
 	}
 
-	this->lvlClusters.push_back(clusterVector);
 }
 
 HierNode* graphLevel::insertNode(iMPoint pos, int maxLvl, bool* toDelete)

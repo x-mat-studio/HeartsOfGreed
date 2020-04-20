@@ -66,6 +66,7 @@ private:
 
 	bool logoValueDown;
 	bool bgValueDown;
+
 };
 
 #endif // __INTRO_SCENE__
