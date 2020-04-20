@@ -236,6 +236,12 @@ Hero::~Hero()
 
 	currAoE.clear();
 	suplAoE.clear();
+
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 }
 
 
@@ -549,11 +555,7 @@ void Hero::Die()
 		minimapIcon->minimapPos = nullptr;
 	}
 
-	if (visionEntity != nullptr)
-	{
-		visionEntity->deleteEntity = true;
-		visionEntity = nullptr;
-	}
+
 
 	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 
