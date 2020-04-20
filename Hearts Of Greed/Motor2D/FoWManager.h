@@ -42,7 +42,9 @@ public:
 	bool CleanUp();
 
 	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius=3);
-	
+	void DeleteAllFoWEntites();
+
+
 	//Resets the map to its shrouded state
 	void ResetFoWMap();
 	void CreateFoWMap(uint width, uint height);
