@@ -30,7 +30,29 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleEntityManager::ModuleEntityManager()
+ModuleEntityManager::ModuleEntityManager() :
+
+base2Texture(nullptr),
+base2TextureEnemy(nullptr),
+base2TextureSelected(nullptr),
+base2TextureSelectedEnemy(nullptr),
+suitManTexture(nullptr),
+armorMaleTexture(nullptr),
+combatFemaleTexture(nullptr),
+buildingTexture(nullptr),
+base1Texture(nullptr),
+deco3Selected(nullptr),
+turretTexture(nullptr),
+enemyTexture(nullptr),
+
+sampleGatherer(nullptr),
+sampleMelee(nullptr),
+sampleEnemy(nullptr),
+sampleSpawner(nullptr),
+sampleBuilding(nullptr),
+sampleBase(nullptr),
+sampleTurret(nullptr)
+
 {
 	name.create("entityManager");
 }
@@ -1704,8 +1726,15 @@ void ModuleEntityManager::ResetEntityManager()
 {
 	DeleteAllEntities();
 
-	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
-	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+	if (base1Texture != nullptr)
+	{
+		SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+	}
+
+	if (buildingTexture != nullptr)
+	{
+		SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+	}
 
 	app->fowManager->DeleteAllFoWEntites();
 }
