@@ -110,19 +110,31 @@ bool UI_Portrait::PostUpdate(float dt)
 
 	for (int i = 0; i < numElem; i++)
 	{
+		if(portraitVector[i].background != nullptr)
 		portraitVector[i].background->PostUpdate(dt);
+
+		if (portraitVector[i].portrait != nullptr)
 		portraitVector[i].portrait->PostUpdate(dt);
+
+		if (portraitVector[i].backgroundLevel != nullptr)
 		portraitVector[i].backgroundLevel->PostUpdate(dt);
+
+		if (portraitVector[i].backgroundHealthbar != nullptr)
 		portraitVector[i].backgroundHealthbar->PostUpdate(dt);
+
+		if (portraitVector[i].healthbar != nullptr)
 		portraitVector[i].healthbar->PostUpdate(dt);
+
+		if (portraitVector[i].level != nullptr)
 		portraitVector[i].level->PostUpdate(dt);
 		
-		if (portraitVector[i].hero != nullptr) {
+		if (portraitVector[i].hero != nullptr) 
+		{
 
-			if (portraitVector[i].hero->selectedByPlayer == true) {
-
-				SDL_Rect posPLS{ this->portraitVector[i].portrait->worldPosition.x * app->win->GetUIScale() , this->portraitVector[i].portrait->worldPosition.y * app->win->GetUIScale(), this->portraitVector[i].portrait->box.w * app->win->GetUIScale(),this->portraitVector[i].portrait->box.h * app->win->GetUIScale() };
-				app->render->DrawQuad(posPLS, 120, 100, 10, 80, true, false);
+			if (portraitVector[i].hero->selectedByPlayer == true) 
+			{
+				SDL_Rect portPos{ this->portraitVector[i].portrait->worldPosition.x * app->win->GetUIScale() , this->portraitVector[i].portrait->worldPosition.y * app->win->GetUIScale(), this->portraitVector[i].portrait->box.w * app->win->GetUIScale(),this->portraitVector[i].portrait->box.h * app->win->GetUIScale() };
+				app->render->DrawQuad(portPos, 120, 100, 10, 80, true, false);
 			}
 
 		}
