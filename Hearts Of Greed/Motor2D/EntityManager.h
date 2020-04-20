@@ -120,6 +120,8 @@ public:
 	//function used for minimap
 	void DrawOnlyStaticBuildings();
 
+	void ResetEntityManager();
+
 private:
 
 	void CheckIfStarted();

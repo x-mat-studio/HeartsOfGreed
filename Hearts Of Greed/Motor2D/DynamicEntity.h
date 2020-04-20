@@ -5,7 +5,7 @@
 
 #include "Entity.h"
 
-#define FRAMES_PER_PATHFINDING 40
+#define FRAMES_PER_PATHFINDING 20
 #define FRAMES_PER_PATH_REQUEST 30
 
 enum class FACE_DIR : int

@@ -101,7 +101,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, 100, 100, 1, 40, 40, 1, 20, 1, 35, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 45, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
 		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
@@ -144,7 +144,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
 		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, 100, 100, 1, 40, 40, 1, 20, 1, 40, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
+		1, 100, 100, 1, 40, 40, 1, 20, 1, 45, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
 		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
@@ -1696,4 +1696,13 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 	break;
 	}
 	return ret;
+}
+
+
+void ModuleEntityManager::ResetEntityManager()
+{
+	DeleteAllEntities();
+
+	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
 }
