@@ -20,9 +20,11 @@ public:
 	ModuleAI();
 	~ModuleAI();
 
-	bool Awake(pugi::xml_node&);
+	bool Start();
 
 	bool PostUpdate(float dt);
+
+	bool CleanUp();
 
 	void OnCollision(Collider*, Collider*);
 
@@ -31,6 +33,7 @@ public:
 	void PushBase(Base* building);
 	void PushSpawner(Spawner* spawner);
 
+	void ResetAI();
 private:
 	void CreateSelectionCollider(Collider*);
 	void ExecuteEvent(EVENT_ENUM eventId);
