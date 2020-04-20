@@ -257,7 +257,7 @@ bool Hero::Update(float dt)
 	GroupMovement(dt);
 
 	FeelingSecure(dt);
-	if(!gettingAttacked)
+	if (!gettingAttacked)
 	{
 		RecoverHealth(dt);
 		RecoverEnergy(dt);
@@ -286,7 +286,7 @@ void Hero::StateMachine(float dt)
 		{
 			visionEntity->SetNewPosition(position);
 		}
-		
+
 
 		if (objective != nullptr)
 		{
@@ -336,6 +336,9 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::CHARGING_ATTACK:
+		if (attackCooldown == 0.f)
+			inputs.push_back(HERO_INPUTS::IN_ATTACK);
+
 		break;
 
 	case HERO_STATES::PREPARE_SKILL1:
@@ -389,7 +392,7 @@ bool Hero::PostUpdate(float dt)
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
-	
+
 
 	if (haveObjective == false)
 	{
@@ -769,8 +772,8 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 			currentAnimation->ResetAnimation();
 
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
-
 			attackCooldown = 0.f;
+
 		}
 	}
 
@@ -884,7 +887,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(); break;
 
-			case HERO_INPUTS::IN_ATTACK: 
+			case HERO_INPUTS::IN_ATTACK:
 				attackCooldown += TIME_TRIGGER;
 				state = HERO_STATES::ATTACK;	PlayGenericNoise(); break;
 
@@ -1331,7 +1334,7 @@ bool Hero::ExecuteSkill1()
 {
 	int ret = 0;
 
-	ret =  app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+	ret = app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
 
 	if (ret > 0)
 	{
@@ -1352,7 +1355,7 @@ bool Hero::ExecuteSkill3()
 
 void Hero::DrawSelected()
 {
-	if (selectedByPlayer == true) 
+	if (selectedByPlayer == true)
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
