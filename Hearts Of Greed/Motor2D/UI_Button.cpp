@@ -178,13 +178,13 @@ void UI_Button::OnClick(float dt)
 		}
 	}
 
-	app->audio->PlayFx(app->uiManager->clickSound);
+	app->audio->PlayFx(app->uiManager->clickSound,0,-1);
 }
 
 void UI_Button::HoverFeedback()
 {
 	if (hoverSound)
-		app->audio->PlayFx(app->uiManager->hoverSound);
+		app->audio->PlayFx(app->uiManager->hoverSound,0,-1);
 
 	hoverSound = false;
 

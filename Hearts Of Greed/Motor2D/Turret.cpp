@@ -205,9 +205,9 @@ int Turret::RecieveDamage(int damage)
 		int randomCounter = rand() % 10;
 
 		if (randomCounter == 0)
-			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 1, this->GetMyLoudness(), this->GetMyDirection(), true);
+			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
 		else if (randomCounter == 9)
-			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
+			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, 3, this->GetMyLoudness(), this->GetMyDirection(), true);
 
 		if (hitPointsCurrent <= 0)
 		{
@@ -399,7 +399,7 @@ void Turret::StateMachine()
 
 	case TURRET_STATES::CHARGING_ATTACK:
 
-		app->audio->PlayFx(app->entityManager->turretShooting, 0, 1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->turretShooting, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
 
 		break;
 

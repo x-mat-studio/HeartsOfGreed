@@ -106,6 +106,7 @@ void ModuleEventManager::FireEvent(EVENT_ENUM eventId) const
 
 EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger)
 {
+	EVENT_ENUM ret= EVENT_ENUM::NULL_EVENT;
 
 	EVENT_ENUM ret = EVENT_ENUM::NULL_EVENT;
 
@@ -115,7 +116,7 @@ EVENT_ENUM ModuleEventManager::CheckEventTrigger(EVENT_ENUM eventTrigger)
 	{
 		if (eventVector[i].idTrigger == eventTrigger)
 		{
-			ret = eventVector[i].id;
+			ret= eventVector[i].id;
 			eventVector.erase(eventVector.begin() + i);
 			break;
 		}
