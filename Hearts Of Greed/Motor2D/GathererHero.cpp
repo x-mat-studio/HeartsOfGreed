@@ -133,6 +133,10 @@ bool GathererHero::ExecuteSkill1()
 
 			ret =  app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
 
+			currAoE.clear();
+			suplAoE.clear();
+			currAreaInfo = nullptr;
+
 			if (ret >= 0)
 			{
 				GetExperience(ret);

@@ -87,6 +87,7 @@ bool MeleeHero::ExecuteSkill1()
 		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
 
 		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+
 		return skillExecutionDelay;
 	}
 	else
@@ -95,6 +96,10 @@ bool MeleeHero::ExecuteSkill1()
 		int ret = 0;
 
 		ret =  app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+
+		currAoE.clear();
+		suplAoE.clear();
+		currAreaInfo = nullptr;
 
 		if (ret > 0)
 		{
