@@ -51,6 +51,9 @@ KP 4: Spawn gatherer hero.
 KP 5: Spawn melee hero.
 KP 7: Spawn turret.
 
+N: Win when in-game.
+M: Lose when in-game.
+
 
 	## Team Members:
 
