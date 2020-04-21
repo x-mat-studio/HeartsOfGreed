@@ -4,7 +4,7 @@
 #include "Map.h"
 #include "FoWManager.h"
 #include "Base.h"
-
+#include "EventManager.h"
 
 
 Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
@@ -250,7 +250,7 @@ void Turret::Attack()
 
 void Turret::Die()
 {
-	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD,EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
 
 	if (minimapIcon != nullptr)

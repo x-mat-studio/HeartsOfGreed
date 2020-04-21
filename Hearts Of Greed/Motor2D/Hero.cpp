@@ -530,7 +530,7 @@ void Hero::Die()
 {
 	toDelete = true;
 
-	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
 	switch (type)
 	{
