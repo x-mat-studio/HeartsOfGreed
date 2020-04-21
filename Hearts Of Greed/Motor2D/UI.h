@@ -40,7 +40,6 @@ public:
 	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE dragable);
 	virtual ~UI();
 
-	bool operator==(UI* element);
 
 	virtual bool Start();
 	virtual bool PreUpdate(float dt);

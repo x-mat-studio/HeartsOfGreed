@@ -57,7 +57,6 @@ ModuleTestScene::~ModuleTestScene()
 bool  ModuleTestScene::Awake(pugi::xml_node& config)
 {
 
-
 	camVel = config.attribute("camVel").as_float(1);
 	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
 	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
@@ -111,14 +110,40 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
+		//mid
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
+
+		//Left
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
+
+		//Right down
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
 
 
+		//Right 
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
+
+		//Base
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -175, 195);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -130, 220);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -125, 215);
+
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
 
 		//Spawners------------------
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1270, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
 
 		//Debug

@@ -32,7 +32,7 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	range(range),
 
 	attackCD(0),
-	
+
 	shortTermObjective(nullptr),
 
 	state(TURRET_STATES::IDLE)
@@ -62,7 +62,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	turretLvl(copy->turretLvl),
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
-	range(copy->range), 
+	range(copy->range),
 
 	attackCD(0),
 
@@ -72,7 +72,13 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	state(TURRET_STATES::IDLE)
 {
 	currentAnimation = &idleRightDown;
-	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
+
+	if (align == ENTITY_ALIGNEMENT::PLAYER)
+		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
+	else
+		this->visionEntity = nullptr;
+
+
 }
 
 
@@ -167,7 +173,7 @@ void Turret::Draw(float dt)
 		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));		
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));
 }
 
 int Turret::GetLvl()
@@ -250,7 +256,7 @@ void Turret::Attack()
 
 void Turret::Die()
 {
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD,EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
 
 	if (minimapIcon != nullptr)
@@ -301,7 +307,7 @@ bool Turret::ExternalInput(std::vector<TURRET_INPUTS>& inputs, float dt)
 	{
 		inputs.push_back(TURRET_INPUTS::IN_ATTACK);
 	}
-	else 
+	else
 	{
 		SearchObjective();
 	}
@@ -396,11 +402,11 @@ void Turret::StateMachine()
 
 			attackCD += 0.01f;
 		}
-		else 
+		else
 		{
 			inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
 		}
-		
+
 		break;
 
 	case TURRET_STATES::CHARGING_ATTACK:
@@ -514,3 +520,4 @@ void Turret::SetAnimation(TURRET_STATES state)
 	}
 	}
 }
+

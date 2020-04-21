@@ -62,7 +62,7 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-	turretCost = 95;
+	turretCost = 120;
 	return true;
 }
 

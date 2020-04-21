@@ -32,26 +32,26 @@
 
 ModuleEntityManager::ModuleEntityManager() :
 
-base2Texture(nullptr),
-base2TextureEnemy(nullptr),
-base2TextureSelected(nullptr),
-base2TextureSelectedEnemy(nullptr),
-suitManTexture(nullptr),
-armorMaleTexture(nullptr),
-combatFemaleTexture(nullptr),
-buildingTexture(nullptr),
-base1Texture(nullptr),
-deco3Selected(nullptr),
-turretTexture(nullptr),
-enemyTexture(nullptr),
+	base2Texture(nullptr),
+	base2TextureEnemy(nullptr),
+	base2TextureSelected(nullptr),
+	base2TextureSelectedEnemy(nullptr),
+	suitManTexture(nullptr),
+	armorMaleTexture(nullptr),
+	combatFemaleTexture(nullptr),
+	buildingTexture(nullptr),
+	base1Texture(nullptr),
+	deco3Selected(nullptr),
+	turretTexture(nullptr),
+	enemyTexture(nullptr),
 
-sampleGatherer(nullptr),
-sampleMelee(nullptr),
-sampleEnemy(nullptr),
-sampleSpawner(nullptr),
-sampleBuilding(nullptr),
-sampleBase(nullptr),
-sampleTurret(nullptr)
+	sampleGatherer(nullptr),
+	sampleMelee(nullptr),
+	sampleEnemy(nullptr),
+	sampleSpawner(nullptr),
+	sampleBuilding(nullptr),
+	sampleBase(nullptr),
+	sampleTurret(nullptr)
 
 {
 	name.create("entityManager");
@@ -119,12 +119,30 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	// Hero collider
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 
+	int maxHP = 100;
+	int recoveryHP = 1;
+	int maxEnergy = 40;
+	int recoveryE = 4;
+
+	int atkDmg = 8;
+	float atkSpd = 0.75f;
+	int atkRange = 45;
+
+	int movSpd = 60;
+	int visTiles = 7;
+
+	float skill1ExecTime = 1.75f;
+	float skill1RecovTime = 6.f;
+	int granDmg = 50;
+
+
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeftG, walkLeftUpG,
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, 100, 100, 1, 40, 40, 1, 20, 1, 45, 60, 5, 1.95f, 20.f, 20.f, 6.f, 15.f, 15.f,
-		50, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
+		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
+		granDmg, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
 
 	suitmandoc.reset();
 
@@ -162,12 +180,31 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation skill1LeftUpM = skill1LeftUpM.PushAnimation(armoredman, "skill_1_left_up");
 	Animation skill1LeftDownM = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
 
+	maxHP = 175;
+	recoveryHP = 2;
+
+	maxEnergy = 80;
+	recoveryE = 3;
+
+	atkDmg = 15;
+	atkSpd = 1.f;
+	atkRange = 45;
+
+	movSpd = 100;
+	visTiles = 5;
+
+	skill1ExecTime = 1.0f;
+	skill1RecovTime = 7.5f;
+	int skill1Dmg = 30;
+
+
 	sampleMelee = new MeleeHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
 		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
 		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, 100, 100, 1, 40, 40, 1, 20, 1, 45, 100, 5, 1.5f, 20.f, 20.f, 7.5f, 15.f, 15.f,
-		50, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
+		skill1Dmg, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
 
@@ -226,26 +263,57 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
 	Collider* spawnerCollider = new Collider({ 0,0,5,5 }, COLLIDER_RECLUIT_IA, app->ai);
 
+	maxHP = 25;
+	recoveryHP = 1;
+
+	atkDmg = 2;
+	atkSpd = 1.75f;
+	atkRange = 40;
+
+	movSpd = 125;
+	int vision = 250;
+	int xp = 10;
+
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-		20, 20, 0, 250, 1, 1, 35, 100, 50);
+		maxHP, maxHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
 
 	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
 
 	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,430, 330}, COLLIDER_VISIBILITY, this);
+	Collider* buildingCollider = new Collider({ -150,130,430, 330 }, COLLIDER_VISIBILITY, this);
 	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
 
 	// Test Turret
+	maxHP = 110;
+	recoveryHP = 0;
+
+	atkDmg = 3;
+	atkSpd = 2.f;
+	atkRange = 250;
+	xp = 25;
+
+
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	sampleTurret = new Turret(1, 5, 2, 300, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
-		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown, 150, 150, 5, 100, 50, 160);
+	sampleTurret = new Turret(1, atkDmg, atkSpd, atkRange, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
+		maxHP, maxHP, recoveryHP, xp, 95, 160);
 
 	//Template base
+	maxHP = 500;
+	int recoverHPRate = 20;
+
+	int maxTurrets = 2;
+	int resourcesProd = 5;
+	int resourcesRate = 5;
+
+
+
 	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
-	Collider* baseAlarmCollider = new Collider({ 0, 0, 800, 800 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, 3, 5, nullptr, baseAlarmCollider, 5, 3, 500, 500, 20, 100);
+	Collider* baseAlarmCollider = new Collider({ 0, 0, 700, 650 }, COLLIDER_BASE_ALERT, app->ai);
+	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, maxTurrets, 5, nullptr, baseAlarmCollider, resourcesProd, resourcesRate,
+		maxHP, maxHP, recoverHPRate, 100);
 
 
 	//Generate Areas------------------------------------
@@ -907,7 +975,7 @@ void ModuleEntityManager::RemoveDeletedEntities()
 			delete entityVector[i];
 			entityVector[i] = nullptr;
 			entityVector.erase(entityVector.begin() + i);
-			
+
 			i--;
 
 			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
@@ -962,7 +1030,7 @@ void ModuleEntityManager::SearchEnemiesAlive()
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
 	}
-	
+
 
 }
 
@@ -974,7 +1042,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	float w, h;
 
 	Collider* col = nullptr;
-	fMPoint pos{0,0};
+	fMPoint pos{ 0,0 };
 
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -988,7 +1056,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 		}
 
 
-		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true) 
+		if (app->map->EntityInsideCamera(pos.x, pos.y, w, h) == true)
 		{
 			//If a Entity Type is added, update the switch :D
 
@@ -1402,7 +1470,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;
-		
+
 
 
 	default:

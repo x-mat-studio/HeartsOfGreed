@@ -92,7 +92,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
-	//selected(false),
 	godMode(false),
 	currAreaInfo(nullptr),
 	skillExecutionDelay(false),
@@ -164,7 +163,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
 	feelingSecure(0),
-	skill1Cost(20),
+	skill1Cost(40),
 
 	expToLevelUp(100),
 	heroXP(0),
@@ -521,6 +520,9 @@ void Hero::Attack()
 	if (ret > 0)
 	{
 		GetExperience(ret);
+
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr)
+			app->player->AddResources(ret * 0.5f);
 		true;
 	}
 }
