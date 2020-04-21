@@ -38,6 +38,8 @@ bool ModuleFoWManager::Start()
 	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr);
 	ret = false;
 
+	foWMapVisible = true;
+
 	//---------Initialize the map being used to translate bits to texture ID---------//
 	//Straight-forward cases
 	bitToTextureTable.insert(std::pair<unsigned short, int>(fow_ALL, 0));
