@@ -1402,7 +1402,7 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		break;
-
+		
 
 
 	default:
@@ -1419,6 +1419,8 @@ void ModuleEntityManager::DeleteAllEntities()
 
 	for (int i = 0; i < numEntities; i++)
 	{
+		app->player->CheckFocusedEntity(entityVector[i]);
+
 		RELEASE(entityVector[i]);
 		entityVector[i] = nullptr;
 	}

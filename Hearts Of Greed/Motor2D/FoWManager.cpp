@@ -7,7 +7,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleFoWManager::ModuleFoWManager() :
-	foWMapVisible(false),
+	foWMapVisible(true),
 	fowMap(nullptr),
 	smoothFoWtexture(nullptr),
 	debugFoWtexture(nullptr),
