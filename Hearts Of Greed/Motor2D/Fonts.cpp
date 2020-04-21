@@ -84,7 +84,7 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 	if (font == nullptr)
 		font = default;
 
-	SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped((font) ? font : font, text, color, app->win->width);
+	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
 
 	if (surface == nullptr)
 	{
