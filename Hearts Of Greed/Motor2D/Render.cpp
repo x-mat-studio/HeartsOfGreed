@@ -7,7 +7,7 @@
 #include "Collision.h"
 
 
-ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false)
+ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr)
 {
 	name.create("renderer");
 }
