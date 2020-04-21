@@ -10,7 +10,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleWindow::ModuleWindow() : Module(), scale(.0f),minScaleValue(.0f),maxScaleValue(.0f),height(0u),width(0u),window(NULL),screenSurface(NULL)
+ModuleWindow::ModuleWindow() : Module(), scale(.0f), minScaleValue(.0f), maxScaleValue(.0f), height(0u), width(0u), window(NULL), screenSurface(NULL), scaleFactor(.0f)
 {
 	name.create("window");
 }
@@ -46,6 +46,8 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 		minScaleValue = config.child("resolution").attribute("minScaleValue").as_float(1.0);
 		maxScaleValue = config.child("resolution").attribute("maxScaleValue").as_float(1.0);
 		
+		scaleFactor = abs(config.child("resolution").attribute("scaleFactor").as_float(.0f));
+
 		stateResolution = RESOLUTION_MODE::STATIC;
 		
 		if (fullscreen == true)
@@ -213,6 +215,18 @@ float ModuleWindow::GetScale() const
 {
 	return scale;
 }
+
+float  ModuleWindow::GetScaleFactor()const
+{
+	return scaleFactor;
+}
+
+void ModuleWindow::GetScaleRange(float& minScale, float& maxScale)const
+{
+	minScale = minScaleValue;
+	maxScale = maxScaleValue;
+}
+
 
 float ModuleWindow::GetUIScale() const
 {
