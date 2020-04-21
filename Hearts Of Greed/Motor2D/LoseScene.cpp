@@ -41,7 +41,7 @@ bool ModuleLoseScene::Start()
 	youLost = app->tex->Load("intro_images/youLost.png");
 	medalLose = app->tex->Load("intro_images/medalLose.png");
 
-	app->audio->PlayMusic("audio/music/youLost.ogg", fadeTime, 200);
+	app->audio->PlayMusic("audio/music/youLost.ogg", fadeTime, app->audio->musicVolume);
 
 	return true;
 }
