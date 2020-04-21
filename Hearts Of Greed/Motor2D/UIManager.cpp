@@ -134,15 +134,17 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
+	if (focusedPortrait != nullptr)
+	{
+		UpdateFocusPortrait();
+	}
+
 	for (uint i = 0; i < uiVector.size(); i++)
 	{
 		uiVector[i]->PostUpdate(dt);
 	}
 
-	if (focusedPortrait != nullptr)
-	{
-		UpdateFocusPortrait();
-	}
+
 
 	return ret;
 }
@@ -165,6 +167,9 @@ bool ModuleUIManager::CleanUp()
 	focusedPortrait = nullptr;
 	currResources = nullptr;
 	createdInGameMenu = nullptr;
+
+	if(app->player != nullptr)
+	app->player->SetMenuState(true);
 
 
 	return true;
@@ -267,10 +272,11 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_ON_CLICK:
-		if(focusedPortrait != nullptr)
-		DeleteUIChilds(focusedPortrait, false);
-		focusedEnt = nullptr;
-		CreateEntityPortrait();
+		//if(focusedPortrait != nullptr)
+		//DeleteUIChilds(focusedPortrait, false);
+
+		//focusedEnt = nullptr;
+		//CreateEntityPortrait();
 		break;
 
 	case EVENT_ENUM::CREATE_SHOP:
@@ -320,6 +326,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 				{
 					DeleteUIChilds(createdInGameMenu, true);
 					createdInGameMenu = nullptr;
+					app->player->SetMenuState(false);
 					app->SetPause(false);
 				}
 				else
@@ -389,6 +396,7 @@ void ModuleUIManager::CreatePauseMenu()
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, P2SString("pauseMenuBackground"));
 	createdInGameMenu = father;
+	app->player->SetMenuState(true);
 
 	int height = h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 8;
 
@@ -453,6 +461,7 @@ void ModuleUIManager::CreateOptionsMenu()
 	UI* father = nullptr;		// TODO: make event and functionality happen		Also, change the button ON / OFF image depending on fullscreen mode
 
 	createdInGameMenu = father = AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2), (h / app->win->GetUIScale() / 2) - (rect.h / 2)), createdInGameMenu, UI_TYPE::UI_IMG, rect, "optionBackground");
+	app->player->SetMenuState(true);
 
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 30, (h / app->win->GetUIScale() / 2) - (rect.h / 2)), father, UI_TYPE::UI_TEXT, rect, P2SString("optionText"), nullptr, DRAGGABLE::DRAG_OFF, "Options");
 
@@ -534,7 +543,6 @@ void ModuleUIManager::CreateEntityPortrait()
 
 void ModuleUIManager::CreateEntityPortraitChilds()
 {
-	BROFILER_CATEGORY("Create UI Childs", Profiler::Color::Green);
 
 	uint w(app->win->width / app->win->GetUIScale()), h(app->win->height / app->win->GetUIScale());
 	SDL_Color std{ (255),(255), (255), (255) };
@@ -609,11 +617,11 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//img portrait
 		rect = RectConstructor(352, 149, 66, 51);
-		AddUIElement(fMPoint(w - 2 * rect.w + 10, h - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, "");
+		AddUIElement(fMPoint(w - 2 * rect.w + 10, h - rect.h - 2), focusedPortrait, UI_TYPE::UI_IMG, rect, "img");
 
 		//health bar
 		rect = RectConstructor(312, 85, 60, 7);
-		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString(""), hero, DRAGGABLE::DRAG_OFF, "HPbar");
+		AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
 		rect = RectConstructor(374, 85, 60, 7);
 		AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("Ebar"), hero, DRAGGABLE::DRAG_OFF, "Ebar");
@@ -621,25 +629,25 @@ void ModuleUIManager::CreateEntityPortraitChilds()
 
 		//stats
 		sprintf_s(stats, 40, "HP: %i", hero->hitPointsCurrent);
-		AddUIElement(fMPoint(w - 60, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("currHP"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "E: %i", hero->energyPoints);
-		AddUIElement(fMPoint(w - 30, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 46)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("EPoints"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AD: %i", hero->attackDamage);
-		AddUIElement(fMPoint(w - 60, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("AttackDmg"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "AS: %f", hero->attackSpeed);
-		AddUIElement(fMPoint(w - 30, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 36)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("AtkSpd"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rng: %i", hero->attackRange);
-		AddUIElement(fMPoint(w - 60, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("AtkRange"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "Rec: %i", hero->recoveryHitPointsRate);
-		AddUIElement(fMPoint(w - 30, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 30, (h - 26)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("HpR"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		sprintf_s(stats, 40, "EXP: %i / %i", hero->heroXP, hero->expToLevelUp);
-		AddUIElement(fMPoint(w - 60, (h - 16)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString(""), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
+		AddUIElement(fMPoint(w - 60, (h - 16)), focusedPortrait, UI_TYPE::UI_TEXT, rect, P2SString("XpLvl"), nullptr, DRAGGABLE::DRAG_OFF, stats, std, app->fonts->fonts[1]);
 
 		break;
 
@@ -732,6 +740,8 @@ void ModuleUIManager::CreateShopMenu()
 
 	UI* father = AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2), h / (app->win->GetUIScale() * 2) - (rect.h / 2)), nullptr, UI_TYPE::UI_IMG, rect, P2SString("shopBackground"));
 	createdInGameMenu = father;
+	app->player->SetMenuState(true);
+
 	// Heroes
 	AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (rect.w / 2) + 3, h / (app->win->GetUIScale() * 2) - (rect.h / 2) + 5), father, UI_TYPE::UI_TEXT, rect, P2SString("heroResurrectionText"), nullptr, DRAGGABLE::DRAG_OFF, "H E R O   R E S U R R E C T I O N");
 
@@ -859,37 +869,51 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 	if (father == nullptr)
 		return;
 
-	int parentId = -1;
 
-	for (int i = 0; i < uiVector.size(); i++)
+	for (int i = uiVector.size()-1; i >= 0; i--)
 	{
 		if (uiVector[i]->parent == father)
 		{
 			if(includeFather)
 			app->uiManager->DeleteUIChilds(uiVector[i], false);
 
+			CheckFatherPointers(uiVector[i]);
 
-			RELEASE(uiVector[i]);
+
+			delete uiVector[i];
 			uiVector[i] = nullptr;
 
 			uiVector.erase(uiVector.begin() + i);
-			i--;
 		}
 		else if (uiVector[i] == father && includeFather == true)
 		{
-			parentId = i;
+
+			CheckFatherPointers(uiVector[i]);
+
+			delete uiVector[i];
+			uiVector[i] = nullptr;
+			uiVector.erase(uiVector.begin() + i);
+
+			break;
 		}
 	}
 
-	if (parentId != -1)
-	{
-		if (createdInGameMenu == uiVector[parentId])
-			createdInGameMenu = createdInGameMenu->parent;
+}
 
-		RELEASE(uiVector[parentId]);
-		uiVector[parentId] = nullptr;
-		uiVector.erase(uiVector.begin() + parentId);
+void ModuleUIManager::CheckFatherPointers(UI* todelete)
+{
+	if (focusedPortrait == todelete)
+		focusedPortrait = nullptr;
+
+	if (createdInGameMenu == todelete)
+	{
+		createdInGameMenu = nullptr;
+		app->player->SetMenuState(false);
+
 	}
+
+	if( currResources == todelete)
+		currResources = nullptr;
 }
 
 
@@ -1022,7 +1046,6 @@ bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
 
 void ModuleUIManager::UpdateFocusPortrait()
 {
-	BROFILER_CATEGORY("Update Focus Portrait", Profiler::Color::Green);
 
 	DeleteUIChilds(focusedPortrait, false);
 
@@ -1030,8 +1053,10 @@ void ModuleUIManager::UpdateFocusPortrait()
 
 	if (focusedEnt != nullptr )
 	{
-		if(focusedEnt->toDelete == false)
-		CreateEntityPortraitChilds();
+		if (focusedEnt->toDelete == false)
+			CreateEntityPortraitChilds();
+		else
+			focusedEnt = nullptr;
 	}
 
 }

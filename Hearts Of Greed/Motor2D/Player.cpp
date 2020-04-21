@@ -36,6 +36,7 @@ ModulePlayer::ModulePlayer() :
 	doingAction(false),
 	hasClicked(false),
 	doSkill(false),
+	UIMenuOn(false),
 
 	constrAreaInfo(nullptr),
 	baseInBuild(nullptr),
@@ -214,6 +215,9 @@ bool ModulePlayer::HandleInput()
 
 	if (buildMode == false)
 	{
+		if (UIMenuOn)
+			return true;
+
 		if (prepareSkill == true || doSkill == true)
 		{
 			CommandSkill();
@@ -247,7 +251,6 @@ bool ModulePlayer::HandleInput()
 	else
 	{
 		clickPosition = app->input->GetMousePosScreen();
-
 
 		if (entityInteraction)
 		{
@@ -830,3 +833,12 @@ int ModulePlayer::GetTurretCost() const
 	return turretCost;
 }
 
+bool ModulePlayer::SetMenuState(bool menuState)
+{
+	if (menuState != UIMenuOn)
+	{
+		UIMenuOn = !UIMenuOn;
+	}
+
+	return UIMenuOn;
+}
