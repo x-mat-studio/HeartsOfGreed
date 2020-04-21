@@ -87,7 +87,7 @@ private:
 
 	float fadeTime;
 	bool camToReset;
-
+	float startingScale;
 };
 
 #endif // __TEST_SCENE_H__
