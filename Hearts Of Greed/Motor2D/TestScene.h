@@ -87,6 +87,7 @@ private:
 
 	float fadeTime;
 	bool camToReset;
+	float startingScale;
 
 };
 
