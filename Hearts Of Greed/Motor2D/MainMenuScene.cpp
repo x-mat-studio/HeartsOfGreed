@@ -107,15 +107,6 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MAIN SCENE
-	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) 
-	{
-
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene,fadeTime*2))
-		{
-			changeScene = false;
-		}
-	}
 
 	if (changeSceneContinue == 0)
 	{
