@@ -7,7 +7,9 @@ UI_Scrollbar::UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SD
 {}
 
 UI_Scrollbar::~UI_Scrollbar()
-{}
+{
+	scrollButton = nullptr;
+}
 
 bool UI_Scrollbar::Start()
 {

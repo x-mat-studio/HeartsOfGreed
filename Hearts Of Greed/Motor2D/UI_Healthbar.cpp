@@ -31,7 +31,11 @@ UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SD
 }
 
 UI_Healthbar::~UI_Healthbar()
-{}
+{
+	this->entity = nullptr;
+	this->currentValue = nullptr;
+	this->maxValue = nullptr;
+}
 
 bool UI_Healthbar::Start()
 {
@@ -81,7 +85,10 @@ void UI_Healthbar::AdjustValue()
 
 void UI_Healthbar::EntityDeath()
 {
-	this->entity = nullptr;
-	this->currentValue = nullptr;
-	this->maxValue = nullptr;
+	if (entity != nullptr && entity->toDelete == true)
+	{
+		this->entity = nullptr;
+		this->currentValue = nullptr;
+		this->maxValue = nullptr;
+	}
 }

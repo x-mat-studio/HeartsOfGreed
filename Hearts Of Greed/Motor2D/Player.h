@@ -49,6 +49,8 @@ public:
 
 	Entity* GetFocusedEntity();
 
+	bool SetMenuState(bool menuState);
+
 private:
 	
 	bool HandleInput();
@@ -99,6 +101,7 @@ private:
 
 	bool hasClicked;
 	bool buildMode;
+	bool UIMenuOn;
 
 	int resources;
 

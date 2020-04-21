@@ -2,6 +2,7 @@
 #include "Render.h"
 #include "Input.h"
 #include "Window.h"
+#include "Textures.h"
 
 UI::UI()
 {}
@@ -32,6 +33,16 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 UI::~UI()
 {
 	parent = nullptr;
+	if (texture == app->uiManager->GetAtlasTexture())
+	{
+		texture = nullptr;
+	}
+	else if (texture != nullptr)
+	{
+		app->tex->UnLoad(texture);
+		texture = nullptr;
+	}
+
 }
 
 
