@@ -40,7 +40,8 @@ ModuleTestScene::ModuleTestScene() :
 	nightTimer(0),
 	camVel(0.f),
 	fadeTime(0),
-	camToReset(false)
+	camToReset(false),
+	startingScale(1.0f)
 {
 	name.create("testScene");
 
@@ -74,7 +75,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
 	
 	fadeTime = config.attribute("fadeTime").as_float(0);
-
+	startingScale = config.attribute("startingScale").as_float(.0f);
 
 	return true;
 }
@@ -164,6 +165,7 @@ bool  ModuleTestScene::PreUpdate(float dt)
 {
 	if (camToReset == true)
 	{
+		app->win->SetScale(startingScale);
 		app->render->currentCamX = initialCamPos.x;
 		app->render->currentCamY = initialCamPos.y;
 		camToReset = false;
