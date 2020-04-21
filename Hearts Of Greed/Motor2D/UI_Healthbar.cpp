@@ -31,7 +31,11 @@ UI_Healthbar::UI_Healthbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SD
 }
 
 UI_Healthbar::~UI_Healthbar()
-{}
+{
+	maxValue = nullptr;
+	currentValue = nullptr;
+	entity = nullptr;
+}
 
 bool UI_Healthbar::Start()
 {

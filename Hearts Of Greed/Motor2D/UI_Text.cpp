@@ -15,13 +15,7 @@ UI_Text::UI_Text(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rec
 }
 
 UI_Text::~UI_Text()
-{
-	if (texture != nullptr)
-	{
-		app->tex->UnLoad(texture);
-		texture = nullptr;
-	}
-}
+{}
 
 
 bool UI_Text::Update(float dt)

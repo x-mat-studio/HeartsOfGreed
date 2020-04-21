@@ -165,7 +165,7 @@ bool ModuleUIManager::CleanUp()
 	focusedPortrait = nullptr;
 	currResources = nullptr;
 	createdInGameMenu = nullptr;
-
+	lastShop = nullptr;
 
 	return true;
 }
