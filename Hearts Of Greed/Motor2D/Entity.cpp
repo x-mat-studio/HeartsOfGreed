@@ -180,11 +180,17 @@ LOUDNESS Entity::GetMyLoudness()
 	}
 	
 	//distance from camera loudness
-	if (scale >= 2)
+	float minScale;
+	float maxScale;
+	app->win->GetScaleRange(minScale, maxScale);
+	float scaleRange = abs(maxScale - minScale);
+
+
+	if (scale >= minScale+(scaleRange*0.66f))
 	{
 		ret -= 1;
 	}
-	else if (scale <= 0.5)
+	else if (scale <= minScale + (scaleRange * 0.33f))
 	{
 		ret += 1;
 	}
