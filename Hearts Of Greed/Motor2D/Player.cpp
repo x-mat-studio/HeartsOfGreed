@@ -358,7 +358,7 @@ void ModulePlayer::Select()
 
 	selectRect = { rectX,rectY, rectW,rectH };
 
-	if (rectW > 10 || rectH > 10)
+	if (rectW > 20 || rectH > 20)
 	{
 		app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
 	}

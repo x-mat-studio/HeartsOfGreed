@@ -167,11 +167,10 @@ bool ModuleUIManager::CleanUp()
 	focusedPortrait = nullptr;
 	currResources = nullptr;
 	createdInGameMenu = nullptr;
+	lastShop = nullptr;
 
-	if(app->player != nullptr)
-	app->player->SetMenuState(true);
-
-
+	if (app->player != nullptr)
+		app->player->SetMenuState(true);
 	return true;
 }
 

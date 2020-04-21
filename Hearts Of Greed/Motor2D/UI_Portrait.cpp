@@ -33,6 +33,7 @@ UI_Portrait::~UI_Portrait()
 		portraitVector[i].healthbar = nullptr;
 		portraitVector[i].level = nullptr;
 		portraitVector[i].portrait = nullptr;
+		portraitVector[i].hero = nullptr;
 	}
 
 	portraitVector.clear();
