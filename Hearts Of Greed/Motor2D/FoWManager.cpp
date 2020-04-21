@@ -7,7 +7,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleFoWManager::ModuleFoWManager() :
-	foWMapVisible(false),
+	foWMapVisible(true),
 	fowMap(nullptr),
 	smoothFoWtexture(nullptr),
 	debugFoWtexture(nullptr),
@@ -37,6 +37,8 @@ bool ModuleFoWManager::Start()
 
 	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr);
 	ret = false;
+
+	foWMapVisible = true;
 
 	//---------Initialize the map being used to translate bits to texture ID---------//
 	//Straight-forward cases

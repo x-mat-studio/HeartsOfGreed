@@ -39,7 +39,8 @@ ModuleTestScene::ModuleTestScene() :
 	dayTimer(0),
 	nightTimer(0),
 	camVel(0.f),
-	fadeTime(0)
+	fadeTime(0),
+	camToReset(false)
 {
 	name.create("testScene");
 
@@ -85,8 +86,7 @@ bool ModuleTestScene::Start()
 	app->player->Enable();
 	app->minimap->Enable();
 
-	app->render->currentCamX = initialCamPos.x;
-	app->render->currentCamY = initialCamPos.y;
+	camToReset = true;
 	//Play Music
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
 
@@ -162,8 +162,15 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
-	CheckListener(this);
+	if (camToReset == true)
+	{
+		app->render->currentCamX = initialCamPos.x;
+		app->render->currentCamY = initialCamPos.y;
+		camToReset = false;
+	}
 
+	CheckListener(this);
+	
 
 	//VERTICAL SLICE
 	//CalculateTimers(dt);

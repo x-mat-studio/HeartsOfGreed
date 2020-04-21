@@ -86,6 +86,7 @@ private:
 	iMPoint camMarginMovements;
 
 	float fadeTime;
+	bool camToReset;
 
 };
 
