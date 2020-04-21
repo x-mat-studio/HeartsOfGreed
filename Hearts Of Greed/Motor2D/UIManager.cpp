@@ -170,7 +170,7 @@ bool ModuleUIManager::CleanUp()
 	lastShop = nullptr;
 
 	if (app->player != nullptr)
-		app->player->SetMenuState(false);
+		app->player->SetMenuState(true);
 	return true;
 }
 
