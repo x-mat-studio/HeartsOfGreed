@@ -14,6 +14,7 @@
 #include "Base.h"
 #include "UIManager.h"
 #include "Base.h"
+#include "Pathfinding.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -181,7 +182,7 @@ bool ModulePlayer::PostUpdate(float dt)
 			fMPoint wBuildPos = app->input->GetMousePosWorld();
 			iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-			if (center.InsideCircle(mBuildPos, constrAreaInfo->radius))
+			if (center.InsideCircle(mBuildPos, constrAreaInfo->radius) && app->pathfinding->IsWalkable(mBuildPos))
 			{
 				buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
 			}
@@ -522,20 +523,26 @@ bool ModulePlayer::BuildClick()
 
 	if (baseInBuild != nullptr)
 	{
-		switch (buildingToBuild)
+		if (buildingPrevPosition.x != INT_MIN)
 		{
-		case ENTITY_TYPE::BLDG_TURRET:
+			switch (buildingToBuild)
+			{
+			case ENTITY_TYPE::BLDG_TURRET:
 
-			baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
-			break;
+				baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+				break;
+			}
+			SubstractBuildResources();
+			DesactivateBuildMode();
 		}
 	}
 	else
+	{
 		app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
+		DesactivateBuildMode();
+	}
 
 
-	SubstractBuildResources();
-	DesactivateBuildMode();
 
 	return true;
 }
