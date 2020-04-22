@@ -492,7 +492,7 @@ bool Hero::CheckAttackRange()
 
 	SDL_Rect rect;
 	rect.x = position.x - attackRange;
-	rect.y = position.y - attackRange;
+	rect.y = position.y - center.y - attackRange;
 	rect.w = attackRange * 2;
 	rect.h = attackRange * 2;
 

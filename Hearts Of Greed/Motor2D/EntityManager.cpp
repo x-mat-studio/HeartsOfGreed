@@ -921,6 +921,13 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	ENTITY_ALIGNEMENT alignement;
 
 	Collider* col;
+	Entity* ret = nullptr;
+	float x, y;
+	x = rect->x + (rect->w * 0.5);
+	y = rect->y + (rect->h * 0.5);
+	fMPoint center = { x,  y };
+
+	fMPoint pos1, pos2;
 
 	if (alig == ENTITY_ALIGNEMENT::ENEMY)
 	{
@@ -950,12 +957,27 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 		{
 			if (col->CheckCollision(*rect))
 			{
-				return entityVector[i];
+				if (ret == nullptr)
+				{
+					ret = entityVector[i];
+				}
+				else
+				{
+					pos1 = ret->GetPosition();
+					pos1.y -= ret->GetCenter().y;
+
+					pos2 = entityVector[i]->GetPosition();
+					pos2.y -= entityVector[i]->GetCenter().y;
+					if (pos1.DistanceNoSqrt(center) > pos2.DistanceNoSqrt(center))
+					{
+						ret = entityVector[i];
+					}
+				}
 			}
 		}
 	}
 
-	return nullptr;
+	return ret;
 }
 
 
