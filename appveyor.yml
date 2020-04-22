@@ -15,7 +15,9 @@ after_build:
 - 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\LICENSE"
 
 artifacts:
-  - path: HeartsOfGreed_Release.zip
+- path: X_Mat_Studio-Hearts_Of_Greed\Game
+  name: X_Mat_Studio-Hearts_Of_Greed
+  type: WebDeployPackage
   
 deploy:
 - provider: GitHub
