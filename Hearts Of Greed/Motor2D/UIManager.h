@@ -105,6 +105,7 @@ private:
 	int screenResources;
 
 	bool isMenuOn;
+	bool fullscreen;
 
 	int framesToUpdatePortrait;
 	int framesSincePortraitUpdate;

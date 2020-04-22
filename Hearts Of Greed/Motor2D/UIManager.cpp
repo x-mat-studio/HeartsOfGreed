@@ -21,7 +21,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
-lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr), clickSound(-1), hoverSound(-1), isMenuOn(false), framesToUpdatePortrait(20),
+lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr), clickSound(-1), hoverSound(-1), isMenuOn(false), fullscreen(false), framesToUpdatePortrait(20),
 framesSincePortraitUpdate(0)
 {
 	name.create("UIManager");
@@ -352,15 +352,17 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FULLSCREEN_INPUT:
 		UI* fullscreenButton = FindUIByName("fullscreenButton");
 
+		fullscreen = !fullscreen;
+
 		if (fullscreenButton != nullptr)
 		{
-			if (fullscreenButton->box.x == 739)
+			if (fullscreen == false)
 			{
-				fullscreenButton->box.x = 763;
+				fullscreenButton->box.x = 739;
 			}
 			else
 			{
-				fullscreenButton->box.x = 739;
+				fullscreenButton->box.x = 763;
 			}
 		}
 
@@ -492,7 +494,14 @@ void ModuleUIManager::CreateOptionsMenu()
 
 	AddUIElement(fMPoint((w / app->win->GetUIScale() / 2) - (rect.w / 2) + 20, (h / app->win->GetUIScale() / 2) - (rect.h / 2) + 75), father, UI_TYPE::UI_TEXT, rect, P2SString("fullscreenModeText"), nullptr, DRAGGABLE::DRAG_OFF, "Fullscreen mode");
 
-	rect = RectConstructor(739, 27, 23, 23);
+	if (fullscreen == false)
+	{
+		rect = RectConstructor(739, 27, 23, 23);
+	}
+	else
+	{
+		rect = RectConstructor(763, 27, 23, 23);
+	}
 	AddButton(fMPoint(w / (app->win->GetUIScale() * 2) - (278 / 2) + 20, h / (app->win->GetUIScale() * 2) - (153 / 2) + 100), father, UI_TYPE::UI_BUTTON, rect, P2SString("fullscreenButton"), EVENT_ENUM::FULLSCREEN_INPUT, false, false, false, false);
 
 	rect = RectConstructor(424, 25, 23, 23);
