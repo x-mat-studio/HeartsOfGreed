@@ -9,14 +9,15 @@ build:
 
 
 after_build:
-- cmd: mkdir %APPVEYOR_BUILD_FOLDER%\X_Mat_Studio-Hearts_Of_Greed
-- cmd: XCOPY /E "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Game\*.*" %APPVEYOR_BUILD_FOLDER%\X_Mat_Studio-Hearts_Of_Greed
-- cmd: copy "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Release\*.exe" %APPVEYOR_BUILD_FOLDER%\X_Mat_Studio-Hearts_Of_Greed
-- cmd: move %APPVEYOR_BUILD_FOLDER%\README.md %APPVEYOR_BUILD_FOLDER%\X_Mat_Studio-Hearts_Of_Greed
-- cmd: move "%APPVEYOR_BUILD_FOLDER%\LICENSE" %APPVEYOR_BUILD_FOLDER%\X_Mat_Studio-Hearts_Of_Greed
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Release\*.exe"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Game\*"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\README.md"
+- 7z a HeartsOfGreed_Release.zip "%APPVEYOR_BUILD_FOLDER%\LICENSE"
 
 artifacts:
-- path: "X_Mat_Studio-Hearts_Of_Greed.zip"
+- path: X_Mat_Studio-Hearts_Of_Greed\Game
+  name: X_Mat_Studio-Hearts_Of_Greed
+  type: WebDeployPackage
   
 deploy:
 - provider: GitHub
