@@ -801,14 +801,14 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-
+	
 	if (cooldownHability1 > 0.f)
 	{
 		cooldownHability1 += dt;
 
 		drawingVfx = true;
 
-		if (cooldownHability1 >= skill1RecoverTime)
+		if (cooldownHability1 >= skill1RecoverTime || godMode)
 		{
 			skill1Charged = true;
 			drawingVfx = false;
