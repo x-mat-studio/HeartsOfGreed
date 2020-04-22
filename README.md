@@ -10,6 +10,10 @@ Disclaimer: play using headphones.
 This project is made as a 2nd year assigment in Bachelor’s Degree in Video Games by UPC at CITM, Terrassa, under the supervision of lecturer Marc Garrigó (www.linkedin.com/in/mgarrigo/).
 
 
+	## What to do
+To play this vertical slice, you need to micromanage your two hero units to conquer the enemy base. Once that happens, go back to your first base and defend it (maybe build a turret to help you). Once all enemies are dead, you've won.
+If all your heroes die, you will lose the game.
+
 
 	## Check our project!
 Github:		https://github.com/x-mat-studio/HeartsOfGreed
