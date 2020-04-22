@@ -553,7 +553,7 @@ void Hero::Die()
 		minimapIcon->minimapPos = nullptr;
 	}
 
-	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 	if (visionEntity != nullptr)
 	{
@@ -731,7 +731,7 @@ int Hero::RecieveDamage(int damage)
 			int randomCounter = rand() % 5;
 
 			if (randomCounter == 0)
-				app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, 4, this->GetMyLoudness(), this->GetMyDirection(), true);
+				app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
 		}
 	}
 
@@ -801,14 +801,14 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-
+	
 	if (cooldownHability1 > 0.f)
 	{
 		cooldownHability1 += dt;
 
 		drawingVfx = true;
 
-		if (cooldownHability1 >= skill1RecoverTime)
+		if (cooldownHability1 >= skill1RecoverTime || godMode)
 		{
 			skill1Charged = true;
 			drawingVfx = false;
