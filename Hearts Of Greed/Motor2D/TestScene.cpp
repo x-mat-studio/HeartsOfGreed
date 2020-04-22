@@ -182,6 +182,8 @@ bool ModuleTestScene::Start()
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
 
 	isNightTime = false;
+	timer = 0;
+	dayTimer = INT_MAX;
 
 	return true;
 }
