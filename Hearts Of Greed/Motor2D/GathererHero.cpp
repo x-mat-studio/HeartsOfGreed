@@ -117,7 +117,7 @@ bool GathererHero::ExecuteSkill1()
 		{
 			energyPoints -= skill1Cost;
 			skillExecutionDelay = true;
-			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, 6, this->GetMyLoudness(), this->GetMyDirection());
+			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 			return skillExecutionDelay;
 		}
 		else
@@ -126,7 +126,7 @@ bool GathererHero::ExecuteSkill1()
 			currentVfx->ResetAnimation();
 			currentVfx->loop = false;
 
-			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
+			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 
 			int ret = 0;

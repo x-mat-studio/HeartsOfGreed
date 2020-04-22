@@ -351,11 +351,11 @@ void Enemy::Die()
 
 	if (randomCounter == 1)
 	{
-		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoDies, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 	}
 	else
 	{
-		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, 3, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoDies2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 	}
 
 	if (minimapIcon != nullptr)
