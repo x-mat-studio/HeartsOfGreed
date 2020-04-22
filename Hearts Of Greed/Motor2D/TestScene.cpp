@@ -136,9 +136,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
 
 		//Base
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -135, 165);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -100, 190);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -95, 175);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -50, 165);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -64, 190);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -45, 175);
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
