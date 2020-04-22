@@ -24,46 +24,50 @@ Twitter:	https://twitter.com/ii_rts
 
 ### Control:
 
-WASD:			      	Control camera
-Cursor next to screen margin: 	Control camera
-Click on minimap:		Teleport to that position
-Mouse wheel:			Zoom in/out
-Click & drag:			Select Unit group
-Click on anything:		Select
+* WASD:			      	
+	- Control camera
+* Cursor next to screen margin: 
+	- Control camera
+* Click on minimap:		
+	- Teleport to that position
+* Mouse wheel:			
+	- Zoom in/out
+* Click & drag:			
+	- Select Unit group
+* Click on anything:		
+	- Select
 
-E: 				Prepare focused hero skill.
-(when preparing skill)
-Left click : 			Use skill.
-Right click : 			Cancel skill.
+* E: 				
+	- Prepare focused hero skill.
+*(when preparing skill)
+	- Left click : 	Use skill.
+	- Right click : Cancel skill.
 
-Tab: Change focus between the selected heroes.
+* Tab: Change focus between the selected heroes.
 
 ### Debug Options (only in-game):
 
-F1: Debug texture for Fog of war (only visible when on Fog of War mode).
-F2: Reset fog of war(only visible when on Fog of War mode).
-F3: Activate/Deactivate Fog of War mode.
-F4: Full screen on / off
-F6: Kill all enemies.
-F7: Activate/Deactivate collider and pathfinding vision.
-F8: Deactivate night.
-F9: Activate night.
-F10: Activate heroes God mode.
-F11: Deactivate heroes God mode.
-
-0: Give resources to player.
-4: Toggle debug build mode for player.
-9: Activate/Deactivate camera movement by mouse.
-
-KP 1: Spawn base.
-KP 2: Spawn decorative building.
-KP 3: Spawn enemy.
-KP 4: Spawn gatherer hero (Suit Man).
-KP 5: Spawn melee hero (Armored Man).
-KP 7: Spawn turret.
-
-N: Win if in-game.
-M: Lose if in-game.
+* F1: Debug texture for Fog of war (only visible when on Fog of War mode).
+* F2: Reset fog of war(only visible when on Fog of War mode).
+* F3: Activate/Deactivate Fog of War mode.
+* F4: Full screen on / off
+* F6: Kill all enemies.
+* F7: Activate/Deactivate collider and pathfinding vision.
+* F8: Deactivate night.
+* F9: Activate night.
+* F10: Activate heroes God mode.
+* F11: Deactivate heroes God mode.
+* 0: Give resources to player.
+* 4: Toggle debug build mode for player.
+* 9: Activate/Deactivate camera movement by mouse.
+* KP 1: Spawn base.
+* KP 2: Spawn decorative building.
+* KP 3: Spawn enemy.
+* KP 4: Spawn gatherer hero (Suit Man).
+* KP 5: Spawn melee hero (Armored Man).
+* KP 7: Spawn turret.
+* N: Win if in-game.
+* M: Lose if in-game.
 
 
 ## Team Members:
