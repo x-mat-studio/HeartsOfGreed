@@ -12,7 +12,9 @@ ingameSize(5)
 
 // Destructor
 ModuleFonts::~ModuleFonts()
-{}
+{
+	default = nullptr;
+}
 
 // Called before render is available
 bool ModuleFonts::Awake(pugi::xml_node& conf)
