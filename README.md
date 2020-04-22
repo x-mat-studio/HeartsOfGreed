@@ -27,6 +27,12 @@ Mouse wheel:			Zoom in/out
 Click & drag:			Select Unit group
 Click on anything:		Select
 
+E: Prepare focused hero skill.
+Left click (when preparing skill): Use skill.
+Right click (when preparing skill): Cancel skill.
+
+Tab: Change focus of the selected heroes.
+
 ### Debug Options (only in-game):
 
 F1: Debug texture for Fog of war (only visible when on Fog of War mode).
