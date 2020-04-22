@@ -36,8 +36,8 @@ ModuleTestScene::ModuleTestScene() :
 	allowCamMovement(true),
 	menuScene(false),
 	isNightTime(false),
-	dayTimer(0),
-	nightTimer(0),
+	dayTimer(INT_MAX),
+	nightTimer(INT_MAX),
 	camVel(0.f),
 	fadeTime(0),
 	camToReset(false),
@@ -60,8 +60,10 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	camVel = config.attribute("camVel").as_float(1);
 	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
 	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
-	dayTimer = config.attribute("dayTimerSec").as_int(1);
-	nightTimer = config.attribute("nightTimerSec").as_int(1);
+
+	//VERTICAL SLICE
+	//dayTimer = config.attribute("dayTimerSec").as_int(1);
+	//nightTimer = config.attribute("nightTimerSec").as_int(1);
 
 	camMarginMovements.x = config.attribute("freeCamMarginDetectionPixelsX").as_int(1);
 	camMarginMovements.y = config.attribute("freeCamMarginDetectionPixelsY").as_int(1);
@@ -134,9 +136,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
 
 		//Base
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -175, 195);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -130, 220);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -125, 215);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -135, 165);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -100, 190);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -95, 175);
 
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
@@ -153,7 +155,7 @@ bool ModuleTestScene::Start()
 
 	app->uiManager->CreateBasicInGameUI();
 
-	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, {0,0,0,0}, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
+
 
 
 	//Events register
@@ -200,7 +202,7 @@ bool  ModuleTestScene::PreUpdate(float dt)
 	
 
 	//VERTICAL SLICE
-	//CalculateTimers(dt);
+	CalculateTimers(dt);
 
 	return true;
 }
@@ -441,9 +443,10 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DEBUG_NIGHT:
-		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-		isNightTime = true;
+		//app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+		app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
 		timer = 0;
+		dayTimer = 7.5f;
 		break;
 
 	}

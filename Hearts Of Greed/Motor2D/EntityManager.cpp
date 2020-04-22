@@ -271,7 +271,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	atkRange = 40;
 
 	movSpd = 125;
-	int vision = 250;
+	int vision = 200;
 	int xp = 10;
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
@@ -291,7 +291,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	atkDmg = 3;
 	atkSpd = 2.f;
-	atkRange = 250;
+	atkRange = 225;
 	xp = 25;
 
 
@@ -307,8 +307,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	int maxTurrets = 2;
 	int resourcesProd = 5;
 	int resourcesRate = 5;
-
-
 
 	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 700, 650 }, COLLIDER_BASE_ALERT, app->ai);

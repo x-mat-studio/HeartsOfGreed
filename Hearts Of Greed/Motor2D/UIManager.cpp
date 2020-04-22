@@ -138,10 +138,10 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
-	if (focusedPortrait != nullptr)
-	{
-		UpdateFocusPortrait();
-	}
+	//if (focusedPortrait != nullptr)
+	//{
+	//	UpdateFocusPortrait();
+	//}
 
 	for (uint i = 0; i < uiVector.size(); i++)
 	{
@@ -275,11 +275,11 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_ON_CLICK:
-		//if(focusedPortrait != nullptr)
-		//DeleteUIChilds(focusedPortrait, false);
+		if (focusedPortrait != nullptr)
+			DeleteUIChilds(focusedPortrait, false);
 
-		//focusedEnt = nullptr;
-		//CreateEntityPortrait();
+		focusedEnt = nullptr;
+		CreateEntityPortrait();
 		break;
 
 	case EVENT_ENUM::CREATE_SHOP:
@@ -363,7 +363,7 @@ void ModuleUIManager::CreateBasicInGameUI()
 	//    father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, P2SString("portraitVector"), nullptr, DRAGGABLE::DRAG_OFF);
-	
+
 	rect = RectConstructor(540, 35, 15, 14);
 	father = AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
@@ -535,7 +535,12 @@ void ModuleUIManager::CreateEntityPortrait()
 
 
 	if (focusedEnt != nullptr)
-		CreateEntityPortraitChilds();
+	{
+		if (focusedEnt->toDelete == false)
+		{
+			CreateEntityPortraitChilds();
+		}
+	}
 	else
 	{
 		focusedEnt = nullptr;
@@ -549,7 +554,7 @@ void ModuleUIManager::UpdateFocusPortrait()
 
 	focusedEnt = app->player->GetFocusedEntity();
 
-	if (focusedEnt != nullptr )
+	if (focusedEnt != nullptr)
 	{
 		if (focusedEnt->toDelete == false)
 		{
@@ -808,7 +813,7 @@ void ModuleUIManager::CreateShopMenu()
 
 	if (lastShop != nullptr)
 	{
-		sprintf_s(cost, 40, "Max. %i",lastShop->GetmaxTurrets());
+		sprintf_s(cost, 40, "Max. %i", lastShop->GetmaxTurrets());
 		AddUIElement(fMPoint(w / (app->win->GetUIScale() * 2) - (194 / 2) + 95, h / (app->win->GetUIScale() * 2) - (231 / 2) + 112), father, UI_TYPE::UI_TEXT, rect, P2SString("turretPurchaseText"), nullptr, DRAGGABLE::DRAG_OFF, cost);
 	}
 	// TODO: read the actual amount of resources that turret prize costs when the variable is added				// It'd be cool if text got gray if the option was not usable (maybe add a variable to text constructor that is a condition, not a bool, since it may be dynamic, like resources)
@@ -898,12 +903,12 @@ void ModuleUIManager::DeleteUIChilds(UI* father, bool includeFather)
 		return;
 
 
-	for (int i = uiVector.size()-1; i >= 0; i--)
+	for (int i = uiVector.size() - 1; i >= 0; i--)
 	{
 		if (uiVector[i]->parent == father)
 		{
-			if(includeFather)
-			app->uiManager->DeleteUIChilds(uiVector[i], false);
+			if (includeFather)
+				app->uiManager->DeleteUIChilds(uiVector[i], false);
 
 			CheckFatherPointers(uiVector[i]);
 
@@ -940,7 +945,7 @@ void ModuleUIManager::CheckFatherPointers(UI* todelete)
 
 	}
 
-	if( currResources == todelete)
+	if (currResources == todelete)
 		currResources = nullptr;
 }
 

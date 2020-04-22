@@ -245,6 +245,7 @@ bool ModulePlayer::HandleInput()
 		if (heroesVector.empty() == false && focusedHero < heroesVector.size())
 		{
 			focusedEntity = heroesVector[focusedHero];
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		}
 	}
 
@@ -634,6 +635,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				focusedHero = 0;
 			}
+
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		}
 	}
 	break;
