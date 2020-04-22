@@ -105,6 +105,9 @@ private:
 	int screenResources;
 
 	bool isMenuOn;
+
+	int framesToUpdatePortrait;
+	int framesSincePortraitUpdate;
 	
 
 };

@@ -47,6 +47,7 @@ Minimap::Minimap() :minimapLoaded(false)
 
 Minimap::~Minimap()
 {
+	minimapIcons.clear();
 
 }
 
