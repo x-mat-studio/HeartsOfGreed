@@ -43,8 +43,6 @@ private:
 
 private:
 	//images
-	SDL_Texture* gameIcon;
-	SDL_Texture* gameTitle;
 	SDL_Texture* logoXMat;
 	SDL_Texture* logoBG;
 
