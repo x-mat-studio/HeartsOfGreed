@@ -38,12 +38,12 @@ bool  ModuleWinScene::Awake(pugi::xml_node&config)
 bool ModuleWinScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(10, app->win->height / app->win->GetUIScale() - 40), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"message", nullptr, DRAGGABLE::DRAG_OFF, "CLICK ANYWHERE TO CONTINUE");
+	app->uiManager->AddUIElement(fMPoint(10, app->win->height / app->win->GetUIScale() - 40), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("message"), nullptr, DRAGGABLE::DRAG_OFF, "CLICK ANYWHERE TO CONTINUE");
 	
 	youWon = app->tex->Load("intro_images/youWon.png");
 	medalWin = app->tex->Load("intro_images/medalWin.png");
 
-	app->audio->PlayMusic("audio/music/youWon.ogg", 15.0F, 200);
+	app->audio->PlayMusic("audio/music/youWon.ogg", 15.0F, app->audio->musicVolume);
 
 	return true;
 }

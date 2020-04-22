@@ -7,7 +7,9 @@ UI_Scrollbar::UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SD
 {}
 
 UI_Scrollbar::~UI_Scrollbar()
-{}
+{
+	scrollButton = nullptr;
+}
 
 bool UI_Scrollbar::Start()
 {
@@ -62,13 +64,13 @@ bool UI_Scrollbar::GenerateScrollButton()
 	if (!generatedButton) 
 	{
 		SDL_Rect aux = app->uiManager->RectConstructor(158, 16, 11, 32);
-		if (name == "sfxScrollbar")
+		if (name == P2SString("sfxScrollbar"))
 		{
-			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + ((app->audio->volumeAdjustment + 255) * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
+			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + ((app->audio->volumeAdjustment + 255) * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, P2SString("scrollButton"), buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
 		}
 		else
 		{
-			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + (app->audio->musicVolume * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, (P2SString)"scrollButton", buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
+			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + (app->audio->musicVolume * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, P2SString("scrollButton"), buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
 		}
 		scrollButton->box.w *= 0.5f;
 		scrollButton->box.h *= 0.5f;

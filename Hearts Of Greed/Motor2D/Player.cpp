@@ -14,6 +14,7 @@
 #include "Base.h"
 #include "UIManager.h"
 #include "Base.h"
+#include "Pathfinding.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -36,6 +37,7 @@ ModulePlayer::ModulePlayer() :
 	doingAction(false),
 	hasClicked(false),
 	doSkill(false),
+	UIMenuOn(false),
 
 	constrAreaInfo(nullptr),
 	baseInBuild(nullptr),
@@ -61,7 +63,7 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-	turretCost = 95;
+	turretCost = 120;
 	return true;
 }
 
@@ -118,6 +120,8 @@ bool ModulePlayer::CleanUp()
 	constrArea.clear();
 
 	heroesVector.clear();
+
+	resources = 0;
 
 	return true;
 }
@@ -178,7 +182,7 @@ bool ModulePlayer::PostUpdate(float dt)
 			fMPoint wBuildPos = app->input->GetMousePosWorld();
 			iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-			if (center.InsideCircle(mBuildPos, constrAreaInfo->radius))
+			if (center.InsideCircle(mBuildPos, constrAreaInfo->radius) && app->pathfinding->IsWalkable(mBuildPos))
 			{
 				buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
 			}
@@ -212,6 +216,9 @@ bool ModulePlayer::HandleInput()
 
 	if (buildMode == false)
 	{
+		if (UIMenuOn)
+			return true;
+
 		if (prepareSkill == true || doSkill == true)
 		{
 			CommandSkill();
@@ -239,13 +246,13 @@ bool ModulePlayer::HandleInput()
 		if (heroesVector.empty() == false && focusedHero < heroesVector.size())
 		{
 			focusedEntity = heroesVector[focusedHero];
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		}
 	}
 
 	else
 	{
 		clickPosition = app->input->GetMousePosScreen();
-
 
 		if (entityInteraction)
 		{
@@ -353,7 +360,7 @@ void ModulePlayer::Select()
 
 	selectRect = { rectX,rectY, rectW,rectH };
 
-	if (rectW > 10 || rectH > 10)
+	if (rectW > 20 || rectH > 20)
 	{
 		app->entityManager->CheckHeroOnSelection(selectRect, &heroesVector);
 	}
@@ -516,19 +523,26 @@ bool ModulePlayer::BuildClick()
 
 	if (baseInBuild != nullptr)
 	{
-		switch (buildingToBuild)
+		if (buildingPrevPosition.x != INT_MIN)
 		{
-		case ENTITY_TYPE::BLDG_TURRET:
-			baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
-			break;
+			switch (buildingToBuild)
+			{
+			case ENTITY_TYPE::BLDG_TURRET:
+
+				baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+				break;
+			}
+			SubstractBuildResources();
+			DesactivateBuildMode();
 		}
 	}
 	else
+	{
 		app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER);
+		DesactivateBuildMode();
+	}
 
 
-	SubstractBuildResources();
-	DesactivateBuildMode();
 
 	return true;
 }
@@ -628,6 +642,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				focusedHero = 0;
 			}
+
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		}
 	}
 	break;
@@ -827,3 +843,12 @@ int ModulePlayer::GetTurretCost() const
 	return turretCost;
 }
 
+bool ModulePlayer::SetMenuState(bool menuState)
+{
+	if (menuState != UIMenuOn)
+	{
+		UIMenuOn = !UIMenuOn;
+	}
+
+	return UIMenuOn;
+}

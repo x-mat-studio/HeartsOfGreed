@@ -73,7 +73,6 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	int x = position.x;
 	int y = position.y;
 
-	x -= baseAreaAlarm->rect.w * 0.25;
 	y -= baseAreaAlarm->rect.h * 0.25;
 
 	baseAreaAlarm->SetPos(x, y);
@@ -130,6 +129,7 @@ bool Base::AddTurret(Turret* turret)
 	else
 	{
 		turretsVector.push_back(turret);
+		turret->myBase = this;
 		return true;
 	}
 }
@@ -181,7 +181,6 @@ void Base::RemoveTurret(Turret* turret)
 	{
 		if (turretsVector[i] == turret)
 		{
-			delete turretsVector[i];
 			turretsVector.erase(turretsVector.begin() + i);
 		}
 	}
@@ -197,7 +196,6 @@ void Base::RemoveBarricade(Barricade* barricade)
 	{
 		if (barricadesVector[i] == barricade)
 		{
-			delete barricadesVector[i];
 			barricadesVector.erase(barricadesVector.begin() + i);
 		}
 	}

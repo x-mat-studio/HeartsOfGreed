@@ -4,11 +4,13 @@
 #define __AI_H__
 
 #define ENEMIES_PER_NIGHT 5
+#define SPAWNERS_TO_ACTIVATE 2
 
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
 
 #include "vector"
+#include "map"
 
 class Base;
 class Spawner;
@@ -41,8 +43,9 @@ private:
 	int CheckBaseAligmentAttack();
 
 	void CommandSpawners();
-	Spawner* FindNearestSpawner();
-	int CalculateEnemiesToSpawn();
+	void FindNearestSpawners(std::multimap<int, Spawner*>* spawners);
+	int CalculateEnemiesToSpawn(int numberOfSpawners);
+	int CalculateSpawnersToActivate();
 	
 private:
 	fMPoint objectivePos;

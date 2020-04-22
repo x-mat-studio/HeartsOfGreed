@@ -52,6 +52,8 @@ public:
 
 	// Retrieve window scale
 	float GetScale() const;
+	float GetScaleFactor()const;
+	void GetScaleRange(float& minScale, float& maxScale)const;
 	float GetUIScale() const;
 
 	float SetScale(float newScale);
@@ -80,7 +82,7 @@ private:
 	float		scale;
 	float minScaleValue;
 	float maxScaleValue;
-
+	float scaleFactor;
 };
 
 #endif // __WINDOW_H__

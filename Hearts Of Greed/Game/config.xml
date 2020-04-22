@@ -15,7 +15,7 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="2.0" minScaleValue="0.25" maxScaleValue="5.0"/>
+    <resolution width="1280" height="720" scale="2.0" minScaleValue="0.25" maxScaleValue="5.0" scaleFactor="0.25"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -50,6 +50,7 @@
 
   <testScene 
     fadeTime="1.0"
+    startingScale="2.0"
     camVel="700" 
     initialCamPosX="-1650" 
     initialCamPosY="800"

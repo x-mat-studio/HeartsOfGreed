@@ -82,6 +82,7 @@ private:
 	void CreateEntityPortraitChilds();
 
 	void UnregisterEvents();
+	void CheckFatherPointers(UI* toDelete);
 
 
 public:
@@ -102,6 +103,11 @@ private:
 
 	UI* currResources;
 	int screenResources;
+
+	bool isMenuOn;
+
+	int framesToUpdatePortrait;
+	int framesSincePortraitUpdate;
 	
 
 };

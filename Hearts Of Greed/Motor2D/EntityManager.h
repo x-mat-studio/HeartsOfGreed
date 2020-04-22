@@ -233,8 +233,6 @@ private:
 	Turret* sampleTurret;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
-
-
 };
 
 #endif //__ENTITYMANAGER_H__

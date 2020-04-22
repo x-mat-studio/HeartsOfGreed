@@ -104,7 +104,7 @@ public:
 	ENTITY_TYPE GetType();
 	ENTITY_ALIGNEMENT GetAlignment();
 	bool IsOpositeAlignement(ENTITY_ALIGNEMENT check);
-	void SetAlignment(ENTITY_ALIGNEMENT newAlign = ENTITY_ALIGNEMENT::UNKNOWN);
+	virtual void SetAlignment(ENTITY_ALIGNEMENT newAlign = ENTITY_ALIGNEMENT::UNKNOWN);
 
 	void SetToDelete(bool toDelete);
 	virtual void Draw(float dt);	

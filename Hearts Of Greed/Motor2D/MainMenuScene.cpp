@@ -53,7 +53,7 @@ bool ModuleMainMenuScene::Start()
 	gameTitle = app->tex->Load("intro_images/gameTitle.png");
 	BG = app->tex->Load("intro_images/MainMenuBG.png");
 
-	app->audio->PlayMusic("audio/music/IntroMenu.ogg", fadeTime, 200);
+	app->audio->PlayMusic("audio/music/IntroMenu.ogg", fadeTime, app->audio->musicVolume);
 
 	alphaCounter = 0;
 	soundDelay = 0;

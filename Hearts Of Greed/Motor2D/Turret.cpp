@@ -3,7 +3,8 @@
 #include "Render.h"
 #include "Map.h"
 #include "FoWManager.h"
-
+#include "Base.h"
+#include "EventManager.h"
 
 
 Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
@@ -31,7 +32,7 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	range(range),
 
 	attackCD(0),
-	
+
 	shortTermObjective(nullptr),
 
 	state(TURRET_STATES::IDLE)
@@ -61,7 +62,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	turretLvl(copy->turretLvl),
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
-	range(copy->range), 
+	range(copy->range),
 
 	attackCD(0),
 
@@ -71,7 +72,13 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	state(TURRET_STATES::IDLE)
 {
 	currentAnimation = &idleRightDown;
-	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
+
+	if (align == ENTITY_ALIGNEMENT::PLAYER)
+		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
+	else
+		this->visionEntity = nullptr;
+
+
 }
 
 
@@ -166,7 +173,7 @@ void Turret::Draw(float dt)
 		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));		
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));
 }
 
 int Turret::GetLvl()
@@ -249,7 +256,7 @@ void Turret::Attack()
 
 void Turret::Die()
 {
-	app->entityManager->AddEvent(EVENT_ENUM::ENTITY_DEAD);
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
 
 	if (minimapIcon != nullptr)
@@ -262,6 +269,11 @@ void Turret::Die()
 	{
 		visionEntity->deleteEntity = true;
 		visionEntity = nullptr;
+	}
+
+	if (myBase != nullptr)
+	{
+		myBase->RemoveTurret(this);
 	}
 }
 
@@ -295,7 +307,7 @@ bool Turret::ExternalInput(std::vector<TURRET_INPUTS>& inputs, float dt)
 	{
 		inputs.push_back(TURRET_INPUTS::IN_ATTACK);
 	}
-	else 
+	else
 	{
 		SearchObjective();
 	}
@@ -390,16 +402,16 @@ void Turret::StateMachine()
 
 			attackCD += 0.01f;
 		}
-		else 
+		else
 		{
 			inputs.push_back(TURRET_INPUTS::IN_CHARGING_ATTACK);
 		}
-		
+
 		break;
 
 	case TURRET_STATES::CHARGING_ATTACK:
 
-		app->audio->PlayFx(app->entityManager->turretShooting, 0, 7, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->turretShooting, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 		break;
 
@@ -508,3 +520,4 @@ void Turret::SetAnimation(TURRET_STATES state)
 	}
 	}
 }
+

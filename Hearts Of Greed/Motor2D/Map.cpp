@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "Building.h" //necessary to read buildings from tiled
 #include "Minimap.h"
+#include "Base.h"//VERTICAL, SOMEONE DELETE THIS
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -51,7 +52,8 @@ void ModuleMap::Draw()
 
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != (P2SString)"Collision" && data.layers[f]->name != (P2SString)"BuildingGeneration") {
+		if (data.layers[f]->name != P2SString("Collision") && data.layers[f]->name != P2SString("BuildingGeneration"))
+		{
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
@@ -106,7 +108,7 @@ void ModuleMap::DrawMinimap()
 	float halfWidth = app->minimap->minimapWidth * 0.5f;
 	while (f < data.layers.size())
 	{
-		if (data.layers[f]->name != (P2SString)"Collision") {
+		if (data.layers[f]->name != P2SString("Collision")) {
 
 			for (int i = 0; i < data.layers[f]->height; i++)//number of rows
 			{
@@ -378,11 +380,11 @@ bool ModuleMap::LoadMap(P2SString path, P2SString name)
 		P2SString orientation(map.attribute("orientation").as_string());
 
 
-		if (orientation == "orthogonal")
+		if (orientation == P2SString("orthogonal"))
 			data.type = MAP_TYPES::MAP_TYPE_ORTHOGONAL;
-		else if (orientation == "isometric")
+		else if (orientation == P2SString("isometric"))
 			data.type = MAP_TYPES::MAP_TYPE_ISOMETRIC;
-		else if (orientation == "staggered")
+		else if (orientation == P2SString("staggered"))
 			data.type = MAP_TYPES::MAP_TYPE_STAGGERED;
 		else
 			data.type = MAP_TYPES::MAP_TYPE_UNKNOWN;
@@ -517,7 +519,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 			}
 		}
 	}
-	if (layer->name == (P2SString)"BuildingGeneration") {
+	if (layer->name == P2SString("BuildingGeneration")) {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
@@ -542,7 +544,11 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				switch (layer->gid[i])
 				{
 				case 390:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
+				{
+					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
+					//VERTICAL SOMEONE DELETE THIS pls
+					base->AddTurret((Turret*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, colliderRectAux.x * colliderRectAux.w*11.f, colliderRectAux.y*6.5f - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY));
+				}
 					break;
 
 				case 391:

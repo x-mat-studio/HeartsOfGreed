@@ -12,7 +12,9 @@ ingameSize(5)
 
 // Destructor
 ModuleFonts::~ModuleFonts()
-{}
+{
+	default = nullptr;
+}
 
 // Called before render is available
 bool ModuleFonts::Awake(pugi::xml_node& conf)
@@ -53,6 +55,7 @@ bool ModuleFonts::CleanUp()
 		LOG("SDL_ttf could not delete! SDL_ttf Error: %s\n", TTF_GetError());
 		fonts[i] = nullptr;
 	}
+	fonts.clear();
 
 	TTF_Quit();
 	return true;
@@ -84,9 +87,10 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 	if (font == nullptr)
 		font = default;
 
-	SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped((font) ? font : font, text, color, app->win->width);
+	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
 
-	if (surface == nullptr)
+
+	if (surface == nullptr || surface->pixels == nullptr)
 	{
 		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}

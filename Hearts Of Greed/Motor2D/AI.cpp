@@ -145,47 +145,53 @@ void ModuleAI::PushSpawner(Spawner* building)
 
 void ModuleAI::CommandSpawners()
 {
-	Spawner* spawner = FindNearestSpawner();
+	std::multimap<int, Spawner*> spawners;
+	FindNearestSpawners(&spawners);
+	int spawnersAbaliable = spawners.size();
 
-	int enemiesToSpawn = CalculateEnemiesToSpawn();
+	int spawnersToActivate = CalculateSpawnersToActivate();
+	int enemiesToSpawn = CalculateEnemiesToSpawn(spawnersToActivate);
 
-	spawner->SetNumberToSpawn(enemiesToSpawn);
+	std::multimap<int, Spawner*>::iterator iterator = spawners.begin();
 
+	for (int i = 0; i < spawnersToActivate && i < spawnersAbaliable; i++)
+	{
+		iterator->second->SetNumberToSpawn(enemiesToSpawn);
+		iterator++;
+	}
+
+	spawners.clear();
 }
 
 
-Spawner* ModuleAI::FindNearestSpawner()
+void ModuleAI::FindNearestSpawners(std::multimap<int, Spawner*>* spawners)
 {
 	int numSpawners = spawnerVector.size();
 
-	Spawner* ret = spawnerVector[0];
 	fMPoint pos;
 
-	float distance;
-	float minDistance = spawnerVector[0]->GetPosition().DistanceNoSqrt(objectivePos);
-
-	for (int i = 1; i < numSpawners; i++)
+	for (int i = 0; i < numSpawners; i++)
 	{
 		pos = spawnerVector[i]->GetPosition();
-		distance = pos.DistanceNoSqrt(objectivePos);
-
-		if (minDistance > distance)
-		{
-			minDistance = distance;
-			ret = spawnerVector[i];
-		}
+		spawners->insert(std::pair< int, Spawner*>(pos.DistanceNoSqrt(objectivePos), spawnerVector[i]));
 	}
+}
 
+
+int ModuleAI::CalculateEnemiesToSpawn(int numberOfSpawners)
+{
+	int days = app->testScene->GetDayNumber();
+
+	int ret = days * ENEMIES_PER_NIGHT / numberOfSpawners;
 	return ret;
 }
 
 
-int ModuleAI::CalculateEnemiesToSpawn()
+int ModuleAI::CalculateSpawnersToActivate()
 {
-	int days = app->testScene->GetDayNumber();
-
-	return days * ENEMIES_PER_NIGHT;
+	return SPAWNERS_TO_ACTIVATE;
 }
+
 
 
 void ModuleAI::ResetAI()

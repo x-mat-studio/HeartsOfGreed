@@ -36,10 +36,12 @@ ModuleTestScene::ModuleTestScene() :
 	allowCamMovement(true),
 	menuScene(false),
 	isNightTime(false),
-	dayTimer(0),
-	nightTimer(0),
+	dayTimer(INT_MAX),
+	nightTimer(INT_MAX),
 	camVel(0.f),
-	fadeTime(0)
+	fadeTime(0),
+	camToReset(false),
+	startingScale(1.0f)
 {
 	name.create("testScene");
 
@@ -55,12 +57,13 @@ ModuleTestScene::~ModuleTestScene()
 bool  ModuleTestScene::Awake(pugi::xml_node& config)
 {
 
-
 	camVel = config.attribute("camVel").as_float(1);
 	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
 	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
-	dayTimer = config.attribute("dayTimerSec").as_int(1);
-	nightTimer = config.attribute("nightTimerSec").as_int(1);
+
+	//VERTICAL SLICE
+	//dayTimer = config.attribute("dayTimerSec").as_int(1);
+	//nightTimer = config.attribute("nightTimerSec").as_int(1);
 
 	camMarginMovements.x = config.attribute("freeCamMarginDetectionPixelsX").as_int(1);
 	camMarginMovements.y = config.attribute("freeCamMarginDetectionPixelsY").as_int(1);
@@ -73,7 +76,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
 	
 	fadeTime = config.attribute("fadeTime").as_float(0);
-
+	startingScale = config.attribute("startingScale").as_float(.0f);
 
 	return true;
 }
@@ -85,10 +88,9 @@ bool ModuleTestScene::Start()
 	app->player->Enable();
 	app->minimap->Enable();
 
-	app->render->currentCamX = initialCamPos.x;
-	app->render->currentCamY = initialCamPos.y;
+	camToReset = true;
 	//Play Music
-	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, 50);
+	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, app->audio->musicVolume);
 
 	//Load sfx used in this scene
 	if (app->map->LoadNew("map_prototype2.tmx") == true)
@@ -110,14 +112,40 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 200, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 250, 750);
+		//mid
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
+
+		//Left
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
+
+		//Right down
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
 
 
+		//Right 
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
+
+		//Base
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -135, 165);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -100, 190);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -95, 175);
+
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
+		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
 
 		//Spawners------------------
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1270, 750);
+		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
 
 		//Debug
@@ -127,7 +155,7 @@ bool ModuleTestScene::Start()
 
 	app->uiManager->CreateBasicInGameUI();
 
-	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, {0,0,0,0}, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Test Scene /  Press F to go to the Menu / N to Win / M to Lose");
+
 
 
 	//Events register
@@ -162,11 +190,19 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
-	CheckListener(this);
+	if (camToReset == true)
+	{
+		app->win->SetScale(startingScale);
+		app->render->currentCamX = initialCamPos.x;
+		app->render->currentCamY = initialCamPos.y;
+		camToReset = false;
+	}
 
+	CheckListener(this);
+	
 
 	//VERTICAL SLICE
-	//CalculateTimers(dt);
+	CalculateTimers(dt);
 
 	return true;
 }
@@ -243,7 +279,7 @@ bool  ModuleTestScene::Update(float dt)
 				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
 				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false && app->uiManager->MouseOnUI(mouseRaw) == false)
 				{
-					Zoom(0.25f * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
+					Zoom(app->win->GetScaleFactor() * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
 				}
 
 			}
@@ -407,9 +443,10 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DEBUG_NIGHT:
-		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-		isNightTime = true;
+		//app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+		app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
 		timer = 0;
+		dayTimer = 7.5f;
 		break;
 
 	}

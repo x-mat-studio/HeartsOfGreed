@@ -10,7 +10,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleWindow::ModuleWindow() : Module(), scale(.0f),minScaleValue(.0f),maxScaleValue(.0f),height(0u),width(0u),window(NULL),screenSurface(NULL)
+ModuleWindow::ModuleWindow() : Module(), scale(.0f), minScaleValue(.0f), maxScaleValue(.0f), height(0u), width(0u), window(NULL), screenSurface(NULL), scaleFactor(.0f)
 {
 	name.create("window");
 }
@@ -46,6 +46,8 @@ bool ModuleWindow::Awake(pugi::xml_node& config)
 		minScaleValue = config.child("resolution").attribute("minScaleValue").as_float(1.0);
 		maxScaleValue = config.child("resolution").attribute("maxScaleValue").as_float(1.0);
 		
+		scaleFactor = abs(config.child("resolution").attribute("scaleFactor").as_float(.0f));
+
 		stateResolution = RESOLUTION_MODE::STATIC;
 		
 		if (fullscreen == true)
@@ -92,19 +94,14 @@ bool ModuleWindow::Update(float dt)
 	
 	CheckListener(this);
 
-	//ONCE we have UI this should be menu events		Don't chu worry Adri, I've got you covered. The UI mantle gives warmth to anyone who needs it. Just get under it, and feel how it embraces you like a giant teddy bear		TODO: delete those debug keys
+	// ONCE we have UI this should be menu events		Don't chu worry Adri, I've got you covered. The UI mantle gives warmth to anyone who needs it. Just get under it, and feel how it embraces you like a giant teddy bear		TODO: delete those debug keys
+	// Then I realized the UI mantle was a trap designed to hunt and kill human beings once they enter thinking it's stable, and so, the cycle continues, in which naive programmers are lured and stroke down. Do not follow their example. Do not trust UI
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::FULLSCREEN_INPUT, EVENT_ENUM::NULL_EVENT);
+	}
 	
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_STATE::KEY_DOWN) {
-
-		ChangeResolution(RESOLUTION_MODE::FULLSCREEN);
-
-	}
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_STATE::KEY_DOWN) {
-
-		ChangeResolution(RESOLUTION_MODE::STATIC);
-
-	}
-
 	return ret;
 }
 
@@ -213,6 +210,18 @@ float ModuleWindow::GetScale() const
 {
 	return scale;
 }
+
+float  ModuleWindow::GetScaleFactor()const
+{
+	return scaleFactor;
+}
+
+void ModuleWindow::GetScaleRange(float& minScale, float& maxScale)const
+{
+	minScale = minScaleValue;
+	maxScale = maxScaleValue;
+}
+
 
 float ModuleWindow::GetUIScale() const
 {
