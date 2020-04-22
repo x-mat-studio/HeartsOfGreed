@@ -135,6 +135,125 @@ Twitter:	https://twitter.com/ii_rts
 * Spatial audio: units on screen or out of it (but still close to the center) will make sounds of different volume and origin.
 * Zoom in/out of map (mouse wheel).
 
+_________________________________________________________________________________________________________________________________
+
+## Changelog
+
+### Release 0.0.3
+
+#### General Updates
+- Skeleton Code Implemented.
+- All the variables, functions, enums and classes in the project are now renamed using the coding nomenclature criteria.
+
+
+#### Bug Fixes
+- Solved a bug that made the game crash when trying to close it with the cross button
+- Adjusted the spacing between functions to be consistent with the coding nomenclature criteria.
+- Modified some constructors to be consistent with the coding criteria.
+. . .
+
+### Release 0.3.19
+
+#### General Updates
+- Entities & Entity Manager implemented.
+- Basic AI for enemies (follow objective & attack it)
+- Pathfinding added to units (HPA* 1 layer)
+- Animations for all entities
+- UI skeleton implemented (Manager & Base classes)
+- Re-sizeable screen added (fullscreen)
+- Group Movement & Event manager added
+
+
+#### Bug Fixes
+- A lot of entities bugfixes
+- Adjusted UI values & Healthbar crash fixed
+- Corrected some animations
+. . .
+
+### Release 0.3.20
+
+#### General Updates
+- Upgrades folder structure
+- Deleted some useless files
+
+#### Bug Fixes
+. . .
+
+### Release 0.3.23
+
+#### General Updates
+- Added Minimap
+- UI menus & Specific elements (with custom functionallity)
+- Day/Night cycle added
+- AI for the night implemented
+- Skills & Areas added
+- Added Turrets, Bases & Buildings as working entities 
+- Debug & God Mode added
+- Finished the scenes (intro, main menu, gameplay & win/lose)
+- Level Up system
+- AI for heroes
+
+#### Bug Fixes
+- Fixed a bunch of audio effects
+- Adjusted UI values & Healthbar crash fixed
+- Player select logic upgraded
+- Fixed a lot of general code bugs & memory leaks
+- Adjusted pathfinding values
+
+. . .
+
+### Release 0.3.24
+
+#### General Updates
+- Animations now sync with attacks
+- Skills pollish
+- Healthbar now updates
+- Added portraits for turrets 
+
+#### Bug Fixes
+- Adjusted animations to match player's feedback
+- Adjusted UI values & Healthbar crash fixed
+- Player select logic bug fix
+- Fixed & adjusted values in the scenes outside gameplay
+- All entities' logic & state machine upgraded
+- Fixed some std::Vector miss use
+- Fixed some animations
+- Now buildings are beign printed in the minimap
+
+. . .
+
+
+### Release 0.3.27
+
+#### General Updates
+- UI & logic for the shop
+- You can buy & place turrets in an area!
+- Added fully functional Spawners
+- Healthbar & UI portraits update in real time
+- Menus can now we open & closed w/ ESC
+- Map re-do
+- LevelUp bonifications added
+
+#### Bug Fixes
+- Now audio channels are correctly used
+- Fixed some memory leaks & release crashes
+- Fog of War correctly works with entities
+- UI fixes & improvements
+- Adjusted UI values & Healthbar crash fixed
+- CleanUp() of some modules are now correctly executed
+- Adjusted pathfinding values
+- Fixed Heroes' state machine
+- Events are now being unregistered correctly.
+- Fixed some turret display bugs
+- Upgraded construction area mode
+- Skill now consume energy
+- HPA* now deletes nodes the right way
+- Polishes pathfinding algorithms
+- Polished armored hero skill
+- Fixed animations
+
+. . .
+
 
 ## Credits
 
