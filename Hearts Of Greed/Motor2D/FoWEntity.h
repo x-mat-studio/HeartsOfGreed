@@ -18,6 +18,7 @@ public:
 	iMPoint GetPos()const;
 
 	void SetNewVisionRadius(uint radius);
+	void SetEntityProvideVision(bool providesVision);
 
 	std::vector<iMPoint> GetTilesInsideRadius()const;
 
