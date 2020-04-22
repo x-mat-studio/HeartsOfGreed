@@ -4,12 +4,11 @@
 #include "FoWBitDefs.h"
 #include "Map.h"
 
-FoWEntity::FoWEntity(fMPoint WorldPos, bool providesVisibility, int visionRadius) : deleteEntity(false), providesVisibility(providesVisibility), posInMap({ 0,0 }), isVisible(false)
+FoWEntity::FoWEntity(fMPoint WorldPos, bool providesVisibility, int visionRadius) : deleteEntity(false), providesVisibility(providesVisibility), posInMap({ 0,0 }), isVisible(false), boundingBoxRadius(0)
 {
-	if (providesVisibility)
-	{
-		SetNewVisionRadius(visionRadius);
-	}
+
+	SetNewVisionRadius(visionRadius);
+
 	SetNewPosition(WorldPos);
 
 }
@@ -57,9 +56,24 @@ void FoWEntity::SetNewVisionRadius(uint radius)
 	app->fowManager->RequestMaskDeletion(boundingBoxRadius);
 	boundingBoxRadius = radius;
 	app->fowManager->RequestMaskGeneration(boundingBoxRadius);
-	app->fowManager->MapNeedsUpdate();
+	if (providesVisibility == true)
+	{
+		app->fowManager->MapNeedsUpdate();
+	}
 
 }
+
+void FoWEntity::SetEntityProvideVision(bool providesVision)
+{
+	if (providesVisibility != providesVision)
+	{
+		providesVisibility = providesVision;
+
+		app->fowManager->MapNeedsUpdate();
+	}
+}
+
+
 
 std::vector<iMPoint> FoWEntity::GetTilesInsideRadius()const
 {

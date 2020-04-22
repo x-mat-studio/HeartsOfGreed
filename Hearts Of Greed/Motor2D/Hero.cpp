@@ -492,7 +492,7 @@ bool Hero::CheckAttackRange()
 
 	SDL_Rect rect;
 	rect.x = position.x - attackRange;
-	rect.y = position.y - attackRange;
+	rect.y = position.y - center.y - attackRange;
 	rect.w = attackRange * 2;
 	rect.h = attackRange * 2;
 
@@ -801,14 +801,14 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-
+	
 	if (cooldownHability1 > 0.f)
 	{
 		cooldownHability1 += dt;
 
 		drawingVfx = true;
 
-		if (cooldownHability1 >= skill1RecoverTime)
+		if (cooldownHability1 >= skill1RecoverTime || godMode)
 		{
 			skill1Charged = true;
 			drawingVfx = false;

@@ -115,7 +115,10 @@ bool GathererHero::ExecuteSkill1()
 	{
 		if (!skillExecutionDelay)
 		{
+			if(!godMode)
 			energyPoints -= skill1Cost;
+
+
 			skillExecutionDelay = true;
 			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 			return skillExecutionDelay;
@@ -209,6 +212,8 @@ bool GathererHero::DrawVfx(float dt)
 	else
 	{
 		Frame currFrame = currentVfx->GetCurrentFrame(dt);
+		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
+			currentVfx = false;
 
 		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
 	}

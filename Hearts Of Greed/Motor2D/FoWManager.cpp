@@ -427,7 +427,7 @@ void ModuleFoWManager::RequestMaskGeneration(int radius)
 	{
 		MaskData data;
 		data.numberOfUsers = 1;
-		data.mask = GenerateCircleJoints(radius,GenerateCircleBorders(radius, GenerateCircle(radius)));
+		data.mask = GenerateCircleJoints(radius, GenerateCircleBorders(radius, GenerateCircle(radius)));
 		maskMap.insert(std::pair<uint, MaskData>(radius, data));
 		//Fill Corners
 		//Fill joints
@@ -572,7 +572,7 @@ unsigned short* ModuleFoWManager::GenerateCircleJoints(int radius, unsigned shor
 			if (mask[(y * diameter) + x] == fow_NON)
 			{
 				//do tile check and change
-				unsigned short aux = CheckJointsFromNeighbours({x,y},diameter,mask);
+				unsigned short aux = CheckJointsFromNeighbours({ x,y }, diameter, mask);
 
 				switch (aux)
 				{
@@ -679,7 +679,12 @@ unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diam
 	int upperTileId = ((pos.y - 1) * diameter) + pos.x;
 	int bottomTileId = ((pos.y + 1) * diameter) + pos.x;
 
-	if (mask[leftTileId] == fow_CNW || mask[leftTileId] == fow_CNE || mask[leftTileId] == fow_CSE || mask[leftTileId] == fow_CSW)
+
+
+
+
+	if (mask[leftTileId] == fow_CNW || mask[leftTileId] == fow_CNE || mask[leftTileId] == fow_CSE || mask[leftTileId] == fow_CSW ||
+		mask[leftTileId] == fow_WWW || mask[leftTileId] == fow_SSS || mask[leftTileId] == fow_NNN || mask[leftTileId] == fow_EEE)
 	{
 		ret += fow_neighbour_W;
 
@@ -687,7 +692,8 @@ unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diam
 
 	//check East tile
 
-	if (mask[rightTileId] == fow_CNW || mask[rightTileId] == fow_CNE || mask[rightTileId] == fow_CSE || mask[rightTileId] == fow_CSW)
+	if (mask[rightTileId] == fow_CNW || mask[rightTileId] == fow_CNE || mask[rightTileId] == fow_CSE || mask[rightTileId] == fow_CSW ||
+		mask[rightTileId] == fow_WWW || mask[rightTileId] == fow_SSS || mask[rightTileId] == fow_NNN || mask[rightTileId] == fow_EEE)
 	{
 		ret += fow_neighbour_E;
 	}
@@ -695,7 +701,8 @@ unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diam
 
 	//check North tile
 
-	if (mask[upperTileId] == fow_CNW || mask[upperTileId] == fow_CNE || mask[upperTileId] == fow_CSE || mask[upperTileId] == fow_CSW)
+	if (mask[upperTileId] == fow_CNW || mask[upperTileId] == fow_CNE || mask[upperTileId] == fow_CSE || mask[upperTileId] == fow_CSW ||
+		mask[upperTileId] == fow_WWW || mask[upperTileId] == fow_SSS || mask[upperTileId] == fow_NNN || mask[upperTileId] == fow_EEE)
 	{
 		ret += fow_neighbour_N;
 	}
@@ -703,7 +710,8 @@ unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diam
 
 	//check South tile
 
-	if (mask[bottomTileId] == fow_CNW || mask[bottomTileId] == fow_CNE || mask[bottomTileId] == fow_CSE || mask[bottomTileId] == fow_CSW)
+	if (mask[bottomTileId] == fow_CNW || mask[bottomTileId] == fow_CNE || mask[bottomTileId] == fow_CSE || mask[bottomTileId] == fow_CSW ||
+		mask[bottomTileId] == fow_WWW || mask[bottomTileId] == fow_SSS || mask[bottomTileId] == fow_NNN || mask[bottomTileId] == fow_EEE)
 	{
 		ret += fow_neighbour_S;
 	}

@@ -53,6 +53,7 @@ bool ModuleFonts::CleanUp()
 		LOG("SDL_ttf could not delete! SDL_ttf Error: %s\n", TTF_GetError());
 		fonts[i] = nullptr;
 	}
+	fonts.clear();
 
 	TTF_Quit();
 	return true;
@@ -86,7 +87,8 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 
 	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
 
-	if (surface == nullptr)
+
+	if (surface == nullptr || surface->pixels == nullptr)
 	{
 		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}

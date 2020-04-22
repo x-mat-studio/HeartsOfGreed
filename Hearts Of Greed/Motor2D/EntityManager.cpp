@@ -120,7 +120,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
 
 	int maxHP = 100;
-	int recoveryHP = 1;
+	int recoveryHP = 2;
 	int maxEnergy = 40;
 	int recoveryE = 4;
 
@@ -133,7 +133,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	float skill1ExecTime = 1.75f;
 	float skill1RecovTime = 6.f;
-	int granDmg = 50;
+	int granDmg = 55;
 
 
 	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeftG, walkLeftUpG,
@@ -180,8 +180,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation skill1LeftUpM = skill1LeftUpM.PushAnimation(armoredman, "skill_1_left_up");
 	Animation skill1LeftDownM = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
 
-	maxHP = 175;
-	recoveryHP = 2;
+	maxHP = 170;
+	recoveryHP = 4;
 
 	maxEnergy = 80;
 	recoveryE = 3;
@@ -271,8 +271,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	atkRange = 40;
 
 	movSpd = 125;
-	int vision = 250;
-	int xp = 10;
+	int vision = 200;
+	int xp = 15;
 
 	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
@@ -290,9 +290,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	recoveryHP = 0;
 
 	atkDmg = 3;
-	atkSpd = 2.f;
-	atkRange = 250;
-	xp = 25;
+	atkSpd = 2.25f;
+	atkRange = 225;
+	xp = 35;
 
 
 	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
@@ -307,8 +307,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	int maxTurrets = 2;
 	int resourcesProd = 5;
 	int resourcesRate = 5;
-
-
 
 	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
 	Collider* baseAlarmCollider = new Collider({ 0, 0, 700, 650 }, COLLIDER_BASE_ALERT, app->ai);
@@ -921,6 +919,13 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	ENTITY_ALIGNEMENT alignement;
 
 	Collider* col;
+	Entity* ret = nullptr;
+	float x, y;
+	x = rect->x + (rect->w * 0.5);
+	y = rect->y + (rect->h * 0.5);
+	fMPoint center = { x,  y };
+
+	fMPoint pos1, pos2;
 
 	if (alig == ENTITY_ALIGNEMENT::ENEMY)
 	{
@@ -950,12 +955,27 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 		{
 			if (col->CheckCollision(*rect))
 			{
-				return entityVector[i];
+				if (ret == nullptr)
+				{
+					ret = entityVector[i];
+				}
+				else
+				{
+					pos1 = ret->GetPosition();
+					pos1.y -= ret->GetCenter().y;
+
+					pos2 = entityVector[i]->GetPosition();
+					pos2.y -= entityVector[i]->GetCenter().y;
+					if (pos1.DistanceNoSqrt(center) > pos2.DistanceNoSqrt(center))
+					{
+						ret = entityVector[i];
+					}
+				}
 			}
 		}
 	}
 
-	return nullptr;
+	return ret;
 }
 
 
