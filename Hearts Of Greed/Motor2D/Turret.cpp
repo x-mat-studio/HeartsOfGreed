@@ -149,7 +149,7 @@ bool Turret::SearchObjective()
 	SDL_Rect rect;
 
 	rect.x = position.x - range;
-	rect.y = position.y - range;
+	rect.y = position.y - center.y - range;
 	rect.w = range * 2;
 	rect.h = range * 2;
 
@@ -233,9 +233,21 @@ bool Turret::CheckAttackRange()
 		return false;
 	}
 
-	fMPoint point = shortTermObjective->GetPosition();
 
-	if (point.DistanceManhattan(position) < range)
+	if (shortTermObjective->GetAlignment() == align)
+	{
+		shortTermObjective = nullptr;
+		return false;
+	}
+
+	SDL_Rect rect;
+	rect.x = position.x - range;
+	rect.y = position.y - center.y - range;
+	rect.w = range * 2;
+	rect.h = range * 2;
+
+
+	if (shortTermObjective->GetCollider()->CheckCollision(rect))
 	{
 		return true;
 	}

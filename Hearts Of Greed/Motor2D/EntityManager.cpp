@@ -291,7 +291,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	atkDmg = 3;
 	atkSpd = 2.25f;
-	atkRange = 225;
+	atkRange = 175;
 	xp = 35;
 
 
