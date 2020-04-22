@@ -52,6 +52,10 @@ bool ModuleEventManager::Start()
 bool ModuleEventManager::CleanUp()
 {
 	CleanListenerMap();
+
+	eventVector.clear();
+
+
 	return true;
 }
 
@@ -176,6 +180,8 @@ void ModuleEventManager::CreateEventOnMap(EVENT_ENUM event)
 	//further testing in this function is needed TODO
 	std::vector<Module*> vec;
 	eventListenersMap[event] = vec;
+
+	vec.clear();
 }
 
 

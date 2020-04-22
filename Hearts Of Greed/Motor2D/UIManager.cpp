@@ -21,7 +21,8 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() : atlas(nullptr), focusedEnt(nullptr), focusedPortrait(nullptr), currResources(nullptr), screenResources(0),
-lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr), clickSound(-1), hoverSound(-1)
+lastShop(nullptr), portraitPointer(nullptr), createdInGameMenu(nullptr), clickSound(-1), hoverSound(-1), isMenuOn(false), framesToUpdatePortrait(20),
+framesSincePortraitUpdate(0)
 {
 	name.create("UIManager");
 }
@@ -33,6 +34,9 @@ ModuleUIManager::~ModuleUIManager()
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
 	UnregisterEvents();
+
+	uiVector.clear();
+
 }
 
 
@@ -540,6 +544,31 @@ void ModuleUIManager::CreateEntityPortrait()
 
 }
 
+void ModuleUIManager::UpdateFocusPortrait()
+{
+
+	focusedEnt = app->player->GetFocusedEntity();
+
+	if (focusedEnt != nullptr )
+	{
+		if (focusedEnt->toDelete == false)
+		{
+			if (framesSincePortraitUpdate >= framesToUpdatePortrait)
+			{
+				DeleteUIChilds(focusedPortrait, false);
+				CreateEntityPortraitChilds();
+				framesSincePortraitUpdate = 0;
+			}
+			framesSincePortraitUpdate++;
+		}
+		else
+			focusedEnt = nullptr;
+	}
+	else
+		DeleteUIChilds(focusedPortrait, false);
+
+}
+
 void ModuleUIManager::CreateEntityPortraitChilds()
 {
 
@@ -1043,22 +1072,7 @@ bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
 	return false;
 }
 
-void ModuleUIManager::UpdateFocusPortrait()
-{
 
-	DeleteUIChilds(focusedPortrait, false);
-
-	focusedEnt = app->player->GetFocusedEntity();
-
-	if (focusedEnt != nullptr )
-	{
-		if (focusedEnt->toDelete == false)
-			CreateEntityPortraitChilds();
-		else
-			focusedEnt = nullptr;
-	}
-
-}
 
 void ModuleUIManager::UpdateResources(int newResources)
 {
