@@ -39,8 +39,7 @@ Tab: Change focus between the selected heroes.
 F1: Debug texture for Fog of war (only visible when on Fog of War mode).
 F2: Reset fog of war(only visible when on Fog of War mode).
 F3: Activate/Deactivate Fog of War mode.
-F4: Full screen.
-F5: Window mode.
+F4: Full screen on / off
 F6: Kill all enemies.
 F7: Activate/Deactivate collider and pathfinding vision.
 F8: Deactivate night.

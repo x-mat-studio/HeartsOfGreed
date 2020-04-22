@@ -167,18 +167,6 @@ void UI_Button::OnClick(float dt)
 		app->uiManager->HideElements(this, dt);
 	}
 
-	if (name == P2SString("fullscreenButton"))
-	{
-		if (box.x == 739)
-		{
-			box.x = 763;
-		}
-		else
-		{
-			box.x = 739;
-		}
-	}
-
 	app->audio->PlayFx(app->uiManager->clickSound,0,-1);
 }
 
