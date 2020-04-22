@@ -109,23 +109,23 @@ M: Lose if in-game.
 * First implementation of a map showing our core game loop.
 * Single resource which is used for building turrets.
 * Two different hero units, each one with one disctintive skill:
-	** Armored Man: A melee attack with an AoE effect.
-	** Suit Man: Throws a grenade in ranged which explodes on contact.
+	- Armored Man: A melee attack with an AoE effect.
+	- Suit Man: Throws a grenade in ranged which explodes on contact.
 * Group selection and movement for ally units.
 * Multiple buildings implemented:
-	** Ally base: Center of operations, you can build and upgrade here.
-	** Enemy base: Your opponents stronghold wich they will defend if your heroes get near, deplete it's health to make it your own.
-	** Turrets: Building which attacks entities of it's contrary alligment.
-	** Decorative Buildings: Flesh out our map and create chokepoints in the map.
+	- Ally base: Center of operations, you can build and upgrade here.
+	- Enemy base: Your opponents stronghold wich they will defend if your heroes get near, deplete it's health to make it your own.
+	- Turrets: Building which attacks entities of it's contrary alligment.
+	- Decorative Buildings: Flesh out our map and create chokepoints in the map.
 * Win condition: triggered by killing all enemies during night.
 * Win scene: custom made "you win message" and track  .
 * Lose condition: triggered by losing all units or losing all bases.
 * Lose scene: custom made "you lose message" and track  .
 * HUD implementation showing resources, heroes, cycle state...
 * Real Time minimap implemented: 
-	** Showing icons for heroes, enemies and important structures.
- 	** Showing rendered images of terrain and decorative buildings.
-	** Last seen image endures in past FoW.
+	- Showing icons for heroes, enemies and important structures.
+ 	- Showing rendered images of terrain and decorative buildings.
+	- Last seen image endures in past FoW.
 * Day / Night cycle. During night, enemies spawn and attack player bases.
 * All units and buildings display a Portrait in the bottom right corner showing their Healthbar and specific characteristics.
 * Spatial audio: units on screen or out of it (but still close to the center) will make sounds of different volume and origin.
@@ -144,7 +144,7 @@ https://www.sounds-resource.com/pc_computer/fallout3/
 https://www.sounds-resource.com/pc_computer/fallout2/
 https://www.sounds-resource.com/pc_computer/fallout/
 
-### Thanks to Juan Hernández and David Carrasquet for dorming part of the team during the first sprint of the project and contributing in the wiki creation.
+Thanks to Juan Hernández and David Carrasquet for dorming part of the team during the first sprint of the project and contributing in the wiki creation.
 	
 
 ## License:
