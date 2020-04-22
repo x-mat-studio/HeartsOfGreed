@@ -352,13 +352,16 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FULLSCREEN_INPUT:
 		UI* fullscreenButton = FindUIByName("fullscreenButton");
 
-		if (fullscreenButton->box.x == 739)
+		if (fullscreenButton != nullptr)
 		{
-			fullscreenButton->box.x = 763;
-		}
-		else
-		{
-			fullscreenButton->box.x = 739;
+			if (fullscreenButton->box.x == 739)
+			{
+				fullscreenButton->box.x = 763;
+			}
+			else
+			{
+				fullscreenButton->box.x = 739;
+			}
 		}
 
 		break;
