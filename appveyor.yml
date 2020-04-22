@@ -10,15 +10,15 @@ build:
 
  after_build:
     - cmd: mkdir %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
-    - cmd: XCOPY /E "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Game\*.*" %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
+    - cmd: copy "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Game\*.*" %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
     - cmd: copy "%APPVEYOR_BUILD_FOLDER%\Hearts Of Greed\Release\*.exe" %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
     - cmd: move %APPVEYOR_BUILD_FOLDER%\README.md %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
     - cmd: move "%APPVEYOR_BUILD_FOLDER%\LICENSE" %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
     
-    - 7z a X_Mat_Studio-Hearts_Of_Greed_$(appveyor_build_version).zip %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
+    - 7z a X_Mat_Studio-Hearts_Of_Greed.zip %APPVEYOR_BUILD_FOLDER%\Hearts_Of_Greed
     
   artifacts:  
-  - path: "X_Mat_Studio-Hearts_Of_Greed_$(appveyor_build_version).zip"
+  - path: "X_Mat_Studio-Hearts_Of_Greed.zip"
 
 
 deploy:
