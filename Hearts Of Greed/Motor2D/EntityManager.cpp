@@ -317,7 +317,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Generate Areas------------------------------------
 	skillArea gathererSkill1AreaRange;
 	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1AreaRange, 0, 0, 7);
+	BuildArea(&gathererSkill1AreaRange, 0, 0, 6);
 	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
 
 	skillArea gathererSkill1AreaExplosion;
