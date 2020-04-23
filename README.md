@@ -288,14 +288,24 @@ ________________________________________________________________________________
 
 ## Credits
 
-### All spritesheets and other images not 100% done by us are from Fallout 1-3 and can be found here:
-https://www.spriters-resource.com/
+### All spritesheets and other images not 100% done by us are from Fallout 1,2 & Tactics:
+https://www.spriters-resource.com/pc_computer/fallout/
+
+https://www.spriters-resource.com/pc_computer/fallout2/
+
+https://www.spriters-resource.com/pc_computer/fallouttactics/
+
 https://itch.io/
+
 https://opengameart.org/
+
+*This is a fan-based project, all the Fallout 1, 2, Tactis & the Fallout series are owned by Bethesda, Black Isle & Micro Forté- Please support the official release* 
 
 ### All sounds are from fallout 1-3 and can be found here:
 https://www.sounds-resource.com/pc_computer/fallout3/
+
 https://www.sounds-resource.com/pc_computer/fallout2/
+
 https://www.sounds-resource.com/pc_computer/fallout/
 
 Thanks to Juan Hernández and David Carrasquet for dorming part of the team during the first sprint of the project and contributing in the wiki creation.
