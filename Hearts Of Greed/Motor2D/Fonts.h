@@ -36,6 +36,11 @@ public:
 
 	bool CalcSize(const char* text, int& width, int& height, TTF_Font* font = NULL) const;
 
+private:
+
+	SDL_Color GetPixelColor(const SDL_Surface* pSurface, const int X, const int Y);
+	void SetPixelColor(SDL_Surface* pSurface, int X, int Y, Uint32 Pixel);
+
 
 public:
 

@@ -2,10 +2,12 @@
 #include "Textures.h"
 #include "Fonts.h"
 #include "Window.h"
+#include "SDL/include/SDL.h"
+
 
 
 ModuleFonts::ModuleFonts() : Module(),
-ingameSize(5)
+ingameSize(6)
 {
 	name.create("fonts");
 }
@@ -87,20 +89,65 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 	if (font == nullptr)
 		font = default;
 
-	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
+	const SDL_Color substitute = { 255,0,0 };
 
+	SDL_Surface* surface = TTF_RenderText_Shaded((font) ? font : font, text, color, substitute);
 
-	if (surface == nullptr || surface->pixels == nullptr)
+	if (surface == nullptr || surface->pixels == nullptr || surface->format == nullptr)
 	{
 		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 	else
 	{
+
+		const int SurfaceWidth = surface->w;
+		const int SurfaceHeight = surface->h;
+
+		// Loop through the second surface' pixel data
+		for (int i = 0; i < SurfaceHeight; ++i)
+		{
+			for (int j = 0; j < SurfaceWidth; ++j)
+			{
+				const Uint32 NewPixelValue = SDL_MapRGB(surface->format, 255, 0, 0);
+
+				SDL_SetColorKey(surface, SDL_TRUE, NewPixelValue);
+
+
+			}
+		}
+
+
+
 		ret = app->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);
+
 	}
 
+
 	return ret;
+}
+
+
+SDL_Color ModuleFonts::GetPixelColor(const SDL_Surface* pSurface, const int X, const int Y)
+{
+	const int Bpp = pSurface->format->BytesPerPixel;
+	const Uint8* pPixel = (Uint8*)pSurface->pixels + Y * pSurface->pitch + X * Bpp;
+	const Uint32 PixelColor = (Uint32)pPixel;
+
+	SDL_Color Color = { 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE };
+
+	const char* hola = SDL_GetPixelFormatName(pSurface->format->format);
+
+	SDL_GetRGB(PixelColor, pSurface->format, &Color.r, &Color.g, &Color.b);
+
+	return Color;
+}
+
+void ModuleFonts::SetPixelColor(SDL_Surface* pSurface, int X, int Y, Uint32 Pixel)
+{
+	Uint32* pPixels = (Uint32*)pSurface->pixels;
+
+	pPixels[(Y * pSurface->w) + X] = Pixel;
 }
 
 // calculate size of a text
