@@ -254,6 +254,37 @@ ________________________________________________________________________________
 
 . . .
 
+### Release 0.5
+
+#### General Updates
+- Balanced Stats for all Entities 
+- Enemies now spawn in the map
+- Introduced a turorial Level
+- Gatherer now gains resources when killing enemies (half of the XP gained)
+
+#### Bug Fixes
+- Fixed UI fullscreen button not changing text
+- Fixed some sound effects volume & channels
+- Fixed mem leaks in Skill areas
+- Fixed some animations
+- Camera now resets with the game loop
+- Pathfinding now finds a way to get out of a walkable tile
+
+
+. . .
+
+### Release 0.5.50
+
+#### General Updates
+- App Veyor is now more accurate at generating automatic builds
+
+#### Bug Fixes
+- Solved a memory segmentation crash (Fonts format related)
+
+
+. . .
+
+
 
 ## Credits
 
