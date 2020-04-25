@@ -19,6 +19,7 @@ Spawner::Spawner(fMPoint position, Spawner* copy) :
 	entitysToSpawn(0)
 {
 	int x, y;
+
 	x = position.x + copy->collider->rect.w * 0.5f;
 	y = position.y - copy->collider->rect.h * 0.5f;
 
@@ -30,11 +31,11 @@ Spawner::~Spawner()
 {}
 
 
-bool Spawner::PreUpdate(float dt)
+bool Spawner::PostUpdate(float dt)
 {
 	collider->active = false;
 
-	if (entitysToSpawn > 0)
+	if (entitysToSpawn > 0 && active)
 	{
 		Spawn(dt);
 		collider->active = true;
@@ -50,6 +51,12 @@ void Spawner::SetNumberToSpawn(int number)
 }
 
 
+void Spawner::SetSpawnRate(float ratio)
+{
+	spawnRate = ratio;
+}
+
+
 void Spawner::Spawn(float dt)
 {
 	timer += dt;
@@ -62,4 +69,24 @@ void Spawner::Spawn(float dt)
 		entitysToSpawn--;
 	}
 	
+}
+
+
+void Spawner::Activate()
+{
+	active = true;
+}
+
+
+void Spawner::Desactivate()
+{
+	active = false;
+	entitysToSpawn = 0;
+}
+
+
+
+bool Spawner::GetActive()
+{
+	return active;
 }

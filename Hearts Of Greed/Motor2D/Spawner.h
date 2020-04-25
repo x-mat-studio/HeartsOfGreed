@@ -15,10 +15,18 @@ public:
 
 	~Spawner();
 
-	void Spawn(float dt);
 	void SetNumberToSpawn(int number);
+	void SetSpawnRate(float ratio);
 
-	bool PreUpdate(float dt);
+	bool PostUpdate(float dt);
+
+	void Activate();
+	void Desactivate();
+
+	bool GetActive();
+
+private:
+	void Spawn(float dt);
 
 private:
 
@@ -27,6 +35,8 @@ private:
 	float spawnRate;
 
 	float timer;
+
+	bool active;
 };
 
 
