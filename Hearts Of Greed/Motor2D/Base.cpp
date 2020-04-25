@@ -8,9 +8,6 @@
 #include "EntityManager.h"
 #include "Player.h"
 
-//VERTICAL SLICE PURPOSES
-#include "EventManager.h"
-
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
 	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int maxHitPoints, int currentHitPoints,
@@ -216,8 +213,6 @@ void Base::ChangeAligment()
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
 
-		//VERTICAL SLICE PURPOSES
-		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
 	}
 
 	if (align == ENTITY_ALIGNEMENT::PLAYER)

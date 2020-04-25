@@ -10,7 +10,6 @@
 #include "EntityManager.h"
 #include "Building.h" //necessary to read buildings from tiled
 #include "Minimap.h"
-#include "Base.h"//VERTICAL, SOMEONE DELETE THIS
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -546,8 +545,6 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				case 390:
 				{
 					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
-					//VERTICAL SOMEONE DELETE THIS pls
-					base->AddTurret((Turret*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, colliderRectAux.x * colliderRectAux.w*11.f, colliderRectAux.y*6.5f - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY));
 				}
 					break;
 

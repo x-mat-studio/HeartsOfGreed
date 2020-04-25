@@ -1003,11 +1003,6 @@ void ModuleEntityManager::RemoveDeletedEntities()
 				SearchHeroesAlive();
 			}
 
-			//VERTICAL SLICE
-			if (type == ENTITY_TYPE::ENEMY)
-			{
-				SearchEnemiesAlive();
-			}
 		}
 	}
 

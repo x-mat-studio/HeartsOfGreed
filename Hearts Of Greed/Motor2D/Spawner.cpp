@@ -2,11 +2,13 @@
 #include "EntityManager.h"
 
 
-Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints) :
+Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints, float spawnRate) :
 	
 	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, col, maxHitPoints, currentHitPoints),
 	spawnerType(spawnerType),
-	entitysToSpawn(0)
+	spawnRate(spawnRate),
+	entitysToSpawn(0),
+	timer(0)
 {}
 
 
@@ -30,12 +32,12 @@ Spawner::~Spawner()
 
 bool Spawner::PreUpdate(float dt)
 {
+	collider->active = false;
 
 	if (entitysToSpawn > 0)
 	{
-		Spawn();
-
-		entitysToSpawn--;
+		Spawn(dt);
+		collider->active = true;
 	}
 
 	return true;
@@ -48,7 +50,16 @@ void Spawner::SetNumberToSpawn(int number)
 }
 
 
-void Spawner::Spawn()
+void Spawner::Spawn(float dt)
 {
-	app->entityManager->AddEntity(spawnerType, position.x, position.y + collider->rect.h, ENTITY_ALIGNEMENT::ENEMY);
+	timer += dt;
+
+	if (timer > spawnRate)
+	{
+		app->entityManager->AddEntity(spawnerType, position.x, position.y + collider->rect.h, ENTITY_ALIGNEMENT::ENEMY);
+		
+		timer -= spawnRate;
+		entitysToSpawn--;
+	}
+	
 }

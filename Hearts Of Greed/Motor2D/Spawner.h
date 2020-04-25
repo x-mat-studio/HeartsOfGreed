@@ -10,12 +10,12 @@ class Spawner : public Entity
 {
 public:
 
-	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints);
+	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints, float spawnRate = 0);
 	Spawner(fMPoint position, Spawner* copy);
 
 	~Spawner();
 
-	void Spawn();
+	void Spawn(float dt);
 	void SetNumberToSpawn(int number);
 
 	bool PreUpdate(float dt);
@@ -24,7 +24,9 @@ private:
 
 	ENTITY_TYPE spawnerType;
 	int entitysToSpawn;
+	float spawnRate;
 
+	float timer;
 };
 
 
