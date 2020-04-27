@@ -119,12 +119,7 @@
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIManager.cpp" />
-    <ClCompile Include="UI_Button.cpp" />
-    <ClCompile Include="UI_Healthbar.cpp" />
-    <ClCompile Include="UI_Portrait.cpp" />
-    <ClCompile Include="UI_Image.cpp" />
-    <ClCompile Include="UI_Scrollbar.cpp" />
-    <ClCompile Include="UI_Text.cpp" />
+    <ClCompile Include="UI_Group.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
@@ -176,12 +171,7 @@
     <ClInclude Include="Turret.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIManager.h" />
-    <ClInclude Include="UI_Button.h" />
-    <ClInclude Include="UI_Healthbar.h" />
-    <ClInclude Include="UI_Portrait.h" />
-    <ClInclude Include="UI_Image.h" />
-    <ClInclude Include="UI_Scrollbar.h" />
-    <ClInclude Include="UI_Text.h" />
+    <ClInclude Include="UI_Group.h" />
     <ClInclude Include="UpgradeCenter.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="p2SString.h" />

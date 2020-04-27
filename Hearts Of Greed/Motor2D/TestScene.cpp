@@ -15,7 +15,6 @@
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "UIManager.h"
-#include "UI_Text.h"
 #include "MainMenuScene.h"
 #include "EventManager.h"
 #include "Minimap.h"
@@ -152,8 +151,6 @@ bool ModuleTestScene::Start()
 		//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
 	}
-
-	app->uiManager->CreateBasicInGameUI();
 
 
 
