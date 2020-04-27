@@ -118,6 +118,7 @@
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UIFactory.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Healthbar.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="UIFactory.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Healthbar.h" />

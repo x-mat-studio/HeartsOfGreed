@@ -154,6 +154,9 @@
     <ClCompile Include="Minimap.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="UIFactory.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -325,6 +328,9 @@
       <Filter>Desenvolupament  ========\Scenes\header files</Filter>
     </ClInclude>
     <ClInclude Include="Minimap.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFactory.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
