@@ -10,6 +10,17 @@ struct UIFactory
 {
 	UIFactory();
 
+	// Menu creation functions
+
+	void CreateMainMenu();
+	void CreateOptionsMenu();
+	void CreateCreditsMenu();
+
+	void CreateBasicInGameUI();
+	void CreateDataPageComponents();
+	void CreatePauseMenu();
+	void CreateShopMenu();
+
 	// Image creation functions
 
 	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect);
@@ -36,7 +47,9 @@ struct UIFactory
 	UI* CreateCloseMenuButton(float x, float y, UI* parent);
 
 	UI* CreateShopButton(float x, float y, UI* parent);
-	UI* CreateReviveButton(float x, float y, UI* parent);
+	UI* CreateGathererReviveButton(float x, float y, UI* parent);
+	UI* CreateMeleeReviveButton(float x, float y, UI* parent);
+	UI* CreateRangedReviveButton(float x, float y, UI* parent);
 	UI* CreateBuyTurretButton(float x, float y, UI* parent);
 	UI* CreateUpgradeTurretButton(float x, float y, UI* parent);
 
