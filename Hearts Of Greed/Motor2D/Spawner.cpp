@@ -2,21 +2,33 @@
 #include "EntityManager.h"
 
 
-Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints, float spawnRate) :
+Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints, int enemiesPerWave, float spawnRate) :
 	
 	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, col, maxHitPoints, currentHitPoints),
+
 	spawnerType(spawnerType),
 	spawnRate(spawnRate),
+	entitiesPerWave(enemiesPerWave),
+
 	entitysToSpawn(0),
-	timer(0)
+	timer(0),
+
+	active(true)
 {}
 
 
 Spawner::Spawner(fMPoint position, Spawner* copy) :
 
 	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, copy->collider, copy->hitPointsMax, copy->hitPointsCurrent),
+
 	spawnerType(copy->spawnerType),
-	entitysToSpawn(0)
+	spawnRate(copy->spawnRate),
+	entitiesPerWave(copy->entitiesPerWave),
+
+	entitysToSpawn(0),
+	timer(0),
+
+	active(true)
 {
 	int x, y;
 
@@ -48,6 +60,7 @@ bool Spawner::PostUpdate(float dt)
 void Spawner::SetNumberToSpawn(int number)
 {
 	entitysToSpawn = number;
+	timer = spawnRate; //This is because when we give the order to spawn, the spawner spawns the first wave instantly
 }
 
 
@@ -57,16 +70,26 @@ void Spawner::SetSpawnRate(float ratio)
 }
 
 
+void Spawner::SetEnemiesPerWave(int entities)
+{
+	entitiesPerWave = entities;
+}
+
+
 void Spawner::Spawn(float dt)
 {
 	timer += dt;
 
 	if (timer > spawnRate)
 	{
-		app->entityManager->AddEntity(spawnerType, position.x, position.y + collider->rect.h, ENTITY_ALIGNEMENT::ENEMY);
+		for (int i = 0; i < entitiesPerWave && entitysToSpawn > 0; i++)
+		{
+			app->entityManager->AddEntity(spawnerType, position.x, position.y + collider->rect.h, ENTITY_ALIGNEMENT::ENEMY);
+			entitysToSpawn--;
+		}
+		
 		
 		timer -= spawnRate;
-		entitysToSpawn--;
 	}
 	
 }
