@@ -52,7 +52,6 @@ public:
 	void Drag(int x, int y);
 	void Hide(float dt);
 	bool OnAbove();
-
 protected:
 
 	virtual void Move();

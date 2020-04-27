@@ -8,7 +8,6 @@
 #include "Audio.h"
 #include "UIManager.h"
 #include "Render.h"
-#include "UI_Text.h"
 #include "EventManager.h"
 
 ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1), fadeTime(0)
@@ -42,11 +41,6 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
 // Called before the first frame
 bool ModuleMainMenuScene::Start()
 {
-
-	//SDL_Rect rect = { 0, 0, 0, 0 };
-	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
-
-	app->uiManager->CreateMainMenu();
 
 	//images
 	gameIcon = app->tex->Load("intro_images/gameIcon.png");
