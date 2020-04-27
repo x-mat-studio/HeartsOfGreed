@@ -80,8 +80,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Hero Gatherer---------------------
-	fMPoint pos;
-	pos.create(100, 600);
+	
 
 	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
@@ -117,32 +116,63 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	Animation skill1LeftDownG = skill1LeftDownG.PushAnimation(suitman, "skill_1_left_down");
 
 	// Hero collider
-	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
+	//passing this through xml
+		//collider
+	SDL_Rect r;
+	r.x = suitman.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = suitman.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = suitman.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = suitman.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)suitman.child("sample").child("collider").child("type").attribute("id").as_int(0);
 
-	int maxHP = 100;
-	int recoveryHP = 2;
-	int maxEnergy = 40;
-	int recoveryE = 4;
-
-	int atkDmg = 8;
-	float atkSpd = 0.75f;
-	int atkRange = 45;
-
-	int movSpd = 60;
-	int visTiles = 7;
-
-	float skill1ExecTime = 1.75f;
-	float skill1RecovTime = 6.f;
-	int granDmg = 55;
+	Collider* collider = new Collider(r, cType, this);
 
 
-	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeftG, walkLeftUpG,
+	fMPoint pos;
+	pos.x= suitman.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = suitman.child("sample").child("position").attribute("y").as_float(0);
+
+	int level = suitman.child("sample").child("stats").attribute("level").as_int(0);
+	int movSpd = suitman.child("sample").child("stats").attribute("movementSpeed").as_int(0);
+	int visTiles = suitman.child("sample").child("stats").attribute("vision").as_int(0);
+
+
+	int maxHP = suitman.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = suitman.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = suitman.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int maxEnergy = suitman.child("sample").child("stats").child("energyPoints").attribute("max").as_int(0);
+	int currentEnergy = suitman.child("sample").child("stats").child("energyPoints").attribute("current").as_int(0);
+	int recoveryE = suitman.child("sample").child("stats").child("energyPoints").attribute("recoveryRate").as_int(0);
+
+	int atkDmg = suitman.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = suitman.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = suitman.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+
+	//skill1
+	float skill1ExecTime = suitman.child("sample").child("skills").child("skill1").attribute("executionTime").as_float(0);
+	float skill1RecovTime = suitman.child("sample").child("skills").child("skill1").attribute("recoverTime").as_float(0);
+	int skill1Dmg = suitman.child("sample").child("skills").child("skill1").attribute("damage").as_int(0);
+	SKILL_ID skill1ID = (SKILL_ID)suitman.child("sample").child("skills").child("skill1").attribute("id").as_int(0);
+	SKILL_TYPE skill1Type= (SKILL_TYPE)suitman.child("sample").child("skills").child("skill1").attribute("type").as_int(0);
+	ENTITY_ALIGNEMENT skill1Target= (ENTITY_ALIGNEMENT)suitman.child("sample").child("skills").child("skill1").attribute("targetAligment").as_int(0);
+
+	//skill2
+	float skill2ExecTime = suitman.child("sample").child("skills").child("skill2").attribute("executionTime").as_float(0);
+	float skill2RecovTime = suitman.child("sample").child("skills").child("skill2").attribute("recoverTime").as_float(0);
+	//skill3
+	float skill3ExecTime = suitman.child("sample").child("skills").child("skill3").attribute("executionTime").as_float(0);
+	float skill3RecovTime = suitman.child("sample").child("skills").child("skill3").attribute("recoverTime").as_float(0);
+
+
+
+	sampleGatherer = new GathererHero(pos, collider, walkLeftG, walkLeftUpG,
 		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
 		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
 		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
-		granDmg, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
+		level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+		movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
+		skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion);
 
 	suitmandoc.reset();
 
@@ -195,7 +225,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	skill1ExecTime = 1.0f;
 	skill1RecovTime = 7.5f;
-	int skill1Dmg = 30;
+	skill1Dmg = 30;
 
 
 	sampleMelee = new MeleeHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
