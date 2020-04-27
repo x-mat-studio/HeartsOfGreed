@@ -222,6 +222,7 @@ private:
 
 	GathererHero* sampleGatherer;
 	MeleeHero* sampleMelee;
+	RangedHero* sampleRanged;
 
 	Enemy* sampleEnemy;
 

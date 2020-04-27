@@ -237,6 +237,66 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		skill1Dmg, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
+	// Sample Ranged Melee---------------------
+	filename = config.child("load").attribute("docnameRangedman").as_string();
+	pugi::xml_document rangedmanDoc;
+	rangedmanDoc.load_file(filename.GetString());
+	pugi::xml_node rangedman = armoredmanDoc.child("rangedman");
+
+	Animation walkLeftR = walkLeftM.PushAnimation(rangedman, "walk_left");
+	Animation walkLeftUpR = walkLeftUpM.PushAnimation(rangedman, "walk_left_up");
+	Animation walkLeftDownR = walkLeftDownM.PushAnimation(rangedman, "walk_left_down");
+	Animation walkRightUpR = walkRightUpM.PushAnimation(rangedman, "walk_right_up");
+	Animation walkRightDownR = walkRightDownM.PushAnimation(rangedman, "walk_right_down");
+	Animation walkRightR = walkRightM.PushAnimation(rangedman, "walk_right");
+
+	Animation idleRightR = idleRightM.PushAnimation(rangedman, "idle_right");
+	Animation idleRightUpR = idleRightUpM.PushAnimation(rangedman, "idle_right_up");
+	Animation idleRightDownR = idleRightDownM.PushAnimation(rangedman, "idle_right_down");
+	Animation idleLeftR = idleLeftM.PushAnimation(rangedman, "idle_left");
+	Animation idleLeftUpR = idleLeftUpM.PushAnimation(rangedman, "idle_left_up");
+	Animation idleLeftDownR = idleLeftDownM.PushAnimation(rangedman, "idle_left_down");
+
+	Animation punchRightR = punchRightM.PushAnimation(rangedman, "punch_right");
+	Animation punchRightUpR = punchRightUpM.PushAnimation(rangedman, "punch_right_up");
+	Animation punchRightDownR = punchRightDownM.PushAnimation(rangedman, "punch_right_down");
+	Animation punchLeftR = punchLeftM.PushAnimation(rangedman, "punch_left");
+	Animation punchLeftUpR = punchLeftUpM.PushAnimation(rangedman, "punch_left_up");
+	Animation punchLeftDownR = punchLeftDownM.PushAnimation(rangedman, "punch_left_down");
+
+	Animation skill1RightR = skill1RightM.PushAnimation(rangedman, "skill_1_right");
+	Animation skill1RightUpR = skill1RightUpM.PushAnimation(rangedman, "skill_1_right_up");
+	Animation skill1RightDownR = skill1RightDownM.PushAnimation(rangedman, "skill_1_right_down");
+	Animation skill1LeftR = skill1LeftM.PushAnimation(rangedman, "skill_1_left");
+	Animation skill1LeftUpR = skill1LeftUpM.PushAnimation(rangedman, "skill_1_left_up");
+	Animation skill1LeftDownR = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
+
+	maxHP = 100;
+	recoveryHP = 4;
+
+	maxEnergy = 80;
+	recoveryE = 3;
+
+	atkDmg = 15;
+	atkSpd = 1.f;
+	atkRange = 250;
+
+	movSpd = 110;
+	visTiles = 5;
+
+	skill1ExecTime = 1.0f;
+	skill1RecovTime = 7.5f;
+	skill1Dmg = 30;
+
+
+	sampleRanged = new RangedHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
+		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
+		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
+		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
+		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
+		skill1Dmg, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+
 
 	// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
@@ -511,6 +571,8 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::HERO_RANGED:
 				entityVector[i]->Start(combatFemaleTexture);
 				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::HERO_GATHERER:
@@ -758,6 +820,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
+		ret = new RangedHero({ (float)x,(float)y }, sampleRanged, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
@@ -811,6 +874,10 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 
 	case ENTITY_TYPE::HERO_MELEE:
 		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_RANGED:
+		return sampleRanged;
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
