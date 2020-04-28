@@ -24,40 +24,40 @@ struct UIFactory
 
 	// Image creation functions
 
-	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect);
+	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group);
 
 	// Text creation functions
 
-	UI* CreateText(float x, float y, UI* parent, P2SString text);
+	UI* CreateText(float x, float y, UI* parent, P2SString text, UI_Group* group);
 
 	// Button creation functions
 
-	UI* CreateNewGameButton(float x, float y, UI* parent);
-	UI* CreateOptionsButton(float x, float y, UI* parent);
-	UI* CreateFullscreenButton(float x, float y, UI* parent);
-	UI* CreateCreditsButton(float x, float y, UI* parent);
-	UI* CreateExitGameButton(float x, float y, UI* parent);
+	UI* CreateNewGameButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateOptionsButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateFullscreenButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateCreditsButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateExitGameButton(float x, float y, UI* parent, UI_Group* group);
 
-	UI* CreatePauseGameButton(float x, float y, UI* parent);
-	UI* CreateResumeGameButton(float x, float y, UI* parent);
-//	UI* CreateSaveGameButton(float x, float y, UI* parent);
-//	UI* CreateLoadGameButton(float x, float y, UI* parent);
-	UI* CreateReturnToMainMenuButton(float x, float y, UI* parent);
+	UI* CreatePauseGameButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateResumeGameButton(float x, float y, UI* parent, UI_Group* group);
+//	UI* CreateSaveGameButton(float x, float y, UI* parent, UI_Group* group);
+//	UI* CreateLoadGameButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group);
 
-//	UI* CreateHideButton(float x, float y, UI* parent);
-	UI* CreateCloseMenuButton(float x, float y, UI* parent);
+//	UI* CreateHideButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateCloseMenuButton(float x, float y, UI* parent, UI_Group* group);
 
-	UI* CreateShopButton(float x, float y, UI* parent);
-	UI* CreateGathererReviveButton(float x, float y, UI* parent);
-	UI* CreateMeleeReviveButton(float x, float y, UI* parent);
-	UI* CreateRangedReviveButton(float x, float y, UI* parent);
-	UI* CreateBuyTurretButton(float x, float y, UI* parent);
-	UI* CreateUpgradeTurretButton(float x, float y, UI* parent);
+	UI* CreateShopButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateRangedReviveButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateBuyTurretButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateUpgradeTurretButton(float x, float y, UI* parent, UI_Group* group);
 
 	// Scrollbar creation functions
 
-	UI* CreateMusicScrollbar(float x, float y, UI* parent);
-	UI* CreateSFXScrollbar(float x, float y, UI* parent);
+	UI* CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group);
 
 	// Image SDL_Rect
 

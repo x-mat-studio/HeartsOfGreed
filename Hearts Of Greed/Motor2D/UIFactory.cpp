@@ -47,32 +47,25 @@ UI_Group* UIFactory::CreateMainMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	UI* uiReturnPointer;
+	//CreateContinueGameButton(x, y, nullptr, group);
 
-	//uiReturnPointer = CreateContinueGameButton(x, y, nullptr);
-	//group->AddUiElement(uiReturnPointer);
+	CreateNewGameButton(x, y + 40, nullptr, group);
 
-	uiReturnPointer = CreateNewGameButton(x, y + 40, nullptr);
-	group->AddUiElement(uiReturnPointer);
+	CreateOptionsButton(x, y + 80, nullptr, group);
 
-	uiReturnPointer = CreateOptionsButton(x, y + 80, nullptr);
-	group->AddUiElement(uiReturnPointer);
+	CreateCreditsButton(x, y + 120, nullptr, group);
 
-	uiReturnPointer = CreateCreditsButton(x, y + 120, nullptr);
-	group->AddUiElement(uiReturnPointer);
+	CreateExitGameButton(x, y + 160, nullptr, group);
 
-	uiReturnPointer = CreateExitGameButton(x, y + 160, nullptr);
-	group->AddUiElement(uiReturnPointer);
-
-	//CreateText(x + 5, y + 5, nullptr, "C O N T I N U E    G A M E");
+	//CreateText(x + 5, y + 5, nullptr, "C O N T I N U E    G A M E", group);
 	
-	CreateText(x + 35, y + 45, nullptr, "N E W  G A M E");
+	CreateText(x + 35, y + 45, nullptr, "N E W  G A M E", group);
 	
-	CreateText(x + 40, y + 85, nullptr, "O P T I O N S");
+	CreateText(x + 40, y + 85, nullptr, "O P T I O N S", group);
 	
-	CreateText(x + 42, y + 125, nullptr, "C R E D I T S");
+	CreateText(x + 42, y + 125, nullptr, "C R E D I T S", group);
 	
-	CreateText(x + 30, y + 165, nullptr, "E X I T    G A M E");
+	CreateText(x + 30, y + 165, nullptr, "E X I T    G A M E", group);
 
 	return group;
 }
@@ -84,35 +77,25 @@ UI_Group* UIFactory::CreateOptionsMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	UI* uiReturnPointer;
 	UI* background;
 	
-	background = CreateImage(x, y, nullptr, optionsMenuBackground);
-	group->AddUiElement(background);
+	background = CreateImage(x, y, nullptr, optionsMenuBackground, group);
 
-	uiReturnPointer = CreateFullscreenButton(x + 20, y + 100, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateFullscreenButton(x + 20, y + 100, background, group);
 
-	uiReturnPointer = CreateCloseMenuButton(x + optionsMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background);
-	group->AddUiElement(uiReturnPointer);
+	CreateCloseMenuButton(x + optionsMenuBackground.w - (0.75f * closeButton.w), y - (0.25f * closeButton.h), background, group);
 
-	uiReturnPointer = CreateMusicScrollbar(x + 20, y + 60, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateMusicScrollbar(x + 20, y + 60, background, group);
 
-	uiReturnPointer = CreateSFXScrollbar(x + 140, y + 60, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateSFXScrollbar(x + 140, y + 60, background, group);
 
-	uiReturnPointer = CreateText(x + 30, y, background, "Options");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 30, y, background, "Options", group);
 
-	uiReturnPointer = CreateText(x + 20, y + 25, background, "Music");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 20, y + 25, background, "Music", group);
 
-	uiReturnPointer = CreateText(x + 140, y + 25, background, "SFX");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 140, y + 25, background, "SFX", group);
 
-	uiReturnPointer = CreateText(x + 20, y + 75, background, "Fullscreen mode");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 20, y + 75, background, "Fullscreen mode", group);
 
 	return group;
 }
@@ -124,53 +107,37 @@ UI_Group* UIFactory::CreateCreditsMenu()
 	
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	UI* uiReturnPointer;
 	UI* background;
 
-	background = CreateImage(x, y, nullptr, pauseMenuBackground);
-	group->AddUiElement(background);
+	background = CreateImage(x, y, nullptr, pauseMenuBackground, group);
 
-	uiReturnPointer = CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background);
-	group->AddUiElement(uiReturnPointer);
+	CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background, group);
 
-	uiReturnPointer = CreateImage(x + 40, y + 50, background, creditsBackgroundImage);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x + 40, y + 50, background, creditsBackgroundImage, group);
 
-	uiReturnPointer = CreateText(x + 5, y, background, "Aaron Guerrero Cruz");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 5, y, background, "Aaron Guerrero Cruz", group);
 
-	uiReturnPointer = CreateText(x + 15, y + 10, background, "Lead");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 15, y + 10, background, "Lead", group);
 
-	uiReturnPointer = CreateText(x + 5, y + 35, background, "Jose Luis Redondo Tello");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 5, y + 35, background, "Jose Luis Redondo Tello", group);
 
-	uiReturnPointer = CreateText(x + 15, y + 45, background, "Code");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 15, y + 45, background, "Code", group);
 
-	uiReturnPointer = CreateText(x + 5, y + 70, background, "Ferran-Roger Basart i Bosch");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 5, y + 70, background, "Ferran-Roger Basart i Bosch", group);
 
-	uiReturnPointer = CreateText(x + 15, y + 80, background, "Management + UI");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 15, y + 80, background, "Management + UI", group);
+	
+	CreateText(x + 5, y + 105, background, "Alex Melenchon Maza", group);
 
-	uiReturnPointer = CreateText(x + 5, y + 105, background, "Alex Melenchon Maza");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 15, y + 115, background, "Design", group);
 
-	uiReturnPointer = CreateText(x + 15, y + 115, background, "Design");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 5, y + 140, background, "Adria Serrano Lopez", group);
 
-	uiReturnPointer = CreateText(x + 5, y + 140, background, "Adria Serrano Lopez");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 15, y + 150, background, "Audio + Art", group);
 
-	uiReturnPointer = CreateText(x + 15, y + 150, background, "Audio + Art");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 5, y + 175, background, "Oscar Perez Martin", group);
 
-	uiReturnPointer = CreateText(x + 5, y + 175, background, "Oscar Perez Martin");
-	group->AddUiElement(uiReturnPointer);
-
-	uiReturnPointer = CreateText(x + 15, y + 185, background, "QA");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 15, y + 185, background, "QA", group);
 
 	return group;
 }
@@ -182,7 +149,6 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	UI* uiReturnPointer;
 	UI* background;
 
 	char resources[10];
@@ -193,28 +159,21 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, P2SString("portraitVector"), nullptr, DRAGGABLE::DRAG_OFF);
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
-	uiReturnPointer = CreateImage(0, y - minimapBackground.h - 20, nullptr, minimapBackground);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(0, y - minimapBackground.h - 20, nullptr, minimapBackground, group);
 
-	uiReturnPointer = CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr);
-	group->AddUiElement(uiReturnPointer);
+	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
-	background = CreateImage(x - 65, y - 97, nullptr, resourcesBackground);
-	group->AddUiElement(background);
+	background = CreateImage(x - 65, y - 97, nullptr, resourcesBackground, group);
 
-	uiReturnPointer = CreateImage(x - 59, y - 90, background, resourceIcon);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x - 59, y - 90, background, resourceIcon, group);
 
 //	screenResources = app->player->GetResources();
 //	sprintf_s(resources, 10, "%d", screenResources);
-//	uiReturnPointer = CreateText(x - 41, y - 94, background, resources);
-	group->AddUiElement(uiReturnPointer);
+//	CreateText(x - 41, y - 94, background, resources, group);
 
-	uiReturnPointer = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
-	uiReturnPointer = CreateImage(x - 2 * dataPageImageBackground.w + 12, y - dataPageImageBackground.h - 5, nullptr, dataPageImageBackground);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x - 2 * dataPageImageBackground.w + 12, y - dataPageImageBackground.h - 5, nullptr, dataPageImageBackground, group);
 
 	return group;
 }
@@ -223,7 +182,6 @@ UI_Group* UIFactory::CreateDataPageComponents()
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	UI* uiReturnPointer;
 	UI* background;
 
 	return group;
@@ -235,39 +193,32 @@ UI_Group* UIFactory::CreatePauseMenu()
 	float y((app->win->height / app->win->GetUIScale() / 2) - (pauseMenuBackground.h / 2));
 	
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
-
-	UI* uiReturnPointer;
+	
 	UI* background;
 
-	background = CreateImage(x, y, nullptr, pauseMenuBackground);
-	group->AddUiElement(background);
+	background = CreateImage(x, y, nullptr, pauseMenuBackground, group);
 
 	x = ((app->win->width / app->win->GetUIScale() / 2) - (menuButton.w / 2));
 
-	uiReturnPointer = CreateResumeGameButton(x, y + 8, background);
-	group->AddUiElement(background);
+	CreateResumeGameButton(x, y + 8, background, group);
 
-	//uiReturnPointer = CreateSaveGameButton(x, y + 52, background);
-	//group->AddUiElement(background);
+	//CreateSaveGameButton(x, y + 52, background, group);
 
-	//uiReturnPointer = CreateSaveGameButton(x, y + 97, background);
-	//group->AddUiElement(background);
+	//CreateSaveGameButton(x, y + 97, background, group);
 
-	uiReturnPointer = CreateOptionsButton(x, y + 142, background);
-	group->AddUiElement(background);
+	CreateOptionsButton(x, y + 142, background, group);
 
-	uiReturnPointer = CreateReturnToMainMenuButton(x, y + 187, background);
-	group->AddUiElement(background);
+	CreateReturnToMainMenuButton(x, y + 187, background, group);
 
-	CreateText(x + 32, y + 13, nullptr, "R E S U M E  G A M E");
+	CreateText(x + 32, y + 13, nullptr, "R E S U M E  G A M E", group);
 
-	CreateText(x + 43, y + 57, nullptr, "S A V E  G A M E");
+	CreateText(x + 43, y + 57, nullptr, "S A V E  G A M E", group);
 
-	CreateText(x + 43, y + 102, nullptr, "L O A D  G A M E");
+	CreateText(x + 43, y + 102, nullptr, "L O A D  G A M E", group);
 
-	CreateText(x + 58, y + 147, nullptr, "O P T I O N S");
+	CreateText(x + 58, y + 147, nullptr, "O P T I O N S", group);
 
-	CreateText(x + 48, y + 192, nullptr, "M A I N  M E N U");
+	CreateText(x + 48, y + 192, nullptr, "M A I N  M E N U", group);
 
 	return group;
 }
@@ -279,178 +230,220 @@ UI_Group* UIFactory::CreateShopMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	UI* uiReturnPointer;
+	
 	UI* background;
 
 	char cost[40];
 
-	background = CreateImage(x, y, nullptr, shopBackground);
-	group->AddUiElement(background);
+	background = CreateImage(x, y, nullptr, shopBackground, group);
 
 	// Heroes
-	uiReturnPointer = CreateText(x + 3, y + 5, background, "H E R O   R E S U R R E C T I O N");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 3, y + 5, background, "H E R O   R E S U R R E C T I O N", group);
 
-	uiReturnPointer = CreateImage(x + 30, y + 35, background, gathererShopPicture);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x + 30, y + 35, background, gathererShopPicture, group);
 
-	uiReturnPointer = CreateImage(x + 80, y + 35, background, rangedShopPicture);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x + 80, y + 35, background, rangedShopPicture, group);
 
-	uiReturnPointer = CreateImage(x + 130, y + 35, background, meleeShopPicture);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x + 130, y + 35, background, meleeShopPicture, group);
 
-	uiReturnPointer = CreateGathererReviveButton(x + 25, y + 65, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateGathererReviveButton(x + 25, y + 65, background, group);
 
-	uiReturnPointer = CreateRangedReviveButton(x + 75, y + 65, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateRangedReviveButton(x + 75, y + 65, background, group);
 
-	uiReturnPointer = CreateMeleeReviveButton(x + 125, y + 65, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateMeleeReviveButton(x + 125, y + 65, background, group);
 
-	CreateText(x + 28, y + 57, nullptr, "Revive");
+	CreateText(x + 28, y + 57, nullptr, "Revive", group);
 
-	CreateText(x + 78, y + 57, nullptr, "Revive");
+	CreateText(x + 78, y + 57, nullptr, "Revive", group);
 
-	CreateText(x + 128, y + 57, nullptr, "Revive");
+	CreateText(x + 128, y + 57, nullptr, "Revive", group);
 
 	// Turrets
-	uiReturnPointer = CreateText(x + 10, y + 85, background, "T U R R E T   B U I L D I N G");
-	group->AddUiElement(uiReturnPointer);
+	CreateText(x + 10, y + 85, background, "T U R R E T   B U I L D I N G", group);
 
-	uiReturnPointer = CreateImage(x + 120, y + 135, background, turretShopPicture);
-	group->AddUiElement(uiReturnPointer);
+	CreateImage(x + 120, y + 135, background, turretShopPicture, group);
 
-	uiReturnPointer = CreateBuyTurretButton(x + 40, y + 120, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateBuyTurretButton(x + 40, y + 120, background, group);
 
-	CreateText(x + 50, y + 112, nullptr, "Buy");
+	CreateText(x + 50, y + 112, nullptr, "Buy", group);
 
 //	if (lastShop != nullptr)
 //	{
 //		sprintf_s(cost, 40, "Max. %i", lastShop->GetmaxTurrets());
-//		uiReturnPointer = CreateText(x + 95, y + 112, background, cost);
-//		group->AddUiElement(uiReturnPointer);
+//		CreateText(x + 95, y + 112, background, cost, group);
 //	}
 	
 //	sprintf_s(cost, 40, "- %i", app->player->GetTurretCost());
-//	uiReturnPointer = CreateText(x + 45, y + 130, background, cost);
-//	group->AddUiElement(uiReturnPointer);
+//	CreateText(x + 45, y + 130, background, cost, group);
 
-	uiReturnPointer = CreateUpgradeTurretButton(x + 40, y + 170, background);
-	group->AddUiElement(uiReturnPointer);
+	CreateUpgradeTurretButton(x + 40, y + 170, background, group);
 
-	CreateText(x + 45, y + 162, nullptr, "Lvl up");
+	CreateText(x + 45, y + 162, nullptr, "Lvl up", group);
 
-	uiReturnPointer = CreateCloseMenuButton(x - (closeButton.w / 2), y - (closeButton.h / 2), background);
-	group->AddUiElement(uiReturnPointer);
+	CreateCloseMenuButton(x - (closeButton.w / 2), y - (closeButton.h / 2), background, group);
 
 	return group;
 }
 
 // Element specific functions
 
-UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect)
+UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateText(float x, float y, UI* parent, P2SString text)
+UI* UIFactory::CreateText(float x, float y, UI* parent, P2SString text, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent)
+UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent)
+UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateFullscreenButton(float x, float y, UI* parent)
+UI* UIFactory::CreateFullscreenButton(float x, float y, UI* parent, UI_Group* group)
 {
 	// Check screen condition to know if you should create the button on ON or OFF
 
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent)
+UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent)
+UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
 
-UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent)
+UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent)
+UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent)
+UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
 	// The event triggered is UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateCloseMenuButton(float x, float y, UI* parent)
+UI* UIFactory::CreateCloseMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
 
-UI* UIFactory::CreateShopButton(float x, float y, UI* parent)
+UI* UIFactory::CreateShopButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent)
+UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent)
+UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent)
+UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent)
+UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent)
+UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateMusicScrollbar(float x, float y, UI* parent)
+UI* UIFactory::CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* group)
 {
 	// Triggers event music adjustment, at 128.0f
 
+
+	group->AddUiElement(nullptr);
+
 	return nullptr;
 }
 
-UI* UIFactory::CreateSFXScrollbar(float x, float y, UI* parent)
+UI* UIFactory::CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group)
 {
 	// Triggers event sfx adjustment, at 455.0f
+
+
+	group->AddUiElement(nullptr);
 
 	return nullptr;
 }
