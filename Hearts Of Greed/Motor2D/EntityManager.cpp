@@ -125,20 +125,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	turretdoc.load_file(filename.GetString());
 	pugi::xml_node turret = turretdoc.child("turret");
 
-	Animation turretIdleRight = turretIdleRight.PushAnimation(turret, "turretIdleRight"); //goes up then bumps right
-	Animation turretIdleRightUp = turretIdleRightUp.PushAnimation(turret, "turretIdleRightUp"); //bumps left
-	Animation turretIdleRightDown = turretIdleRightDown.PushAnimation(turret, "turretIdleRightDown"); //bumps right
-	Animation turretIdleLeft = turretIdleLeft.PushAnimation(turret, "turretIdleLeft"); //bumps left
-	Animation turretIdleLeftUp = turretIdleLeftUp.PushAnimation(turret, "turretIdleLeftUp"); //bumps right
-	Animation turretIdleLeftDown = turretIdleLeftDown.PushAnimation(turret, "turretIdleLeftDown"); //bumps right
-
-	Animation turretShootingRight = turretShootingRight.PushAnimation(turret, "turretShootingRight"); //goes up then bumps right
-	Animation turretShootingRightUp = turretShootingRightUp.PushAnimation(turret, "turretShootingRightUp"); //bumps left
-	Animation turretShootingRightDown = turretShootingRightDown.PushAnimation(turret, "turretShootingRightDown"); //bumps right
-	Animation turretShootingLeft = turretShootingLeft.PushAnimation(turret, "turretShootingLeft"); //bumps left
-	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turret, "turretShootingLeftUp"); //bumps right
-	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turret, "turretShootingLeftDown"); //bumps right
-
+	LoadSampleTurret(turret);
 	turretdoc.reset();
 
 	//Enemy collider and spawner
@@ -160,21 +147,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	//Test building
 	Collider* buildingCollider = new Collider({ -150,130,430, 330 }, COLLIDER_VISIBILITY, this);
 	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
-
-	// Test Turret
-	maxHP = 110;
-	recoveryHP = 0;
-
-	atkDmg = 3;
-	atkSpd = 2.25f;
-	atkRange = 175;
-	xp = 35;
-
-
-	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	sampleTurret = new Turret(1, atkDmg, atkSpd, atkRange, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
-		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
-		maxHP, maxHP, recoveryHP, xp, 95, 160);
 
 	//Template base
 	maxHP = 500;
@@ -1850,6 +1822,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	return ret;
 }
 
+
 bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
 {
 	bool ret = true;
@@ -1868,6 +1841,7 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
 	pos.y = enemyNode.child("sample").child("position").attribute("y").as_float(0);
 
 	int maxHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
 	int recoveryHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
 	int atkDmg = enemyNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
@@ -1902,7 +1876,67 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
 	sampleEnemy = new Enemy(pos, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-		maxHP, maxHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
+		maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
+
+	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
+{
+	bool ret = true;
+	//collider
+	SDL_Rect r;
+	r.x = turretNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = turretNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = turretNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = turretNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)turretNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	
+	Collider* turretCollider = new Collider(r, cType, this);
+
+	//stats
+	fMPoint pos;
+	pos.x = turretNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = turretNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int level = turretNode.child("sample").child("stats").attribute("level").as_int(0);
+	int vision = turretNode.child("sample").child("stats").attribute("vision").as_int(0);
+	int xp = turretNode.child("sample").child("stats").attribute("xp").as_int(0);
+	int buildingCost = turretNode.child("sample").child("stats").attribute("buildingCost").as_int(0);
+	int transparency = turretNode.child("sample").child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = turretNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = turretNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = turretNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int atkDmg = turretNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = turretNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = turretNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+
+
+
+	//Animations
+	Animation turretIdleRight = turretIdleRight.PushAnimation(turretNode, "turretIdleRight"); //goes up then bumps right
+	Animation turretIdleRightUp = turretIdleRightUp.PushAnimation(turretNode, "turretIdleRightUp"); //bumps left
+	Animation turretIdleRightDown = turretIdleRightDown.PushAnimation(turretNode, "turretIdleRightDown"); //bumps right
+	Animation turretIdleLeft = turretIdleLeft.PushAnimation(turretNode, "turretIdleLeft"); //bumps left
+	Animation turretIdleLeftUp = turretIdleLeftUp.PushAnimation(turretNode, "turretIdleLeftUp"); //bumps right
+	Animation turretIdleLeftDown = turretIdleLeftDown.PushAnimation(turretNode, "turretIdleLeftDown"); //bumps right
+
+	Animation turretShootingRight = turretShootingRight.PushAnimation(turretNode, "turretShootingRight"); //goes up then bumps right
+	Animation turretShootingRightUp = turretShootingRightUp.PushAnimation(turretNode, "turretShootingRightUp"); //bumps left
+	Animation turretShootingRightDown = turretShootingRightDown.PushAnimation(turretNode, "turretShootingRightDown"); //bumps right
+	Animation turretShootingLeft = turretShootingLeft.PushAnimation(turretNode, "turretShootingLeft"); //bumps left
+	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turretNode, "turretShootingLeftUp"); //bumps right
+	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turretNode, "turretShootingLeftDown"); //bumps right
+
+	
+	//sample
+	sampleTurret = new Turret(level, atkDmg, atkSpd, atkRange,vision, pos, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
+		maxHP, currentHP, recoveryHP, xp, buildingCost, transparency);
 
 	return ret;
 }
