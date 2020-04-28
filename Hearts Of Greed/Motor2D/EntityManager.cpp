@@ -81,7 +81,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Sample Hero Gatherer---------------------
 	
-
 	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
@@ -237,39 +236,33 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 		skill1Dmg, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
 
 
-	// Sample Ranged Melee---------------------
+	// Sample Ranged Hero---------------------
 	filename = config.child("load").attribute("docnameRangedman").as_string();
 	pugi::xml_document rangedmanDoc;
 	rangedmanDoc.load_file(filename.GetString());
 	pugi::xml_node rangedman = armoredmanDoc.child("rangedman");
 
-	Animation walkLeftR = walkLeftM.PushAnimation(rangedman, "walk_left");
-	Animation walkLeftUpR = walkLeftUpM.PushAnimation(rangedman, "walk_left_up");
-	Animation walkLeftDownR = walkLeftDownM.PushAnimation(rangedman, "walk_left_down");
-	Animation walkRightUpR = walkRightUpM.PushAnimation(rangedman, "walk_right_up");
-	Animation walkRightDownR = walkRightDownM.PushAnimation(rangedman, "walk_right_down");
-	Animation walkRightR = walkRightM.PushAnimation(rangedman, "walk_right");
+	Animation walkLeftR = walkLeftR.PushAnimation(rangedman, "walk_left");
+	Animation walkLeftUpR = walkLeftUpR.PushAnimation(rangedman, "walk_left_up");
+	Animation walkLeftDownR = walkLeftDownR.PushAnimation(rangedman, "walk_left_down");
+	Animation walkRightUpR = walkRightUpR.PushAnimation(rangedman, "walk_right_up");
+	Animation walkRightDownR = walkRightDownR.PushAnimation(rangedman, "walk_right_down");
+	Animation walkRightR = walkRightR.PushAnimation(rangedman, "walk_right");
 
-	Animation idleRightR = idleRightM.PushAnimation(rangedman, "idle_right");
-	Animation idleRightUpR = idleRightUpM.PushAnimation(rangedman, "idle_right_up");
-	Animation idleRightDownR = idleRightDownM.PushAnimation(rangedman, "idle_right_down");
-	Animation idleLeftR = idleLeftM.PushAnimation(rangedman, "idle_left");
-	Animation idleLeftUpR = idleLeftUpM.PushAnimation(rangedman, "idle_left_up");
-	Animation idleLeftDownR = idleLeftDownM.PushAnimation(rangedman, "idle_left_down");
+	Animation idleRightR = idleRightR.PushAnimation(rangedman, "idle_right");
+	Animation idleRightUpR = idleRightUpR.PushAnimation(rangedman, "idle_right_up");
+	Animation idleRightDownR = idleRightDownR.PushAnimation(rangedman, "idle_right_down");
+	Animation idleLeftR = idleLeftR.PushAnimation(rangedman, "idle_left");
+	Animation idleLeftUpR = idleLeftUpR.PushAnimation(rangedman, "idle_left_up");
+	Animation idleLeftDownR = idleLeftDownR.PushAnimation(rangedman, "idle_left_down");
 
-	Animation punchRightR = punchRightM.PushAnimation(rangedman, "punch_right");
-	Animation punchRightUpR = punchRightUpM.PushAnimation(rangedman, "punch_right_up");
-	Animation punchRightDownR = punchRightDownM.PushAnimation(rangedman, "punch_right_down");
-	Animation punchLeftR = punchLeftM.PushAnimation(rangedman, "punch_left");
-	Animation punchLeftUpR = punchLeftUpM.PushAnimation(rangedman, "punch_left_up");
-	Animation punchLeftDownR = punchLeftDownM.PushAnimation(rangedman, "punch_left_down");
+	Animation punchRightR = punchRightR.PushAnimation(rangedman, "punch_right");
+	Animation punchRightUpR = punchRightUpR.PushAnimation(rangedman, "punch_right_up");
+	Animation punchRightDownR = punchRightDownR.PushAnimation(rangedman, "punch_right_down");
+	Animation punchLeftR = punchLeftR.PushAnimation(rangedman, "punch_left");
+	Animation punchLeftUpR = punchLeftUpR.PushAnimation(rangedman, "punch_left_up");
+	Animation punchLeftDownR = punchLeftDownR.PushAnimation(rangedman, "punch_left_down");
 
-	Animation skill1RightR = skill1RightM.PushAnimation(rangedman, "skill_1_right");
-	Animation skill1RightUpR = skill1RightUpM.PushAnimation(rangedman, "skill_1_right_up");
-	Animation skill1RightDownR = skill1RightDownM.PushAnimation(rangedman, "skill_1_right_down");
-	Animation skill1LeftR = skill1LeftM.PushAnimation(rangedman, "skill_1_left");
-	Animation skill1LeftUpR = skill1LeftUpM.PushAnimation(rangedman, "skill_1_left_up");
-	Animation skill1LeftDownR = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
 
 	maxHP = 100;
 	recoveryHP = 4;
@@ -289,9 +282,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	skill1Dmg = 30;
 
 
-	sampleRanged = new RangedHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
-		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
-		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
+	sampleRanged = new RangedHero(fMPoint{ pos.x, pos.y }, collider, walkLeftR, walkLeftUpR,
+		walkLeftDownR, walkRightUpR, walkRightDownR, walkRightR, idleRightR, idleRightDownR, idleRightUpR, idleLeftR,
+		idleLeftUpR, idleLeftDownR, punchLeftR, punchLeftUpR, punchLeftDownR, punchRightUpR, punchRightDownR, punchRightR, skill1RightM,
 		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
 		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
