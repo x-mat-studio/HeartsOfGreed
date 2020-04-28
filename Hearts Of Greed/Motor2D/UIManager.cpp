@@ -12,7 +12,11 @@
 
 #include "Brofiler/Brofiler/Brofiler.h"
 
-ModuleUIManager::ModuleUIManager() : atlas(nullptr), lastShop(nullptr)
+ModuleUIManager::ModuleUIManager() :
+
+	mouseOverUI(false),
+	atlas(nullptr), 
+	lastShop(nullptr)
 {
 	name.create("UIManager");
 }
@@ -83,6 +87,8 @@ bool ModuleUIManager::PreUpdate(float dt)
 	bool ret = true;
 
 	CheckListener(this);
+
+	MouseOnUI();
 
 	int numEntities = uiGroupVector.size();
 
@@ -221,22 +227,20 @@ void ModuleUIManager::LoadAtlas()
 
 
 //Remember to aply changes
-bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
+bool ModuleUIManager::MouseOnUI()
 {
-	int numEntities = uiGroupVector.size();
+	int numGroup = uiGroupVector.size();
 
-	for (int i = 0; i < numEntities; i++)
+	for (int i = numGroup - 1; i >= 0; i--)
 	{
-		/*if (uiGroupVector[i]->parent == nullptr && uiGroupVector[i]->enabled)
+		if (uiGroupVector[i]->OnAbove() == true)
 		{
-			if (uiGroupVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiGroupVector[i]->worldPosition.x + uiGroupVector[i]->box.w) * app->win->GetUIScale() >= mouse.x &&
-				uiGroupVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiGroupVector[i]->worldPosition.y + uiGroupVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
-			{
-				return true;
-			}
-		}*/
+			mouseOverUI = true;
+			return true;
+		}
 	}
 
+	mouseOverUI = false;
 	return false;
 }
 

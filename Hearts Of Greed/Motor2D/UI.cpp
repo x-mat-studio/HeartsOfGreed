@@ -123,7 +123,9 @@ bool UI::OnAbove()
 	SDL_Rect intersect = { worldPosition.x , worldPosition.y, box.w, box.h };
 
 	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interactable)
+	{
 		ret = true;
+	}
 
 	return ret;
 }

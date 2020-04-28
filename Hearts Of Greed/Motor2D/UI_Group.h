@@ -41,6 +41,8 @@ public:
 	GROUP_TAG GetTag();
 	void SetTag(GROUP_TAG tagSet);
 
+	bool OnAbove();
+
 private:
 	std::vector<UI*> uiElementVector;
 	GROUP_TAG tag;

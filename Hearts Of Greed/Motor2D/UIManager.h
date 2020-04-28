@@ -46,7 +46,7 @@ public:
 
 	void LoadAtlas();
 
-	bool MouseOnUI(iMPoint& mouse);
+	bool MouseOnUI();
 
 	void CheckFocusEntity();
 
@@ -61,6 +61,7 @@ private:
 
 public:
 	Base* lastShop;
+	bool mouseOverUI;
 
 private:
 

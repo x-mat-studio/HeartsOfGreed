@@ -73,3 +73,17 @@ void UI_Group::SetTag(GROUP_TAG tagSet)
 {
 	tag = tagSet;
 }
+
+
+bool UI_Group::OnAbove()
+{
+	int uiNumber = uiElementVector.size();
+
+	for (int i = uiNumber - 1; i >= 0; i--)
+	{
+		if (uiElementVector[i]->OnAbove() == true)
+			return true;
+	}
+
+	return false;
+}
