@@ -199,12 +199,11 @@ int Turret::GetRng()
 void Turret::DrawSelected()
 {
 	if (selectedByPlayer == true)
-		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w * 0.5f, this->collider->rect.y);
 }
 
 int Turret::RecieveDamage(int damage)
 {
-
 	if (hitPointsCurrent > 0)
 	{
 		hitPointsCurrent -= damage;
@@ -230,6 +229,7 @@ bool Turret::CheckAttackRange()
 {
 	if (shortTermObjective == nullptr)
 	{
+		inputs.push_back(TURRET_INPUTS::IN_IDLE);
 		return false;
 	}
 
@@ -237,6 +237,7 @@ bool Turret::CheckAttackRange()
 	if (shortTermObjective->GetAlignment() == align)
 	{
 		shortTermObjective = nullptr;
+		inputs.push_back(TURRET_INPUTS::IN_IDLE);
 		return false;
 	}
 

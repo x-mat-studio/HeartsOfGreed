@@ -61,9 +61,9 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
 	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
 
-	//VERTICAL SLICE
-	//dayTimer = config.attribute("dayTimerSec").as_int(1);
-	//nightTimer = config.attribute("nightTimerSec").as_int(1);
+	
+	dayTimer = config.attribute("dayTimerSec").as_int(1);
+	nightTimer = config.attribute("nightTimerSec").as_int(1);
 
 	camMarginMovements.x = config.attribute("freeCamMarginDetectionPixelsX").as_int(1);
 	camMarginMovements.y = config.attribute("freeCamMarginDetectionPixelsY").as_int(1);
@@ -111,6 +111,7 @@ bool ModuleTestScene::Start()
 
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
 
 		//mid
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
@@ -443,10 +444,10 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DEBUG_NIGHT:
-		//app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-		app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
+		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+		isNightTime = true;
+		//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
 		timer = 0;
-		dayTimer = 7.5f;
 		break;
 
 	}
