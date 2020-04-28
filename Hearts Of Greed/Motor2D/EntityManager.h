@@ -141,6 +141,8 @@ private:
 
 	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
 
+	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
+
 
 
 public:
