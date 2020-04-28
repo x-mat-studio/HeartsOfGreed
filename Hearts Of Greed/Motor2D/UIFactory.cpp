@@ -59,14 +59,6 @@ UI_Group* UIFactory::CreateMainMenu()
 
 	//CreateText(x + 5, y + 5, nullptr, "C O N T I N U E    G A M E", group);
 	
-	CreateText(x + 35, y + 45, nullptr, "N E W  G A M E", group);
-	
-	CreateText(x + 40, y + 85, nullptr, "O P T I O N S", group);
-	
-	CreateText(x + 42, y + 125, nullptr, "C R E D I T S", group);
-	
-	CreateText(x + 30, y + 165, nullptr, "E X I T    G A M E", group);
-
 	return group;
 }
 
@@ -75,7 +67,7 @@ UI_Group* UIFactory::CreateOptionsMenu()
 	float x((app->win->width / app->win->GetUIScale() / 2) - (optionsMenuBackground.w / 2));
 	float y((app->win->height / app->win->GetUIScale() / 2) - (optionsMenuBackground.h / 2));
 
-	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::OPTIONS_MENU);
 
 	UI* background;
 	
@@ -105,7 +97,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 	float x((app->win->width / app->win->GetUIScale() / 2) - (pauseMenuBackground.w / 2));
 	float y((app->win->height / app->win->GetUIScale() / 2) - (pauseMenuBackground.h / 2));
 	
-	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::CREDITS_MENU);
 
 	UI* background;
 
@@ -147,7 +139,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	float x(app->win->width / app->win->GetUIScale());
 	float y(app->win->height / app->win->GetUIScale());
 
-	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_GAME);
 
 	UI* background;
 
@@ -180,7 +172,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 UI_Group* UIFactory::CreateDataPageComponents()
 {
-	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::DATA_PAGE);
 
 	UI* background;
 
@@ -192,7 +184,7 @@ UI_Group* UIFactory::CreatePauseMenu()
 	float x((app->win->width / app->win->GetUIScale() / 2) - (pauseMenuBackground.w / 2));
 	float y((app->win->height / app->win->GetUIScale() / 2) - (pauseMenuBackground.h / 2));
 	
-	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::PAUSE_MENU);
 	
 	UI* background;
 
@@ -210,15 +202,9 @@ UI_Group* UIFactory::CreatePauseMenu()
 
 	CreateReturnToMainMenuButton(x, y + 187, background, group);
 
-	CreateText(x + 32, y + 13, nullptr, "R E S U M E  G A M E", group);
+	//CreateText(x + 43, y + 5, nullptr, "S A V E  G A M E", group);
 
-	CreateText(x + 43, y + 57, nullptr, "S A V E  G A M E", group);
-
-	CreateText(x + 43, y + 102, nullptr, "L O A D  G A M E", group);
-
-	CreateText(x + 58, y + 147, nullptr, "O P T I O N S", group);
-
-	CreateText(x + 48, y + 192, nullptr, "M A I N  M E N U", group);
+	//CreateText(x + 43, y + 5, nullptr, "L O A D  G A M E", group);
 
 	return group;
 }
@@ -228,7 +214,7 @@ UI_Group* UIFactory::CreateShopMenu()
 	float x((app->win->width / app->win->GetUIScale() / 2) - (shopBackground.w / 2));
 	float y((app->win->height / app->win->GetUIScale() / 2) - (shopBackground.h / 2));
 
-	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::SHOP_MENU);
 
 	
 	UI* background;
@@ -252,20 +238,12 @@ UI_Group* UIFactory::CreateShopMenu()
 
 	CreateMeleeReviveButton(x + 125, y + 65, background, group);
 
-	CreateText(x + 28, y + 57, nullptr, "Revive", group);
-
-	CreateText(x + 78, y + 57, nullptr, "Revive", group);
-
-	CreateText(x + 128, y + 57, nullptr, "Revive", group);
-
 	// Turrets
 	CreateText(x + 10, y + 85, background, "T U R R E T   B U I L D I N G", group);
 
 	CreateImage(x + 120, y + 135, background, turretShopPicture, group);
 
 	CreateBuyTurretButton(x + 40, y + 120, background, group);
-
-	CreateText(x + 50, y + 112, nullptr, "Buy", group);
 
 //	if (lastShop != nullptr)
 //	{
@@ -277,8 +255,6 @@ UI_Group* UIFactory::CreateShopMenu()
 //	CreateText(x + 45, y + 130, background, cost, group);
 
 	CreateUpgradeTurretButton(x + 40, y + 170, background, group);
-
-	CreateText(x + 45, y + 162, nullptr, "Lvl up", group);
 
 	CreateCloseMenuButton(x - (closeButton.w / 2), y - (closeButton.h / 2), background, group);
 
@@ -306,6 +282,8 @@ UI* UIFactory::CreateText(float x, float y, UI* parent, P2SString text, UI_Group
 UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)
 {
 
+	CreateText(x + 35, y + 5, nullptr, "N E W  G A M E", group);
+
 	group->AddUiElement(nullptr);
 
 	return nullptr;
@@ -313,6 +291,8 @@ UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group
 
 UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	CreateText(x + 40, y + 5, nullptr, "O P T I O N S", group);
 
 	group->AddUiElement(nullptr);
 
@@ -332,6 +312,8 @@ UI* UIFactory::CreateFullscreenButton(float x, float y, UI* parent, UI_Group* gr
 UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent, UI_Group* group)
 {
 
+	CreateText(x + 42, y + 5, nullptr, "C R E D I T S", group);
+
 	group->AddUiElement(nullptr);
 
 	return nullptr;
@@ -339,6 +321,8 @@ UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent, UI_Group* group
 
 UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	CreateText(x + 30, y + 5, nullptr, "E X I T    G A M E", group);
 
 	group->AddUiElement(nullptr);
 
@@ -357,6 +341,8 @@ UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent, UI_Group* gro
 UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* group)
 {
 
+	CreateText(x + 32, y + 5, nullptr, "R E S U M E  G A M E", group);
+
 	group->AddUiElement(nullptr);
 
 	return nullptr;
@@ -365,6 +351,8 @@ UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* gr
 UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
 	// The event triggered is UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU
+
+	CreateText(x + 48, y + 5, nullptr, "M A I N  M E N U", group);
 
 	group->AddUiElement(nullptr);
 
@@ -391,6 +379,8 @@ UI* UIFactory::CreateShopButton(float x, float y, UI* parent, UI_Group* group)
 UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
 
+	CreateText(x + 3, y - 8, nullptr, "Revive", group);
+
 	group->AddUiElement(nullptr);
 
 	return nullptr;
@@ -398,6 +388,8 @@ UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group
 
 UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	CreateText(x + 3, y - 8, nullptr, "Revive", group);
 
 	group->AddUiElement(nullptr);
 
@@ -407,6 +399,8 @@ UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* g
 UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
 
+	CreateText(x + 3, y - 8, nullptr, "Revive", group);
+
 	group->AddUiElement(nullptr);
 
 	return nullptr;
@@ -415,6 +409,8 @@ UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, UI_Group* 
 UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, UI_Group* group)
 {
 
+	CreateText(x + 10, y - 8, nullptr, "Buy", group);
+
 	group->AddUiElement(nullptr);
 
 	return nullptr;
@@ -422,6 +418,8 @@ UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, UI_Group* gro
 
 UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, UI_Group* group)
 {
+
+	CreateText(x + 5, y - 8, nullptr, "Lvl up", group);
 
 	group->AddUiElement(nullptr);
 
