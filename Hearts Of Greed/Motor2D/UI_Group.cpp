@@ -13,7 +13,7 @@ UI_Group::~UI_Group()
 
 	int elementNumber = uiElementVector.size();
 
-	for (int i = elementNumber; i >= 0; i--)
+	for (int i = elementNumber - 1; i >= 0; i--)
 	{
 		delete uiElementVector[i];
 		uiElementVector[i] = nullptr;

@@ -7,14 +7,10 @@
 #include <list>
 
 struct SDL_Texture;
-class UI;
-class UI_Portrait;
-class Entity;
-class UI_Healthbar;
+class UI_Group;
+enum class GROUP_TAG;
 class Base;
-class UI_Text;
-enum class UI_TYPE;
-class Entity;
+
 
 enum class DRAGGABLE
 {
@@ -46,15 +42,20 @@ public:
 
 	SDL_Texture* GetAtlasTexture() const;
 
-	void AddUIElement(UI* element);
-
-	bool MouseOnUI(iMPoint& mouse);
+	void AddUIGroup(UI_Group* element);
 
 	void LoadAtlas();
 
+	bool MouseOnUI(iMPoint& mouse);
+
+	void CheckFocusEntity();
+
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
-	void CheckFocusEntity();
+
+
+	bool CheckGroupTag(GROUP_TAG tag);
+	
 
 	void UnregisterEvents();
 
@@ -63,7 +64,7 @@ public:
 
 private:
 
-	std::vector<UI*> uiVector;
+	std::vector<UI_Group*> uiGroupVector;
 	SDL_Texture* atlas;
 
 	bool isMenuOn;

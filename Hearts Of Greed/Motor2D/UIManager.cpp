@@ -4,12 +4,10 @@
 #include "EventManager.h"
 #include "EntityManager.h"
 #include "UI.h"
+#include "UI_Group.h"
 #include "Audio.h"
 #include "Window.h"
-#include "Player.h"
-#include "Enemy.h"
 #include "Minimap.h"
-#include "Turret.h"
 #include "Base.h"
 
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -27,7 +25,7 @@ ModuleUIManager::~ModuleUIManager()
 	atlas = nullptr;
 	UnregisterEvents();
 
-	uiVector.clear();
+	uiGroupVector.clear();
 
 }
 
@@ -72,7 +70,7 @@ bool ModuleUIManager::Start()
 {
 	bool ret = true;
 
-	
+
 
 	return ret;
 }
@@ -86,11 +84,11 @@ bool ModuleUIManager::PreUpdate(float dt)
 
 	CheckListener(this);
 
-	int numEntities = uiVector.size();
+	int numEntities = uiGroupVector.size();
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		uiVector[i]->PreUpdate(dt);
+		uiGroupVector[i]->PreUpdate(dt);
 	}
 
 	return true;
@@ -105,9 +103,9 @@ bool ModuleUIManager::Update(float dt)
 
 	CheckListener(this);
 
-	for (uint i = 0; i < uiVector.size(); i++)
+	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
-		uiVector[i]->Update(dt);
+		uiGroupVector[i]->Update(dt);
 	}
 
 	return ret;
@@ -120,9 +118,9 @@ bool ModuleUIManager::PostUpdate(float dt)
 
 	bool ret = true;
 
-	for (uint i = 0; i < uiVector.size(); i++)
+	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
-		uiVector[i]->PostUpdate(dt);
+		uiGroupVector[i]->PostUpdate(dt);
 	}
 
 	return ret;
@@ -131,27 +129,32 @@ bool ModuleUIManager::PostUpdate(float dt)
 //// Called before quitting
 bool ModuleUIManager::CleanUp()
 {
-	for (int i = 0; i < uiVector.size(); i++)
+	for (int i = 0; i < uiGroupVector.size(); i++)
 	{
-		RELEASE(uiVector[i]);
-		uiVector[i] = nullptr;
-		uiVector.erase(uiVector.begin() + i);
+		RELEASE(uiGroupVector[i]);
+		uiGroupVector[i] = nullptr;
+		uiGroupVector.erase(uiGroupVector.begin() + i);
 		i--;
 	}
 
-	uiVector.clear();
+	uiGroupVector.clear();
 
 	lastShop = nullptr;
 
-	if (app->player != nullptr)
-		app->player->SetMenuState(false);
+	//SOMETHING RELATED TO THE BUY MENU
+	/*if (app->player != nullptr)
+		app->player->(false);*/
 	return true;
 }
 
 
-void ModuleUIManager::AddUIElement(UI* element)
+void ModuleUIManager::AddUIGroup(UI_Group* element)
 {
-	uiVector.push_back(element);
+	GROUP_TAG tag = element->GetTag();
+
+	assert(tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false); // You shouldn't have to ui groups with the same tag, something bad is happening
+
+	uiGroupVector.push_back(element);
 }
 
 
@@ -161,17 +164,16 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	switch (eventId)
 	{
-
 		// When adding a Hero to these enum, add it to the checking function below
 	case EVENT_ENUM::HERO_MELEE_CREATED:		break;
 	case EVENT_ENUM::HERO_GATHERER_CREATED:		break;
 	case EVENT_ENUM::HERO_RANGED_CREATED:		break;
 
-		
+
 	case EVENT_ENUM::HERO_MELEE_OUT:			break;
 	case EVENT_ENUM::HERO_GATHERER_OUT:			break;
 	case EVENT_ENUM::HERO_RANGED_OUT:			break;
-		
+
 
 	case EVENT_ENUM::OPTION_MENU:				break;
 
@@ -221,23 +223,44 @@ void ModuleUIManager::LoadAtlas()
 //Remember to aply changes
 bool ModuleUIManager::MouseOnUI(iMPoint& mouse)
 {
-	int numEntities = uiVector.size();
+	int numEntities = uiGroupVector.size();
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (uiVector[i]->parent == nullptr && uiVector[i]->enabled)
+		/*if (uiGroupVector[i]->parent == nullptr && uiGroupVector[i]->enabled)
 		{
-			if (uiVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiVector[i]->worldPosition.x + uiVector[i]->box.w) * app->win->GetUIScale() >= mouse.x &&
-				uiVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiVector[i]->worldPosition.y + uiVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
+			if (uiGroupVector[i]->worldPosition.x * app->win->GetUIScale() <= mouse.x && (uiGroupVector[i]->worldPosition.x + uiGroupVector[i]->box.w) * app->win->GetUIScale() >= mouse.x &&
+				uiGroupVector[i]->worldPosition.y * app->win->GetUIScale() <= mouse.y && (uiGroupVector[i]->worldPosition.y + uiGroupVector[i]->box.h) * app->win->GetUIScale() >= mouse.y)
 			{
 				return true;
 			}
-		}
+		}*/
 	}
 
 	return false;
 }
 
+
+void ModuleUIManager::CheckFocusEntity()
+{
+
+}
+
+
+bool ModuleUIManager::CheckGroupTag(GROUP_TAG tag)
+{
+	int uiGroupNumber = uiGroupVector.size();
+
+	for (int i = 0; i < uiGroupNumber; i++)
+	{
+		if (uiGroupVector[i]->GetTag() == tag)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 
 
 void ModuleUIManager::UnregisterEvents()
@@ -264,3 +287,5 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
 }
+
+
