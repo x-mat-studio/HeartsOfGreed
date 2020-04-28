@@ -139,6 +139,9 @@
     <ClCompile Include="UI_Group.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UIFactory.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -296,6 +299,9 @@
     </ClInclude>
     <ClInclude Include="UI_Group.h">
       <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFactory.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
