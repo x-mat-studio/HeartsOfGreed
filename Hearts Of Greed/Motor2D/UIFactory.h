@@ -5,6 +5,7 @@
 #include "SDL/include/SDL_rect.h"
 
 class UI;
+class UI_Group;
 
 struct UIFactory
 {
@@ -12,14 +13,14 @@ struct UIFactory
 
 	// Menu creation functions
 
-	void CreateMainMenu();
-	void CreateOptionsMenu();
-	void CreateCreditsMenu();
+	UI_Group* CreateMainMenu();
+	UI_Group* CreateOptionsMenu();
+	UI_Group* CreateCreditsMenu();
 
-	void CreateBasicInGameUI();
-	void CreateDataPageComponents();
-	void CreatePauseMenu();
-	void CreateShopMenu();
+	UI_Group* CreateBasicInGameUI();
+	UI_Group* CreateDataPageComponents();
+	UI_Group* CreatePauseMenu();
+	UI_Group* CreateShopMenu();
 
 	// Image creation functions
 
