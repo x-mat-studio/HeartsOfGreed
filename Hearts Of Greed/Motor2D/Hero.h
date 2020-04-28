@@ -270,6 +270,7 @@ public:
 
 	float damageTakenTimer;
 
+	iMPoint movingTo;
 
 };
 

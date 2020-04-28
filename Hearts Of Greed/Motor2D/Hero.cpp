@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Input.h"
+#include "Pathfinding.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -96,6 +97,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	currAreaInfo(nullptr),
 	skillExecutionDelay(false),
 	visionInPx(0.f),
+	movingTo{ -1,-1 },
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
@@ -379,13 +381,25 @@ bool Hero::PostUpdate(float dt)
 
 	if (app->debugMode)
 	{
-		Frame currFrame = currentAnimation->GetCurrentFrame(dt);
+		Frame currFrame = currentAnimation->GetCurrentFrame();
 		DebugDraw(currFrame.pivotPositionX, currFrame.pivotPositionY);
 	}
 
 	DrawArea();
 
+	if (selectedByPlayer)
+	{
 
+		if (path.size() > 0)
+		{
+			app->render->Blit(app->entityManager->debugPathTexture, movingTo.x, movingTo.y);
+		}
+		else
+		{
+			movingTo = { -1, -1 };
+		}
+
+	}
 
 	return true;
 }
@@ -402,8 +416,13 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 	if (GeneratePath(x, y, 1))
 	{
+
+		movingTo = app->pathfinding->GetDestination(this);
+		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
+
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
+
 	}
 
 
@@ -801,7 +820,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 		}
 	}
 
-	
+
 	if (cooldownHability1 > 0.f)
 	{
 		cooldownHability1 += dt;
