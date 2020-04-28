@@ -32,7 +32,7 @@ public:
 
 	void LevelUp();
 
-	void PlayGenericNoise();
+	void PlayGenericNoise(int random);
 
 private:
 

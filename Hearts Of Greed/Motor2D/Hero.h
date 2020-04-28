@@ -146,6 +146,7 @@ public:
 
 	void SkillCanceled();
 
+	virtual void PlayGenericNoise(int random);
 
 private:
 	
@@ -165,7 +166,6 @@ private:
 
 	void FeelingSecure(float dt);
 
-	virtual void PlayGenericNoise();
 
 protected:
 	void SetAnimation(HERO_STATES currState);

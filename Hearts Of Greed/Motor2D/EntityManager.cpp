@@ -220,6 +220,7 @@ bool ModuleEntityManager::Start()
 {
 	bool ret = true;
 
+	//Textures load-----
 	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
 	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
 	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
@@ -307,6 +308,8 @@ bool ModuleEntityManager::Start()
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
+	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
+
 
 	return ret;
 }
@@ -769,7 +772,13 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selectedByPlayer = true;
+
+					if (!thisHero->selectedByPlayer)
+					{
+						thisHero->selectedByPlayer = true;
+						app->audio->PlayFx(selectHero, 0, -1);
+					}
+
 					heroPlayerVector->push_back(thisHero);
 				}
 				else

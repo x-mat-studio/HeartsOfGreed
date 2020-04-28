@@ -624,9 +624,10 @@ void Hero::FeelingSecure(float dt)
 }
 
 
-void Hero::PlayGenericNoise()
+void Hero::PlayGenericNoise(int random)
 {
 	//Herency only
+	return;
 }
 
 
@@ -909,11 +910,11 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(); break;
+			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_ATTACK:
 				attackCooldown += TIME_TRIGGER;
-				state = HERO_STATES::ATTACK;	PlayGenericNoise(); break;
+				state = HERO_STATES::ATTACK;	PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
 			case HERO_INPUTS::IN_PREPARE_SKILL2: state = HERO_STATES::PREPARE_SKILL2;  break;
@@ -935,7 +936,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		break;
 
 			case HERO_INPUTS::IN_ATTACK:
-				PlayGenericNoise();
+				PlayGenericNoise(33);
 				attackCooldown += TIME_TRIGGER;
 				state = HERO_STATES::ATTACK;	break;
 
@@ -956,7 +957,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_CHARGING_ATTACK:state = HERO_STATES::CHARGING_ATTACK;			 break;
 
-			case HERO_INPUTS::IN_MOVE:  PlayGenericNoise(); state = HERO_STATES::MOVE;								 break;
+			case HERO_INPUTS::IN_MOVE:  PlayGenericNoise(33); state = HERO_STATES::MOVE;								 break;
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
 
