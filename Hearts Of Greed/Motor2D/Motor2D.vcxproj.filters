@@ -140,7 +140,7 @@
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
     <ClCompile Include="UIFactory.cpp">
-      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,7 +301,7 @@
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
     <ClInclude Include="UIFactory.h">
-      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
