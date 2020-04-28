@@ -22,16 +22,6 @@ enum class UI_TYPE
 	UI_NONE
 };
 
-struct ButtonProperties
-{
-	bool hiding;
-	bool hoverMove;
-	bool closeMenu;
-	bool includeFather;
-	bool scrollbarPositioning;
-	DRAGGABLE draggable;
-};
-
 class UI
 {
 public:
@@ -50,8 +40,9 @@ public:
 
 	bool MouseUnderElement(int x, int y);
 	void Drag(int x, int y);
-	void Hide(float dt);
+
 	bool OnAbove();
+
 protected:
 
 	virtual void Move();
@@ -79,7 +70,7 @@ public:
 
 	UI_TYPE type;
 	SDL_Rect box;
-	P2SString name;
+
 	UI* parent;
 
 protected:

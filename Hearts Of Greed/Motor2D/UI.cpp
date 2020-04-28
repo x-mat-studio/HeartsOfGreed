@@ -12,7 +12,6 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SStri
 	worldPosition(positionValue),
 	parent(father),
 	type(uiType),
-	name(uiName),
 	localPosition(0, 0),
 	box(rect),
 	debugBox(false),
