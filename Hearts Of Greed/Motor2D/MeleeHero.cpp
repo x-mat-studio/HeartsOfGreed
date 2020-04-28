@@ -142,10 +142,9 @@ void MeleeHero::LevelUp()
 
 }
 
-void MeleeHero::PlayGenericNoise()
+void MeleeHero::PlayGenericNoise(int probability)
 {
-	
-	int random = rand() % 15 +1; 
+	int random = rand() % ((100 * 4) / probability) + 1;
 
 	switch (random)
 	{

@@ -187,6 +187,8 @@ public:
 	int noise4Armored;
 
 	int lvlup;
+	int selectHero;
+	int moveHero;
 
 	//public textures
 	SDL_Texture* base2Texture;

@@ -581,6 +581,15 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		selectUnits = false;
 		doingAction = false;
 		focusedHero = 0;
+
+		if(heroesVector.size() > 0)
+		{ 
+			int random = rand() % heroesVector.size();
+
+			heroesVector[random]->PlayGenericNoise(100);
+		}
+			
+
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
