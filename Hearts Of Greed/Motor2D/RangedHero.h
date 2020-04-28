@@ -22,6 +22,7 @@ public:
 	bool UseHability3();
 
 	void LevelUp();
+
 };
 
 

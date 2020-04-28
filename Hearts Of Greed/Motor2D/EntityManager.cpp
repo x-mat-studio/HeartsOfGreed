@@ -81,7 +81,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Sample Hero Gatherer---------------------
 	
-
 	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
@@ -101,7 +100,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	armoredmanDoc.reset();
 
 
-	// Sample Ranged Melee---------------------
+	// Sample Ranged Hero---------------------
 	filename = config.child("load").attribute("docnameRangedman").as_string();
 	pugi::xml_document rangedmanDoc;
 	rangedmanDoc.load_file(filename.GetString());
