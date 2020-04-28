@@ -28,7 +28,14 @@ public:
 	UI_Group(GROUP_TAG tag);
 	~UI_Group();
 
+	void PreUpdate(float dt);
+	void Update(float dt);
+	void PostUpdate(float dt);
+
 	void AddUiElement(UI* element);
+	
+	GROUP_TAG GetTag();
+	void SetTag(GROUP_TAG tagSet);
 
 private:
 	std::vector<UI*> uiElementVector;
