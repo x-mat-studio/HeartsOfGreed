@@ -2,9 +2,9 @@
 #include "EntityManager.h"
 
 
-Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints, int enemiesPerWave, float spawnRate) :
+Spawner::Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int enemiesPerWave, float spawnRate) :
 	
-	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, col, maxHitPoints, currentHitPoints),
+	Entity(position, ENTITY_TYPE::SPAWNER, ENTITY_ALIGNEMENT::NEUTRAL, col,1,1),
 
 	spawnerType(spawnerType),
 	spawnRate(spawnRate),

@@ -1,0 +1,16 @@
+<spawner>
+  <sample>
+    <position x="150" y="250"/>
+
+    <collider>
+      <rect x="0" y="0" w="5" h="5"/>
+      <type id="6"/>
+    </collider>
+
+    <stats enemiesPerWave="1" spawnRate="0.0" spawnsType="7" />
+    
+  </sample>
+  
+  
+  
+</spawner>

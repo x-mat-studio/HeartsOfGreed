@@ -10,7 +10,7 @@ class Spawner : public Entity
 {
 public:
 
-	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints, int enemiesPerWave = 1, float spawnRate = 0);
+	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int enemiesPerWave = 1, float spawnRate = 0);
 	Spawner(fMPoint position, Spawner* copy);
 
 	~Spawner();

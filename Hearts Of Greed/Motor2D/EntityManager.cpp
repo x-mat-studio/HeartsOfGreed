@@ -80,12 +80,12 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Hero Gatherer---------------------
-	
+
 	filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
-	
+
 	LoadSampleHero(ENTITY_TYPE::HERO_GATHERER, suitman, config);
 
 	suitmandoc.reset();
@@ -95,7 +95,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	pugi::xml_document armoredmanDoc;
 	armoredmanDoc.load_file(filename.GetString());
 	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
-	
+
 	LoadSampleHero(ENTITY_TYPE::HERO_MELEE, armoredman, config);
 	armoredmanDoc.reset();
 
@@ -128,39 +128,28 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	LoadSampleTurret(turret);
 	turretdoc.reset();
 
-	//Enemy collider and spawner
-	Collider* spawnerCollider = new Collider({ 0,0,5,5 }, COLLIDER_RECLUIT_IA, app->ai);
+	//spawner
+	filename = config.child("load").attribute("docnameSpawner").as_string();
+	pugi::xml_document spawnerdoc;
+	spawnerdoc.load_file(filename.GetString());
+	pugi::xml_node spawner = spawnerdoc.child("spawner");
 
-	int maxHP = 25;
-	int recoveryHP = 1;
+	LoadSampleSpawner(spawner);
+	spawnerdoc.reset();
 
-	int atkDmg = 2;
-	float atkSpd = 1.75f;
-	int atkRange = 40;
+	//Building & Base templates
+	filename = config.child("load").attribute("docnameBuildings").as_string();
+	pugi::xml_document buildingsdoc;
+	buildingsdoc.load_file(filename.GetString());
+	pugi::xml_node buildings = buildingsdoc.child("buildings");
 
-	int movSpd = 125;
-	int vision = 200;
-	int xp = 15;
+	pugi::xml_node building = buildings.child("building");
+	pugi::xml_node base = buildings.child("base");
 
-	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
+	LoadSampleBuilding(building);
+	LoadSampleBase(base);
 
-	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,430, 330 }, COLLIDER_VISIBILITY, this);
-	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
-
-	//Template base
-	maxHP = 500;
-	int recoverHPRate = 20;
-
-	int maxTurrets = 2;
-	int resourcesProd = 5;
-	int resourcesRate = 5;
-
-	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
-	Collider* baseAlarmCollider = new Collider({ 0, 0, 700, 650 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, maxTurrets, 5, nullptr, baseAlarmCollider, resourcesProd, resourcesRate,
-		maxHP, maxHP, recoverHPRate, 100);
-
+	buildingsdoc.reset();
 
 	//Generate Areas------------------------------------
 	skillArea gathererSkill1AreaRange;
@@ -1689,7 +1678,7 @@ void ModuleEntityManager::ResetEntityManager()
 }
 
 //returns true if a hero has been loaded into its sample, otherwise false
-bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode,pugi::xml_node& config)
+bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config)
 {
 	bool ret = false;
 	//collider
@@ -1772,7 +1761,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	switch (heroType)
 	{
 	case ENTITY_TYPE::HERO_MELEE:
-				
+
 		//Sample Creation ----------------------------
 		sampleMelee = new MeleeHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
@@ -1787,7 +1776,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 
 
 	case ENTITY_TYPE::HERO_RANGED:
-		
+
 		//Sample Creation ----------------------------
 		sampleRanged = new RangedHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
@@ -1812,7 +1801,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 
 		Animation vfxExplosion = vfxExplosion.PushAnimation(explosion, "explosion");
 		vfxDoc.reset();
-		
+
 		//Sample Creation ----------------------------
 		sampleGatherer = new GathererHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
@@ -1900,9 +1889,9 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 	r.y = turretNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
 	r.w = turretNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
 	r.h = turretNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
-	
+
 	COLLIDER_TYPE cType = (COLLIDER_TYPE)turretNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
-	
+
 	Collider* turretCollider = new Collider(r, cType, this);
 
 	//stats
@@ -1941,11 +1930,116 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turretNode, "turretShootingLeftUp"); //bumps right
 	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turretNode, "turretShootingLeftDown"); //bumps right
 
-	
+
 	//sample
-	sampleTurret = new Turret(level, atkDmg, atkSpd, atkRange,vision, pos, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+	sampleTurret = new Turret(level, atkDmg, atkSpd, atkRange, vision, pos, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
 		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
 		maxHP, currentHP, recoveryHP, xp, buildingCost, transparency);
 
 	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
+{
+	bool ret = true;
+
+	SDL_Rect r;
+	r.x = spawnerNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = spawnerNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = spawnerNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = spawnerNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)spawnerNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+
+	Collider* spawnerCollider = new Collider(r, cType, app->ai);
+
+	fMPoint pos;
+	pos.x = spawnerNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = spawnerNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int enemiesPerWave = spawnerNode.child("sample").child("stats").attribute("enemiesPerWave").as_int(0);
+	float spawnRate = spawnerNode.child("sample").child("stats").attribute("spawnRate").as_float(0);
+	ENTITY_TYPE spawnsType = (ENTITY_TYPE)spawnerNode.child("sample").child("stats").attribute("spawnsType").as_int(0);
+
+	sampleSpawner = new Spawner(pos, spawnsType, spawnerCollider, enemiesPerWave, spawnRate);
+
+	return ret;
+
+}
+
+
+bool ModuleEntityManager::LoadSampleBuilding(pugi::xml_node& buildingNode)
+{
+	//collider
+	bool ret = true;
+	SDL_Rect r;
+	r.x = buildingNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = buildingNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = buildingNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = buildingNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)buildingNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	Collider* buildingCollider = new Collider(r, cType, this);
+
+	//stats
+	fMPoint pos;
+	pos.x = buildingNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = buildingNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int maxHP = buildingNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = buildingNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = buildingNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int xp = buildingNode.child("sample").child("stats").attribute("xp").as_int(0);
+	int buildingCost = buildingNode.child("sample").child("stats").attribute("buildingCost").as_int(0);
+	int transparency = buildingNode.child("sample").child("stats").attribute("transparency").as_int(0);
+
+
+	//sample
+	sampleBuilding = new Building(pos, maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, buildingCollider);
+
+	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleBase(pugi::xml_node& baseNode)
+{
+	bool ret = true;
+	//colliders
+	SDL_Rect r;
+	r.x = baseNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = baseNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = baseNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = baseNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)baseNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	Collider* baseCollider = new Collider(r, cType, this);
+
+	r.x = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("x").as_int(0);
+	r.y = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("y").as_int(0);
+	r.w = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("w").as_int(0);
+	r.h = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("h").as_int(0);
+	cType = (COLLIDER_TYPE)baseNode.child("sample").child("baseAlarmCollider").child("type").attribute("id").as_int(0);
+
+	Collider* baseAlarmCollider = new Collider(r, cType, app->ai);
+
+	//stats
+	int maxHP = baseNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = baseNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = baseNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int resourcesProd = baseNode.child("sample").child("stats").child("resources").attribute("produced").as_int(0);
+	int resourcesRate = baseNode.child("sample").child("stats").child("resources").attribute("rate").as_int(0);
+
+	int maxTurrets = baseNode.child("sample").child("stats").attribute("maxTurrets").as_int(0);
+	int maxBarricades = baseNode.child("sample").child("stats").attribute("maxBarricades").as_int(0);
+	int transparency = baseNode.child("sample").child("stats").attribute("transparency").as_int(0);
+
+	//TODO FOR OSCAR: although is not used at the moment, the plan is to make bases interact with the FoW, so we will need this variable
+	int vision= baseNode.child("sample").child("stats").attribute("vision").as_int(0);
+
+	//sample	
+	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, maxTurrets, maxBarricades, nullptr, baseAlarmCollider, resourcesProd, resourcesRate,
+		maxHP, currentHP, recoveryHP,transparency);
+
+	return ret;
+
 }
