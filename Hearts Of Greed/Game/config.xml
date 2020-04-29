@@ -45,7 +45,7 @@
   <minimap width="300" posX="0" posY="500"/>
 
   <entityManager>
-	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml" docnameArmoredman="armoredman.xml" docnamevfx="Vfx.xml" />
+	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml" docnameArmoredman="armoredman.xml" docnameRangedman="rangedman.xml" docnamevfx="Vfx.xml" />
   </entityManager>
 
   <testScene 
