@@ -113,17 +113,15 @@
       <frame rposX="345" rposY="750" rwidth="30" rheight="62" time="0.15f" pivotX="23" pivotY="44"/>
     </walk_left_up>
 
-    <punch_right_up name="punch_right_up" frames="10">
-      <frame rposX="484" rposY="0" rwidth="45" rheight="73" time="0.15f" pivotX="22" pivotY="53"/>
-      <frame rposX="554" rposY="0" rwidth="38" rheight="73" time="0.15f" pivotX="17" pivotY="53"/>
-      <frame rposX="626" rposY="0" rwidth="28" rheight="73" time="0.15f" pivotX="15" pivotY="53"/>
-      <frame rposX="686" rposY="0" rwidth="43" rheight="73" time="0.15f" pivotX="16" pivotY="53"/>
-      <frame rposX="755" rposY="0" rwidth="38" rheight="73" time="0.15f" pivotX="17" pivotY="53"/>
-      <frame rposX="823" rposY="0" rwidth="36" rheight="73" time="0.15f" pivotX="17" pivotY="53"/>
-      <frame rposX="887" rposY="0" rwidth="42" rheight="73" time="0.15f" pivotX="19" pivotY="53"/>
-      <frame rposX="954" rposY="0" rwidth="42" rheight="73" time="0.15f" pivotX="21" pivotY="53"/>
-      <frame rposX="1022" rposY="0" rwidth="41" rheight="73" time="0.15f" pivotX="26" pivotY="53"/>
-      <frame rposX="1089" rposY="0" rwidth="40" rheight="73" time="0.15f" pivotX="28" pivotY="53"/>
+    <punch_right_up name="punch_right_up" frames="8">
+      <frame rposX="393" rposY="410" rwidth="30" rheight="62" time="0.15f" pivotX="12" pivotY="46"/>
+      <frame rposX="440" rposY="409" rwidth="30" rheight="63" time="0.15f" pivotX="11" pivotY="47"/>
+      <frame rposX="487" rposY="409" rwidth="30" rheight="62" time="0.15f" pivotX="12" pivotY="47"/>
+      <frame rposX="534" rposY="409" rwidth="30" rheight="63" time="0.15f" pivotX="11" pivotY="46"/>
+      <frame rposX="581" rposY="410" rwidth="30" rheight="62" time="0.15f" pivotX="12" pivotY="46"/>
+      <frame rposX="628" rposY="410" rwidth="30" rheight="63" time="0.15f" pivotX="10" pivotY="47"/>
+      <frame rposX="676" rposY="408" rwidth="29" rheight="64" time="0.15f" pivotX="9" pivotY="47"/>
+      <frame rposX="722" rposY="408" rwidth="30" rheight="64" time="0.15f" pivotX="9" pivotY="48"/>
     </punch_right_up>
 
     <punch_right name="punch_right" frames="10">
