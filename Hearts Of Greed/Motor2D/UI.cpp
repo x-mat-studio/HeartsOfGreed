@@ -92,6 +92,8 @@ void UI::Drag(int x, int y)
 
 bool UI::OnAbove()
 {
+	focused = false;
+
 	if (interactable == false)
 	{
 		return false;
@@ -109,6 +111,7 @@ bool UI::OnAbove()
 
 	if (SDL_PointInRect(&mouse, &intersect) && this->interactable)
 	{
+		focused = true;
 		return true;
 	}
 

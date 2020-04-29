@@ -27,8 +27,8 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
 
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME_FROM_CONTINUE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
-	app->eventManager->EventRegister(EVENT_ENUM::CREDIT_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 
 	//sounds
 	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
@@ -57,6 +57,10 @@ bool ModuleMainMenuScene::Start()
 
 	changeScene = false;
 	changeSceneContinue = -1;
+
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_INTRO_MENU, EVENT_ENUM::NULL_EVENT);
+
 	return true;
 }
 

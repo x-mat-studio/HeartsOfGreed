@@ -7,6 +7,8 @@
 #include <list>
 
 struct SDL_Texture;
+struct UIFactory;
+
 class UI_Group;
 class Base;
 
@@ -71,6 +73,8 @@ private:
 
 	std::vector<UI_Group*> uiGroupVector;
 	SDL_Texture* atlas;
+
+	UIFactory* factory;
 
 	bool isMenuOn;
 };

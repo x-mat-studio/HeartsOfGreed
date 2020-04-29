@@ -5,6 +5,7 @@
 #include "EntityManager.h"
 #include "UI.h"
 #include "UI_Group.h"
+#include "UIFactory.h"
 
 #include "Button.h"
 
@@ -12,6 +13,7 @@
 #include "Window.h"
 #include "Minimap.h"
 #include "Base.h"
+
 
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -50,12 +52,17 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
-	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
-	app->eventManager->EventRegister(EVENT_ENUM::CREDIT_MENU, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_SHOP_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
+	
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
+
+
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
-	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
-	app->eventManager->EventRegister(EVENT_ENUM::CREATE_SHOP, this);
+
 	app->eventManager->EventRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
@@ -66,7 +73,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
-
+	
 
 	return ret;
 }
@@ -77,7 +84,7 @@ bool ModuleUIManager::Start()
 {
 	bool ret = true;
 
-
+	factory = new UIFactory();
 
 	return ret;
 }
@@ -161,7 +168,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 {
 	GROUP_TAG tag = element->GetTag();
 
-	assert(tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false); // You shouldn't have to ui groups with the same tag, something bad is happening
+	//assert(tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false); // You shouldn't have to ui groups with the same tag, something bad is happening
 
 	uiGroupVector.push_back(element);
 }
@@ -170,6 +177,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
+	UI_Group* group = nullptr;
 
 	switch (eventId)
 	{
@@ -183,18 +191,22 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::HERO_GATHERER_OUT:			break;
 	case EVENT_ENUM::HERO_RANGED_OUT:			break;
 
+	case EVENT_ENUM::CREATE_INTRO_MENU:
 
-	case EVENT_ENUM::OPTION_MENU:				break;
+		group = factory->CreateMainMenu();
+		AddUIGroup(group);
 
-	case EVENT_ENUM::CREDIT_MENU:				break;
+			break;
 
-	case EVENT_ENUM::PAUSE_GAME:				break;
+	case EVENT_ENUM::CREATE_OPTION_MENU:			break;
+
+	case EVENT_ENUM::CREATE_CREDIT_MENU:			break;
+
+	case EVENT_ENUM::PAUSE_GAME:					break;
 
 	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:	break;
 
-	case EVENT_ENUM::ENTITY_ON_CLICK:			break;
-
-	case EVENT_ENUM::CREATE_SHOP:				break;
+	case EVENT_ENUM::CREATE_SHOP_MENU:			break;
 
 	case EVENT_ENUM::MUSIC_ADJUSTMENT:			break;
 
@@ -294,17 +306,17 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::OPTION_MENU, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::CREDIT_MENU, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::PAUSE_GAME, this);
+		app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_ON_CLICK, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_SHOP, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_SHOP_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_MENU, this);
-
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);

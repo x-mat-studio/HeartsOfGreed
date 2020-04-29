@@ -52,7 +52,7 @@ void UI_Group::PostUpdate(float dt)
 	for (int i = 0; i < elementNumber; i++)
 	{
 		uiElementVector[i]->PostUpdate(dt);
-	}
+	}	
 
 }
 
@@ -77,9 +77,11 @@ void UI_Group::SetTag(GROUP_TAG tagSet)
 
 bool UI_Group::OnAbove()
 {
+	bool ret = false;
+
 	int uiNumber = uiElementVector.size();
 
-	for (int i = uiNumber - 1; i >= 0; i--)
+	for (int i = uiNumber - 1; i >= 0 && ret == false; i--)
 	{
 		if (uiElementVector[i]->OnAbove() == true)
 		{
@@ -90,12 +92,11 @@ bool UI_Group::OnAbove()
 				uiElementVector[i]->focused = false;
 			}
 
-			return true;
+			ret = true;
 		}
-			
 	}
 
-	return false;
+	return ret;
 }
 
 

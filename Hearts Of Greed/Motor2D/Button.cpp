@@ -27,21 +27,22 @@ BUTTON_TAG Button::GetTag()
 
 void Button::HandleInput()
 {
-	clicked = false;
-
 	if (focused)
 	{
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
 			clicked = true;
 		}
-		
+
 
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_UP && clicked == true)
 		{
 			app->uiManager->ExecuteButton(buttonTag);
 		}
 	}
+
+	else
+		clicked = false;
 }
 
 

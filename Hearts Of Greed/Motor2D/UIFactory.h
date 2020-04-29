@@ -9,6 +9,8 @@ class UI_Group;
 
 struct UIFactory
 {
+public:
+
 	UIFactory();
 
 	// Menu creation functions
@@ -59,6 +61,7 @@ struct UIFactory
 	UI* CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group);
 
+private:
 	// Image SDL_Rect
 
 	SDL_Rect portraitBackground;

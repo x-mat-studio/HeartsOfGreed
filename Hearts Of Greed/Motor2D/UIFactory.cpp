@@ -1,8 +1,11 @@
 #include "App.h"
 #include "UIFactory.h"
 #include "UI_Group.h"
+
 #include "UI_Image.h"
 #include "UI_Text.h"
+#include "Button.h"
+
 #include "Window.h"
 
 UIFactory::UIFactory() :
@@ -53,11 +56,11 @@ UI_Group* UIFactory::CreateMainMenu()
 
 	CreateNewGameButton(x, y + 40, nullptr, group);
 
-	CreateOptionsButton(x, y + 80, nullptr, group);
+	/*CreateOptionsButton(x, y + 80, nullptr, group);
 
 	CreateCreditsButton(x, y + 120, nullptr, group);
 
-	CreateExitGameButton(x, y + 160, nullptr, group);
+	CreateExitGameButton(x, y + 160, nullptr, group);*/
 
 	//CreateText(x + 5, y + 5, nullptr, "C O N T I N U E    G A M E", group);
 	
@@ -285,12 +288,13 @@ UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* gr
 
 UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEW_GAME);
+
+	group->AddUiElement(button);
 
 	CreateText(x + 35, y + 5, nullptr, "N E W  G A M E", group);
 
-	group->AddUiElement(nullptr);
-
-	return nullptr;
+	return button;
 }
 
 UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group)
