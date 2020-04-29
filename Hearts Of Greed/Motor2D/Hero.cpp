@@ -18,7 +18,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
-	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
+	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
@@ -50,6 +50,8 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill1Left(skill1Left),
 	skill1LeftUp(skill1LeftUp),
 	skill1LeftDown(skill1LeftDown),
+
+	tileOnWalk(tileOnWalk),
 
 	level(level),
 
@@ -98,6 +100,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skillExecutionDelay(false),
 	visionInPx(0.f),
 	movingTo{ -1,-1 },
+	drawingVfx(false),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
@@ -136,6 +139,8 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill1Left(copy->skill1Left),
 	skill1LeftUp(copy->skill1LeftUp),
 	skill1LeftDown(copy->skill1LeftDown),
+
+	tileOnWalk(copy->tileOnWalk),
 
 	level(copy->level),
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
@@ -190,6 +195,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	drawingVfx(false)
 {
 	currentAnimation = &walkLeft;
+	tileOnWalk.loop = false;
 
 	//FoW Related
 	visionEntity = app->fowManager->CreateFoWEntity(position, true, visionDistance);
@@ -392,11 +398,13 @@ bool Hero::PostUpdate(float dt)
 
 		if (path.size() > 0)
 		{
-			app->render->Blit(app->entityManager->debugPathTexture, movingTo.x, movingTo.y);
+			Frame currFrame = tileOnWalk.GetCurrentFrame(dt);
+			app->render->Blit(app->entityManager->moveCommandTile, movingTo.x - currFrame.pivotPositionX, movingTo.y - currFrame.pivotPositionY, &currFrame.frame);
 		}
 		else
 		{
 			movingTo = { -1, -1 };
+			tileOnWalk.ResetAnimation();
 		}
 
 	}
@@ -419,6 +427,8 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 		movingTo = app->pathfinding->GetDestination(this);
 		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
+		app->audio->PlayFx(app->entityManager->moveHero, 0, -1);
+		tileOnWalk.ResetAnimation();
 
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
