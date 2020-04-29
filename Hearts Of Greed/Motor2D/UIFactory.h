@@ -24,11 +24,11 @@ struct UIFactory
 
 	// Image creation functions
 
-	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group);
+	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false);
 
 	// Text creation functions
 
-	UI* CreateText(float x, float y, UI* parent, P2SString text, UI_Group* group);
+	UI* CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false);
 
 	// Button creation functions
 

@@ -1,6 +1,8 @@
 #include "App.h"
 #include "UIFactory.h"
 #include "UI_Group.h"
+#include "UI_Image.h"
+#include "UI_Text.h"
 #include "Window.h"
 
 UIFactory::UIFactory() :
@@ -71,7 +73,7 @@ UI_Group* UIFactory::CreateOptionsMenu()
 
 	UI* background;
 	
-	background = CreateImage(x, y, nullptr, optionsMenuBackground, group);
+	background = CreateImage(x, y, nullptr, optionsMenuBackground, group, true);
 
 	CreateFullscreenButton(x + 20, y + 100, background, group);
 
@@ -101,7 +103,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 
 	UI* background;
 
-	background = CreateImage(x, y, nullptr, pauseMenuBackground, group);
+	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
 
 	CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background, group);
 
@@ -188,7 +190,7 @@ UI_Group* UIFactory::CreatePauseMenu()
 	
 	UI* background;
 
-	background = CreateImage(x, y, nullptr, pauseMenuBackground, group);
+	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
 
 	x = ((app->win->width / app->win->GetUIScale() / 2) - (menuButton.w / 2));
 
@@ -221,7 +223,7 @@ UI_Group* UIFactory::CreateShopMenu()
 
 	char cost[40];
 
-	background = CreateImage(x, y, nullptr, shopBackground, group);
+	background = CreateImage(x, y, nullptr, shopBackground, group, true);
 
 	// Heroes
 	CreateText(x + 3, y + 5, background, "H E R O   R E S U R R E C T I O N", group);
@@ -263,20 +265,22 @@ UI_Group* UIFactory::CreateShopMenu()
 
 // Element specific functions
 
-UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group)
+UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable)
 {
+	UI_Image* uiImage = new UI_Image(x, y, parent, rect, app->uiManager->GetAtlasTexture(), dragable);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(uiImage);
 
-	return nullptr;
+	return uiImage;
 }
 
-UI* UIFactory::CreateText(float x, float y, UI* parent, P2SString text, UI_Group* group)
+UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable)
 {
+	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(uiText);
 
-	return nullptr;
+	return uiText;
 }
 
 UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)

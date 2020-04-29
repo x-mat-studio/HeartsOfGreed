@@ -122,6 +122,8 @@
     <ClCompile Include="UIFactory.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UI_Group.cpp" />
+    <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="UIFactory.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UI_Group.h" />
+    <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI_Text.h" />
     <ClInclude Include="UpgradeCenter.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="p2SString.h" />
