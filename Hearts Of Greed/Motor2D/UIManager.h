@@ -7,10 +7,15 @@
 #include <list>
 
 struct SDL_Texture;
+struct UIFactory;
+
 class UI_Group;
+class Base;
+
 class UI;
 enum class GROUP_TAG;
-class Base;
+enum class BUTTON_TAG;
+
 
 
 enum class DRAGGABLE
@@ -51,6 +56,7 @@ public:
 
 	void CheckFocusEntity();
 
+	void ExecuteButton(BUTTON_TAG tag);
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
@@ -76,6 +82,8 @@ private:
 
 	UI* dragElement;
 	iMPoint dragMouse;
+
+	UIFactory* factory;
 
 	bool isMenuOn;
 };

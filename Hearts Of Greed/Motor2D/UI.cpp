@@ -59,6 +59,7 @@ UI::~UI()
 
 bool UI::PreUpdate(float dt)
 {
+	HandleInput();
 	return true;
 }
 
@@ -75,6 +76,11 @@ bool UI::PostUpdate(float dt)
 }
 
 
+void UI::HandleInput()
+{
+}
+
+
 void UI::Draw(float dt)
 {
 	app->render->Blit(texture, position.x, position.y, &rect, false, false, '\000', 255, 255, 255);
@@ -86,6 +92,8 @@ void UI::Drag(int x, int y)
 
 bool UI::OnAbove()
 {
+	focused = false;
+
 	if (interactable == false)
 	{
 		return false;
@@ -103,6 +111,7 @@ bool UI::OnAbove()
 
 	if (SDL_PointInRect(&mouse, &intersect) && this->interactable)
 	{
+		focused = true;
 		return true;
 	}
 

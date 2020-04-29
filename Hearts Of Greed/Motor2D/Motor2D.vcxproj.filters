@@ -142,6 +142,9 @@
     <ClCompile Include="UIFactory.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
     <ClCompile Include="UI_Image.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
@@ -308,6 +311,9 @@
     </ClInclude>
     <ClInclude Include="UIFactory.h">
       <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
     <ClInclude Include="UI_Image.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
