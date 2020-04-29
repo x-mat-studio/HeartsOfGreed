@@ -151,6 +151,7 @@ public:
 	SDL_Texture* selectedTexture;
 	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
+	SDL_Texture* moveCommandTile;
 	SDL_Texture* explosionTexture;
 
 	
@@ -189,6 +190,7 @@ public:
 	int lvlup;
 	int selectHero;
 	int moveHero;
+
 
 	//public textures
 	SDL_Texture* base2Texture;
