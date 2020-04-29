@@ -38,6 +38,7 @@ void Button::HandleInput()
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_UP && clicked == true)
 		{
 			app->uiManager->ExecuteButton(buttonTag);
+			clicked = false;
 		}
 	}
 

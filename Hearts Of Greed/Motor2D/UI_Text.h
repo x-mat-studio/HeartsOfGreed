@@ -10,10 +10,6 @@ public:
 	UI_Text(float x, float y, UI* parent, char* text, bool interactable);
 	~UI_Text();
 
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	bool PostUpdate(float dt);
-	void CleanUp();
 
 };
 

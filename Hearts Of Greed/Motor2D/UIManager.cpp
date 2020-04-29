@@ -171,7 +171,11 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 {
 	GROUP_TAG tag = element->GetTag();
 
-	//assert(tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false); // You shouldn't have to ui groups with the same tag, something bad is happening
+	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false)
+	{
+		assert(true); // You shouldn't have to ui groups with the same tag, something bad is happening
+	}
+	
 
 	uiGroupVector.push_back(element);
 }
@@ -198,8 +202,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		group = factory->CreateMainMenu();
 		AddUIGroup(group);
-
-			break;
+		break;
 
 	case EVENT_ENUM::CREATE_OPTION_MENU:			break;
 
@@ -366,7 +369,7 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::PAUSE_GAME, this);
-		app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_SHOP_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
@@ -394,6 +397,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 
 
 	case BUTTON_TAG::NEW_GAME:
+		app->eventManager->GenerateEvent(EVENT_ENUM::START_GAME, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
