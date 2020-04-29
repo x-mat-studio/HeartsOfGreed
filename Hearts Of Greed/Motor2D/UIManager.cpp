@@ -5,6 +5,9 @@
 #include "EntityManager.h"
 #include "UI.h"
 #include "UI_Group.h"
+
+#include "Button.h"
+
 #include "Audio.h"
 #include "Window.h"
 #include "Minimap.h"
@@ -309,3 +312,101 @@ void ModuleUIManager::UnregisterEvents()
 }
 
 
+void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
+{
+	switch (tag)
+	{
+	case BUTTON_TAG::NULL_TAG:
+		assert(true); //you tried to execute a button that was already deleted or some fucked up shit i dont want to get involved with
+		break;
+
+
+	case BUTTON_TAG::CLOSE:
+		break;
+
+
+	case BUTTON_TAG::NEW_GAME:
+		break;
+
+
+	case BUTTON_TAG::CONTINUE_GAME:
+		break;
+
+
+	case BUTTON_TAG::OPTIONS:
+		break;
+
+
+	case BUTTON_TAG::CREADITS:
+		break;
+
+
+	case BUTTON_TAG::EXIT_GAME:
+		break;
+
+
+	case BUTTON_TAG::FULLSCREEN_ON:
+		break;
+
+
+	case BUTTON_TAG::FULLSCREEN_OFF:
+		break;
+
+
+	case BUTTON_TAG::HIDE:
+		break;
+
+
+	case BUTTON_TAG::SHOW:
+		break;
+
+
+	case BUTTON_TAG::PAUSE:
+		break;
+
+
+	case BUTTON_TAG::RESUME:
+		break;
+
+
+	case BUTTON_TAG::MAIN_MENU:
+		break;
+
+
+	case BUTTON_TAG::SAVE:
+		break;
+
+
+	case BUTTON_TAG::LOAD:
+		break;
+
+
+	case BUTTON_TAG::SHOP:
+		break;
+
+
+	case BUTTON_TAG::REVIVE_GATHERER:
+		break;
+
+
+	case BUTTON_TAG::REVIVE_RANGED:
+		break;
+
+
+	case BUTTON_TAG::REVIVE_MELEE:
+		break;
+
+
+	case BUTTON_TAG::BUY_TURRET:
+		break;
+
+
+	case BUTTON_TAG::LEVEL_UP_TURRET:
+		break;
+
+
+	default:
+		assert(true); //you forgot to add the case of the button tag :D
+		break;
+	}
+}

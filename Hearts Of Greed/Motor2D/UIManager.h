@@ -8,8 +8,11 @@
 
 struct SDL_Texture;
 class UI_Group;
-enum class GROUP_TAG;
 class Base;
+
+enum class GROUP_TAG;
+enum class BUTTON_TAG;
+
 
 
 enum class DRAGGABLE
@@ -50,6 +53,7 @@ public:
 
 	void CheckFocusEntity();
 
+	void ExecuteButton(BUTTON_TAG tag);
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 

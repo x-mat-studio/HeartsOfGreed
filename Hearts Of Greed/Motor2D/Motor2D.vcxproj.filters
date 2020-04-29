@@ -142,6 +142,9 @@
     <ClCompile Include="UIFactory.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -302,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="UIFactory.h">
       <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

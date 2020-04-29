@@ -59,6 +59,7 @@ UI::~UI()
 
 bool UI::PreUpdate(float dt)
 {
+	HandleInput();
 	return true;
 }
 
@@ -72,6 +73,11 @@ bool UI::PostUpdate(float dt)
 {
 	Draw(dt);
 	return true;
+}
+
+
+void UI::HandleInput()
+{
 }
 
 
