@@ -99,6 +99,23 @@ bool UI_Group::OnAbove()
 }
 
 
+UI* UI_Group::SearchFocus()
+{
+	int numElem = uiElementVector.size();
+	UI* focusUI;
+
+	for (int i = 0; i < numElem; i++)
+	{
+		if (uiElementVector[i]->OnAbove())
+		{
+			return uiElementVector[i];
+		}
+	}
+
+	return nullptr;
+}
+
+
 void UI_Group::UnFocus()
 {
 	int uiNumber = uiElementVector.size();

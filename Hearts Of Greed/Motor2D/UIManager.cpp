@@ -7,6 +7,7 @@
 #include "UI_Group.h"
 #include "Audio.h"
 #include "Window.h"
+#include "Input.h"
 #include "Minimap.h"
 #include "Base.h"
 
@@ -108,6 +109,8 @@ bool ModuleUIManager::Update(float dt)
 	bool ret = true;
 
 	CheckListener(this);
+
+	DragElement();
 
 	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
@@ -280,6 +283,59 @@ bool ModuleUIManager::CheckGroupTag(GROUP_TAG tag)
 	}
 
 	return true;
+}
+
+
+UI* ModuleUIManager::SearchFocusUI() const
+{
+	int numGroup = uiGroupVector.size();
+	UI* focusUI;
+
+	for (int i = numGroup - 1; i >= 0; i--)
+	{
+		focusUI = uiGroupVector[i]->SearchFocus();
+
+		if (focusUI != nullptr)
+		{
+			return focusUI;
+		}
+	}
+
+	return nullptr;
+}
+
+
+void ModuleUIManager::DragElement()
+{
+
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
+	{
+		dragMouse = app->input->GetMousePosScreen() * app->win->GetUIScale();
+		dragElement = SearchFocusUI();
+	}
+	
+	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+	{
+		if (dragElement != nullptr)
+		{
+			iMPoint position = app->input->GetMousePosScreen() * app->win->GetUIScale();
+
+			dragElement->Drag(position.x - dragMouse.x, position.y - dragMouse.y);
+
+			dragMouse = position;
+		}
+	}
+	
+	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_UP)
+	{
+		dragElement = nullptr;
+	}
+}
+
+
+void ModuleUIManager::CallElementDrag()
+{
+
 }
 
 

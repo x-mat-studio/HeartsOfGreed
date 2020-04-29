@@ -8,6 +8,7 @@
 
 struct SDL_Texture;
 class UI_Group;
+class UI;
 enum class GROUP_TAG;
 class Base;
 
@@ -55,6 +56,11 @@ private:
 
 
 	bool CheckGroupTag(GROUP_TAG tag);
+
+	UI* SearchFocusUI() const;
+
+	void DragElement();
+	void CallElementDrag();
 	
 
 	void UnregisterEvents();
@@ -67,6 +73,9 @@ private:
 
 	std::vector<UI_Group*> uiGroupVector;
 	SDL_Texture* atlas;
+
+	UI* dragElement;
+	iMPoint dragMouse;
 
 	bool isMenuOn;
 };
