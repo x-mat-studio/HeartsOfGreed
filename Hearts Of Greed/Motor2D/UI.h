@@ -50,9 +50,12 @@ protected:
 	virtual void Move();
 	
 
-protected:
+public:
 
 	bool focused;
+
+
+protected:
 
 	fMPoint position;
 	fMPoint localPosition;

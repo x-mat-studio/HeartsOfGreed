@@ -42,6 +42,7 @@ public:
 	void SetTag(GROUP_TAG tagSet);
 
 	bool OnAbove();
+	void UnFocus();
 
 private:
 	std::vector<UI*> uiElementVector;

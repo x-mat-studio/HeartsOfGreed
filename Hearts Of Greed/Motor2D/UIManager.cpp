@@ -229,19 +229,35 @@ void ModuleUIManager::LoadAtlas()
 //Remember to aply changes
 bool ModuleUIManager::MouseOnUI()
 {
+	bool ret = false;
+	mouseOverUI = false;
+
 	int numGroup = uiGroupVector.size();
 
-	for (int i = numGroup - 1; i >= 0; i--)
+	int i;
+
+	for (i = numGroup - 1; i >= 0; i--)
 	{
 		if (uiGroupVector[i]->OnAbove() == true)
 		{
 			mouseOverUI = true;
-			return true;
+			ret = true;
+			break;
 		}
 	}
 
-	mouseOverUI = false;
-	return false;
+	if (mouseOverUI == true)
+	{
+		i--;
+
+		for (i - 1; i >= 0; i--)
+		{
+			uiGroupVector[i]->UnFocus();
+		}
+	}
+
+	
+	return ret;
 }
 
 

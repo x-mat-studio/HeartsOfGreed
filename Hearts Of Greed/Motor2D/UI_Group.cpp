@@ -82,8 +82,29 @@ bool UI_Group::OnAbove()
 	for (int i = uiNumber - 1; i >= 0; i--)
 	{
 		if (uiElementVector[i]->OnAbove() == true)
+		{
+			i--;
+
+			for (i; i >= 0; i--)
+			{
+				uiElementVector[i]->focused = false;
+			}
+
 			return true;
+		}
+			
 	}
 
 	return false;
+}
+
+
+void UI_Group::UnFocus()
+{
+	int uiNumber = uiElementVector.size();
+
+	for (int i = 0; i < uiNumber; i++)
+	{
+		uiElementVector[i]->focused = false;
+	}
 }
