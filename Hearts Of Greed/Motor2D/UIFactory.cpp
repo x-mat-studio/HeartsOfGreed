@@ -110,7 +110,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 
 	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
 
-	//CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background, group);
+	CreateCloseCreditsButton(pauseMenuBackground.w - (3 * closeButton.w / 4), (1 * closeButton.h / 4), background, group);
 
 	CreateImage(40, 50, background, creditsBackgroundImage, group);
 
@@ -263,7 +263,7 @@ UI_Group* UIFactory::CreateShopMenu()
 
 	CreateUpgradeTurretButton(x + 40, y + 170, background, group);
 
-	CreateCloseMenuButton(x - (closeButton.w / 2), y - (closeButton.h / 2), background, group);
+	CreateCloseShopMenuButton(closeButton.w * 0.5f, closeButton.h * 0.5f, background, group);
 
 	return group;
 }
@@ -379,12 +379,44 @@ UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Gro
 }
 
 
-UI* UIFactory::CreateCloseMenuButton(float x, float y, UI* parent, UI_Group* group)
+
+UI* UIFactory::CreateCloseOptionMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_OPTIONS_MENU);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(button);
 
-	return nullptr;
+	return button;
+}
+
+
+UI* UIFactory::CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_CREDITS_MENU);
+
+	group->AddUiElement(button);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_PAUSE_MENU);
+
+	group->AddUiElement(button);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateCloseShopMenuButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_SHOP_MENU);
+
+	group->AddUiElement(button);
+
+	return button;
 }
 
 

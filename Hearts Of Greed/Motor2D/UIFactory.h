@@ -47,7 +47,11 @@ public:
 	UI* CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group);
 
 //	UI* CreateHideButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateCloseMenuButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateCloseOptionMenuButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateCloseShopMenuButton(float x, float y, UI* parent, UI_Group* group);
+
 
 	UI* CreateShopButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group);

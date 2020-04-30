@@ -67,7 +67,12 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
-	app->eventManager->EventRegister(EVENT_ENUM::DELETE_MENU, this);
+	
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_OPTIONS_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_SHOP_MENU, this);
+
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
 
@@ -152,6 +157,7 @@ bool ModuleUIManager::CleanUp()
 	{
 		RELEASE(uiGroupVector[i]);
 		uiGroupVector[i] = nullptr;
+
 		uiGroupVector.erase(uiGroupVector.begin() + i);
 		i--;
 	}
@@ -180,6 +186,27 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 	uiGroupVector.push_back(element);
 }
 
+
+void ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
+{
+	int numUiGroups = uiGroupVector.size();
+
+	for (int i = 0; i < numUiGroups; i++)
+	{
+		if (uiGroupVector[i]->GetTag() == tag)
+		{
+			delete uiGroupVector[i];
+			uiGroupVector[i] = nullptr;
+
+			uiGroupVector.erase(uiGroupVector.begin() + i);
+
+			return;
+		}
+	}
+
+
+	assert(true); //You tried to delete a group that doesn't exist, check out what could have gone wrong
+}
 
 
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
@@ -225,6 +252,27 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::UNHIDE_MENU:				break;
 
 	case EVENT_ENUM::EXIT_MENUS:				break;
+
+
+	case EVENT_ENUM::DELETE_OPTIONS_MENU:
+		DeleteUIGroup(GROUP_TAG::OPTIONS_MENU);
+		break;
+
+
+	case EVENT_ENUM::DELETE_CREDITS_MENU:		
+		DeleteUIGroup(GROUP_TAG::CREDITS_MENU);
+		break;
+
+
+	case EVENT_ENUM::DELETE_PAUSE_MENU:			
+		DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
+		break;
+
+
+	case EVENT_ENUM::DELETE_SHOP_MENU:
+		DeleteUIGroup(GROUP_TAG::SHOP_MENU);
+		break;
+
 
 	case EVENT_ENUM::FULLSCREEN_INPUT:			break;
 
@@ -375,7 +423,11 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_MENU, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_OPTIONS_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_SHOP_MENU, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
@@ -392,7 +444,23 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 		break;
 
 
-	case BUTTON_TAG::CLOSE:
+	case BUTTON_TAG::CLOSE_OPTIONS_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::CLOSE_CREDITS_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_CREDITS_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::CLOSE_PAUSE_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::CLOSE_SHOP_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SHOP_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 

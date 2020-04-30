@@ -17,7 +17,6 @@ enum class GROUP_TAG;
 enum class BUTTON_TAG;
 
 
-
 enum class DRAGGABLE
 {
 	DRAG_OFF = 0,
@@ -50,6 +49,8 @@ public:
 
 	void AddUIGroup(UI_Group* element);
 
+	void DeleteUIGroup(GROUP_TAG tag);
+
 	void LoadAtlas();
 
 	bool MouseOnUI();
@@ -57,6 +58,7 @@ public:
 	void CheckFocusEntity();
 
 	void ExecuteButton(BUTTON_TAG tag);
+
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
