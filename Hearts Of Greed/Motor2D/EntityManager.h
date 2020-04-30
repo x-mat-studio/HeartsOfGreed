@@ -144,6 +144,10 @@ private:
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
 	bool LoadSampleEnemy(pugi::xml_node& enemyNode);
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
+	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
+	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
+	bool LoadSampleBase(pugi::xml_node& baseNode);
+	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
 
 public:
