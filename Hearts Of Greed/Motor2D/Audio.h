@@ -59,6 +59,7 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0, int channel = 1, LOUDNESS loudness = LOUDNESS::LOUD, DIRECTION direction = DIRECTION::FRONT, bool overrideChannel = false);
 
+	void SetVolume(float volume);
 
 	//Configure Channel
 	bool ConfigureChannel(unsigned int channel, int volume, float angle);

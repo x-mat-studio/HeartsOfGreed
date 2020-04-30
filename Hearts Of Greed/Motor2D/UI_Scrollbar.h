@@ -9,16 +9,20 @@ class UI_Scrollbar : public UI
 {
 public:
 
-	UI_Scrollbar(float x, float y, UI* parent, SDL_Rect rect, SDL_Texture* texture, int maxValue);
+	UI_Scrollbar(float x, float y, UI* parent, SDL_Rect rect, SDL_Texture* texture, float maxValue);
 	~UI_Scrollbar();
 
 private:
 
+	void HandleInput();
 	void Move();
+	float ConvertPosition();
 
 private:
 
-	int maxValue;
+	float previousX;
+	float currentValue;
+	float maxValue;
 };
 
 #endif//__UI_SCROLLBAR_H__
