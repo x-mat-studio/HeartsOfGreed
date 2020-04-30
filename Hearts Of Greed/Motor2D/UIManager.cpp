@@ -180,7 +180,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 
 	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false)
 	{
-		assert(true); // You shouldn't have to ui groups with the same tag, something bad is happening
+		return;
 	}
 	
 
@@ -237,16 +237,14 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddUIGroup(group);
 		break;
 
-	case EVENT_ENUM::CREATE_OPTION_MENU:			break;
-
-	case EVENT_ENUM::CREATE_CREDIT_MENU:			break;
-
 	case EVENT_ENUM::PAUSE_GAME:
 		group = factory->CreatePauseMenu();
 		AddUIGroup(group);
 		break;
 
-	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:	break;
+	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:	
+		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
 
 	case EVENT_ENUM::CREATE_SHOP_MENU:			break;
 
@@ -263,12 +261,19 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::EXIT_MENUS:
 		
 		//If none of this menus is open and you are in the Game Scene, create pause menu
-		creditMenuExisted = DeleteUIGroup(GROUP_TAG::CREDITS_MENU);
-		optionsMenuExisted = DeleteUIGroup(GROUP_TAG::OPTIONS_MENU);
-		pauseMenuExisted = DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
-		shopMenuExisted = DeleteUIGroup(GROUP_TAG::SHOP_MENU);
+		if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
+			break;
 
-		if (creditMenuExisted == false && optionsMenuExisted == false && pauseMenuExisted == false && shopMenuExisted == false && app->testScene->IsEnabled() == true)
+		else if (DeleteUIGroup(GROUP_TAG::OPTIONS_MENU) == true)
+			break;
+
+		else if (DeleteUIGroup(GROUP_TAG::SHOP_MENU) == true)
+			break;
+
+		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
+			break;
+		
+		else if (app->testScene->IsEnabled() == true)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
 		}
@@ -293,10 +298,6 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::DELETE_SHOP_MENU:
 		DeleteUIGroup(GROUP_TAG::SHOP_MENU);
 		break;
-
-
-	case EVENT_ENUM::FULLSCREEN_INPUT:			break;
-
 	}
 }
 
@@ -346,7 +347,6 @@ bool ModuleUIManager::MouseOnUI()
 		}
 	}
 
-	
 	return ret;
 }
 
@@ -530,6 +530,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 
 	case BUTTON_TAG::RESUME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 

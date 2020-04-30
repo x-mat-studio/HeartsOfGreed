@@ -42,8 +42,8 @@ public:
 
 	UI* CreatePauseGameButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateResumeGameButton(float x, float y, UI* parent, UI_Group* group);
-//	UI* CreateSaveGameButton(float x, float y, UI* parent, UI_Group* group);
-//	UI* CreateLoadGameButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateSaveGameButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateLoadGameButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group);
 
 //	UI* CreateHideButton(float x, float y, UI* parent, UI_Group* group);

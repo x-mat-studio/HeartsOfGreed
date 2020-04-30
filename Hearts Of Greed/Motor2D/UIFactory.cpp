@@ -204,15 +204,15 @@ UI_Group* UIFactory::CreatePauseMenu()
 
 	
 
-	CreateResumeGameButton(10, 8, background, group);
+	CreateResumeGameButton(2, 8, background, group);
 
-	//CreateSaveGameButton(, y + 52, background, group);
+	CreateSaveGameButton(2, 52, background, group);
 
-	//CreateSaveGameButton(x, y + 97, background, group);
+	CreateLoadGameButton(2, 97, background, group);
 
-	CreateOptionsButton(10, 142, background, group);
+	CreateOptionsButton(2, 142, background, group);
 
-	CreateReturnToMainMenuButton(10, 187, background, group);
+	CreateReturnToMainMenuButton(2, 187, background, group);
 
 	//CreateText(x + 43, y + 5, nullptr, "S A V E  G A M E", group);
 
@@ -376,6 +376,30 @@ UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* gr
 	group->AddUiElement(button);
 
 	CreateText(32, 5, button, "R E S U M E  G A M E", group);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateSaveGameButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::SAVE);
+
+	group->AddUiElement(button);
+
+	CreateText(32, 5, button, "S A V E  G A M E", group);
+	
+	return button;
+}
+
+
+UI* UIFactory::CreateLoadGameButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::LOAD);
+
+	group->AddUiElement(button);
+
+	CreateText(32, 5, button, "L O A D  G A M E", group);
 
 	return button;
 }
