@@ -43,6 +43,7 @@ public:
 	fMPoint GetPosition();
 	fMPoint GetLocalPosition();
 
+	bool GetDragable();
 
 protected:
 
@@ -55,16 +56,16 @@ public:
 
 	bool focused;
 
+	SDL_Rect rect;
 
 protected:
 
 	fMPoint position;
 	fMPoint localPosition;
 
-	SDL_Rect rect;
-
 	SDL_Texture* texture;
 
+	UI* father;
 
 private:
 
@@ -72,8 +73,6 @@ private:
 	bool interactable;
 
 	UI_TYPE type;
-	
-	UI* father;
 };
 
 #endif//__UI_H__

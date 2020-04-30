@@ -4,6 +4,7 @@
 
 #include "UI_Image.h"
 #include "UI_Text.h"
+#include "UI_Scrollbar.h"
 #include "Button.h"
 
 #include "Window.h"
@@ -40,7 +41,10 @@ UIFactory::UIFactory() :
 	fullscreenOnButton{ 739, 27, 23, 23 },
 	fullscreenOffButton{ 763, 27, 23, 23 },
 	shopButton{ 480, 62, 33, 33 },
-	reviveButton{ 653, 54, 46, 14 }
+	reviveButton{ 653, 54, 46, 14 },
+
+	scrollbarBar{ 272, 45, 90, 4 },
+	scrollbarButton{ 257, 15, 13, 34 }
 {}
 
 // Menu specific functions
@@ -296,6 +300,9 @@ UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group
 
 	CreateText(35, 5, button, "N E W  G A M E", group);
 
+	UI* image = CreateImage( x / 2, y, nullptr, scrollbarBar, group, false);
+	CreateMusicScrollbar( x / 2, y, image, group);
+
 	return button;
 }
 
@@ -483,21 +490,19 @@ UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, UI_Group*
 
 UI* UIFactory::CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* group)
 {
-	// Triggers event music adjustment, at 128.0f
+	UI_Scrollbar* scrollbar = new UI_Scrollbar( x, y, parent, scrollbarButton, app->uiManager->GetAtlasTexture(), 128.0f);
 
+	group->AddUiElement(scrollbar);
 
-	group->AddUiElement(nullptr);
-
-	return nullptr;
+	return scrollbar;
 }
 
 UI* UIFactory::CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group)
 {
-	// Triggers event sfx adjustment, at 455.0f
+	UI_Scrollbar* scrollbar = new UI_Scrollbar(x, y, parent, scrollbarButton, app->uiManager->GetAtlasTexture(), 455.0f);
 
+	group->AddUiElement(scrollbar);
 
-	group->AddUiElement(nullptr);
-
-	return nullptr;
+	return scrollbar;
 }
 

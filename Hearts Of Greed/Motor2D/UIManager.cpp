@@ -384,11 +384,14 @@ void ModuleUIManager::DragElement()
 	{
 		if (dragElement != nullptr)
 		{
-			iMPoint position = app->input->GetMousePosScreen() / app->win->GetUIScale();
+			if (dragElement->GetDragable() == true)
+			{
+				iMPoint position = app->input->GetMousePosScreen() / app->win->GetUIScale();
 
-			dragElement->Drag(position.x - dragMouse.x, position.y - dragMouse.y);
+				dragElement->Drag(position.x - dragMouse.x, position.y - dragMouse.y);
 
-			dragMouse = position;
+				dragMouse = position;
+			}
 		}
 	}
 	

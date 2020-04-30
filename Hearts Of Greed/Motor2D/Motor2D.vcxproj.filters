@@ -151,6 +151,9 @@
     <ClCompile Include="UI_Text.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Scrollbar.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -319,6 +322,9 @@
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
     <ClInclude Include="UI_Text.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Scrollbar.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>

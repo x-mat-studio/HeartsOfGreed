@@ -156,3 +156,9 @@ fMPoint UI::GetLocalPosition()
 	return localPosition;
 }
 
+
+bool UI::GetDragable()
+{
+	return dragable;
+}
+
