@@ -393,21 +393,27 @@ bool Hero::PostUpdate(float dt)
 
 	DrawArea();
 
-	if (selectedByPlayer)
+
+	//Final tile indicator draw-----
+	if (path.size() > 0)
 	{
+		Frame currFrame = tileOnWalk.GetCurrentFrame(dt);
 
-		if (path.size() > 0)
-		{
-			Frame currFrame = tileOnWalk.GetCurrentFrame(dt);
-			app->render->Blit(app->entityManager->moveCommandTile, movingTo.x - currFrame.pivotPositionX, movingTo.y - currFrame.pivotPositionY, &currFrame.frame);
-		}
-		else
-		{
-			movingTo = { -1, -1 };
-			tileOnWalk.ResetAnimation();
-		}
+		int drawAlpha = 125;
 
+		if (selectedByPlayer)
+			drawAlpha = 225;
+
+
+		app->render->Blit(app->entityManager->moveCommandTile, movingTo.x - currFrame.pivotPositionX, movingTo.y - currFrame.pivotPositionY, &currFrame.frame, false, true, drawAlpha);
 	}
+	else
+	{
+		movingTo = { -1, -1 };
+		tileOnWalk.ResetAnimation();
+	}
+
+
 
 	return true;
 }
