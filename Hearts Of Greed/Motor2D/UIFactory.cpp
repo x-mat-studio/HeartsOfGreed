@@ -79,26 +79,27 @@ UI_Group* UIFactory::CreateOptionsMenu()
 	UI_Group* group = new UI_Group(GROUP_TAG::OPTIONS_MENU);
 
 	UI* background;
+	UI* scrollbar;
 	
 	background = CreateImage(x, y, nullptr, optionsMenuBackground, group, true);
 
-	/*CreateFullscreenButton(x + 20, y + 100, background, group);
+	scrollbar = CreateImage(20, 60, background, scrollbarBar, group, false);
+	CreateMusicScrollbar(0, 0, scrollbar, group);
 
-	CreateCloseMenuButton(x + optionsMenuBackground.w - (0.75f * closeButton.w), y - (0.25f * closeButton.h), background, group);
+	scrollbar = CreateImage(140, 60, background, scrollbarBar, group, false);
+	CreateSFXScrollbar(0, 0, scrollbar, group);
 
-	CreateMusicScrollbar(x + 20, y + 60, background, group);
+	CreateFullscreenButton(20, 100, background, group);
 
-	CreateSFXScrollbar(x + 140, y + 60, background, group);
+	CreateCloseOptionMenuButton(optionsMenuBackground.w - (0.75f * closeButton.w), (0.25f * closeButton.h), background, group);
 
-	CreateText(x + 30, y, background, "Options", group);
+	CreateText(30, 0, background, "Options", group);
 
-	CreateText(x + 20, y + 25, background, "Music", group);
+	CreateText(20, 25, background, "Music", group);
 
-	CreateText(x + 140, y + 25, background, "SFX", group);
+	CreateText(140, 25, background, "SFX", group);
 
-	CreateText(x + 20, y + 75, background, "Fullscreen mode", group);*/
-
-	
+	CreateText(20, 75, background, "Fullscreen mode", group);
 
 	return group;
 }
@@ -300,9 +301,6 @@ UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group
 
 	CreateText(35, 5, button, "N E W  G A M E", group);
 
-	UI* image = CreateImage( x / 2, y, nullptr, scrollbarBar, group, false);
-	CreateMusicScrollbar( x / 2, y, image, group);
-
 	return button;
 }
 
@@ -321,10 +319,18 @@ UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group
 
 UI* UIFactory::CreateFullscreenButton(float x, float y, UI* parent, UI_Group* group)
 {
-	// Check screen condition to know if you should create the button on ON or OFF
+	Button* button;
+		
+	if (app->win->stateResolution == RESOLUTION_MODE::FULLSCREEN)
+	{
+		button = new Button(fMPoint{ x, y }, parent, fullscreenOffButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::FULLSCREEN_OFF);
+	}
+	else
+	{
+		button = new Button(fMPoint{ x, y }, parent, fullscreenOnButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::FULLSCREEN_ON);
+	}
 
-
-	group->AddUiElement(nullptr);
+	group->AddUiElement(button);
 
 	return nullptr;
 }
