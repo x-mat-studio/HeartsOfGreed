@@ -110,7 +110,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 
 	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
 
-	CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background, group);
+	//CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background, group);
 
 	CreateImage(40, 50, background, creditsBackgroundImage, group);
 
@@ -304,9 +304,9 @@ UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::OPTIONS);
 
-	CreateText(x + 40, y + 5, button, "O P T I O N S", group);
-
 	group->AddUiElement(button);
+
+	CreateText(40, 5, button, "O P T I O N S", group);
 
 	return button;
 }
@@ -327,9 +327,9 @@ UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent, UI_Group* group
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CREDITS);
 
-	CreateText(42, 5, button, "C R E D I T S", group);
-
 	group->AddUiElement(button);
+
+	CreateText(42, 5, button, "C R E D I T S", group);
 
 	return button;
 }
@@ -339,9 +339,9 @@ UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* grou
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::EXIT_GAME);
 
-	CreateText(30, 5, button, "E X I T    G A M E", group);
-
 	group->AddUiElement(button);
+
+	CreateText(30, 5, button, "E X I T    G A M E", group);
 
 	return button;
 }
