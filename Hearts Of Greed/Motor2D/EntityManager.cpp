@@ -70,12 +70,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
-	//Vfx load -----------------------------------
-
-
-
 	// Sample Hero Gatherer---------------------
-	
+
 	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
@@ -147,25 +143,13 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	buildingsdoc.reset();
 
 	//Generate Areas------------------------------------
-	skillArea gathererSkill1AreaRange;
-	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1AreaRange, 0, 0, 6);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
+	filename = config.child("load").attribute("docnameSkillAreas").as_string();
+	pugi::xml_document skillAreassdoc;
+	skillAreassdoc.load_file(filename.GetString());
+	pugi::xml_node skillAreasNode = skillAreassdoc.child("skillAreas");
 
-	skillArea gathererSkill1AreaExplosion;
-	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1AreaRange, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1_MOUSE, gathererSkill1AreaRange });
-
-	skillArea meleeSkill1Area;
-	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&meleeSkill1Area, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
-
-	skillArea baseConstruction;
-	baseConstruction.form = AREA_TYPE::CIRCLE;
-	BuildArea(&baseConstruction, 0, 0, 8);
-	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
+	LoadSkillAreas(skillAreasNode);
+	skillAreassdoc.reset();
 
 	return ret;
 }
@@ -1772,7 +1756,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 		sampleMelee = new MeleeHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk, 
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
 			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
 			skill1Dmg, skill1ID, skill1Type, skill1Target);
@@ -1816,7 +1800,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 
 
 	}
-		vfxDoc.reset();
+	vfxDoc.reset();
 
 	return ret;
 }
@@ -2035,12 +2019,38 @@ bool ModuleEntityManager::LoadSampleBase(pugi::xml_node& baseNode)
 	int transparency = baseNode.child("sample").child("stats").attribute("transparency").as_int(0);
 
 	//TODO FOR OSCAR: although is not used at the moment, the plan is to make bases interact with the FoW, so we will need this variable
-	int vision= baseNode.child("sample").child("stats").attribute("vision").as_int(0);
+	int vision = baseNode.child("sample").child("stats").attribute("vision").as_int(0);
 
 	//sample	
 	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, maxTurrets, maxBarricades, nullptr, baseAlarmCollider, resourcesProd, resourcesRate,
-		maxHP, currentHP, recoveryHP,transparency);
+		maxHP, currentHP, recoveryHP, transparency);
 
 	return ret;
 
+}
+
+
+bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
+{
+	bool ret = true;
+
+	skillArea area;
+	SKILL_ID id;
+	int w;
+	int h;
+	int r;
+
+	for (pugi::xml_node currentArea = areasNode.child("area"); currentArea; currentArea = currentArea.next_sibling("area"))
+	{
+		area.form = (AREA_TYPE)currentArea.attribute("type").as_int(0);
+		w = currentArea.child("measures").attribute("w").as_int(0);
+		h = currentArea.child("measures").attribute("h").as_int(0);
+		r = currentArea.child("measures").attribute("r").as_int(0);
+		id= (SKILL_ID)currentArea.attribute("id").as_int(0);
+		
+		BuildArea(&area, w, h, r);
+		skillAreas.insert({ id, area });
+	}
+
+	return ret;
 }

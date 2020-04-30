@@ -147,6 +147,7 @@ private:
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
+	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
 
 public:

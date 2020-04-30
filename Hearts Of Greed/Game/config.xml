@@ -53,6 +53,7 @@
     docnamevfx="Vfx.xml" 
     docnameSpawner="spawner.xml"
     docnameBuildings="buildings.xml"
+    docnameSkillAreas="skillAreas.xml"
     />
   </entityManager>
 
