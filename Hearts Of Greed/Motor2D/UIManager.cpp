@@ -328,7 +328,7 @@ void ModuleUIManager::DragElement()
 
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN)
 	{
-		dragMouse = app->input->GetMousePosScreen() * app->win->GetUIScale();
+		dragMouse = app->input->GetMousePosScreen() / app->win->GetUIScale();
 		dragElement = SearchFocusUI();
 	}
 	
@@ -336,7 +336,7 @@ void ModuleUIManager::DragElement()
 	{
 		if (dragElement != nullptr)
 		{
-			iMPoint position = app->input->GetMousePosScreen() * app->win->GetUIScale();
+			iMPoint position = app->input->GetMousePosScreen() / app->win->GetUIScale();
 
 			dragElement->Drag(position.x - dragMouse.x, position.y - dragMouse.y);
 
