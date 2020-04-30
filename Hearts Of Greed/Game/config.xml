@@ -50,6 +50,7 @@
     docnameWanamingo="wanamingo.xml" 
     docnameTurret="turret.xml" 
     docnameArmoredman="armoredman.xml" 
+    docnameRangedman="rangedman.xml"
     docnamevfx="Vfx.xml" 
     docnameSpawner="spawner.xml"
     docnameBuildings="buildings.xml"
