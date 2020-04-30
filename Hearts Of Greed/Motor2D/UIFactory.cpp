@@ -201,17 +201,17 @@ UI_Group* UIFactory::CreatePauseMenu()
 
 	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
 
-	x = ((app->win->width / app->win->GetUIScale() / 2) - (menuButton.w / 2));
+	
 
-	CreateResumeGameButton(x, y + 8, background, group);
+	CreateResumeGameButton(10, 8, background, group);
 
-	//CreateSaveGameButton(x, y + 52, background, group);
+	//CreateSaveGameButton(, y + 52, background, group);
 
 	//CreateSaveGameButton(x, y + 97, background, group);
 
-	CreateOptionsButton(x, y + 142, background, group);
+	CreateOptionsButton(10, 142, background, group);
 
-	CreateReturnToMainMenuButton(x, y + 187, background, group);
+	CreateReturnToMainMenuButton(10, 187, background, group);
 
 	//CreateText(x + 43, y + 5, nullptr, "S A V E  G A M E", group);
 
@@ -365,24 +365,26 @@ UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent, UI_Group* gro
 
 UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RESUME);
 
-	CreateText(x + 32, y + 5, nullptr, "R E S U M E  G A M E", group);
+	group->AddUiElement(button);
 
-	group->AddUiElement(nullptr);
+	CreateText(32, 5, button, "R E S U M E  G A M E", group);
 
-	return nullptr;
+	return button;
 }
 
 
 UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
 	// The event triggered is UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MAIN_MENU);
 
-	CreateText(x + 48, y + 5, nullptr, "M A I N  M E N U", group);
+	group->AddUiElement(button);
 
-	group->AddUiElement(nullptr);
+	CreateText(48, 5, button, "M A I N  M E N U", group);
 
-	return nullptr;
+	return button;
 }
 
 
@@ -409,7 +411,7 @@ UI* UIFactory::CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* 
 
 UI* UIFactory::CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_PAUSE_MENU);
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RESUME);
 
 	group->AddUiElement(button);
 

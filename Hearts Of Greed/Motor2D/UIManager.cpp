@@ -3,6 +3,7 @@
 #include "UIManager.h"
 #include "EventManager.h"
 #include "EntityManager.h"
+#include "TestScene.h"
 #include "UI.h"
 #include "UI_Group.h"
 #include "UIFactory.h"
@@ -187,7 +188,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 }
 
 
-void ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
+bool ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
 {
 	int numUiGroups = uiGroupVector.size();
 
@@ -200,18 +201,23 @@ void ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
 
 			uiGroupVector.erase(uiGroupVector.begin() + i);
 
-			return;
+			return true;
 		}
 	}
 
 
-	assert(true); //You tried to delete a group that doesn't exist, check out what could have gone wrong
+	return false;
 }
 
 
 void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 	UI_Group* group = nullptr;
+
+	bool creditMenuExisted;
+	bool optionsMenuExisted;
+	bool pauseMenuExisted;
+	bool shopMenuExisted;
 
 	switch (eventId)
 	{
@@ -235,7 +241,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::CREATE_CREDIT_MENU:			break;
 
-	case EVENT_ENUM::PAUSE_GAME:					break;
+	case EVENT_ENUM::PAUSE_GAME:
+		group = factory->CreatePauseMenu();
+		AddUIGroup(group);
+		break;
 
 	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:	break;
 
@@ -251,7 +260,19 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::UNHIDE_MENU:				break;
 
-	case EVENT_ENUM::EXIT_MENUS:				break;
+	case EVENT_ENUM::EXIT_MENUS:
+		
+		//If none of this menus is open and you are in the Game Scene, create pause menu
+		creditMenuExisted = DeleteUIGroup(GROUP_TAG::CREDITS_MENU);
+		optionsMenuExisted = DeleteUIGroup(GROUP_TAG::OPTIONS_MENU);
+		pauseMenuExisted = DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
+		shopMenuExisted = DeleteUIGroup(GROUP_TAG::SHOP_MENU);
+
+		if (creditMenuExisted == false && optionsMenuExisted == false && pauseMenuExisted == false && shopMenuExisted == false && app->testScene->IsEnabled() == true)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
 
 
 	case EVENT_ENUM::DELETE_OPTIONS_MENU:
@@ -457,11 +478,6 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 		break;
 
 
-	case BUTTON_TAG::CLOSE_PAUSE_MENU:
-		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
-		break;
-
-
 	case BUTTON_TAG::CLOSE_SHOP_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SHOP_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
@@ -508,14 +524,17 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 
 
 	case BUTTON_TAG::PAUSE:
+		AddUIGroup(factory->CreatePauseMenu());
 		break;
 
 
 	case BUTTON_TAG::RESUME:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
 	case BUTTON_TAG::MAIN_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
