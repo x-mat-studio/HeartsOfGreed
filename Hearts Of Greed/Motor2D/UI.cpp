@@ -85,7 +85,7 @@ void UI::Draw(float dt)
 {
 	if (rect.h == 0 || rect.w == 0)
 	{
-		app->render->Blit(texture, position.x, position.y, NULL, false, false, '\000', 255, 255, 255);
+		app->render->Blit(texture, position.x, position.y, nullptr, false, false, '\000', 255, 255, 255);
 	}
 
 	else
@@ -97,7 +97,10 @@ void UI::Draw(float dt)
 
 
 void UI::Drag(int x, int y)
-{}
+{
+	localPosition.x += x;
+	localPosition.y += y;
+}
 
 bool UI::OnAbove()
 {
