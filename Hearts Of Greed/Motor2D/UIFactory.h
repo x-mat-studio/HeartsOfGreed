@@ -109,8 +109,8 @@ private:
 
 	// Scrollbar SDL_Rect
 
-//	SDL_Rect musicScrollbar;
-//	SDL_Rect SFXScrollbar;
+	SDL_Rect scrollbarBar;
+	SDL_Rect scrollbarButton;
 
 };
 
