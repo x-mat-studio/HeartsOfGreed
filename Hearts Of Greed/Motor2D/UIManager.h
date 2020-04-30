@@ -49,7 +49,7 @@ public:
 
 	void AddUIGroup(UI_Group* element);
 
-	void DeleteUIGroup(GROUP_TAG tag);
+	bool DeleteUIGroup(GROUP_TAG tag);
 
 	void LoadAtlas();
 
