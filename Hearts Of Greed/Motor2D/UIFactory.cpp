@@ -56,11 +56,11 @@ UI_Group* UIFactory::CreateMainMenu()
 
 	CreateNewGameButton(x, y + 40, nullptr, group);
 
-	/*CreateOptionsButton(x, y + 80, nullptr, group);
+	CreateOptionsButton(x, y + 80, nullptr, group);
 
 	CreateCreditsButton(x, y + 120, nullptr, group);
 
-	CreateExitGameButton(x, y + 160, nullptr, group);*/
+	CreateExitGameButton(x, y + 160, nullptr, group);
 
 	//CreateText(x + 5, y + 5, nullptr, "C O N T I N U E    G A M E", group);
 	
@@ -78,7 +78,7 @@ UI_Group* UIFactory::CreateOptionsMenu()
 	
 	background = CreateImage(x, y, nullptr, optionsMenuBackground, group, true);
 
-	CreateFullscreenButton(x + 20, y + 100, background, group);
+	/*CreateFullscreenButton(x + 20, y + 100, background, group);
 
 	CreateCloseMenuButton(x + optionsMenuBackground.w - (0.75f * closeButton.w), y - (0.25f * closeButton.h), background, group);
 
@@ -92,7 +92,9 @@ UI_Group* UIFactory::CreateOptionsMenu()
 
 	CreateText(x + 140, y + 25, background, "SFX", group);
 
-	CreateText(x + 20, y + 75, background, "Fullscreen mode", group);
+	CreateText(x + 20, y + 75, background, "Fullscreen mode", group);*/
+
+	
 
 	return group;
 }
@@ -110,31 +112,31 @@ UI_Group* UIFactory::CreateCreditsMenu()
 
 	CreateCloseMenuButton(x + pauseMenuBackground.w - (3 * closeButton.w / 4), y - (1 * closeButton.h / 4), background, group);
 
-	CreateImage(x + 40, y + 50, background, creditsBackgroundImage, group);
+	CreateImage(40, 50, background, creditsBackgroundImage, group);
 
-	CreateText(x + 5, y, background, "Aaron Guerrero Cruz", group);
+	CreateText(5, 0, background, "Aaron Guerrero Cruz", group);
 
-	CreateText(x + 15, y + 10, background, "Lead", group);
+	CreateText(15, 10, background, "Lead", group);
 
-	CreateText(x + 5, y + 35, background, "Jose Luis Redondo Tello", group);
+	CreateText(5, 35, background, "Jose Luis Redondo Tello", group);
 
-	CreateText(x + 15, y + 45, background, "Code", group);
+	CreateText(15, 45, background, "Code", group);
 
-	CreateText(x + 5, y + 70, background, "Ferran-Roger Basart i Bosch", group);
+	CreateText(5, 70, background, "Ferran-Roger Basart i Bosch", group);
 
-	CreateText(x + 15, y + 80, background, "Management + UI", group);
+	CreateText(15, 80, background, "Management + UI", group);
 	
-	CreateText(x + 5, y + 105, background, "Alex Melenchon Maza", group);
+	CreateText(5, 105, background, "Alex Melenchon Maza", group);
 
-	CreateText(x + 15, y + 115, background, "Design", group);
+	CreateText(15, 115, background, "Design", group);
 
-	CreateText(x + 5, y + 140, background, "Adria Serrano Lopez", group);
+	CreateText(5, 140, background, "Adria Serrano Lopez", group);
 
-	CreateText(x + 15, y + 150, background, "Audio + Art", group);
+	CreateText(15, 150, background, "Audio + Art", group);
 
-	CreateText(x + 5, y + 175, background, "Oscar Perez Martin", group);
+	CreateText(5, 175, background, "Oscar Perez Martin", group);
 
-	CreateText(x + 15, y + 185, background, "QA", group);
+	CreateText(15, 185, background, "QA", group);
 
 	return group;
 }
@@ -292,20 +294,23 @@ UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group
 
 	group->AddUiElement(button);
 
-	CreateText(x + 35, y + 5, nullptr, "N E W  G A M E", group);
+	CreateText(35, 5, button, "N E W  G A M E", group);
 
 	return button;
 }
 
+
 UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::OPTIONS);
 
-	CreateText(x + 40, y + 5, nullptr, "O P T I O N S", group);
+	CreateText(x + 40, y + 5, button, "O P T I O N S", group);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(button);
 
-	return nullptr;
+	return button;
 }
+
 
 UI* UIFactory::CreateFullscreenButton(float x, float y, UI* parent, UI_Group* group)
 {
@@ -317,24 +322,28 @@ UI* UIFactory::CreateFullscreenButton(float x, float y, UI* parent, UI_Group* gr
 	return nullptr;
 }
 
+
 UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CREDITS);
 
-	CreateText(x + 42, y + 5, nullptr, "C R E D I T S", group);
+	CreateText(42, 5, button, "C R E D I T S", group);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(button);
 
-	return nullptr;
+	return button;
 }
+
 
 UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::EXIT_GAME);
 
-	CreateText(x + 30, y + 5, nullptr, "E X I T    G A M E", group);
+	CreateText(30, 5, button, "E X I T    G A M E", group);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(button);
 
-	return nullptr;
+	return button;
 }
 
 
@@ -346,6 +355,7 @@ UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent, UI_Group* gro
 	return nullptr;
 }
 
+
 UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* group)
 {
 
@@ -355,6 +365,7 @@ UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* gr
 
 	return nullptr;
 }
+
 
 UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
@@ -366,6 +377,7 @@ UI* UIFactory::CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Gro
 
 	return nullptr;
 }
+
 
 UI* UIFactory::CreateCloseMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
@@ -384,6 +396,7 @@ UI* UIFactory::CreateShopButton(float x, float y, UI* parent, UI_Group* group)
 	return nullptr;
 }
 
+
 UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
 
@@ -393,6 +406,8 @@ UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group
 
 	return nullptr;
 }
+
+
 
 UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
