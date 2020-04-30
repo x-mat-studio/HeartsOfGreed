@@ -409,14 +409,17 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 
 
 	case BUTTON_TAG::OPTIONS:
+		AddUIGroup(factory->CreateOptionsMenu());
 		break;
 
 
-	case BUTTON_TAG::CREADITS:
+	case BUTTON_TAG::CREDITS:
+		AddUIGroup(factory->CreateCreditsMenu());
 		break;
 
 
 	case BUTTON_TAG::EXIT_GAME:
+		app->eventManager->GenerateEvent(EVENT_ENUM::EXIT_GAME, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
