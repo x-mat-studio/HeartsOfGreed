@@ -917,6 +917,29 @@ bool ModulePathfinding::RequestPath(Entity* request, std::vector <iMPoint>* path
 	return false;
 }
 
+iMPoint ModulePathfinding::GetDestination(Entity* request)
+{
+	BROFILER_CATEGORY("RequestPath", Profiler::Color::Khaki);
+
+	if (generatedPaths.size() < 1)
+		return {-1,-1};
+
+	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
+
+	int maxSize = generatedPaths.size();
+	for (int i = 0; i < maxSize; i++)
+	{
+		if (it->first == request)
+		{
+			return it->second.path.back();
+		}
+		it++;
+	}
+
+	return {-1,-1};
+}
+
+
 bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int lvl, std::vector<iMPoint>* pathToFill)
 {
 	BROFILER_CATEGORY("Refine And Smooth Path", Profiler::Color::RosyBrown);

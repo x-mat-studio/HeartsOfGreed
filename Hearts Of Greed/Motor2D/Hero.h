@@ -87,7 +87,7 @@ public:
 		Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 		Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
-		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
+		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk,
 		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
@@ -146,6 +146,7 @@ public:
 
 	void SkillCanceled();
 
+	virtual void PlayGenericNoise(int random);
 
 private:
 	
@@ -165,7 +166,6 @@ private:
 
 	void FeelingSecure(float dt);
 
-	virtual void PlayGenericNoise();
 
 protected:
 	void SetAnimation(HERO_STATES currState);
@@ -249,6 +249,8 @@ public:
 	Animation skill1LeftUp;
 	Animation skill1LeftDown;
 
+	Animation tileOnWalk;
+
 
 	bool skillFromAttacking;
 	HERO_STATES state;
@@ -270,6 +272,7 @@ public:
 
 	float damageTakenTimer;
 
+	iMPoint movingTo;
 
 };
 

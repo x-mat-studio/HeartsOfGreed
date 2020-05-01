@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 <turret>
+
+  <sample>
+    <position x="0" y="0"/>
+
+    <collider>
+      <rect x="150" y="130" w="70" h="80"/>
+      <type id="4"/>
+    </collider>
+
+    <stats level="1" vision="5" xp="35" buildingCost="95" transparency="160">
+      <hitPoints max="110" current="110" recoveryRate="0"/>
+      <attack damage="3" speed="2.25" range="175"/>
+    </stats>
+
+  </sample>
+  
 	<Animations>
 
       <turretIdleRight name="turretIdleRight" frames="1">

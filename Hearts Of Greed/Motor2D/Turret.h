@@ -42,7 +42,7 @@ class Turret : public Building
 
 public:
 
-	Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+	Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 		Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
 		Animation& shootingLeftDown, int maxHitPoints = 100, int currentHitPoints = 100, int recoveryHitPointsRate=5, int xpOnDeath=100, int buildingCost=50, int transparency = 0);
 
@@ -92,7 +92,7 @@ private:
 	int attackSpeed;
 	float attackCD;
 	int range;
-
+	int vision;
 
 	Animation idleRight;
 	Animation idleRightUp;

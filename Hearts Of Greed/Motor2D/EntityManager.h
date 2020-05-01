@@ -141,6 +141,13 @@ private:
 
 	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
 
+	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
+	bool LoadSampleEnemy(pugi::xml_node& enemyNode);
+	bool LoadSampleTurret(pugi::xml_node& turretNode);
+	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
+	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
+	bool LoadSampleBase(pugi::xml_node& baseNode);
+	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
 
 public:
@@ -148,6 +155,7 @@ public:
 	SDL_Texture* selectedTexture;
 	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
+	SDL_Texture* moveCommandTile;
 	SDL_Texture* explosionTexture;
 
 	
@@ -184,6 +192,9 @@ public:
 	int noise4Armored;
 
 	int lvlup;
+	int selectHero;
+	int moveHero;
+
 
 	//public textures
 	SDL_Texture* base2Texture;
@@ -222,6 +233,7 @@ private:
 
 	GathererHero* sampleGatherer;
 	MeleeHero* sampleMelee;
+	RangedHero* sampleRanged;
 
 	Enemy* sampleEnemy;
 

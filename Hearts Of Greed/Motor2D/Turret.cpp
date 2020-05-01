@@ -7,7 +7,7 @@
 #include "EventManager.h"
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
 	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
@@ -30,6 +30,7 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	attackDmg(attackDmg),
 	attackSpeed(attackSpeed),
 	range(range),
+	vision(vision),
 
 	attackCD(0),
 
@@ -63,7 +64,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
 	range(copy->range),
-
+	vision(copy->vision),
 	attackCD(0),
 
 
@@ -73,10 +74,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 {
 	currentAnimation = &idleRightDown;
 
-	if (align == ENTITY_ALIGNEMENT::PLAYER)
-		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
-	else
-		this->visionEntity = nullptr;
+		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
 
 
 }

@@ -34,6 +34,18 @@
       <frame rposX="399" rposY="393  " rwidth="92" rheight="100" time="0.06f" pivotX="46" pivotY="50"/>
     </explosion>
 
+    <onMyWay name="onMyWay" frames="7">
+
+      <frame rposX="0" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+      <frame rposX="64" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+      <frame rposX="128" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+      <frame rposX="192" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+      <frame rposX="256" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+      <frame rposX="320" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+      <frame rposX="384" rposY="0" rwidth="64" rheight="64" time="0.05f" pivotX="32" pivotY="48"/>
+
+    </onMyWay>
+
 	
 	</Animations>
 </Vfx>
