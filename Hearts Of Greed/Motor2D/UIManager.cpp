@@ -1,9 +1,6 @@
 #include "App.h"
-#include "Textures.h"
+
 #include "UIManager.h"
-#include "EventManager.h"
-#include "EntityManager.h"
-#include "TestScene.h"
 #include "UI.h"
 #include "UI_Group.h"
 #include "UIFactory.h"
@@ -13,6 +10,12 @@
 #include "Audio.h"
 #include "Window.h"
 #include "Input.h"
+#include "Player.h"
+#include "EntityManager.h"
+#include "TestScene.h"
+#include "EventManager.h"
+#include "Textures.h"
+
 #include "Minimap.h"
 #include "Base.h"
 
@@ -334,13 +337,16 @@ bool ModuleUIManager::MouseOnUI()
 
 	int i;
 
-	for (i = numGroup - 1; i >= 0; i--)
+	if (app->player->doingAction == false)
 	{
-		if (uiGroupVector[i]->OnAbove() == true)
+		for (i = numGroup - 1; i >= 0; i--)
 		{
-			mouseOverUI = true;
-			ret = true;
-			break;
+			if (uiGroupVector[i]->OnAbove() == true)
+			{
+				mouseOverUI = true;
+				ret = true;
+				break;
+			}
 		}
 	}
 
