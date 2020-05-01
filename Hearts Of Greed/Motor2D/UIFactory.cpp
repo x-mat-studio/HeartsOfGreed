@@ -203,19 +203,15 @@ UI_Group* UIFactory::CreatePauseMenu()
 
 	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
 
-	CreateResumeGameButton(2, 8, background, group);
+	CreateResumeGameButton(0, 8, background, group);
 
-	CreateSaveGameButton(2, 52, background, group);
+	CreateSaveGameButton(0, 52, background, group);
 
-	CreateLoadGameButton(2, 97, background, group);
+	CreateLoadGameButton(0, 97, background, group);
 
-	CreateOptionsButton(2, 142, background, group);
+	CreateOptionsButton(0, 142, background, group);
 
-	CreateReturnToMainMenuButton(2, 187, background, group);
-
-	//CreateText(x + 43, y + 5, nullptr, "S A V E  G A M E", group);
-
-	//CreateText(x + 43, y + 5, nullptr, "L O A D  G A M E", group);
+	CreateReturnToMainMenuButton(0, 187, background, group);
 
 	return group;
 }
@@ -298,7 +294,7 @@ UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group
 
 	group->AddUiElement(button);
 
-	CreateText(35, 5, button, "N E W  G A M E", group);
+	CreateText(55, 5, button, "N E W  G A M E", group);
 
 	return button;
 }
@@ -310,7 +306,7 @@ UI* UIFactory::CreateOptionsButton(float x, float y, UI* parent, UI_Group* group
 
 	group->AddUiElement(button);
 
-	CreateText(40, 5, button, "O P T I O N S", group);
+	CreateText(58, 5, button, "O P T I O N S", group);
 
 	return button;
 }
@@ -341,7 +337,7 @@ UI* UIFactory::CreateCreditsButton(float x, float y, UI* parent, UI_Group* group
 
 	group->AddUiElement(button);
 
-	CreateText(42, 5, button, "C R E D I T S", group);
+	CreateText(60, 5, button, "C R E D I T S", group);
 
 	return button;
 }
@@ -353,7 +349,7 @@ UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* grou
 
 	group->AddUiElement(button);
 
-	CreateText(30, 5, button, "E X I T    G A M E", group);
+	CreateText(50, 5, button, "E X I T    G A M E", group);
 
 	return button;
 }
@@ -375,7 +371,7 @@ UI* UIFactory::CreateResumeGameButton(float x, float y, UI* parent, UI_Group* gr
 
 	group->AddUiElement(button);
 
-	CreateText(32, 5, button, "R E S U M E  G A M E", group);
+	CreateText(37, 5, button, "R E S U M E  G A M E", group);
 
 	return button;
 }
@@ -387,7 +383,7 @@ UI* UIFactory::CreateSaveGameButton(float x, float y, UI* parent, UI_Group* grou
 
 	group->AddUiElement(button);
 
-	CreateText(32, 5, button, "S A V E  G A M E", group);
+	CreateText(47, 5, button, "S A V E  G A M E", group);
 	
 	return button;
 }
@@ -399,7 +395,7 @@ UI* UIFactory::CreateLoadGameButton(float x, float y, UI* parent, UI_Group* grou
 
 	group->AddUiElement(button);
 
-	CreateText(32, 5, button, "L O A D  G A M E", group);
+	CreateText(48, 5, button, "L O A D  G A M E", group);
 
 	return button;
 }
