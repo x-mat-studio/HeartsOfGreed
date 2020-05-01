@@ -361,7 +361,7 @@ UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* grou
 
 UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent, UI_Group* group)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, pauseButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::EXIT_GAME);
+	Button* button = new Button(fMPoint{ x, y }, parent, pauseButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::PAUSE);
 
 	group->AddUiElement(button);
 
