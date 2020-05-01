@@ -147,7 +147,7 @@ bool  ModuleMainMenuScene::CleanUp()
 	if (changeSceneContinue == 1)
 	{
 		changeSceneContinue = -1;
-		app->eventManager->GenerateEvent(EVENT_ENUM::LOAD_GAME, EVENT_ENUM::GAME_SCENE_STARTED);
+		app->eventManager->GenerateEvent(EVENT_ENUM::LOAD_GAME, EVENT_ENUM::GAME_SCENE_ENTERED);
 	}
 
 	return true;

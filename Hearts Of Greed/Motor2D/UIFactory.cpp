@@ -8,6 +8,8 @@
 #include "Button.h"
 
 #include "Window.h"
+#include "Minimap.h"
+#include "Player.h"
 
 UIFactory::UIFactory() :
 	portraitBackground{ 643, 145, 72, 56 },
@@ -31,7 +33,7 @@ UIFactory::UIFactory() :
 	pauseMenuBackground{ 15, 271, 194, 231 },
 	optionsMenuBackground{ 677, 369, 278, 153 },
 	creditsMenuBackground{ 15, 271, 194, 231 },
-	minimapBackground{ 221, 317, 162, 174 },
+	minimapBackground{ 221, 317, 162, 150 },
 	shopBackground{ 15, 271, 194, 231 },
 	resourcesBackground{ 415, 435, 65, 30 },
 
@@ -156,24 +158,23 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	UI* background;
 
 	char resources[10];
-	//float screenResources = app->player->GetResources();
+	float screenResources = app->player->GetResources();
 
 	//rect = RectConstructor(556, 35, 15, 14);
 	//father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 	//AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, P2SString("portraitVector"), nullptr, DRAGGABLE::DRAG_OFF);
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
-	CreateImage(0, y - minimapBackground.h - 20, nullptr, minimapBackground, group);
+	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
 	background = CreateImage(x - 65, y - 97, nullptr, resourcesBackground, group);
 
-	CreateImage(x - 59, y - 90, background, resourceIcon, group);
+	CreateImage(6, 7, background, resourceIcon, group);
 
-//	screenResources = app->player->GetResources();
-//	sprintf_s(resources, 10, "%d", screenResources);
-//	CreateText(x - 41, y - 94, background, resources, group);
+	sprintf_s(resources, 10, "%d", screenResources);
+	CreateText(24, 3, background, resources, group);
 
 	CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
@@ -201,8 +202,6 @@ UI_Group* UIFactory::CreatePauseMenu()
 	UI* background;
 
 	background = CreateImage(x, y, nullptr, pauseMenuBackground, group, true);
-
-	
 
 	CreateResumeGameButton(2, 8, background, group);
 
@@ -362,8 +361,9 @@ UI* UIFactory::CreateExitGameButton(float x, float y, UI* parent, UI_Group* grou
 
 UI* UIFactory::CreatePauseGameButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, pauseButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::EXIT_GAME);
 
-	group->AddUiElement(nullptr);
+	group->AddUiElement(button);
 
 	return nullptr;
 }

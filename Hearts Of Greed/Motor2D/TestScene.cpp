@@ -168,7 +168,7 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_SPRINT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
-	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_STARTED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
@@ -176,7 +176,7 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
 
-	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
 	isNightTime = false;
 

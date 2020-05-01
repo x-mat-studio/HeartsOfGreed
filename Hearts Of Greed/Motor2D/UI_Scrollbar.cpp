@@ -8,6 +8,15 @@ UI_Scrollbar::UI_Scrollbar(float x, float y, UI* parent, SDL_Rect rect, SDL_Text
 {
 	if (parent == nullptr)
 		assert("Must have a father");
+
+	if (maxValue == 128.0f)
+	{
+		localPosition.x = ValueToPosition(app->audio->musicVolume);
+	}
+	else
+	{
+		localPosition.x = ValueToPosition(app->audio->volumeAdjustment + 255);
+	}
 }
 
 UI_Scrollbar::~UI_Scrollbar()
@@ -18,7 +27,7 @@ void  UI_Scrollbar::HandleInput()
 {
 	if (previousX != localPosition.x)
 	{
-		currentValue = ConvertPosition();
+		currentValue = PositionToValue();
 		if (maxValue == 128.0f)
 		{
 			app->audio->SetVolume(currentValue);
@@ -45,8 +54,13 @@ void UI_Scrollbar::Move() {
 	position.y = father->GetPosition().y - 15;
 }
 
-float UI_Scrollbar::ConvertPosition()
+float UI_Scrollbar::PositionToValue()
 {
 	return (localPosition.x + (rect.w * 0.5)) * maxValue / father->rect.w;
 }
 
+
+float UI_Scrollbar::ValueToPosition(float value)
+{
+	return (value * father->rect.w / maxValue);
+}

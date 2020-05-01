@@ -16,7 +16,8 @@ private:
 
 	void HandleInput();
 	void Move();
-	float ConvertPosition();
+	float PositionToValue();
+	float ValueToPosition(float value);
 
 private:
 

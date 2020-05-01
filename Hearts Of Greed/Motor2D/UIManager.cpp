@@ -55,6 +55,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_SHOP_MENU, this);
@@ -244,6 +245,12 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:	
 		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case EVENT_ENUM::GAME_SCENE_ENTERED:
+
+		group = factory->CreateBasicInGameUI();
+		AddUIGroup(group);
 		break;
 
 	case EVENT_ENUM::CREATE_SHOP_MENU:			break;
@@ -438,6 +445,7 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::PAUSE_GAME, this);
