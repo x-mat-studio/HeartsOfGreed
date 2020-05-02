@@ -69,6 +69,13 @@ public:
 	//Portrait things
 	UI* CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* group);
 
+
+public:
+
+	SDL_Rect fullscreenOnButton;
+	SDL_Rect fullscreenOffButton;
+
+
 private:
 	// Image SDL_Rect
 
@@ -110,8 +117,6 @@ private:
 	SDL_Rect closeButton;
 //	SDL_Rect hideLeftButton;
 //	SDL_Rect hideRightButton;
-	SDL_Rect fullscreenOnButton;
-	SDL_Rect fullscreenOffButton;
 	SDL_Rect shopButton;
 	SDL_Rect reviveButton;
 

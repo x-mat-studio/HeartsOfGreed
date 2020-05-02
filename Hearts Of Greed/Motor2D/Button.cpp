@@ -25,6 +25,12 @@ BUTTON_TAG Button::GetTag()
 }
 
 
+void Button::SetTag(BUTTON_TAG tag)
+{
+	buttonTag = tag;
+}
+
+
 void Button::HandleInput()
 {
 	if (focused)
@@ -37,7 +43,7 @@ void Button::HandleInput()
 
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_UP && clicked == true)
 		{
-			app->uiManager->ExecuteButton(buttonTag);
+			app->uiManager->ExecuteButton(buttonTag, this);
 			clicked = false;
 		}
 	}

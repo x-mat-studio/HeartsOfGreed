@@ -475,7 +475,7 @@ void ModuleUIManager::UnregisterEvents()
 }
 
 
-void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
+void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 {
 	switch (tag)
 	{
@@ -524,10 +524,16 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag)
 
 
 	case BUTTON_TAG::FULLSCREEN_ON:
+		app->eventManager->GenerateEvent(EVENT_ENUM::FULLSCREEN_INPUT, EVENT_ENUM::NULL_EVENT);
+		button->rect = factory->fullscreenOffButton;
+		button->SetTag(BUTTON_TAG::FULLSCREEN_OFF);
 		break;
 
 
 	case BUTTON_TAG::FULLSCREEN_OFF:
+		app->eventManager->GenerateEvent(EVENT_ENUM::FULLSCREEN_INPUT, EVENT_ENUM::NULL_EVENT);
+		button->rect = factory->fullscreenOnButton;
+		button->SetTag(BUTTON_TAG::FULLSCREEN_ON);
 		break;
 
 

@@ -13,6 +13,7 @@ class UI_Group;
 class Base;
 
 class UI;
+class Button;
 enum class GROUP_TAG;
 enum class BUTTON_TAG;
 
@@ -59,7 +60,7 @@ public:
 
 	void CheckDragElement(UI* element);
 
-	void ExecuteButton(BUTTON_TAG tag);
+	void ExecuteButton(BUTTON_TAG tag, Button* button);
 
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
@@ -71,6 +72,7 @@ private:
 	void DragElement();
 
 	void UnregisterEvents();
+
 
 public:
 	Base* lastShop;

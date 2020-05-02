@@ -45,6 +45,7 @@ public:
 	~Button();
 
 	BUTTON_TAG GetTag();
+	void SetTag(BUTTON_TAG tag);
 
 private:
 	void HandleInput();
