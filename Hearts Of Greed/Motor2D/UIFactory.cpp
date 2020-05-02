@@ -164,8 +164,6 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_GAME);
 
-	UI* background;
-
 	//rect = RectConstructor(556, 35, 15, 14);
 	//father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 	//AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, P2SString("portraitVector"), nullptr, DRAGGABLE::DRAG_OFF);
@@ -175,11 +173,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
-	background = CreateImage(x - 65, y - 97, nullptr, resourcesBackground, group);
-
-	CreateImage(6, 7, background, resourceIcon, group);
-
-	CreateResourcesPortrait(24, 3, background, group);
+	CreateResourcesPortrait(x - 65, y - 97, nullptr, group);
 
 	CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
@@ -548,7 +542,11 @@ UI* UIFactory::CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group)
 
 UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* group)
 {
-	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(x, y, parent, false);
+	UI* background = CreateImage(x, y, nullptr, resourcesBackground, group);
+
+	CreateImage(6, 7, background, resourceIcon, group);
+
+	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 
 	group->AddUiElement(resourcesPortrait);
 
