@@ -12,6 +12,7 @@ struct UIFactory
 public:
 
 	UIFactory();
+	~UIFactory();
 
 	// Menu creation functions
 

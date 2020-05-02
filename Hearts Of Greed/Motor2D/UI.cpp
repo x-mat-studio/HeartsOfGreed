@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Window.h"
 #include "Textures.h"
+#include "UIManager.h"
 
 UI::UI() :
 
@@ -50,8 +51,10 @@ UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, bool in
 
 }
 
+
 UI::~UI()
 {
+	app->uiManager->CheckDragElement(this);
 	texture = nullptr;
 	father = nullptr;
 }

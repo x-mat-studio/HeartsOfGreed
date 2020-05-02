@@ -57,19 +57,18 @@ public:
 
 	void CheckFocusEntity();
 
+	void CheckDragElement(UI* element);
+
 	void ExecuteButton(BUTTON_TAG tag);
 
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
-
 
 	bool CheckGroupTag(GROUP_TAG tag);
 
 	UI* SearchFocusUI() const;
 
 	void DragElement();
-	void CallElementDrag();
-	
 
 	void UnregisterEvents();
 

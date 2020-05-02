@@ -1,6 +1,7 @@
 #include "App.h"
 #include "UI_Text.h"
 #include "Fonts.h"
+#include "Textures.h"
 
 UI_Text::UI_Text(float x, float y, UI* parent, char* text, bool interactable) : 
 	
@@ -10,4 +11,6 @@ UI_Text::UI_Text(float x, float y, UI* parent, char* text, bool interactable) :
 }
 
 UI_Text::~UI_Text()
-{}
+{
+	app->tex->UnLoad(texture);
+}

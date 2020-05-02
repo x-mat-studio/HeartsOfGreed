@@ -49,6 +49,11 @@ UIFactory::UIFactory() :
 	scrollbarButton{ 257, 15, 13, 34 }
 {}
 
+
+UIFactory::~UIFactory()
+{
+}
+
 // Menu specific functions
 
 UI_Group* UIFactory::CreateMainMenu()
@@ -72,6 +77,7 @@ UI_Group* UIFactory::CreateMainMenu()
 	
 	return group;
 }
+
 
 UI_Group* UIFactory::CreateOptionsMenu()
 {
@@ -105,6 +111,7 @@ UI_Group* UIFactory::CreateOptionsMenu()
 
 	return group;
 }
+
 
 UI_Group* UIFactory::CreateCreditsMenu()
 {
@@ -148,6 +155,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 	return group;
 }
 
+
 UI_Group* UIFactory::CreateBasicInGameUI()
 {
 	float x(app->win->width / app->win->GetUIScale());
@@ -183,6 +191,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	return group;
 }
 
+
 UI_Group* UIFactory::CreateDataPageComponents()
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::DATA_PAGE);
@@ -191,6 +200,7 @@ UI_Group* UIFactory::CreateDataPageComponents()
 
 	return group;
 }
+
 
 UI_Group* UIFactory::CreatePauseMenu()
 {
@@ -215,6 +225,7 @@ UI_Group* UIFactory::CreatePauseMenu()
 
 	return group;
 }
+
 
 UI_Group* UIFactory::CreateShopMenu()
 {

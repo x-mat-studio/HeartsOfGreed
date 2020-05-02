@@ -35,8 +35,8 @@ ModuleUIManager::ModuleUIManager() :
 // Destructor
 ModuleUIManager::~ModuleUIManager()
 {
-	app->tex->UnLoad(atlas);
-	atlas = nullptr;
+	delete factory;
+
 	UnregisterEvents();
 
 	uiGroupVector.clear();
@@ -170,10 +170,8 @@ bool ModuleUIManager::CleanUp()
 	uiGroupVector.clear();
 
 	lastShop = nullptr;
+	dragElement = nullptr;
 
-	//SOMETHING RELATED TO THE BUY MENU
-	/*if (app->player != nullptr)
-		app->player->(false);*/
 	return true;
 }
 
@@ -184,6 +182,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 
 	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false)
 	{
+		delete element;
 		return;
 	}
 	
@@ -370,6 +369,15 @@ void ModuleUIManager::CheckFocusEntity()
 }
 
 
+void ModuleUIManager::CheckDragElement(UI* element)
+{
+	if (dragElement == element)
+	{
+		dragElement = nullptr;
+	}
+}
+
+
 bool ModuleUIManager::CheckGroupTag(GROUP_TAG tag)
 {
 	int uiGroupNumber = uiGroupVector.size();
@@ -433,12 +441,6 @@ void ModuleUIManager::DragElement()
 	{
 		dragElement = nullptr;
 	}
-}
-
-
-void ModuleUIManager::CallElementDrag()
-{
-
 }
 
 
