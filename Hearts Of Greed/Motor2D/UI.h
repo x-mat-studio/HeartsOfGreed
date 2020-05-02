@@ -19,7 +19,8 @@ enum class UI_TYPE : int
 	SCROLLBAR,
 	BUTTON,
 	HEALTHBAR,
-	PORTRAIT,
+	
+	RESOURCES_COUNTER,
 
 	MAX
 };

@@ -113,6 +113,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RangedHero.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="ResourcesPortrait.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="RangedHero.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="ResourcesPortrait.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Textures.h" />

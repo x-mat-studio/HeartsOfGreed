@@ -66,6 +66,9 @@ public:
 	UI* CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group);
 
+	//Portrait things
+	UI* CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* group);
+
 private:
 	// Image SDL_Rect
 

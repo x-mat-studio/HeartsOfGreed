@@ -6,6 +6,7 @@
 #include "UI_Text.h"
 #include "UI_Scrollbar.h"
 #include "Button.h"
+#include "ResourcesPortrait.h"
 
 #include "Window.h"
 #include "Minimap.h"
@@ -165,9 +166,6 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	UI* background;
 
-	char resources[10];
-	float screenResources = app->player->GetResources();
-
 	//rect = RectConstructor(556, 35, 15, 14);
 	//father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
 	//AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, P2SString("portraitVector"), nullptr, DRAGGABLE::DRAG_OFF);
@@ -181,8 +179,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	CreateImage(6, 7, background, resourceIcon, group);
 
-	sprintf_s(resources, 10, "%d", screenResources);
-	CreateText(24, 3, background, resources, group);
+	CreateResourcesPortrait(24, 3, background, group);
 
 	CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
@@ -279,6 +276,7 @@ UI_Group* UIFactory::CreateShopMenu()
 	return group;
 }
 
+
 // Element specific functions
 
 UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable)
@@ -290,6 +288,7 @@ UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group
 	return uiImage;
 }
 
+
 UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable)
 {
 	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
@@ -298,6 +297,7 @@ UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* gr
 
 	return uiText;
 }
+
 
 UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)
 {
@@ -545,3 +545,12 @@ UI* UIFactory::CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group)
 	return scrollbar;
 }
 
+
+UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* group)
+{
+	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(x, y, parent, false);
+
+	group->AddUiElement(resourcesPortrait);
+
+	return resourcesPortrait;
+}
