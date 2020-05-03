@@ -32,7 +32,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 {
 	if (minimapPos != nullptr)
 	{
-		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x + offSet.x, minimapPos->y + offSet.y);
+		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x, minimapPos->y);
 		float uiscale = app->win->GetUIScale();
 		app->render->Blit(app->uiManager->GetAtlasTexture(), (newpos.x - (sourceRect.w * 0.5f)) / uiscale, (newpos.y - (sourceRect.h * 0.5f)) / uiscale, &sourceRect, false, false);
 	}
@@ -94,9 +94,9 @@ bool Minimap::PreUpdate(float dt)
 		}
 
 		float UIscale = app->win->GetUIScale();
-		UI* element = app->uiManager->FindUIByName("minimapBackground");
+		/*UI* element = app->uiManager->FindUIByName("minimapBackground");
 		position.x = element->worldPosition.x * UIscale + 5;
-		position.y = element->worldPosition.y * UIscale + 7;
+		position.y = element->worldPosition.y * UIscale + 7;*/
 	}
 	return true;
 }

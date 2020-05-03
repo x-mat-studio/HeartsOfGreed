@@ -70,79 +70,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
-	//Vfx load -----------------------------------
-	P2SString filename = config.child("load").attribute("docnamevfx").as_string();
-	pugi::xml_document vfxDoc;
-	vfxDoc.load_file(filename.GetString());
-	pugi::xml_node explosion = vfxDoc.child("Vfx");
-
-	Animation vfxExplosion = vfxExplosion.PushAnimation(explosion, "explosion");
-
-
 	// Sample Hero Gatherer---------------------
-	fMPoint pos;
-	pos.create(100, 600);
 
-	filename = config.child("load").attribute("docnameSuitman").as_string();
+	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
 	suitmandoc.load_file(filename.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
 
-	Animation walkLeftG = walkLeftG.PushAnimation(suitman, "walk_left");
-	Animation walkLeftUpG = walkLeftUpG.PushAnimation(suitman, "walk_left_up");
-	Animation walkLeftDownG = walkLeftDownG.PushAnimation(suitman, "walk_left_down");
-	Animation walkRightUpG = walkRightUpG.PushAnimation(suitman, "walk_right_up");
-	Animation walkRightDownG = walkRightDownG.PushAnimation(suitman, "walk_right_down");
-	Animation walkRightG = walkRightG.PushAnimation(suitman, "walk_right");
-
-	Animation idleRightG = idleRightG.PushAnimation(suitman, "idle_right");
-	Animation idleRightUpG = idleRightUpG.PushAnimation(suitman, "idle_right_up");
-	Animation idleRightDownG = idleRightDownG.PushAnimation(suitman, "idle_right_down");
-	Animation idleLeftG = idleLeftG.PushAnimation(suitman, "idle_left");
-	Animation idleLeftUpG = idleLeftUpG.PushAnimation(suitman, "idle_left_up");
-	Animation idleLeftDownG = idleLeftDownG.PushAnimation(suitman, "idle_left_down");
-
-	Animation punchRightG = punchRightG.PushAnimation(suitman, "punch_right");
-	Animation punchRightUpG = punchRightUpG.PushAnimation(suitman, "punch_right_up");
-	Animation punchRightDownG = punchRightDownG.PushAnimation(suitman, "punch_right_down");
-	Animation punchLeftG = punchLeftG.PushAnimation(suitman, "punch_left");
-	Animation punchLeftUpG = punchLeftUpG.PushAnimation(suitman, "punch_left_up");
-	Animation punchLeftDownG = punchLeftDownG.PushAnimation(suitman, "punch_left_down");
-
-	Animation skill1RightG = skill1RightG.PushAnimation(suitman, "skill_1_right");
-	Animation skill1RightUpG = skill1RightUpG.PushAnimation(suitman, "skill_1_right_up");
-	Animation skill1RightDownG = skill1RightDownG.PushAnimation(suitman, "skill_1_right_down");
-	Animation skill1LeftG = skill1LeftG.PushAnimation(suitman, "skill_1_left");
-	Animation skill1LeftUpG = skill1LeftUpG.PushAnimation(suitman, "skill_1_left_up");
-	Animation skill1LeftDownG = skill1LeftDownG.PushAnimation(suitman, "skill_1_left_down");
-
-	// Hero collider
-	Collider* collider = new Collider({ 0,0,30,65 }, COLLIDER_HERO, this);
-
-	int maxHP = 100;
-	int recoveryHP = 2;
-	int maxEnergy = 40;
-	int recoveryE = 4;
-
-	int atkDmg = 8;
-	float atkSpd = 0.75f;
-	int atkRange = 45;
-
-	int movSpd = 60;
-	int visTiles = 7;
-
-	float skill1ExecTime = 1.75f;
-	float skill1RecovTime = 6.f;
-	int granDmg = 55;
-
-
-	sampleGatherer = new GathererHero(fMPoint{ pos.x, pos.y }, collider, walkLeftG, walkLeftUpG,
-		walkLeftDownG, walkRightUpG, walkRightDownG, walkRightG, idleRightG, idleRightUpG, idleRightDownG, idleLeftG,
-		idleLeftUpG, idleLeftDownG, punchLeftG, punchLeftUpG, punchLeftDownG, punchRightUpG, punchRightDownG, punchRightG, skill1RightG,
-		skill1RightUpG, skill1RightDownG, skill1LeftG, skill1LeftUpG, skill1LeftDownG,
-		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
-		granDmg, SKILL_ID::GATHERER_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY, vfxExplosion);
+	LoadSampleHero(ENTITY_TYPE::HERO_GATHERER, suitman, config);
 
 	suitmandoc.reset();
 
@@ -152,61 +87,18 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	armoredmanDoc.load_file(filename.GetString());
 	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
 
-	Animation walkLeftM = walkLeftM.PushAnimation(armoredman, "walk_left");
-	Animation walkLeftUpM = walkLeftUpM.PushAnimation(armoredman, "walk_left_up");
-	Animation walkLeftDownM = walkLeftDownM.PushAnimation(armoredman, "walk_left_down");
-	Animation walkRightUpM = walkRightUpM.PushAnimation(armoredman, "walk_right_up");
-	Animation walkRightDownM = walkRightDownM.PushAnimation(armoredman, "walk_right_down");
-	Animation walkRightM = walkRightM.PushAnimation(armoredman, "walk_right");
-
-	Animation idleRightM = idleRightM.PushAnimation(armoredman, "idle_right");
-	Animation idleRightUpM = idleRightUpM.PushAnimation(armoredman, "idle_right_up");
-	Animation idleRightDownM = idleRightDownM.PushAnimation(armoredman, "idle_right_down");
-	Animation idleLeftM = idleLeftM.PushAnimation(armoredman, "idle_left");
-	Animation idleLeftUpM = idleLeftUpM.PushAnimation(armoredman, "idle_left_up");
-	Animation idleLeftDownM = idleLeftDownM.PushAnimation(armoredman, "idle_left_down");
-
-	Animation punchRightM = punchRightM.PushAnimation(armoredman, "punch_right");
-	Animation punchRightUpM = punchRightUpM.PushAnimation(armoredman, "punch_right_up");
-	Animation punchRightDownM = punchRightDownM.PushAnimation(armoredman, "punch_right_down");
-	Animation punchLeftM = punchLeftM.PushAnimation(armoredman, "punch_left");
-	Animation punchLeftUpM = punchLeftUpM.PushAnimation(armoredman, "punch_left_up");
-	Animation punchLeftDownM = punchLeftDownM.PushAnimation(armoredman, "punch_left_down");
-
-	Animation skill1RightM = skill1RightM.PushAnimation(armoredman, "skill_1_right");
-	Animation skill1RightUpM = skill1RightUpM.PushAnimation(armoredman, "skill_1_right_up");
-	Animation skill1RightDownM = skill1RightDownM.PushAnimation(armoredman, "skill_1_right_down");
-	Animation skill1LeftM = skill1LeftM.PushAnimation(armoredman, "skill_1_left");
-	Animation skill1LeftUpM = skill1LeftUpM.PushAnimation(armoredman, "skill_1_left_up");
-	Animation skill1LeftDownM = skill1LeftDownM.PushAnimation(armoredman, "skill_1_left_down");
-
-	maxHP = 170;
-	recoveryHP = 4;
-
-	maxEnergy = 80;
-	recoveryE = 3;
-
-	atkDmg = 15;
-	atkSpd = 1.f;
-	atkRange = 45;
-
-	movSpd = 100;
-	visTiles = 5;
-
-	skill1ExecTime = 1.0f;
-	skill1RecovTime = 7.5f;
-	int skill1Dmg = 30;
+	LoadSampleHero(ENTITY_TYPE::HERO_MELEE, armoredman, config);
+	armoredmanDoc.reset();
 
 
-	sampleMelee = new MeleeHero(fMPoint{ pos.x, pos.y }, collider, walkLeftM, walkLeftUpM,
-		walkLeftDownM, walkRightUpM, walkRightDownM, walkRightM, idleRightM, idleRightUpM, idleRightDownM, idleLeftM,
-		idleLeftUpM, idleLeftDownM, punchLeftM, punchLeftUpM, punchLeftDownM, punchRightUpM, punchRightDownM, punchRightM, skill1RightM,
-		skill1RightUpM, skill1RightDownM, skill1LeftM, skill1LeftUpM, skill1LeftDownM,
-		1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-		movSpd, visTiles, skill1ExecTime, 20.f, 20.f, skill1RecovTime, 15.f, 15.f,
-		skill1Dmg, SKILL_ID::MELEE_SKILL1, SKILL_TYPE::AREA_OF_EFFECT, ENTITY_ALIGNEMENT::ENEMY);
+	// Sample Ranged Hero---------------------
+	filename = config.child("load").attribute("docnameRangedman").as_string();
+	pugi::xml_document rangedmanDoc;
+	rangedmanDoc.load_file(filename.GetString());
+	pugi::xml_node rangedman = rangedmanDoc.child("rangedman");
 
-
+	LoadSampleHero(ENTITY_TYPE::HERO_RANGED, rangedman, config);
+	rangedmanDoc.reset();
 
 	// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
@@ -214,26 +106,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	wanamingodoc.load_file(filename.GetString());
 	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo");
 
-	Animation enemyWalkLeft = enemyWalkLeft.PushAnimation(wanamingo, "wanamingoLeftWalk"); // looks good
-	Animation enemyWalkLeftUp = enemyWalkLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftWalk");// looks good
-	Animation enemyWalkLeftDown = enemyWalkLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftWalk"); // last frame teleports to the left
-	Animation enemyWalkRightUp = enemyWalkRightUp.PushAnimation(wanamingo, "wanamingoUpRightWalk"); // looks good
-	Animation enemyWalkRightDown = enemyWalkRightDown.PushAnimation(wanamingo, "wanamingoDownRightWalk"); // looks good
-	Animation enemyWalkRight = enemyWalkRight.PushAnimation(wanamingo, "wanamingoRightWalk");// looks good
-
-	Animation enemyIdleRight = enemyIdleRight.PushAnimation(wanamingo, "wanamingoRightIdle"); //goes up then bumps right
-	Animation enemyIdleRightUp = enemyIdleRightUp.PushAnimation(wanamingo, "wanamingoUpRightIdle"); //bumps left
-	Animation enemyIdleRightDown = enemyIdleRightDown.PushAnimation(wanamingo, "wanamingoDownRightIdle"); //bumps right
-	Animation enemyIdleLeft = enemyIdleLeft.PushAnimation(wanamingo, "wanamingoLeftIdle"); //bumps left
-	Animation enemyIdleLeftUp = enemyIdleLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftIdle"); //bumps right
-	Animation enemyIdleLeftDown = enemyIdleLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftIdle"); //bumps right
-
-	Animation enemyPunchRight = enemyPunchRight.PushAnimation(wanamingo, "wanamingoRightPunch"); //looks good
-	Animation enemyPunchRightUp = enemyPunchRightUp.PushAnimation(wanamingo, "wanamingoUpRightPunch"); //jesus christ 
-	Animation enemyPunchRightDown = enemyPunchRightDown.PushAnimation(wanamingo, "wanamingoDownRightPunch"); //goes back and forth
-	Animation enemyPunchLeft = enemyPunchLeft.PushAnimation(wanamingo, "wanamingoLeftPunch"); //It should bump to the other side!
-	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(wanamingo, "wanamingoUpLeftPunch"); //jesus christ 
-	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(wanamingo, "wanamingoDownLeftPunch"); //jesus christ 
+	LoadSampleEnemy(wanamingo);
 
 	wanamingodoc.reset();
 
@@ -243,97 +116,40 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	turretdoc.load_file(filename.GetString());
 	pugi::xml_node turret = turretdoc.child("turret");
 
-	Animation turretIdleRight = turretIdleRight.PushAnimation(turret, "turretIdleRight"); //goes up then bumps right
-	Animation turretIdleRightUp = turretIdleRightUp.PushAnimation(turret, "turretIdleRightUp"); //bumps left
-	Animation turretIdleRightDown = turretIdleRightDown.PushAnimation(turret, "turretIdleRightDown"); //bumps right
-	Animation turretIdleLeft = turretIdleLeft.PushAnimation(turret, "turretIdleLeft"); //bumps left
-	Animation turretIdleLeftUp = turretIdleLeftUp.PushAnimation(turret, "turretIdleLeftUp"); //bumps right
-	Animation turretIdleLeftDown = turretIdleLeftDown.PushAnimation(turret, "turretIdleLeftDown"); //bumps right
-
-	Animation turretShootingRight = turretShootingRight.PushAnimation(turret, "turretShootingRight"); //goes up then bumps right
-	Animation turretShootingRightUp = turretShootingRightUp.PushAnimation(turret, "turretShootingRightUp"); //bumps left
-	Animation turretShootingRightDown = turretShootingRightDown.PushAnimation(turret, "turretShootingRightDown"); //bumps right
-	Animation turretShootingLeft = turretShootingLeft.PushAnimation(turret, "turretShootingLeft"); //bumps left
-	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turret, "turretShootingLeftUp"); //bumps right
-	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turret, "turretShootingLeftDown"); //bumps right
-
+	LoadSampleTurret(turret);
 	turretdoc.reset();
 
-	//Enemy collider and spawner
-	Collider* enemyCollider = new Collider({ 0,0,50,50 }, COLLIDER_ENEMY, this);
-	Collider* spawnerCollider = new Collider({ 0,0,5,5 }, COLLIDER_RECLUIT_IA, app->ai);
+	//spawner
+	filename = config.child("load").attribute("docnameSpawner").as_string();
+	pugi::xml_document spawnerdoc;
+	spawnerdoc.load_file(filename.GetString());
+	pugi::xml_node spawner = spawnerdoc.child("spawner");
 
-	maxHP = 25;
-	recoveryHP = 1;
+	LoadSampleSpawner(spawner);
+	spawnerdoc.reset();
 
-	atkDmg = 2;
-	atkSpd = 1.75f;
-	atkRange = 40;
+	//Building & Base templates
+	filename = config.child("load").attribute("docnameBuildings").as_string();
+	pugi::xml_document buildingsdoc;
+	buildingsdoc.load_file(filename.GetString());
+	pugi::xml_node buildings = buildingsdoc.child("buildings");
 
-	movSpd = 125;
-	int vision = 200;
-	int xp = 15;
+	pugi::xml_node building = buildings.child("building");
+	pugi::xml_node base = buildings.child("base");
 
-	sampleEnemy = new Enemy(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
-		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
-		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-		maxHP, maxHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
+	LoadSampleBuilding(building);
+	LoadSampleBase(base);
 
-	sampleSpawner = new Spawner(fMPoint{ 150, 250 }, ENTITY_TYPE::ENEMY, spawnerCollider, sampleEnemy->hitPointsMax, sampleEnemy->hitPointsCurrent);
-
-	//Test building
-	Collider* buildingCollider = new Collider({ -150,130,430, 330 }, COLLIDER_VISIBILITY, this);
-	sampleBuilding = new Building(fMPoint{ 0,0 }, 100, 100, 100, 100, 100, 100, buildingCollider);
-
-	// Test Turret
-	maxHP = 110;
-	recoveryHP = 0;
-
-	atkDmg = 3;
-	atkSpd = 2.25f;
-	atkRange = 175;
-	xp = 35;
-
-
-	Collider* turretCollider = new Collider({ 150,130,70,80 }, COLLIDER_VISIBILITY, this);
-	sampleTurret = new Turret(1, atkDmg, atkSpd, atkRange, fMPoint{ 0, 0 }, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
-		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
-		maxHP, maxHP, recoveryHP, xp, 95, 160);
-
-	//Template base
-	maxHP = 500;
-	int recoverHPRate = 20;
-
-	int maxTurrets = 2;
-	int resourcesProd = 5;
-	int resourcesRate = 5;
-
-	Collider* baseCollider = new Collider({ -150,130,480,410 }, COLLIDER_VISIBILITY, this);
-	Collider* baseAlarmCollider = new Collider({ 0, 0, 700, 650 }, COLLIDER_BASE_ALERT, app->ai);
-	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, maxTurrets, 5, nullptr, baseAlarmCollider, resourcesProd, resourcesRate,
-		maxHP, maxHP, recoverHPRate, 100);
-
+	buildingsdoc.reset();
 
 	//Generate Areas------------------------------------
-	skillArea gathererSkill1AreaRange;
-	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1AreaRange, 0, 0, 6);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1, gathererSkill1AreaRange });
+	filename = config.child("load").attribute("docnameSkillAreas").as_string();
+	pugi::xml_document skillAreassdoc;
+	skillAreassdoc.load_file(filename.GetString());
+	pugi::xml_node skillAreasNode = skillAreassdoc.child("skillAreas");
 
-	skillArea gathererSkill1AreaExplosion;
-	gathererSkill1AreaRange.form = AREA_TYPE::CIRCLE;
-	BuildArea(&gathererSkill1AreaRange, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::GATHERER_SKILL1_MOUSE, gathererSkill1AreaRange });
-
-	skillArea meleeSkill1Area;
-	meleeSkill1Area.form = AREA_TYPE::CIRCLE;
-	BuildArea(&meleeSkill1Area, 0, 0, 2);
-	skillAreas.insert({ SKILL_ID::MELEE_SKILL1, meleeSkill1Area });
-
-	skillArea baseConstruction;
-	baseConstruction.form = AREA_TYPE::CIRCLE;
-	BuildArea(&baseConstruction, 0, 0, 8);
-	skillAreas.insert({ SKILL_ID::BASE_AREA, baseConstruction });
+	LoadSkillAreas(skillAreasNode);
+	skillAreassdoc.reset();
 
 	return ret;
 }
@@ -344,6 +160,7 @@ bool ModuleEntityManager::Start()
 {
 	bool ret = true;
 
+	//Textures load-----
 	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
 	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
 	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
@@ -363,6 +180,7 @@ bool ModuleEntityManager::Start()
 	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
 
 	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
+	moveCommandTile = app->tex->Load("spritesheets/VFX/OnMyWay.png");
 
 
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -431,6 +249,9 @@ bool ModuleEntityManager::Start()
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
+	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
+	moveHero = app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
+
 
 	return ret;
 }
@@ -481,6 +302,8 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::HERO_RANGED:
 				entityVector[i]->Start(combatFemaleTexture);
 				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::HERO_GATHERER:
@@ -728,6 +551,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::HERO_RANGED:
+		ret = new RangedHero({ (float)x,(float)y }, sampleRanged, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
@@ -781,6 +605,10 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 
 	case ENTITY_TYPE::HERO_MELEE:
 		return sampleMelee;
+		break;
+
+	case ENTITY_TYPE::HERO_RANGED:
+		return sampleRanged;
 		break;
 
 	case ENTITY_TYPE::HERO_GATHERER:
@@ -886,7 +714,13 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 			{
 				if (col->CheckCollision(selection))
 				{
-					thisHero->selectedByPlayer = true;
+
+					if (!thisHero->selectedByPlayer)
+					{
+						thisHero->selectedByPlayer = true;
+						app->audio->PlayFx(selectHero, 0, -1);
+					}
+
 					heroPlayerVector->push_back(thisHero);
 				}
 				else
@@ -1003,11 +837,6 @@ void ModuleEntityManager::RemoveDeletedEntities()
 				SearchHeroesAlive();
 			}
 
-			//VERTICAL SLICE
-			if (type == ENTITY_TYPE::ENEMY)
-			{
-				SearchEnemiesAlive();
-			}
 		}
 	}
 
@@ -1795,8 +1624,10 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad))
+				if (entColl->CheckCollisionCircle(pivot, newRad)) 
+				{
 					ret += entityVector[i]->RecieveDamage(dmg);
+				}		
 			}
 			break;
 			case AREA_TYPE::QUAD:
@@ -1827,4 +1658,401 @@ void ModuleEntityManager::ResetEntityManager()
 	}
 
 	app->fowManager->DeleteAllFoWEntites();
+}
+
+//returns true if a hero has been loaded into its sample, otherwise false
+bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config)
+{
+	bool ret = false;
+	//collider
+	SDL_Rect r;
+	r.x = heroNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = heroNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = heroNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = heroNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)heroNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+
+	Collider* collider = new Collider(r, cType, this);
+
+	//stats
+	fMPoint pos;
+	pos.x = heroNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = heroNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int level = heroNode.child("sample").child("stats").attribute("level").as_int(0);
+	int movSpd = heroNode.child("sample").child("stats").attribute("movementSpeed").as_int(0);
+	int visTiles = heroNode.child("sample").child("stats").attribute("vision").as_int(0);
+
+
+	int maxHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int maxEnergy = heroNode.child("sample").child("stats").child("energyPoints").attribute("max").as_int(0);
+	int currentEnergy = heroNode.child("sample").child("stats").child("energyPoints").attribute("current").as_int(0);
+	int recoveryE = heroNode.child("sample").child("stats").child("energyPoints").attribute("recoveryRate").as_int(0);
+
+	int atkDmg = heroNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = heroNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = heroNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+
+	//skill1
+	float skill1ExecTime = heroNode.child("sample").child("skills").child("skill1").attribute("executionTime").as_float(0);
+	float skill1RecovTime = heroNode.child("sample").child("skills").child("skill1").attribute("recoverTime").as_float(0);
+	int skill1Dmg = heroNode.child("sample").child("skills").child("skill1").attribute("damage").as_int(0);
+	SKILL_ID skill1ID = (SKILL_ID)heroNode.child("sample").child("skills").child("skill1").attribute("id").as_int(0);
+	SKILL_TYPE skill1Type = (SKILL_TYPE)heroNode.child("sample").child("skills").child("skill1").attribute("type").as_int(0);
+	ENTITY_ALIGNEMENT skill1Target = (ENTITY_ALIGNEMENT)heroNode.child("sample").child("skills").child("skill1").attribute("targetAligment").as_int(0);
+
+	//skill2
+	float skill2ExecTime = heroNode.child("sample").child("skills").child("skill2").attribute("executionTime").as_float(0);
+	float skill2RecovTime = heroNode.child("sample").child("skills").child("skill2").attribute("recoverTime").as_float(0);
+	//skill3
+	float skill3ExecTime = heroNode.child("sample").child("skills").child("skill3").attribute("executionTime").as_float(0);
+	float skill3RecovTime = heroNode.child("sample").child("skills").child("skill3").attribute("recoverTime").as_float(0);
+
+
+	//Animations Load ----------------------------
+	Animation walkLeft = walkLeft.PushAnimation(heroNode, "walk_left");
+	Animation walkLeftUp = walkLeftUp.PushAnimation(heroNode, "walk_left_up");
+	Animation walkLeftDown = walkLeftDown.PushAnimation(heroNode, "walk_left_down");
+	Animation walkRightUp = walkRightUp.PushAnimation(heroNode, "walk_right_up");
+	Animation walkRightDown = walkRightDown.PushAnimation(heroNode, "walk_right_down");
+	Animation walkRight = walkRight.PushAnimation(heroNode, "walk_right");
+
+	Animation idleRight = idleRight.PushAnimation(heroNode, "idle_right");
+	Animation idleRightUp = idleRightUp.PushAnimation(heroNode, "idle_right_up");
+	Animation idleRightDown = idleRightDown.PushAnimation(heroNode, "idle_right_down");
+	Animation idleLeft = idleLeft.PushAnimation(heroNode, "idle_left");
+	Animation idleLeftUp = idleLeftUp.PushAnimation(heroNode, "idle_left_up");
+	Animation idleLeftDown = idleLeftDown.PushAnimation(heroNode, "idle_left_down");
+
+	Animation punchRight = punchRight.PushAnimation(heroNode, "punch_right");
+	Animation punchRightUp = punchRightUp.PushAnimation(heroNode, "punch_right_up");
+	Animation punchRightDown = punchRightDown.PushAnimation(heroNode, "punch_right_down");
+	Animation punchLeft = punchLeft.PushAnimation(heroNode, "punch_left");
+	Animation punchLeftUp = punchLeftUp.PushAnimation(heroNode, "punch_left_up");
+	Animation punchLeftDown = punchLeftDown.PushAnimation(heroNode, "punch_left_down");
+
+	Animation skill1Right = skill1Right.PushAnimation(heroNode, "skill_1_right");
+	Animation skill1RightUp = skill1RightUp.PushAnimation(heroNode, "skill_1_right_up");
+	Animation skill1RightDown = skill1RightDown.PushAnimation(heroNode, "skill_1_right_down");
+	Animation skill1Left = skill1Left.PushAnimation(heroNode, "skill_1_left");
+	Animation skill1LeftUp = skill1LeftUp.PushAnimation(heroNode, "skill_1_left_up");
+	Animation skill1LeftDown = skill1LeftDown.PushAnimation(heroNode, "skill_1_left_down");
+
+	//General Vfx load -----------------------------------
+	P2SString filename = config.child("load").attribute("docnamevfx").as_string();
+	pugi::xml_document vfxDoc;
+	vfxDoc.load_file(filename.GetString());
+	pugi::xml_node vfx = vfxDoc.child("Vfx");
+
+	Animation tileOnWalk = tileOnWalk.PushAnimation(vfx, "onMyWay");
+
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+
+		//Sample Creation ----------------------------
+		sampleMelee = new MeleeHero(pos, collider, walkLeft, walkLeftUp,
+			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
+			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
+			skill1Dmg, skill1ID, skill1Type, skill1Target);
+
+		ret = true;
+		break;
+
+
+	case ENTITY_TYPE::HERO_RANGED:
+
+		//Sample Creation ----------------------------
+		sampleRanged = new RangedHero(pos, collider, walkLeft, walkLeftUp,
+			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
+			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
+			skill1Dmg, skill1ID, skill1Type, skill1Target);
+
+		ret = true;
+		break;
+
+
+	case ENTITY_TYPE::HERO_GATHERER:
+
+
+		//Vfx load -----------------------------------
+		Animation vfxExplosion = vfxExplosion.PushAnimation(vfx, "explosion");
+
+		//Sample Creation ----------------------------
+		sampleGatherer = new GathererHero(pos, collider, walkLeft, walkLeftUp,
+			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
+			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
+			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion);
+
+		ret = true;
+		break;
+
+
+	}
+	vfxDoc.reset();
+
+	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
+{
+	bool ret = true;
+	//collider
+	SDL_Rect r;
+	r.x = enemyNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = enemyNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = enemyNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = enemyNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)enemyNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	Collider* enemyCollider = new Collider(r, cType, this);
+
+	//stats
+	fMPoint pos;
+	pos.x = enemyNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = enemyNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int maxHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int atkDmg = enemyNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = enemyNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = enemyNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+
+	int movSpd = enemyNode.child("sample").child("stats").attribute("movementSpeed").as_int(0);
+	int vision = enemyNode.child("sample").child("stats").attribute("vision").as_int(0);
+	int xp = enemyNode.child("sample").child("stats").attribute("xp").as_int(0);
+
+	Animation enemyWalkLeft = enemyWalkLeft.PushAnimation(enemyNode, "wanamingoLeftWalk"); // looks good
+	Animation enemyWalkLeftUp = enemyWalkLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftWalk");// looks good
+	Animation enemyWalkLeftDown = enemyWalkLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftWalk"); // last frame teleports to the left
+	Animation enemyWalkRightUp = enemyWalkRightUp.PushAnimation(enemyNode, "wanamingoUpRightWalk"); // looks good
+	Animation enemyWalkRightDown = enemyWalkRightDown.PushAnimation(enemyNode, "wanamingoDownRightWalk"); // looks good
+	Animation enemyWalkRight = enemyWalkRight.PushAnimation(enemyNode, "wanamingoRightWalk");// looks good
+
+	Animation enemyIdleRight = enemyIdleRight.PushAnimation(enemyNode, "wanamingoRightIdle"); //goes up then bumps right
+	Animation enemyIdleRightUp = enemyIdleRightUp.PushAnimation(enemyNode, "wanamingoUpRightIdle"); //bumps left
+	Animation enemyIdleRightDown = enemyIdleRightDown.PushAnimation(enemyNode, "wanamingoDownRightIdle"); //bumps right
+	Animation enemyIdleLeft = enemyIdleLeft.PushAnimation(enemyNode, "wanamingoLeftIdle"); //bumps left
+	Animation enemyIdleLeftUp = enemyIdleLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftIdle"); //bumps right
+	Animation enemyIdleLeftDown = enemyIdleLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftIdle"); //bumps right
+
+	Animation enemyPunchRight = enemyPunchRight.PushAnimation(enemyNode, "wanamingoRightPunch"); //looks good
+	Animation enemyPunchRightUp = enemyPunchRightUp.PushAnimation(enemyNode, "wanamingoUpRightPunch"); //jesus christ 
+	Animation enemyPunchRightDown = enemyPunchRightDown.PushAnimation(enemyNode, "wanamingoDownRightPunch"); //goes back and forth
+	Animation enemyPunchLeft = enemyPunchLeft.PushAnimation(enemyNode, "wanamingoLeftPunch"); //It should bump to the other side!
+	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftPunch"); //jesus christ 
+	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftPunch"); //jesus christ 
+
+	sampleEnemy = new Enemy(pos, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
+		maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
+
+	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
+{
+	bool ret = true;
+	//collider
+	SDL_Rect r;
+	r.x = turretNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = turretNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = turretNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = turretNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)turretNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+
+	Collider* turretCollider = new Collider(r, cType, this);
+
+	//stats
+	fMPoint pos;
+	pos.x = turretNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = turretNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int level = turretNode.child("sample").child("stats").attribute("level").as_int(0);
+	int vision = turretNode.child("sample").child("stats").attribute("vision").as_int(0);
+	int xp = turretNode.child("sample").child("stats").attribute("xp").as_int(0);
+	int buildingCost = turretNode.child("sample").child("stats").attribute("buildingCost").as_int(0);
+	int transparency = turretNode.child("sample").child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = turretNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = turretNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = turretNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int atkDmg = turretNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = turretNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = turretNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+
+
+
+	//Animations
+	Animation turretIdleRight = turretIdleRight.PushAnimation(turretNode, "turretIdleRight"); //goes up then bumps right
+	Animation turretIdleRightUp = turretIdleRightUp.PushAnimation(turretNode, "turretIdleRightUp"); //bumps left
+	Animation turretIdleRightDown = turretIdleRightDown.PushAnimation(turretNode, "turretIdleRightDown"); //bumps right
+	Animation turretIdleLeft = turretIdleLeft.PushAnimation(turretNode, "turretIdleLeft"); //bumps left
+	Animation turretIdleLeftUp = turretIdleLeftUp.PushAnimation(turretNode, "turretIdleLeftUp"); //bumps right
+	Animation turretIdleLeftDown = turretIdleLeftDown.PushAnimation(turretNode, "turretIdleLeftDown"); //bumps right
+
+	Animation turretShootingRight = turretShootingRight.PushAnimation(turretNode, "turretShootingRight"); //goes up then bumps right
+	Animation turretShootingRightUp = turretShootingRightUp.PushAnimation(turretNode, "turretShootingRightUp"); //bumps left
+	Animation turretShootingRightDown = turretShootingRightDown.PushAnimation(turretNode, "turretShootingRightDown"); //bumps right
+	Animation turretShootingLeft = turretShootingLeft.PushAnimation(turretNode, "turretShootingLeft"); //bumps left
+	Animation turretShootingLeftUp = turretShootingLeftUp.PushAnimation(turretNode, "turretShootingLeftUp"); //bumps right
+	Animation turretShootingLeftDown = turretShootingLeftDown.PushAnimation(turretNode, "turretShootingLeftDown"); //bumps right
+
+
+	//sample
+	sampleTurret = new Turret(level, atkDmg, atkSpd, atkRange, vision, pos, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
+		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
+		maxHP, currentHP, recoveryHP, xp, buildingCost, transparency);
+
+	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
+{
+	bool ret = true;
+
+	SDL_Rect r;
+	r.x = spawnerNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = spawnerNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = spawnerNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = spawnerNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)spawnerNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+
+	Collider* spawnerCollider = new Collider(r, cType, app->ai);
+
+	fMPoint pos;
+	pos.x = spawnerNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = spawnerNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int enemiesPerWave = spawnerNode.child("sample").child("stats").attribute("enemiesPerWave").as_int(0);
+	float spawnRate = spawnerNode.child("sample").child("stats").attribute("spawnRate").as_float(0);
+	ENTITY_TYPE spawnsType = (ENTITY_TYPE)spawnerNode.child("sample").child("stats").attribute("spawnsType").as_int(0);
+
+	sampleSpawner = new Spawner(pos, spawnsType, spawnerCollider, enemiesPerWave, spawnRate);
+
+	return ret;
+
+}
+
+
+bool ModuleEntityManager::LoadSampleBuilding(pugi::xml_node& buildingNode)
+{
+	//collider
+	bool ret = true;
+	SDL_Rect r;
+	r.x = buildingNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = buildingNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = buildingNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = buildingNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)buildingNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	Collider* buildingCollider = new Collider(r, cType, this);
+
+	//stats
+	fMPoint pos;
+	pos.x = buildingNode.child("sample").child("position").attribute("x").as_float(0);
+	pos.y = buildingNode.child("sample").child("position").attribute("y").as_float(0);
+
+	int maxHP = buildingNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = buildingNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = buildingNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int xp = buildingNode.child("sample").child("stats").attribute("xp").as_int(0);
+	int buildingCost = buildingNode.child("sample").child("stats").attribute("buildingCost").as_int(0);
+	int transparency = buildingNode.child("sample").child("stats").attribute("transparency").as_int(0);
+
+
+	//sample
+	sampleBuilding = new Building(pos, maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, buildingCollider);
+
+	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleBase(pugi::xml_node& baseNode)
+{
+	bool ret = true;
+	//colliders
+	SDL_Rect r;
+	r.x = baseNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
+	r.y = baseNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
+	r.w = baseNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
+	r.h = baseNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)baseNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	Collider* baseCollider = new Collider(r, cType, this);
+
+	r.x = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("x").as_int(0);
+	r.y = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("y").as_int(0);
+	r.w = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("w").as_int(0);
+	r.h = baseNode.child("sample").child("baseAlarmCollider").child("rect").attribute("h").as_int(0);
+	cType = (COLLIDER_TYPE)baseNode.child("sample").child("baseAlarmCollider").child("type").attribute("id").as_int(0);
+
+	Collider* baseAlarmCollider = new Collider(r, cType, app->ai);
+
+	//stats
+	int maxHP = baseNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = baseNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = baseNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int resourcesProd = baseNode.child("sample").child("stats").child("resources").attribute("produced").as_int(0);
+	int resourcesRate = baseNode.child("sample").child("stats").child("resources").attribute("rate").as_int(0);
+
+	int maxTurrets = baseNode.child("sample").child("stats").attribute("maxTurrets").as_int(0);
+	int maxBarricades = baseNode.child("sample").child("stats").attribute("maxBarricades").as_int(0);
+	int transparency = baseNode.child("sample").child("stats").attribute("transparency").as_int(0);
+
+	//TODO FOR OSCAR: although is not used at the moment, the plan is to make bases interact with the FoW, so we will need this variable
+	int vision = baseNode.child("sample").child("stats").attribute("vision").as_int(0);
+
+	//sample	
+	sampleBase = new Base(fMPoint{ 0, 0 }, baseCollider, maxTurrets, maxBarricades, nullptr, baseAlarmCollider, resourcesProd, resourcesRate,
+		maxHP, currentHP, recoveryHP, transparency);
+
+	return ret;
+
+}
+
+
+bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
+{
+	bool ret = true;
+
+	skillArea area;
+	SKILL_ID id;
+	int w;
+	int h;
+	int r;
+
+	for (pugi::xml_node currentArea = areasNode.child("area"); currentArea; currentArea = currentArea.next_sibling("area"))
+	{
+		area.form = (AREA_TYPE)currentArea.attribute("type").as_int(0);
+		w = currentArea.child("measures").attribute("w").as_int(0);
+		h = currentArea.child("measures").attribute("h").as_int(0);
+		r = currentArea.child("measures").attribute("r").as_int(0);
+		id= (SKILL_ID)currentArea.attribute("id").as_int(0);
+		
+		BuildArea(&area, w, h, r);
+		skillAreas.insert({ id, area });
+	}
+
+	return ret;
 }

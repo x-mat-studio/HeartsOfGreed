@@ -94,15 +94,6 @@
     <ClCompile Include="UI.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI_Button.cpp">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Image.cpp">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Text.cpp">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
@@ -127,17 +118,8 @@
     <ClCompile Include="Spawner.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
-    <ClCompile Include="UI_Healthbar.cpp">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Portrait.cpp">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClCompile>
     <ClCompile Include="FadeToBlack.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Scrollbar.cpp">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
     <ClCompile Include="MainMenuScene.cpp">
       <Filter>Desenvolupament  ========\Scenes\cpp files</Filter>
@@ -153,6 +135,33 @@
     </ClCompile>
     <ClCompile Include="Minimap.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Group.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFactory.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Text.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Scrollbar.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesPortrait.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="DataPages.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="RoboHero.cpp">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -264,15 +273,6 @@
     <ClInclude Include="UI.h">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Button.h">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Text.h">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Image.h">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
@@ -300,17 +300,8 @@
     <ClInclude Include="Spawner.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Healthbar.h">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Portrait.h">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
-    </ClInclude>
     <ClInclude Include="FadeToBlack.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Scrollbar.h">
-      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
     <ClInclude Include="MainMenuScene.h">
       <Filter>Desenvolupament  ========\Scenes\header files</Filter>
@@ -326,6 +317,33 @@
     </ClInclude>
     <ClInclude Include="Minimap.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Group.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFactory.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Scrollbar.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcesPortrait.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="DataPages.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="RoboHero.h">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

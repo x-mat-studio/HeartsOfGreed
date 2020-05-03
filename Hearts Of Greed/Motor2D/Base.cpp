@@ -8,9 +8,6 @@
 #include "EntityManager.h"
 #include "Player.h"
 
-//VERTICAL SLICE PURPOSES
-#include "EventManager.h"
-
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
 	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int maxHitPoints, int currentHitPoints,
@@ -73,9 +70,10 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	int x = position.x;
 	int y = position.y;
 
-	y -= baseAreaAlarm->rect.h * 0.25;
+	y -= baseAreaAlarm->rect.h * 0.25; //TODO make this work with new entity offsets
 
 	baseAreaAlarm->SetPos(x, y);
+	radiusSize = 5;
 
 }
 
@@ -106,7 +104,7 @@ bool Base::Update(float dt)
 
 bool Base::PostUpdate(float dt)
 {
-	
+	DebugDraw();
 	return true;
 }
 
@@ -115,7 +113,7 @@ void Base::DisableTurrets()
 {
 	for (uint i = 0; i < this->turretsVector.size(); i++) 
 	{
-
+		//TODO: someone left this for empty
 		
 	}
 }
@@ -210,14 +208,12 @@ void Base::RemoveUpgradeCenter()
 
 void Base::ChangeAligment()
 {
-	ENTITY_ALIGNEMENT aligment;
+	ENTITY_ALIGNEMENT aligment= ENTITY_ALIGNEMENT::UNKNOWN;
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
 
-		//VERTICAL SLICE PURPOSES
-		app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
 	}
 
 	if (align == ENTITY_ALIGNEMENT::PLAYER)

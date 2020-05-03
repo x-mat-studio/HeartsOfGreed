@@ -10,21 +10,37 @@ class Spawner : public Entity
 {
 public:
 
-	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int maxHitPoints, int currentHitPoints);
+	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int enemiesPerWave = 1, float spawnRate = 0);
 	Spawner(fMPoint position, Spawner* copy);
 
 	~Spawner();
 
-	void Spawn();
 	void SetNumberToSpawn(int number);
+	void SetSpawnRate(float ratio);
+	void SetEnemiesPerWave(int entities);
 
-	bool PreUpdate(float dt);
+	bool PostUpdate(float dt);
+
+	void Activate();
+	void Desactivate();
+
+	bool GetActive();
+
+private:
+	void Spawn(float dt);
 
 private:
 
 	ENTITY_TYPE spawnerType;
 	int entitysToSpawn;
 
+	int entitiesPerWave;
+	float spawnRate;
+
+
+	float timer;
+
+	bool active;
 };
 
 

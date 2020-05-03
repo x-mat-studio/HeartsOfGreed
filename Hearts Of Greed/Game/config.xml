@@ -45,7 +45,17 @@
   <minimap width="300" posX="0" posY="500"/>
 
   <entityManager>
-	<load docnameSuitman="suitman.xml" docnameWanamingo="wanamingo.xml" docnameTurret="turret.xml" docnameArmoredman="armoredman.xml" docnamevfx="Vfx.xml" />
+	<load 
+    docnameSuitman="suitman.xml" 
+    docnameWanamingo="wanamingo.xml" 
+    docnameTurret="turret.xml" 
+    docnameArmoredman="armoredman.xml" 
+    docnameRangedman="rangedman.xml"
+    docnamevfx="Vfx.xml" 
+    docnameSpawner="spawner.xml"
+    docnameBuildings="buildings.xml"
+    docnameSkillAreas="skillAreas.xml"
+    />
   </entityManager>
 
   <testScene 
@@ -54,8 +64,8 @@
     camVel="700" 
     initialCamPosX="-1650" 
     initialCamPosY="800"
-    dayTimerSec="4"
-    nightTimerSec="5" 
+    dayTimerSec="300"
+    nightTimerSec="250" 
     freeCamMarginDetectionPixelsX="20"
     freeCamMarginDetectionPixelsY="15"
     

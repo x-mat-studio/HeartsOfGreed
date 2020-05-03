@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <wanamingo>
+  
+  <sample>
+    <position x="150" y="250"/>
 
+    <collider>
+      <rect x="0" y="0" w="50" h="50"/>
+      <type id="2"/>
+    </collider>
+
+    <stats movementSpeed="125" vision="200" xp="15">
+      <hitPoints max="25" current="25" recoveryRate="1"/>
+      <attack damage="2" speed="1.75" range="40"/>
+    </stats>
+    
+  </sample>
+  
 	<Animations>
 
 		<wanamingoUpRightIdle frames="16" name="wanamingoUpRightIdle">

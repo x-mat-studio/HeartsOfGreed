@@ -7,7 +7,7 @@
 #include "EventManager.h"
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
 	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
 
@@ -30,6 +30,7 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 	attackDmg(attackDmg),
 	attackSpeed(attackSpeed),
 	range(range),
+	vision(vision),
 
 	attackCD(0),
 
@@ -37,7 +38,7 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, fMPoint
 
 	state(TURRET_STATES::IDLE)
 {
-	currentAnimation = &idleRightDown;
+	currentAnimation = &this->idleRightDown;
 }
 
 
@@ -63,7 +64,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	attackDmg(copy->attackDmg),
 	attackSpeed(copy->attackSpeed),
 	range(copy->range),
-
+	vision(copy->vision),
 	attackCD(0),
 
 
@@ -73,10 +74,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 {
 	currentAnimation = &idleRightDown;
 
-	if (align == ENTITY_ALIGNEMENT::PLAYER)
-		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, 5);
-	else
-		this->visionEntity = nullptr;
+	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
 
 
 }
@@ -170,10 +168,10 @@ void Turret::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue);
+		app->render->Blit(texture, position.x + offset.x, position.y + offset.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt));
+		app->render->Blit(texture, position.x + offset.x, position.y + offset.y, &currentAnimation->GetCurrentFrameBox(dt));
 }
 
 int Turret::GetLvl()
@@ -199,12 +197,11 @@ int Turret::GetRng()
 void Turret::DrawSelected()
 {
 	if (selectedByPlayer == true)
-		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
+		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w * 0.5f, this->collider->rect.y);
 }
 
 int Turret::RecieveDamage(int damage)
 {
-
 	if (hitPointsCurrent > 0)
 	{
 		hitPointsCurrent -= damage;
@@ -230,6 +227,7 @@ bool Turret::CheckAttackRange()
 {
 	if (shortTermObjective == nullptr)
 	{
+		inputs.push_back(TURRET_INPUTS::IN_IDLE);
 		return false;
 	}
 
@@ -237,6 +235,7 @@ bool Turret::CheckAttackRange()
 	if (shortTermObjective->GetAlignment() == align)
 	{
 		shortTermObjective = nullptr;
+		inputs.push_back(TURRET_INPUTS::IN_IDLE);
 		return false;
 	}
 
@@ -410,7 +409,7 @@ void Turret::StateMachine()
 		{
 			Attack();
 			if (shortTermObjective != nullptr)
-				dir = DetermineDirection(shortTermObjective->position - position - offset);
+				dir = DetermineDirection(shortTermObjective->position - position);
 
 			attackCD += 0.01f;
 		}

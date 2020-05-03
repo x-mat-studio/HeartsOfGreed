@@ -1,0 +1,27 @@
+<skillAreas>
+  
+  <area type="0" id="0">
+    <measures w="0" h="0" r="6"/>
+  </area>
+  
+  <area type="0" id="1">
+    <measures w="0" h="0" r="2"/>
+  </area>
+  
+  <area type="0" id="2">
+    <measures w="0" h="0" r="2"/>
+  </area>
+  
+  <area type="0" id="3">
+    <measures w="0" h="0" r="8"/>
+  </area>
+  
+  <area type="0" id="4">
+    <measures w="0" h="0" r="5"/>
+  </area>
+  
+  <area type="0" id="5">
+    <measures w="0" h="0" r="3"/>
+  </area>
+
+</skillAreas>

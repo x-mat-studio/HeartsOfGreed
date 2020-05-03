@@ -184,6 +184,7 @@ public:
 	uchar GetTileAt(const iMPoint& pos) const;
 
 	bool RequestPath(Entity* request, std::vector <iMPoint>* path);
+	iMPoint GetDestination(Entity* request);
 	bool DeletePath(Entity* request);
 
 private:

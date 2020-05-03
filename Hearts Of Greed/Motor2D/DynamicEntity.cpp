@@ -68,11 +68,11 @@ bool DynamicEntity::Move(float dt)
 
 		framesSinceRequest++;
 	}
+
 	dir = DetermineDirection(pathSpeed);
 
-	// ----------------------------------------------------------------- 
-	pathSpeed.x = pathSpeed.x * unitSpeed;
-	pathSpeed.y = pathSpeed.y * unitSpeed;
+	// -----------------------------------------------------------------
+	pathSpeed = pathSpeed * unitSpeed;
 
 	toMove += pathSpeed;
 
@@ -142,6 +142,7 @@ void DynamicEntity::GroupMovement(float dt)
 
 
 	toMove = { 0,0 };
+
 	// ----------------------------------------------------------------
 
 	app->entityManager->GetEntityNeighbours(&closeEntityVector, &collidingEntityVector, this);
@@ -187,7 +188,7 @@ void DynamicEntity::GroupMovement(float dt)
 
 	// ----------------------------------------------------------------- 
 
-	toMove += separationSpeed * 30.f + cohesionSpeed * 7.5f + alignmentSpeed * 1.5f;
+	toMove += separationSpeed * 30.f + cohesionSpeed * 7.f + alignmentSpeed * 2.25f;
 
 
 	position.x += (toMove.x) * dt;
@@ -337,7 +338,7 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	return false;
 }
 
-void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
+void DynamicEntity::DebugDraw()
 {
 	if (!app->debugMode)
 	{
