@@ -65,14 +65,13 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	turretsVector(copy->turretsVector),
 	barricadesVector(copy->barricadesVector)
 {
-	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback);
+	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback, this);
 
-	int x = position.x;
-	int y = position.y;
-
-	y -= baseAreaAlarm->rect.h * 0.25;
+	int x = position.x - baseAreaAlarm->rect.w *0.5f;
+	int y = position.y - baseAreaAlarm->rect.h * 0.6f;
 
 	baseAreaAlarm->SetPos(x, y);
+	radiusSize = 5;
 
 }
 
@@ -103,7 +102,7 @@ bool Base::Update(float dt)
 
 bool Base::PostUpdate(float dt)
 {
-	
+	DebugDraw();
 	return true;
 }
 
@@ -112,7 +111,7 @@ void Base::DisableTurrets()
 {
 	for (uint i = 0; i < this->turretsVector.size(); i++) 
 	{
-
+		//TODO: someone left this for empty
 		
 	}
 }
@@ -207,7 +206,7 @@ void Base::RemoveUpgradeCenter()
 
 void Base::ChangeAligment()
 {
-	ENTITY_ALIGNEMENT aligment;
+	ENTITY_ALIGNEMENT aligment= ENTITY_ALIGNEMENT::UNKNOWN;
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{

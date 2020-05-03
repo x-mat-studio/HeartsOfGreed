@@ -14,6 +14,53 @@ ModulePathfinding::~ModulePathfinding()
 	RELEASE_ARRAY(walkabilityMap);
 }
 
+bool ModulePathfinding::LineRayCast(iMPoint& p0, iMPoint& p1)
+{
+	std::vector <iMPoint> line = CreateLine(p0, p1);
+
+	bool walkableFound = false;
+	bool currWalkability = false;
+
+	for (int i = 0; i < line.size(); i++)
+	{
+		currWalkability = IsWalkable(line[i]);
+
+		if (currWalkability && !walkableFound)
+			walkableFound = true;
+		else if (!currWalkability && walkableFound)
+			return false;
+
+
+	}
+
+
+	return true;
+}
+
+std::vector<iMPoint> ModulePathfinding::CreateLine(iMPoint& p0, iMPoint& p1)
+{
+	std::vector<iMPoint> line;
+
+	float n = p0.DiagonalDistance(p1);
+
+	fMPoint p0f = { (float)p0.x, (float)p0.y };
+	fMPoint p1f = { (float)p1.x, (float)p1.y };
+
+	for (int step = 0; step <= n; step++)
+	{
+		float t = n == 0 ? 0.0 : step / n;
+
+		fMPoint nextPointf = p0f.LerpPoint(p1f, t);
+		nextPointf.RoundPoint();
+
+		iMPoint nextPoint = { (int)nextPointf.x, (int)nextPointf.y };
+		line.push_back(nextPoint);
+
+	}
+
+
+	return line;
+}
 
 bool ModulePathfinding::CleanUp()
 {
@@ -313,7 +360,7 @@ void graphLevel::buildClusters(int lvl)
 				c.height = clustSize;
 
 			c.pos = { i,k };
-			lvlClusters[lvl-1].push_back(Cluster(c));
+			lvlClusters[lvl - 1].push_back(Cluster(c));
 		}
 	}
 
@@ -513,7 +560,7 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 		}
 
 		// Y
-		if (IsWalkable({0,retPos.y }) && retPos.DistanceNoSqrt({ 0,retPos.y }) < currDistance)
+		if (IsWalkable({ 0,retPos.y }) && retPos.DistanceNoSqrt({ 0,retPos.y }) < currDistance)
 		{
 			currDistance = retPos.DistanceNoSqrt(ret);
 			ret = retPos;
@@ -525,7 +572,7 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 			ret = retPos;
 		}
 
-		
+
 		// X
 		if (IsWalkable({ retPos.x,0 }) && retPos.DistanceNoSqrt({ retPos.x,0 }) < currDistance)
 		{
@@ -922,7 +969,7 @@ iMPoint ModulePathfinding::GetDestination(Entity* request)
 	BROFILER_CATEGORY("RequestPath", Profiler::Color::Khaki);
 
 	if (generatedPaths.size() < 1)
-		return {-1,-1};
+		return { -1,-1 };
 
 	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
 
@@ -936,7 +983,7 @@ iMPoint ModulePathfinding::GetDestination(Entity* request)
 		it++;
 	}
 
-	return {-1,-1};
+	return { -1,-1 };
 }
 
 

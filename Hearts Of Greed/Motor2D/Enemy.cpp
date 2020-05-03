@@ -235,7 +235,6 @@ void Enemy::StateMachine(float dt)
 		break;
 	}
 
-	CollisionPosUpdate();
 
 	SetAnimation(state);
 }
@@ -310,7 +309,7 @@ void Enemy::Draw(float dt)
 	else
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
 
-	DebugDraw(currFrame.pivotPositionX, currFrame.pivotPositionY);
+	DebugDraw();
 }
 
 

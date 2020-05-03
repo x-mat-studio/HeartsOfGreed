@@ -5,6 +5,8 @@
 #include "Base.h"
 #include "Spawner.h"
 #include "TestScene.h"
+#include "Pathfinding.h"
+#include "Map.h"
 
 ModuleAI::ModuleAI() : Module()
 {
@@ -50,13 +52,23 @@ bool ModuleAI::CleanUp()
 
 void ModuleAI::OnCollision(Collider* c1, Collider* c2)
 {
+	
 	if (c1->type == COLLIDER_BASE_ALERT && c2->type == COLLIDER_HERO)
 	{
-		CreateSelectionCollider(c1);
 
-		if(c2->thisEntity)
-		objectivePos = c2->thisEntity->GetPosition();
+
+		fMPoint c1Pos = c1->thisEntity->position;
+		fMPoint c2Pos = c2->thisEntity->position;
+
+		bool isVisible = app->pathfinding->LineRayCast(app->map->WorldToMap(c1Pos.x, c1Pos.y), app->map->WorldToMap(c2Pos.x, c2Pos.y));
+
+		if (c2->thisEntity)
+		{
+			CreateSelectionCollider(c1);
+			objectivePos = c2->thisEntity->GetPosition();
+		}
 	}
+
 }
 
 
@@ -70,7 +82,7 @@ void ModuleAI::CreateSelectionCollider(Collider* collider)
 
 fMPoint* ModuleAI::GetObjective()
 {
-	if (objectivePos != fMPoint{INT_MIN, INT_MIN })
+	if (objectivePos != fMPoint{ INT_MIN, INT_MIN })
 	{
 		return &objectivePos;
 	}
@@ -92,12 +104,12 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 		if (base != -1) //-1 means no player controlled bases were found
 		{
 			objectivePos = baseVector[base]->GetPosition() + baseVector[base]->GetCenter();
-			
+
 			//call nearest spawner and spawn x number of monsters
 			CommandSpawners();
 		}
 
-	break;
+		break;
 
 
 	case EVENT_ENUM::DAY_START:
@@ -117,9 +129,9 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 int ModuleAI::CheckBaseAligmentAttack()
 {
 	int numBases = baseVector.size();
-	
 
-	for (int i = numBases-1; i >= 0; i--)
+
+	for (int i = numBases - 1; i >= 0; i--)
 	{
 		if (ENTITY_ALIGNEMENT::PLAYER == baseVector[i]->GetAlignment())
 		{

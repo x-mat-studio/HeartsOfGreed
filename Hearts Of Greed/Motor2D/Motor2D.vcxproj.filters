@@ -166,6 +166,9 @@
     <ClCompile Include="HeroPortrait.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="RoboHero.cpp">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -344,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="DataPages.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="RoboHero.h">
+      <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClInclude>
     <ClInclude Include="HeroesPortraitManager.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>

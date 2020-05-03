@@ -338,7 +338,7 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	return false;
 }
 
-void DynamicEntity::DebugDraw(int pivotPositionX, int pivotPositionY)
+void DynamicEntity::DebugDraw()
 {
 	if (!app->debugMode)
 	{

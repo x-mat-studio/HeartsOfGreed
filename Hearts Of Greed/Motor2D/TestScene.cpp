@@ -40,7 +40,8 @@ ModuleTestScene::ModuleTestScene() :
 	camVel(0.f),
 	fadeTime(0),
 	camToReset(false),
-	startingScale(1.0f)
+	startingScale(1.0f),
+	mapLoaded(false)
 {
 	name.create("testScene");
 
@@ -84,6 +85,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	mapLoaded = false;
 	app->player->Enable();
 	app->minimap->Enable();
 
@@ -155,7 +157,6 @@ bool ModuleTestScene::Start()
 
 
 
-
 	//Events register
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_UP, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_DOWN, this);
@@ -188,6 +189,12 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
+	if (mapLoaded == false)
+	{
+		app->minimap->LoadMinimap();
+		mapLoaded = true;
+	}
+
 	if (camToReset == true)
 	{
 		app->win->SetScale(startingScale);

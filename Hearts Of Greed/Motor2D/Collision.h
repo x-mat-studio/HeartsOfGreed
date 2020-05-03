@@ -92,7 +92,7 @@ public:
 	bool PostUpdate(float dt);
 	bool CleanUp();
 
-	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = nullptr);
+	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = nullptr, Entity* entCallback = nullptr);
 
 	void AddColliderEntity(Collider* collider);
 	void DebugDraw();

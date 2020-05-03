@@ -31,6 +31,17 @@ public:
 
 	void LevelUp();
 
+
+	fMPoint granadePosLaunch;
+	skillArea* granadeArea;
+
+	Animation vfxExplosion;
+
+	//This is a placeholder for particles
+	SDL_Rect explosionRect;
+	Animation* currentVfx;
+	bool DrawVfx(float dt);
+
 };
 
 

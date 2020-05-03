@@ -729,8 +729,7 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 
 		if (baseInBuild != nullptr)
 		{
-			baseDrawCenter = baseInBuild->GetPosition() + baseInBuild->GetCenter();
-			baseDrawCenter.y += app->map->data.tileHeight;
+			baseDrawCenter = baseInBuild->GetPosition();
 
 			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 			origin = app->map->MapToWorld(origin.x, origin.y);

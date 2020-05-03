@@ -11,7 +11,7 @@
     <stats level="1" movementSpeed="100" vision="5">
       <hitPoints max="170" current="170" recoveryRate="4"/>
       <energyPoints max="80" current="80" recoveryRate="3"/>
-      <attack damage="15" speed="1.0" range="45"/>
+      <attack damage="15" speed="1.0" range="1"/>
     </stats>
 
     <skills>

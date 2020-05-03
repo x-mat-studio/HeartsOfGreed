@@ -1625,8 +1625,10 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad))
+				if (entColl->CheckCollisionCircle(pivot, newRad)) 
+				{
 					ret += entityVector[i]->RecieveDamage(dmg);
+				}		
 			}
 			break;
 			case AREA_TYPE::QUAD:
