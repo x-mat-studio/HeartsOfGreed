@@ -8,7 +8,6 @@
 #include "Audio.h"
 #include "UIManager.h"
 #include "Render.h"
-#include "UI_Text.h"
 #include "EventManager.h"
 
 ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1), fadeTime(0)
@@ -28,8 +27,8 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
 
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME_FROM_CONTINUE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::OPTION_MENU, this);
-	app->eventManager->EventRegister(EVENT_ENUM::CREDIT_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 
 	//sounds
 	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
@@ -42,11 +41,6 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
 // Called before the first frame
 bool ModuleMainMenuScene::Start()
 {
-
-	//SDL_Rect rect = { 0, 0, 0, 0 };
-	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"MenuScene", DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Menu Scene /  Press N to go to the Game");
-
-	app->uiManager->CreateMainMenu();
 
 	//images
 	gameIcon = app->tex->Load("intro_images/gameIcon.png");
@@ -63,6 +57,10 @@ bool ModuleMainMenuScene::Start()
 
 	changeScene = false;
 	changeSceneContinue = -1;
+
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_INTRO_MENU, EVENT_ENUM::NULL_EVENT);
+
 	return true;
 }
 
@@ -149,7 +147,7 @@ bool  ModuleMainMenuScene::CleanUp()
 	if (changeSceneContinue == 1)
 	{
 		changeSceneContinue = -1;
-		app->eventManager->GenerateEvent(EVENT_ENUM::LOAD_GAME, EVENT_ENUM::GAME_SCENE_STARTED);
+		app->eventManager->GenerateEvent(EVENT_ENUM::LOAD_GAME, EVENT_ENUM::GAME_SCENE_ENTERED);
 	}
 
 	return true;

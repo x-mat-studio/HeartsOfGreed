@@ -1,93 +1,66 @@
+#include "App.h"
 #include "UI_Scrollbar.h"
 #include "Audio.h"
 
+UI_Scrollbar::UI_Scrollbar(float x, float y, UI* parent, SDL_Rect rect, SDL_Texture* texture, float maxValue) :
 
-UI_Scrollbar::UI_Scrollbar(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable, EVENT_ENUM eventR, EVENT_ENUM eventTrigger, float maxValue) :
-	UI(positionValue, father, uiType, rect, uiName, draggable), generatedButton(false), maxValue(maxValue), buttonEvent(eventR), buttonTrigger(eventTrigger)
-{}
+	UI({ x, y }, parent, UI_TYPE::SCROLLBAR, rect, true, true, texture), maxValue(maxValue), previousX(x)
+{
+	if (parent == nullptr)
+		assert("Must have a father");
+
+	if (maxValue == 128.0f)
+	{
+		localPosition.x = ValueToPosition(app->audio->musicVolume);
+	}
+	else
+	{
+		localPosition.x = ValueToPosition(app->audio->volumeAdjustment + 255);
+	}
+}
 
 UI_Scrollbar::~UI_Scrollbar()
+{}
+
+
+void  UI_Scrollbar::HandleInput()
 {
-	scrollButton = nullptr;
-}
-
-bool UI_Scrollbar::Start()
-{
-	return true;
-}
-
-bool UI_Scrollbar::PreUpdate(float dt)
-{
-	return true;
-}
-
-bool UI_Scrollbar::Update(float dt)
-{
-
-	return true;
-}
-
-bool UI_Scrollbar::PostUpdate(float dt)
-{
-	
-	GenerateScrollButton();
-
-	Draw(texture);
-
-	return true;
-}
-
-
-void UI_Scrollbar::ScrollLimit() 
-{
-
-	// We don't need to put Y axis limits, because we're not using it.
-
-	if (scrollButton->localPosition.x > 0)
+	if (previousX != localPosition.x)
 	{
-		scrollButton->localPosition.x = 0;
-
-		scrollButton->worldPosition.x = this->worldPosition.x - scrollButton->localPosition.x;
-	}
-	else if (scrollButton->localPosition.x < (-this->box.w + scrollButton->box.w))
-	{
-		scrollButton->localPosition.x = -this->box.w + scrollButton->box.w;
-
-		scrollButton->worldPosition.x = this->worldPosition.x - scrollButton->localPosition.x;
-	}
-
-}
-
-bool UI_Scrollbar::GenerateScrollButton() 
-{
-
-	if (!generatedButton) 
-	{
-		SDL_Rect aux = app->uiManager->RectConstructor(158, 16, 11, 32);
-		if (name == P2SString("sfxScrollbar"))
+		currentValue = PositionToValue();
+		if (maxValue == 128.0f)
 		{
-			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + ((app->audio->volumeAdjustment + 255) * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, P2SString("scrollButton"), buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
+			app->audio->SetVolume(currentValue);
 		}
 		else
 		{
-			scrollButton = app->uiManager->AddButton(fMPoint(this->worldPosition.x + (app->audio->musicVolume * box.w / maxValue), this->worldPosition.y), parent, UI_TYPE::UI_BUTTON, aux, P2SString("scrollButton"), buttonEvent, false, false, false, false, DRAGGABLE::DRAG_X, buttonTrigger);
+			app->audio->volumeAdjustment = currentValue - 255;
 		}
-		scrollButton->box.w *= 0.5f;
-		scrollButton->box.h *= 0.5f;
-		scrollButton->worldPosition.y = this->worldPosition.y - scrollButton->box.h * 0.5f + this->box.h * 0.5f;
-		scrollButton->hidden = true;
-
-		generatedButton = true;
 	}
 
-	scrollButton->localPosition.x = this->worldPosition.x - scrollButton->worldPosition.x;
-	scrollButton->localPosition.y = this->worldPosition.y - scrollButton->worldPosition.y;
-	ScrollLimit();
-	
-	return generatedButton;
+	previousX = localPosition.x;
 }
 
-float UI_Scrollbar::GetScrollValue()
-{ 
-	return -((float(-scrollButton->localPosition.x) / (float(-this->box.w) + float(scrollButton->box.w))) * maxValue); 
+
+void UI_Scrollbar::Move() {
+
+	if (localPosition.x > father->rect.w - rect.w / 2)
+		localPosition.x = father->rect.w - rect.w / 2;
+
+	else if (localPosition.x < 0)
+		localPosition.x = 0;
+
+	position.x = localPosition.x + father->GetPosition().x;
+	position.y = father->GetPosition().y - 15;
+}
+
+float UI_Scrollbar::PositionToValue()
+{
+	return (localPosition.x + (rect.w * 0.5)) * maxValue / father->rect.w;
+}
+
+
+float UI_Scrollbar::ValueToPosition(float value)
+{
+	return (value * father->rect.w / maxValue);
 }

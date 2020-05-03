@@ -480,7 +480,7 @@ void Hero::Draw(float dt)
 
 
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y  - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
 
 	else
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255);

@@ -70,7 +70,7 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	int x = position.x;
 	int y = position.y;
 
-	y -= baseAreaAlarm->rect.h * 0.25;
+	y -= baseAreaAlarm->rect.h * 0.25; //TODO make this work with new entity offsets
 
 	baseAreaAlarm->SetPos(x, y);
 	radiusSize = 5;
@@ -113,7 +113,7 @@ void Base::DisableTurrets()
 {
 	for (uint i = 0; i < this->turretsVector.size(); i++) 
 	{
-
+		//TODO: someone left this for empty
 		
 	}
 }
@@ -208,7 +208,7 @@ void Base::RemoveUpgradeCenter()
 
 void Base::ChangeAligment()
 {
-	ENTITY_ALIGNEMENT aligment;
+	ENTITY_ALIGNEMENT aligment= ENTITY_ALIGNEMENT::UNKNOWN;
 
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{

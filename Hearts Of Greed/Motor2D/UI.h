@@ -10,26 +10,20 @@
 
 struct SDL_Texture;
 
-enum class UI_TYPE
+enum class UI_TYPE : int
 {
-	UI_TEXT,
-	UI_IMG,
-	UI_SCROLLBAR,
-	UI_BUTTON,
-	UI_HEALTHBAR,
-	UI_PORTRAIT,
+	NONE = -1,
 
-	UI_NONE
-};
+	TEXT,
+	IMG,
+	SCROLLBAR,
+	BUTTON,
+	HEALTHBAR,
+	DATA_PAGES,
+	
+	RESOURCES_COUNTER,
 
-struct ButtonProperties
-{
-	bool hiding;
-	bool hoverMove;
-	bool closeMenu;
-	bool includeFather;
-	bool scrollbarPositioning;
-	DRAGGABLE draggable;
+	MAX
 };
 
 class UI
@@ -37,57 +31,50 @@ class UI
 public:
 
 	UI();
-	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE dragable);
+	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, bool interactable, bool dragable, SDL_Texture* texture);
 	virtual ~UI();
 
+	bool PreUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
 
-	virtual bool Start();
-	virtual bool PreUpdate(float dt);
-	virtual bool Update(float dt);
-	virtual bool PostUpdate(float dt);
-	virtual void CleanUp();
-	void Draw(SDL_Texture* texture);
-
-	bool MouseUnderElement(int x, int y);
 	void Drag(int x, int y);
-	void Hide(float dt);
+
 	bool OnAbove();
 
+	fMPoint GetPosition();
+	fMPoint GetLocalPosition();
+
+	bool GetDragable();
+
 protected:
 
-	virtual void Move();
 	virtual void HandleInput();
+	virtual void Draw(float dt);
+	virtual void Move();
+	
 
 public:
-	
-	bool debugBox;
-	bool hover;
-
-	bool hiding_unhiding;
-	bool hidden;
-
-	float hideSpeed;
-	float defaultPosition;
-
-	bool dragging;
 
 	bool focused;
-	bool enabled;
-	bool interactable;
 
-	fMPoint worldPosition;
-	fMPoint localPosition;
-
-	UI_TYPE type;
-	SDL_Rect box;
-	P2SString name;
-	UI* parent;
+	SDL_Rect rect;
 
 protected:
 
-	SDL_Texture* texture;
-	DRAGGABLE draggable;
+	fMPoint position;
+	fMPoint localPosition;
 
+	SDL_Texture* texture;
+
+	UI* father;
+
+private:
+
+	bool dragable;
+	bool interactable;
+
+	UI_TYPE type;
 };
 
 #endif//__UI_H__

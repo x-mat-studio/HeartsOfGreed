@@ -319,9 +319,6 @@ bool ModuleMap::LoadNew(const char* file_name)
 
 	mapLoaded = ret;
 
-	if (mapLoaded)
-		app->minimap->LoadMinimap();
-
 	// Clean up the pugui tree
 	mapFile.reset();
 	return ret;
@@ -544,44 +541,44 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				{
 				case 390:
 				{
-					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
+					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 				}
 					break;
 
 				case 391:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::PLAYER);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
 				case 392:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
 					break;
 
 				case 393:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::ENEMY);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 					break;
 
 				case 394:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h, ENTITY_ALIGNEMENT::PLAYER);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
 				case 395:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
+					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
 					break;
 
 				case 396:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_01;
 					break;
 
 				case 397:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_02;
 					break;
 
 				case 398:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x - 6 * colliderRectAux.w, colliderRectAux.y - colliderRectAux.h);
+					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_03;
 					break;

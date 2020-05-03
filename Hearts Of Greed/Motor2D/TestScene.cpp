@@ -15,7 +15,6 @@
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "UIManager.h"
-#include "UI_Text.h"
 #include "MainMenuScene.h"
 #include "EventManager.h"
 #include "Minimap.h"
@@ -41,7 +40,8 @@ ModuleTestScene::ModuleTestScene() :
 	camVel(0.f),
 	fadeTime(0),
 	camToReset(false),
-	startingScale(1.0f)
+	startingScale(1.0f),
+	mapLoaded(false)
 {
 	name.create("testScene");
 
@@ -85,6 +85,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleTestScene::Start()
 {
+	mapLoaded = false;
 	app->player->Enable();
 	app->minimap->Enable();
 
@@ -154,8 +155,6 @@ bool ModuleTestScene::Start()
 
 	}
 
-	app->uiManager->CreateBasicInGameUI();
-
 
 
 
@@ -172,7 +171,7 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_CAMERA_SPRINT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
-	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_STARTED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
@@ -180,7 +179,7 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
 
-	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_STARTED, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
 	isNightTime = false;
 
@@ -191,6 +190,12 @@ bool ModuleTestScene::Start()
 // Called each loop iteration
 bool  ModuleTestScene::PreUpdate(float dt)
 {
+	if (mapLoaded == false)
+	{
+		app->minimap->LoadMinimap();
+		mapLoaded = true;
+	}
+
 	if (camToReset == true)
 	{
 		app->win->SetScale(startingScale);
@@ -278,7 +283,7 @@ bool  ModuleTestScene::Update(float dt)
 			else if (scrollWheel.y != 0)
 			{
 				//that 0.25 is an arbitrary number and will be changed to be read from the config file. TODO
-				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false && app->uiManager->MouseOnUI(mouseRaw) == false)
+				if (app->minimap->ClickingOnMinimap(mouseRaw.x, mouseRaw.y) == false && app->uiManager->mouseOverUI == false)
 				{
 					Zoom(app->win->GetScaleFactor() * scrollWheel.y, mouseRaw.x, mouseRaw.y, scale);
 				}
