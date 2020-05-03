@@ -17,9 +17,17 @@ public:
 
 	RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT alignement);
 
-	bool UseHability1();
-	bool UseHability2();
-	bool UseHability3();
+	bool ActivateSkill1(fMPoint clickPosition);
+	bool ActivateSkill2();
+	bool ActivateSkill3();
+
+	bool PreProcessSkill1();
+	bool PreProcessSkill2();
+	bool PreProcessSkill3();
+
+	bool ExecuteSkill1();
+	bool ExecuteSkill2();
+	bool ExecuteSkill3();
 
 	void LevelUp();
 
