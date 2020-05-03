@@ -1,4 +1,6 @@
 #include "RangedHero.h"
+#include "EntityManager.h"
+#include "Map.h"
 
 RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -25,19 +27,93 @@ RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT ali
 {}
 
 
-bool RangedHero::UseHability1()
+bool RangedHero::ActivateSkill1(fMPoint clickPosition)
+{
+
+	inputs.push_back(IN_SKILL1);
+
+	return true;
+}
+
+bool RangedHero::ActivateSkill2()
 {
 
 	return true;
 }
 
-bool RangedHero::UseHability2()
+bool RangedHero::ActivateSkill3()
 {
 
 	return true;
 }
 
-bool RangedHero::UseHability3()
+bool RangedHero::PreProcessSkill1()
+{
+	if (currAoE.size() == 0)
+	{
+		origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+	}
+
+	return true;
+}
+
+bool RangedHero::PreProcessSkill2()
+{
+
+	return true;
+}
+
+bool RangedHero::PreProcessSkill3()
+{
+
+	return true;
+}
+
+bool RangedHero::ExecuteSkill1()
+{
+
+	if (!skillExecutionDelay)
+	{
+		if (!godMode)
+			energyPoints -= skill1Cost;
+
+		skillExecutionDelay = true;
+		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+
+		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+
+		return skillExecutionDelay;
+	}
+	else
+	{
+
+		int ret = 0;
+
+		ret = app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+
+		currAoE.clear();
+		suplAoE.clear();
+		currAreaInfo = nullptr;
+
+		if (ret > 0)
+		{
+			GetExperience(ret);
+		}
+
+		return true;
+	}
+
+}
+
+bool RangedHero::ExecuteSkill2()
+{
+
+	return true;
+}
+
+bool RangedHero::ExecuteSkill3()
 {
 
 	return true;
