@@ -157,6 +157,9 @@
     <ClCompile Include="ResourcesPortrait.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="DataPages.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -331,6 +334,9 @@
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
     <ClInclude Include="ResourcesPortrait.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="DataPages.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
