@@ -30,7 +30,7 @@
       
       <baseAlarmCollider>
         <rect x="0" y="0" w="700" h="650"/>
-        <type id="4"/>
+        <type id="5"/>
       </baseAlarmCollider>
       
       <stats maxTurrets="2" maxBarricades="5" vision="0" transparency="100">
