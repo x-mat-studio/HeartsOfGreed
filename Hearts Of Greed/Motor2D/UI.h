@@ -20,6 +20,8 @@ enum class UI_TYPE : int
 	BUTTON,
 	HEALTHBAR,
 	
+	HERO_PORTRAIT,
+	HERO_PORTRAIT_MANAGER,
 	RESOURCES_COUNTER,
 
 	MAX
@@ -33,9 +35,9 @@ public:
 	UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, bool interactable, bool dragable, SDL_Texture* texture);
 	virtual ~UI();
 
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	bool PostUpdate(float dt);
+	virtual bool PreUpdate(float dt);
+	virtual bool Update(float dt);
+	virtual bool PostUpdate(float dt);
 
 	void Drag(int x, int y);
 
@@ -43,6 +45,7 @@ public:
 
 	fMPoint GetPosition();
 	fMPoint GetLocalPosition();
+	void SetLocalPosition(fMPoint locPos);
 
 	bool GetDragable();
 

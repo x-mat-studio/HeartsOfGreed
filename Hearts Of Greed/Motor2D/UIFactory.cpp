@@ -7,10 +7,13 @@
 #include "UI_Scrollbar.h"
 #include "Button.h"
 #include "ResourcesPortrait.h"
+#include "HeroesPortraitManager.h"
+#include "HeroPortrait.h"
 
 #include "Window.h"
 #include "Minimap.h"
 #include "Player.h"
+#include "Hero.h"
 
 UIFactory::UIFactory() :
 	portraitBackground{ 643, 145, 72, 56 },
@@ -47,7 +50,16 @@ UIFactory::UIFactory() :
 	reviveButton{ 653, 54, 46, 14 },
 
 	scrollbarBar{ 272, 45, 90, 4 },
-	scrollbarButton{ 257, 15, 13, 34 }
+	scrollbarButton{ 257, 15, 13, 34 },
+
+	dataPageHealthbarGreenImage{313, 81, 58, 4},
+	dataPageHealthbarBlueImage{375, 81, 58, 4},
+	healthBarContainer{251, 86, 60, 7},
+
+	heroPortrait{401, 328, 68, 81},
+	gathererHeroIcon{101, 521, 27, 33},
+	meleHeroIcon{18, 519, 36, 35},
+	rangedHeroIcon{60, 519, 35, 35}
 {}
 
 
@@ -521,6 +533,7 @@ UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, UI_Group*
 	return nullptr;
 }
 
+
 UI* UIFactory::CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* group)
 {
 	UI_Scrollbar* scrollbar = new UI_Scrollbar( x, y, parent, scrollbarButton, app->uiManager->GetAtlasTexture(), 128.0f);
@@ -529,6 +542,7 @@ UI* UIFactory::CreateMusicScrollbar(float x, float y, UI* parent, UI_Group* grou
 
 	return scrollbar;
 }
+
 
 UI* UIFactory::CreateSFXScrollbar(float x, float y, UI* parent, UI_Group* group)
 {
@@ -551,4 +565,79 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 	group->AddUiElement(resourcesPortrait);
 
 	return resourcesPortrait;
+}
+
+ 
+UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* group)
+{
+	UI* element = new HeroesPortraitManager(x, y, nullptr, false);
+
+	group->AddUiElement(element);
+
+	return element;
+}
+
+
+void UIFactory::CreatePortrait(Hero* hero)
+{
+	HeroPortrait* portrait = new HeroPortrait(hero);
+
+	Button* BackGround = nullptr;
+	UI* icon = nullptr;
+	UI* healthBar = nullptr;
+	UI* manaBar = nullptr;
+	UI* healthBarCont = nullptr;
+	UI* manaBarCont = nullptr;
+	
+	switch (hero->GetType())
+	{
+	case ENTITY_TYPE::HERO_GATHERER:
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(17, 9, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		portrait->AddElement(icon);
+
+		break;
+
+
+	case ENTITY_TYPE::HERO_MELEE:
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(17, 9, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		portrait->AddElement(icon);
+
+		break;
+
+
+	case ENTITY_TYPE::HERO_RANGED:
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(17, 9, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		portrait->AddElement(icon);
+
+		break;
+
+
+	default:
+		assert(true); //shouldt have anything that is not a hero
+		break;
+	}
+
+	
+	healthBar = new UI_Image(5, 52, BackGround, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	portrait->AddHealthBar(healthBar);
+
+	healthBarCont = new UI_Image(4, 51, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	portrait->AddElement(healthBarCont);
+
+	manaBar = new UI_Image(5, 63, BackGround, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
+	portrait->AddManaBar(manaBar);
+
+	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	portrait->AddElement(manaBarCont);
+
+	app->uiManager->GetPortraitManager()->AddPortrait(portrait);
 }

@@ -14,6 +14,7 @@
 #include "Minimap.h"
 #include "Player.h"
 #include "TestScene.h"
+#include "UIManager.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -294,21 +295,21 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::HERO_MELEE:
 				entityVector[i]->Start(armorMaleTexture);
-				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_MELEE_CREATED, EVENT_ENUM::NULL_EVENT);
+				app->uiManager->AddPortrait((Hero*)entityVector[i]);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::HERO_RANGED:
 				entityVector[i]->Start(combatFemaleTexture);
-				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RANGED_CREATED, EVENT_ENUM::NULL_EVENT);
+				app->uiManager->AddPortrait((Hero*)entityVector[i]);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
 			case ENTITY_TYPE::HERO_GATHERER:
 				entityVector[i]->Start(suitManTexture);
-				app->eventManager->GenerateEvent(EVENT_ENUM::HERO_GATHERER_CREATED, EVENT_ENUM::NULL_EVENT);
+				app->uiManager->AddPortrait((Hero*)entityVector[i]);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;

@@ -26,7 +26,8 @@ ModuleUIManager::ModuleUIManager() :
 
 	mouseOverUI(false),
 	atlas(nullptr), 
-	lastShop(nullptr)
+	lastShop(nullptr),
+	portraitManager(nullptr)
 {
 	name.create("UIManager");
 }
@@ -50,13 +51,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	BROFILER_CATEGORY("UI Manager Awake", Profiler::Color::MediumPurple);
 
 	bool ret = true;
-
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_CREATED, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_CREATED, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_CREATED, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
-	app->eventManager->EventRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
@@ -224,16 +218,6 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	switch (eventId)
 	{
-		// When adding a Hero to these enum, add it to the checking function below
-	case EVENT_ENUM::HERO_MELEE_CREATED:		break;
-	case EVENT_ENUM::HERO_GATHERER_CREATED:		break;
-	case EVENT_ENUM::HERO_RANGED_CREATED:		break;
-
-
-	case EVENT_ENUM::HERO_MELEE_OUT:			break;
-	case EVENT_ENUM::HERO_GATHERER_OUT:			break;
-	case EVENT_ENUM::HERO_RANGED_OUT:			break;
-
 	case EVENT_ENUM::CREATE_INTRO_MENU:
 
 		group = factory->CreateMainMenu();
@@ -446,13 +430,6 @@ void ModuleUIManager::DragElement()
 
 void ModuleUIManager::UnregisterEvents()
 {
-	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_MELEE_CREATED, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_GATHERER_CREATED, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RANGED_CREATED, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_MELEE_OUT, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_GATHERER_OUT, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RANGED_OUT, this);
-
 	app->eventManager->EventUnRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
@@ -597,4 +574,30 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		assert(true); //you forgot to add the case of the button tag :D
 		break;
 	}
+}
+
+
+HeroesPortraitManager* ModuleUIManager::GetPortraitManager()
+{
+	return portraitManager;
+}
+
+
+void ModuleUIManager::SetPortraitManager(HeroesPortraitManager* manager)
+{
+	portraitManager = manager;
+}
+
+
+void ModuleUIManager::AddPortrait(Hero* portrait)
+{
+
+
+}
+
+
+void ModuleUIManager::RemovePortrait(Hero* portrait)
+{
+
+
 }

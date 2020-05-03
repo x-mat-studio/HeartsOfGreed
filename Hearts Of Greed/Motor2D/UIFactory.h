@@ -7,6 +7,8 @@
 class UI;
 class UI_Group;
 
+class Hero;
+
 struct UIFactory
 {
 public:
@@ -69,6 +71,8 @@ public:
 	//Portrait things
 	UI* CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* group);
 
+	UI* CreatePortraitManager(float x, float y, UI* parent, UI_Group* group);
+	void CreatePortrait(Hero* hero);
 
 public:
 
@@ -84,8 +88,9 @@ private:
 	SDL_Rect portraitHealthbarBackground;
 	SDL_Rect portraitHealthbarGreenImage;
 
-//	SDL_Rect dataPageHealthbarGreenImage;
-//	SDL_Rect dataPageHealthbarBlueImage;
+	SDL_Rect healthBarContainer;
+	SDL_Rect dataPageHealthbarGreenImage;
+	SDL_Rect dataPageHealthbarBlueImage;
 	SDL_Rect dataPageBackground;
 	SDL_Rect dataPageImageBackground;
 
@@ -124,6 +129,13 @@ private:
 
 	SDL_Rect scrollbarBar;
 	SDL_Rect scrollbarButton;
+
+
+	SDL_Rect heroPortrait;
+	SDL_Rect gathererHeroIcon;
+	SDL_Rect meleHeroIcon;
+	SDL_Rect rangedHeroIcon;
+
 
 };
 

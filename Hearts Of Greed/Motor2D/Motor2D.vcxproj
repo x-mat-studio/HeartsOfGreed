@@ -98,6 +98,8 @@
     <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="GathererHero.cpp" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="HeroesPortraitManager.cpp" />
+    <ClCompile Include="HeroPortrait.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="LoseScene.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -158,6 +160,8 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="GathererHero.h" />
     <ClInclude Include="Hero.h" />
+    <ClInclude Include="HeroesPortraitManager.h" />
+    <ClInclude Include="HeroPortrait.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="LoseScene.h" />

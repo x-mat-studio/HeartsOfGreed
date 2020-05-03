@@ -22,6 +22,7 @@ UI::UI() :
 	focused(false)
 {}
 
+
 UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, bool interactable, bool dragable, SDL_Texture* texture) :
 
 	localPosition(positionValue),
@@ -157,6 +158,12 @@ fMPoint UI::GetPosition()
 fMPoint UI::GetLocalPosition()
 {
 	return localPosition;
+}
+
+
+void UI::SetLocalPosition(fMPoint locPos)
+{
+	localPosition = locPos;
 }
 
 
