@@ -60,7 +60,9 @@ enum class SKILL_ID : int
 	GATHERER_SKILL1,
 	GATHERER_SKILL1_MOUSE,
 	MELEE_SKILL1,
-	BASE_AREA
+	BASE_AREA,
+	MELEE_RANGE
+
 };
 
 enum class SKILL_TYPE
@@ -93,6 +95,7 @@ public:
 	virtual void CheckObjective(Entity* deleted);
 
 	fMPoint GetPosition();
+	int GetRadiusSize();
 	fMPoint GetCenter();
 	fMPoint GetOffset();
 	void SetPosition(int x, int y);
@@ -109,6 +112,7 @@ public:
 	void SetToDelete(bool toDelete);
 	virtual void Draw(float dt);	
 	virtual void MinimapDraw(float scale, float halfWidth);
+	virtual void DebugDraw();
 
 	//Sound related
 	DIRECTION GetMyDirection();
@@ -135,6 +139,8 @@ protected:
 	
 	fMPoint offset;
 	fMPoint center;
+
+	int radiusSize;
 
 	ENTITY_TYPE type;
 	ENTITY_ALIGNEMENT align;

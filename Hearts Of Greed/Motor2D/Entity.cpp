@@ -4,6 +4,7 @@
 #include "Audio.h"
 #include "App.h"
 #include "Minimap.h"
+#include "Map.h"
 
 Entity::Entity()
 {}
@@ -32,10 +33,11 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
-	center {0, 0}
+	center {0, 0},
+
+	radiusSize(1)
 	
-{
-}
+{}
 
 Entity::~Entity()
 {
@@ -124,9 +126,7 @@ void Entity::Draw(float dt)
 {}
 
 void Entity::MinimapDraw(float scale, float halfWidth)
-{
-
-}
+{}
 
 
 DIRECTION Entity::GetMyDirection()
@@ -207,6 +207,11 @@ LOUDNESS Entity::GetMyLoudness()
 fMPoint Entity::GetPosition()
 {
 	return position;
+}
+
+int Entity::GetRadiusSize()
+{
+	return radiusSize;
 }
 
 
@@ -337,4 +342,20 @@ void Entity::CheckObjective(Entity* deleted)
 	return;
 }
 
+void Entity::DebugDraw()
+{
+	if (!app->debugMode)
+	{
+		return;
+	}
 
+	//Position --------------------------------------
+	app->render->DrawQuad({ (int)position.x, (int)position.y, 2,2 }, 255, 0, 0);
+
+	fMPoint nextPoint = { 0,0 };
+	iMPoint origin = app->map->WorldToMap(round(position.x), round(position.y));
+	origin = app->map->MapToWorld(origin.x, origin.y);
+
+	app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
+
+}

@@ -38,7 +38,7 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vis
 
 	state(TURRET_STATES::IDLE)
 {
-	currentAnimation = &idleRightDown;
+	currentAnimation = &this->idleRightDown;
 }
 
 

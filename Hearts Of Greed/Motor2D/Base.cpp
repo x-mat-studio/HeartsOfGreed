@@ -73,6 +73,7 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	y -= baseAreaAlarm->rect.h * 0.25;
 
 	baseAreaAlarm->SetPos(x, y);
+	radiusSize = 5;
 
 }
 
@@ -103,7 +104,7 @@ bool Base::Update(float dt)
 
 bool Base::PostUpdate(float dt)
 {
-	
+	DebugDraw();
 	return true;
 }
 

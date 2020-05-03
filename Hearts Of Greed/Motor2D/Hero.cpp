@@ -311,7 +311,7 @@ void Hero::StateMachine(float dt)
 					fMPoint pos = objective->GetPosition();
 					fMPoint offSet = objective->GetOffset();
 
-					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+					MoveTo(pos.x, pos.y);
 				}
 			}
 		}
@@ -388,7 +388,7 @@ bool Hero::PostUpdate(float dt)
 	if (app->debugMode)
 	{
 		Frame currFrame = currentAnimation->GetCurrentFrame();
-		DebugDraw(currFrame.pivotPositionX, currFrame.pivotPositionY);
+		DebugDraw();
 	}
 
 	DrawArea();
@@ -478,6 +478,7 @@ void Hero::Draw(float dt)
 	else
 		currFrame = currentAnimation->GetCurrentFrame(dt);
 
+
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
 
@@ -525,16 +526,16 @@ bool Hero::CheckAttackRange()
 		return false;
 	}
 
-	SDL_Rect rect;
-	rect.x = position.x - attackRange;
-	rect.y = position.y - center.y - attackRange;
-	rect.w = attackRange * 2;
-	rect.h = attackRange * 2;
 
+	iMPoint myPos = app->map->WorldToMap(position.x, position.y);
 
-	if (objective->GetCollider()->CheckCollision(rect))
+	fMPoint objPosW = objective->GetPosition();
+	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
+
+	if (myPos.DistanceTo(objPosM) < attackRange + objective->GetRadiusSize() )
 	{
 		return true;
+
 	}
 
 	else
