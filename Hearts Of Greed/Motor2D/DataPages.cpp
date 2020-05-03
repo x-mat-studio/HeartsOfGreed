@@ -1,11 +1,16 @@
 #include "DataPages.h"
 #include "Player.h"
 #include "UIManager.h"
+#include "UIFactory.h"
+#include "Base.h"
+#include "Turret.h"
+#include "Enemy.h"
+#include "Hero.h"
 
-DataPages::DataPages(UI* parent, Entity* entity) : UI({ 0, 0 }, parent, UI_TYPE::DATA_PAGES, { 0, 0, 0, 0 }, true, false, nullptr),
-	state(DATA_PAGE_ENUM::FOCUSED_NONE),
-	focusEntity(entity),
-	factory(app->uiManager->GetFactory())
+DataPages::DataPages(float x, float y, UI* parent, Entity* entity) : UI({ x, y }, parent, UI_TYPE::DATA_PAGES, { 0, 0, 0, 0 }, true, false, nullptr),
+state(DATA_PAGE_ENUM::FOCUSED_NONE),
+focusEntity(entity),
+factory(app->uiManager->GetFactory())
 {}
 
 DataPages::~DataPages()
@@ -23,68 +28,77 @@ bool DataPages::PreUpdate(float dt)
 		focusEntity = focus;
 	}
 
-	switch (state)
+	if (focus != nullptr)
 	{
-	case DATA_PAGE_ENUM::FOCUSED_NONE:
-		if (focus != nullptr)
+		switch (state)
 		{
+		case DATA_PAGE_ENUM::FOCUSED_NONE:
+
 			switch (focus->GetType())
 			{
 
 			case ENTITY_TYPE::HERO_GATHERER:
-				CreateGathererPage();
+				factory->CreateGathererPage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_GATHERER;
 				break;
 			case ENTITY_TYPE::HERO_MELEE:
-				CreateMeleePage();
+				factory->CreateMeleePage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_MELEE;
 				break;
 			case ENTITY_TYPE::HERO_RANGED:
-				CreateRangedPage();
+				factory->CreateRangedPage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_RANGED;
 				break;
 			case ENTITY_TYPE::ENEMY:
-				CreateWanamingoPage();
+				factory->CreateWanamingoPage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
 				break;
 			case ENTITY_TYPE::BLDG_TURRET:
-				CreateTurretPage();
+				factory->CreateTurretPage(dataPageVector, this);
 				break;
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
-				CreateUpgradeCenterPage();
+				factory->CreateUpgradeCenterPage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER;
 				break;
 			case ENTITY_TYPE::BLDG_BASE:
-				CreateBasePage();
+				factory->CreateBasePage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_BASE;
 				break;
 			case ENTITY_TYPE::BLDG_BARRICADE:
-				CreateBarricadePage();
+				factory->CreateBarricadePage(dataPageVector, this);
+				state = DATA_PAGE_ENUM::FOCUSED_BARRICADE;
 				break;
 			default:
 				state = DATA_PAGE_ENUM::FOCUSED_UNKNOWN;
 				break;
 			}
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_BASE:
+			CheckBaseValues();
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_GATHERER:
+			CheckHeroesValues();
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_MELEE:
+			CheckHeroesValues();
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_RANGED:
+			CheckHeroesValues();
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_TURRET:
+			CheckTurretValues();
+			state = DATA_PAGE_ENUM::FOCUSED_TURRET;
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER:
+			CheckUpgradeCenterValues();
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_WANAMINGO:
+			CheckWanamingoValues();
+			break;
+		case DATA_PAGE_ENUM::FOCUSED_UNKNOWN:
+		default:
+			break;
 		}
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_BASE:
-		CheckBaseValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_GATHERER:
-		CheckGathererValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_MELEE:
-		CheckMeleeValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_RANGED:
-		CheckRangedValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_TURRET:
-		CheckTurretValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER:
-		CheckUpgradeCenterValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_WANAMINGO:
-		CheckWanamingoValues();
-		break;
-	case DATA_PAGE_ENUM::FOCUSED_UNKNOWN:
-	default:
-		break;
 	}
 
 	int numElem = dataPageVector.size();
@@ -102,8 +116,8 @@ bool DataPages::PreUpdate(float dt)
 
 bool DataPages::Update(float dt)
 {
-	int numElem = dataPageVector.size(); 
-	
+	int numElem = dataPageVector.size();
+
 	for (int i = 0; i < numElem; i++)
 	{
 		dataPageVector[i]->Update(dt);
@@ -136,88 +150,66 @@ bool DataPages::CheckData(int previous, int current)
 }
 
 
-void DataPages::ChangeTexture()
-{}
 
-
-void DataPages::CreateGathererPage()
+void DataPages::CheckHeroesValues()
 {
-	
+	bool check = false;
 
-	state = DATA_PAGE_ENUM::FOCUSED_GATHERER;
+	Hero* focus = (Hero*)focusEntity;
+
+	if (CheckData(attackDamage, focus->attackDamage))
+	{
+		if (CheckData(attackSpeed, focus->attackSpeed))
+		{
+			if (CheckData(range, focus->attackRange))
+			{
+				if (CheckData(hpRecovery, focus->recoveryHitPointsRate))
+				{
+					if (CheckData(xpToNextLevel, focus->expToLevelUp))
+					{
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
 }
-
-
-void DataPages::CreateMeleePage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_MELEE;
-}
-
-
-void DataPages::CreateRangedPage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_RANGED;
-}
-
-
-void DataPages::CreateWanamingoPage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
-}
-
-
-void DataPages::CreateBasePage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_BASE;
-}
-
-
-void DataPages::CreateTurretPage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_TURRET;
-}
-
-
-void DataPages::CreateUpgradeCenterPage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER;
-}
-
-
-void DataPages::CreateBarricadePage()
-{
-
-
-	state = DATA_PAGE_ENUM::FOCUSED_BARRICADE;
-}
-
-
-void DataPages::CheckGathererValues()
-{}
-
-
-void DataPages::CheckMeleeValues()
-{}
-
-
-void DataPages::CheckRangedValues()
-{}
 
 
 void DataPages::CheckWanamingoValues()
-{}
+{
+	bool check = false;
+
+	Enemy* focus = (Enemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					check = true;
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
 
 
 void DataPages::CheckBarricadeValues()
@@ -225,11 +217,52 @@ void DataPages::CheckBarricadeValues()
 
 
 void DataPages::CheckBaseValues()
-{}
+{
+	bool check = false;
+
+	Base* focus = (Base*)focusEntity;
+
+	if (CheckData(resources, focus->GetRsrc()))
+	{
+		check = true;
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
 
 
 void DataPages::CheckTurretValues()
-{}
+{
+	bool check = false;
+
+	Turret* focus = (Turret*)focusEntity;
+
+	if (CheckData(level, focus->GetLvl()))
+	{
+		if (CheckData(attackDamage, focus->GetAD()))
+		{
+			if (CheckData(attackSpeed, focus->GetAS()))
+			{
+				if (CheckData(range, focus->GetRng()))
+				{
+					check = true;
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
 
 
 void DataPages::CheckUpgradeCenterValues()
@@ -249,6 +282,15 @@ void DataPages::DeleteCurrentData()
 	}
 
 	dataPageVector.clear();
+
+	resources = -1;
+	level = -1;
+	attackDamage = -1;
+	attackSpeed = -1;
+	range = -1;
+	vision = -1;
+	hpRecovery = -1;
+	xpToNextLevel = -1;
 
 	focusEntity = nullptr;
 	state = DATA_PAGE_ENUM::FOCUSED_NONE;

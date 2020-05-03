@@ -28,7 +28,7 @@ class DataPages : public UI
 {
 public:
 
-	DataPages(UI* parent, Entity* entity);
+	DataPages(float x, float y, UI* parent, Entity* entity);
 	~DataPages();
 
 
@@ -39,22 +39,9 @@ private:
 	bool PostUpdate(float dt);
 
 	bool CheckData(int previous, int current);
-	void ChangeTexture();
-
-	// Create Data Page
-	void CreateGathererPage();
-	void CreateMeleePage();
-	void CreateRangedPage();
-	void CreateWanamingoPage();
-	void CreateBasePage();
-	void CreateTurretPage();
-	void CreateUpgradeCenterPage();
-	void CreateBarricadePage();
 
 	// Check Data Page Values
-	void CheckGathererValues();
-	void CheckMeleeValues();
-	void CheckRangedValues();
+	void CheckHeroesValues();
 	void CheckWanamingoValues();
 	void CheckBaseValues();
 	void CheckTurretValues();
@@ -71,6 +58,15 @@ private:
 	DATA_PAGE_ENUM state;
 	Entity* focusEntity;
 	UIFactory* factory;
+
+	int resources;
+	int level;
+	int attackDamage;
+	int attackSpeed;
+	int range;
+	int vision;
+	int hpRecovery;
+	int xpToNextLevel;
 
 };
 
