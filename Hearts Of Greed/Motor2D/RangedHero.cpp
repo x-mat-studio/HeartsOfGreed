@@ -1,5 +1,7 @@
 #include "RangedHero.h"
+#include "Input.h"
 #include "EntityManager.h"
+#include "Render.h"
 #include "Map.h"
 
 RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -17,13 +19,25 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 		skill1LeftUp, skill1LeftDown, tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
 		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
 		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
-		skill1Dmg, skill1Id, skill1Type, skill1Target)
+		skill1Dmg, skill1Id, skill1Type, skill1Target),
+
+	granadeArea(nullptr),
+
+	currentVfx(nullptr),
+	vfxExplosion(vfxExplosion),
+	explosionRect{ 0,0,0,0 }
 {}
 
 
 RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Hero(position, copy, alignement)
+	Hero(position, copy, alignement),
+
+	granadeArea(nullptr),
+
+	currentVfx(nullptr),
+	vfxExplosion(copy->vfxExplosion),
+	explosionRect{ 0,0,0,0 }
 {}
 
 
@@ -53,7 +67,16 @@ bool RangedHero::PreProcessSkill1()
 	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
+
 		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+	}
+
+	iMPoint center = app->map->WorldToMap(position.x, position.y);
+	granadePosLaunch = app->input->GetMousePosWorld();
+
+	if (center.InsideCircle(app->map->WorldToMap(granadePosLaunch.x, granadePosLaunch.y), currAreaInfo->radius))
+	{
+		granadeArea = app->entityManager->RequestArea(SKILL_ID::RANGED_SKILL1_MOUSE, &this->suplAoE, { (int)granadePosLaunch.x, (int)granadePosLaunch.y });
 	}
 
 	return true;
@@ -74,36 +97,44 @@ bool RangedHero::PreProcessSkill3()
 bool RangedHero::ExecuteSkill1()
 {
 
-	if (!skillExecutionDelay)
+	if (granadeArea)
 	{
-		if (!godMode)
-			energyPoints -= skill1Cost;
+		if (!skillExecutionDelay)
+		{
+			if (!godMode)
+				energyPoints -= skill1Cost;
 
-		skillExecutionDelay = true;
-		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
-		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			skillExecutionDelay = true;
+			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			return skillExecutionDelay;
+		}
+		else
+		{
+			currentVfx = &vfxExplosion;
+			currentVfx->ResetAnimation();
+			currentVfx->loop = false;
 
-		return skillExecutionDelay;
+			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+
+
+			int ret = 0;
+
+			ret = app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+
+			currAoE.clear();
+			suplAoE.clear();
+			currAreaInfo = nullptr;
+
+			if (ret >= 0)
+			{
+				GetExperience(ret);
+				return true;
+			}
+		}
 	}
 	else
-	{
-
-		int ret = 0;
-
-		ret = app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
-
-		currAoE.clear();
-		suplAoE.clear();
-		currAreaInfo = nullptr;
-
-		if (ret > 0)
-		{
-			GetExperience(ret);
-		}
-
-		return true;
-	}
+		return false;
 
 }
 
@@ -135,4 +166,22 @@ void RangedHero::LevelUp()
 	unitSpeed;
 	visionDistance;
 
+}
+
+
+bool RangedHero::DrawVfx(float dt)
+{
+	if (currentVfx == nullptr)
+		return false;
+	else
+	{
+		Frame currFrame = currentVfx->GetCurrentFrame(dt);
+		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
+			currentVfx = false;
+
+		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
+	}
+
+
+	return false;
 }
