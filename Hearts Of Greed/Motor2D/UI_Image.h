@@ -7,7 +7,7 @@ class UI_Image : public UI
 {
 public:
 
-	UI_Image(float x, float y, UI* parent, SDL_Rect rect, SDL_Texture* texture, bool dragable);
+	UI_Image(float x, float y, UI* parent, SDL_Rect rect, SDL_Texture* texture, bool dragable, bool interactable = true);
 	~UI_Image();
 
 };

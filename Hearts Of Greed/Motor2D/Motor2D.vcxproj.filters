@@ -160,6 +160,12 @@
     <ClCompile Include="DataPages.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="HeroesPortraitManager.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroPortrait.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
     <ClCompile Include="RoboHero.cpp">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClCompile>
@@ -344,6 +350,12 @@
     </ClInclude>
     <ClInclude Include="RoboHero.h">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroesPortraitManager.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroPortrait.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

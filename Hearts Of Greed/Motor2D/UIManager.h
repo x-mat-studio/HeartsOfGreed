@@ -14,6 +14,11 @@ class Base;
 
 class UI;
 class Button;
+class HeroesPortraitManager;
+class HeroPortrait;
+
+class Hero;
+
 enum class GROUP_TAG;
 enum class BUTTON_TAG;
 
@@ -63,6 +68,12 @@ public:
 
 	void ExecuteButton(BUTTON_TAG tag, Button* button);
 
+	HeroesPortraitManager* GetPortraitManager();
+	void SetPortraitManager(HeroesPortraitManager* portraitManager);
+
+	void AddPortrait(Hero* portrait);
+	void RemovePortrait(Hero* portrait);
+
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
@@ -88,6 +99,8 @@ private:
 	iMPoint dragMouse;
 
 	UIFactory* factory;
+
+	HeroesPortraitManager* portraitManager;
 
 	bool isMenuOn;
 };

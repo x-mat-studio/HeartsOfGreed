@@ -21,6 +21,8 @@ enum class UI_TYPE : int
 	HEALTHBAR,
 	DATA_PAGES,
 	
+	HERO_PORTRAIT,
+	HERO_PORTRAIT_MANAGER,
 	RESOURCES_COUNTER,
 
 	MAX
@@ -44,6 +46,7 @@ public:
 
 	fMPoint GetPosition();
 	fMPoint GetLocalPosition();
+	void SetLocalPosition(fMPoint locPos);
 
 	bool GetDragable();
 
