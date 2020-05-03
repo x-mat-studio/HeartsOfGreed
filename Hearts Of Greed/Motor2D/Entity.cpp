@@ -41,8 +41,6 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	offset.x = -((float)collider->rect.w * 0.5f);
 
 	offset.y = -((float)collider->rect.h * 0.66f);
-
-;
 }
 
 Entity::~Entity()

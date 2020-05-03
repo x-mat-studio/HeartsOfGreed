@@ -65,12 +65,10 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	turretsVector(copy->turretsVector),
 	barricadesVector(copy->barricadesVector)
 {
-	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback);
+	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback, this);
 
-	int x = position.x;
-	int y = position.y;
-
-	y -= baseAreaAlarm->rect.h * 0.25; //TODO make this work with new entity offsets
+	int x = position.x - baseAreaAlarm->rect.w *0.5f;
+	int y = position.y - baseAreaAlarm->rect.h * 0.6f;
 
 	baseAreaAlarm->SetPos(x, y);
 	radiusSize = 5;
