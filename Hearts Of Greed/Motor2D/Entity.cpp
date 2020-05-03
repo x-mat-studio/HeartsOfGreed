@@ -33,14 +33,16 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	hitPointsCurrent(currentHealth),
 
 	offset {0, 0},
-	center {0, 0}
+	center {0, 0},
+
+	radiusSize(1)
 	
 {
 	offset.x = -((float)collider->rect.w * 0.5f);
 
 	offset.y = -((float)collider->rect.h * 0.66f);
 
-	radiusSize(1);
+;
 }
 
 Entity::~Entity()
