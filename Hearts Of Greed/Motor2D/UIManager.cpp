@@ -316,6 +316,10 @@ SDL_Texture* ModuleUIManager::GetAtlasTexture() const
 	return atlas;
 }
 
+UIFactory* ModuleUIManager::GetFactory() const
+{
+	return factory;
+}
 
 void ModuleUIManager::LoadAtlas()
 {

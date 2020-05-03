@@ -47,6 +47,7 @@ public:
 	bool CleanUp();
 
 	SDL_Texture* GetAtlasTexture() const;
+	UIFactory* ModuleUIManager::GetFactory() const;
 
 	void AddUIGroup(UI_Group* element);
 
