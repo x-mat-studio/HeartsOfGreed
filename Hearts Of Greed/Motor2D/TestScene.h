@@ -88,6 +88,7 @@ private:
 	float fadeTime;
 	bool camToReset;
 	float startingScale;
+	bool mapLoaded;
 };
 
 #endif // __TEST_SCENE_H__

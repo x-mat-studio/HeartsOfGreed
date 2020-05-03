@@ -35,6 +35,9 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	center {0, 0}
 	
 {
+	offset.x = -((float)collider->rect.w * 0.5f);
+
+	offset.y = -((float)collider->rect.h * 0.66f);
 }
 
 Entity::~Entity()
@@ -60,8 +63,6 @@ Entity::~Entity()
 bool Entity::Start(SDL_Texture* texture)
 {
 	this->texture = texture;
-
-
 	if (collider != nullptr)
 	{
 		collider = new Collider(collider->rect, collider->type, collider->callback, this);
@@ -70,14 +71,15 @@ bool Entity::Start(SDL_Texture* texture)
 
 		collider->SetPos(position.x, position.y);
 
-		offset.x = (float)collider->rect.w * 0.5f;
-		
-		offset.y = (float)collider->rect.h;
+		offset.x = -((float)collider->rect.w * 0.5f);
 
-		center.x = (float)collider->rect.w * 0.5f;;
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
 		center.y = (float)collider->rect.h * 0.5f;
-	}
 
+		CollisionPosUpdate();
+	}
 	started = true;
 
 	return true;
@@ -110,7 +112,7 @@ void Entity::OnCollision(Collider* collider)
 
 void Entity::CollisionPosUpdate()
 {
-	collider->SetPos(position.x - offset.x, position.y - offset.y);
+	collider->SetPos(position.x + offset.x, position.y + offset.y);
 }
 
 

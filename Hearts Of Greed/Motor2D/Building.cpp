@@ -19,7 +19,8 @@ Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN),
 	myDecor(decor)
-{}
+{
+}
 
 
 Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignement) :
@@ -37,7 +38,8 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 	transparent(false),
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
-{}
+{
+}
 
 
 Building::Building()
@@ -104,34 +106,37 @@ void Building::Contruct()
 
 void Building::Draw(float dt)
 {
+
+	fMPoint newPos = position + offset;
+
 	if (selectedByPlayer)
 	{
 		if (transparent) 
 		{
-			app->render->Blit(selectedTexture, position.x, position.y, nullptr, false, true, transparencyValue);
+			app->render->Blit(selectedTexture, newPos.x, newPos.y, nullptr, false, true, transparencyValue);
 		}
 		else
 		{
-			app->render->Blit(selectedTexture, position.x, position.y, nullptr, false, true);
+			app->render->Blit(selectedTexture, newPos.x, newPos.y, nullptr, false, true);
 		}
 	}
 	else 
 	{
 		if (transparent)
 		{
-			app->render->Blit(texture, position.x, position.y, nullptr, false, true, transparencyValue);
+			app->render->Blit(texture, newPos.x, newPos.y, nullptr, false, true, transparencyValue);
 		}
 		else
 		{
-			app->render->Blit(texture, position.x, position.y, nullptr, false, true);
+			app->render->Blit(texture, newPos.x, newPos.y, nullptr, false, true);
 		}
 	}
 }
 
 void Building::MinimapDraw(float scale, float halfWidth)
 {
-	float worldX = position.x;
-	float worldY = position.y;
+	float worldX = position.x+offset.x;
+	float worldY = position.y+offset.y;
 
 	worldX += app->render->currentCamX;
 	worldY += app->render->currentCamY;

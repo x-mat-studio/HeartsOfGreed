@@ -32,7 +32,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 {
 	if (minimapPos != nullptr)
 	{
-		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x + offSet.x, minimapPos->y + offSet.y);
+		iMPoint newpos = app->minimap->WorldToMinimap(minimapPos->x, minimapPos->y);
 		float uiscale = app->win->GetUIScale();
 		app->render->Blit(app->uiManager->GetAtlasTexture(), (newpos.x - (sourceRect.w * 0.5f)) / uiscale, (newpos.y - (sourceRect.h * 0.5f)) / uiscale, &sourceRect, false, false);
 	}
