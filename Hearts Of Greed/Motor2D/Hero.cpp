@@ -18,7 +18,8 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
-	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk,
+	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
+	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
@@ -50,6 +51,12 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	skill1Left(skill1Left),
 	skill1LeftUp(skill1LeftUp),
 	skill1LeftDown(skill1LeftDown),
+	deathRight(deathRight),
+	deathRightDown(deathRightDown),
+	deathRightUp(deathRightUp),
+	deathLeft(deathLeft),
+	deathLeftUp(deathLeftUp),
+	deathLeftDown(deathLeftDown),
 
 	tileOnWalk(tileOnWalk),
 
@@ -139,6 +146,12 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skill1Left(copy->skill1Left),
 	skill1LeftUp(copy->skill1LeftUp),
 	skill1LeftDown(copy->skill1LeftDown),
+	deathRight(copy->deathRight),
+	deathRightDown(copy->deathRightDown),
+	deathRightUp(copy->deathRightUp),
+	deathLeft(copy->deathLeft),
+	deathLeftUp(copy->deathLeftUp),
+	deathLeftDown(copy->deathLeftDown),
 
 	tileOnWalk(copy->tileOnWalk),
 
@@ -1230,7 +1243,7 @@ void Hero::SetAnimation(HERO_STATES currState)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			currentAnimation = &idleRightUp;
+			currentAnimation = &deathRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
 			currentAnimation = &idleLeftUp;

@@ -1741,6 +1741,13 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	Animation skill1LeftUp = skill1LeftUp.PushAnimation(heroNode, "skill_1_left_up");
 	Animation skill1LeftDown = skill1LeftDown.PushAnimation(heroNode, "skill_1_left_down");
 
+	Animation deathRight = deathRight.PushAnimation(heroNode, "death_right");
+	Animation deathRightUp = deathRightUp.PushAnimation(heroNode, "death_right_up");
+	Animation deathRightDown = deathRightDown.PushAnimation(heroNode, "death_right_down");
+	Animation deathLeft = deathLeft.PushAnimation(heroNode, "death_left");
+	Animation deathLeftUp = deathLeftUp.PushAnimation(heroNode, "death_left_up");
+	Animation deathLeftDown = deathLeftDown.PushAnimation(heroNode, "death_left_down");
+
 	//General Vfx load -----------------------------------
 	P2SString filename = config.child("load").attribute("docnamevfx").as_string();
 	pugi::xml_document vfxDoc;
@@ -1758,7 +1765,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 		sampleMelee = new MeleeHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
 			skill1Dmg, skill1ID, skill1Type, skill1Target);
@@ -1773,7 +1780,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 		sampleRanged = new RangedHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
 			skill1Dmg, skill1ID, skill1Type, skill1Target);
@@ -1792,7 +1799,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 		sampleGatherer = new GathererHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
-			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, tileOnWalk,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
 			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion);
