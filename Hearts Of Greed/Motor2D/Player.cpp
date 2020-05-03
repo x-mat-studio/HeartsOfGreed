@@ -246,7 +246,6 @@ bool ModulePlayer::HandleInput()
 		if (heroesVector.empty() == false && focusedHero < heroesVector.size())
 		{
 			focusedEntity = heroesVector[focusedHero];
-			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		}
 	}
 
@@ -296,7 +295,6 @@ void ModulePlayer::LeftClick()
 			heroesVector.clear();
 			heroesVector.push_back((Hero*)focusedEntity);
 		}
-		app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 	}
 }
 
@@ -569,7 +567,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::SELECT_UNITS:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->mouseOverUI == false)
 		{
 			selectUnits = true;
 			doingAction = true;
@@ -593,7 +591,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->mouseOverUI == false)
 		{
 			entityComand = true;
 			doingAction = true;
@@ -601,7 +599,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_INTERACTION:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->MouseOnUI(mouse) == false)
+		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->mouseOverUI == false)
 		{
 			entityInteraction = true;
 			doingAction = true;
@@ -652,7 +650,6 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 				focusedHero = 0;
 			}
 
-			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_ON_CLICK, EVENT_ENUM::NULL_EVENT);
 		}
 	}
 	break;

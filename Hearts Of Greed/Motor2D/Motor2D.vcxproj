@@ -85,6 +85,7 @@
     <ClCompile Include="Barricade.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DynamicEntity.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -112,16 +113,16 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RangedHero.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="ResourcesPortrait.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UIFactory.cpp" />
     <ClCompile Include="UIManager.cpp" />
-    <ClCompile Include="UI_Button.cpp" />
-    <ClCompile Include="UI_Healthbar.cpp" />
-    <ClCompile Include="UI_Portrait.cpp" />
+    <ClCompile Include="UI_Group.cpp" />
     <ClCompile Include="UI_Image.cpp" />
     <ClCompile Include="UI_Scrollbar.cpp" />
     <ClCompile Include="UI_Text.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Base.h" />
     <ClInclude Include="Brofiler\Brofiler\Brofiler.h" />
     <ClInclude Include="Building.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DynamicEntity.h" />
     <ClInclude Include="Enemy.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="RangedHero.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="ResourcesPortrait.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Textures.h" />
@@ -175,10 +178,9 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="UIFactory.h" />
     <ClInclude Include="UIManager.h" />
-    <ClInclude Include="UI_Button.h" />
-    <ClInclude Include="UI_Healthbar.h" />
-    <ClInclude Include="UI_Portrait.h" />
+    <ClInclude Include="UI_Group.h" />
     <ClInclude Include="UI_Image.h" />
     <ClInclude Include="UI_Scrollbar.h" />
     <ClInclude Include="UI_Text.h" />

@@ -5,7 +5,7 @@
 #include "FadeToBlack.h"
 #include "MainMenuScene.h"
 #include "UIManager.h"
-#include "UI_Text.h"
+
 #include "Render.h"
 #include "Textures.h"
 #include "Window.h"
@@ -36,10 +36,9 @@ bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 bool ModuleLoseScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
-	app->uiManager->AddUIElement(fMPoint(10, app->win->height / app->win->GetUIScale() -40), nullptr, UI_TYPE::UI_TEXT, rect, P2SString("message"),nullptr, DRAGGABLE::DRAG_OFF, "CLICK ANYWHERE TO CONTINUE");
 
-	youLost = app->tex->Load("intro_images/youLost.png");
-	medalLose = app->tex->Load("intro_images/medalLose.png");
+	/*youLost = app->tex->Load("intro_images/youLost.png");
+	medalLose = app->tex->Load("intro_images/medalLose.png");*/
 
 	app->audio->PlayMusic("audio/music/youLost.ogg", fadeTime, app->audio->musicVolume);
 

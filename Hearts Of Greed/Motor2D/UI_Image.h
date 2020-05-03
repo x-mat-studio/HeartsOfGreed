@@ -5,19 +5,11 @@
 
 class UI_Image : public UI
 {
-
 public:
 
-	UI_Image(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, P2SString uiName, DRAGGABLE draggable);
+	UI_Image(float x, float y, UI* parent, SDL_Rect rect, SDL_Texture* texture, bool dragable);
 	~UI_Image();
-
-	bool Update(float dt);
-	bool PostUpdate(float dt);
-
-private:
-
-	void HandleInput();
 
 };
 
-#endif // UI_IMAGE_H
+#endif//__UI_IMAGE_H__
