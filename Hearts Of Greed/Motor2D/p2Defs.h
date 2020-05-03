@@ -31,6 +31,7 @@
                               \
     }
 
+
 #define IN_RANGE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 #define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
 #define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
@@ -64,5 +65,13 @@ inline const char* const PATH(const char* folder, const char* file)
 template <typename T> int sgn(T val) {
 	return (T(0) < val) - (val < T(0));
 }
+
+template <class VALUE_TYPE> VALUE_TYPE  lerp(VALUE_TYPE& start, VALUE_TYPE& end, float t)
+{
+	return start + t * (end - start);
+}
+
+
+
 
 #endif

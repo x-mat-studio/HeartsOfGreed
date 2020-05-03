@@ -157,7 +157,6 @@ bool ModuleTestScene::Start()
 
 
 
-
 	//Events register
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_UP, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_DOWN, this);

@@ -187,6 +187,10 @@ public:
 	iMPoint GetDestination(Entity* request);
 	bool DeletePath(Entity* request);
 
+	bool LineRayCast(iMPoint& p0, iMPoint& p1);
+	std::vector<iMPoint> CreateLine(iMPoint& p0, iMPoint& p1);
+
+
 private:
 
 	float SimpleAPathfinding(const iMPoint& origin, const iMPoint& destination);

@@ -189,11 +189,11 @@ bool ModuleCollision::CleanUp()
 }
 
 
-Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback)
+Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback, Entity* entCallback)
 {
 	Collider* ret = nullptr;
 
-	ret = new Collider(rect, type, callback);
+	ret = new Collider(rect, type, callback, entCallback);
 	colliders.push_back(ret);
 
 	return ret;

@@ -5,6 +5,8 @@
 #include "Base.h"
 #include "Spawner.h"
 #include "TestScene.h"
+#include "Pathfinding.h"
+#include "Map.h"
 
 ModuleAI::ModuleAI() : Module()
 {
@@ -50,13 +52,23 @@ bool ModuleAI::CleanUp()
 
 void ModuleAI::OnCollision(Collider* c1, Collider* c2)
 {
+	
 	if (c1->type == COLLIDER_BASE_ALERT && c2->type == COLLIDER_HERO)
 	{
-		CreateSelectionCollider(c1);
+
+
+		fMPoint c1Pos = c1->thisEntity->position;
+		fMPoint c2Pos = c2->thisEntity->position;
+
+		bool isVisible = app->pathfinding->LineRayCast(app->map->WorldToMap(c1Pos.x, c1Pos.y), app->map->WorldToMap(c2Pos.x, c2Pos.y));
 
 		if (c2->thisEntity)
+		{
+			CreateSelectionCollider(c1);
 			objectivePos = c2->thisEntity->GetPosition();
+		}
 	}
+
 }
 
 

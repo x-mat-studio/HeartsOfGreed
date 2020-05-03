@@ -29,7 +29,7 @@
       </collider>
       
       <baseAlarmCollider>
-        <rect x="0" y="0" w="700" h="650"/>
+        <rect x="0" y="0" w="800" h="650"/>
         <type id="5"/>
       </baseAlarmCollider>
       
