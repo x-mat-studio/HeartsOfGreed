@@ -15,7 +15,7 @@
     </stats>
 
     <skills>
-      <skill1 executionTime="1.0" recoverTime="7.5" damage="30" id="2" type="1" targetAligment="1"/>
+      <skill1 executionTime="1.0" recoverTime="7.5" damage="30" id="4" type="1" targetAligment="1"/>
       <skill2 executionTime="20.0" recoverTime="15.0"/>
       <skill3 executionTime="20.0" recoverTime="15.0"/>
     </skills>
@@ -285,7 +285,7 @@
       <frame rposX="870" rposY="1468" rwidth="35" rheight="87"  time="0.15f" pivotX="35" pivotY="70"/>
       <frame rposX="942" rposY="1468" rwidth="36" rheight="87"  time="0.15f" pivotX="36" pivotY="70"/>
       <frame rposX="1013" rposY="1468" rwidth="37" rheight="87"  time="0.15f" pivotX="37" pivotY="70"/>
-      </skill_1_right_up>
+    </skill_1_left_up>
 
 
     </Animations>

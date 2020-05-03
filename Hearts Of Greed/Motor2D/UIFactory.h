@@ -6,6 +6,7 @@
 
 class UI;
 class UI_Group;
+class Entity;
 
 struct UIFactory
 {
@@ -69,6 +70,7 @@ public:
 	//Portrait things
 	UI* CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* group);
 
+	UI* CreateDataPage(UI* parent, Entity* entity, UI_Group* group);
 
 public:
 

@@ -7,6 +7,7 @@
 #include "UI_Scrollbar.h"
 #include "Button.h"
 #include "ResourcesPortrait.h"
+#include "DataPages.h"
 
 #include "Window.h"
 #include "Minimap.h"
@@ -162,6 +163,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	float x(app->win->width / app->win->GetUIScale());
 	float y(app->win->height / app->win->GetUIScale());
 
+	UI* background;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_GAME);
 
 	//rect = RectConstructor(556, 35, 15, 14);
@@ -175,9 +177,11 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	CreateResourcesPortrait(x - 65, y - 97, nullptr, group);
 
-	CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
+	background = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
 	CreateImage(x - 2 * dataPageImageBackground.w + 12, y - dataPageImageBackground.h - 5, nullptr, dataPageImageBackground, group);
+
+	CreateDataPage(background, nullptr, group);
 
 	return group;
 }
@@ -551,4 +555,13 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 	group->AddUiElement(resourcesPortrait);
 
 	return resourcesPortrait;
+}
+
+UI* UIFactory::CreateDataPage(UI* parent, Entity* entity, UI_Group* group)
+{
+	DataPages* dataPage = new DataPages(parent, entity);
+
+	group->AddUiElement(dataPage);
+
+	return dataPage;
 }
