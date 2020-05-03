@@ -48,6 +48,15 @@ private:
 	void CheckUpgradeCenterValues();
 	void CheckBarricadeValues();
 
+	// Get Data Page Values
+
+	void GetHeroValue();
+	void GetWanamingoValue();
+	void GetBaseValue();
+	void GetTurretValue();
+	void GetUpgradeCenterValue();
+	void GetBarricadeValue();
+
 
 	void DeleteCurrentData();
 

@@ -38,34 +38,42 @@ bool DataPages::PreUpdate(float dt)
 			{
 
 			case ENTITY_TYPE::HERO_GATHERER:
-				factory->CreateGathererPage(dataPageVector, this);
+				factory->CreateGathererPage(&dataPageVector, this);
+				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_GATHERER;
 				break;
 			case ENTITY_TYPE::HERO_MELEE:
-				factory->CreateMeleePage(dataPageVector, this);
+				factory->CreateMeleePage(&dataPageVector, this);
+				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_MELEE;
 				break;
 			case ENTITY_TYPE::HERO_RANGED:
-				factory->CreateRangedPage(dataPageVector, this);
+				factory->CreateRangedPage(&dataPageVector, this);
+				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_RANGED;
 				break;
 			case ENTITY_TYPE::ENEMY:
-				factory->CreateWanamingoPage(dataPageVector, this);
+				factory->CreateWanamingoPage(&dataPageVector, this);
+				GetWanamingoValue();
 				state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
 				break;
 			case ENTITY_TYPE::BLDG_TURRET:
-				factory->CreateTurretPage(dataPageVector, this);
+				factory->CreateTurretPage(&dataPageVector, this);
+				GetTurretValue();
 				break;
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
-				factory->CreateUpgradeCenterPage(dataPageVector, this);
+				factory->CreateUpgradeCenterPage(&dataPageVector, this);
+				GetUpgradeCenterValue();
 				state = DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER;
 				break;
 			case ENTITY_TYPE::BLDG_BASE:
-				factory->CreateBasePage(dataPageVector, this);
+				factory->CreateBasePage(&dataPageVector, this);
+				GetBaseValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BASE;
 				break;
 			case ENTITY_TYPE::BLDG_BARRICADE:
-				factory->CreateBarricadePage(dataPageVector, this);
+				factory->CreateBarricadePage(&dataPageVector, this);
+				GetBarricadeValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BARRICADE;
 				break;
 			default:
@@ -267,6 +275,59 @@ void DataPages::CheckTurretValues()
 
 void DataPages::CheckUpgradeCenterValues()
 {}
+
+void DataPages::GetHeroValue()
+{
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->attackDamage;
+	attackSpeed = focus->attackSpeed;
+	range = focus->attackRange;
+	hpRecovery = focus->recoveryHitPointsRate;
+	xpToNextLevel = focus->expToLevelUp;
+}
+
+
+void DataPages::GetWanamingoValue()
+{
+	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+}
+
+
+void DataPages::GetBaseValue()
+{
+	Base* focus = (Base*)app->player->GetFocusedEntity();
+
+	resources = focus->GetRsrc();
+}
+
+
+void DataPages::GetTurretValue()
+{
+	Turret* focus = (Turret*)app->player->GetFocusedEntity();
+
+	level = focus->GetLvl();
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	range = focus->GetRng();
+}
+
+
+void DataPages::GetUpgradeCenterValue()
+{
+
+}
+
+
+void DataPages::GetBarricadeValue()
+{
+
+}
 
 
 void DataPages::DeleteCurrentData()

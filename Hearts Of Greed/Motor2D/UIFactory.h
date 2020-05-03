@@ -75,14 +75,14 @@ public:
 	// Data Pages creation functions
 
 	UI* CreateDataPage(UI* parent, Entity* entity, UI_Group* group);
-	void CreateGathererPage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateMeleePage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateRangedPage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateWanamingoPage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateBasePage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateTurretPage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateUpgradeCenterPage(std::vector<UI*> dataPagesVector, UI* dataPage);
-	void CreateBarricadePage(std::vector<UI*> dataPagesVector, UI* dataPage);
+	void CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 
 
 public:

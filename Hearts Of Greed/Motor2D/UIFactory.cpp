@@ -585,12 +585,12 @@ UI* UIFactory::CreateDataPage(UI* parent, Entity* entity, UI_Group* group)
 }
 
 
-void UIFactory::CreateGathererPage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector.push_back(CreateNonGroupImage(-2 * gathererPicture.w + 10, -gathererPicture.h - 2, dataPage, gathererPicture));
+	dataPagesVector->push_back(CreateNonGroupImage(-2 * gathererPicture.w + 10, -gathererPicture.h - 2, dataPage, gathererPicture));
 
 	// AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
@@ -598,28 +598,28 @@ void UIFactory::CreateGathererPage(std::vector<UI*> dataPagesVector, UI* dataPag
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -46, dataPage, stats));
 
 	sprintf_s(stats, 40, "AS: %f", focus->attackSpeed);
-	dataPagesVector.push_back(CreateNonGroupText(-30, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-30, -46, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -36, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector.push_back(CreateNonGroupText(-30, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-30, -36, dataPage, stats));
 
 	sprintf_s(stats, 40, "EXP: %i / %i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -26, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -26, dataPage, stats));
 }
 
 
-void UIFactory::CreateMeleePage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector.push_back(CreateNonGroupImage(-2 * meleePicture.w + 10, -meleePicture.h - 2, dataPage, meleePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(-2 * meleePicture.w + 10, -meleePicture.h - 2, dataPage, meleePicture));
 
 	// AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
@@ -627,28 +627,28 @@ void UIFactory::CreateMeleePage(std::vector<UI*> dataPagesVector, UI* dataPage)
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -46, dataPage, stats));
 
 	sprintf_s(stats, 40, "AS: %f", focus->attackSpeed);
-	dataPagesVector.push_back(CreateNonGroupText(-30, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-30, -46, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -36, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector.push_back(CreateNonGroupText(-30, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-30, -36, dataPage, stats));
 
 	sprintf_s(stats, 40, "EXP: %i / %i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -26, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -26, dataPage, stats));
 }
 
 
-void UIFactory::CreateRangedPage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector.push_back(CreateNonGroupImage(-2 * rangedPicture.w + 10, -rangedPicture.h - 2, dataPage, rangedPicture));
+	dataPagesVector->push_back(CreateNonGroupImage(-2 * rangedPicture.w + 10, -rangedPicture.h - 2, dataPage, rangedPicture));
 
 	// AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
 
@@ -656,95 +656,95 @@ void UIFactory::CreateRangedPage(std::vector<UI*> dataPagesVector, UI* dataPage)
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -46, dataPage, stats));
 
 	sprintf_s(stats, 40, "AS: %f", focus->attackSpeed);
-	dataPagesVector.push_back(CreateNonGroupText(-30, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-30, -46, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -36, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector.push_back(CreateNonGroupText(-30, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-30, -36, dataPage, stats));
 
 	sprintf_s(stats, 40, "EXP: %i / %i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector.push_back(CreateNonGroupText(-60, -26, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -26, dataPage, stats));
 }
 
 
-void UIFactory::CreateWanamingoPage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	char stats[40];
 	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
 
-	dataPagesVector.push_back(CreateNonGroupImage(-2 * wanamingoDataPagePicture.w + 30, - wanamingoDataPagePicture.h - 10, dataPage, wanamingoDataPagePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(-2 * wanamingoDataPagePicture.w + 30, - wanamingoDataPagePicture.h - 10, dataPage, wanamingoDataPagePicture));
 
-//	dataPagesVector.push_back(CreateNonGroupImage(-2 * wanamingoDataPagePicture.w + 30, - wanamingoDataPagePicture.h - 10, dataPage, wanamingoDataPagePicture));
+//	dataPagesVector->push_back(CreateNonGroupImage(-2 * wanamingoDataPagePicture.w + 30, - wanamingoDataPagePicture.h - 10, dataPage, wanamingoDataPagePicture));
 	// PUSH HEALTHBAR
 //	AddUIElement(fMPoint(w - 90, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), enemy, DRAGGABLE::DRAG_OFF, "HPbar");
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	dataPagesVector.push_back(CreateNonGroupText(-60, -55, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -55, dataPage, stats));
 
 	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
-	dataPagesVector.push_back(CreateNonGroupText(-60, -40, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -40, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	dataPagesVector.push_back(CreateNonGroupText(-25, -40, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-25, -40, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	dataPagesVector.push_back(CreateNonGroupText(-60, -25, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -25, dataPage, stats));
 }
 
 
-void UIFactory::CreateBasePage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	char stats[40];
 	Base* focus = (Base*)app->player->GetFocusedEntity();
 
-	dataPagesVector.push_back(CreateNonGroupImage(-2 * baseDataPagePicture.w + 15, -baseDataPagePicture.h - 6, dataPage, baseDataPagePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(-2 * baseDataPagePicture.w + 15, -baseDataPagePicture.h - 6, dataPage, baseDataPagePicture));
 
 //	AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), base, DRAGGABLE::DRAG_OFF, "HPbar");
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
-	dataPagesVector.push_back(CreateNonGroupText(-60, -55, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-60, -55, dataPage, stats));
 }
 
 
-void UIFactory::CreateTurretPage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	char stats[40];
 	Turret* focus = (Turret*)app->player->GetFocusedEntity();
 
-	dataPagesVector.push_back(CreateNonGroupImage(-2 * turretDataPagePicture.w + 10, -turretDataPagePicture.h - 1, dataPage, turretDataPagePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(-2 * turretDataPagePicture.w + 10, -turretDataPagePicture.h - 1, dataPage, turretDataPagePicture));
 
 	// AddUIElement(fMPoint(w - 62, (h - 64)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), turret, DRAGGABLE::DRAG_OFF, "HPbar");
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
-	dataPagesVector.push_back(CreateNonGroupText(-45, -15, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-45, -15, dataPage, stats));
 
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	dataPagesVector.push_back(CreateNonGroupText(-45, -30, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-45, -30, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetRng());
-	dataPagesVector.push_back(CreateNonGroupText(-45, -45, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-45, -45, dataPage, stats));
 
 	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
-	dataPagesVector.push_back(CreateNonGroupText(-45, -60, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(-45, -60, dataPage, stats));
 }
 
 
-void UIFactory::CreateUpgradeCenterPage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 
 
 }
 
 
-void UIFactory::CreateBarricadePage(std::vector<UI*> dataPagesVector, UI* dataPage)
+void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 
 
