@@ -765,7 +765,7 @@ void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataP
 }
 
 
-}
+
 
  
 UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* group)
