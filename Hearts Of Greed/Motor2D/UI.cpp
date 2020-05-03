@@ -86,14 +86,17 @@ void UI::HandleInput()
 
 void UI::Draw(float dt)
 {
-	if (rect.h == 0 || rect.w == 0)
+	if (texture != nullptr)
 	{
-		app->render->Blit(texture, position.x, position.y, nullptr, false, false, '\000', 255, 255, 255);
-	}
+		if (rect.h == 0 || rect.w == 0)
+		{
+			app->render->Blit(texture, position.x, position.y, nullptr, false, false, '\000', 255, 255, 255);
+		}
 
-	else
-	{
-		app->render->Blit(texture, position.x, position.y, &rect, false, false, '\000', 255, 255, 255);
+		else
+		{
+			app->render->Blit(texture, position.x, position.y, &rect, false, false, '\000', 255, 255, 255);
+		}
 	}
 	
 }
