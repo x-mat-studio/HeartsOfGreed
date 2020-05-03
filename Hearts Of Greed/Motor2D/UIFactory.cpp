@@ -296,6 +296,12 @@ UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* gr
 	return uiText;
 }
 
+UI* UIFactory::CreateNonGroupText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable)
+{
+	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
+
+	return uiText;
+}
 
 UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)
 {

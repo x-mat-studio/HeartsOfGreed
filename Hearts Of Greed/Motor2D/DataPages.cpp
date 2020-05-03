@@ -1,9 +1,11 @@
 #include "DataPages.h"
 #include "Player.h"
+#include "UIManager.h"
 
 DataPages::DataPages(UI* parent, Entity* entity) : UI({ 0, 0 }, parent, UI_TYPE::DATA_PAGES, { 0, 0, 0, 0 }, true, false, nullptr),
 	state(DATA_PAGE_ENUM::FOCUSED_NONE),
-	focusEntity(entity)
+	focusEntity(entity),
+	factory(app->uiManager->GetFactory())
 {}
 
 DataPages::~DataPages()
@@ -11,7 +13,7 @@ DataPages::~DataPages()
 	DeleteCurrentData();
 }
 
-void DataPages::HandleInput()
+bool DataPages::PreUpdate(float dt)
 {
 	Entity* focus = app->player->GetFocusedEntity();
 
@@ -89,32 +91,38 @@ void DataPages::HandleInput()
 
 	for (int i = 0; i < numElem; i++)
 	{
-//		dataPageVector[i]->uiElement->PreUpdate();
+		dataPageVector[i]->PreUpdate(dt);
 	}
 
 	focus = nullptr;
+
+	return true;
 }
 
 
-void DataPages::Move()
+bool DataPages::Update(float dt)
 {
 	int numElem = dataPageVector.size(); 
 	
 	for (int i = 0; i < numElem; i++)
 	{
-//		dataPageVector[i]->uiElement->Update();
+		dataPageVector[i]->Update(dt);
 	}
+
+	return true;
 }
 
 
-void DataPages::Draw(float dt)
+bool DataPages::PostUpdate(float dt)
 {
 	int numElem = dataPageVector.size();
 
 	for (int i = 0; i < numElem; i++)
 	{
-		dataPageVector[i]->uiElement->PostUpdate(dt);
+		dataPageVector[i]->PostUpdate(dt);
 	}
+
+	return true;
 }
 
 

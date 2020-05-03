@@ -33,6 +33,7 @@ public:
 	// Text creation functions
 
 	UI* CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false);
+	UI* CreateNonGroupText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false);
 
 	// Button creation functions
 

@@ -4,6 +4,7 @@
 #include "UI.h"
 
 class Entity;
+class UIFactory;
 
 enum class DATA_PAGE_ENUM
 {
@@ -23,13 +24,6 @@ enum class DATA_PAGE_ENUM
 	FOCUSED_UNKNOWN,
 };
 
-struct PageElement
-{
-public:
-	UI* uiElement;
-	int previousValue;
-};
-
 class DataPages : public UI
 {
 public:
@@ -40,9 +34,9 @@ public:
 
 private:
 
-	void HandleInput();
-	void Move();
-	void Draw(float dt);
+	bool PreUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
 
 	bool CheckData(int previous, int current);
 	void ChangeTexture();
@@ -73,9 +67,10 @@ private:
 
 private:
 
-	std::vector<PageElement*> dataPageVector;
+	std::vector<UI*> dataPageVector;
 	DATA_PAGE_ENUM state;
 	Entity* focusEntity;
+	UIFactory* factory;
 
 };
 
