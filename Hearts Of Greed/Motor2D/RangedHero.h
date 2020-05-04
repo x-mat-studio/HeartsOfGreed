@@ -43,7 +43,7 @@ public:
 	SDL_Rect explosionRect;
 	Animation* currentVfx;
 	bool DrawVfx(float dt);
-
+	void BlitCommandVfx(Frame& currframe, int alphaValue);
 };
 
 

@@ -21,6 +21,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "AI.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -94,7 +95,7 @@ bool ModuleTestScene::Start()
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, app->audio->musicVolume);
 
 	//Load sfx used in this scene
-	if (app->map->LoadNew("map_prototype2.tmx") == true)
+	if (app->map->LoadNew("finalMap.tmx") == true)
 	{
 		int w, h;
 		uchar* data = nullptr;
@@ -113,6 +114,7 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
+		app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
 		//mid
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
@@ -323,6 +325,8 @@ bool  ModuleTestScene::Update(float dt)
 bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
+
+	BROFILER_CATEGORY("Game Scene PostUpdate", Profiler::Color::LightYellow);
 
 	app->map->Draw();
 

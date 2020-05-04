@@ -26,17 +26,17 @@ UIFactory::UIFactory() :
 	portraitLevelBackground{ 55, 210, 18, 18 },
 	portraitHealthbarBackground{ 34, 22, 52, 10 },
 	portraitHealthbarGreenImage{ 29, 79, 50, 8 },
-	dataPageBackground{ 400, 435, 139, 67 },
-	dataPageImageBackground{ 727, 203, 65, 51 },
-	gathererPicture{ 351, 149, 68, 52 },
+	dataPageBackground{ 678, 369, 190, 67 },
+	dataPageImageBackground{ 721, 202, 65, 51 },
+	gathererPicture{ 352, 149, 59, 45 },
 	gathererShopPicture{ 581, 24, 36, 27 },
-	meleePicture{ 561, 149, 68, 52 },
+	meleePicture{ 566, 149, 59, 45 },
 	meleeShopPicture{ 658, 24, 36, 27 },
-	rangedPicture{ 147, 149, 68, 52 },
+	rangedPicture{ 150, 149, 59, 45 },
 	rangedShopPicture{ 619, 24, 36, 27 },
-	baseDataPagePicture{ 634, 78, 68, 62 },
-	turretDataPagePicture{ 561, 77, 68, 62 },
-	wanamingoDataPagePicture{ 894, 116, 70, 79 },
+	baseDataPagePicture{ 634, 90, 59, 45 },
+	turretDataPagePicture{ 561, 77, 60, 45 },
+	wanamingoDataPagePicture{ 885, 152, 59, 45 },
 	turretShopPicture{ 696, 12, 34, 40 },
 	resourceIcon{ 18, 209, 11, 19 },
 	creditsBackgroundImage{ 563, 237, 117, 122 },
@@ -58,9 +58,9 @@ UIFactory::UIFactory() :
 	scrollbarBar{ 272, 45, 90, 4 },
 	scrollbarButton{ 257, 15, 13, 34 },
 
-	dataPageHealthbarGreenImage{313, 81, 58, 4},
-	dataPageHealthbarBlueImage{375, 81, 58, 4},
-	healthBarContainer{251, 86, 60, 7},
+	dataPageHealthbarGreenImage{313, 81, 59, 4},
+	dataPageHealthbarBlueImage{375, 81, 59, 4},
+	healthBarContainer{251, 86, 61, 8},
 
 	heroPortrait{401, 328, 68, 81},
 	gathererHeroIcon{101, 521, 27, 33},
@@ -189,6 +189,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
+	CreatePortraitManager(x, y, nullptr, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
@@ -196,7 +197,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	background = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
-	CreateImage(x - 2 * dataPageImageBackground.w + 12, y - dataPageImageBackground.h - 5, nullptr, dataPageImageBackground, group);
+	CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageImageBackground, group);
 
 	CreateDataPage(background, nullptr, group);
 
@@ -591,7 +592,7 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 UI* UIFactory::CreateDataPage(UI* parent, Entity* entity, UI_Group* group)
 {
-	DataPages* dataPage = new DataPages(dataPageBackground.w, dataPageBackground.h, parent, entity);
+	DataPages* dataPage = new DataPages(0, 0, parent, entity);
 
 	group->AddUiElement(dataPage);
 
@@ -604,27 +605,35 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(-2 * gathererPicture.w + 10, -gathererPicture.h - 2, dataPage, gathererPicture));
+	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, gathererPicture));
 
-	// AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
+	UI* healthbar = new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
-	// AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("Ebar"), hero, DRAGGABLE::DRAG_OFF, "Ebar");
+	healthbar = new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
 
-	sprintf_s(stats, 40, "AS: %f", focus->attackSpeed);
-	dataPagesVector->push_back(CreateNonGroupText(-30, -46, dataPage, stats));
+	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
+	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
+	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector->push_back(CreateNonGroupText(-30, -36, dataPage, stats));
-
-	sprintf_s(stats, 40, "EXP: %i / %i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -26, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 25, dataPage, stats));
 }
 
 
@@ -633,27 +642,35 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(-2 * meleePicture.w + 10, -meleePicture.h - 2, dataPage, meleePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, meleePicture));
 
-	// AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
+	UI* healthbar = new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
-	// AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("Ebar"), hero, DRAGGABLE::DRAG_OFF, "Ebar");
+	healthbar = new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
 
-	sprintf_s(stats, 40, "AS: %f", focus->attackSpeed);
-	dataPagesVector->push_back(CreateNonGroupText(-30, -46, dataPage, stats));
+	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
+	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
+	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector->push_back(CreateNonGroupText(-30, -36, dataPage, stats));
-
-	sprintf_s(stats, 40, "EXP: %i / %i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -26, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 25, dataPage, stats));
 }
 
 
@@ -662,27 +679,35 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(-2 * rangedPicture.w + 10, -rangedPicture.h - 2, dataPage, rangedPicture));
+	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, rangedPicture));
 
-	// AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), hero, DRAGGABLE::DRAG_OFF, "HPbar");
+	UI* healthbar = new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
-	// AddUIElement(fMPoint(w - 60, (h - 50)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("Ebar"), hero, DRAGGABLE::DRAG_OFF, "Ebar");
+	healthbar = new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -46, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
 
-	sprintf_s(stats, 40, "AS: %f", focus->attackSpeed);
-	dataPagesVector->push_back(CreateNonGroupText(-30, -46, dataPage, stats));
+	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
+	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
+	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -36, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector->push_back(CreateNonGroupText(-30, -36, dataPage, stats));
-
-	sprintf_s(stats, 40, "EXP: %i / %i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector->push_back(CreateNonGroupText(-60, -26, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 25, dataPage, stats));
 }
 
 
@@ -691,24 +716,26 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 	char stats[40];
 	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(-2 * wanamingoDataPagePicture.w + 30, - wanamingoDataPagePicture.h - 10, dataPage, wanamingoDataPagePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, wanamingoDataPagePicture));
 
-//	dataPagesVector->push_back(CreateNonGroupImage(-2 * wanamingoDataPagePicture.w + 30, - wanamingoDataPagePicture.h - 10, dataPage, wanamingoDataPagePicture));
-	// PUSH HEALTHBAR
-//	AddUIElement(fMPoint(w - 90, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), enemy, DRAGGABLE::DRAG_OFF, "HPbar");
+	UI* healthbar = new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	dataPagesVector->push_back(CreateNonGroupText(-60, -55, dataPage, stats));
-
-	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
-	dataPagesVector->push_back(CreateNonGroupText(-60, -40, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	dataPagesVector->push_back(CreateNonGroupText(-25, -40, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+
+	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
+	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	dataPagesVector->push_back(CreateNonGroupText(-60, -25, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
 }
 
 
@@ -717,13 +744,17 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	char stats[40];
 	Base* focus = (Base*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(-2 * baseDataPagePicture.w + 15, -baseDataPagePicture.h - 6, dataPage, baseDataPagePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, baseDataPagePicture));
 
-//	AddUIElement(fMPoint(w - 60, (h - 60)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), base, DRAGGABLE::DRAG_OFF, "HPbar");
+	UI* healthbar = new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
-	dataPagesVector->push_back(CreateNonGroupText(-60, -55, dataPage, stats));
+	dataPagesVector->push_back(CreateNonGroupText(68, 10, dataPage, stats));
 }
 
 
@@ -732,9 +763,13 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	char stats[40];
 	Turret* focus = (Turret*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(-2 * turretDataPagePicture.w + 10, -turretDataPagePicture.h - 1, dataPage, turretDataPagePicture));
+	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, turretDataPagePicture));
 
-	// AddUIElement(fMPoint(w - 62, (h - 64)), focusedPortrait, UI_TYPE::UI_HEALTHBAR, rect, P2SString("HPbar"), turret, DRAGGABLE::DRAG_OFF, "HPbar");
+	UI* healthbar = new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
+
+	healthbar = new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	dataPagesVector->push_back(healthbar);
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
@@ -774,11 +809,13 @@ UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* gro
 
 	group->AddUiElement(element);
 
+	app->uiManager->SetPortraitManager((HeroesPortraitManager*)element);
+
 	return element;
 }
 
 
-void UIFactory::CreatePortrait(Hero* hero)
+HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 {
 	HeroPortrait* portrait = new HeroPortrait(hero);
 
@@ -792,7 +829,7 @@ void UIFactory::CreatePortrait(Hero* hero)
 	switch (hero->GetType())
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(17, 9, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -802,7 +839,7 @@ void UIFactory::CreatePortrait(Hero* hero)
 
 
 	case ENTITY_TYPE::HERO_MELEE:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(17, 9, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -812,7 +849,7 @@ void UIFactory::CreatePortrait(Hero* hero)
 
 
 	case ENTITY_TYPE::HERO_RANGED:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(17, 9, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -827,17 +864,17 @@ void UIFactory::CreatePortrait(Hero* hero)
 	}
 
 	
-	healthBar = new UI_Image(5, 52, BackGround, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	healthBar = new UI_Image(5, 52, BackGround, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(4, 51, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	healthBarCont = new UI_Image(4, 51, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(5, 63, BackGround, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
+	manaBar = new UI_Image(5, 63, BackGround, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
-	app->uiManager->GetPortraitManager()->AddPortrait(portrait);
+	return portrait;
 }

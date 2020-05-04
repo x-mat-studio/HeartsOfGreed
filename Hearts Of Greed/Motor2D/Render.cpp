@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "EventManager.h"
 #include "Collision.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
 ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr)
@@ -90,6 +91,8 @@ bool ModuleRender::Update(float dt)
 
 bool ModuleRender::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("Coll PostUpdate", Profiler::Color::LightYellow);
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	
 	SDL_RenderPresent(renderer);

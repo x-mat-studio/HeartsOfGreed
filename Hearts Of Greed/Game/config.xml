@@ -51,6 +51,7 @@
     docnameTurret="turret.xml" 
     docnameArmoredman="armoredman.xml" 
     docnameRangedman="rangedman.xml"
+    docnameRobotto="robotto.xml"
     docnamevfx="Vfx.xml" 
     docnameSpawner="spawner.xml"
     docnameBuildings="buildings.xml"

@@ -20,10 +20,12 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 HeroPortrait::~HeroPortrait()
 {
 	hero = nullptr;
+	healthRect = nullptr;
+	manaRect = nullptr;
 
 	int numberElements = uiElementsVector.size();
 
-	for (int i = numberElements; i >= 0; i--)
+	for (int i = numberElements - 1; i >= 0; i--)
 	{
 		delete uiElementsVector[i];
 		uiElementsVector[i] = nullptr;
@@ -37,19 +39,28 @@ HeroPortrait::~HeroPortrait()
 
 bool HeroPortrait::PreUpdate(float dt)
 {
-
-	if (hero->hitPointsCurrent != life && hero->hitPointsCurrent != 0)
+	if (hero->hitPointsCurrent != life && hero->hitPointsCurrent > 0)
 	{
 		life = hero->hitPointsCurrent;
 
 		healthRect->w = life * originalBarsWidth / hero->hitPointsMax;
+
+		if (healthRect->w == 0)
+		{
+			healthRect->w = 1;
+		}
 	}
 
-	if (hero->hitPointsCurrent != life && hero->hitPointsCurrent != 0)
+	if (hero->energyPoints != mana && hero->energyPoints > 0)
 	{
-		life = hero->hitPointsCurrent;
+		mana = hero->energyPoints;
 
-		healthRect->w = life * originalBarsWidth / hero->hitPointsMax;
+		manaRect->w = life * originalBarsWidth / hero->maxEnergyPoints;
+
+		if (manaRect->w == 0)
+		{
+			manaRect->w = 1;
+		}
 	}
 
 	int numElements = uiElementsVector.size();
@@ -109,4 +120,65 @@ void HeroPortrait::AddManaBar(UI* element)
 {
 	manaRect = &element->rect;
 	uiElementsVector.push_back(element);
+}
+
+
+Hero* HeroPortrait::GetHero()
+{
+	return hero;
+}
+
+
+bool HeroPortrait::OnAbove()
+{
+	bool ret = false;
+
+	int elementsNumber = uiElementsVector.size();
+
+	for (int i = elementsNumber - 1; i >= 0 && ret == false; i--)
+	{
+		if (uiElementsVector[i]->OnAbove() == true)
+		{
+			i--;
+
+			for (i; i >= 0; i--)
+			{
+				uiElementsVector[i]->UnFocus();
+			}
+
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+
+UI* HeroPortrait::SearchFocus()
+{
+	int numElem = uiElementsVector.size();
+	UI* focusUI;
+
+	for (int i = numElem - 1; i >= 0; i--)
+	{
+		focusUI = uiElementsVector[i]->SearchFocus();
+
+		if (focusUI != nullptr)
+		{
+			return focusUI;
+		}
+	}
+
+	return nullptr;
+}
+
+
+void HeroPortrait::UnFocus()
+{
+	int elementsNumber = uiElementsVector.size();
+
+	for (int i = 0; i < elementsNumber; i++)
+	{
+		uiElementsVector[i]->UnFocus();
+	}
 }

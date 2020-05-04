@@ -89,7 +89,7 @@ bool UI_Group::OnAbove()
 
 			for (i; i >= 0; i--)
 			{
-				uiElementVector[i]->focused = false;
+				uiElementVector[i]->UnFocus();
 			}
 
 			ret = true;
@@ -107,9 +107,11 @@ UI* UI_Group::SearchFocus()
 
 	for (int i = numElem - 1; i >= 0; i--)
 	{
-		if (uiElementVector[i]->OnAbove())
+		focusUI = uiElementVector[i]->SearchFocus();
+
+		if (focusUI != nullptr)
 		{
-			return uiElementVector[i];
+			return focusUI;
 		}
 	}
 
@@ -123,6 +125,6 @@ void UI_Group::UnFocus()
 
 	for (int i = 0; i < uiNumber; i++)
 	{
-		uiElementVector[i]->focused = false;
+		uiElementVector[i]->UnFocus();
 	}
 }

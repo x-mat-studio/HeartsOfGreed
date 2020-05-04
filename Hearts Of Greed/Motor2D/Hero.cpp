@@ -406,8 +406,13 @@ bool Hero::PostUpdate(float dt)
 
 	DrawArea();
 
+	CommandVfx(dt);
 
-	//Final tile indicator draw-----
+	return true;
+}
+
+void Hero::CommandVfx(float dt)
+{
 	if (path.size() > 0)
 	{
 		Frame currFrame = tileOnWalk.GetCurrentFrame(dt);
@@ -417,8 +422,7 @@ bool Hero::PostUpdate(float dt)
 		if (selectedByPlayer)
 			drawAlpha = 225;
 
-
-		app->render->Blit(app->entityManager->moveCommandTile, movingTo.x - currFrame.pivotPositionX, movingTo.y - currFrame.pivotPositionY, &currFrame.frame, false, true, drawAlpha);
+		BlitCommandVfx(currFrame, drawAlpha);
 	}
 	else
 	{
@@ -427,10 +431,7 @@ bool Hero::PostUpdate(float dt)
 	}
 
 
-
-	return true;
 }
-
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
 {
@@ -446,7 +447,7 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 		movingTo = app->pathfinding->GetDestination(this);
 		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
-		app->audio->PlayFx(app->entityManager->moveHero, 0, -1);
+
 		tileOnWalk.ResetAnimation();
 
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
@@ -583,20 +584,6 @@ void Hero::Die()
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
-	//TODO
-	switch (type)
-	{
-	case ENTITY_TYPE::HERO_MELEE:
-		
-		break;
-	case ENTITY_TYPE::HERO_RANGED:
-		
-		break;
-	case ENTITY_TYPE::HERO_GATHERER:
-		
-		break;
-	}
-
 	if (minimapIcon != nullptr)
 	{
 		minimapIcon->toDelete = true;
@@ -658,6 +645,11 @@ void Hero::FeelingSecure(float dt)
 void Hero::PlayGenericNoise(int random)
 {
 	//Herency only
+	return;
+}
+
+void Hero::BlitCommandVfx (Frame& currframe, int alphaValue)
+{
 	return;
 }
 

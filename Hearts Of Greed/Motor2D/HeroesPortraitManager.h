@@ -5,25 +5,34 @@
 #include "vector"
 
 class HeroPortrait;
+class Hero;
 
 class HeroesPortraitManager : public UI
 {
 public:
+
 	HeroesPortraitManager(float x, float y, UI* parent, bool dragable);
 	~HeroesPortraitManager();
+
+	void AddPortrait(HeroPortrait* portrait);
+
+	void DeletePortrait(Hero* portrait);
+
+	bool OnAbove();
+	UI* SearchFocus();
+	void UnFocus();
+
+private:
 
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	void AddPortrait(HeroPortrait* portrait);
 
-	void DeletePortrait(HeroPortrait* portrait);
 private:
 
 	std::vector<HeroPortrait*> heroPortraitsVector;
 };
-
 
 
 

@@ -12,6 +12,7 @@ class Hero;
 class GathererHero;
 class MeleeHero;
 class RangedHero;
+class RoboHero;
 
 class Building;
 class DynamicEntity;
@@ -155,7 +156,11 @@ public:
 	SDL_Texture* selectedTexture;
 	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
-	SDL_Texture* moveCommandTile;
+
+	SDL_Texture* moveCommandTileRng;
+	SDL_Texture* moveCommandTileGath;
+	SDL_Texture* moveCommandTileMelee;
+
 	SDL_Texture* explosionTexture;
 
 	
@@ -216,6 +221,8 @@ private:
 	SDL_Texture* suitManTexture;
 	SDL_Texture* armorMaleTexture;
 	SDL_Texture* combatFemaleTexture;
+	SDL_Texture* roboTexture;
+
 	SDL_Texture* buildingTexture;
 
 	
@@ -234,6 +241,7 @@ private:
 	GathererHero* sampleGatherer;
 	MeleeHero* sampleMelee;
 	RangedHero* sampleRanged;
+	RoboHero* sampleRobo;
 
 	Enemy* sampleEnemy;
 

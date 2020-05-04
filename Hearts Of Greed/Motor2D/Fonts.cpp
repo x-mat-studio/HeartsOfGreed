@@ -100,24 +100,6 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 	else
 	{
 
-		const int SurfaceWidth = surface->w;
-		const int SurfaceHeight = surface->h;
-
-		// Loop through the second surface' pixel data
-		for (int i = 0; i < SurfaceHeight; ++i)
-		{
-			for (int j = 0; j < SurfaceWidth; ++j)
-			{
-				const Uint32 NewPixelValue = SDL_MapRGB(surface->format, 255, 0, 0);
-
-				SDL_SetColorKey(surface, SDL_TRUE, NewPixelValue);
-
-
-			}
-		}
-
-
-
 		ret = app->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);
 

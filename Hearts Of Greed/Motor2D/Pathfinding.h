@@ -15,8 +15,8 @@
 #include <unordered_map>
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 2
-#define CLUSTER_SIZE_LVL 4
+#define NODE_MIN_DISTANCE 6
+#define CLUSTER_SIZE_LVL 10
 #define MAX_LEVELS 1
 
 
@@ -190,10 +190,10 @@ public:
 	bool LineRayCast(iMPoint& p0, iMPoint& p1);
 	std::vector<iMPoint> CreateLine(iMPoint& p0, iMPoint& p1);
 
+	float SimpleAPathfinding(const iMPoint& origin, const iMPoint& destination, int limitpath = -1);
 
 private:
 
-	float SimpleAPathfinding(const iMPoint& origin, const iMPoint& destination);
 
 	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl);
 

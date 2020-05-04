@@ -37,6 +37,9 @@ public:
 	void PlayGenericNoise(int random);
 
 private:
+	void BlitCommandVfx(Frame& currframe, int alphaValue);
+
+private:
 
 	fMPoint granadePosLaunch;
 	skillArea* granadeArea;
@@ -46,6 +49,7 @@ private:
 	//This is a placeholder for particles
 	SDL_Rect explosionRect;
 	Animation* currentVfx;
+
 	bool DrawVfx(float dt);
 };
 

@@ -99,7 +99,6 @@ void UI::Draw(float dt)
 			app->render->Blit(texture, position.x, position.y, &rect, false, false, '\000', 255, 255, 255);
 		}
 	}
-	
 }
 
 
@@ -175,3 +174,19 @@ bool UI::GetDragable()
 	return dragable;
 }
 
+
+UI* UI::SearchFocus()
+{
+	if (focused == true)
+	{
+		return this;
+	}
+
+	return nullptr;
+}
+
+
+void UI::UnFocus()
+{
+	focused = false;
+}
