@@ -42,7 +42,9 @@ public:
 
 	void Drag(int x, int y);
 
-	bool OnAbove();
+	virtual bool OnAbove();
+	virtual void UnFocus();
+	virtual UI* SearchFocus();
 
 	fMPoint GetPosition();
 	fMPoint GetLocalPosition();
