@@ -21,6 +21,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "AI.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -94,7 +95,7 @@ bool ModuleTestScene::Start()
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, app->audio->musicVolume);
 
 	//Load sfx used in this scene
-	if (app->map->LoadNew("map_prototype2.tmx") == true)
+	if (app->map->LoadNew("finalMap.tmx") == true)
 	{
 		int w, h;
 		uchar* data = nullptr;
@@ -324,6 +325,8 @@ bool  ModuleTestScene::Update(float dt)
 bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
+
+	BROFILER_CATEGORY("Game Scene PostUpdate", Profiler::Color::LightYellow);
 
 	app->map->Draw();
 

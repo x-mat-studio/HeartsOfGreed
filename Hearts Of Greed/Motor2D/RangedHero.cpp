@@ -188,3 +188,8 @@ bool RangedHero::DrawVfx(float dt)
 
 	return false;
 }
+
+void RangedHero::BlitCommandVfx(Frame& currframe, int alphaValue)
+{
+	app->render->Blit(app->entityManager->moveCommandTileRng, movingTo.x - currframe.pivotPositionX, movingTo.y - currframe.pivotPositionY, &currframe.frame, false, true, alphaValue);
+}

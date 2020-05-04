@@ -319,6 +319,7 @@ void ModulePlayer::RightClick()
 		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
 	}
 
+	app->audio->PlayFx(app->entityManager->moveHero, 0, -1);
 }
 
 

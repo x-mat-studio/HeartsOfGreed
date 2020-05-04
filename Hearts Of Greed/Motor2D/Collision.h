@@ -1,7 +1,7 @@
 #ifndef __Collision_H__
 #define __Collision_H__
 
-#define MAX_COLLIDERS 3500
+#define MAX_COLLIDERS 4500
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
@@ -100,8 +100,10 @@ public:
 private:
 
 	bool		debug = false;
-	std::vector <Collider*> colliders;
+	Collider* colliders [MAX_COLLIDERS];
 	bool		matrix[COLLIDER_MAX][COLLIDER_MAX];
+
+	uint collCheck;
 
 };
 
