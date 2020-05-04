@@ -12,6 +12,7 @@ class Hero;
 class GathererHero;
 class MeleeHero;
 class RangedHero;
+class RoboHero;
 
 class Building;
 class DynamicEntity;
@@ -216,6 +217,8 @@ private:
 	SDL_Texture* suitManTexture;
 	SDL_Texture* armorMaleTexture;
 	SDL_Texture* combatFemaleTexture;
+	SDL_Texture* roboTexture;
+
 	SDL_Texture* buildingTexture;
 
 	
@@ -234,6 +237,7 @@ private:
 	GathererHero* sampleGatherer;
 	MeleeHero* sampleMelee;
 	RangedHero* sampleRanged;
+	RoboHero* sampleRobo;
 
 	Enemy* sampleEnemy;
 
