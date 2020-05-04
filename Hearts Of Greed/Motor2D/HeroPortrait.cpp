@@ -127,3 +127,58 @@ Hero* HeroPortrait::GetHero()
 {
 	return hero;
 }
+
+
+bool HeroPortrait::OnAbove()
+{
+	bool ret = false;
+
+	int elementsNumber = uiElementsVector.size();
+
+	for (int i = elementsNumber - 1; i >= 0 && ret == false; i--)
+	{
+		if (uiElementsVector[i]->OnAbove() == true)
+		{
+			i--;
+
+			for (i; i >= 0; i--)
+			{
+				uiElementsVector[i]->UnFocus();
+			}
+
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+
+UI* HeroPortrait::SearchFocus()
+{
+	int numElem = uiElementsVector.size();
+	UI* focusUI;
+
+	for (int i = numElem - 1; i >= 0; i--)
+	{
+		focusUI = uiElementsVector[i]->SearchFocus();
+
+		if (focusUI != nullptr)
+		{
+			return focusUI;
+		}
+	}
+
+	return nullptr;
+}
+
+
+void HeroPortrait::UnFocus()
+{
+	int elementsNumber = uiElementsVector.size();
+
+	for (int i = 0; i < elementsNumber; i++)
+	{
+		uiElementsVector[i]->UnFocus();
+	}
+}

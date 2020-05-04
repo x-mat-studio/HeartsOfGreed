@@ -91,10 +91,6 @@ void UI::Draw(float dt)
 	{
 		if (rect.h == 0 || rect.w == 0)
 		{
-			if (type != UI_TYPE::TEXT)
-			{
-				LOG("SHIIIIIT");
-			}
 			app->render->Blit(texture, position.x, position.y, nullptr, false, false, '\000', 255, 255, 255);
 		}
 
@@ -178,3 +174,19 @@ bool UI::GetDragable()
 	return dragable;
 }
 
+
+UI* UI::SearchFocus()
+{
+	if (focused == true)
+	{
+		return this;
+	}
+
+	return nullptr;
+}
+
+
+void UI::UnFocus()
+{
+	focused = false;
+}

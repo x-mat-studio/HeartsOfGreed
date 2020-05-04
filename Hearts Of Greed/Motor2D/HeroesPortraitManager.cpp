@@ -4,7 +4,7 @@
 
 HeroesPortraitManager::HeroesPortraitManager(float x, float y, UI* parent, bool dragable) :
 
-	UI(fMPoint(x, y), parent, UI_TYPE::HERO_PORTRAIT_MANAGER, {0, 0, 0, 0}, false, false, nullptr)
+	UI(fMPoint(x, y), parent, UI_TYPE::HERO_PORTRAIT_MANAGER, { 0, 0, 0, 0 }, false, false, nullptr)
 
 {
 	app->uiManager->SetPortraitManager(this);
@@ -57,7 +57,7 @@ bool HeroesPortraitManager::PostUpdate(float dt)
 
 	for (int i = 0; i < heroPortraitsNumber; i++)
 	{
-		heroPortraitsVector[i]->SetLocalPosition(fMPoint(3, 60*i));
+		heroPortraitsVector[i]->SetLocalPosition(fMPoint(3, 70 * i));
 		heroPortraitsVector[i]->PostUpdate(dt);
 	}
 
@@ -86,5 +86,60 @@ void HeroesPortraitManager::DeletePortrait(Hero* portrait)
 
 			break;
 		}
+	}
+}
+
+
+bool HeroesPortraitManager::OnAbove()
+{
+	bool ret = false;
+
+	int elementsNumber = heroPortraitsVector.size();
+
+	for (int i = elementsNumber - 1; i >= 0 && ret == false; i--)
+	{
+		if (heroPortraitsVector[i]->OnAbove() == true)
+		{
+			i--;
+
+			for (i; i >= 0; i--)
+			{
+				heroPortraitsVector[i]->UnFocus();
+			}
+
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+
+UI* HeroesPortraitManager::SearchFocus()
+{
+	int numElem = heroPortraitsVector.size();
+	UI* focusUI;
+
+	for (int i = numElem - 1; i >= 0; i--)
+	{
+		focusUI = heroPortraitsVector[i]->SearchFocus();
+
+		if (focusUI != nullptr)
+		{
+			return focusUI;
+		}
+	}
+
+	return nullptr;
+}
+
+
+void HeroesPortraitManager::UnFocus()
+{
+	int elementsNumber = heroPortraitsVector.size();
+
+	for (int i = 0; i < elementsNumber; i++)
+	{
+		heroPortraitsVector[i]->UnFocus();
 	}
 }
