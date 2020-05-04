@@ -111,6 +111,10 @@ private:
 	SDL_Rect dataPageBackground;
 	SDL_Rect dataPageImageBackground;
 
+	SDL_Rect littleHealthBarContainer;
+	SDL_Rect littleHealthbarGreenImage;
+	SDL_Rect littleHealthbarBlueImage;
+
 	SDL_Rect gathererPicture;
 	SDL_Rect gathererShopPicture;
 	SDL_Rect meleePicture;

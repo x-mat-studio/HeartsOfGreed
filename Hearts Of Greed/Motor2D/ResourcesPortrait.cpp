@@ -13,6 +13,7 @@ ResourcesPortrait::ResourcesPortrait(float x, float y, UI* parent, bool interact
 
 ResourcesPortrait::~ResourcesPortrait()
 {
+	app->tex->UnLoad(texture);
 }
 
 
