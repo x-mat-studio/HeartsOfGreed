@@ -1244,7 +1244,7 @@ void Hero::SetAnimation(HERO_STATES currState)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			currentAnimation = &deathRightUp;
+			currentAnimation = &idleRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
 			currentAnimation = &idleLeftUp;
