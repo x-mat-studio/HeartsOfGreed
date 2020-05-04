@@ -314,7 +314,7 @@
 
 		<wanamingoUpLeftWalk frames="15" name="wanamingoUpLeftWalk">
 			<frame rposX="1075" rposY="285" rwidth="25" rheight="52"   time="0.15f" pivotX="10" pivotY="53"/>
-			<frame rposX="1139" rposY="285" rwidth="28" rheight="52"   time="0.15f" pivotX="19" pivotY="53/>
+			<frame rposX="1139" rposY="285" rwidth="28" rheight="52"   time="0.15f" pivotX="19" pivotY="53"/>
 			<frame rposX="1204" rposY="285" rwidth="28" rheight="52"   time="0.15f" pivotX="22" pivotY="53"/>
 			<frame rposX="1268" rposY="285" rwidth="30" rheight="52"   time="0.15f" pivotX="23" pivotY="53"/>
 			<frame rposX="1331" rposY="285" rwidth="34" rheight="52"   time="0.15f" pivotX="23" pivotY="53"/>
@@ -396,7 +396,7 @@
 			<frame rposX="1511" rposY="1413" rwidth="80" rheight="53"  time="0.15f" pivotX="76" pivotY="39"/>
 			<frame rposX="1593" rposY="1413" rwidth="79" rheight="53"  time="0.15f" pivotX="75" pivotY="40"/>
 			<frame rposX="1674" rposY="1413" rwidth="79" rheight="53"  time="0.15f" pivotX="75" pivotY="40"/>
-			<frame rposX="1754" rposY="1413" rwidth="80" rheight="53"  time="0.15f" pivotX="74" pivotY="42"/>
+			<frame rposX="1754" rposY="1413" rwidth="80" rheight="53"  time="0.15f" pivotX="75" pivotY="40"/>
 			<frame rposX="1835" rposY="1413" rwidth="80" rheight="53"  time="0.15f" pivotX="76" pivotY="40"/>
 		</wanamingoLeftDeath>
 
