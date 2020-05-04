@@ -824,8 +824,15 @@ void ModuleEntityManager::RemoveDeletedEntities()
 		{
 			CheckDynamicEntitysObjectives(entityVector[i]);
 			app->player->CheckFocusedEntity(entityVector[i]);
+			app->uiManager->CheckFocusEntity(entityVector[i]);
+
 
 			type = entityVector[i]->GetType();
+
+			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+			{
+				app->uiManager->RemovePortrait((Hero*)entityVector[i]);
+			}
 
 			delete entityVector[i];
 			entityVector[i] = nullptr;

@@ -7,10 +7,15 @@
 #include "Enemy.h"
 #include "Hero.h"
 
-DataPages::DataPages(float x, float y, UI* parent, Entity* entity) : UI({ x, y }, parent, UI_TYPE::DATA_PAGES, { 0, 0, 0, 0 }, true, false, nullptr),
-state(DATA_PAGE_ENUM::FOCUSED_NONE),
-focusEntity(entity),
-factory(app->uiManager->GetFactory())
+DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
+
+	UI({ x, y }, parent, UI_TYPE::DATA_PAGES, { 0, 0, 0, 0 }, true, false, nullptr),
+
+	state(DATA_PAGE_ENUM::FOCUSED_NONE),
+
+	factory(app->uiManager->GetFactory()),
+	focusEntity(entity)
+
 {}
 
 DataPages::~DataPages()
@@ -38,72 +43,113 @@ bool DataPages::PreUpdate(float dt)
 			{
 
 			case ENTITY_TYPE::HERO_GATHERER:
+
 				factory->CreateGathererPage(&dataPageVector, this);
 				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_GATHERER;
 				break;
+
+
 			case ENTITY_TYPE::HERO_MELEE:
+
 				factory->CreateMeleePage(&dataPageVector, this);
 				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_MELEE;
 				break;
+
+
 			case ENTITY_TYPE::HERO_RANGED:
+
 				factory->CreateRangedPage(&dataPageVector, this);
 				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_RANGED;
 				break;
+
+
 			case ENTITY_TYPE::ENEMY:
+
 				factory->CreateWanamingoPage(&dataPageVector, this);
 				GetWanamingoValue();
 				state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
 				break;
+
+
 			case ENTITY_TYPE::BLDG_TURRET:
+
 				factory->CreateTurretPage(&dataPageVector, this);
 				GetTurretValue();
 				break;
+
+
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+
 				factory->CreateUpgradeCenterPage(&dataPageVector, this);
 				GetUpgradeCenterValue();
 				state = DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER;
 				break;
+
+
 			case ENTITY_TYPE::BLDG_BASE:
+
 				factory->CreateBasePage(&dataPageVector, this);
 				GetBaseValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BASE;
 				break;
+
+
 			case ENTITY_TYPE::BLDG_BARRICADE:
+
 				factory->CreateBarricadePage(&dataPageVector, this);
 				GetBarricadeValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BARRICADE;
 				break;
+
+
 			default:
 				state = DATA_PAGE_ENUM::FOCUSED_UNKNOWN;
 				break;
 			}
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_BASE:
 			CheckBaseValues();
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_GATHERER:
 			CheckHeroesValues();
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_MELEE:
 			CheckHeroesValues();
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_RANGED:
 			CheckHeroesValues();
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_TURRET:
 			CheckTurretValues();
 			state = DATA_PAGE_ENUM::FOCUSED_TURRET;
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER:
 			CheckUpgradeCenterValues();
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_WANAMINGO:
 			CheckWanamingoValues();
 			break;
+
+
 		case DATA_PAGE_ENUM::FOCUSED_UNKNOWN:
+			break;
 		default:
 			break;
 		}
@@ -355,4 +401,59 @@ void DataPages::DeleteCurrentData()
 
 	focusEntity = nullptr;
 	state = DATA_PAGE_ENUM::FOCUSED_NONE;
+}
+
+
+bool DataPages::OnAbove()
+{
+	bool ret = false;
+
+	int elementsNumber = dataPageVector.size();
+
+	for (int i = elementsNumber - 1; i >= 0 && ret == false; i--)
+	{
+		if (dataPageVector[i]->OnAbove() == true)
+		{
+			i--;
+
+			for (i; i >= 0; i--)
+			{
+				dataPageVector[i]->UnFocus();
+			}
+
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+
+UI* DataPages::SearchFocus()
+{
+	int numElem = dataPageVector.size();
+	UI* focusUI;
+
+	for (int i = numElem - 1; i >= 0; i--)
+	{
+		focusUI = dataPageVector[i]->SearchFocus();
+
+		if (focusUI != nullptr)
+		{
+			return focusUI;
+		}
+	}
+
+	return nullptr;
+}
+
+
+void DataPages::UnFocus()
+{
+	int elementsNumber = dataPageVector.size();
+
+	for (int i = 0; i < elementsNumber; i++)
+	{
+		dataPageVector[i]->UnFocus();
+	}
 }

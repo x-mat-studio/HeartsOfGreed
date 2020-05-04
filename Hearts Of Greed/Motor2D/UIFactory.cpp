@@ -189,6 +189,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
+	CreatePortraitManager(x, y, nullptr, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
@@ -808,11 +809,13 @@ UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* gro
 
 	group->AddUiElement(element);
 
+	app->uiManager->SetPortraitManager((HeroesPortraitManager*)element);
+
 	return element;
 }
 
 
-void UIFactory::CreatePortrait(Hero* hero)
+HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 {
 	HeroPortrait* portrait = new HeroPortrait(hero);
 
@@ -826,7 +829,7 @@ void UIFactory::CreatePortrait(Hero* hero)
 	switch (hero->GetType())
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(17, 9, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -836,7 +839,7 @@ void UIFactory::CreatePortrait(Hero* hero)
 
 
 	case ENTITY_TYPE::HERO_MELEE:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(17, 9, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -846,7 +849,7 @@ void UIFactory::CreatePortrait(Hero* hero)
 
 
 	case ENTITY_TYPE::HERO_RANGED:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(17, 9, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -861,17 +864,17 @@ void UIFactory::CreatePortrait(Hero* hero)
 	}
 
 	
-	healthBar = new UI_Image(5, 52, BackGround, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
+	healthBar = new UI_Image(5, 52, BackGround, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(4, 51, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	healthBarCont = new UI_Image(4, 51, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(5, 63, BackGround, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
+	manaBar = new UI_Image(5, 63, BackGround, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
+	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
-	app->uiManager->GetPortraitManager()->AddPortrait(portrait);
+	return portrait;
 }

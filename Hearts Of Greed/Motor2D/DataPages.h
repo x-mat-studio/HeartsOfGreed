@@ -31,6 +31,9 @@ public:
 	DataPages(float x, float y, UI* parent, Entity* entity);
 	~DataPages();
 
+	bool OnAbove();
+	UI* SearchFocus();
+	void UnFocus();
 
 private:
 
