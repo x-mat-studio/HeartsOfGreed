@@ -22,6 +22,8 @@ public:
 	void AddHealthBar(UI* element);
 	void AddManaBar(UI* element);
 
+	Hero* GetHero();
+
 private:
 	Hero* hero;
 

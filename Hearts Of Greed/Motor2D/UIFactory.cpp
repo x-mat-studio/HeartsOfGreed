@@ -189,16 +189,17 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
+	CreatePortraitManager(x, y, nullptr, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
-	CreateResourcesPortrait(x - 65, y - 97, nullptr, group);
+//	CreateResourcesPortrait(x - 65, y - 97, nullptr, group);
 
 	background = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
 	CreateImage(x - 2 * dataPageImageBackground.w + 12, y - dataPageImageBackground.h - 5, nullptr, dataPageImageBackground, group);
 
-	CreateDataPage(background, nullptr, group);
+	//CreateDataPage(background, nullptr, group);
 
 	return group;
 }
@@ -774,11 +775,13 @@ UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* gro
 
 	group->AddUiElement(element);
 
+	app->uiManager->SetPortraitManager((HeroesPortraitManager*)element);
+
 	return element;
 }
 
 
-void UIFactory::CreatePortrait(Hero* hero)
+HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 {
 	HeroPortrait* portrait = new HeroPortrait(hero);
 
@@ -839,5 +842,5 @@ void UIFactory::CreatePortrait(Hero* hero)
 	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
 	portrait->AddElement(manaBarCont);
 
-	app->uiManager->GetPortraitManager()->AddPortrait(portrait);
+	return portrait;
 }

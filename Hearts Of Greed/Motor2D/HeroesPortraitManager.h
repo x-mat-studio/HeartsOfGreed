@@ -5,6 +5,7 @@
 #include "vector"
 
 class HeroPortrait;
+class Hero;
 
 class HeroesPortraitManager : public UI
 {
@@ -18,12 +19,11 @@ public:
 
 	void AddPortrait(HeroPortrait* portrait);
 
-	void DeletePortrait(HeroPortrait* portrait);
+	void DeletePortrait(Hero* portrait);
 private:
 
 	std::vector<HeroPortrait*> heroPortraitsVector;
 };
-
 
 
 

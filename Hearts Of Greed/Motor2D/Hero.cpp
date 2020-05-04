@@ -583,20 +583,6 @@ void Hero::Die()
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
-	//TODO
-	switch (type)
-	{
-	case ENTITY_TYPE::HERO_MELEE:
-		
-		break;
-	case ENTITY_TYPE::HERO_RANGED:
-		
-		break;
-	case ENTITY_TYPE::HERO_GATHERER:
-		
-		break;
-	}
-
 	if (minimapIcon != nullptr)
 	{
 		minimapIcon->toDelete = true;

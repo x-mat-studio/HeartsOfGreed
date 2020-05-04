@@ -15,7 +15,7 @@ HeroesPortraitManager::~HeroesPortraitManager()
 {
 	int heroPortraitsNumber = heroPortraitsVector.size();
 
-	for (int i = heroPortraitsNumber; i >= 0; i--)
+	for (int i = heroPortraitsNumber - 1; i >= 0; i--)
 	{
 		delete heroPortraitsVector[i];
 		heroPortraitsVector[i] = nullptr;
@@ -60,6 +60,7 @@ bool HeroesPortraitManager::PostUpdate(float dt)
 		heroPortraitsVector[i]->SetLocalPosition(fMPoint(3, 60*i));
 		heroPortraitsVector[i]->PostUpdate(dt);
 	}
+
 	return true;
 }
 
@@ -70,18 +71,20 @@ void HeroesPortraitManager::AddPortrait(HeroPortrait* portrait)
 }
 
 
-void HeroesPortraitManager::DeletePortrait(HeroPortrait* portrait)
+void HeroesPortraitManager::DeletePortrait(Hero* portrait)
 {
 	int heroPortraitsNumber = heroPortraitsVector.size();
 
 	for (int i = 0; i < heroPortraitsNumber; i++)
 	{
-		if (heroPortraitsVector[i] == portrait)
+		if (heroPortraitsVector[i]->GetHero() == portrait)
 		{
 			delete heroPortraitsVector[i];
 			heroPortraitsVector[i] = nullptr;
 
 			heroPortraitsVector.erase(heroPortraitsVector.begin() + i);
+
+			break;
 		}
 	}
 }

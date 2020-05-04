@@ -6,9 +6,11 @@
 
 class UI;
 class UI_Group;
-class Entity;
+class HeroPortrait;
 
+class Entity;
 class Hero;
+
 
 struct UIFactory
 {
@@ -87,7 +89,7 @@ public:
 	void CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 
 	UI* CreatePortraitManager(float x, float y, UI* parent, UI_Group* group);
-	void CreatePortrait(Hero* hero);
+	HeroPortrait* CreatePortrait(Hero* hero);
 
 public:
 
