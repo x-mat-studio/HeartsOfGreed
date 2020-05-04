@@ -12,7 +12,8 @@
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
-	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int maxHitPoints, int currentHitPoints,
+	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, 
+	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
 	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 25),
@@ -34,6 +35,12 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	punchRightUp(punchRightUp),
 	punchRightDown(punchRightDown),
 	punchRight(punchRight),
+	deathRight(deathRight),
+	deathRightDown(deathRightDown),
+	deathRightUp(deathRightUp),
+	deathLeft(deathLeft),
+	deathLeftUp(deathLeftUp),
+	deathLeftDown(deathLeftDown),
 
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	vision(vision),
@@ -76,6 +83,12 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	punchRightUp(copy->punchRightUp),
 	punchRightDown(copy->punchRightDown),
 	punchRight(copy->punchRight),
+	deathRight(copy->deathRight),
+	deathRightDown(copy->deathRightDown),
+	deathRightUp(copy->deathRightUp),
+	deathLeft(copy->deathLeft),
+	deathLeftUp(copy->deathLeftUp),
+	deathLeftDown(copy->deathLeftDown),
 
 	recoveryHitPointsRate(copy->recoveryHitPointsRate),
 	vision(copy->vision),

@@ -1866,10 +1866,17 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
 	Animation enemyPunchLeftUp = enemyPunchLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftPunch"); //jesus christ 
 	Animation enemyPunchLeftDown = enemyPunchLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftPunch"); //jesus christ 
 
+	Animation enemyDeathRight = enemyDeathRight.PushAnimation(enemyNode, "wanamingoRightDeath"); //looks good
+	Animation enemyDeathRightUp = enemyDeathRightUp.PushAnimation(enemyNode, "wanamingoUpRightDeath"); //jesus christ 
+	Animation enemyDeathRightDown = enemyDeathRightDown.PushAnimation(enemyNode, "wanamingoDownRightDeath"); //goes back and forth
+	Animation enemyDeathLeft = enemyDeathLeft.PushAnimation(enemyNode, "wanamingoLeftDeath"); //It should bump to the other side!
+	Animation enemyDeathLeftUp = enemyDeathLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftDeath"); //jesus christ 
+	Animation enemyDeathLeftDown = enemyDeathLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftDeath"); //jesus christ 
+
 	sampleEnemy = new Enemy(pos, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-		maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
+		enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
 
 	return ret;
 }
