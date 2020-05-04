@@ -20,6 +20,7 @@
 #include "GathererHero.h"
 #include "MeleeHero.h"
 #include "RangedHero.h"
+#include "RoboHero.h"
 #include "Enemy.h"
 
 #include "Spawner.h"
@@ -104,6 +105,17 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	LoadSampleHero(ENTITY_TYPE::HERO_RANGED, rangedman, config);
 	rangedmanDoc.reset();
 
+
+	// Sample Robo Hero---------------------
+	filename = config.child("load").attribute("docnameRobotto").as_string();
+	pugi::xml_document robottoDoc;
+	robottoDoc.load_file(filename.GetString());
+	pugi::xml_node robotto = robottoDoc.child("robotto");
+
+	LoadSampleHero(ENTITY_TYPE::HERO_ROBO, robotto, config);
+	robottoDoc.reset();
+
+
 	// Sample Enemy---------------------
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
@@ -168,6 +180,7 @@ bool ModuleEntityManager::Start()
 	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
 	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
 	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
+	roboTexture = app->tex->Load("spritesheets/characters/robotto.png");
 
 	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
 
@@ -320,6 +333,13 @@ void ModuleEntityManager::CheckIfStarted() {
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
+			case ENTITY_TYPE::HERO_ROBO:
+				entityVector[i]->Start(roboTexture);
+				app->uiManager->AddPortrait((Hero*)entityVector[i]);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
+				break;
+
 			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
 
@@ -456,6 +476,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
 	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
 	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
+	app->tex->UnLoad(roboTexture);					roboTexture = nullptr;
 	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
 
 	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
@@ -569,6 +590,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		ret = new GathererHero({ (float)x,(float)y }, sampleGatherer, ENTITY_ALIGNEMENT::PLAYER);
 		break;
 
+	case ENTITY_TYPE::HERO_ROBO:
+		ret = new RoboHero({ (float)x,(float)y }, sampleRobo, ENTITY_ALIGNEMENT::PLAYER);
+		break;
+
 	case ENTITY_TYPE::BUILDING:
 		ret = new Building({ (float)x,(float)y }, sampleBuilding, alignement);
 		break;
@@ -626,6 +651,10 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 		return sampleGatherer;
 		break;
 
+	case ENTITY_TYPE::HERO_ROBO:
+		return sampleRobo;
+		break;
+
 	case ENTITY_TYPE::ENEMY:
 		return sampleEnemy;
 		break;
@@ -667,7 +696,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 		//dynamic entities get priority over static entities
 		if (mousePos.PointInRect(&col->rect))
 		{
-			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED))
+			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO))
 			{
 				if (focus == true)
 				{
@@ -714,7 +743,7 @@ void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_MELEE)
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_ROBO)
 		{
 			col = entityVector[i]->GetCollider();
 
@@ -834,8 +863,15 @@ void ModuleEntityManager::RemoveDeletedEntities()
 		{
 			CheckDynamicEntitysObjectives(entityVector[i]);
 			app->player->CheckFocusedEntity(entityVector[i]);
+			app->uiManager->CheckFocusEntity(entityVector[i]);
+
 
 			type = entityVector[i]->GetType();
+
+			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
+			{
+				app->uiManager->RemovePortrait((Hero*)entityVector[i]);
+			}
 
 			delete entityVector[i];
 			entityVector[i] = nullptr;
@@ -843,7 +879,7 @@ void ModuleEntityManager::RemoveDeletedEntities()
 
 			i--;
 
-			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+			if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
 			{
 				SearchHeroesAlive();
 			}
@@ -864,7 +900,7 @@ void ModuleEntityManager::SearchHeroesAlive()
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
 			return;
 	}
 
@@ -934,6 +970,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
+			case ENTITY_TYPE::HERO_ROBO:
 
 				movableEntityVector.push_back(entityVector[i]);
 				break;
@@ -1010,7 +1047,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 	//icons
 	for (int i = 0; i < selectedVector.size(); i++)
 	{
-		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED))
+		if ((selectedVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED) || (selectedVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO))
 		{
 
 			if (selectedVector[i]->visionEntity != nullptr)
@@ -1198,6 +1235,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x, pos.y);
 		break;
 
+	case EVENT_ENUM::SPAWN_ROBO_HERO:
+
+		AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x, pos.y);
+		break;
+
 	case EVENT_ENUM::SPAWN_TURRET:
 
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
@@ -1372,6 +1414,7 @@ Hero* ModuleEntityManager::CheckUIAssigned(int& anotherHeroWithoutUI)
 		case ENTITY_TYPE::HERO_GATHERER:
 		case ENTITY_TYPE::HERO_MELEE:
 		case ENTITY_TYPE::HERO_RANGED:
+		case ENTITY_TYPE::HERO_ROBO:
 			if (entityVector[i]->UIAssigned == false)
 			{
 				if (hero == nullptr)
@@ -1428,7 +1471,7 @@ void ModuleEntityManager::ActivateGodModeHeroes()
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
 		{
 			hero = (Hero*)entityVector[i];
 			hero->godMode = true;
@@ -1448,7 +1491,7 @@ void ModuleEntityManager::DesactivateGodModeHeroes()
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
 		{
 			hero = (Hero*)entityVector[i];
 			hero->godMode = false;
@@ -1789,6 +1832,21 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 
 		//Sample Creation ----------------------------
 		sampleRanged = new RangedHero(pos, collider, walkLeft, walkLeftUp,
+			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
+			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
+			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
+			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
+			skill1Dmg, skill1ID, skill1Type, skill1Target);
+
+		ret = true;
+		break;
+
+
+	case ENTITY_TYPE::HERO_ROBO:
+
+		//Sample Creation ----------------------------
+		sampleRobo = new RoboHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,

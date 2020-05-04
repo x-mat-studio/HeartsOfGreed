@@ -584,20 +584,6 @@ void Hero::Die()
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
-	//TODO
-	switch (type)
-	{
-	case ENTITY_TYPE::HERO_MELEE:
-		
-		break;
-	case ENTITY_TYPE::HERO_RANGED:
-		
-		break;
-	case ENTITY_TYPE::HERO_GATHERER:
-		
-		break;
-	}
-
 	if (minimapIcon != nullptr)
 	{
 		minimapIcon->toDelete = true;
@@ -1250,7 +1236,7 @@ void Hero::SetAnimation(HERO_STATES currState)
 		switch (dir)
 		{
 		case FACE_DIR::NORTH_EAST:
-			currentAnimation = &deathRightUp;
+			currentAnimation = &idleRightUp;
 			break;
 		case FACE_DIR::NORTH_WEST:
 			currentAnimation = &idleLeftUp;

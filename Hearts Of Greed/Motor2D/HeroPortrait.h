@@ -22,6 +22,12 @@ public:
 	void AddHealthBar(UI* element);
 	void AddManaBar(UI* element);
 
+	Hero* GetHero();
+
+	bool OnAbove();
+	UI* SearchFocus();
+	void UnFocus();
+
 private:
 	Hero* hero;
 

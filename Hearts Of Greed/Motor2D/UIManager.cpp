@@ -6,6 +6,8 @@
 #include "UIFactory.h"
 
 #include "Button.h"
+#include "HeroesPortraitManager.h"
+#include "HeroPortrait.h"
 
 #include "Audio.h"
 #include "Window.h"
@@ -102,6 +104,8 @@ bool ModuleUIManager::PreUpdate(float dt)
 	bool ret = true;
 
 	CheckListener(this);
+
+	AddPendingPortraits();
 
 	MouseOnUI();
 
@@ -351,7 +355,7 @@ bool ModuleUIManager::MouseOnUI()
 }
 
 
-void ModuleUIManager::CheckFocusEntity()
+void ModuleUIManager::CheckFocusEntity(Entity* entity)
 {
 
 }
@@ -595,13 +599,30 @@ void ModuleUIManager::SetPortraitManager(HeroesPortraitManager* manager)
 
 void ModuleUIManager::AddPortrait(Hero* portrait)
 {
-
-
+	portraitsToAdd.push_back(factory->CreatePortrait(portrait));
 }
 
 
 void ModuleUIManager::RemovePortrait(Hero* portrait)
 {
+	if (portraitManager != nullptr)
+	{
+		portraitManager->DeletePortrait(portrait);
+	}
+}
 
 
+void ModuleUIManager::AddPendingPortraits()
+{
+	int portraitsNumber = portraitsToAdd.size();
+
+	if (portraitManager != nullptr)
+	{
+		for (int i = 0; i < portraitsNumber; i++)
+		{
+			portraitManager->AddPortrait(portraitsToAdd[i]);
+		}
+
+		portraitsToAdd.clear();
+	}
 }

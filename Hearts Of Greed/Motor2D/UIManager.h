@@ -17,6 +17,7 @@ class Button;
 class HeroesPortraitManager;
 class HeroPortrait;
 
+class Entity;
 class Hero;
 
 enum class GROUP_TAG;
@@ -62,7 +63,7 @@ public:
 
 	bool MouseOnUI();
 
-	void CheckFocusEntity();
+	void CheckFocusEntity(Entity* entity);
 
 	void CheckDragElement(UI* element);
 
@@ -85,14 +86,16 @@ private:
 
 	void UnregisterEvents();
 
+	void AddPendingPortraits();
 
 public:
 	Base* lastShop;
 	bool mouseOverUI;
 
 private:
-
 	std::vector<UI_Group*> uiGroupVector;
+	std::vector<HeroPortrait*> portraitsToAdd;
+	
 	SDL_Texture* atlas;
 
 	UI* dragElement;
