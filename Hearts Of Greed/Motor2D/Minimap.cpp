@@ -105,6 +105,9 @@ bool Minimap::PreUpdate(float dt)
 // Called each loop iteration
 bool Minimap::Update(float dt)
 {
+	BROFILER_CATEGORY("Minimap Update", Profiler::Color::DarkBlue);
+
+
 	CheckListener(this);
 
 	if (minimapLoaded==true)
@@ -137,6 +140,7 @@ bool Minimap::Update(float dt)
 bool Minimap::PostUpdate(float dt)
 {
 	bool ret = true;
+	BROFILER_CATEGORY("Minimap PostUpdate", Profiler::Color::DarkSlateBlue);
 
 	if (minimapLoaded==true)
 	{

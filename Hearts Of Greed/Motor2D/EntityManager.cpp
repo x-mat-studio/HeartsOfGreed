@@ -52,7 +52,10 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleSpawner(nullptr),
 	sampleBuilding(nullptr),
 	sampleBase(nullptr),
-	sampleTurret(nullptr)
+	sampleTurret(nullptr),
+	moveCommandTileRng(nullptr),
+	moveCommandTileGath(nullptr),
+	moveCommandTileMelee(nullptr)
 
 {
 	name.create("entityManager");
@@ -181,7 +184,10 @@ bool ModuleEntityManager::Start()
 	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
 
 	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
-	moveCommandTile = app->tex->Load("spritesheets/VFX/OnMyWay.png");
+	
+	moveCommandTileRng = app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
+	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
+	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
 
 
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
@@ -427,7 +433,7 @@ bool ModuleEntityManager::Update(float dt)
 // Called each loop iteration
 bool ModuleEntityManager::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue);
+	BROFILER_CATEGORY("Entity Manager Post Update", Profiler::Color::Blue);
 
 	int numEntities = entityVector.size();
 	for (int i = 0; i < numEntities; i++)
@@ -468,6 +474,10 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
 	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
 	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
+
+	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
+	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
+	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
 
 	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
 	RELEASE(sampleMelee);							sampleMelee = nullptr;
