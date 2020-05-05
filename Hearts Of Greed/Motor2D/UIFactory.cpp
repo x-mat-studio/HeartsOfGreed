@@ -244,53 +244,14 @@ UI_Group* UIFactory::CreatePauseMenu()
 }
 
 
-UI_Group* UIFactory::CreateShopMenu()
+UI_Group* UIFactory::CreateInHoverReviveMenu(UI* button)
 {
 	float x((app->win->width / app->win->GetUIScale() / 2) - (shopBackground.w / 2));
 	float y((app->win->height / app->win->GetUIScale() / 2) - (shopBackground.h / 2));
 
-	UI_Group* group = new UI_Group(GROUP_TAG::SHOP_MENU);
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background;
 
-	char cost[40];
-
-	background = CreateImage(x, y, nullptr, shopBackground, group, true);
-
-	// Heroes
-	CreateText(x + 3, y + 5, background, "H E R O   R E S U R R E C T I O N", group);
-
-	CreateImage(x + 30, y + 35, background, gathererShopPicture, group);
-
-	CreateImage(x + 80, y + 35, background, rangedShopPicture, group);
-
-	CreateImage(x + 130, y + 35, background, meleeShopPicture, group);
-
-	CreateGathererReviveButton(x + 25, y + 65, background, group);
-
-	CreateRangedReviveButton(x + 75, y + 65, background, group);
-
-	CreateMeleeReviveButton(x + 125, y + 65, background, group);
-
-	// Turrets
-	CreateText(x + 10, y + 85, background, "T U R R E T   B U I L D I N G", group);
-
-	CreateImage(x + 120, y + 135, background, turretShopPicture, group);
-
-	CreateBuyTurretButton(x + 40, y + 120, background, group);
-
-//	if (lastShop != nullptr)
-//	{
-//		sprintf_s(cost, 40, "Max. %i", lastShop->GetmaxTurrets());
-//		CreateText(x + 95, y + 112, background, cost, group);
-//	}
-	
-//	sprintf_s(cost, 40, "- %i", app->player->GetTurretCost());
-//	CreateText(x + 45, y + 130, background, cost, group);
-
-	CreateUpgradeTurretButton(x + 40, y + 170, background, group);
-
-	CreateCloseShopMenuButton(closeButton.w * 0.5f, closeButton.h * 0.5f, background, group);
 
 	return group;
 }
@@ -489,27 +450,9 @@ UI* UIFactory::CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group
 }
 
 
-UI* UIFactory::CreateCloseShopMenuButton(float x, float y, UI* parent, UI_Group* group)
-{
-	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_SHOP_MENU);
-
-	group->AddUiElement(button);
-
-	return button;
-}
-
-
-UI* UIFactory::CreateShopButton(float x, float y, UI* parent, UI_Group* group)
-{
-
-	group->AddUiElement(nullptr);
-
-	return nullptr;
-}
-
-
 UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RESUME);
 
 	CreateText(x + 3, y - 8, nullptr, "Revive", group);
 
@@ -611,17 +554,13 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 
 	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, gathererPicture));
 
-	UI* healthbar = new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false));
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
@@ -648,17 +587,13 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, meleePicture));
 
-	UI* healthbar = new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false));
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
@@ -685,17 +620,13 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, rangedPicture));
 
-	UI* healthbar = new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false));
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
@@ -722,11 +653,9 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, wanamingoDataPagePicture));
 
-	UI* healthbar = new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
@@ -750,15 +679,16 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, baseDataPagePicture));
 
-	UI* healthbar = new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
+
+//	dataPagesVector->push_back(CreateGathererReviveButton(133, 20, dataPage, nullptr));
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
 	dataPagesVector->push_back(CreateNonGroupText(68, 10, dataPage, stats));
+
 }
 
 
@@ -769,11 +699,9 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, turretDataPagePicture));
 
-	UI* healthbar = new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
 
-	healthbar = new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false);
-	dataPagesVector->push_back(healthbar);
+	dataPagesVector->push_back(new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
