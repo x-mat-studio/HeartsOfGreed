@@ -321,10 +321,12 @@ void ModulePlayer::RightClick()
 	{
 		enemyFound = heroesVector[i]->LockOn(obj);
 
-		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
+		if (heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound))
+			app->audio->PlayFx(app->entityManager->moveHero, 0, -1);;
+
 	}
 
-	app->audio->PlayFx(app->entityManager->moveHero, 0, -1);
+
 }
 
 
@@ -588,13 +590,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		doingAction = false;
 		focusedHero = 0;
 
-		if(heroesVector.size() > 0)
-		{ 
+		if (heroesVector.size() > 0)
+		{
 			int random = rand() % heroesVector.size();
 
 			heroesVector[random]->PlayGenericNoise(100);
 		}
-			
+
 
 		break;
 
@@ -697,7 +699,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 		heroesVector.clear();
 
-		
+
 		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_GATHERER);
 		hero->selectedByPlayer = true;
 
