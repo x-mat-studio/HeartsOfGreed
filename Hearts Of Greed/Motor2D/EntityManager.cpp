@@ -2155,3 +2155,152 @@ Entity* ModuleEntityManager::SearchEntity(ENTITY_TYPE type)
 
 	return nullptr;
 }
+
+
+bool ModuleEntityManager::Load(pugi::xml_node& data)
+{
+
+	return true;
+}
+
+
+bool ModuleEntityManager::Save(pugi::xml_node& data)
+{
+	int entityNumber = entityVector.size();
+	
+	Spawner* spawner = nullptr;
+	Hero* hero = nullptr;
+	Enemy* enemy = nullptr;
+
+	for (int i = 0; i < entityNumber; i++)
+	{
+		pugi::xml_node iterator = data.append_child("entity");
+
+		switch (entityVector[i]->GetType())
+		{
+		case ENTITY_TYPE::UNKNOWN:
+			break;
+
+
+		case ENTITY_TYPE::PARTICLE:
+			break;
+
+
+		case ENTITY_TYPE::EMITER:
+			break;
+
+
+		case ENTITY_TYPE::PARTICLE_SYSTEM:
+			break;
+
+
+		case ENTITY_TYPE::SPAWNER:
+
+			iterator.append_attribute("type") = "spawner";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			spawner = (Spawner*)entityVector[i];
+
+			iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
+			iterator.append_attribute("spawnRate") = spawner->GetSpawnRate();
+			iterator.append_attribute("entitiesPerWave") = spawner->GetEnemiesPerWave();
+			iterator.append_attribute("active") = spawner->GetActive();
+			break;
+
+
+		case ENTITY_TYPE::HERO_MELEE:
+
+			iterator.append_attribute("type") = "hero_melee";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			hero = (Hero*)entityVector[i];
+
+			iterator.append_attribute("level") = spawner->GetNumberToSpawn();
+			iterator.append_attribute("exp_to_level_up") = spawner->GetSpawnRate();
+			iterator.append_attribute("hero_exp") = spawner->GetEnemiesPerWave();
+
+			iterator.append_attribute("recovery_hit_points_rate") = spawner->GetActive();
+			iterator.append_attribute("energy_points") = spawner->GetNumberToSpawn();
+			iterator.append_attribute("max_energy_points") = spawner->GetSpawnRate();
+			iterator.append_attribute("recovery_energy_rate") = spawner->GetEnemiesPerWave();
+
+			iterator.append_attribute("recovering_health") = spawner->GetActive();
+			iterator.append_attribute("recovering_energy") = spawner->GetNumberToSpawn();
+			iterator.append_attribute("feeling_secure") = spawner->GetSpawnRate();
+
+			iterator.append_attribute("attack_damage") = spawner->GetEnemiesPerWave();
+			iterator.append_attribute("attack_range") = spawner->GetActive();
+			iterator.append_attribute("attack_speed") = spawner->GetActive();
+
+			iterator.append_attribute("vision_distance") = spawner->GetActive();
+			iterator.append_attribute("vision_in_px") = spawner->GetActive();
+
+			iterator.append_attribute("skill1_cost") = spawner->GetNumberToSpawn();
+
+			iterator.append_attribute("skill1_recover_time") = spawner->GetSpawnRate();
+			iterator.append_attribute("skill2_recover_time") = spawner->GetEnemiesPerWave();
+			iterator.append_attribute("skill3_recover_time") = spawner->GetActive();
+
+			iterator.append_attribute("skill1_execution_time") = spawner->GetSpawnRate();
+			iterator.append_attribute("skill2_execution_time") = spawner->GetEnemiesPerWave();
+			iterator.append_attribute("skill3_execution_time") = spawner->GetActive();
+
+
+			break;
+
+
+		case ENTITY_TYPE::HERO_RANGED:
+			break;
+
+
+		case ENTITY_TYPE::HERO_GATHERER:
+			break;
+
+
+		case ENTITY_TYPE::HERO_ROBO:
+			break;
+
+
+		case ENTITY_TYPE::ENEMY:
+			break;
+
+
+		case ENTITY_TYPE::BUILDING:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_TURRET:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_BASE:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_BARRICADE:
+			break;
+
+
+		case ENTITY_TYPE::MAX_TYPE:
+			break;
+		default:
+			break;
+		}
+	}
+
+	
+
+	return true;
+}

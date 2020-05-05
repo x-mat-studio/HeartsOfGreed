@@ -438,14 +438,10 @@ int App::GetArgc() const
 // ---------------------------------------
 const char* App::GetArgv(int index) const
 {
-
-
 	if (index < argc)
 		return args[index];
 	else
 		return NULL;
-
-
 }
 
 // ---------------------------------------

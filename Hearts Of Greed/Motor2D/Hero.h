@@ -273,7 +273,6 @@ public:
 	std::vector <iMPoint> currAoE;
 	std::vector <iMPoint> suplAoE;
 
-
 	skillArea* currAreaInfo;
 	Skill skill1;
 
