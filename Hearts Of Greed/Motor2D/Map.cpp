@@ -542,51 +542,53 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				colliderRectAux.w /= 2;
 
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
+				LOG(" gid was %i", layer->gid[i]);
 
 
 				// 6* because we need to undo offset and isometric conversion. 2*3 = 6.
 
 				switch (layer->gid[i])
 				{
-				case 390:
+					//250 = id of the first tile of the tileset that codifies for building generation
+				case 250 + 0:
 				{
 					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 				}
 					break;
 
-				case 391:
+				case 250 + 1:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
-				case 392:
+				case 250 + 2:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
 					break;
 
-				case 393:
+				case 250 + 3:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 					break;
 
-				case 394:
+				case 250 + 4:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
-				case 395:
+				case 250 + 5:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
 					break;
 
-				case 396:
+				case 250 + 6:
 					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_01;
 					break;
 
-				case 397:
+				case 250 + 7:
 					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_02;
 					break;
 
-				case 398:
+				case 250 + 8:
 					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
 					bld = (Building*)bldgToBe;
 					bld->myDecor = BUILDING_DECOR::ST_03;

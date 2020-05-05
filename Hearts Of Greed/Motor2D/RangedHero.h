@@ -44,6 +44,9 @@ public:
 	Animation* currentVfx;
 	bool DrawVfx(float dt);
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
+
+	void PlayGenericNoise(int random);
+
 };
 
 
