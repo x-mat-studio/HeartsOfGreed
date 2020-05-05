@@ -89,9 +89,7 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 	if (font == nullptr)
 		font = default;
 
-	const SDL_Color substitute = { 255,0,0 };
-
-	SDL_Surface* surface = TTF_RenderText_Shaded((font) ? font : font, text, color, substitute);
+	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
 
 	if (surface == nullptr || surface->pixels == nullptr || surface->format == nullptr)
 	{
