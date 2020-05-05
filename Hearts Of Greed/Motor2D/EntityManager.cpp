@@ -2258,12 +2258,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("skill1_recover_time") = spawner->GetSpawnRate();
 			iterator.append_attribute("skill2_recover_time") = spawner->GetEnemiesPerWave();
 			iterator.append_attribute("skill3_recover_time") = spawner->GetActive();
-
-			iterator.append_attribute("skill1_execution_time") = spawner->GetSpawnRate();
-			iterator.append_attribute("skill2_execution_time") = spawner->GetEnemiesPerWave();
-			iterator.append_attribute("skill3_execution_time") = spawner->GetActive();
-
-
 			break;
 
 
