@@ -19,6 +19,12 @@ public:
 	UIFactory();
 	~UIFactory();
 
+	// Getters
+
+	SDL_Rect GetHealthBarBackground();
+	SDL_Rect GetGreenHealthBar();
+	SDL_Rect GetBlueHealthBar();
+
 	// Menu creation functions
 
 	UI_Group* CreateMainMenu();

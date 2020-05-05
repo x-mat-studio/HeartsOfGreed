@@ -55,7 +55,7 @@ bool HeroPortrait::PreUpdate(float dt)
 	{
 		mana = hero->energyPoints;
 
-		manaRect->w = life * originalBarsWidth / hero->maxEnergyPoints;
+		manaRect->w = mana * originalBarsWidth / hero->maxEnergyPoints;
 
 		if (manaRect->w == 0)
 		{

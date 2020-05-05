@@ -882,3 +882,21 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 	return portrait;
 }
+
+SDL_Rect UIFactory::GetHealthBarBackground()
+{
+	return healthBarContainer;
+}
+
+
+SDL_Rect UIFactory::GetGreenHealthBar()
+{
+	return dataPageHealthbarGreenImage;
+}
+
+
+SDL_Rect UIFactory::GetBlueHealthBar()
+{
+	return dataPageHealthbarBlueImage;
+}
+
