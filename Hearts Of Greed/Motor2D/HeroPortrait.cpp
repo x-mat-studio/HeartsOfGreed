@@ -9,7 +9,7 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 	hero(hero),
 
 	life(hero->hitPointsCurrent),
-	mana(hero->energyPoints),
+	mana(hero->GetEnergyPoints()),
 
 	healthRect(nullptr),
 	manaRect(nullptr),
@@ -55,11 +55,13 @@ bool HeroPortrait::PreUpdate(float dt)
 		}
 	}
 
-	if (hero->energyPoints != mana && hero->energyPoints > 0)
-	{
-		mana = hero->energyPoints;
+	int energyPoints = hero->GetEnergyPoints();
 
-		manaRect->w = mana * originalBarsWidth / hero->maxEnergyPoints;
+	if (energyPoints != mana && energyPoints > 0)
+	{
+		mana = energyPoints;
+
+		manaRect->w = mana * originalBarsWidth / hero->GetMaxEnergyPoints();
 
 		if (manaRect->w == 0)
 		{

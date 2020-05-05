@@ -404,7 +404,7 @@ void ModulePlayer::PrepareHeroSkills()
 
 	if (skill1 == true)
 	{
-		if (heroesVector[focusedHero]->skill1Charged == true && (heroesVector[focusedHero]->energyPoints >= heroesVector[focusedHero]->skill1Cost))
+		if (heroesVector[focusedHero]->skill1Charged == true && (heroesVector[focusedHero]->GetEnergyPoints() >= heroesVector[focusedHero]->GetSkill1Cost()))
 		{
 			doSkill = heroesVector[focusedHero]->PrepareSkill1();
 			prepareSkill = !doSkill;
