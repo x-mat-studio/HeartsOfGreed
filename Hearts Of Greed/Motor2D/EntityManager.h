@@ -123,6 +123,8 @@ public:
 
 	void ResetEntityManager();
 
+	Entity* SearchEntity(ENTITY_TYPE type);
+
 private:
 
 	void CheckIfStarted();
