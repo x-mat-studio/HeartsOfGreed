@@ -419,7 +419,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
 					entityVector[i]->Start(base2TextureEnemy);
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY_BASE, entityVector[i]->GetCenter());
 
 					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
