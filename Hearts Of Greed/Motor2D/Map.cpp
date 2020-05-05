@@ -492,7 +492,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
 
-	if (layer->name == P2SString("Collision")) 
+	/*if (layer->name == P2SString("Collision")) 
 	{
 
 		for (int i = 0; i < layer->width * layer->height; i++)
@@ -514,7 +514,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 			}
 		}
-	}
+	}*/
 	if (layer->name == P2SString("BuildingGeneration")) {
 
 		for (int i = 0; i < layer->width * layer->height; i++)

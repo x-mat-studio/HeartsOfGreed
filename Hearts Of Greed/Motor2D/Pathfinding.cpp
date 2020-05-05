@@ -756,6 +756,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	last_path.clear();
 
+
 	if (maxLvl > 0)
 	{
 		n1 = absGraph.insertNode(origin, maxLvl, &toDeleteN1);
@@ -786,7 +787,6 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 		ret = PATH_TYPE::SIMPLE;
 	}
-
 
 	generatedPaths.erase(pathRequest);
 	generatedPaths.insert({ pathRequest, generatedPath(last_path, ret, maxLvl) });
@@ -1038,7 +1038,7 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 		if (!IsStraightPath(startPos, currPos) || startPos.DistanceTo(currPos) > maxPath || (i == pathSize - 1 && pathSize > 0))
 		{
 
-			SimpleAPathfinding(startPos, currPos, maxPath);
+			SimpleAPathfinding(startPos, currPos);
 
 			generatedPath = &last_path;
 
