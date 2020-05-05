@@ -107,7 +107,7 @@ bool ModuleTestScene::Start()
 		app->fowManager->CreateFoWMap(app->map->data.width, app->map->data.height);
 
 		fMPoint pos;
-		pos.create(100, 600);
+		pos.create(950, 4100);
 
 		//Test Hero
 
@@ -116,6 +116,7 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
+		/*
 		//mid
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
@@ -147,7 +148,7 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
-
+			*/
 		//Spawners------------------
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
