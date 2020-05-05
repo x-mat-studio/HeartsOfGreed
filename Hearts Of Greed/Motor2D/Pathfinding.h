@@ -219,6 +219,7 @@ private:
 	graphLevel absGraph;
 
 	std::vector<iMPoint> last_path;
+	std::vector<iMPoint> last_line;
 
 	std::unordered_map <Entity*, generatedPath> generatedPaths;
 };

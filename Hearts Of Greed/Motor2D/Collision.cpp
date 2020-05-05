@@ -62,7 +62,7 @@ ModuleCollision::ModuleCollision()
 	matrix[COLLIDER_VISIBILITY][COLLIDER_QUEST] = false;
 
 	matrix[COLLIDER_QUEST][COLLIDER_WALL] = false;
-	matrix[COLLIDER_QUEST][COLLIDER_HERO] = false;
+	matrix[COLLIDER_QUEST][COLLIDER_HERO] = true;
 	matrix[COLLIDER_QUEST][COLLIDER_ENEMY] = false;
 	matrix[COLLIDER_QUEST][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_QUEST][COLLIDER_RECLUIT_IA] = false;
@@ -190,8 +190,8 @@ void ModuleCollision::DebugDraw()
 			app->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
 			break;
 
-		case COLLIDER_QUEST: //greenish
-			app->render->DrawQuad(colliders[i]->rect, 125, 250, 0, alpha);
+		case COLLIDER_QUEST: //RED
+			app->render->DrawQuad(colliders[i]->rect, 250, 0, 0, alpha);
 		}
 	}
 }

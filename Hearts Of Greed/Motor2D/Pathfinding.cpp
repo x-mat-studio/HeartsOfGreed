@@ -16,6 +16,8 @@ ModulePathfinding::~ModulePathfinding()
 
 bool ModulePathfinding::LineRayCast(iMPoint& p0, iMPoint& p1)
 {
+	BROFILER_CATEGORY("RayCast", Profiler::Color::Cornsilk);
+
 	std::vector <iMPoint> line = CreateLine(p0, p1);
 
 	bool walkableFound = false;
@@ -29,8 +31,6 @@ bool ModulePathfinding::LineRayCast(iMPoint& p0, iMPoint& p1)
 			walkableFound = true;
 		else if (!currWalkability && walkableFound)
 			return false;
-
-
 	}
 
 
@@ -39,7 +39,7 @@ bool ModulePathfinding::LineRayCast(iMPoint& p0, iMPoint& p1)
 
 std::vector<iMPoint> ModulePathfinding::CreateLine(const iMPoint& p0, const iMPoint& p1, int maxDistance)
 {
-	std::vector<iMPoint> line;
+	last_line.clear();
 
 	float n = p0.DiagonalDistance(p1);
 
@@ -48,18 +48,18 @@ std::vector<iMPoint> ModulePathfinding::CreateLine(const iMPoint& p0, const iMPo
 
 	for (int step = 0; step <= n && step < maxDistance; step++)
 	{
+
 		float t = n == 0 ? 0.0 : step / n;
 
 		fMPoint nextPointf = p0f.LerpPoint(p1f, t);
 		nextPointf.RoundPoint();
 
 		iMPoint nextPoint = { (int)nextPointf.x, (int)nextPointf.y };
-		line.push_back(nextPoint);
+		last_line.push_back(nextPoint);
 
 	}
 
-
-	return line;
+	return last_line;
 }
 
 bool ModulePathfinding::CleanUp()
@@ -68,6 +68,7 @@ bool ModulePathfinding::CleanUp()
 
 	//A*-----------------------------------------
 	last_path.clear();
+	last_line.clear();
 	RELEASE_ARRAY(walkabilityMap);
 
 	//HPA-----------------------------------------
@@ -540,7 +541,7 @@ generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int l
 iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination)
 {
 
-	std::vector <iMPoint> line  = CreateLine(origin, destination, NEARBY_TILES_CHECK);
+	std::vector <iMPoint> line = CreateLine(origin, destination, NEARBY_TILES_CHECK);
 
 	for (int i = 0; i < line.size(); i++)
 	{
@@ -725,14 +726,14 @@ float PathNode::CalculateF(const iMPoint& destination)
 		g = parent->g + 1;
 	}
 
-	h = pos.DistanceTo(destination);
+	h = pos.OctileDistance(destination);
 
 	return g + h;
 }
 
 float HierNode::CalculateF(const iMPoint& destination)
 {
-	h = pos.DistanceTo(destination);
+	h = pos.OctileDistance(destination);
 
 	return g + h;
 }
@@ -767,38 +768,47 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 			origin = newDest;
 	}
 
-	last_path.clear();
 
-
-	if (maxLvl > 0)
+	if()
+	if (LineRayCast(origin, destination))
 	{
-		n1 = absGraph.insertNode(origin, maxLvl, &toDeleteN1);
-		n2 = absGraph.insertNode(destination, maxLvl, &toDeleteN2);
-
-		if (!n1 || !n2)
-			return ret;
-
-		n1->h = n1->pos.DistanceTo(n2->pos);
-
-		//Abs Path
-			bool pathDone = HPAPathfinding(*n1, n2->pos, 1);
-
-		if (toDeleteN1)
-			absGraph.deleteNode((HierNode*)n1, maxLvl);
-		if (toDeleteN2)
-			absGraph.deleteNode((HierNode*)n2, maxLvl);
-
-		if (pathDone)
-			ret = PATH_TYPE::ABSTRACT;
-		else
-			return PATH_TYPE::NO_TYPE;
-
+		last_path = last_line;
+		ret = PATH_TYPE::SIMPLE;
 	}
 	else
 	{
-		SimpleAPathfinding(origin, destination);
 
-		ret = PATH_TYPE::SIMPLE;
+		if (maxLvl > 0)
+		{
+			n1 = absGraph.insertNode(origin, maxLvl, &toDeleteN1);
+			n2 = absGraph.insertNode(destination, maxLvl, &toDeleteN2);
+
+			if (!n1 || !n2)
+				return ret;
+
+			n1->h = n1->pos.OctileDistance(n2->pos);
+
+
+			//Abs Path
+			bool pathDone = HPAPathfinding(*n1, n2->pos, 1);
+
+			if (toDeleteN1)
+				absGraph.deleteNode((HierNode*)n1, maxLvl);
+			if (toDeleteN2)
+				absGraph.deleteNode((HierNode*)n2, maxLvl);
+
+			if (pathDone)
+				ret = PATH_TYPE::ABSTRACT;
+			else
+				return PATH_TYPE::NO_TYPE;
+
+		}
+		else
+		{
+			SimpleAPathfinding(origin, destination);
+
+			ret = PATH_TYPE::SIMPLE;
+		}
 	}
 
 	generatedPaths.erase(pathRequest);
@@ -812,6 +822,8 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl)
 {
 	BROFILER_CATEGORY("HPA Algorithm", Profiler::Color::Black);
+
+	last_path.clear();
 
 	std::multimap<float, HierNode> open;
 
@@ -837,8 +849,6 @@ int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& des
 
 		iterations++;
 
-		if (iterations > 200)
-			return 0;
 
 		if (curr->pos == destination)
 		{
@@ -892,7 +902,7 @@ float ModulePathfinding::SimpleAPathfinding(const iMPoint& origin, const iMPoint
 	std::multimap<float, PathNode> open;
 
 	std::vector<PathNode> closed;
-	open.insert(std::pair<float, PathNode>(0, PathNode(0, origin.DistanceTo(destination), origin, nullptr, 0, 0)));
+	open.insert(std::pair<float, PathNode>(0, PathNode(0, origin.OctileDistance(destination), origin, nullptr, 0, 0)));
 
 	//Analize the current
 	PathNode* curr = nullptr;
@@ -1036,6 +1046,23 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 	int maxPath = lvl * CLUSTER_SIZE_LVL;
 	int pathSize = absPath->size();
 
+	Cluster* fromC = nullptr;
+
+	if (pathSize > 2)
+	{
+		if (LineRayCast(absPath->front(), absPath->back()))
+		{
+			generatedPath = &last_line;
+			pathSize = 0;
+			absPath->clear();
+
+
+			if (pathToFill->size() > 1)
+				pathToFill->insert(pathToFill->end(), generatedPath->begin() + 1, generatedPath->end());
+			else
+				pathToFill->insert(pathToFill->end(), generatedPath->begin(), generatedPath->end());
+		}
+	}
 
 	for (int i = 0; i < pathSize; i)
 	{
@@ -1045,23 +1072,27 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 		{
 			startPos = currPos;
 			from = i;
+			fromC = absGraph.determineCluster(startPos, lvl);
 			i++;
 			continue;
 		}
 
-		if (!IsStraightPath(startPos, currPos) || startPos.DistanceTo(currPos) > maxPath || (i == pathSize - 1 && pathSize > 0))
+		if (fromC != absGraph.determineCluster(currPos, lvl) || (i == pathSize - 1 && pathSize > 0))
 		{
-
-			if (SimpleAPathfinding(startPos, currPos, maxPath *3) && last_path.size() > 0)
+			if (LineRayCast(startPos, currPos) && !last_line.empty())
 			{
-				generatedPath = &last_path;
-
-				if (pathToFill->size() > 1)
-					pathToFill->insert(pathToFill->end(), generatedPath->begin() + 1, generatedPath->end());
-				else
-					pathToFill->insert(pathToFill->end(), generatedPath->begin(), generatedPath->end());
+				generatedPath = &last_line;
 			}
 
+			else if (SimpleAPathfinding(startPos, currPos) && !last_path.empty())
+			{
+				generatedPath = &last_path;
+			}
+
+			if (pathToFill->size() > 1)
+				pathToFill->insert(pathToFill->end(), generatedPath->begin() + 1, generatedPath->end());
+			else
+				pathToFill->insert(pathToFill->end(), generatedPath->begin(), generatedPath->end());
 
 			absPath->erase(absPath->begin() + from, absPath->begin() + i);
 			break;

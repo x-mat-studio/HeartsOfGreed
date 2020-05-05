@@ -19,10 +19,12 @@ public:
 	bool PostUpdate(float dt);
 	bool CleanUp();
 
-	void AddQuest(Collider* activation);
+	//std::vector <Quest*> ongoing;
+	//std::vector <Quest*> finished;
 
-	std::vector <Quest*> ongoing;
-	std::vector <Quest*> finished;
+	void OnCollision(Collider * c1, Collider* c2);
+
+	int questSfx;
 
 private:
 
