@@ -24,6 +24,7 @@
 #include "Enemy.h"
 
 #include "Spawner.h"
+#include "Quest.h"
 
 #include "Building.h"
 #include "Base.h"
@@ -575,6 +576,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	switch (type)
 	{
+	case ENTITY_TYPE::QUEST:
+		ret = new Quest(x,y);
+		
+		break;
 	case ENTITY_TYPE::SPAWNER:
 		ret = new Spawner({ (float)x,(float)y }, sampleSpawner);
 		app->ai->PushSpawner((Spawner*)ret);
