@@ -774,11 +774,19 @@ int Hero::RecieveDamage(int damage)
 			int randomCounter = rand() % 5;
 
 			if (randomCounter == 0)
-				app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
+			{
+				PlayOnHitSound();
+			}
 		}
 	}
 
 	return ret;
+}
+
+void Hero::PlayOnHitSound()
+{
+	app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
+
 }
 
 

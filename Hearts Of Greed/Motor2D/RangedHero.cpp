@@ -218,3 +218,8 @@ void RangedHero::PlayGenericNoise(int probability)
 	}
 
 }
+
+void RangedHero::PlayOnHitSound()
+{
+	app->audio->PlayFx(app->entityManager->rangedGetsHit, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
+}

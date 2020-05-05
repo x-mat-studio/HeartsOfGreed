@@ -81,7 +81,7 @@ bool DynamicEntity::Move(float dt)
 
 	// ------------------------------------------------------------------
 
-	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 10 && abs(position.y - nextPoint.y) <= 10)
+	if (path.size() > 0 && abs(position.x - nextPoint.x) <= 15 && abs(position.y - nextPoint.y) <= 15)
 	{
 		path.erase(path.begin());
 	}

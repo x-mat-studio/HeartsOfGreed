@@ -170,6 +170,8 @@ private:
 	void CommandVfx(float dt);
 	virtual void BlitCommandVfx(Frame& currframe, int alphaValue);
 
+	virtual void PlayOnHitSound();
+
 protected:
 	void SetAnimation(HERO_STATES currState);
 
