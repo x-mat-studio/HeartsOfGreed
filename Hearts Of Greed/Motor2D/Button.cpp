@@ -35,6 +35,8 @@ void Button::HandleInput()
 {
 	if (focused)
 	{
+		app->uiManager->ExecuteHoverButton(buttonTag, this);
+
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
 			clicked = true;

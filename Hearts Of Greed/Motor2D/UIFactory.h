@@ -19,6 +19,12 @@ public:
 	UIFactory();
 	~UIFactory();
 
+	// Getters
+
+	SDL_Rect GetHealthBarBackground();
+	SDL_Rect GetGreenHealthBar();
+	SDL_Rect GetBlueHealthBar();
+
 	// Menu creation functions
 
 	UI_Group* CreateMainMenu();
@@ -28,17 +34,17 @@ public:
 	UI_Group* CreateBasicInGameUI();
 	UI_Group* CreateDataPageComponents();
 	UI_Group* CreatePauseMenu();
-	UI_Group* CreateShopMenu();
+	UI_Group* CreateInHoverReviveMenu(UI* button);
 
 	// Image creation functions
 
 	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false);
-	UI* CreateNonGroupImage(float x, float y, UI* parent, SDL_Rect rect, bool dragable = false);
+	UI* CreateNonGroupImage(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, SDL_Rect rect, bool dragable = false);
 
 	// Text creation functions
 
 	UI* CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false);
-	UI* CreateNonGroupText(float x, float y, UI* parent, char* text, bool interactable = false);
+	UI* CreateNonGroupText(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, char* text, bool interactable = false);
 
 	// Button creation functions
 
@@ -58,10 +64,7 @@ public:
 	UI* CreateCloseOptionMenuButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateCloseShopMenuButton(float x, float y, UI* parent, UI_Group* group);
 
-
-	UI* CreateShopButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateRangedReviveButton(float x, float y, UI* parent, UI_Group* group);

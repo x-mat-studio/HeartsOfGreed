@@ -267,6 +267,16 @@ bool ModuleEntityManager::Start()
 
 	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
 
+	//Ranged sfx--------
+	noise1Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise1.wav");
+	noise2Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise2.wav");
+	noise3Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise3.wav");
+	noise4Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise4.wav");
+
+	rangedGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
+	rangedDies = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
+
+
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
 	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");

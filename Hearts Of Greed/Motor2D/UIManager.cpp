@@ -57,7 +57,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
-	app->eventManager->EventRegister(EVENT_ENUM::CREATE_SHOP_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
 	
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
@@ -72,7 +71,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_OPTIONS_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
-	app->eventManager->EventRegister(EVENT_ENUM::DELETE_SHOP_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
@@ -243,8 +242,6 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddUIGroup(group);
 		break;
 
-	case EVENT_ENUM::CREATE_SHOP_MENU:			break;
-
 	case EVENT_ENUM::MUSIC_ADJUSTMENT:			break;
 
 	case EVENT_ENUM::SFX_ADJUSTMENT:			break;
@@ -262,9 +259,6 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 			break;
 
 		else if (DeleteUIGroup(GROUP_TAG::OPTIONS_MENU) == true)
-			break;
-
-		else if (DeleteUIGroup(GROUP_TAG::SHOP_MENU) == true)
 			break;
 
 		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
@@ -292,8 +286,8 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 
-	case EVENT_ENUM::DELETE_SHOP_MENU:
-		DeleteUIGroup(GROUP_TAG::SHOP_MENU);
+	case EVENT_ENUM::DELETE_IN_HOVER_MENU:
+		DeleteUIGroup(GROUP_TAG::IN_HOVER_MENU);
 		break;
 	}
 }
@@ -444,7 +438,6 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::PAUSE_GAME, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_SHOP_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
@@ -452,7 +445,7 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_OPTIONS_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_SHOP_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
@@ -476,11 +469,6 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::CLOSE_CREDITS_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_CREDITS_MENU, EVENT_ENUM::NULL_EVENT);
-		break;
-
-
-	case BUTTON_TAG::CLOSE_SHOP_MENU:
-		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SHOP_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
@@ -597,6 +585,21 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 	}
 }
 
+
+void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
+{
+	switch (tag)
+	{
+
+	case BUTTON_TAG::REVIVE_GATHERER:
+	case BUTTON_TAG::REVIVE_RANGED:
+	case BUTTON_TAG::REVIVE_MELEE:
+		AddUIGroup(factory->CreateInHoverReviveMenu(button));
+		break;
+	default:
+		break;
+	}
+}
 
 HeroesPortraitManager* ModuleUIManager::GetPortraitManager()
 {
