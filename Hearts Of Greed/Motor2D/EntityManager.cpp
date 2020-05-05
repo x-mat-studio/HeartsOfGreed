@@ -2139,3 +2139,19 @@ bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
 
 	return ret;
 }
+
+
+Entity* ModuleEntityManager::SearchEntity(ENTITY_TYPE type)
+{
+	int entityNumber = entityVector.size();
+
+	for (int i = 0; i < entityNumber; i++)
+	{
+		if (entityVector[i]->GetType() == type)
+		{
+			return entityVector[i];
+		}
+	}
+
+	return nullptr;
+}
