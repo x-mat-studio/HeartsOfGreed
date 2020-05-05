@@ -26,6 +26,11 @@ public:
 
 	bool GetActive();
 
+	int GetNumberToSpawn();
+	float GetSpawnRate();
+	int GetEnemiesPerWave();
+
+
 private:
 	void Spawn(float dt);
 

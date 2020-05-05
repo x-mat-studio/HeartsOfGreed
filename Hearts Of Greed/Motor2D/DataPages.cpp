@@ -14,9 +14,12 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	state(DATA_PAGE_ENUM::FOCUSED_NONE),
 
 	factory(app->uiManager->GetFactory()),
-	focusEntity(entity)
-
-{}
+	focusEntity(entity),
+	healthRect(nullptr),
+	manaRect(nullptr)
+{
+	originalBarsWidth = factory->GetHealthBarBackground().w;
+}
 
 DataPages::~DataPages()
 {
@@ -49,14 +52,12 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_GATHERER;
 				break;
 
-
 			case ENTITY_TYPE::HERO_MELEE:
 
 				factory->CreateMeleePage(&dataPageVector, this);
 				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_MELEE;
 				break;
-
 
 			case ENTITY_TYPE::HERO_RANGED:
 
@@ -65,7 +66,6 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_RANGED;
 				break;
 
-
 			case ENTITY_TYPE::ENEMY:
 
 				factory->CreateWanamingoPage(&dataPageVector, this);
@@ -73,13 +73,11 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
 				break;
 
-
 			case ENTITY_TYPE::BLDG_TURRET:
 
 				factory->CreateTurretPage(&dataPageVector, this);
 				GetTurretValue();
 				break;
-
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 
@@ -88,7 +86,6 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER;
 				break;
 
-
 			case ENTITY_TYPE::BLDG_BASE:
 
 				factory->CreateBasePage(&dataPageVector, this);
@@ -96,14 +93,12 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_BASE;
 				break;
 
-
 			case ENTITY_TYPE::BLDG_BARRICADE:
 
 				factory->CreateBarricadePage(&dataPageVector, this);
 				GetBarricadeValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BARRICADE;
 				break;
-
 
 			default:
 				state = DATA_PAGE_ENUM::FOCUSED_UNKNOWN;
@@ -116,37 +111,30 @@ bool DataPages::PreUpdate(float dt)
 			CheckBaseValues();
 			break;
 
-
 		case DATA_PAGE_ENUM::FOCUSED_GATHERER:
 			CheckHeroesValues();
 			break;
-
 
 		case DATA_PAGE_ENUM::FOCUSED_MELEE:
 			CheckHeroesValues();
 			break;
 
-
 		case DATA_PAGE_ENUM::FOCUSED_RANGED:
 			CheckHeroesValues();
 			break;
-
 
 		case DATA_PAGE_ENUM::FOCUSED_TURRET:
 			CheckTurretValues();
 			state = DATA_PAGE_ENUM::FOCUSED_TURRET;
 			break;
 
-
 		case DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER:
 			CheckUpgradeCenterValues();
 			break;
 
-
 		case DATA_PAGE_ENUM::FOCUSED_WANAMINGO:
 			CheckWanamingoValues();
 			break;
-
 
 		case DATA_PAGE_ENUM::FOCUSED_UNKNOWN:
 			break;
@@ -211,6 +199,9 @@ void DataPages::CheckHeroesValues()
 
 	Hero* focus = (Hero*)focusEntity;
 
+	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+	AdjustManaBars(focus->energyPoints, focus->maxEnergyPoints);
+
 	if (CheckData(attackDamage, focus->attackDamage))
 	{
 		if (CheckData(attackSpeed, focus->attackSpeed))
@@ -242,6 +233,8 @@ void DataPages::CheckWanamingoValues()
 	bool check = false;
 
 	Enemy* focus = (Enemy*)focusEntity;
+
+	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
 
 	if (CheckData(attackDamage, focus->GetAD()))
 	{
@@ -276,6 +269,8 @@ void DataPages::CheckBaseValues()
 
 	Base* focus = (Base*)focusEntity;
 
+	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+
 	if (CheckData(resources, focus->GetRsrc()))
 	{
 		check = true;
@@ -295,6 +290,8 @@ void DataPages::CheckTurretValues()
 	bool check = false;
 
 	Turret* focus = (Turret*)focusEntity;
+
+	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
 
 	if (CheckData(level, focus->GetLvl()))
 	{
@@ -331,6 +328,8 @@ void DataPages::GetHeroValue()
 	range = focus->attackRange;
 	hpRecovery = focus->recoveryHitPointsRate;
 	xpToNextLevel = focus->expToLevelUp;
+
+	GetHealthBarValues();
 }
 
 
@@ -342,6 +341,8 @@ void DataPages::GetWanamingoValue()
 	attackSpeed = focus->GetAS();
 	vision = focus->GetVision();
 	hpRecovery = focus->GetRecov();
+
+	GetHealthBarValues();
 }
 
 
@@ -350,6 +351,8 @@ void DataPages::GetBaseValue()
 	Base* focus = (Base*)app->player->GetFocusedEntity();
 
 	resources = focus->GetRsrc();
+
+	GetHealthBarValues();
 }
 
 
@@ -361,18 +364,20 @@ void DataPages::GetTurretValue()
 	attackDamage = focus->GetAD();
 	attackSpeed = focus->GetAS();
 	range = focus->GetRng();
+
+	GetHealthBarValues();
 }
 
 
 void DataPages::GetUpgradeCenterValue()
 {
-
+	GetHealthBarValues();
 }
 
 
 void DataPages::GetBarricadeValue()
 {
-
+	GetHealthBarValues();
 }
 
 
@@ -390,6 +395,8 @@ void DataPages::DeleteCurrentData()
 
 	dataPageVector.clear();
 
+	life = -1;
+	mana = -1;
 	resources = -1;
 	level = -1;
 	attackDamage = -1;
@@ -399,6 +406,8 @@ void DataPages::DeleteCurrentData()
 	hpRecovery = -1;
 	xpToNextLevel = -1;
 
+	healthRect = nullptr;
+	manaRect = nullptr;
 	focusEntity = nullptr;
 	state = DATA_PAGE_ENUM::FOCUSED_NONE;
 }
@@ -457,3 +466,59 @@ void DataPages::UnFocus()
 		dataPageVector[i]->UnFocus();
 	}
 }
+
+
+void DataPages::AdjustHealthBars(int newValue, int maxValue)
+{
+	if (newValue != life && newValue > 0)
+	{
+		life = newValue;
+
+		healthRect->w = life * originalBarsWidth / maxValue;
+
+		if (healthRect->w == 0)
+		{
+			healthRect->w = 1;
+		}
+	}
+}
+
+
+void DataPages::AdjustManaBars(int newValue, int maxValue)
+{
+	if (newValue != mana && newValue > 0)
+	{
+		mana = newValue;
+
+		manaRect->w = mana * originalBarsWidth / maxValue;
+
+		if (manaRect->w == 0)
+		{
+			manaRect->w = 1;
+		}
+	}
+}
+
+
+void DataPages::GetHealthBarValues()
+{
+	SDL_Rect rect = factory->GetGreenHealthBar();
+	SDL_Rect rect2 = factory->GetBlueHealthBar();
+	
+	int numElem = dataPageVector.size();
+
+	for (int i = 0; i < numElem; i++)
+	{
+		if (dataPageVector[i]->rect.x == rect.x && dataPageVector[i]->rect.y == rect.y
+			&& dataPageVector[i]->rect.w == rect.w && dataPageVector[i]->rect.h == rect.h)
+		{
+			healthRect = &dataPageVector[i]->rect;
+		}
+		else if (dataPageVector[i]->rect.x == rect2.x && dataPageVector[i]->rect.y == rect2.y
+			&& dataPageVector[i]->rect.w == rect2.w && dataPageVector[i]->rect.h == rect2.h)
+		{
+			manaRect = &dataPageVector[i]->rect;
+		}
+	}
+}
+

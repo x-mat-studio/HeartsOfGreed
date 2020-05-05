@@ -42,6 +42,8 @@ private:
 	bool PostUpdate(float dt);
 
 	bool CheckData(int previous, int current);
+	void AdjustHealthBars(int newValue, int maxValue);
+	void AdjustManaBars(int newValue, int maxValue);
 
 	// Check Data Page Values
 	void CheckHeroesValues();
@@ -59,7 +61,7 @@ private:
 	void GetTurretValue();
 	void GetUpgradeCenterValue();
 	void GetBarricadeValue();
-
+	void GetHealthBarValues();
 
 	void DeleteCurrentData();
 
@@ -71,6 +73,12 @@ private:
 	Entity* focusEntity;
 	UIFactory* factory;
 
+	SDL_Rect* healthRect;
+	SDL_Rect* manaRect;
+	int originalBarsWidth;
+
+	int life;
+	int mana;
 	int resources;
 	int level;
 	int attackDamage;

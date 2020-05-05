@@ -15,8 +15,8 @@
 #include <unordered_map>
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 6
-#define CLUSTER_SIZE_LVL 10
+#define NODE_MIN_DISTANCE 4
+#define CLUSTER_SIZE_LVL 9
 #define MAX_LEVELS 1
 
 
@@ -175,7 +175,7 @@ public:
 
 	PATH_TYPE CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
 
-	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination) const;
+	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination);
 
 	bool CheckBoundaries(const iMPoint& pos) const;
 
@@ -188,7 +188,7 @@ public:
 	bool DeletePath(Entity* request);
 
 	bool LineRayCast(iMPoint& p0, iMPoint& p1);
-	std::vector<iMPoint> CreateLine(iMPoint& p0, iMPoint& p1);
+	std::vector<iMPoint> CreateLine(const iMPoint& p0, const iMPoint& p1, int maxDistance = INT_MAX);
 
 	float SimpleAPathfinding(const iMPoint& origin, const iMPoint& destination, int limitpath = -1);
 

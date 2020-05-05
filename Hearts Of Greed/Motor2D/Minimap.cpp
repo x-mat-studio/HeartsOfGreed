@@ -291,6 +291,7 @@ void Minimap::CreateMinimapText()
 
 	app->map->DrawMinimap();
 	app->entityManager->DrawOnlyStaticBuildings();
+	app->fowManager->DrawFoWMinimap();
 	app->render->currentCamX = auxCam.x;
 	app->render->currentCamY = auxCam.y;
 }

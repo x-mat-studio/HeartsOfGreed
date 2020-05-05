@@ -42,7 +42,7 @@
     <folder>maps/</folder>
   </map>
 
-  <minimap width="400" posX="0" posY="500"/>
+  <minimap width="450" posX="-35" posY="520"/>
 
   <entityManager>
 	<load 

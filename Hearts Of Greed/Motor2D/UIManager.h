@@ -68,6 +68,7 @@ public:
 	void CheckDragElement(UI* element);
 
 	void ExecuteButton(BUTTON_TAG tag, Button* button);
+	void ExecuteHoverButton(BUTTON_TAG tag, Button* button);
 
 	HeroesPortraitManager* GetPortraitManager();
 	void SetPortraitManager(HeroesPortraitManager* portraitManager);

@@ -170,6 +170,8 @@ private:
 	void CommandVfx(float dt);
 	virtual void BlitCommandVfx(Frame& currframe, int alphaValue);
 
+	virtual void PlayOnHitSound();
+
 protected:
 	void SetAnimation(HERO_STATES currState);
 
@@ -272,7 +274,6 @@ public:
 
 	std::vector <iMPoint> currAoE;
 	std::vector <iMPoint> suplAoE;
-
 
 	skillArea* currAreaInfo;
 	Skill skill1;
