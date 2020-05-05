@@ -24,6 +24,7 @@
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "Minimap.h"
+#include "QuestManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
@@ -50,7 +51,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	fonts = new ModuleFonts();
 	fowManager = new ModuleFoWManager();
 	fadeToBlack = new ModuleFadeToBlack();
-
+	questManager = new ModuleQuestManager();
 	introScene = new ModuleIntroScene();
 	mainMenu = new ModuleMainMenuScene();
 	testScene = new ModuleTestScene();
@@ -79,7 +80,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	AddModule(pathfinding);
 	AddModule(player);
 	AddModule(ai);
-
+	AddModule(questManager);
 	AddModule(minimap);
 
 	//Fade to black before render
