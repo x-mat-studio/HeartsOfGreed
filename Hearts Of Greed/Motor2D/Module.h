@@ -100,6 +100,10 @@ enum class EVENT_ENUM
 	PLAYER_CONQUERED_A_BASE,
 	ENEMY_CONQUERED_A_BASE,
 
+	//Quest Events
+	START_QUEST,
+	FINISH_QUEST,
+
 	// Camera related events
 	CAMERA_UP,
 	STOP_CAMERA_UP,

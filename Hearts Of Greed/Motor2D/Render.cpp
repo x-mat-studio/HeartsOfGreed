@@ -91,7 +91,7 @@ bool ModuleRender::Update(float dt)
 
 bool ModuleRender::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Coll PostUpdate", Profiler::Color::LightYellow);
+	BROFILER_CATEGORY("Render PostUpdate", Profiler::Color::LightYellow);
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	

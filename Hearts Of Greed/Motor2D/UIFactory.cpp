@@ -269,9 +269,11 @@ UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group
 }
 
 
-UI* UIFactory::CreateNonGroupImage(float x, float y, UI* parent, SDL_Rect rect, bool dragable)
+UI* UIFactory::CreateNonGroupImage(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, SDL_Rect rect, bool dragable)
 {
 	UI_Image* uiImage = new UI_Image(x, y, parent, rect, app->uiManager->GetAtlasTexture(), dragable);
+
+	dataPagesVector->push_back(uiImage);
 
 	return uiImage;
 }
@@ -286,9 +288,11 @@ UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* gr
 	return uiText;
 }
 
-UI* UIFactory::CreateNonGroupText(float x, float y, UI* parent, char* text, bool interactable)
+UI* UIFactory::CreateNonGroupText(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, char* text, bool interactable)
 {
 	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
+
+	dataPagesVector->push_back(uiText);
 
 	return uiText;
 }
@@ -452,13 +456,11 @@ UI* UIFactory::CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group
 
 UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RESUME);
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RESUME);
 
-	CreateText(x + 3, y - 8, nullptr, "Revive", group);
+//	CreateNonGroupText(x + 3, y - 8, button, "Revive", group);
 
-	group->AddUiElement(nullptr);
-
-	return nullptr;
+	return button;
 }
 
 
@@ -552,31 +554,31 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, gathererPicture));
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, gathererPicture);
 
-	dataPagesVector->push_back(new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
-
-	dataPagesVector->push_back(new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
-
-	dataPagesVector->push_back(new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
-
-	dataPagesVector->push_back(new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
+	
+	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	
+	CreateNonGroupImage(68, 12, dataPage, dataPagesVector, healthBarContainer);
+	
+	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
+	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
-	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
+	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
+	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector->push_back(CreateNonGroupText(133, 25, dataPage, stats));
+	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
 }
 
 
@@ -585,31 +587,31 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, meleePicture));
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, meleePicture);
 
-	dataPagesVector->push_back(new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
-	dataPagesVector->push_back(new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 12, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
+	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
-	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
+	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
+	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector->push_back(CreateNonGroupText(133, 25, dataPage, stats));
+	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
 }
 
 
@@ -618,31 +620,31 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, rangedPicture));
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, rangedPicture);
 
-	dataPagesVector->push_back(new UI_Image(68, 4, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 6, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
-	dataPagesVector->push_back(new UI_Image(68, 12, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 12, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 14, dataPage, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
-	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
+	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
-	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
-	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
+	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
-	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
+	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
-	dataPagesVector->push_back(CreateNonGroupText(133, 25, dataPage, stats));
+	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
 }
 
 
@@ -651,24 +653,24 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 	char stats[40];
 	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, wanamingoDataPagePicture));
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, wanamingoDataPagePicture);
 
-	dataPagesVector->push_back(new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	dataPagesVector->push_back(CreateNonGroupText(133, 0, dataPage, stats));
+	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	dataPagesVector->push_back(CreateNonGroupText(68, 12, dataPage, stats));
+	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
-	dataPagesVector->push_back(CreateNonGroupText(133, 12, dataPage, stats));
+	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	dataPagesVector->push_back(CreateNonGroupText(68, 25, dataPage, stats));
+	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 }
 
 
@@ -677,17 +679,17 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	char stats[40];
 	Base* focus = (Base*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, baseDataPagePicture));
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, baseDataPagePicture);
 
-	dataPagesVector->push_back(new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
-//	dataPagesVector->push_back(CreateGathererReviveButton(133, 20, dataPage, nullptr));
+	CreateGathererReviveButton(133, 20, dataPage, nullptr);
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
-	dataPagesVector->push_back(CreateNonGroupText(68, 10, dataPage, stats));
+	CreateNonGroupText(68, 10, dataPage, dataPagesVector, stats);
 
 }
 
@@ -697,24 +699,24 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	char stats[40];
 	Turret* focus = (Turret*)app->player->GetFocusedEntity();
 
-	dataPagesVector->push_back(CreateNonGroupImage(3, 3, dataPage, turretDataPagePicture));
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, turretDataPagePicture);
 
-	dataPagesVector->push_back(new UI_Image(68, 8, dataPage, healthBarContainer, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	dataPagesVector->push_back(new UI_Image(69, 10, dataPage, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false));
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
-	dataPagesVector->push_back(CreateNonGroupText(-45, -15, dataPage, stats));
+	CreateNonGroupText(-45, -15, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	dataPagesVector->push_back(CreateNonGroupText(-45, -30, dataPage, stats));
+	CreateNonGroupText(-45, -30, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetRng());
-	dataPagesVector->push_back(CreateNonGroupText(-45, -45, dataPage, stats));
+	CreateNonGroupText(-45, -45, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
-	dataPagesVector->push_back(CreateNonGroupText(-45, -60, dataPage, stats));
+	CreateNonGroupText(-45, -60, dataPage, dataPagesVector, stats);
 }
 
 

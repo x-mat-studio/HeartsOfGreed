@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "EntityManager.h"
 #include "Player.h"
+#include "FoWManager.h"
 
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
@@ -73,6 +74,15 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	baseAreaAlarm->SetPos(x, y);
 	radiusSize = 5;
 
+	//FoW Related
+	if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+	{
+		visionEntity = app->fowManager->CreateFoWEntity(position, true, 15);//TODO that 15 needs to be passed as a parameter
+	}
+	else
+	{
+		visionEntity = app->fowManager->CreateFoWEntity(position, false, 15);
+	}
 }
 
 
@@ -82,6 +92,11 @@ Base::~Base()
 
 	baseUpgradeCenter = nullptr;
 
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 	turretsVector.clear();
 	barricadesVector.clear();
 }
@@ -212,11 +227,35 @@ void Base::ChangeAligment()
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
 
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetEntityProvideVision(true);
+			
+		}
+
+
+		if(minimapIcon!=nullptr)
+		{
+			minimapIcon->type = MINIMAP_ICONS::BASE;
+		}
 	}
 
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
+
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetEntityProvideVision(false);
+		}
+
+		if (minimapIcon != nullptr)
+		{
+			minimapIcon->type = MINIMAP_ICONS::ENEMY_BASE;
+		}
+
 	}
 
 	if (baseUpgradeCenter != nullptr)
