@@ -125,9 +125,18 @@ void ModuleMap::DrawMinimap()
 
 						worldX += app->render->currentCamX;
 						worldY += app->render->currentCamY;
-
-						app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
-
+						FoWDataStruct* fogData = app->fowManager->GetFoWTileState({ j,i });
+						if (fogData != nullptr && app->fowManager->foWMapVisible)
+						{
+							if (fogData->tileShroudBits != fow_ALL)
+							{
+								app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
+							}
+						}
+						else
+						{
+							app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
+						}
 
 					}
 

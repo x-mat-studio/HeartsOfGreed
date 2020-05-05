@@ -10,6 +10,7 @@
 #include "UIManager.h"
 #include "UI.h"
 #include "Player.h"
+#include "FoWManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -39,7 +40,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 }
 
 
-Minimap::Minimap() :minimapLoaded(false)
+Minimap::Minimap() :minimapLoaded(false),minimapFoWNeedsUpdate(false)
 {
 	name = "minimap";
 }
@@ -144,6 +145,13 @@ bool Minimap::PostUpdate(float dt)
 
 	if (minimapLoaded==true)
 	{
+		if (minimapFoWNeedsUpdate == true)
+		{
+			UpdateMinimapFoW();
+			minimapFoWNeedsUpdate = false;
+		}
+		//app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
+		//FoW Draw
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 
 		//Draw icons
@@ -178,6 +186,8 @@ bool Minimap::PostUpdate(float dt)
 			minimapIcons[i]->Draw(iconRect);
 
 		}
+
+
 
 
 		//camera rect representation
@@ -304,7 +314,49 @@ void Minimap::LoadMinimap()
 	SDL_SetRenderTarget(app->render->renderer, minimapTexture);
 	CreateMinimapText();
 	SDL_SetRenderTarget(app->render->renderer, NULL);
+	minimapFoWNeedsUpdate = true;
 	
+}
+
+void Minimap::CreateFoWText()
+{
+	fMPoint auxCam;
+	auxCam.x = app->render->currentCamX;
+	auxCam.y = app->render->currentCamY;
+	app->render->currentCamX = 0.0f;
+	app->render->currentCamY = 0.0f;
+
+	app->map->DrawMinimap();
+	app->entityManager->DrawOnlyStaticBuildings();
+
+	app->fowManager->DrawFoWMinimap();
+	app->render->currentCamX = auxCam.x;
+	app->render->currentCamY = auxCam.y;
+}
+
+
+void Minimap::UpdateMinimapFoW()
+{
+	if (minimapLoaded == true)
+	{
+		BROFILER_CATEGORY("Update Minimap FoW", Profiler::Color::LightCoral);
+		app->tex->UnLoad(minimapTexture);
+		minimapTexture = nullptr;
+
+		uint windowWidth, windowHeight;
+		app->win->GetWindowSize(windowWidth, windowHeight);
+
+		minimapTexture = SDL_CreateTexture(app->render->renderer, SDL_GetWindowPixelFormat(app->win->window), SDL_TEXTUREACCESS_TARGET, 1.05f * width, 1.05f * height);
+
+		SDL_SetRenderTarget(app->render->renderer, minimapTexture);
+		CreateFoWText();
+		SDL_SetRenderTarget(app->render->renderer, NULL);
+	}
+}
+void Minimap::MinimapFoWNeedsUpdate()
+{
+	if (minimapFoWNeedsUpdate == false)
+		minimapFoWNeedsUpdate = true;
 }
 
 

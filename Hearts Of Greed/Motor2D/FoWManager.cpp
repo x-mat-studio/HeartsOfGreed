@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Render.h"
 #include "Input.h"
+#include "Minimap.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleFoWManager::ModuleFoWManager() :
@@ -147,6 +148,7 @@ bool ModuleFoWManager::Update(float dt)
 		if (foWMapNeedsRefresh)
 		{
 			UpdateFoWMap();
+			app->minimap->MinimapFoWNeedsUpdate();
 			foWMapNeedsRefresh = false;
 		}
 	}
@@ -362,6 +364,58 @@ void ModuleFoWManager::DrawFoWMap()
 		}
 	}
 }
+
+
+void ModuleFoWManager::DrawFoWMinimap()
+{
+	BROFILER_CATEGORY("FOW MINIMAP DRAW", Profiler::Color::NavajoWhite);
+	if (foWMapVisible)
+	{
+		float scale = app->minimap->minimapScaleRelation;
+		float halfWidth = app->minimap->minimapWidth * 0.5f;
+
+		float halfTileHeight = app->map->data.tileHeight * 0.5f;
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+
+				fMPoint worldPos;
+				app->map->MapToWorldCoords(x, y, app->map->data, worldPos.x, worldPos.y);
+
+				FoWDataStruct* tileInfo = GetFoWTileState({ x, y });
+				int shroudId = -1;
+
+				if (tileInfo != nullptr)
+				{
+
+					if (bitToTextureTable.find(tileInfo->tileShroudBits) != bitToTextureTable.end())
+					{
+						shroudId = bitToTextureTable[tileInfo->tileShroudBits];
+					}
+
+
+
+					//draw fog
+					if (shroudId != -1)
+					{
+
+						//SDL_SetTextureAlphaMod(smoothFoWtexture, 255);//set the alpha of the texture to half to reproduce fog
+						SDL_Rect r = { shroudId*64 ,0,64 ,64}; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						app->render->MinimapBlit(smoothFoWtexture, worldPos.x + halfWidth, worldPos.y - halfTileHeight, &r, scale);
+						/*SDL_Rect r = { (worldPos.x + halfWidth) * scale,worldPos.y * scale,64 * scale,64 * scale };
+						app->render->DrawQuad(r, 255, 255, 255, 255, true, false);*/
+					}
+
+				}
+
+
+			}
+		}
+	}
+}
+
 
 FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius)
 {

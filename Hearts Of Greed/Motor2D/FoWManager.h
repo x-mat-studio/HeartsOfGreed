@@ -52,6 +52,7 @@ public:
 	//Updates the data on the FoWMap based on the FoWEntities position and mask shape
 	void UpdateFoWMap();
 	void DrawFoWMap();
+	void DrawFoWMinimap();
 	//Tell the map that it needs to be updated the next frame
 	void MapNeedsUpdate();
 
