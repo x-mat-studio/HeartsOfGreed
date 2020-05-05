@@ -247,6 +247,14 @@ public:
 		return sqrtf((fx * fx) + (fy * fy));
 	}
 
+	float OctileDistance(const MAT_Point& v) const
+	{
+		int dx = abs(v.x - x);
+		int dy = abs(v.y - y);
+
+		return  max(dx, dy) + (0.41f) * min(dx, dy);
+	}
+
 	TYPE DistanceNoSqrt(const MAT_Point& v) const
 	{
 		TYPE fx = x - v.x;
@@ -260,10 +268,10 @@ public:
 		return abs(v.x - x) + abs(v.y - y);
 	}
 
-	TYPE DiagonalDistance(const MAT_Point& v) const
+	float DiagonalDistance(const MAT_Point& v) const
 	{
-		TYPE dx = v.x - x, dy = v.y - y;
-		return MAX(dx, dy);
+		float dx = v.x - x, dy = v.y - y;
+		return (MAX(abs(dx), abs(dy)));
 	}
 
 	bool PointInRect( const SDL_Rect* r)
