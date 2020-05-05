@@ -62,10 +62,14 @@ UIFactory::UIFactory() :
 	dataPageHealthbarBlueImage{375, 81, 59, 4},
 	healthBarContainer{251, 86, 61, 8},
 
-	heroPortrait{401, 328, 68, 81},
-	gathererHeroIcon{101, 521, 27, 33},
-	meleHeroIcon{18, 519, 36, 35},
-	rangedHeroIcon{60, 519, 35, 35}
+	heroPortrait{478, 328, 33, 40},
+	gathererHeroIcon{178, 529, 13, 16},
+	meleHeroIcon{134, 528, 20, 17},
+	rangedHeroIcon{157, 526, 18, 19},
+
+	littleHealthBarContainer{251, 72, 31, 7},
+	littleHealthbarGreenImage{319, 73, 29, 4},
+	littleHealthbarBlueImage{352, 73, 29, 4}
 {}
 
 
@@ -829,30 +833,30 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	switch (hero->GetType())
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
-		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w - 5, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(17, 9, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(10, 5, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
 
 
 	case ENTITY_TYPE::HERO_MELEE:
-		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w - 5, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(17, 9, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 5, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
 
 
 	case ENTITY_TYPE::HERO_RANGED:
-		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		BackGround = new Button(fMPoint{ app->win->width / app->win->GetUIScale() - heroPortrait.w - 5, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(17, 9, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(7, 3, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -864,17 +868,35 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	}
 
 	
-	healthBar = new UI_Image(5, 52, BackGround, dataPageHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
+	healthBar = new UI_Image(1, 25, BackGround, littleHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(4, 51, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	healthBarCont = new UI_Image(0, 24, BackGround, littleHealthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(5, 63, BackGround, dataPageHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
+	manaBar = new UI_Image(1, 33, BackGround, littleHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(4, 62, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	manaBarCont = new UI_Image(0, 32, BackGround, littleHealthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
 	return portrait;
 }
+
+SDL_Rect UIFactory::GetHealthBarBackground()
+{
+	return healthBarContainer;
+}
+
+
+SDL_Rect UIFactory::GetGreenHealthBar()
+{
+	return dataPageHealthbarGreenImage;
+}
+
+
+SDL_Rect UIFactory::GetBlueHealthBar()
+{
+	return dataPageHealthbarBlueImage;
+}
+

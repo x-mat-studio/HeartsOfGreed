@@ -12,7 +12,9 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 	mana(hero->energyPoints),
 
 	healthRect(nullptr),
-	manaRect(nullptr)
+	manaRect(nullptr),
+
+	focused(false)
 {
 }
 
@@ -39,6 +41,8 @@ HeroPortrait::~HeroPortrait()
 
 bool HeroPortrait::PreUpdate(float dt)
 {
+	focused = hero->selectedByPlayer;
+
 	if (hero->hitPointsCurrent != life && hero->hitPointsCurrent > 0)
 	{
 		life = hero->hitPointsCurrent;
@@ -55,7 +59,7 @@ bool HeroPortrait::PreUpdate(float dt)
 	{
 		mana = hero->energyPoints;
 
-		manaRect->w = life * originalBarsWidth / hero->maxEnergyPoints;
+		manaRect->w = mana * originalBarsWidth / hero->maxEnergyPoints;
 
 		if (manaRect->w == 0)
 		{
@@ -93,10 +97,17 @@ bool HeroPortrait::PostUpdate(float dt)
 {
 	int numElements = uiElementsVector.size();
 
+	if (focused == true)
+	{
+		SDL_SetTextureColorMod(app->uiManager->GetAtlasTexture(), 65, 169, 76);
+	}
+
 	for (size_t i = 0; i < numElements; i++)
 	{
 		uiElementsVector[i]->PostUpdate(dt);
 	}
+
+	SDL_SetTextureColorMod(app->uiManager->GetAtlasTexture(), 255, 255, 255);
 
 	return true;
 }

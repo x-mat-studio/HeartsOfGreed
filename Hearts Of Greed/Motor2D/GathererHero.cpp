@@ -223,3 +223,8 @@ bool GathererHero::DrawVfx(float dt)
 
 	return false;
 }
+
+void GathererHero::BlitCommandVfx (Frame& currframe, int alphaValue)
+{
+	app->render->Blit(app->entityManager->moveCommandTileGath, movingTo.x - currframe.pivotPositionX, movingTo.y - currframe.pivotPositionY, &currframe.frame, false, true, alphaValue);
+}

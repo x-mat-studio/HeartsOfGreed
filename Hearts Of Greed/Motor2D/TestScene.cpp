@@ -21,6 +21,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "AI.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
@@ -94,7 +95,7 @@ bool ModuleTestScene::Start()
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, app->audio->musicVolume);
 
 	//Load sfx used in this scene
-	if (app->map->LoadNew("map_prototype2.tmx") == true)
+	if (app->map->LoadNew("finalMap.tmx") == true)
 	{
 		int w, h;
 		uchar* data = nullptr;
@@ -106,7 +107,7 @@ bool ModuleTestScene::Start()
 		app->fowManager->CreateFoWMap(app->map->data.width, app->map->data.height);
 
 		fMPoint pos;
-		pos.create(100, 600);
+		pos.create(950, 4100);
 
 		//Test Hero
 
@@ -115,6 +116,7 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
 		app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
+		/*
 		//mid
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
@@ -146,7 +148,7 @@ bool ModuleTestScene::Start()
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
 		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
-
+			*/
 		//Spawners------------------
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
 		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
@@ -324,6 +326,8 @@ bool  ModuleTestScene::Update(float dt)
 bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
+
+	BROFILER_CATEGORY("Game Scene PostUpdate", Profiler::Color::LightYellow);
 
 	app->map->Draw();
 

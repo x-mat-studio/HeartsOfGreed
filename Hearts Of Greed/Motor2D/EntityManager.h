@@ -123,6 +123,8 @@ public:
 
 	void ResetEntityManager();
 
+	Entity* SearchEntity(ENTITY_TYPE type);
+
 private:
 
 	void CheckIfStarted();
@@ -156,7 +158,11 @@ public:
 	SDL_Texture* selectedTexture;
 	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
-	SDL_Texture* moveCommandTile;
+
+	SDL_Texture* moveCommandTileRng;
+	SDL_Texture* moveCommandTileGath;
+	SDL_Texture* moveCommandTileMelee;
+
 	SDL_Texture* explosionTexture;
 
 	
@@ -171,6 +177,9 @@ public:
 	int suitmanGetsHit2;
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
+
+	int rangedGetsHit;
+	int rangedDies;
 
 	int buildingGetsHit;
 	int buildingGetsHit2;
@@ -191,6 +200,11 @@ public:
 	int noise2Armored;
 	int noise3Armored;
 	int noise4Armored;
+
+	int noise1Ranged;
+	int noise2Ranged;
+	int noise3Ranged;
+	int noise4Ranged;
 
 	int lvlup;
 	int selectHero;

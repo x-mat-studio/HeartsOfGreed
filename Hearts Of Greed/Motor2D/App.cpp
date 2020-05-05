@@ -24,7 +24,7 @@
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "Minimap.h"
-
+#include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
@@ -345,6 +345,7 @@ bool App::PreUpdate()
 	bool ret = true;
 	int numModules = modules.size();
 
+	BROFILER_CATEGORY("App PreUpdate", Profiler::Color::Aquamarine);
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{
@@ -371,6 +372,7 @@ bool App::DoUpdate()
 	bool ret = true;
 	int numModules = modules.size();
 
+	BROFILER_CATEGORY("App Update", Profiler::Color::Aquamarine);
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{
@@ -394,6 +396,9 @@ bool App::PostUpdate()
 {
 	bool ret = true;
 	int numModules = modules.size();
+
+	BROFILER_CATEGORY("App PostUpdate", Profiler::Color::Aquamarine);
+
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{

@@ -8,8 +8,8 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
-	Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk,
-	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
+	Animation& skill1LeftUp, Animation& skill1LeftDown, 
+	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
@@ -187,4 +187,34 @@ bool RangedHero::DrawVfx(float dt)
 
 
 	return false;
+}
+
+void RangedHero::BlitCommandVfx(Frame& currframe, int alphaValue)
+{
+	app->render->Blit(app->entityManager->moveCommandTileRng, movingTo.x - currframe.pivotPositionX, movingTo.y - currframe.pivotPositionY, &currframe.frame, false, true, alphaValue);
+}
+
+void RangedHero::PlayGenericNoise(int probability)
+{
+	int random = rand() % ((100 * 4) / probability) + 1;
+
+	switch (random)
+	{
+	case 1:
+		app->audio->PlayFx(app->entityManager->noise1Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 2:
+		app->audio->PlayFx(app->entityManager->noise2Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 3:
+		app->audio->PlayFx(app->entityManager->noise3Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 4:
+		app->audio->PlayFx(app->entityManager->noise4Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+
+	default:
+		break;
+	}
+
 }

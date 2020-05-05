@@ -42,7 +42,7 @@
     <folder>maps/</folder>
   </map>
 
-  <minimap width="300" posX="0" posY="500"/>
+  <minimap width="450" posX="-35" posY="520"/>
 
   <entityManager>
 	<load 
@@ -70,10 +70,10 @@
     freeCamMarginDetectionPixelsX="20"
     freeCamMarginDetectionPixelsY="15"
     
-    mapBordersUpperLeftCornerX="-1450"
-    mapBordersUpperLeftCornerY="0"
-    mapBordersBottomRightCornerX="1500"
-    mapBordersBottomRightCornerY="1550"
+    mapBordersUpperLeftCornerX="-3800"
+    mapBordersUpperLeftCornerY="1400"
+    mapBordersBottomRightCornerX="4200"
+    mapBordersBottomRightCornerY="4200"
     
     />
   

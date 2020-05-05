@@ -19,6 +19,12 @@ public:
 	UIFactory();
 	~UIFactory();
 
+	// Getters
+
+	SDL_Rect GetHealthBarBackground();
+	SDL_Rect GetGreenHealthBar();
+	SDL_Rect GetBlueHealthBar();
+
 	// Menu creation functions
 
 	UI_Group* CreateMainMenu();
@@ -110,6 +116,10 @@ private:
 	SDL_Rect dataPageHealthbarBlueImage;
 	SDL_Rect dataPageBackground;
 	SDL_Rect dataPageImageBackground;
+
+	SDL_Rect littleHealthBarContainer;
+	SDL_Rect littleHealthbarGreenImage;
+	SDL_Rect littleHealthbarBlueImage;
 
 	SDL_Rect gathererPicture;
 	SDL_Rect gathererShopPicture;

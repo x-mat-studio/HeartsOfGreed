@@ -167,6 +167,8 @@ private:
 
 	void FeelingSecure(float dt);
 
+	void CommandVfx(float dt);
+	virtual void BlitCommandVfx(Frame& currframe, int alphaValue);
 
 protected:
 	void SetAnimation(HERO_STATES currState);
@@ -223,7 +225,6 @@ public:
 	float visionInPx;
 
 	Entity* objective;
-	//bool selected;
 
 	Animation walkLeft;
 	Animation walkLeftUp;

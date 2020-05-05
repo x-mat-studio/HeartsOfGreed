@@ -8,6 +8,11 @@ ModuleCollision::ModuleCollision()
 {
 	name.create("colliders");
 
+	for (size_t i = 0; i < MAX_COLLIDERS; i++)
+	{
+		colliders[i] = nullptr;
+	}
+
 	matrix[COLLIDER_HERO][COLLIDER_WALL] = true;
 	matrix[COLLIDER_HERO][COLLIDER_HERO] = true;
 	matrix[COLLIDER_HERO][COLLIDER_ENEMY] = true;
@@ -63,13 +68,15 @@ bool ModuleCollision::PreUpdate(float dt)
 	BROFILER_CATEGORY("Collision Pre-Update", Profiler::Color::Gold);
 
 	// Remove all colliders scheduled for deletion
-	for (uint i = 0; i < colliders.size(); ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
+		if (colliders[i] == nullptr)
+			continue;
+
 		if (colliders[i]->to_delete == true)
 		{
 			delete colliders[i];
 			colliders[i] = nullptr;
-			colliders.erase(colliders.begin() + i);
 		}
 	}
 
@@ -84,21 +91,23 @@ bool ModuleCollision::Update(float dt)
 	Collider* c1;
 	Collider* c2;
 
-	for (uint i = 0; i < colliders.size(); ++i)
+	BROFILER_CATEGORY("Coll Update", Profiler::Color::DarkBlue);
+
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		c1 = colliders[i];
 
-		if (c1->active == false)
+		if (c1 == nullptr || c1->active == false)
 			continue;
 		
 
 		// avoid checking collisions already checked
-		for (uint k = i + 1; k < colliders.size(); ++k)
+		for (uint k = i + 1; k < MAX_COLLIDERS; ++k)
 		{
 
 			c2 = colliders[k];
 
-			if (c2->active == false || c1->active == false)
+			if (c2 == nullptr || c2->active == false || c1->active == false)
 				continue;
 			
 
@@ -129,8 +138,11 @@ void ModuleCollision::DebugDraw()
 		return;
 
 	Uint8 alpha = 80;
-	for (uint i = 0; i < colliders.size(); ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
+		if (colliders[i] == nullptr)
+			continue;
+
 		switch (colliders[i]->type)
 		{
 		case COLLIDER_NONE: // white
@@ -175,15 +187,13 @@ bool ModuleCollision::CleanUp()
 {
 	LOG("Freeing all colliders");
 
-	int numColl = colliders.size();
 
-	for (int i = 0; i < numColl; i++)
+	for (uint i = 0; i < MAX_COLLIDERS; i++)
 	{
 		RELEASE(colliders[i]);
 		colliders[i] = nullptr;
 	}
 
-	colliders.clear();
 
 	return true;
 }
@@ -194,7 +204,15 @@ Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module
 	Collider* ret = nullptr;
 
 	ret = new Collider(rect, type, callback, entCallback);
-	colliders.push_back(ret);
+
+	for (int i = 0; i < MAX_COLLIDERS; i++)
+	{
+		if (colliders[i] == nullptr)
+		{
+			colliders[i] = ret;
+			break;
+		}
+	}
 
 	return ret;
 }
@@ -202,7 +220,14 @@ Collider* ModuleCollision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module
 
 void ModuleCollision::AddColliderEntity(Collider* collider)
 {
-	colliders.push_back(collider);
+	for (int i = 0; i < MAX_COLLIDERS; i++)
+	{
+		if (colliders[i] == nullptr)
+		{
+			colliders[i] = collider;
+			break;
+		}
+	}
 }
 
 
