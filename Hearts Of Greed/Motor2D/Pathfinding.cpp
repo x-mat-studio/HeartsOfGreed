@@ -48,6 +48,7 @@ std::vector<iMPoint> ModulePathfinding::CreateLine(const iMPoint& p0, const iMPo
 
 	for (int step = 0; step <= n && step < maxDistance; step++)
 	{
+
 		float t = n == 0 ? 0.0 : step / n;
 
 		fMPoint nextPointf = p0f.LerpPoint(p1f, t);
@@ -768,6 +769,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	}
 
 
+	if()
 	if (LineRayCast(origin, destination))
 	{
 		last_path = last_line;
@@ -1046,6 +1048,21 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 
 	Cluster* fromC = nullptr;
 
+	if (pathSize > 2)
+	{
+		if (LineRayCast(absPath->front(), absPath->back()))
+		{
+			generatedPath = &last_line;
+			pathSize = 0;
+			absPath->clear();
+
+
+			if (pathToFill->size() > 1)
+				pathToFill->insert(pathToFill->end(), generatedPath->begin() + 1, generatedPath->end());
+			else
+				pathToFill->insert(pathToFill->end(), generatedPath->begin(), generatedPath->end());
+		}
+	}
 
 	for (int i = 0; i < pathSize; i)
 	{
