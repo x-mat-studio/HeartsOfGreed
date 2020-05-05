@@ -769,7 +769,6 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	}
 
 
-	if()
 	if (LineRayCast(origin, destination))
 	{
 		last_path = last_line;
