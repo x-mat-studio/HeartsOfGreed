@@ -1430,3 +1430,251 @@ Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : 
 
 Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id)
 {}
+
+
+//Getters and setters hellish nightmare
+
+int Hero::GetHeroLevel() const
+{
+	return level;
+}
+
+
+void Hero::SetHeroLevel(int lvl)
+{
+	level = lvl;
+}
+
+
+int Hero::GetExpToLevelUp() const
+{
+	return expToLevelUp;
+}
+
+
+void Hero::SetExpToLevelUp(int exp)
+{
+	expToLevelUp = exp;
+}
+
+
+int Hero::GetHeroXP() const
+{
+	return heroXP;
+}
+
+
+void Hero::SetHeroXP(int xp)
+{
+	heroXP = xp;
+}
+
+
+int Hero::GetRecoveryHitPointsRate() const
+{
+	return recoveryHitPointsRate;
+}
+
+
+void Hero::SetRecoveryHitPointsRate(int hpRate)
+{
+	recoveryHitPointsRate = hpRate;
+}
+
+
+int Hero::GetEnergyPoints() const
+{
+	return energyPoints;
+}
+
+
+void Hero::SetEnergyPoints(int engPoints)
+{
+	energyPoints = engPoints;
+}
+
+
+int Hero::GetMaxEnergyPoints() const
+{
+	return maxEnergyPoints;
+}
+
+
+void Hero::SetMaxEnergyPoints(int maxEngPoints)
+{
+	maxEnergyPoints = maxEngPoints;
+}
+
+
+int Hero::GetRecoveryEnergyRate() const
+{
+	return recoveryEnergyRate;
+}
+
+
+void Hero::SetRecoveryEnergyRate(int recEnergyRate)
+{
+	recoveryEnergyRate = recEnergyRate;
+}
+
+
+float Hero::GetRecoveringHealth() const
+{
+	return recoveringHealth;
+}
+
+
+void Hero::SetRecoverHealth(float recHealth)
+{
+	recoveringHealth = recHealth;
+}
+
+
+float Hero::GetRecoveringEnergy() const
+{
+	return recoveringEnergy;
+}
+
+
+void Hero::SetRecoveringEnergy(float recoverEnergy)
+{
+	recoveringEnergy = recoverEnergy;
+}
+
+
+float Hero::GetFeelingSecure() const
+{
+	return feelingSecure;
+}
+
+
+void Hero::SetFeelingSecure(float feelSecure)
+{
+	feelingSecure = feelSecure;
+}
+
+
+int Hero::GetAttackDamage() const
+{
+	return attackDamage;
+}
+
+
+void Hero::SetAttackDamage(int atkDamage)
+{
+	attackDamage = atkDamage;
+}
+
+
+int Hero::GetAttackRange() const
+{
+	return attackRange;
+}
+
+
+void Hero::SetAttackRange(int atkRange)
+{
+	attackRange = atkRange;
+}
+
+
+int Hero::GetSkill1Cost() const
+{
+	return skill1Cost;
+}
+
+
+void Hero::SetSkill1Cost(int skillCost)
+{
+	skill1Cost = skillCost;
+}
+
+
+float Hero::GetAttackSpeed() const
+{
+	return attackSpeed;
+}
+
+
+void Hero::SetAttackSpeed(float atkSpeed)
+{
+	attackSpeed = atkSpeed;
+}
+
+
+float Hero::GetSkill1RecoverTime() const
+{
+	return skill1RecoverTime;
+}
+
+
+void Hero::SetSkill1RecoverTime(float skillRecoverTime)
+{
+	skill1RecoverTime = skillRecoverTime;
+}
+
+
+float Hero::GetSkill2RecoverTime() const
+{
+	return skill2RecoverTime;
+}
+
+
+void Hero::SetSkill2RecoverTime(float skillRecoverTime)
+{
+	skill2RecoverTime = skillRecoverTime;
+}
+
+
+float Hero::GetSkill3RecoverTime() const
+{
+	return skill3RecoverTime;
+}
+
+
+void Hero::SetSkill3RecoverTime(float skillRecoverTime)
+{
+	skill3RecoverTime = skillRecoverTime;
+}
+
+
+float Hero::GetSkill1TimePassed() const
+{
+	return skill1TimePassed;
+}
+
+
+float Hero::GetSkill2TimePassed() const
+{
+	return skill2TimePassed;
+}
+
+
+float Hero::GetSkill3TimePassed() const
+{
+	return skill3TimePassed;
+}
+
+
+int Hero::GetVisionDistance() const
+{
+	return visionDistance;
+}
+
+
+void Hero::SetVisionDistance(int visDistance)
+{
+	visionDistance = visDistance;
+}
+
+
+float Hero::GetVisionInPx() const
+{
+	return visionInPx;
+}
+
+
+void Hero::SetVisionInPx(float visPx)
+{
+	visionInPx = visPx;
+}

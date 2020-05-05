@@ -54,7 +54,7 @@ bool DynamicEntity::Move(float dt)
 	fMPoint pathSpeed = { 0,0 };
 	fMPoint nextPoint = { 0,0 };
 
-	if (framesSinceRequest >= framesToRquest)
+	if (framesSinceRequest >= framesToRquest || path.size() < 2)
 	{
 		app->pathfinding->RequestPath(this, &path);
 		framesSinceRequest = 0;
@@ -65,8 +65,8 @@ bool DynamicEntity::Move(float dt)
 		app->map->MapToWorldCoords(path[0].x, path[0].y, app->map->data, nextPoint.x, nextPoint.y);
 
 		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
-
 		framesSinceRequest++;
+
 	}
 
 	dir = DetermineDirection(pathSpeed);
@@ -324,16 +324,15 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	origin = app->map->WorldToMap(round(position.x), round(position.y));
 	goal = app->map->WorldToMap(x, y);
 
-	if (app->pathfinding->CreatePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
-	{
-		path.clear();
-		app->pathfinding->RequestPath(this, &path);
+	if (app->pathfinding->GetDestination(this) != goal)
+		if (app->pathfinding->CreatePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
+		{
+			path.clear();
+			app->pathfinding->RequestPath(this, &path);
 
-		if (path.size() > 0)
-			path.erase(path.begin());
 
-		return true;
-	}
+			return true;
+		}
 
 	return false;
 }

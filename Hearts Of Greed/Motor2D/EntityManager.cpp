@@ -420,7 +420,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
 					entityVector[i]->Start(base2TextureEnemy);
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY_BASE, entityVector[i]->GetCenter());
 
 					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
@@ -2263,12 +2263,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("skill1_recover_time") = spawner->GetSpawnRate();
 			iterator.append_attribute("skill2_recover_time") = spawner->GetEnemiesPerWave();
 			iterator.append_attribute("skill3_recover_time") = spawner->GetActive();
-
-			iterator.append_attribute("skill1_execution_time") = spawner->GetSpawnRate();
-			iterator.append_attribute("skill2_execution_time") = spawner->GetEnemiesPerWave();
-			iterator.append_attribute("skill3_execution_time") = spawner->GetActive();
-
-
 			break;
 
 

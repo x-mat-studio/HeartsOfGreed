@@ -149,6 +149,72 @@ public:
 
 	virtual void PlayGenericNoise(int random);
 
+	//Getters and setters
+
+	int GetHeroLevel() const;
+	void SetHeroLevel(int level);
+
+	int GetExpToLevelUp() const;
+	void SetExpToLevelUp(int exp);
+
+	int GetHeroXP() const;
+	void SetHeroXP(int xp);
+
+	int GetRecoveryHitPointsRate() const;
+	void SetRecoveryHitPointsRate(int hpRate);
+
+	int GetEnergyPoints() const;
+	void SetEnergyPoints(int energyPoints);
+
+	int GetMaxEnergyPoints() const;
+	void SetMaxEnergyPoints(int maxEnergyPoints);
+
+	int GetRecoveryEnergyRate() const;
+	void SetRecoveryEnergyRate(int recoveryEnergyRate);
+
+	float GetRecoveringHealth() const;
+	void SetRecoverHealth(float recoverHealth);
+
+	float GetRecoveringEnergy() const;
+	void SetRecoveringEnergy(float recoverEnergy);
+
+	float GetFeelingSecure() const;
+	void SetFeelingSecure(float feelingSecure);
+
+	int GetAttackDamage() const;
+	void SetAttackDamage(int atkDamage);
+
+	int GetAttackRange() const;
+	void SetAttackRange(int atkRange);
+
+	int GetSkill1Cost() const;
+	void SetSkill1Cost(int skillCost);
+
+	float GetAttackSpeed() const;
+	void SetAttackSpeed(float atkSpeed);
+
+	float GetSkill1RecoverTime() const;
+	void SetSkill1RecoverTime(float skillRecoverTime);
+
+	float GetSkill2RecoverTime() const;
+	void SetSkill2RecoverTime(float skillRecoverTime);
+
+
+	float GetSkill3RecoverTime() const;
+	void SetSkill3RecoverTime(float skillRecoverTime);
+
+
+	float GetSkill1TimePassed() const;
+	float GetSkill2TimePassed() const;
+	float GetSkill3TimePassed() const;
+
+
+	int GetVisionDistance() const;
+	void SetVisionDistance(int visDistance);
+
+	float GetVisionInPx() const;
+	void SetVisionInPx(float visPx);
+
 private:
 	
 	bool CheckAttackRange();
