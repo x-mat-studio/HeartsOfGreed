@@ -207,17 +207,17 @@ void DataPages::CheckHeroesValues()
 	Hero* focus = (Hero*)focusEntity;
 
 	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-	AdjustManaBars(focus->energyPoints, focus->maxEnergyPoints);
+	AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
 
-	if (CheckData(attackDamage, focus->attackDamage))
+	if (CheckData(attackDamage, focus->GetAttackDamage()))
 	{
-		if (CheckData(attackSpeed, focus->attackSpeed))
+		if (CheckData(attackSpeed, focus->GetAttackSpeed()))
 		{
-			if (CheckData(range, focus->attackRange))
+			if (CheckData(range, focus->GetAttackRange()))
 			{
-				if (CheckData(hpRecovery, focus->recoveryHitPointsRate))
+				if (CheckData(hpRecovery, focus->GetRecoveryHitPointsRate()))
 				{
-					if (CheckData(xpToNextLevel, focus->expToLevelUp))
+					if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
 					{
 						check = true;
 					}
@@ -330,11 +330,11 @@ void DataPages::GetHeroValue()
 {
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	attackDamage = focus->attackDamage;
-	attackSpeed = focus->attackSpeed;
-	range = focus->attackRange;
-	hpRecovery = focus->recoveryHitPointsRate;
-	xpToNextLevel = focus->expToLevelUp;
+	attackDamage = focus->GetAttackDamage();
+	attackSpeed = focus->GetAttackSpeed();
+	range = focus->GetAttackRange();
+	hpRecovery = focus->GetRecoveryHitPointsRate();
+	xpToNextLevel = focus->GetExpToLevelUp();
 
 	GetHealthBarValues();
 }

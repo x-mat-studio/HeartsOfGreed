@@ -38,9 +38,12 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	radiusSize(1)
 	
 {
-	offset.x = -((float)collider->rect.w * 0.5f);
+	if (collider != nullptr)
+	{
+		offset.x = -((float)collider->rect.w * 0.5f);
 
-	offset.y = -((float)collider->rect.h * 0.66f);
+		offset.y = -((float)collider->rect.h * 0.66f);
+	}
 }
 
 Entity::~Entity()

@@ -44,15 +44,15 @@ enum HERO_INPUTS
 	IN_PREPARE_SKILL1,
 	IN_SKILL1,
 	IN_PREPARE_SKILL2,
-	IN_SKILL2, 
+	IN_SKILL2,
 	IN_PREPARE_SKILL3,
 	IN_SKILL3,
-	
+
 	IN_SKILL_CANCEL,
 	IN_SKILL_FINISHED,
 
 	IN_OUT_OF_RANGE,
-	
+
 	IN_OBJECTIVE_DONE,
 
 	IN_ATTACKED,
@@ -87,7 +87,7 @@ public:
 		Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 		Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
-		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown, 
+		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
 		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
@@ -149,8 +149,74 @@ public:
 
 	virtual void PlayGenericNoise(int random);
 
+	//Getters and setters
+
+	int GetHeroLevel() const;
+	void SetHeroLevel(int level);
+
+	int GetExpToLevelUp() const;
+	void SetExpToLevelUp(int exp);
+
+	int GetHeroXP() const;
+	void SetHeroXP(int xp);
+
+	int GetRecoveryHitPointsRate() const;
+	void SetRecoveryHitPointsRate(int hpRate);
+
+	int GetEnergyPoints() const;
+	void SetEnergyPoints(int energyPoints);
+
+	int GetMaxEnergyPoints() const;
+	void SetMaxEnergyPoints(int maxEnergyPoints);
+
+	int GetRecoveryEnergyRate() const;
+	void SetRecoveryEnergyRate(int recoveryEnergyRate);
+
+	float GetRecoveringHealth() const;
+	void SetRecoverHealth(float recoverHealth);
+
+	float GetRecoveringEnergy() const;
+	void SetRecoveringEnergy(float recoverEnergy);
+
+	float GetFeelingSecure() const;
+	void SetFeelingSecure(float feelingSecure);
+
+	int GetAttackDamage() const;
+	void SetAttackDamage(int atkDamage);
+
+	int GetAttackRange() const;
+	void SetAttackRange(int atkRange);
+
+	int GetSkill1Cost() const;
+	void SetSkill1Cost(int skillCost);
+
+	float GetAttackSpeed() const;
+	void SetAttackSpeed(float atkSpeed);
+
+	float GetSkill1RecoverTime() const;
+	void SetSkill1RecoverTime(float skillRecoverTime);
+
+	float GetSkill2RecoverTime() const;
+	void SetSkill2RecoverTime(float skillRecoverTime);
+
+
+	float GetSkill3RecoverTime() const;
+	void SetSkill3RecoverTime(float skillRecoverTime);
+
+
+	float GetSkill1TimePassed() const;
+	float GetSkill2TimePassed() const;
+	float GetSkill3TimePassed() const;
+
+
+	int GetVisionDistance() const;
+	void SetVisionDistance(int visDistance);
+
+	float GetVisionInPx() const;
+	void SetVisionInPx(float visPx);
+
 private:
-	
+
 	bool CheckAttackRange();
 	void Attack();
 	void Die();
@@ -176,6 +242,13 @@ protected:
 	void SetAnimation(HERO_STATES currState);
 
 public:
+	bool skill1Charged;
+	bool skill2Charged;
+	bool skill3Charged;
+
+	bool godMode;
+
+protected:
 	int level;
 	int expToLevelUp;
 	int heroXP;
@@ -209,11 +282,6 @@ public:
 	float skill1TimePassed;
 	float skill2TimePassed;
 	float skill3TimePassed;
-
-
-	bool skill1Charged;
-	bool skill2Charged;
-	bool skill3Charged;
 
 	bool skillExecutionDelay;
 
@@ -265,16 +333,13 @@ public:
 	HERO_STATES state;
 
 	std::vector<HERO_INPUTS> inputs;
-	Animation *currentAnimation;
+	Animation* currentAnimation;
 
 	int framesPerPathfinding;
 	int framePathfindingCount;
 
-	bool godMode;
-
 	std::vector <iMPoint> currAoE;
 	std::vector <iMPoint> suplAoE;
-
 
 	skillArea* currAreaInfo;
 	Skill skill1;

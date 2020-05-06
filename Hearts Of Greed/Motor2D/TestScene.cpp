@@ -17,6 +17,7 @@
 #include "UIManager.h"
 #include "MainMenuScene.h"
 #include "EventManager.h"
+#include "QuestManager.h"
 #include "Minimap.h"
 #include "Render.h"
 #include "Player.h"
@@ -156,6 +157,11 @@ bool ModuleTestScene::Start()
 		//Debug
 		//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
+
+
+		//Quests-------------
+		app->entityManager->AddEntity(ENTITY_TYPE::QUEST, pos.x - 900, pos.y - 100);
+		
 	}
 
 

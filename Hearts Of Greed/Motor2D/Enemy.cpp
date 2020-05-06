@@ -8,6 +8,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Input.h"
+#include "Map.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
@@ -420,6 +421,7 @@ bool Enemy::SearchObjective()
 	Entity* objective;
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 
+
 	if (objective != nullptr)
 	{
 		ret = true;
@@ -445,16 +447,16 @@ bool Enemy::CheckAttackRange()
 		return false;
 	}
 
-	SDL_Rect rect;
-	rect.x = position.x - attackRange;
-	rect.y = position.y - center.y - attackRange;
-	rect.w = attackRange * 2;
-	rect.h = attackRange * 2;
 
+	iMPoint myPos = app->map->WorldToMap(position.x, position.y);
 
-	if (shortTermObjective->GetCollider()->CheckCollision(rect))
+	fMPoint objPosW = shortTermObjective->GetPosition();
+	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
+
+	if (myPos.DistanceTo(objPosM) < attackRange + shortTermObjective->GetRadiusSize())
 	{
 		return true;
+
 	}
 	else
 	{

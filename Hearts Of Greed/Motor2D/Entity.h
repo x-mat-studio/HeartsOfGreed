@@ -39,6 +39,8 @@ enum class ENTITY_TYPE : int
 	BLDG_BASE,
 	BLDG_BARRICADE,
 
+	QUEST,
+
 	MAX_TYPE
 };
 

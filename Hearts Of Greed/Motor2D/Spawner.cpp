@@ -113,3 +113,21 @@ bool Spawner::GetActive()
 {
 	return active;
 }
+
+
+int Spawner::GetNumberToSpawn()
+{
+	return entitysToSpawn;
+}
+
+
+float Spawner::GetSpawnRate()
+{
+	return spawnRate;
+}
+
+
+int Spawner::GetEnemiesPerWave()
+{
+	return entitiesPerWave;
+}

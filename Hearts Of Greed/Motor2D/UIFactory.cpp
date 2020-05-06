@@ -577,19 +577,19 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
-	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
+	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
 	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
+	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
 	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
 	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
+	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
 	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
+	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
 	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
 }
 
@@ -610,19 +610,19 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
-	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
+	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
 	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
+	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
 	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
 	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
+	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
 	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
+	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
 	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
 }
 
@@ -643,19 +643,19 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
-	sprintf_s(stats, 40, "AD: %i", focus->attackDamage);
+	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
 	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Exp: %i/%i", focus->heroXP, focus->expToLevelUp);
+	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
 	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->attackSpeed);
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
 	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rng: %i", focus->attackRange);
+	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
 	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rec: %i", focus->recoveryHitPointsRate);
+	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
 	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
 }
 
