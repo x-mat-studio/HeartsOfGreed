@@ -15,7 +15,7 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="2.0" minScaleValue="0.25" maxScaleValue="5.0" scaleFactor="0.25"/>
+    <resolution width="1280" height="720" scale="2.0" minScaleValue="1.0" maxScaleValue="5.0" scaleFactor="0.25"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -63,8 +63,8 @@
     fadeTime="1.0"
     startingScale="2.0"
     camVel="700" 
-    initialCamPosX="-1650" 
-    initialCamPosY="800"
+    initialCamPosX="408" 
+    initialCamPosY="7934"
     dayTimerSec="300"
     nightTimerSec="250" 
     freeCamMarginDetectionPixelsX="20"

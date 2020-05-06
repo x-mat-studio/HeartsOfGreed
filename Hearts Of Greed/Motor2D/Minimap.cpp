@@ -291,7 +291,7 @@ void Minimap::CreateMinimapText()
 
 	app->map->DrawMinimap();
 	app->entityManager->DrawOnlyStaticBuildings();
-	app->fowManager->DrawFoWMinimap();
+	//app->fowManager->DrawFoWMinimap(); //detalis & bases are not visible in the minimap so we can not draw the FoW
 	app->render->currentCamX = auxCam.x;
 	app->render->currentCamY = auxCam.y;
 }
@@ -319,23 +319,6 @@ void Minimap::LoadMinimap()
 	
 }
 
-void Minimap::CreateFoWText()
-{
-	fMPoint auxCam;
-	auxCam.x = app->render->currentCamX;
-	auxCam.y = app->render->currentCamY;
-	app->render->currentCamX = 0.0f;
-	app->render->currentCamY = 0.0f;
-
-	app->map->DrawMinimap();
-	app->entityManager->DrawOnlyStaticBuildings();
-
-	app->fowManager->DrawFoWMinimap();
-	app->render->currentCamX = auxCam.x;
-	app->render->currentCamY = auxCam.y;
-}
-
-
 void Minimap::UpdateMinimapFoW()
 {
 	if (minimapLoaded == true)
@@ -350,7 +333,7 @@ void Minimap::UpdateMinimapFoW()
 		minimapTexture = SDL_CreateTexture(app->render->renderer, SDL_GetWindowPixelFormat(app->win->window), SDL_TEXTUREACCESS_TARGET, 1.05f * width, 1.05f * height);
 
 		SDL_SetRenderTarget(app->render->renderer, minimapTexture);
-		CreateFoWText();
+		CreateMinimapText();
 		SDL_SetRenderTarget(app->render->renderer, NULL);
 	}
 }
