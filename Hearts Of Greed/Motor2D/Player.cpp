@@ -675,7 +675,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 			if (resources >= turretCost && base->TurretCapacityExceed())
 			{
-				ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
+				ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, base);
 			}
 		}
 		break;
