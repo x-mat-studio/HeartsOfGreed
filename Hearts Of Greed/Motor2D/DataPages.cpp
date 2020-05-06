@@ -16,7 +16,8 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	factory(app->uiManager->GetFactory()),
 	focusEntity(entity),
 	healthRect(nullptr),
-	manaRect(nullptr)
+	manaRect(nullptr),
+	alignment(ENTITY_ALIGNEMENT::UNKNOWN)
 {
 	originalBarsWidth = factory->GetHealthBarBackground().w;
 }
@@ -280,7 +281,10 @@ void DataPages::CheckBaseValues()
 
 	if (CheckData(resources, focus->GetRsrc()))
 	{
-		check = true;
+		if (CheckData((int)alignment, (int)focus->GetAlignment()))
+		{
+			check = true;
+		}
 	}
 
 	if (check == false)
@@ -358,6 +362,7 @@ void DataPages::GetBaseValue()
 	Base* focus = (Base*)app->player->GetFocusedEntity();
 
 	resources = focus->GetRsrc();
+	alignment = focus->GetAlignment();
 
 	GetHealthBarValues();
 }
@@ -412,6 +417,7 @@ void DataPages::DeleteCurrentData()
 	vision = -1;
 	hpRecovery = -1;
 	xpToNextLevel = -1;
+	alignment = ENTITY_ALIGNEMENT::UNKNOWN;
 
 	healthRect = nullptr;
 	manaRect = nullptr;

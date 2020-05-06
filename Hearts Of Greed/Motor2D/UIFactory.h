@@ -35,7 +35,9 @@ public:
 	UI_Group* CreateBasicInGameUI();
 	UI_Group* CreateDataPageComponents();
 	UI_Group* CreatePauseMenu();
-	UI_Group* CreateInHoverReviveMenu(Button* button);
+	UI_Group* CreateOnHoverReviveMenu(Button* button);
+	UI_Group* CreateOnHoverBuyTurretMenu(Button* button);
+	UI_Group* CreateOnHoverUpgradeTurretMenu(Button* button);
 
 	// Image creation functions
 
