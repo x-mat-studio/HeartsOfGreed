@@ -247,7 +247,7 @@ UI_Group* UIFactory::CreatePauseMenu()
 }
 
 
-UI_Group* UIFactory::CreateInHoverReviveMenu(Button* button)
+UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -273,6 +273,42 @@ UI_Group* UIFactory::CreateInHoverReviveMenu(Button* button)
 	CreateImage(5, 20, background, resourceIcon, group, false, false);
 
 	CreateText(25, 15, background, "-500", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverBuyTurretMenu(Button* button)
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Buy turret:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-120", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu(Button* button)
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade turret:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-200", group);
 
 	return group;
 }
@@ -511,7 +547,7 @@ UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, std::vector<U
 
 UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_TURRET);
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_TURRET);
 	dataPagesVector->push_back(button);
 
 	return button;

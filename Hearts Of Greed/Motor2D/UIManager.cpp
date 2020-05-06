@@ -62,7 +62,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 
-
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
@@ -75,6 +74,9 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
+	
+	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::TURRET_UPGRADED, this);
 
 
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
@@ -451,6 +453,11 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_UPGRADED, this);
+
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
@@ -546,27 +553,28 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 
-	case BUTTON_TAG::SHOP:
-		break;
-
-
 	case BUTTON_TAG::REVIVE_GATHERER:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
 	case BUTTON_TAG::REVIVE_RANGED:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
 	case BUTTON_TAG::REVIVE_MELEE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
 	case BUTTON_TAG::BUY_TURRET:
+		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
-	case BUTTON_TAG::LEVEL_UP_TURRET:
+	case BUTTON_TAG::UPGRADE_TURRET:
+		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
@@ -592,17 +600,25 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 {
+
+	hoverElement = button;
+
 	switch (tag)
 	{
 
 	case BUTTON_TAG::REVIVE_GATHERER:
 	case BUTTON_TAG::REVIVE_RANGED:
 	case BUTTON_TAG::REVIVE_MELEE:
-		hoverElement = button;
-		AddUIGroup(factory->CreateInHoverReviveMenu(button));
+		AddUIGroup(factory->CreateOnHoverReviveMenu(button));
 		break;
-	default:
+	case BUTTON_TAG::BUY_TURRET:
+		AddUIGroup(factory->CreateOnHoverBuyTurretMenu(button));
 		break;
+	case BUTTON_TAG::UPGRADE_TURRET:
+		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu(button));
+	break;	default:
+		break;
+
 	}
 }
 
