@@ -5,6 +5,7 @@
 
 class Entity;
 class UIFactory;
+enum class ENTITY_ALIGNEMENT;
 
 enum class DATA_PAGE_ENUM
 {
@@ -87,6 +88,7 @@ private:
 	int vision;
 	int hpRecovery;
 	int xpToNextLevel;
+	ENTITY_ALIGNEMENT alignment;
 
 };
 

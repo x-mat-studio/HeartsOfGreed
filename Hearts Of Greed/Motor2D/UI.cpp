@@ -177,7 +177,7 @@ bool UI::GetDragable()
 
 UI* UI::SearchFocus()
 {
-	if (focused == true)
+	if (OnAbove() == true)
 	{
 		return this;
 	}

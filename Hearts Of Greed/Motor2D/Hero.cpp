@@ -430,7 +430,7 @@ void Hero::CommandVfx(float dt)
 	else
 	{
 		movingTo = { -1, -1 };
-		tileOnWalk.ResetAnimation();
+		//tileOnWalk.ResetAnimation();
 	}
 
 
@@ -449,6 +449,9 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 	{
 
 		movingTo = app->pathfinding->GetDestination(this);
+		if (movingTo.x == -1 && !path.empty())
+			movingTo = path.back();
+
 		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
 
 		tileOnWalk.ResetAnimation();

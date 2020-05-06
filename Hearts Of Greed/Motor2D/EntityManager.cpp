@@ -1018,6 +1018,7 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 				break;
 			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::QUEST:
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
 			case ENTITY_TYPE::HERO_RANGED:
