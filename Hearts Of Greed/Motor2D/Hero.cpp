@@ -325,7 +325,10 @@ void Hero::StateMachine(float dt)
 					fMPoint offSet = objective->GetOffset();
 
 					MoveTo(pos.x, pos.y);
+
+
 				}
+				framePathfindingCount = 0;
 			}
 		}
 		else if (!hasMoved)

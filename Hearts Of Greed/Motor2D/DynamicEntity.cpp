@@ -324,12 +324,14 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	origin = app->map->WorldToMap(round(position.x), round(position.y));
 	goal = app->map->WorldToMap(x, y);
 
-	if (app->pathfinding->GetDestination(this) != goal)
+	if (app->pathfinding->GetDestination(this) != goal || (!this->path.empty() && this->path.back() == goal))
 		if (app->pathfinding->CreatePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
 		{
 			path.clear();
 			app->pathfinding->RequestPath(this, &path);
 
+			if (!path.empty())
+				path.erase(path.begin());
 
 			return true;
 		}

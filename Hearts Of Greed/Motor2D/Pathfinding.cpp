@@ -540,77 +540,78 @@ generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int l
 
 iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination)
 {
-
-	std::vector <iMPoint> line = CreateLine(origin, destination, NEARBY_TILES_CHECK);
-
-	for (int i = 0; i < line.size(); i++)
-	{
-		if (IsWalkable(line[i]))
-			return line[i];
-	}
-
-	return origin;
-
 	/*
-	//iMPoint retNeg = destination;
-	//iMPoint retPos = destination;
+	//std::vector <iMPoint> line = CreateLine(origin, destination, NEARBY_TILES_CHECK);
 
-	//iMPoint ret = destination;
-	//float currDistance = FLT_MAX;
-
-	//for (int i = 0; i < NEARBY_TILES_CHECK; i++)
+	//for (int i = 0; i < line.size(); i++)
 	//{
-	//	retPos.x++;
-	//	retNeg.x--;
-
-	//	retPos.y++;
-	//	retNeg.y--;
-
-
-	//	//Diagonals
-	//	if (IsWalkable(retNeg) && retNeg.DistanceNoSqrt(ret) < currDistance)
-	//	{
-	//		currDistance = retNeg.DistanceNoSqrt(ret);
-	//		ret = retNeg;
-	//	}
-
-	//	if (IsWalkable(retPos) && retPos.DistanceNoSqrt(ret) < currDistance)
-	//	{
-	//		currDistance = retPos.DistanceNoSqrt(ret);
-	//		ret = retPos;
-	//	}
-
-	//	// Y
-	//	if (IsWalkable({ 0,retPos.y }) && retPos.DistanceNoSqrt({ 0,retPos.y }) < currDistance)
-	//	{
-	//		currDistance = retPos.DistanceNoSqrt(ret);
-	//		ret = retPos;
-	//	}
-
-	//	if (IsWalkable({ 0,retNeg.y }) && retPos.DistanceNoSqrt({ 0,retNeg.y }) < currDistance)
-	//	{
-	//		currDistance = retPos.DistanceNoSqrt(ret);
-	//		ret = retPos;
-	//	}
-
-
-	//	// X
-	//	if (IsWalkable({ retPos.x,0 }) && retPos.DistanceNoSqrt({ retPos.x,0 }) < currDistance)
-	//	{
-	//		currDistance = retPos.DistanceNoSqrt(ret);
-	//		ret = retPos;
-	//	}
-
-	//	if (IsWalkable({ retNeg.x,0 }) && retPos.DistanceNoSqrt({ retNeg.x,0 }) < currDistance)
-	//	{
-	//		currDistance = retPos.DistanceNoSqrt(ret);
-	//		ret = retPos;
-	//	}
-
-
+	//	if (IsWalkable(line[i]))
+	//		return line[i];
 	//}
-	//	return ret;
+
+	//return origin;
 	*/
+
+
+	iMPoint retNeg = destination;
+	iMPoint retPos = destination;
+
+	iMPoint ret = destination;
+	float currDistance = FLT_MAX;
+
+	for (int i = 0; i < NEARBY_TILES_CHECK; i++)
+	{
+		retPos.x++;
+		retNeg.x--;
+
+		retPos.y++;
+		retNeg.y--;
+
+
+		//Diagonals
+		if (IsWalkable(retNeg) && retNeg.OctileDistance(ret) < currDistance)
+		{
+			currDistance = retNeg.OctileDistance(ret);
+			ret = retNeg;
+		}
+
+		if (IsWalkable(retPos) && retPos.OctileDistance(ret) < currDistance)
+		{
+			currDistance = retPos.OctileDistance(ret);
+			ret = retPos;
+		}
+
+		// Y
+		if (IsWalkable({ destination.x,retPos.y }) && retPos.OctileDistance({ destination.x,retPos.y }) < currDistance)
+		{
+			currDistance = retPos.OctileDistance(ret);
+			ret = retPos;
+		}
+
+		if (IsWalkable({ destination.x,retNeg.y }) && retPos.OctileDistance({ destination.x,retNeg.y }) < currDistance)
+		{
+			currDistance = retPos.OctileDistance(ret);
+			ret = retPos;
+		}
+
+
+		// X
+		if (IsWalkable({ retPos.x,destination.y }) && retPos.OctileDistance({ retPos.x,destination.y }) < currDistance)
+		{
+			currDistance = retPos.OctileDistance(ret);
+			ret = retPos;
+		}
+
+		if (IsWalkable({ retNeg.x,destination.y }) && retPos.OctileDistance({ retNeg.x,destination.y }) < currDistance)
+		{
+			currDistance = retPos.OctileDistance(ret);
+			ret = retPos;
+		}
+
+
+	}
+	return ret;
+
 }
 
 bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const
@@ -719,11 +720,11 @@ float PathNode::CalculateF(const iMPoint& destination)
 {
 	if (is_Diagonal)
 	{
-		g = parent->g + 1.41;
+		g = parent->g + 1.41f;
 	}
 	else
 	{
-		g = parent->g + 1;
+		g = parent->g + 1.f;
 	}
 
 	h = pos.OctileDistance(destination);
@@ -749,7 +750,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	if (IsWalkable(destination) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(destination, origin);
+		iMPoint newDest = CheckNearbyTiles(origin, destination);
 
 		if (newDest == destination || newDest == origin)
 			return ret;
@@ -760,7 +761,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	if (IsWalkable(origin) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(origin, destination);
+		iMPoint newDest = CheckNearbyTiles(destination, origin);
 
 		if (newDest == origin || newDest == destination)
 			return ret;
@@ -779,10 +780,11 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 		if (maxLvl > 0)
 		{
+
 			n1 = absGraph.insertNode(origin, maxLvl, &toDeleteN1);
 			n2 = absGraph.insertNode(destination, maxLvl, &toDeleteN2);
 
-			if (!n1 || !n2)
+			if (!n1 || !n2 || n1->edges.empty() || n2->edges.empty())
 				return ret;
 
 			n1->h = n1->pos.OctileDistance(n2->pos);
@@ -847,6 +849,8 @@ int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& des
 		open.erase(lowest);
 
 		iterations++;
+		if (iterations > 400)
+			return 0;
 
 
 		if (curr->pos == destination)
