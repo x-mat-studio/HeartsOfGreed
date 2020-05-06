@@ -3,6 +3,7 @@
 #include "EventManager.h"
 #include "Collision.h"
 #include "QuestManager.h"
+#include "Render.h"
 
 Quest::Quest() :
 
@@ -16,6 +17,7 @@ Quest::Quest(int x, int y) :
 	this->collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST,app->questManager,this);
 	this->id = 0;
 	this->position = { (float)x,(float)y };
+	this->texture = app->questManager->questMarker;
 	//this.id = check size of the lists and shit
 }
 
@@ -26,6 +28,13 @@ Quest::Quest(Collider * col):
 {
 	this->id = 0;
 	//this.id = check size of the lists and shit
+}
+
+void Quest::Draw(float dt)
+{
+
+	//app->render->Blit(texture, position.x,position.y);
+
 }
 
 void Quest::OnCollision(Collider * collider)

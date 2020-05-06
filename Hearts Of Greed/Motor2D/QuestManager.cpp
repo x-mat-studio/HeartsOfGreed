@@ -3,9 +3,11 @@
 #include "EventManager.h"
 #include "Collision.h"
 #include "Audio.h"
+#include "Textures.h"
 
 
-ModuleQuestManager::ModuleQuestManager()
+ModuleQuestManager::ModuleQuestManager():
+	questMarker(nullptr)
 {
 	name.create("QuestManager");
 }
@@ -27,6 +29,8 @@ bool ModuleQuestManager::Start()
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FINISH_QUEST, this);
 
 	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
+
+	questMarker = app->tex->Load("spritesheets/VFX/questMarker.png");
 
 	return ret;
 }
@@ -58,6 +62,7 @@ bool ModuleQuestManager::CleanUp()
 {
 	bool ret = true;
 
+	app->tex->UnLoad(questMarker);		questMarker = nullptr;
 	
 	//for (std::vector<Quest*>::iterator it = ongoing.begin(); it != ongoing.end(); it++)
 	//	ongoing.erase(it);

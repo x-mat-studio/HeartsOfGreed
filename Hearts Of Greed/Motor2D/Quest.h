@@ -22,6 +22,8 @@ public:
 	Quest(int x, int y);
 	Quest(Collider* col);
 
+	void Draw(float dt);
+
 	void OnCollision(Collider* collider);
 
 	int id;
