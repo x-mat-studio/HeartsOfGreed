@@ -6,6 +6,7 @@
 
 class UI;
 class UI_Group;
+class Button;
 class HeroPortrait;
 
 class Entity;
@@ -34,17 +35,17 @@ public:
 	UI_Group* CreateBasicInGameUI();
 	UI_Group* CreateDataPageComponents();
 	UI_Group* CreatePauseMenu();
-	UI_Group* CreateShopMenu();
+	UI_Group* CreateInHoverReviveMenu(Button* button);
 
 	// Image creation functions
 
-	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false);
-	UI* CreateNonGroupImage(float x, float y, UI* parent, SDL_Rect rect, bool dragable = false);
+	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false, bool interactable = true);
+	UI* CreateNonGroupImage(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, SDL_Rect rect, bool dragable = false, bool interactable = true);
 
 	// Text creation functions
 
 	UI* CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false);
-	UI* CreateNonGroupText(float x, float y, UI* parent, char* text, bool interactable = false);
+	UI* CreateNonGroupText(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, char* text, bool interactable = false);
 
 	// Button creation functions
 
@@ -64,15 +65,12 @@ public:
 	UI* CreateCloseOptionMenuButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateCloseShopMenuButton(float x, float y, UI* parent, UI_Group* group);
 
-
-	UI* CreateShopButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateGathererReviveButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateMeleeReviveButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateRangedReviveButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateBuyTurretButton(float x, float y, UI* parent, UI_Group* group);
-	UI* CreateUpgradeTurretButton(float x, float y, UI* parent, UI_Group* group);
+	UI* CreateGathererReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateMeleeReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateRangedReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 
 	// Scrollbar creation functions
 
@@ -90,6 +88,7 @@ public:
 	void CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
@@ -163,6 +162,8 @@ private:
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
 
+	// Hover menus SDL_Rect
+	SDL_Rect reviveHoverBackground;
 
 };
 

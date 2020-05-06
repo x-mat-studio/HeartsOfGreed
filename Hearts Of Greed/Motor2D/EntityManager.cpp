@@ -24,6 +24,7 @@
 #include "Enemy.h"
 
 #include "Spawner.h"
+#include "Quest.h"
 
 #include "Building.h"
 #include "Base.h"
@@ -273,6 +274,9 @@ bool ModuleEntityManager::Start()
 	noise3Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise3.wav");
 	noise4Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise4.wav");
 
+	rangedGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
+	rangedDies = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
+
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
@@ -416,7 +420,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
 				{
 					entityVector[i]->Start(base2TextureEnemy);
-					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::BASE, entityVector[i]->GetCenter());
+					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY_BASE, entityVector[i]->GetCenter());
 
 					auxBase->selectedTexture = base2TextureSelectedEnemy;
 				}
@@ -572,6 +576,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	switch (type)
 	{
+	case ENTITY_TYPE::QUEST:
+		ret = new Quest(x,y);
+		
+		break;
 	case ENTITY_TYPE::SPAWNER:
 		ret = new Spawner({ (float)x,(float)y }, sampleSpawner);
 		app->ai->PushSpawner((Spawner*)ret);
@@ -2161,4 +2169,257 @@ Entity* ModuleEntityManager::SearchEntity(ENTITY_TYPE type)
 	}
 
 	return nullptr;
+}
+
+
+bool ModuleEntityManager::Load(pugi::xml_node& data)
+{
+
+	return true;
+}
+
+
+bool ModuleEntityManager::Save(pugi::xml_node& data)
+{
+	int entityNumber = entityVector.size();
+	
+	Spawner* spawner = nullptr;
+	Hero* hero = nullptr;
+	Enemy* enemy = nullptr;
+	Building* building = nullptr;
+
+	for (int i = 0; i < entityNumber; i++)
+	{
+		pugi::xml_node iterator = data.append_child("entity");
+
+		switch (entityVector[i]->GetType())
+		{
+		case ENTITY_TYPE::UNKNOWN:
+			break;
+
+
+		case ENTITY_TYPE::PARTICLE:
+			break;
+
+
+		case ENTITY_TYPE::EMITER:
+			break;
+
+
+		case ENTITY_TYPE::PARTICLE_SYSTEM:
+			break;
+
+
+		case ENTITY_TYPE::SPAWNER:
+
+			iterator.append_attribute("type") = "spawner";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			spawner = (Spawner*)entityVector[i];
+
+			iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
+			iterator.append_attribute("spawnRate") = spawner->GetSpawnRate();
+			iterator.append_attribute("entitiesPerWave") = spawner->GetEnemiesPerWave();
+			iterator.append_attribute("active") = spawner->GetActive();
+			break;
+
+
+		case ENTITY_TYPE::HERO_MELEE:
+
+			iterator.append_attribute("type") = "hero_melee";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			hero = (Hero*)entityVector[i];
+
+			iterator.append_attribute("level") = hero->GetHeroLevel();
+			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+			iterator.append_attribute("attack_range") = hero->GetAttackRange();
+			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+			break;
+
+
+		case ENTITY_TYPE::HERO_RANGED:
+
+			iterator.append_attribute("type") = "hero_ranged";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			hero = (Hero*)entityVector[i];
+
+			iterator.append_attribute("level") = hero->GetHeroLevel();
+			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+			iterator.append_attribute("attack_range") = hero->GetAttackRange();
+			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+			break;
+
+
+		case ENTITY_TYPE::HERO_GATHERER:
+
+			iterator.append_attribute("type") = "hero_gatherer";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			hero = (Hero*)entityVector[i];
+
+			iterator.append_attribute("level") = hero->GetHeroLevel();
+			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+			iterator.append_attribute("attack_range") = hero->GetAttackRange();
+			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+			break;
+
+
+		case ENTITY_TYPE::HERO_ROBO:
+
+			iterator.append_attribute("type") = "hero_robot";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			hero = (Hero*)entityVector[i];
+
+			iterator.append_attribute("level") = hero->GetHeroLevel();
+			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+			iterator.append_attribute("attack_range") = hero->GetAttackRange();
+			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+			break;
+
+
+		case ENTITY_TYPE::ENEMY:
+
+			iterator.append_attribute("type") = "enemy";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			break;
+
+
+		case ENTITY_TYPE::BUILDING:
+
+			iterator.append_attribute("type") = "building";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			building = (Building*)entityVector[i];
+
+			iterator.append_attribute("decor") = (int)building->GetDecor();
+
+			break;
+
+
+		case ENTITY_TYPE::BLDG_TURRET:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_BASE:
+			break;
+
+
+		case ENTITY_TYPE::BLDG_BARRICADE:
+			break;
+
+
+		case ENTITY_TYPE::MAX_TYPE:
+			break;
+		default:
+			break;
+		}
+	}
+
+	
+
+	return true;
 }

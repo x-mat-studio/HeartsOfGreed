@@ -9,7 +9,6 @@ enum class BUTTON_TAG : int
 
 	CLOSE_OPTIONS_MENU,
 	CLOSE_CREDITS_MENU,
-	CLOSE_SHOP_MENU,
 
 	NEW_GAME,
 	CONTINUE_GAME,
@@ -58,6 +57,7 @@ private:
 
 private:
 	bool clicked;
+	bool focusedFirstFrame;
 	BUTTON_TAG buttonTag;
 };
 

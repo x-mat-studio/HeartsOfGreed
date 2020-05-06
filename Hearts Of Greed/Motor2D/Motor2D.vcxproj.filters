@@ -169,6 +169,12 @@
     <ClCompile Include="RoboHero.cpp">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
     </ClCompile>
+    <ClCompile Include="QuestManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -356,6 +362,12 @@
     </ClInclude>
     <ClInclude Include="HeroPortrait.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

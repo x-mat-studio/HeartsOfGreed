@@ -16,7 +16,8 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	factory(app->uiManager->GetFactory()),
 	focusEntity(entity),
 	healthRect(nullptr),
-	manaRect(nullptr)
+	manaRect(nullptr),
+	alignment(ENTITY_ALIGNEMENT::UNKNOWN)
 {
 	originalBarsWidth = factory->GetHealthBarBackground().w;
 }
@@ -88,7 +89,14 @@ bool DataPages::PreUpdate(float dt)
 
 			case ENTITY_TYPE::BLDG_BASE:
 
-				factory->CreateBasePage(&dataPageVector, this);
+				if (focus->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					factory->CreateBasePage(&dataPageVector, this);
+				}
+				else
+				{
+					factory->CreateNonPlayerBasePage(&dataPageVector, this);
+				}
 				GetBaseValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BASE;
 				break;
@@ -200,17 +208,17 @@ void DataPages::CheckHeroesValues()
 	Hero* focus = (Hero*)focusEntity;
 
 	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-	AdjustManaBars(focus->energyPoints, focus->maxEnergyPoints);
+	AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
 
-	if (CheckData(attackDamage, focus->attackDamage))
+	if (CheckData(attackDamage, focus->GetAttackDamage()))
 	{
-		if (CheckData(attackSpeed, focus->attackSpeed))
+		if (CheckData(attackSpeed, focus->GetAttackSpeed()))
 		{
-			if (CheckData(range, focus->attackRange))
+			if (CheckData(range, focus->GetAttackRange()))
 			{
-				if (CheckData(hpRecovery, focus->recoveryHitPointsRate))
+				if (CheckData(hpRecovery, focus->GetRecoveryHitPointsRate()))
 				{
-					if (CheckData(xpToNextLevel, focus->expToLevelUp))
+					if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
 					{
 						check = true;
 					}
@@ -273,7 +281,10 @@ void DataPages::CheckBaseValues()
 
 	if (CheckData(resources, focus->GetRsrc()))
 	{
-		check = true;
+		if (CheckData((int)alignment, (int)focus->GetAlignment()))
+		{
+			check = true;
+		}
 	}
 
 	if (check == false)
@@ -323,11 +334,11 @@ void DataPages::GetHeroValue()
 {
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	attackDamage = focus->attackDamage;
-	attackSpeed = focus->attackSpeed;
-	range = focus->attackRange;
-	hpRecovery = focus->recoveryHitPointsRate;
-	xpToNextLevel = focus->expToLevelUp;
+	attackDamage = focus->GetAttackDamage();
+	attackSpeed = focus->GetAttackSpeed();
+	range = focus->GetAttackRange();
+	hpRecovery = focus->GetRecoveryHitPointsRate();
+	xpToNextLevel = focus->GetExpToLevelUp();
 
 	GetHealthBarValues();
 }
@@ -351,6 +362,7 @@ void DataPages::GetBaseValue()
 	Base* focus = (Base*)app->player->GetFocusedEntity();
 
 	resources = focus->GetRsrc();
+	alignment = focus->GetAlignment();
 
 	GetHealthBarValues();
 }
@@ -405,6 +417,7 @@ void DataPages::DeleteCurrentData()
 	vision = -1;
 	hpRecovery = -1;
 	xpToNextLevel = -1;
+	alignment = ENTITY_ALIGNEMENT::UNKNOWN;
 
 	healthRect = nullptr;
 	manaRect = nullptr;

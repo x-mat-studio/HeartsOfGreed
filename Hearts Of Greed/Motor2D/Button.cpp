@@ -8,7 +8,8 @@ Button::Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, 
 	UI(positionValue, father, UI_TYPE::BUTTON, rect, true, dragable, texture),
 
 	buttonTag(buttonTag),
-	clicked(false)
+	clicked(false),
+	focusedFirstFrame(true)
 {
 }
 
@@ -35,6 +36,12 @@ void Button::HandleInput()
 {
 	if (focused)
 	{
+		if (focusedFirstFrame == true)
+		{
+			app->uiManager->ExecuteHoverButton(buttonTag, this);
+			focusedFirstFrame = false;
+		}
+
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
 			clicked = true;
@@ -49,7 +56,10 @@ void Button::HandleInput()
 	}
 
 	else
+	{
 		clicked = false;
+		focusedFirstFrame = true;
+	}
 }
 
 

@@ -68,6 +68,7 @@ public:
 	void CheckDragElement(UI* element);
 
 	void ExecuteButton(BUTTON_TAG tag, Button* button);
+	void ExecuteHoverButton(BUTTON_TAG tag, Button* button);
 
 	HeroesPortraitManager* GetPortraitManager();
 	void SetPortraitManager(HeroesPortraitManager* portraitManager);
@@ -79,6 +80,8 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	bool CheckGroupTag(GROUP_TAG tag);
+
+	void CheckFocusedUI();
 
 	UI* SearchFocusUI() const;
 
@@ -100,6 +103,9 @@ private:
 
 	UI* dragElement;
 	iMPoint dragMouse;
+
+	// DO NOT USE THIS IF YOU AREN'T FERRAN >:3
+	UI* hoverElement;
 
 	UIFactory* factory;
 
