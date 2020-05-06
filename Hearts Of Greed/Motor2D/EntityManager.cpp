@@ -30,6 +30,7 @@
 #include "Base.h"
 #include "Turret.h"
 
+#include "p2SString.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -198,7 +199,7 @@ bool ModuleEntityManager::Start()
 	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
 
 	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
-	
+
 	moveCommandTileRng = app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
 	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
 	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
@@ -577,8 +578,8 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	switch (type)
 	{
 	case ENTITY_TYPE::QUEST:
-		ret = new Quest(x,y);
-		
+		ret = new Quest(x, y);
+
 		break;
 	case ENTITY_TYPE::SPAWNER:
 		ret = new Spawner({ (float)x,(float)y }, sampleSpawner);
@@ -631,6 +632,41 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::ENEMY:
 		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, ENTITY_ALIGNEMENT::ENEMY);
+		break;
+
+	default:
+		break;
+	}
+
+	if (ret != nullptr)
+	{
+		entityVector.push_back(ret);
+	}
+
+	return ret;
+}
+
+
+Entity* ModuleEntityManager::AddDecorativeBuilding(BUILDING_DECOR decor, int x, int y)
+{
+	Entity* ret = nullptr;
+	Building* building = nullptr;
+
+	switch (decor)
+	{
+	case BUILDING_DECOR::ST_01:
+		ret = building = new Building({ (float)x,(float)y }, sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		building->myDecor = decor;
+		break;
+
+	case BUILDING_DECOR::ST_02:
+		ret = building = new Building({ (float)x,(float)y }, sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		building->myDecor = decor;
+		break;
+
+	case BUILDING_DECOR::ST_03:
+		ret = building = new Building({ (float)x,(float)y }, sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		building->myDecor = decor;
 		break;
 
 	default:
@@ -1322,7 +1358,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -1693,10 +1729,10 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 			{
 			case AREA_TYPE::CIRCLE:
 			{
-				if (entColl->CheckCollisionCircle(pivot, newRad)) 
+				if (entColl->CheckCollisionCircle(pivot, newRad))
 				{
 					ret += entityVector[i]->RecieveDamage(dmg);
-				}		
+				}
 			}
 			break;
 			case AREA_TYPE::QUAD:
@@ -2146,8 +2182,8 @@ bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
 		w = currentArea.child("measures").attribute("w").as_int(0);
 		h = currentArea.child("measures").attribute("h").as_int(0);
 		r = currentArea.child("measures").attribute("r").as_int(0);
-		id= (SKILL_ID)currentArea.attribute("id").as_int(0);
-		
+		id = (SKILL_ID)currentArea.attribute("id").as_int(0);
+
 		BuildArea(&area, w, h, r);
 		skillAreas.insert({ id, area });
 	}
@@ -2174,7 +2210,223 @@ Entity* ModuleEntityManager::SearchEntity(ENTITY_TYPE type)
 
 bool ModuleEntityManager::Load(pugi::xml_node& data)
 {
+	int i = 0;
 
+	Spawner* spawner = nullptr;
+	Hero* hero = nullptr;
+	Enemy* enemy = nullptr;
+	Building* building = nullptr;
+
+	Base* base = nullptr;
+	Turret* turret = nullptr;
+	UpgradeCenter* upgradeCenter = nullptr;
+	Barricade* barricade = nullptr;
+
+	for (pugi::xml_node iterator = data.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		P2SString type(iterator.attribute("type").as_string());
+
+		if (type == "spawner")
+		{
+			spawner = (Spawner*)AddEntity(ENTITY_TYPE::SPAWNER, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+			spawner->SetNumberToSpawn(iterator.attribute("entitys_to_spawn").as_int());
+			spawner->SetSpawnRate(iterator.attribute("spawn_rate").as_float());
+			spawner->SetEnemiesPerWave(iterator.attribute("entities_per_wave").as_int());
+
+			if (iterator.attribute("active").as_bool() == true)
+				spawner->Activate();
+
+			else
+				spawner->Desactivate();
+		}
+
+
+		else if (type == "hero_melee")
+		{
+			hero = (Hero*)AddEntity(ENTITY_TYPE::HERO_MELEE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+			hero->SetHeroLevel(iterator.attribute("level").as_int());
+			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
+			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
+
+			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
+			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
+
+			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
+			hero->SetMaxEnergyPoints(iterator.attribute("max_energy_points").as_int());
+			hero->SetRecoveryEnergyRate(iterator.attribute("recovery_energy_rate").as_int());
+
+			hero->SetRecoverHealth(iterator.attribute("recovering_health").as_float());
+			hero->SetRecoveringEnergy(iterator.attribute("recovering_energy").as_float());
+			hero->SetFeelingSecure(iterator.attribute("feeling_secure").as_float());
+
+			hero->SetAttackDamage(iterator.attribute("attack_damage").as_int());
+			hero->SetAttackRange(iterator.attribute("attack_range").as_int());
+			hero->SetAttackSpeed(iterator.attribute("attack_speed").as_float());
+
+			hero->SetVisionDistance(iterator.attribute("vision_distance").as_int());
+			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
+
+			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+		}
+
+
+		else if (type == "hero_ranged")
+		{
+			hero = (Hero*)AddEntity(ENTITY_TYPE::HERO_RANGED, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+			hero->SetHeroLevel(iterator.attribute("level").as_int());
+			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
+			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
+
+			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
+			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
+
+			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
+			hero->SetMaxEnergyPoints(iterator.attribute("max_energy_points").as_int());
+			hero->SetRecoveryEnergyRate(iterator.attribute("recovery_energy_rate").as_int());
+
+			hero->SetRecoverHealth(iterator.attribute("recovering_health").as_float());
+			hero->SetRecoveringEnergy(iterator.attribute("recovering_energy").as_float());
+			hero->SetFeelingSecure(iterator.attribute("feeling_secure").as_float());
+
+			hero->SetAttackDamage(iterator.attribute("attack_damage").as_int());
+			hero->SetAttackRange(iterator.attribute("attack_range").as_int());
+			hero->SetAttackSpeed(iterator.attribute("attack_speed").as_float());
+
+			hero->SetVisionDistance(iterator.attribute("vision_distance").as_int());
+			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
+
+			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+		}
+
+
+		else if (type == "hero_gatherer")
+		{
+			hero = (Hero*)AddEntity(ENTITY_TYPE::HERO_GATHERER, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+			hero->SetHeroLevel(iterator.attribute("level").as_int());
+			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
+			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
+
+			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
+			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
+
+			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
+			hero->SetMaxEnergyPoints(iterator.attribute("max_energy_points").as_int());
+			hero->SetRecoveryEnergyRate(iterator.attribute("recovery_energy_rate").as_int());
+
+			hero->SetRecoverHealth(iterator.attribute("recovering_health").as_float());
+			hero->SetRecoveringEnergy(iterator.attribute("recovering_energy").as_float());
+			hero->SetFeelingSecure(iterator.attribute("feeling_secure").as_float());
+
+			hero->SetAttackDamage(iterator.attribute("attack_damage").as_int());
+			hero->SetAttackRange(iterator.attribute("attack_range").as_int());
+			hero->SetAttackSpeed(iterator.attribute("attack_speed").as_float());
+
+			hero->SetVisionDistance(iterator.attribute("vision_distance").as_int());
+			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
+
+			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+		}
+
+
+		else if (type == "hero_robot")
+		{
+			hero = (Hero*)AddEntity(ENTITY_TYPE::HERO_ROBO, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+			hero->SetHeroLevel(iterator.attribute("level").as_int());
+			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
+			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
+
+			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
+			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
+
+			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
+			hero->SetMaxEnergyPoints(iterator.attribute("max_energy_points").as_int());
+			hero->SetRecoveryEnergyRate(iterator.attribute("recovery_energy_rate").as_int());
+
+			hero->SetRecoverHealth(iterator.attribute("recovering_health").as_float());
+			hero->SetRecoveringEnergy(iterator.attribute("recovering_energy").as_float());
+			hero->SetFeelingSecure(iterator.attribute("feeling_secure").as_float());
+
+			hero->SetAttackDamage(iterator.attribute("attack_damage").as_int());
+			hero->SetAttackRange(iterator.attribute("attack_range").as_int());
+			hero->SetAttackSpeed(iterator.attribute("attack_speed").as_float());
+
+			hero->SetVisionDistance(iterator.attribute("vision_distance").as_int());
+			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
+
+			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+		}
+
+
+		else if (type == "enemy")
+		{
+			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+		}
+
+
+		else if (type == "building")
+		{
+			int decor = iterator.attribute("decor").as_int();
+
+			switch (decor)
+			{
+			case 0:
+				AddDecorativeBuilding(BUILDING_DECOR::ST_01, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+				break;
+
+			case 1:
+				AddDecorativeBuilding(BUILDING_DECOR::ST_02, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+				break;
+
+			case 2:
+				AddDecorativeBuilding(BUILDING_DECOR::ST_03, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+				break;
+			}
+		}
+
+
+		else if (type == "base")
+		{
+			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)
+			{
+				if (iterator2.attribute("name").as_string() == "turret")
+				{
+					turret = (Turret*)AddEntity(ENTITY_TYPE::BLDG_TURRET, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+					turret->SetLevel(iterator2.attribute("level").as_int());
+
+					base->AddTurret(turret);
+				}
+
+				if (iterator2.attribute("name").as_string() == "barricade")
+				{
+					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+					base->AddBarricade(barricade);
+				}
+
+				if (iterator2.attribute("name").as_string() == "upgrade_center")
+				{
+					upgradeCenter = (UpgradeCenter*)AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+					base->AddUpgradeCenter(upgradeCenter);
+				}
+			}
+
+		}
+	}
 	return true;
 }
 
@@ -2182,11 +2434,18 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 bool ModuleEntityManager::Save(pugi::xml_node& data)
 {
 	int entityNumber = entityVector.size();
-	
+
 	Spawner* spawner = nullptr;
 	Hero* hero = nullptr;
 	Enemy* enemy = nullptr;
 	Building* building = nullptr;
+
+	Base* base = nullptr;
+	std::vector<Turret*>* turretVector = nullptr;
+	std::vector<Barricade*>* barricadeVector = nullptr;
+	UpgradeCenter* upgradeCenter = nullptr;
+
+	pugi::xml_node iterator2;
 
 	for (int i = 0; i < entityNumber; i++)
 	{
@@ -2222,8 +2481,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			spawner = (Spawner*)entityVector[i];
 
 			iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
-			iterator.append_attribute("spawnRate") = spawner->GetSpawnRate();
-			iterator.append_attribute("entitiesPerWave") = spawner->GetEnemiesPerWave();
+			iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
+			iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
 			iterator.append_attribute("active") = spawner->GetActive();
 			break;
 
@@ -2235,15 +2494,16 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
-
 			hero = (Hero*)entityVector[i];
 
 			iterator.append_attribute("level") = hero->GetHeroLevel();
 			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
+			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
 			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
 			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
 			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
 			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
@@ -2270,15 +2530,16 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
-
 			hero = (Hero*)entityVector[i];
 
 			iterator.append_attribute("level") = hero->GetHeroLevel();
 			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
+			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
 			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
 			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
 			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
 			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
@@ -2300,12 +2561,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 
 		case ENTITY_TYPE::HERO_GATHERER:
 
-			iterator.append_attribute("type") = "hero_gatherer";
-
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
 
 			hero = (Hero*)entityVector[i];
 
@@ -2313,7 +2570,10 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
+			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
 			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
 			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
 			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
 			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
@@ -2339,8 +2599,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
 
 			hero = (Hero*)entityVector[i];
 
@@ -2375,7 +2633,10 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+			enemy = (Enemy*)entityVector[i];
+
+			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
 			break;
 
@@ -2387,8 +2648,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
-
 			building = (Building*)entityVector[i];
 
 			iterator.append_attribute("decor") = (int)building->GetDecor();
@@ -2396,19 +2655,45 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			break;
 
 
-		case ENTITY_TYPE::BLDG_TURRET:
-			break;
-
-
-		case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
-			break;
-
-
 		case ENTITY_TYPE::BLDG_BASE:
-			break;
 
+			iterator.append_attribute("type") = "base";
 
-		case ENTITY_TYPE::BLDG_BARRICADE:
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+			base = (Base*)entityVector[i];
+
+			turretVector = base->GetTurretVector();
+			barricadeVector = base->GetBarricadeVector();
+			upgradeCenter = base->GetUpgradeCenter();
+
+			for (int i = 0; i < turretVector->size(); i++)
+			{
+				iterator2 = iterator.append_child("turret");
+				iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
+				iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
+
+				iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
+			}
+
+			for (int i = 0; i < barricadeVector->size(); i++)
+			{
+				//TODO
+				iterator2 = iterator.append_child("barricade");
+				//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
+				//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+			}
+
+			if (upgradeCenter != nullptr)
+			{
+				iterator2 = iterator.append_child("upgrade_center");
+				//iterator2.append_attribute("x") = upgradeCenter->position.x;
+				//iterator2.append_attribute("y") = upgradeCenter->position.y;
+			}
+
 			break;
 
 
@@ -2419,7 +2704,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 		}
 	}
 
-	
+
 
 	return true;
 }

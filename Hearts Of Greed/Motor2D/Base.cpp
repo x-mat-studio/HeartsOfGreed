@@ -401,3 +401,21 @@ int Base::GetmaxTurrets()
 {
 	return maxTurrets;
 }
+
+
+std::vector<Turret*>* Base::GetTurretVector()
+{
+	return &turretsVector;
+}
+
+
+std::vector<Barricade*>* Base::GetBarricadeVector()
+{
+	return &barricadesVector;
+}
+
+
+UpgradeCenter* Base::GetUpgradeCenter()
+{
+	return baseUpgradeCenter;
+}

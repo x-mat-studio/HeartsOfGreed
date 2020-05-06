@@ -52,6 +52,12 @@ public:
 	int GetcurrentTurrets();
 	int GetmaxTurrets();
 
+	std::vector<Turret*>* GetTurretVector();
+	std::vector<Barricade*>* GetBarricadeVector();
+
+	UpgradeCenter* GetUpgradeCenter();
+
+
 private:
 	
 	void DisableTurrets();

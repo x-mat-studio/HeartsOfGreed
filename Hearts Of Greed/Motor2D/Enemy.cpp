@@ -734,3 +734,23 @@ int Enemy::GetRecov()
 {
 	return recoveryHitPointsRate;
 }
+
+
+int Enemy::GetLongTermObjectiveX()
+{
+	return longTermObjective.x;
+}
+
+
+int Enemy::GetLongTermObjectiveY()
+{
+	return longTermObjective.y;
+}
+
+
+//This is only used when we load a game, do not use it anywhere else
+void Enemy::SetLongTermObjective(fMPoint point)
+{
+	haveOrders = true;
+	longTermObjective = point;
+}

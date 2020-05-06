@@ -76,6 +76,12 @@ public:
 	int GetRecov();
 
 	void DrawOnSelect();
+
+	int GetLongTermObjectiveX();
+	int GetLongTermObjectiveY();
+
+	void SetLongTermObjective(fMPoint point);
+
 private:
 
 	bool Attack();
