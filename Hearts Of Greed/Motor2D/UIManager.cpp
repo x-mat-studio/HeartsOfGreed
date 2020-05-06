@@ -29,7 +29,8 @@ ModuleUIManager::ModuleUIManager() :
 	mouseOverUI(false),
 	atlas(nullptr), 
 	lastShop(nullptr),
-	portraitManager(nullptr)
+	portraitManager(nullptr),
+	hoverElement(nullptr)
 {
 	name.create("UIManager");
 }
@@ -102,6 +103,8 @@ bool ModuleUIManager::PreUpdate(float dt)
 
 	bool ret = true;
 
+	CheckFocusedUI();
+
 	CheckListener(this);
 
 	AddPendingPortraits();
@@ -168,6 +171,7 @@ bool ModuleUIManager::CleanUp()
 
 	lastShop = nullptr;
 	dragElement = nullptr;
+	hoverElement = nullptr;
 
 	return true;
 }
@@ -594,6 +598,7 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 	case BUTTON_TAG::REVIVE_GATHERER:
 	case BUTTON_TAG::REVIVE_RANGED:
 	case BUTTON_TAG::REVIVE_MELEE:
+		hoverElement = button;
 		AddUIGroup(factory->CreateInHoverReviveMenu(button));
 		break;
 	default:
@@ -642,3 +647,18 @@ void ModuleUIManager::AddPendingPortraits()
 		portraitsToAdd.clear();
 	}
 }
+
+
+void ModuleUIManager::CheckFocusedUI()
+{
+	if (hoverElement != nullptr)
+	{
+		if (hoverElement != SearchFocusUI())
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_IN_HOVER_MENU, EVENT_ENUM::NULL_EVENT);
+			hoverElement = nullptr;
+		}
+	}
+}
+
+

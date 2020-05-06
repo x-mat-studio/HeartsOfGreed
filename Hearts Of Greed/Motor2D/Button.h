@@ -57,6 +57,7 @@ private:
 
 private:
 	bool clicked;
+	bool focusedFirstFrame;
 	BUTTON_TAG buttonTag;
 };
 

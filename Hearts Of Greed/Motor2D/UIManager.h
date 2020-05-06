@@ -81,6 +81,8 @@ private:
 
 	bool CheckGroupTag(GROUP_TAG tag);
 
+	void CheckFocusedUI();
+
 	UI* SearchFocusUI() const;
 
 	void DragElement();
@@ -101,6 +103,9 @@ private:
 
 	UI* dragElement;
 	iMPoint dragMouse;
+
+	// DO NOT USE THIS IF YOU AREN'T FERRAN >:3
+	UI* hoverElement;
 
 	UIFactory* factory;
 

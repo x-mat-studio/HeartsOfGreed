@@ -88,7 +88,14 @@ bool DataPages::PreUpdate(float dt)
 
 			case ENTITY_TYPE::BLDG_BASE:
 
-				factory->CreateBasePage(&dataPageVector, this);
+				if (focus->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					factory->CreateBasePage(&dataPageVector, this);
+				}
+				else
+				{
+					factory->CreateNonPlayerBasePage(&dataPageVector, this);
+				}
 				GetBaseValue();
 				state = DATA_PAGE_ENUM::FOCUSED_BASE;
 				break;
