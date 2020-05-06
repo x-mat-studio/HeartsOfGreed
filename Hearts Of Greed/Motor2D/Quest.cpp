@@ -9,7 +9,8 @@ Quest::Quest() :
 	myState(QUEST_STATE::ACTIVE)
 {}
 
-Quest::Quest(int x, int y)
+Quest::Quest(int x, int y) : 
+	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1)
 {
 	SDL_Rect auxQ{ x, y,20,20 };
 	this->collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST,app->questManager,this);
@@ -20,9 +21,9 @@ Quest::Quest(int x, int y)
 
 Quest::Quest(Collider * col):
 
-	myState(QUEST_STATE::ACTIVE)
+	myState(QUEST_STATE::ACTIVE),
+	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, col, 1, 1)
 {
-	this->collider = col;
 	this->id = 0;
 	//this.id = check size of the lists and shit
 }

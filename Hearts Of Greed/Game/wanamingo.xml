@@ -11,7 +11,7 @@
 
     <stats movementSpeed="125" vision="200" xp="15">
       <hitPoints max="25" current="25" recoveryRate="1"/>
-      <attack damage="2" speed="1.75" range="40"/>
+      <attack damage="2" speed="1.75" range="1"/>
     </stats>
     
   </sample>

@@ -585,13 +585,13 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 		if (IsWalkable({ destination.x,retPos.y }) && retPos.OctileDistance({ destination.x,retPos.y }) < currDistance)
 		{
 			currDistance = retPos.OctileDistance(ret);
-			ret = retPos;
+			ret = { destination.x,retPos.y };
 		}
 
 		if (IsWalkable({ destination.x,retNeg.y }) && retPos.OctileDistance({ destination.x,retNeg.y }) < currDistance)
 		{
 			currDistance = retPos.OctileDistance(ret);
-			ret = retPos;
+			ret = { destination.x,retNeg.y };
 		}
 
 
@@ -599,13 +599,13 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 		if (IsWalkable({ retPos.x,destination.y }) && retPos.OctileDistance({ retPos.x,destination.y }) < currDistance)
 		{
 			currDistance = retPos.OctileDistance(ret);
-			ret = retPos;
+			ret = { retPos.x,destination.y };
 		}
 
 		if (IsWalkable({ retNeg.x,destination.y }) && retPos.OctileDistance({ retNeg.x,destination.y }) < currDistance)
 		{
 			currDistance = retPos.OctileDistance(ret);
-			ret = retPos;
+			ret = { retNeg.x,destination.y };
 		}
 
 
@@ -1092,10 +1092,13 @@ bool ModulePathfinding::RefineAndSmoothPath(std::vector<iMPoint>* absPath, int l
 				generatedPath = &last_path;
 			}
 
-			if (pathToFill->size() > 1)
-				pathToFill->insert(pathToFill->end(), generatedPath->begin() + 1, generatedPath->end());
-			else
-				pathToFill->insert(pathToFill->end(), generatedPath->begin(), generatedPath->end());
+			if (generatedPath != nullptr)
+			{
+				if (pathToFill->size() > 1)
+					pathToFill->insert(pathToFill->end(), generatedPath->begin() + 1, generatedPath->end());
+				else
+					pathToFill->insert(pathToFill->end(), generatedPath->begin(), generatedPath->end());
+			}
 
 			absPath->erase(absPath->begin() + from, absPath->begin() + i);
 			break;
