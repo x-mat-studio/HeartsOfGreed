@@ -91,7 +91,7 @@ bool ModuleRender::Update(float dt)
 
 bool ModuleRender::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("Render PostUpdate", Profiler::Color::LightYellow);
+	//BROFILER_CATEGORY("Render PostUpdate", Profiler::Color::LightYellow);
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	
@@ -167,7 +167,7 @@ void ModuleRender::ExecuteEvent(EVENT_ENUM eventId)
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, bool cameraUse, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b,
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, bool cameraUse, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b, float additionalScale,
 	float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
 	camera.x = currentCamX;
@@ -213,8 +213,22 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	}
 
 
-	rect.w *= scale;
-	rect.h *= scale;
+
+	if (additionalScale != 1.0f)
+	{
+		int prevW = rect.w * scale, prevH = rect.h * scale;
+
+		rect.w *= (scale * additionalScale);
+		rect.h *= (scale * additionalScale);
+
+		rect.x -= rect.w - prevW;
+		rect.y -= rect.h -prevH;
+	}
+	else
+	{
+		rect.w *= (scale);
+		rect.h *= (scale);
+	}
 
 	SDL_Point* p = NULL;
 	SDL_Point rotPivot;
