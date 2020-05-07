@@ -26,8 +26,12 @@ public:
 
 	void OnCollision(Collider* collider);
 
+	void Die();
+
 	int id;
 	QUEST_STATE myState;
+
+	void BlitMyAnimation(float dt);
 
 }; 
 

@@ -465,40 +465,32 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		assert(true); //you tried to execute a button that was already deleted or some fucked up shit i dont want to get involved with
 		break;
 
-
 	case BUTTON_TAG::CLOSE_OPTIONS_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
-
 
 	case BUTTON_TAG::CLOSE_CREDITS_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_CREDITS_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
-
 	case BUTTON_TAG::NEW_GAME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::START_GAME, EVENT_ENUM::NULL_EVENT);
 		break;
 
-
 	case BUTTON_TAG::CONTINUE_GAME:
 		break;
-
 
 	case BUTTON_TAG::OPTIONS:
 		AddUIGroup(factory->CreateOptionsMenu());
 		break;
 
-
 	case BUTTON_TAG::CREDITS:
 		AddUIGroup(factory->CreateCreditsMenu());
 		break;
 
-
 	case BUTTON_TAG::EXIT_GAME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::EXIT_GAME, EVENT_ENUM::NULL_EVENT);
 		break;
-
 
 	case BUTTON_TAG::FULLSCREEN_ON:
 		app->eventManager->GenerateEvent(EVENT_ENUM::FULLSCREEN_INPUT, EVENT_ENUM::NULL_EVENT);
@@ -506,82 +498,114 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		button->SetTag(BUTTON_TAG::FULLSCREEN_OFF);
 		break;
 
-
 	case BUTTON_TAG::FULLSCREEN_OFF:
 		app->eventManager->GenerateEvent(EVENT_ENUM::FULLSCREEN_INPUT, EVENT_ENUM::NULL_EVENT);
 		button->rect = factory->fullscreenOnButton;
 		button->SetTag(BUTTON_TAG::FULLSCREEN_ON);
 		break;
 
-
 	case BUTTON_TAG::HIDE:
 		break;
-
 
 	case BUTTON_TAG::SHOW:
 		break;
 
-
 	case BUTTON_TAG::PAUSE:
 		AddUIGroup(factory->CreatePauseMenu());
 		break;
-
 
 	case BUTTON_TAG::RESUME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
-
 	case BUTTON_TAG::MAIN_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
-
 
 	case BUTTON_TAG::SAVE:
 		app->SaveGame();
 		break;
 
-
 	case BUTTON_TAG::LOAD:
 		app->LoadGame();
 		break;
-
 
 	case BUTTON_TAG::REVIVE_GATHERER:
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		break;
 
-
 	case BUTTON_TAG::REVIVE_RANGED:
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		break;
-
 
 	case BUTTON_TAG::REVIVE_MELEE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		break;
 
-
 	case BUTTON_TAG::BUY_TURRET:
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		break;
-
 
 	case BUTTON_TAG::UPGRADE_TURRET:
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
 		break;
 
-
 	case BUTTON_TAG::BUY_BARRICADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		break;
-
 
 	case BUTTON_TAG::UPGRADE_BARRICADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+	break;
+
+	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
 
 	case BUTTON_TAG::GATHERER_PORTRAIT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
@@ -618,19 +642,67 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:
-		AddUIGroup(factory->CreateOnHoverBuyTurretMenu(button));
+		AddUIGroup(factory->CreateOnHoverBuyTurretMenu());
 		break;
 
 	case BUTTON_TAG::UPGRADE_TURRET:
-		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu(button));
+		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu());
 	break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
-		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu(button));
+		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu());
 		break;
 
 	case BUTTON_TAG::UPGRADE_BARRICADE:
-		AddUIGroup(factory->CreateOnHoverUpgradeBarricadeMenu(button));
+		AddUIGroup(factory->CreateOnHoverUpgradeBarricadeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererLifeUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeLifeUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedLifeMenuMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererPassive1Menu());
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererActive1Menu());
+		break;
+
+	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleePassive1Menu());
+		break;
+
+	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeActive1Menu());
+		break;
+
+	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedPassive1Menu());
+		break;
+
+	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
 	default:

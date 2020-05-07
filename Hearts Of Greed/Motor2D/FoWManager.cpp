@@ -14,7 +14,9 @@ ModuleFoWManager::ModuleFoWManager() :
 	debugFoWtexture(nullptr),
 	debugMode(false),
 	foWMapNeedsRefresh(false)
-{}
+{
+	name.create("FOWManager");
+}
 
 
 ModuleFoWManager::~ModuleFoWManager()
@@ -771,3 +773,30 @@ unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diam
 	return ret;
 }
 
+
+bool ModuleFoWManager::Load(pugi::xml_node& data)
+{
+	int i = 0;
+
+	for (pugi::xml_node iterator = data.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		fowMap[i].tileShroudBits = iterator.first_attribute().as_int();
+	}
+
+	return true;
+}
+
+
+bool ModuleFoWManager::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node iterator;
+
+	for (int i = 0; i < width * height; i++)
+	{
+		iterator = data.append_child("fow_tile");
+
+		iterator.append_attribute("visited") = fowMap[i].tileShroudBits;
+	}
+
+	return true;
+}
