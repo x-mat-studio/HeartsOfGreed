@@ -546,10 +546,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 
 	case BUTTON_TAG::SAVE:
+		app->SaveGame();
 		break;
 
 
 	case BUTTON_TAG::LOAD:
+		app->LoadGame();
 		break;
 
 
