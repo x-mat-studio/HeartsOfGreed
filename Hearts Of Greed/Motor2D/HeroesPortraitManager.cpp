@@ -40,10 +40,13 @@ bool HeroesPortraitManager::PreUpdate(float dt)
 
 bool HeroesPortraitManager::Update(float dt)
 {
+	Move();
+
 	int heroPortraitsNumber = heroPortraitsVector.size();
 
 	for (int i = 0; i < heroPortraitsNumber; i++)
 	{
+		heroPortraitsVector[i]->SetLocalPosition(fMPoint(-35, 41 * i + 40));
 		heroPortraitsVector[i]->Update(dt);
 	}
 
@@ -57,7 +60,7 @@ bool HeroesPortraitManager::PostUpdate(float dt)
 
 	for (int i = 0; i < heroPortraitsNumber; i++)
 	{
-		heroPortraitsVector[i]->SetLocalPosition(fMPoint(3, 41 * i + 40));
+		
 		heroPortraitsVector[i]->PostUpdate(dt);
 	}
 
@@ -67,6 +70,7 @@ bool HeroesPortraitManager::PostUpdate(float dt)
 
 void HeroesPortraitManager::AddPortrait(HeroPortrait* portrait)
 {
+	portrait->SetFather(this);
 	heroPortraitsVector.push_back(portrait);
 }
 

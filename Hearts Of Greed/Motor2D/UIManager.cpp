@@ -17,6 +17,7 @@
 #include "TestScene.h"
 #include "EventManager.h"
 #include "Textures.h"
+#include "FadeToBlack.h"
 
 #include "Minimap.h"
 #include "Base.h"
@@ -184,7 +185,6 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 		delete element;
 		return;
 	}
-	
 
 	uiGroupVector.push_back(element);
 }
@@ -528,7 +528,8 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::LOAD:
-		app->LoadGame();
+		app->testScene->startFromLoad = true;
+		app->fadeToBlack->FadeToBlack(app->testScene, app->testScene, 3);
 		break;
 
 	case BUTTON_TAG::REVIVE_GATHERER:
