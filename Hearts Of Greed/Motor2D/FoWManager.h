@@ -19,8 +19,8 @@ struct FoWDataStruct
 
 struct MaskData
 {
-	int numberOfUsers=0;
-	unsigned short* mask= nullptr;
+	int numberOfUsers = 0;
+	unsigned short* mask = nullptr;
 };
 
 
@@ -41,7 +41,7 @@ public:
 
 	bool CleanUp();
 
-	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius=3,int visibleRadius=1);
+	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius = 3, int visibleRadius = 1);
 	void DeleteAllFoWEntites();
 
 
@@ -69,10 +69,13 @@ public:
 
 	bool InsideCircle(iMPoint center, iMPoint tile, float radius);
 
+	bool Load(pugi::xml_node&);
+
+	bool Save(pugi::xml_node&) const;
 
 private:
 	unsigned short* GenerateCircle(int radius);
-	unsigned short* GenerateCircleBorders(int radius,unsigned short* mask);
+	unsigned short* GenerateCircleBorders(int radius, unsigned short* mask);
 	unsigned short* GenerateCircleJoints(int radius, unsigned short* mask);
 	unsigned short CheckCornersFromNeighbours(iMPoint pos, int diameter, unsigned short* mask);
 	unsigned short CheckJointsFromNeighbours(iMPoint pos, int diameter, unsigned short* mask);
