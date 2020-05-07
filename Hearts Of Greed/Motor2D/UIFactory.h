@@ -37,10 +37,16 @@ public:
 	UI_Group* CreateDataPageComponents();
 	UI_Group* CreatePauseMenu();
 	UI_Group* CreateOnHoverReviveMenu(Button* button);
-	UI_Group* CreateOnHoverBuyTurretMenu(Button* button);
-	UI_Group* CreateOnHoverUpgradeTurretMenu(Button* button);
-	UI_Group* CreateOnHoverBuyBarricadeMenu(Button* button);
-	UI_Group* CreateOnHoverUpgradeBarricadeMenu(Button* button);
+	UI_Group* CreateOnHoverBuyTurretMenu();
+	UI_Group* CreateOnHoverUpgradeTurretMenu();
+	UI_Group* CreateOnHoverBuyBarricadeMenu();
+	UI_Group* CreateOnHoverUpgradeBarricadeMenu();
+	UI_Group* CreateOnHoverGathererLifeUpgradeMenu();
+	UI_Group* CreateOnHoverGathererDamageUpgradeMenu();
+	UI_Group* CreateOnHoverMeleeLifeUpgradeMenu();
+	UI_Group* CreateOnHoverMeleeDamageUpgradeMenu();
+	UI_Group* CreateOnHoverRangedLifeMenuMenu();
+	UI_Group* CreateOnHoverRangedDamageUpgradeMenu();
 
 	// Image creation functions
 
@@ -66,7 +72,7 @@ public:
 	UI* CreateLoadGameButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateReturnToMainMenuButton(float x, float y, UI* parent, UI_Group* group);
 
-//	UI* CreateHideButton(float x, float y, UI* parent, UI_Group* group);
+	//	UI* CreateHideButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateCloseOptionMenuButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
@@ -159,8 +165,8 @@ private:
 	SDL_Rect menuButton;
 	SDL_Rect pauseButton;
 	SDL_Rect closeButton;
-//	SDL_Rect hideLeftButton;
-//	SDL_Rect hideRightButton;
+	//	SDL_Rect hideLeftButton;
+	//	SDL_Rect hideRightButton;
 	SDL_Rect shopButton;
 	SDL_Rect reviveButton;
 
@@ -180,6 +186,7 @@ private:
 
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;
+	SDL_Rect upgradeHoverBackground;
 
 };
 
