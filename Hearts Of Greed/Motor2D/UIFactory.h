@@ -33,21 +33,6 @@ public:
 	UI_Group* CreateOptionsMenu();
 	UI_Group* CreateCreditsMenu();
 
-	UI_Group* CreateBasicInGameUI();
-	UI_Group* CreateDataPageComponents();
-	UI_Group* CreatePauseMenu();
-	UI_Group* CreateOnHoverReviveMenu(Button* button);
-	UI_Group* CreateOnHoverBuyTurretMenu();
-	UI_Group* CreateOnHoverUpgradeTurretMenu();
-	UI_Group* CreateOnHoverBuyBarricadeMenu();
-	UI_Group* CreateOnHoverUpgradeBarricadeMenu();
-	UI_Group* CreateOnHoverGathererLifeUpgradeMenu();
-	UI_Group* CreateOnHoverGathererDamageUpgradeMenu();
-	UI_Group* CreateOnHoverMeleeLifeUpgradeMenu();
-	UI_Group* CreateOnHoverMeleeDamageUpgradeMenu();
-	UI_Group* CreateOnHoverRangedLifeMenuMenu();
-	UI_Group* CreateOnHoverRangedDamageUpgradeMenu();
-
 	// Image creation functions
 
 	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false, bool interactable = true);
@@ -89,6 +74,36 @@ public:
 
 	UI* CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
 	UI* CreateDamageUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
+
+	UI* CreateGathererPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateGathererActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateMeleePassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateMeleeActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateRangedPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateRangedActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+
+	// Hover menu creation functions
+
+	UI_Group* CreateBasicInGameUI();
+	UI_Group* CreateDataPageComponents();
+	UI_Group* CreatePauseMenu();
+	UI_Group* CreateOnHoverReviveMenu(Button* button);
+	UI_Group* CreateOnHoverBuyTurretMenu();
+	UI_Group* CreateOnHoverUpgradeTurretMenu();
+	UI_Group* CreateOnHoverBuyBarricadeMenu();
+	UI_Group* CreateOnHoverUpgradeBarricadeMenu();
+	UI_Group* CreateOnHoverGathererLifeUpgradeMenu();
+	UI_Group* CreateOnHoverGathererDamageUpgradeMenu();
+	UI_Group* CreateOnHoverMeleeLifeUpgradeMenu();
+	UI_Group* CreateOnHoverMeleeDamageUpgradeMenu();
+	UI_Group* CreateOnHoverRangedLifeMenuMenu();
+	UI_Group* CreateOnHoverRangedDamageUpgradeMenu();
+	UI_Group* CreateOnHoverGathererPassive1Menu();
+	UI_Group* CreateOnHoverGathererActive1Menu();
+	UI_Group* CreateOnHoverMeleePassive1Menu();
+	UI_Group* CreateOnHoverMeleeActive1Menu();
+	UI_Group* CreateOnHoverRangedPassive1Menu();
+	UI_Group* CreateOnHoverRangedActive1Menu();
 
 	// Scrollbar creation functions
 
@@ -183,6 +198,13 @@ private:
 
 	SDL_Rect lifeUpgradeButton;
 	SDL_Rect damageUpgradeButton;
+
+	SDL_Rect gathererPassive1Button;
+	SDL_Rect meleePassive1Button;
+	SDL_Rect rangedPassive1Button;
+	SDL_Rect gathererActive1Button;
+	SDL_Rect meleeActive1Button;
+	SDL_Rect rangedActive1Button;
 
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;
