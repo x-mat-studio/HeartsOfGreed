@@ -4,6 +4,8 @@
 #include "Collision.h"
 #include "Audio.h"
 #include "Textures.h"
+#include "Brofiler/Brofiler/Brofiler.h"
+#include "Player.h"
 
 
 ModuleQuestManager::ModuleQuestManager():
@@ -15,9 +17,10 @@ ModuleQuestManager::ModuleQuestManager():
 ModuleQuestManager::~ModuleQuestManager()
 {}
 
-bool ModuleQuestManager::Awake(pugi::xml_node&)
+bool ModuleQuestManager::Awake(pugi::xml_node& config)
 {
 	bool ret = true;
+	BROFILER_CATEGORY("Quest Manager Awake", Profiler::Color::RosyBrown);
 
 	return ret;
 }
@@ -97,6 +100,7 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FINISH_QUEST:
 
 		app->audio->PlayFx(questSfx, 0, -1);
+		app->player->AddResources(400);
 
 		break;
 	}

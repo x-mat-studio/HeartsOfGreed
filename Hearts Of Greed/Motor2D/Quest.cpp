@@ -13,7 +13,7 @@ Quest::Quest() :
 Quest::Quest(int x, int y) : 
 	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1)
 {
-	SDL_Rect auxQ{ x, y,20,20 };
+	SDL_Rect auxQ{ x, y,128,128 };
 	this->collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST,app->questManager,this);
 	this->id = 0;
 	this->position = { (float)x,(float)y };
@@ -33,8 +33,8 @@ Quest::Quest(Collider * col):
 void Quest::Draw(float dt)
 {
 
-	//app->render->Blit(texture, position.x,position.y);
-
+	app->render->Blit(texture, position.x,position.y,0,false,true,0,255,255,255,1.0f);
+	// blit my particle effect here
 }
 
 void Quest::OnCollision(Collider * collider)
@@ -43,5 +43,20 @@ void Quest::OnCollision(Collider * collider)
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
 
-	this->collider->to_delete = true;
+	Die();
+}
+
+void Quest::Die()
+{
+	toDelete = true;
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+	collider->thisEntity = nullptr;
+
+}
+
+void Quest::BlitMyAnimation(float dt)
+{
+	
+	//this shoould be a particle yellow effect
+
 }
