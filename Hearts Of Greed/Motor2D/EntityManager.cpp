@@ -51,6 +51,11 @@ ModuleEntityManager::ModuleEntityManager() :
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
 	enemyTexture(nullptr),
+	explosionTexture(nullptr),
+	targetedTexture(nullptr),
+	selectedTexture(nullptr),
+	roboTexture(nullptr),
+	debugPathTexture(nullptr),
 
 	sampleGatherer(nullptr),
 	sampleMelee(nullptr),
@@ -61,7 +66,12 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleTurret(nullptr),
 	moveCommandTileRng(nullptr),
 	moveCommandTileGath(nullptr),
-	moveCommandTileMelee(nullptr)
+	moveCommandTileMelee(nullptr),
+	sampleRanged(nullptr),
+	sampleRobo(nullptr),
+	sampleEnemyGiga(nullptr),
+	sampleEnemyRanged(nullptr),
+	sampleEnemyNight(nullptr)
 
 {
 	name.create("entityManager");
@@ -771,7 +781,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 {
 	Entity* ret = nullptr;
 
-	Collider* col;
+	Collider* col = nullptr;
 	ENTITY_TYPE type;
 
 	int numEntities = entityVector.size();
@@ -780,6 +790,9 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 	{
 		type = entityVector[i]->GetType();
 		col = entityVector[i]->GetCollider();
+
+		if (col == nullptr)
+			continue;
 
 		//dynamic entities get priority over static entities
 		if (mousePos.PointInRect(&col->rect))

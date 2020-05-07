@@ -9,7 +9,7 @@ Barricade::Barricade(int barricadeLvl) :
 	barricadeLvl(barricadeLvl)
 {}
 
-Barricade::Barricade(Barricade * copy)
+Barricade::Barricade(Barricade * copy): barricadeLvl(copy->barricadeLvl)
 {
 }
 

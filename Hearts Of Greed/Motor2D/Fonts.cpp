@@ -6,7 +6,7 @@
 
 
 
-ModuleFonts::ModuleFonts() : Module(),
+ModuleFonts::ModuleFonts() : Module(), default(nullptr),
 ingameSize(6)
 {
 	name.create("fonts");
