@@ -12,6 +12,7 @@ class HeroPortrait;
 class Entity;
 class Hero;
 
+enum class BUTTON_TAG;
 
 struct UIFactory
 {
@@ -38,6 +39,8 @@ public:
 	UI_Group* CreateOnHoverReviveMenu(Button* button);
 	UI_Group* CreateOnHoverBuyTurretMenu(Button* button);
 	UI_Group* CreateOnHoverUpgradeTurretMenu(Button* button);
+	UI_Group* CreateOnHoverBuyBarricadeMenu(Button* button);
+	UI_Group* CreateOnHoverUpgradeBarricadeMenu(Button* button);
 
 	// Image creation functions
 
@@ -68,11 +71,18 @@ public:
 	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
 
+	// Data Page Buttons
+
 	UI* CreateGathererReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateMeleeReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateRangedReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateBuyBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateUpgradeBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+
+	UI* CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
+	UI* CreateDamageUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
 
 	// Scrollbar creation functions
 
@@ -88,6 +98,7 @@ public:
 	void CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
@@ -163,6 +174,9 @@ private:
 	SDL_Rect gathererHeroIcon;
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
+
+	SDL_Rect lifeUpgradeButton;
+	SDL_Rect damageUpgradeButton;
 
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;

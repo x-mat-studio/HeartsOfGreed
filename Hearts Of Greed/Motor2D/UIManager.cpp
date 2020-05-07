@@ -75,10 +75,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 	
-	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
-	app->eventManager->EventRegister(EVENT_ENUM::TURRET_UPGRADED, this);
-
-
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
@@ -455,9 +451,6 @@ void ModuleUIManager::UnregisterEvents()
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
-	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_UPGRADED, this);
-
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
@@ -580,6 +573,16 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 
+	case BUTTON_TAG::BUY_BARRICADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::UPGRADE_BARRICADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
 	case BUTTON_TAG::GATHERER_PORTRAIT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
 		break;
@@ -613,12 +616,24 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 	case BUTTON_TAG::REVIVE_MELEE:
 		AddUIGroup(factory->CreateOnHoverReviveMenu(button));
 		break;
+
 	case BUTTON_TAG::BUY_TURRET:
 		AddUIGroup(factory->CreateOnHoverBuyTurretMenu(button));
 		break;
+
 	case BUTTON_TAG::UPGRADE_TURRET:
 		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu(button));
-	break;	default:
+	break;
+
+	case BUTTON_TAG::BUY_BARRICADE:
+		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu(button));
+		break;
+
+	case BUTTON_TAG::UPGRADE_BARRICADE:
+		AddUIGroup(factory->CreateOnHoverUpgradeBarricadeMenu(button));
+		break;
+
+	default:
 		break;
 
 	}
