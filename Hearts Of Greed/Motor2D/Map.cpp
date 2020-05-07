@@ -577,21 +577,16 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 					break;
 
 				case 250 + 6:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-					bld = (Building*)bldgToBe;
-					bld->myDecor = BUILDING_DECOR::ST_01;
+					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_01, colliderRectAux.x, colliderRectAux.y);
 					break;
 
 				case 250 + 7:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-					bld = (Building*)bldgToBe;
-					bld->myDecor = BUILDING_DECOR::ST_02;
+					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_02, colliderRectAux.x, colliderRectAux.y);
 					break;
 
 				case 250 + 8:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-					bld = (Building*)bldgToBe;
-					bld->myDecor = BUILDING_DECOR::ST_03;
+					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_03, colliderRectAux.x, colliderRectAux.y);
+					
 					break;
 
 				default:

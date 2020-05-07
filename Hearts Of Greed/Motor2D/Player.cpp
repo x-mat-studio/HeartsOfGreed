@@ -669,9 +669,14 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
-		if (resources >= turretCost && app->uiManager->lastShop->TurretCapacityExceed())
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
 		{
-			ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
+			Base* base = (Base*)focusedEntity;
+
+			if (resources >= turretCost && base->TurretCapacityExceed())
+			{
+				ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, base);
+			}
 		}
 		break;
 

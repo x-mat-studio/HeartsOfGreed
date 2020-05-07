@@ -2,6 +2,8 @@
 #include "Render.h"
 #include "Textures.h"
 #include "EntityManager.h"
+#include "Brofiler/Brofiler/Brofiler.h"
+
 
 Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
 	ENTITY_TYPE type, BUILDING_DECOR decor) :
@@ -106,6 +108,7 @@ void Building::Contruct()
 
 void Building::Draw(float dt)
 {
+	BROFILER_CATEGORY("DRAW Static Buildings", Profiler::Color::DarkGoldenRod);
 
 	fMPoint newPos = position + offset;
 
@@ -143,24 +146,16 @@ void Building::MinimapDraw(float scale, float halfWidth)
 
 	SDL_Texture* auxTexture = nullptr;
 
-	switch (GetDecor())
+	
+	if (texture != nullptr)
 	{
-	case BUILDING_DECOR::ST_01:
-		auxTexture = app->tex->Load("maps/base01.png");
-		break;
-	case BUILDING_DECOR::ST_02:
-		auxTexture = app->tex->Load("maps/base02.png");
-		break;
-	case BUILDING_DECOR::ST_03:
-		auxTexture = app->tex->Load("maps/base03.png");
-		break;
-
+		app->render->MinimapBlit(texture, worldX + halfWidth, worldY, NULL, scale);
+	}
+	else
+	{
+		app->minimap->MinimapFoWNeedsUpdate();
 	}
 
-	
-	app->render->MinimapBlit(auxTexture, worldX + halfWidth, worldY, NULL, scale);
-
-	app->tex->UnLoad(auxTexture);
 }
 
 void Building::ActivateTransparency()

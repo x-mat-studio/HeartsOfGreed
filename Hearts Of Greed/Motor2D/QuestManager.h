@@ -26,6 +26,7 @@ public:
 
 	int questSfx;
 
+	SDL_Texture* questMarker;
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);

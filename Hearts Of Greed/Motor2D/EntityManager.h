@@ -21,6 +21,8 @@ class Spawner;
 class Base;
 class Turret;
 
+enum class BUILDING_DECOR;
+
 enum class AREA_TYPE
 {
 	NO_TYPE = -1,
@@ -79,6 +81,7 @@ public:
 
 
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
+	Entity* AddDecorativeBuilding(BUILDING_DECOR decor, int x, int y);
 	Entity* GetSample(ENTITY_TYPE);
 
 

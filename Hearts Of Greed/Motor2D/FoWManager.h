@@ -41,7 +41,7 @@ public:
 
 	bool CleanUp();
 
-	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius=3);
+	FoWEntity* CreateFoWEntity(fMPoint pos, bool providesVisibility,int visionRadius=3,int visibleRadius=1);
 	void DeleteAllFoWEntites();
 
 

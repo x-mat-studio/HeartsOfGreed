@@ -532,3 +532,13 @@ void Turret::SetAnimation(TURRET_STATES state)
 	}
 }
 
+
+void Turret::SetLevel(int lvl)
+{
+	for (int i = 1; i < lvl; i++)
+	{
+		//LevelUp() TODO
+	}
+
+	turretLvl = lvl;
+}

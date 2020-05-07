@@ -56,7 +56,6 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void CreateMinimapText();
-	void CreateFoWText();
 	void LoadMinimap();
 	void UpdateMinimapFoW();
 	void MinimapFoWNeedsUpdate();
