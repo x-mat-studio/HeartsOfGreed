@@ -17,6 +17,9 @@ class RoboHero;
 class Building;
 class DynamicEntity;
 class Enemy;
+class RangedEnemy;
+class GigaEnemy;
+class NightEnemy;
 class Spawner;
 class Base;
 class Turret;
@@ -148,7 +151,7 @@ private:
 	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
 
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
-	bool LoadSampleEnemy(pugi::xml_node& enemyNode);
+	bool LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType);
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
@@ -257,6 +260,9 @@ private:
 	RoboHero* sampleRobo;
 
 	Enemy* sampleEnemy;
+	NightEnemy* sampleEnemyNight;
+	GigaEnemy* sampleEnemyGiga;
+	RangedEnemy* sampleEnemyRanged;
 
 	Spawner* sampleSpawner;
 

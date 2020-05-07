@@ -182,7 +182,7 @@ bool RangedHero::DrawVfx(float dt)
 		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
 			currentVfx = false;
 
-		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
+		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
 	}
 
 
@@ -191,7 +191,7 @@ bool RangedHero::DrawVfx(float dt)
 
 void RangedHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
-	app->render->Blit(app->entityManager->moveCommandTileRng, movingTo.x - currframe.pivotPositionX, movingTo.y - currframe.pivotPositionY, &currframe.frame, false, true, alphaValue);
+	app->render->Blit(app->entityManager->moveCommandTileRng, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }
 
 void RangedHero::PlayGenericNoise(int probability)

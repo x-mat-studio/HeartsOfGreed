@@ -22,6 +22,9 @@
 #include "RangedHero.h"
 #include "RoboHero.h"
 #include "Enemy.h"
+#include "RangedEnemy.h"
+#include "GigaEnemy.h"
+#include "NightEnemy.h"
 
 #include "Spawner.h"
 #include "Quest.h"
@@ -124,11 +127,23 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	wanamingodoc.load_file(filename.GetString());
 	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo");
 
-	LoadSampleEnemy(wanamingo);
+	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY);
+
+	wanamingo = wanamingodoc.child("sampleRanged");
+
+	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_RANGED);
+
+	wanamingo = wanamingodoc.child("sampleSpeed");
+
+	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_NIGHT);
+
+	wanamingo = wanamingodoc.child("sampleGiga");
+
+	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_GIGA);
 
 	wanamingodoc.reset();
 
-	// Sample Crazy Turret Melee---------------------
+	// Sample Turret ---------------------
 	filename = config.child("load").attribute("docnameTurret").as_string();
 	pugi::xml_document turretdoc;
 	turretdoc.load_file(filename.GetString());
@@ -352,7 +367,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
-			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::ENEMY: case ENTITY_TYPE::ENEMY_NIGHT: case ENTITY_TYPE::ENEMY_RANGED: case ENTITY_TYPE::ENEMY_GIGA:
 				entityVector[i]->Start(enemyTexture);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
@@ -634,6 +649,16 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		ret = new Enemy({ (float)x,(float)y }, sampleEnemy, ENTITY_ALIGNEMENT::ENEMY);
 		break;
 
+	case ENTITY_TYPE::ENEMY_RANGED:
+		ret = new RangedEnemy({ (float)x,(float)y }, sampleEnemyRanged, ENTITY_ALIGNEMENT::ENEMY);
+		break;
+	case ENTITY_TYPE::ENEMY_GIGA:
+		ret = new Enemy({ (float)x,(float)y }, sampleEnemyGiga, ENTITY_ALIGNEMENT::ENEMY);
+		break;
+	case ENTITY_TYPE::ENEMY_NIGHT:
+		ret = new Enemy({ (float)x,(float)y }, sampleEnemyNight, ENTITY_ALIGNEMENT::ENEMY);
+		break;
+
 	default:
 		break;
 	}
@@ -708,6 +733,18 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 
 	case ENTITY_TYPE::ENEMY:
 		return sampleEnemy;
+		break;
+
+	case ENTITY_TYPE::ENEMY_RANGED:
+		return sampleEnemyRanged;
+		break;
+
+	case ENTITY_TYPE::ENEMY_GIGA:
+		return sampleEnemyGiga;
+		break;
+
+	case ENTITY_TYPE::ENEMY_NIGHT:
+		return sampleEnemyNight;
 		break;
 
 	case ENTITY_TYPE::BUILDING:
@@ -969,7 +1006,7 @@ void ModuleEntityManager::SearchEnemiesAlive()
 	{
 		type = entityVector[i]->GetType();
 
-		if (type == ENTITY_TYPE::ENEMY)
+		if (type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::ENEMY_GIGA || type == ENTITY_TYPE::ENEMY_RANGED || type == ENTITY_TYPE::ENEMY_NIGHT)
 			return;
 	}
 
@@ -1018,6 +1055,9 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 				break;
 			case ENTITY_TYPE::BLDG_TURRET:
 			case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::ENEMY_RANGED:
+			case ENTITY_TYPE::ENEMY_NIGHT:
+			case ENTITY_TYPE::ENEMY_GIGA:
 			case ENTITY_TYPE::QUEST:
 			case ENTITY_TYPE::HERO_GATHERER:
 			case ENTITY_TYPE::HERO_MELEE:
@@ -1141,7 +1181,8 @@ void ModuleEntityManager::SpriteOrdering(float dt)
 			}
 		}
 
-		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		if (selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY || selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY_RANGED
+			|| selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY_NIGHT || selectedVector[i]->GetType() == ENTITY_TYPE::ENEMY_GIGA)
 		{
 			if (selectedVector[i]->visionEntity != nullptr)
 			{
@@ -1270,6 +1311,21 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::SPAWN_ENEMY:
 
 		AddEntity(ENTITY_TYPE::ENEMY, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_ENEMY_RANGED:
+
+		AddEntity(ENTITY_TYPE::ENEMY_RANGED, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_ENEMY_NIGHT:
+
+		AddEntity(ENTITY_TYPE::ENEMY_NIGHT, pos.x, pos.y);
+		break;
+
+	case EVENT_ENUM::SPAWN_ENEMY_GIGA:
+
+		AddEntity(ENTITY_TYPE::ENEMY_GIGA, pos.x, pos.y);
 		break;
 
 	case EVENT_ENUM::SPAWN_GATHERER_HERO:
@@ -1560,7 +1616,8 @@ void ModuleEntityManager::KillAllEnemies()
 
 	for (int i = 0; i < numEntities; i++)
 	{
-		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY)
+		if (entityVector[i]->GetType() == ENTITY_TYPE::ENEMY || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY_RANGED
+			|| entityVector[i]->GetType() == ENTITY_TYPE::ENEMY_NIGHT || entityVector[i]->GetType() == ENTITY_TYPE::ENEMY_GIGA)
 		{
 			enemy = (Enemy*)entityVector[i];
 			enemy->Die();
@@ -1936,7 +1993,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 }
 
 
-bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
+bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType)
 {
 	bool ret = true;
 	//collider
@@ -1995,10 +2052,36 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
 	Animation enemyDeathLeftUp = enemyDeathLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftDeath"); //jesus christ 
 	Animation enemyDeathLeftDown = enemyDeathLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftDeath"); //jesus christ 
 
-	sampleEnemy = new Enemy(pos, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
-		enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
-		enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-		enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp);
+	switch (enemyType)
+	{
+	case ENTITY_TYPE::ENEMY:
+		sampleEnemy = new Enemy(pos, ENTITY_TYPE::ENEMY, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
+			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
+		break;
+	case ENTITY_TYPE::ENEMY_RANGED:
+		sampleEnemy = new RangedEnemy(pos, ENTITY_TYPE::ENEMY_RANGED, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
+			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
+		break;
+	case ENTITY_TYPE::ENEMY_NIGHT:
+		sampleEnemyNight = new NightEnemy(pos, ENTITY_TYPE::ENEMY_NIGHT, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
+			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
+		break;
+	case ENTITY_TYPE::ENEMY_GIGA:
+		sampleEnemy = new GigaEnemy(pos, ENTITY_TYPE::ENEMY_GIGA, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
+			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
+			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
+		break;
+
+
+	}
+
 
 	return ret;
 }

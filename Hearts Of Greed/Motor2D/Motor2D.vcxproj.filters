@@ -178,6 +178,12 @@
     <ClCompile Include="RangedEnemy.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="NightEnemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="GigaEnemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -373,6 +379,12 @@
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
     <ClInclude Include="RangedEnemy.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightEnemy.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="GigaEnemy.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
   </ItemGroup>

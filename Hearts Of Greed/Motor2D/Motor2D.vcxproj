@@ -97,6 +97,7 @@
     <ClCompile Include="FoWEntity.cpp" />
     <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="GathererHero.cpp" />
+    <ClCompile Include="GigaEnemy.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="HeroesPortraitManager.cpp" />
     <ClCompile Include="HeroPortrait.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="FadeToBlack.cpp" />
+    <ClCompile Include="NightEnemy.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quest.cpp" />
@@ -163,6 +165,7 @@
     <ClInclude Include="Frame.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="GathererHero.h" />
+    <ClInclude Include="GigaEnemy.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="HeroesPortraitManager.h" />
     <ClInclude Include="HeroPortrait.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="MeleeHero.h" />
     <ClInclude Include="FadeToBlack.h" />
     <ClInclude Include="Minimap.h" />
+    <ClInclude Include="NightEnemy.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quest.h" />

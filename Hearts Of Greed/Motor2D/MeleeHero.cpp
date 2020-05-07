@@ -175,5 +175,5 @@ void MeleeHero::PlayGenericNoise(int probability)
 
 void MeleeHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
-	app->render->Blit(app->entityManager->moveCommandTileMelee, movingTo.x - currframe.pivotPositionX, movingTo.y - currframe.pivotPositionY, &currframe.frame, false, true, alphaValue);
+	app->render->Blit(app->entityManager->moveCommandTileMelee, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }

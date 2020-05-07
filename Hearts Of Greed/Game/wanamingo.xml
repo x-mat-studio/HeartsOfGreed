@@ -11,7 +11,7 @@
 
     <stats movementSpeed="100" vision="200" xp="15">
       <hitPoints max="25" current="25" recoveryRate="1"/>
-      <attack damage="2" speed="1.75" range="1"/>
+      <attack damage="2" speed="1.75" range="1" scale =" 1.f"/>
     </stats>
     
   </sample>
@@ -26,7 +26,7 @@
 
     <stats movementSpeed="135" vision="225" xp="20">
       <hitPoints max="15" current="15" recoveryRate="3"/>
-      <attack damage="4" speed="1.25" range="5"/>
+      <attack damage="4" speed="1.25" range="5" scale =" 1.f"/>
     </stats>
 
   </sampleRanged>
@@ -41,7 +41,7 @@
 
     <stats movementSpeed="200" vision="100" xp="7">
       <hitPoints max="20" current="20" recoveryRate="3"/>
-      <attack damage="1" speed="3.25" range="1"/>
+      <attack damage="1" speed="3.25" range="1" scale =" 0.75f"/>
     </stats>
 
   </sampleSpeed>
@@ -56,7 +56,7 @@
 
     <stats movementSpeed="35" vision="200" xp="100">
       <hitPoints max="325" current="150" recoveryRate="5"/>
-      <attack damage="35" speed="0.75" range="1"/>
+      <attack damage="35" speed="0.75" range="1" scale =" 1.5f"/>
     </stats>
 
   </sampleGiga>

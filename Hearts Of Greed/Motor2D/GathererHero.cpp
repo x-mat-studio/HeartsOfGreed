@@ -217,7 +217,7 @@ bool GathererHero::DrawVfx(float dt)
 		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
 			currentVfx = false;
 
-		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
+		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame, false, true, 0, 255, 255,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
 	}
 
 
@@ -226,5 +226,5 @@ bool GathererHero::DrawVfx(float dt)
 
 void GathererHero::BlitCommandVfx (Frame& currframe, int alphaValue)
 {
-	app->render->Blit(app->entityManager->moveCommandTileGath, movingTo.x - currframe.pivotPositionX, movingTo.y - currframe.pivotPositionY, &currframe.frame, false, true, alphaValue);
+	app->render->Blit(app->entityManager->moveCommandTileGath, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue,255, 255, 255, 1.0f,  currframe.pivotPositionX, currframe.pivotPositionY);
 }
