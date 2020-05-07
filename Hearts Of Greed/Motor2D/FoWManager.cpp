@@ -281,11 +281,8 @@ void ModuleFoWManager::UpdateFoWMap()
 		{
 			for (int i = 0; i < fowEntities.size(); i++)
 			{
-				if (CheckTileVisibility(fowEntities[i]->GetPos()))
-				{
-					fowEntities[i]->isVisible = true;
-				}
-				else fowEntities[i]->isVisible = false;
+
+				fowEntities.at(i)->UpdateVisibility();
 
 			}
 		}
@@ -402,7 +399,7 @@ void ModuleFoWManager::DrawFoWMinimap()
 					{
 
 						//SDL_SetTextureAlphaMod(smoothFoWtexture, 255);//set the alpha of the texture to half to reproduce fog
-						SDL_Rect r = { shroudId*64 ,0,64 ,64}; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						SDL_Rect r = { shroudId * 64 ,0,64 ,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
 						app->render->MinimapBlit(smoothFoWtexture, worldPos.x + halfWidth, worldPos.y - halfTileHeight, &r, scale);
 						/*SDL_Rect r = { (worldPos.x + halfWidth) * scale,worldPos.y * scale,64 * scale,64 * scale };
 						app->render->DrawQuad(r, 255, 255, 255, 255, true, false);*/
@@ -417,11 +414,11 @@ void ModuleFoWManager::DrawFoWMinimap()
 }
 
 
-FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius)
+FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius, int visibleRadius)
 {
 	FoWEntity* entity = nullptr;
 
-	entity = new FoWEntity(pos, providesVisibility, visionRadius);
+	entity = new FoWEntity(pos, providesVisibility, visionRadius, visibleRadius);
 
 	if (entity != nullptr)
 	{

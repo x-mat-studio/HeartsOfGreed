@@ -75,10 +75,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 	
-	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
-	app->eventManager->EventRegister(EVENT_ENUM::TURRET_UPGRADED, this);
-
-
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
@@ -455,9 +451,6 @@ void ModuleUIManager::UnregisterEvents()
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
-	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
-	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_UPGRADED, this);
-
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
@@ -546,10 +539,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 
 	case BUTTON_TAG::SAVE:
+		app->SaveGame();
 		break;
 
 
 	case BUTTON_TAG::LOAD:
+		app->LoadGame();
 		break;
 
 
@@ -575,6 +570,46 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::UPGRADE_TURRET:
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::BUY_BARRICADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::UPGRADE_BARRICADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+	break;
+
+
+	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
@@ -611,12 +646,48 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 	case BUTTON_TAG::REVIVE_MELEE:
 		AddUIGroup(factory->CreateOnHoverReviveMenu(button));
 		break;
+
 	case BUTTON_TAG::BUY_TURRET:
-		AddUIGroup(factory->CreateOnHoverBuyTurretMenu(button));
+		AddUIGroup(factory->CreateOnHoverBuyTurretMenu());
 		break;
+
 	case BUTTON_TAG::UPGRADE_TURRET:
-		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu(button));
-	break;	default:
+		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu());
+	break;
+
+	case BUTTON_TAG::BUY_BARRICADE:
+		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu());
+		break;
+
+	case BUTTON_TAG::UPGRADE_BARRICADE:
+		AddUIGroup(factory->CreateOnHoverUpgradeBarricadeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererLifeUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeLifeUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedLifeMenuMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedDamageUpgradeMenu());
+		break;
+
+	default:
 		break;
 
 	}
