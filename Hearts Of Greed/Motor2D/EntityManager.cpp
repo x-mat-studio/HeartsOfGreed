@@ -2400,27 +2400,30 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 		else if (type == "base")
 		{
-			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+		
+			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)
 			{
-				if (iterator2.attribute("name").as_string() == "turret")
+				P2SString name(iterator2.attribute("name").as_string());
+
+				if (name == "turret")
 				{
-					turret = (Turret*)AddEntity(ENTITY_TYPE::BLDG_TURRET, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+					turret = (Turret*)AddEntity(ENTITY_TYPE::BLDG_TURRET, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 					turret->SetLevel(iterator2.attribute("level").as_int());
 
 					base->AddTurret(turret);
 				}
 
-				if (iterator2.attribute("name").as_string() == "barricade")
+				if (name == "barricade")
 				{
 					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
 
 					base->AddBarricade(barricade);
 				}
 
-				if (iterator2.attribute("name").as_string() == "upgrade_center")
+				if (name == "upgrade_center")
 				{
 					upgradeCenter = (UpgradeCenter*)AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
 
@@ -2434,7 +2437,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 }
 
 
-bool ModuleEntityManager::Save(pugi::xml_node& data)
+bool ModuleEntityManager::Save(pugi::xml_node& data) const
 {
 	int entityNumber = entityVector.size();
 
@@ -2478,8 +2481,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
 
 			spawner = (Spawner*)entityVector[i];
 
@@ -2563,6 +2564,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 
 
 		case ENTITY_TYPE::HERO_GATHERER:
+			iterator.append_attribute("type") = "hero_gatherer";
 
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
@@ -2676,6 +2678,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			for (int i = 0; i < turretVector->size(); i++)
 			{
 				iterator2 = iterator.append_child("turret");
+				iterator2.append_attribute("name") = "turret";
 				iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
 				iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
 
@@ -2686,6 +2689,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			{
 				//TODO
 				iterator2 = iterator.append_child("barricade");
+				iterator2.append_attribute("name") = "barricade";
 				//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
 				//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
 			}
@@ -2693,6 +2697,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data)
 			if (upgradeCenter != nullptr)
 			{
 				iterator2 = iterator.append_child("upgrade_center");
+				iterator2.append_attribute("name") = "upgrade_center";
 				//iterator2.append_attribute("x") = upgradeCenter->position.x;
 				//iterator2.append_attribute("y") = upgradeCenter->position.y;
 			}
