@@ -879,8 +879,6 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 {
 	int numEntities = entityVector.size();
 
-	ENTITY_TYPE type;
-
 	for (int i = 0; i < numEntities; i++)
 	{
 		entityVector[i]->CheckObjective(entity);

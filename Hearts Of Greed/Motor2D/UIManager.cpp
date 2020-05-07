@@ -219,10 +219,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 	UI_Group* group = nullptr;
 
-	bool creditMenuExisted;
-	bool optionsMenuExisted;
-	bool pauseMenuExisted;
-	bool shopMenuExisted;
+
 
 	switch (eventId)
 	{

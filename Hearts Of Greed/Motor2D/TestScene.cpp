@@ -367,6 +367,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 // Called before quitting
 bool  ModuleTestScene::CleanUp()
 {
+
 	app->pathfinding->CleanUp();
 	app->uiManager->CleanUp();
 	app->entityManager->ResetEntityManager();
@@ -385,14 +386,26 @@ bool  ModuleTestScene::CleanUp()
 }
 
 
-bool  ModuleTestScene::Load(pugi::xml_node&)
+bool  ModuleTestScene::Load(pugi::xml_node& data)
 {
+	pugi::xml_node iterator = data.first_child();
+
+	dayNumber = iterator.attribute("days_passed").as_int();
+	isNightTime = iterator.attribute("is_night").as_bool();
+
+	timer = iterator.attribute("timer").as_float();
+
 	return true;
 }
 
 
-bool  ModuleTestScene::Save(pugi::xml_node&) const
+bool  ModuleTestScene::Save(pugi::xml_node& data) const
 {
+	pugi::xml_node iterator = data.append_child("time_info");
+
+	iterator.append_attribute("days_passed") = dayNumber;
+	iterator.append_attribute("is_night") = isNightTime;
+	iterator.append_attribute("timer") = timer;
 	return true;
 }
 
