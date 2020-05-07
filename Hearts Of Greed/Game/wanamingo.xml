@@ -9,12 +9,57 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="125" vision="200" xp="15">
+    <stats movementSpeed="100" vision="200" xp="15">
       <hitPoints max="25" current="25" recoveryRate="1"/>
       <attack damage="2" speed="1.75" range="1"/>
     </stats>
     
   </sample>
+
+  <sampleRanged>
+    <position x="150" y="250"/>
+
+    <collider>
+      <rect x="0" y="0" w="50" h="50"/>
+      <type id="2"/>
+    </collider>
+
+    <stats movementSpeed="135" vision="225" xp="20">
+      <hitPoints max="15" current="15" recoveryRate="3"/>
+      <attack damage="4" speed="1.25" range="5"/>
+    </stats>
+
+  </sampleRanged>
+
+  <sampleSpeed>
+    <position x="150" y="250"/>
+
+    <collider>
+      <rect x="0" y="0" w="35" h="35"/>
+      <type id="2"/>
+    </collider>
+
+    <stats movementSpeed="200" vision="100" xp="7">
+      <hitPoints max="20" current="20" recoveryRate="3"/>
+      <attack damage="1" speed="3.25" range="1"/>
+    </stats>
+
+  </sampleSpeed>
+
+  <sampleGiga>
+    <position x="150" y="250"/>
+
+    <collider>
+      <rect x="0" y="0" w="75" h="75"/>
+      <type id="2"/>
+    </collider>
+
+    <stats movementSpeed="35" vision="200" xp="100">
+      <hitPoints max="325" current="150" recoveryRate="5"/>
+      <attack damage="35" speed="0.75" range="1"/>
+    </stats>
+
+  </sampleGiga>
   
 	<Animations>
 
