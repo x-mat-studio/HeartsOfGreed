@@ -190,3 +190,9 @@ void UI::UnFocus()
 {
 	focused = false;
 }
+
+
+void UI::SetFather(UI* element)
+{
+	father = element;
+}

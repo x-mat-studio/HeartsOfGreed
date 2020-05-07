@@ -50,6 +50,8 @@ public:
 	fMPoint GetLocalPosition();
 	void SetLocalPosition(fMPoint locPos);
 
+	void SetFather(UI* father);
+
 	bool GetDragable();
 
 protected:

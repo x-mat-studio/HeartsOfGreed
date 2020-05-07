@@ -29,6 +29,14 @@ ModuleTestScene::ModuleTestScene() :
 	prevmousePosY(0),
 	timer(0),
 	dayNumber(1),
+	
+	dayTimer(INT_MAX),
+	nightTimer(INT_MAX),
+	camVel(0.f),
+	fadeTime(0),
+	startingScale(1.0f),
+
+	camToReset(false),
 	camUp(false),
 	camDown(false),
 	camRight(false),
@@ -37,16 +45,10 @@ ModuleTestScene::ModuleTestScene() :
 	allowCamMovement(true),
 	menuScene(false),
 	isNightTime(false),
-	dayTimer(INT_MAX),
-	nightTimer(INT_MAX),
-	camVel(0.f),
-	fadeTime(0),
-	camToReset(false),
-	startingScale(1.0f),
-	mapLoaded(false)
+	mapLoaded(false),
+	startFromLoad(false)
 {
 	name.create("testScene");
-
 }
 
 
@@ -111,57 +113,67 @@ bool ModuleTestScene::Start()
 		pos.create(950, 4100);
 
 		//Test Hero
+		if (startFromLoad == false)
+		{
 
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
-		/*
-		//mid
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
+			/*
+			//mid
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
 
-		//Left
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
+			//Left
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
 
-		//Right down
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
-
-
-		//Right 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
-
-		//Base
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -50, 165);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -64, 190);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -45, 175);
-
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
-			*/
-		//Spawners------------------
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
-
-		//Debug
-		//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
+			//Right down
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
 
 
+			//Right
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
 
-		//Quests-------------
-		app->entityManager->AddEntity(ENTITY_TYPE::QUEST, pos.x - 750, pos.y - 250);
+			//Base
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -50, 165);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -64, 190);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -45, 175);
+
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
+				*/
+				//Spawners------------------
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+
+			//Debug
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
+
+
+
+			//Quests-------------
+			app->entityManager->AddEntity(ENTITY_TYPE::QUEST, pos.x - 750, pos.y - 250);
+		}
 		
+	}
+
+	if (startFromLoad == true)
+	{
+		app->entityManager->DeleteAllEntities();
+		app->LoadGame();
+		startFromLoad = false;
 	}
 
 
