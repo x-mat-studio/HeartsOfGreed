@@ -77,11 +77,11 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	//FoW Related
 	if (alignement == ENTITY_ALIGNEMENT::PLAYER)
 	{
-		visionEntity = app->fowManager->CreateFoWEntity(position, true, 15);//TODO that 15 needs to be passed as a parameter
+		visionEntity = app->fowManager->CreateFoWEntity(position, true, 15,5);//TODO that 15 needs to be passed as a parameter
 	}
 	else
 	{
-		visionEntity = app->fowManager->CreateFoWEntity(position, false, 15);
+		visionEntity = app->fowManager->CreateFoWEntity(position, false, 15,5);
 	}
 }
 
