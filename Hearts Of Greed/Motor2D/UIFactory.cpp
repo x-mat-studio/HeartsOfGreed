@@ -29,15 +29,15 @@ UIFactory::UIFactory() :
 	portraitHealthbarGreenImage{ 29, 79, 50, 8 },
 	dataPageBackground{ 678, 369, 190, 67 },
 	dataPageImageBackground{ 721, 202, 65, 51 },
-	gathererPicture{ 352, 149, 59, 45 },
+	gathererPicture{ 352, 149, 61, 47 },
 	gathererShopPicture{ 581, 24, 36, 27 },
-	meleePicture{ 566, 149, 59, 45 },
+	meleePicture{ 566, 149, 61, 47 },
 	meleeShopPicture{ 658, 24, 36, 27 },
-	rangedPicture{ 150, 149, 59, 45 },
+	rangedPicture{ 150, 149, 61, 47 },
 	rangedShopPicture{ 619, 24, 36, 27 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
 	turretDataPagePicture{ 561, 77, 60, 45 },
-	wanamingoDataPagePicture{ 885, 152, 59, 45 },
+	wanamingoDataPagePicture{ 885, 150, 59, 45 },
 	turretShopPicture{ 696, 12, 34, 40 },
 	resourceIcon{ 18, 209, 11, 19 },
 	creditsBackgroundImage{ 563, 237, 117, 122 },
@@ -72,7 +72,9 @@ UIFactory::UIFactory() :
 	littleHealthbarGreenImage{ 319, 73, 29, 4 },
 	littleHealthbarBlueImage{ 352, 73, 29, 4 },
 
-	reviveHoverBackground{ 20, 300, 150, 50 }
+	reviveHoverBackground{ 20, 300, 150, 50 },
+	lifeUpgradeButton { 250, 410, 15, 15 },
+	damageUpgradeButton { 250, 410, 15, 15 }
 {}
 
 
@@ -160,7 +162,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 
 	CreateText(5, 35, background, "Jose Luis Redondo Tello", group);
 
-	CreateText(15, 45, background, "Code", group);
+	CreateText(15, 45, background, "Code + UI", group);
 
 	CreateText(5, 70, background, "Ferran-Roger Basart i Bosch", group);
 
@@ -309,6 +311,42 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu(Button* button)
 	CreateImage(5, 20, background, resourceIcon, group, false, false);
 
 	CreateText(25, 15, background, "-200", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu(Button* button)
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Buy barricade:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-100", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu(Button* button)
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade barricade:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-150", group);
 
 	return group;
 }
@@ -529,6 +567,7 @@ UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, std::vector
 	return button;
 }
 
+
 UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_RANGED);
@@ -536,6 +575,25 @@ UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, std::vecto
 
 	return button;
 }
+
+
+UI* UIFactory::CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, lifeUpgradeButton, false, app->uiManager->GetAtlasTexture(), tag);
+	dataPagesVector->push_back(button);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateDamageUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, damageUpgradeButton, false, app->uiManager->GetAtlasTexture(), tag);
+	dataPagesVector->push_back(button);
+
+	return button;
+}
+
 
 UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
@@ -545,9 +603,28 @@ UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, std::vector<U
 	return button;
 }
 
+
 UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_TURRET);
+	dataPagesVector->push_back(button);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateBuyBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_BARRICADE);
+	dataPagesVector->push_back(button);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateUpgradeBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_BARRICADE);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -599,100 +676,53 @@ UI* UIFactory::CreateDataPage(UI* parent, Entity* entity, UI_Group* group)
 
 void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
-	char stats[40];
-	Hero* focus = (Hero*)app->player->GetFocusedEntity();
-
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, gathererPicture);
-
-	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
-	
-	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
-	
-	CreateNonGroupImage(68, 12, dataPage, dataPagesVector, healthBarContainer);
-	
-	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
-
-	//stats
-	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
-	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
-	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
-	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
-	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
-	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
+	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
 
 
 void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
-	char stats[40];
-	Hero* focus = (Hero*)app->player->GetFocusedEntity();
-
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, meleePicture);
-
-	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
-
-	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
-
-	CreateNonGroupImage(68, 12, dataPage, dataPagesVector, healthBarContainer);
-
-	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
-
-	//stats
-	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
-	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
-	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
-	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
-	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
-
-	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
-	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
+	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
 
 
 void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, rangedPicture);
+	CreateGenericHeroPage(dataPagesVector, dataPage);
+}
+
+
+void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
+{
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, rangedPicture);
+	CreateNonGroupImage(68, 15, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(69, 17, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
-	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(68, 23, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(68, 12, dataPage, dataPagesVector, healthBarContainer);
-
-	CreateNonGroupImage(69, 14, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
+	CreateNonGroupImage(69, 25, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
-	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 10, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
-	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
-	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 22, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
-	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 35, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
-	CreateNonGroupText(133, 25, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 35, dataPage, dataPagesVector, stats);
 }
 
 
@@ -703,22 +733,22 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, wanamingoDataPagePicture);
 
-	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 0, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 12, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
-	CreateNonGroupText(133, 12, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 25, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
 }
 
 
@@ -729,23 +759,19 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, baseDataPagePicture);
 
-	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 18, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 20, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
 
-	CreateGathererReviveButton(140, 10, dataPage, dataPagesVector);
+	CreateGathererReviveButton(140, 20, dataPage, dataPagesVector);
 
-	CreateMeleeReviveButton(140, 20, dataPage, dataPagesVector);
+	CreateMeleeReviveButton(140, 30, dataPage, dataPagesVector);
 
-	CreateRangedReviveButton(140, 30, dataPage, dataPagesVector);
-
-	CreateBuyTurretButton(68, 30, dataPage, dataPagesVector);
-
-	CreateUpgradeTurretButton(108, 30, dataPage, dataPagesVector);
+	CreateRangedReviveButton(140, 40, dataPage, dataPagesVector);
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
-	CreateNonGroupText(68, 10, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 20, dataPage, dataPagesVector, stats);
 
 }
 
@@ -788,6 +814,13 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
+	CreateBuyTurretButton(68, 30, dataPage, dataPagesVector);
+
+	CreateUpgradeTurretButton(108, 30, dataPage, dataPagesVector);
+
+	CreateBuyBarricadeButton(68, 50, dataPage, dataPagesVector);
+
+	CreateUpgradeBarricadeButton(108, 50, dataPage, dataPagesVector);
 
 
 }
