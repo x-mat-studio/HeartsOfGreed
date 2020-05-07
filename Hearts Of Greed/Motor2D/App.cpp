@@ -398,8 +398,6 @@ bool App::PostUpdate()
 	bool ret = true;
 	int numModules = modules.size();
 
-	//BROFILER_CATEGORY("App PostUpdate", Profiler::Color::Aquamarine);
-
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{

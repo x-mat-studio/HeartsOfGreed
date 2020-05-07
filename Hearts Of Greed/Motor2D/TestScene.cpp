@@ -160,7 +160,7 @@ bool ModuleTestScene::Start()
 
 
 		//Quests-------------
-		app->entityManager->AddEntity(ENTITY_TYPE::QUEST, pos.x - 900, pos.y - 100);
+		app->entityManager->AddEntity(ENTITY_TYPE::QUEST, pos.x - 750, pos.y - 250);
 		
 	}
 

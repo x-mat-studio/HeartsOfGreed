@@ -116,6 +116,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quest.cpp" />
     <ClCompile Include="QuestManager.cpp" />
+    <ClCompile Include="RangedEnemy.cpp" />
     <ClCompile Include="RangedHero.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="ResourcesPortrait.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quest.h" />
     <ClInclude Include="QuestManager.h" />
+    <ClInclude Include="RangedEnemy.h" />
     <ClInclude Include="RangedHero.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="ResourcesPortrait.h" />

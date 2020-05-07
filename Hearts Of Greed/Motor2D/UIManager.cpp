@@ -583,6 +583,36 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 
+	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+	break;
+
+
+	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
+	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+
 	case BUTTON_TAG::GATHERER_PORTRAIT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
 		break;
@@ -618,19 +648,43 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:
-		AddUIGroup(factory->CreateOnHoverBuyTurretMenu(button));
+		AddUIGroup(factory->CreateOnHoverBuyTurretMenu());
 		break;
 
 	case BUTTON_TAG::UPGRADE_TURRET:
-		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu(button));
+		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu());
 	break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
-		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu(button));
+		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu());
 		break;
 
 	case BUTTON_TAG::UPGRADE_BARRICADE:
-		AddUIGroup(factory->CreateOnHoverUpgradeBarricadeMenu(button));
+		AddUIGroup(factory->CreateOnHoverUpgradeBarricadeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererLifeUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeLifeUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedLifeMenuMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedDamageUpgradeMenu());
 		break;
 
 	default:

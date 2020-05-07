@@ -1965,6 +1965,8 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode)
 	int vision = enemyNode.child("sample").child("stats").attribute("vision").as_int(0);
 	int xp = enemyNode.child("sample").child("stats").attribute("xp").as_int(0);
 
+	float scale = enemyNode.child("sample").child("stats").attribute("scale").as_float(1.0f);
+
 	Animation enemyWalkLeft = enemyWalkLeft.PushAnimation(enemyNode, "wanamingoLeftWalk"); // looks good
 	Animation enemyWalkLeftUp = enemyWalkLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftWalk");// looks good
 	Animation enemyWalkLeftDown = enemyWalkLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftWalk"); // last frame teleports to the left
