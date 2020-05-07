@@ -16,7 +16,7 @@ public:
 
 	TYPE x, y;
 
-	MAT_Point()
+	MAT_Point() : x(0), y(0)
 	{}
 
 	~MAT_Point()

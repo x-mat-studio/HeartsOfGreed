@@ -18,7 +18,6 @@ class Quest : public Entity
 {
 
 public:
-	Quest();
 	Quest(int x, int y);
 	Quest(Collider* col);
 

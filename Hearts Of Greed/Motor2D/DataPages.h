@@ -4,7 +4,7 @@
 #include "UI.h"
 
 class Entity;
-class UIFactory;
+struct UIFactory;
 enum class ENTITY_ALIGNEMENT;
 
 enum class DATA_PAGE_ENUM

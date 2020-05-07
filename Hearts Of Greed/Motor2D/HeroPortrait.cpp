@@ -14,7 +14,9 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 	healthRect(nullptr),
 	manaRect(nullptr),
 
-	focused(false)
+	focused(false),
+	heroType(ENTITY_TYPE::UNKNOWN),
+	originalBarsWidth(0)
 {
 }
 

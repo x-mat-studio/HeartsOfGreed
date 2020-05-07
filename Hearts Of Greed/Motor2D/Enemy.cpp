@@ -59,6 +59,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	damageTakenTimer(0.f),
 	haveOrders(false),
 	scale(scale),
+	currentAnimation(nullptr),
 
 	state(ENEMY_STATES::IDLE)
 {}

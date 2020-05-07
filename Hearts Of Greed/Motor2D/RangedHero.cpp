@@ -27,7 +27,6 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	granadeArea(nullptr),
 
 	currentVfx(nullptr),
-	vfxExplosion(vfxExplosion),
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -39,7 +38,6 @@ RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT ali
 	granadeArea(nullptr),
 
 	currentVfx(nullptr),
-	vfxExplosion(copy->vfxExplosion),
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -114,9 +112,6 @@ bool RangedHero::ExecuteSkill1()
 		}
 		else
 		{
-			currentVfx = &vfxExplosion;
-			currentVfx->ResetAnimation();
-			currentVfx->loop = false;
 
 			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 

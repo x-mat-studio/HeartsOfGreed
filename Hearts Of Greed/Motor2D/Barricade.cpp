@@ -1,16 +1,14 @@
 #include "Barricade.h"
 
 
-
-
-
 Barricade::Barricade(int barricadeLvl) :
 
 	barricadeLvl(barricadeLvl)
 {}
 
-Barricade::Barricade(Barricade * copy): barricadeLvl(copy->barricadeLvl)
-{
+Barricade::Barricade(Barricade * copy): 
+
+	barricadeLvl(copy->barricadeLvl) {
 }
 
 

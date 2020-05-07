@@ -7,7 +7,7 @@ UpgradeCenter::UpgradeCenter(int turretLvl, int barricadeLvl) :
 	barricadeLvl(barricadeLvl)
 {}
 
-UpgradeCenter::UpgradeCenter(fMPoint position, UpgradeCenter * copy, ENTITY_ALIGNEMENT alignement)
+UpgradeCenter::UpgradeCenter(fMPoint position, UpgradeCenter * copy, ENTITY_ALIGNEMENT alignement) : turretLvl(0)
 {
 }
 

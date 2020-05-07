@@ -7,12 +7,12 @@
 class Frame
 {
 public:
-	float maxFrames;
+	float maxFrames = 0.f;
 
-	SDL_Rect frame;
+	SDL_Rect frame = {0,0,0,0};
 
-	int pivotPositionX;
-	int pivotPositionY;
+	int pivotPositionX = 0;
+	int pivotPositionY = 0;
 
 private:
 	int lastCollider = 0;

@@ -11,7 +11,9 @@
 
 
 
-ModuleIntroScene::ModuleIntroScene() : bgValueDown(false), logoValueDown(false)
+ModuleIntroScene::ModuleIntroScene() : bgValueDown(false), logoValueDown(false), logoAlphaCounter(0), bgStartingValue(0), bgTopValue(0),
+bgTransitionConst(0), logoBG(nullptr), bgAlphaCounter(0), logoSound(-1), logoStartingValue(0), logoTopValue(0), logoTransitionConst(0),
+logoXMat(nullptr), titleSound(-1)
 {
 	name.create("introScene");
 }

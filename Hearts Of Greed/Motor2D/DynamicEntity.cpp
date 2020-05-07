@@ -260,7 +260,13 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_
 
 	float norm = sqrt(cohesionSpeed.x * cohesionSpeed.x + cohesionSpeed.y * cohesionSpeed.y);
 
-	int diameter = (it->moveRange1 * 2 + 1);
+	int diameter = 0;
+
+	if (it != nullptr)
+		diameter = (it->moveRange1 * 2 + 1);
+	else
+		return cohesionSpeed;
+
 
 	if (cohesionSpeed.x < diameter && cohesionSpeed.x > -diameter)
 	{

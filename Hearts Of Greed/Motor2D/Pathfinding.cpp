@@ -451,19 +451,20 @@ void graphLevel::deleteNode(HierNode* toDelete, int maxLvl)
 		return;
 
 	Cluster* c = nullptr;
+	HierNode* toDeleteNode = toDelete;
 
 	for (int l = 1; l <= maxLvl; l++)
 	{
 		if (l > this->lvlClusters.size())
 			break;
 
-		c = determineCluster(toDelete->pos, l);
+		c = determineCluster(toDeleteNode->pos, l);
 
 		for (int i = 0; i < c->clustNodes.size(); i++)
 		{
 			for (int j = 0; j < c->clustNodes[i]->edges.size(); j++)
 			{
-				if (c->clustNodes[i]->edges[j]->dest == toDelete)
+				if (c->clustNodes[i]->edges[j]->dest == toDeleteNode)
 				{
 					c->clustNodes[i]->edges[j]->dest = nullptr;
 					delete c->clustNodes[i]->edges[j];
@@ -476,9 +477,9 @@ void graphLevel::deleteNode(HierNode* toDelete, int maxLvl)
 
 		for (int i = 0; i < c->clustNodes.size(); i++)
 		{
-			if (c->clustNodes[i]->pos == toDelete->pos)
+			if (c->clustNodes[i]->pos == toDeleteNode->pos)
 			{
-				for (int j = 0; j < toDelete->edges.size(); j++)
+				for (int j = 0; j < toDeleteNode->edges.size(); j++)
 				{
 					c->clustNodes[i]->edges[j]->dest = nullptr;
 					delete c->clustNodes[i]->edges[j];
@@ -486,8 +487,8 @@ void graphLevel::deleteNode(HierNode* toDelete, int maxLvl)
 				}
 
 				c->clustNodes.erase(c->clustNodes.begin() + i);
-				toDelete->edges.clear();
-				delete toDelete;
+				toDeleteNode->edges.clear();
+				delete toDeleteNode;
 				break;
 			}
 		}
@@ -744,7 +745,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	BROFILER_CATEGORY("Create Path", Profiler::Color::Black);
 
 	PATH_TYPE ret = PATH_TYPE::NO_TYPE;
-	HierNode* n1, * n2;
+	HierNode* n1 = nullptr, * n2 = nullptr;
 	bool toDeleteN1 = false;
 	bool toDeleteN2 = false;
 
@@ -794,9 +795,9 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 			bool pathDone = HPAPathfinding(*n1, n2->pos, 1);
 
 			if (toDeleteN1)
-				absGraph.deleteNode((HierNode*)n1, maxLvl);
+				absGraph.deleteNode(n1, maxLvl);
 			if (toDeleteN2)
-				absGraph.deleteNode((HierNode*)n2, maxLvl);
+				absGraph.deleteNode(n2, maxLvl);
 
 			if (pathDone)
 				ret = PATH_TYPE::ABSTRACT;

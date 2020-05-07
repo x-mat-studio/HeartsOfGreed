@@ -5,13 +5,9 @@
 #include "QuestManager.h"
 #include "Render.h"
 
-Quest::Quest() :
-
-	myState(QUEST_STATE::ACTIVE)
-{}
-
 Quest::Quest(int x, int y) : 
-	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1)
+	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
+	myState(QUEST_STATE::ST_UNKNOWN)
 {
 	SDL_Rect auxQ{ x, y,128,128 };
 	this->collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST,app->questManager,this);

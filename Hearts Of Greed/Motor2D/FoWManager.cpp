@@ -38,8 +38,8 @@ bool ModuleFoWManager::Start()
 	smoothFoWtexture = app->tex->Load("spritesheets/VFX/fogTiles.png");
 	debugFoWtexture = app->tex->Load("spritesheets/VFX/fogTilesDebug.png");
 
-	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr);
-	ret = false;
+	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr)
+		ret = false;
 
 	foWMapVisible = true;
 

@@ -31,7 +31,10 @@ ModuleUIManager::ModuleUIManager() :
 	atlas(nullptr), 
 	lastShop(nullptr),
 	portraitManager(nullptr),
-	hoverElement(nullptr)
+	hoverElement(nullptr),
+	dragElement(nullptr),
+	isMenuOn(false),
+	factory(nullptr)
 {
 	name.create("UIManager");
 }

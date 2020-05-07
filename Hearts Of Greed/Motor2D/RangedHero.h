@@ -37,8 +37,6 @@ public:
 	fMPoint granadePosLaunch;
 	skillArea* granadeArea;
 
-	Animation vfxExplosion;
-
 	//This is a placeholder for particles
 	SDL_Rect explosionRect;
 	Animation* currentVfx;

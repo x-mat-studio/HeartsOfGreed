@@ -4,11 +4,11 @@
 #include "Collision.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-ModuleCollision::ModuleCollision()
+ModuleCollision::ModuleCollision() : colliders{}
 {
 	name.create("colliders");
 
-	for (size_t i = 0; i < MAX_COLLIDERS; i++)
+	for (int i = 0; i < MAX_COLLIDERS; i++)
 	{
 		colliders[i] = nullptr;
 	}

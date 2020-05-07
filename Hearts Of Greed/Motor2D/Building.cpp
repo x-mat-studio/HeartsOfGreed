@@ -4,6 +4,9 @@
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
+Building::Building()
+{
+}
 
 Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
 	ENTITY_TYPE type, BUILDING_DECOR decor) :
@@ -43,10 +46,6 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 {
 }
 
-
-Building::Building()
-{
-}
 
 
 void Building::Destroy()

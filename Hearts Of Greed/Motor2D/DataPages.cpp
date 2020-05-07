@@ -17,7 +17,17 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	focusEntity(entity),
 	healthRect(nullptr),
 	manaRect(nullptr),
-	alignment(ENTITY_ALIGNEMENT::UNKNOWN)
+	alignment(ENTITY_ALIGNEMENT::UNKNOWN),
+	attackDamage(0),
+	attackSpeed(0),
+	hpRecovery(0),
+	level(0),
+	life(0),
+	mana(0),
+	range(0),
+	resources(0),
+	vision(0),
+	xpToNextLevel(0)
 {
 	originalBarsWidth = factory->GetHealthBarBackground().w;
 }

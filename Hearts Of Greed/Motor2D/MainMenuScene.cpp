@@ -10,7 +10,8 @@
 #include "Render.h"
 #include "EventManager.h"
 
-ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1), fadeTime(0)
+ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1), fadeTime(0), BG(nullptr), alphaCounter(0),
+canon(0), gameIcon(nullptr), gameTitle(nullptr), soundDelay(0), titleSound(-1)
 {
 	name.create("menuScene");
 }

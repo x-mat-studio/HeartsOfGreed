@@ -36,7 +36,8 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vis
 
 	shortTermObjective(nullptr),
 
-	state(TURRET_STATES::IDLE)
+	state(TURRET_STATES::IDLE),
+	dir(FACE_DIR::SOUTH_EAST)
 {
 	currentAnimation = &this->idleRightDown;
 }
@@ -70,7 +71,8 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	shortTermObjective(nullptr),
 
-	state(TURRET_STATES::IDLE)
+	state(TURRET_STATES::IDLE),
+	dir(copy->dir)
 {
 	currentAnimation = &idleRightDown;
 

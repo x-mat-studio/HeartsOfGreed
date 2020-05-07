@@ -113,7 +113,7 @@ bool GathererHero::PreProcessSkill3()
 
 bool GathererHero::ExecuteSkill1()
 {
-	if (granadeArea)
+	if (granadeArea != nullptr)
 	{
 		if (!skillExecutionDelay)
 		{
@@ -145,12 +145,15 @@ bool GathererHero::ExecuteSkill1()
 			if (ret >= 0)
 			{
 				GetExperience(ret);
-				return true;
 			}
+			return true;
+
 		}
 	}
 	else
 		return false;
+
+	return false;
 }
 
 bool GathererHero::ExecuteSkill2()
