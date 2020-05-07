@@ -73,6 +73,7 @@ UIFactory::UIFactory() :
 	littleHealthbarBlueImage{ 352, 73, 29, 4 },
 
 	reviveHoverBackground{ 20, 300, 150, 50 },
+	upgradeHoverBackground{ 20, 300, 180, 50 },
 	lifeUpgradeButton { 250, 410, 15, 15 },
 	damageUpgradeButton { 250, 410, 15, 15 }
 {}
@@ -280,7 +281,7 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 }
 
 
-UI_Group* UIFactory::CreateOnHoverBuyTurretMenu(Button* button)
+UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -298,7 +299,7 @@ UI_Group* UIFactory::CreateOnHoverBuyTurretMenu(Button* button)
 }
 
 
-UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu(Button* button)
+UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -316,7 +317,7 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu(Button* button)
 }
 
 
-UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu(Button* button)
+UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -334,7 +335,7 @@ UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu(Button* button)
 }
 
 
-UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu(Button* button)
+UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -347,6 +348,114 @@ UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu(Button* button)
 	CreateImage(5, 20, background, resourceIcon, group, false, false);
 
 	CreateText(25, 15, background, "-150", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverGathererLifeUpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade gatherer HP:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-25", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade gatherer damage:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-25", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade melee HP:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-25", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade melee damage:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-25", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade ranged HP:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-25", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade ranged damage:", group);
+
+	CreateImage(5, 20, background, resourceIcon, group, false, false);
+
+	CreateText(25, 15, background, "-25", group);
 
 	return group;
 }
@@ -677,6 +786,10 @@ UI* UIFactory::CreateDataPage(UI* parent, Entity* entity, UI_Group* group)
 void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, gathererPicture);
+
+	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_LIFE_UPGRADE);
+	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_DAMAGE_UPGRADE);
+
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
 
@@ -684,6 +797,10 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, meleePicture);
+
+	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::MELEE_LIFE_UPGRADE);
+	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::MELEE_DAMAGE_UPGRADE);
+
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
 
@@ -691,6 +808,10 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, rangedPicture);
+
+	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::RANGED_LIFE_UPGRADE);
+	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::RANGED_DAMAGE_UPGRADE);
+
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
 

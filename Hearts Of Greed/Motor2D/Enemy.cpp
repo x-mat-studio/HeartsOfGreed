@@ -15,7 +15,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, 
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
-	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath) :
+	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 25),
 	walkLeft(walkLeft),
@@ -58,6 +58,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	shortTermObjective(nullptr),
 	damageTakenTimer(0.f),
 	haveOrders(false),
+	scale(scale),
 
 	state(ENEMY_STATES::IDLE)
 {}
@@ -106,6 +107,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	shortTermObjective(nullptr),
 	damageTakenTimer(0.f),
 
+	scale(copy->scale),
 	haveOrders(false),
 
 	state(ENEMY_STATES::IDLE)
@@ -318,10 +320,10 @@ void Enemy::Draw(float dt)
 		currFrame = currentAnimation->GetCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0, scale/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
 
 	else
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255, scale/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
 
 	DebugDraw();
 }

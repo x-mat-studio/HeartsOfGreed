@@ -449,6 +449,7 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 	{
 
 		movingTo = app->pathfinding->GetDestination(this);
+
 		if (movingTo.x == -1 && !path.empty())
 			movingTo = path.back();
 
@@ -503,7 +504,7 @@ void Hero::Draw(float dt)
 		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y  - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 0, 0);
 
 	else
-		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255);
+		app->render->Blit(texture, position.x - currFrame.pivotPositionX, position.y - currFrame.pivotPositionY, &currFrame.frame, false, true, 0, 255, 255, 255, 0.75f);
 
 	if (drawingVfx)
 		DrawVfx(dt);
@@ -656,6 +657,7 @@ void Hero::PlayGenericNoise(int random)
 
 void Hero::BlitCommandVfx (Frame& currframe, int alphaValue)
 {
+
 	return;
 }
 
