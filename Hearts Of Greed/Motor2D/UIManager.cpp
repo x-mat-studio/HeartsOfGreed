@@ -14,6 +14,7 @@
 #include "Input.h"
 #include "Player.h"
 #include "EntityManager.h"
+#include "MainMenuScene.h"
 #include "TestScene.h"
 #include "EventManager.h"
 #include "Textures.h"
@@ -487,6 +488,8 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::CONTINUE_GAME:
+		app->testScene->startFromLoad = true;
+		app->fadeToBlack->FadeToBlack(app->mainMenu, app->testScene, 3);
 		break;
 
 	case BUTTON_TAG::OPTIONS:
