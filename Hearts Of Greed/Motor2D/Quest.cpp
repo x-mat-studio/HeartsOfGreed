@@ -51,7 +51,7 @@ void Quest::Die()
 	toDelete = true;
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
-
+	collider->to_delete = true;
 	collider->thisEntity = nullptr;
 
 }
