@@ -27,7 +27,6 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
 {
 
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME, this);
-	app->eventManager->EventRegister(EVENT_ENUM::START_GAME_FROM_CONTINUE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 
@@ -173,9 +172,6 @@ void ModuleMainMenuScene::ExecuteEvent(EVENT_ENUM eventId)
 	{
 	case EVENT_ENUM::START_GAME:
 		changeScene = true;
-		break;
-	case EVENT_ENUM::START_GAME_FROM_CONTINUE:
-		changeSceneContinue = 0;
 		break;
 	}
 }

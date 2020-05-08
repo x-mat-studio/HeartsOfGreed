@@ -171,8 +171,6 @@ bool App::Start()
 	bool ret = true;
 	int numModules = modules.size();
 
-	uiManager->LoadAtlas();
-
 	for (int i = 0; i < numModules; i++)
 	{
 		if (modules[i]->IsEnabled())

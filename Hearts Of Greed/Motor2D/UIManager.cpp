@@ -14,6 +14,7 @@
 #include "Input.h"
 #include "Player.h"
 #include "EntityManager.h"
+#include "MainMenuScene.h"
 #include "TestScene.h"
 #include "EventManager.h"
 #include "Textures.h"
@@ -87,7 +88,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
-	
 
 	return ret;
 }
@@ -99,6 +99,8 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	factory = new UIFactory();
+
+	LoadAtlas();
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
@@ -486,6 +488,8 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::CONTINUE_GAME:
+		app->testScene->startFromLoad = true;
+		app->fadeToBlack->FadeToBlack(app->mainMenu, app->testScene, 3);
 		break;
 
 	case BUTTON_TAG::OPTIONS:
@@ -634,7 +638,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 	}
 
-	app->audio->PlayFx(app->uiManager->clickSound, 0, -1);
+	PlayClickSound();
 
 }
 
@@ -722,7 +726,7 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 
 	}
 
-	app->audio->PlayFx(app->uiManager->hoverSound, 0, -1);
+	PlayHoverSound();
 
 }
 
@@ -779,6 +783,18 @@ void ModuleUIManager::CheckFocusedUI()
 			hoverElement = nullptr;
 		}
 	}
+}
+
+
+void ModuleUIManager::PlayHoverSound()
+{
+	app->audio->PlayFx(hoverSound, 0, -1);
+}
+
+
+void ModuleUIManager::PlayClickSound()
+{
+	app->audio->PlayFx(clickSound, 0, -1);
 }
 
 

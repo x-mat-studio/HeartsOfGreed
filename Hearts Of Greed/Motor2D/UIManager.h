@@ -76,6 +76,9 @@ public:
 	void AddPortrait(Hero* portrait);
 	void RemovePortrait(Hero* portrait);
 
+	void PlayHoverSound();
+	void PlayClickSound();
+
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
