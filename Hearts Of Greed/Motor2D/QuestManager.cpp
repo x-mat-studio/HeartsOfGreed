@@ -9,7 +9,8 @@
 
 
 ModuleQuestManager::ModuleQuestManager():
-	questMarker(nullptr)
+	questMarker(nullptr),
+	questSfx(-1)
 {
 	name.create("QuestManager");
 }

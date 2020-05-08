@@ -8,7 +8,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr)
+ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr), viewport{ 0,0,0,0 }, currentCamX(0), currentCamY(0), camera{0,0,0,0}
 {
 	name.create("renderer");
 }

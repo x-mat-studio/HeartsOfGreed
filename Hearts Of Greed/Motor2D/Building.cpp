@@ -4,7 +4,18 @@
 #include "EntityManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
-Building::Building()
+Building::Building() :
+	recoveryHitPointsRate(0),
+	xpOnDeath(0),
+	buildingCost(0),
+	transparencyValue(0),
+
+	myBase(nullptr),
+	selectedTexture(nullptr),
+	transparent(false),
+	selected(false),
+	currentState(BUILDING_STATE::ST_UNKNOWN),
+	myDecor(BUILDING_DECOR::NONE)
 {
 }
 
@@ -113,7 +124,7 @@ void Building::Draw(float dt)
 
 	if (selectedByPlayer)
 	{
-		if (transparent) 
+		if (transparent)
 		{
 			app->render->Blit(selectedTexture, newPos.x, newPos.y, nullptr, false, true, transparencyValue);
 		}
@@ -122,7 +133,7 @@ void Building::Draw(float dt)
 			app->render->Blit(selectedTexture, newPos.x, newPos.y, nullptr, false, true);
 		}
 	}
-	else 
+	else
 	{
 		if (transparent)
 		{
@@ -137,15 +148,15 @@ void Building::Draw(float dt)
 
 void Building::MinimapDraw(float scale, float halfWidth)
 {
-	float worldX = position.x+offset.x;
-	float worldY = position.y+offset.y;
+	float worldX = position.x + offset.x;
+	float worldY = position.y + offset.y;
 
 	worldX += app->render->currentCamX;
 	worldY += app->render->currentCamY;
 
 	SDL_Texture* auxTexture = nullptr;
 
-	
+
 	if (texture != nullptr)
 	{
 		app->render->MinimapBlit(texture, worldX + halfWidth, worldY, NULL, scale);

@@ -13,7 +13,11 @@ ModuleFoWManager::ModuleFoWManager() :
 	smoothFoWtexture(nullptr),
 	debugFoWtexture(nullptr),
 	debugMode(false),
-	foWMapNeedsRefresh(false)
+	foWMapNeedsRefresh(false),
+
+	width(0),
+	height(0),
+	fowUpdateTimer(0)
 {
 	name.create("FOWManager");
 }
