@@ -3,12 +3,15 @@
 #include "Particle.h"
 
 ParticleSystem::ParticleSystem() :
-	position{ 0, 0 },
+
+	Entity(fMPoint(0, 0), ENTITY_TYPE::PARTICLE_SYSTEM, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 0, 0),
+	
 	active(true)
 {}
 
 ParticleSystem::ParticleSystem(float x, float y) :
-	position{ x, y },
+
+	Entity(fMPoint(x, y), ENTITY_TYPE::PARTICLE_SYSTEM, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 0, 0),
 	active(true)
 {}
 
@@ -18,7 +21,7 @@ ParticleSystem::~ParticleSystem()
 }
 
 
-void ParticleSystem::Update(float dt)
+bool ParticleSystem::Update(float dt)
 {
 	int numEmiters = emitterVector.size();
 
@@ -27,10 +30,11 @@ void ParticleSystem::Update(float dt)
 		emitterVector[i].Update(dt);
 	}
 
+	return true;
 }
 
 
-void ParticleSystem::PostUpdate(float dt)
+bool ParticleSystem::PostUpdate(float dt)
 {
 	int numEmiters = emitterVector.size();
 
@@ -38,6 +42,8 @@ void ParticleSystem::PostUpdate(float dt)
 	{
 		emitterVector[i].PostUpdate(dt);
 	}
+
+	return true;
 }
 
 
