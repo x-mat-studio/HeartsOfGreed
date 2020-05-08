@@ -280,9 +280,9 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 		break;
 	}
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-500", group);
+	CreateText(25, 20, background, "-500", group);
 
 	return group;
 }
@@ -298,9 +298,9 @@ UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 
 	CreateText(5, 0, background, "Buy turret:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-120", group);
+	CreateText(25, 20, background, "-120", group);
 
 	return group;
 }
@@ -316,9 +316,9 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 
 	CreateText(5, 0, background, "Upgrade turret:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-200", group);
+	CreateText(25, 20, background, "-200", group);
 
 	return group;
 }
@@ -334,9 +334,9 @@ UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 
 	CreateText(5, 0, background, "Buy barricade:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-100", group);
+	CreateText(25, 20, background, "-100", group);
 
 	return group;
 }
@@ -352,9 +352,9 @@ UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu()
 
 	CreateText(5, 0, background, "Upgrade barricade:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-150", group);
+	CreateText(25, 20, background, "-150", group);
 
 	return group;
 }
@@ -370,9 +370,9 @@ UI_Group* UIFactory::CreateOnHoverGathererLifeUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade gatherer HP:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -388,9 +388,9 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade gatherer damage:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -406,9 +406,9 @@ UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade melee HP:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -424,9 +424,9 @@ UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade melee damage:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -442,9 +442,9 @@ UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
 
 	CreateText(5, 0, background, "Upgrade ranged HP:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -460,9 +460,9 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade ranged damage:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -474,6 +474,14 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade gatherer passive:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+
 	return group;
 }
 
@@ -484,6 +492,14 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade grenade:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -493,6 +509,14 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade melee passive:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
 
 	return group;
 }
@@ -504,6 +528,14 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade hammer crush:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -514,6 +546,14 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade ranged passive:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -524,6 +564,14 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade :", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
