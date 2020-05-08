@@ -109,9 +109,6 @@
     <ClCompile Include="DynamicEntity.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
@@ -176,13 +173,16 @@
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
     <ClCompile Include="RangedEnemy.cpp">
-      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="NightEnemy.cpp">
-      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GigaEnemy.cpp">
-      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,9 +312,6 @@
     <ClInclude Include="DynamicEntity.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Desenvolupament  ========\Entities\header files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
@@ -378,14 +375,17 @@
     <ClInclude Include="Quest.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClInclude>
     <ClInclude Include="RangedEnemy.h">
-      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="NightEnemy.h">
-      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GigaEnemy.h">
-      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +460,9 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities\Fog of War\header files">
       <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Enemies">
+      <UniqueIdentifier>{ef24dc2f-2b30-4a4e-bb05-bac8e5afb625}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

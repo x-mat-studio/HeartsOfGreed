@@ -2505,11 +2505,26 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 		}
 
 
-		else if (type == "enemy")
+		else if (type == "enemy_ranged")
 		{
-			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_RANGED, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+		}
+
+		else if (type == "enemy_night")
+		{
+		enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+		enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+		}
+
+
+		else if (type == "enemy_giga")
+		{
+		enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+
+		enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
 		}
 
 
@@ -2771,6 +2786,51 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 		case ENTITY_TYPE::ENEMY:
 
 			iterator.append_attribute("type") = "enemy";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			enemy = (Enemy*)entityVector[i];
+
+			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+			break;
+
+
+		case ENTITY_TYPE::ENEMY_RANGED:
+
+			iterator.append_attribute("type") = "enemy_ranged";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			enemy = (Enemy*)entityVector[i];
+
+			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+			break;
+
+
+		case ENTITY_TYPE::ENEMY_NIGHT:
+
+			iterator.append_attribute("type") = "enemy_night";
+
+			iterator.append_attribute("x") = entityVector[i]->position.x;
+			iterator.append_attribute("y") = entityVector[i]->position.y;
+
+			enemy = (Enemy*)entityVector[i];
+
+			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+			break;
+
+
+		case ENTITY_TYPE::ENEMY_GIGA:
+
+			iterator.append_attribute("type") = "enemy_giga";
 
 			iterator.append_attribute("x") = entityVector[i]->position.x;
 			iterator.append_attribute("y") = entityVector[i]->position.y;
