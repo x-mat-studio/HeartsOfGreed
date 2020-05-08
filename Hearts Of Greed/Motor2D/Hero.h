@@ -218,6 +218,7 @@ public:
 private:
 
 	bool CheckAttackRange();
+	Frame GetAnimationCurrentFrame(float dt);
 	void Attack();
 	void Die();
 

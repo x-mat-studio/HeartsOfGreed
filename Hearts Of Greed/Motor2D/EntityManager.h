@@ -251,6 +251,9 @@ private:
 	SDL_Texture* turretTexture;
 
 	SDL_Texture* enemyTexture;
+	SDL_Texture* enemyNightTexture;
+	SDL_Texture* enemyGigaTexture;
+	SDL_Texture* enemyRangedTexture;
 
 	//Samples
 

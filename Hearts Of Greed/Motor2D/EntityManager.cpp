@@ -168,19 +168,19 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
-	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo");
+	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo").child("sample");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY);
 
-	wanamingo = wanamingodoc.child("sampleRanged");
+	wanamingo = wanamingodoc.child("wanamingo").child("sampleRanged");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_RANGED);
 
-	wanamingo = wanamingodoc.child("sampleSpeed");
+	wanamingo = wanamingodoc.child("wanamingo").child("sampleSpeed");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_NIGHT);
 
-	wanamingo = wanamingodoc.child("sampleGiga");
+	wanamingo = wanamingodoc.child("wanamingo").child("sampleGiga");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_GIGA);
 
@@ -243,6 +243,9 @@ bool ModuleEntityManager::Start()
 	roboTexture = app->tex->Load("spritesheets/characters/robotto.png");
 
 	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
+	enemyRangedTexture = app->tex->Load("spritesheets/Enemies/Snipermingo.png");
+	enemyGigaTexture = app->tex->Load("spritesheets/Enemies/Gigamingo.png");
+	enemyNightTexture = app->tex->Load("spritesheets/Enemies/Speedomingo.png");
 
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
@@ -287,6 +290,10 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_RANGED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
 
 
 	sampleBuilding->SetTexture(base1Texture);
@@ -410,8 +417,26 @@ void ModuleEntityManager::CheckIfStarted() {
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
-			case ENTITY_TYPE::ENEMY: case ENTITY_TYPE::ENEMY_NIGHT: case ENTITY_TYPE::ENEMY_RANGED: case ENTITY_TYPE::ENEMY_GIGA:
+			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				break;
+
+			case ENTITY_TYPE::ENEMY_NIGHT:
+				entityVector[i]->Start(enemyNightTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				break;
+
+			case ENTITY_TYPE::ENEMY_RANGED:
+				entityVector[i]->Start(enemyRangedTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				break;
+
+			case ENTITY_TYPE::ENEMY_GIGA:
+				entityVector[i]->Start(enemyGigaTexture);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
 				break;
@@ -614,6 +639,10 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_RANGED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
 
 	return true;
 }
@@ -1459,7 +1488,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -2040,34 +2069,37 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType)
 {
 	bool ret = true;
+
 	//collider
 	SDL_Rect r;
-	r.x = enemyNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
-	r.y = enemyNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
-	r.w = enemyNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
-	r.h = enemyNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
-	COLLIDER_TYPE cType = (COLLIDER_TYPE)enemyNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	r.x = enemyNode.child("collider").child("rect").attribute("x").as_int(0);
+	r.y = enemyNode.child("collider").child("rect").attribute("y").as_int(0);
+	r.w = enemyNode.child("collider").child("rect").attribute("w").as_int(0);
+	r.h = enemyNode.child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)enemyNode.child("collider").child("type").attribute("id").as_int(0);
 	Collider* enemyCollider = new Collider(r, cType, this);
 
 	//stats
 	fMPoint pos;
-	pos.x = enemyNode.child("sample").child("position").attribute("x").as_float(0);
-	pos.y = enemyNode.child("sample").child("position").attribute("y").as_float(0);
+	pos.x = enemyNode.child("position").attribute("x").as_float(0);
+	pos.y = enemyNode.child("position").attribute("y").as_float(0);
 
-	int maxHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
-	int currentHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
-	int recoveryHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
-	int atkDmg = enemyNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
-	float atkSpd = enemyNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
-	int atkRange = enemyNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+	int maxHP = enemyNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = enemyNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = enemyNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
-	int movSpd = enemyNode.child("sample").child("stats").attribute("movementSpeed").as_int(0);
-	int vision = enemyNode.child("sample").child("stats").attribute("vision").as_int(0);
-	int xp = enemyNode.child("sample").child("stats").attribute("xp").as_int(0);
+	int atkDmg = enemyNode.child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = enemyNode.child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = enemyNode.child("stats").child("attack").attribute("range").as_int(0);
 
-	float scale = enemyNode.child("sample").child("stats").attribute("scale").as_float(1.0f);
+	int movSpd = enemyNode.child("stats").attribute("movementSpeed").as_int(0);
+	int vision = enemyNode.child("stats").attribute("vision").as_int(0);
+	int xp = enemyNode.child("stats").attribute("xp").as_int(0);
 
+	float scale = enemyNode.child("stats").attribute("scale").as_float(1.0f);
+
+	enemyNode = enemyNode.parent();
 	Animation enemyWalkLeft = enemyWalkLeft.PushAnimation(enemyNode, "wanamingoLeftWalk"); // looks good
 	Animation enemyWalkLeftUp = enemyWalkLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftWalk");// looks good
 	Animation enemyWalkLeftDown = enemyWalkLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftWalk"); // last frame teleports to the left
@@ -2105,7 +2137,7 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
 		break;
 	case ENTITY_TYPE::ENEMY_RANGED:
-		sampleEnemy = new RangedEnemy(pos, ENTITY_TYPE::ENEMY_RANGED, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		sampleEnemyRanged = new RangedEnemy(pos, ENTITY_TYPE::ENEMY_RANGED, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
@@ -2117,7 +2149,7 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
 		break;
 	case ENTITY_TYPE::ENEMY_GIGA:
-		sampleEnemy = new GigaEnemy(pos, ENTITY_TYPE::ENEMY_GIGA, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		sampleEnemyGiga = new GigaEnemy(pos, ENTITY_TYPE::ENEMY_GIGA, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
@@ -2527,7 +2559,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 		else if (type == "base")
 		{
-		
+
 			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)

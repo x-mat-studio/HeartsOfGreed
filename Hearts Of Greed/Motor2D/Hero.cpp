@@ -343,11 +343,14 @@ void Hero::StateMachine(float dt)
 		{
 			if (CheckAttackRange() == true)
 			{
-				Attack();
-				if (objective != nullptr)
-					dir = DetermineDirection(objective->position - position);
+				if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame * 0.5f)
+				{
+					Attack();
+					if (objective != nullptr)
+						dir = DetermineDirection(objective->position - position);
 
-				attackCooldown += TIME_TRIGGER;
+					attackCooldown += TIME_TRIGGER;
+				}
 
 			}
 			else
@@ -355,7 +358,7 @@ void Hero::StateMachine(float dt)
 				inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
 			}
 		}
-		else
+		else if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
 			inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 
 		break;
@@ -492,13 +495,7 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	Frame currFrame;
-
-	if (state == HERO_STATES::CHARGING_ATTACK || state == HERO_STATES::PREPARE_SKILL1)
-		currFrame = currentAnimation->GetCurrentFrame();
-	else
-		currFrame = currentAnimation->GetCurrentFrame(dt);
-
+	Frame currFrame = GetAnimationCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0,0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
@@ -508,6 +505,20 @@ void Hero::Draw(float dt)
 
 	if (drawingVfx)
 		DrawVfx(dt);
+}
+
+Frame Hero::GetAnimationCurrentFrame(float dt)
+{
+	Frame currFrame;
+
+	if (state == HERO_STATES::ATTACK)
+	{
+		currFrame = currentAnimation->GetCurrentFrame(dt * attackSpeed);
+	}
+	else
+		currFrame = currentAnimation->GetCurrentFrame(dt);
+
+	return currFrame;
 }
 
 void Hero::DrawArea()
@@ -553,7 +564,8 @@ bool Hero::CheckAttackRange()
 	fMPoint objPosW = objective->GetPosition();
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
-	if (myPos.DistanceTo(objPosM) < attackRange + objective->GetRadiusSize() )
+
+	if (app->pathfinding->CreateLine(myPos, objPosM).size() < attackRange + objective->GetRadiusSize() )
 	{
 		return true;
 
@@ -828,15 +840,10 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		currentAnimation->GetCurrentFrame(attackSpeed * dt);
-
-		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (attackCooldown > (1 / attackSpeed))
 		{
-			currentAnimation->ResetAnimation();
-
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0.f;
-
 		}
 
 	}
@@ -1274,6 +1281,7 @@ void Hero::SetAnimation(HERO_STATES currState)
 	}
 
 	case HERO_STATES::CHARGING_ATTACK:
+	case HERO_STATES::ATTACK:
 	{
 
 		switch (dir)

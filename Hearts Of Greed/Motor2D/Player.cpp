@@ -147,11 +147,6 @@ bool ModulePlayer::PreUpdate(float dt)
 		DesactivateBuildMode();
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_STATE::KEY_DOWN) // For debug purposes
-	{
-		resources += 1000;
-	}
-
 
 	CheckListener(this);
 

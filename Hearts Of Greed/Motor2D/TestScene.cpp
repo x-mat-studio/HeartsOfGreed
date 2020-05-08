@@ -154,7 +154,8 @@ bool ModuleTestScene::Start()
 			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
 			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
 				*/
-				//Spawners------------------
+
+			//Spawners------------------
 			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
 			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
 

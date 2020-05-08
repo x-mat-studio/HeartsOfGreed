@@ -4,7 +4,7 @@ GigaEnemy::GigaEnemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Ani
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
-	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale) :
+	int recoveryHitPointsRate, int vision, int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale) :
 
 	Enemy(position, type, collider, walkLeft, walkLeftUp, walkLeftDown, walkRightUp,
 		walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft, idleLeftUp, idleLeftDown,

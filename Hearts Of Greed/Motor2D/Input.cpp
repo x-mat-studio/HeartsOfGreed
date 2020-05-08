@@ -576,6 +576,24 @@ void ModuleInput::HandleDebugKeys()
 		app->eventManager->GenerateEvent(EVENT_ENUM::GIVE_RESOURCES, EVENT_ENUM::NULL_EVENT);
 	}
 
+
+	if (GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY_GIGA, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_2) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY_NIGHT, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_3) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY_RANGED, EVENT_ENUM::NULL_EVENT);
+	}
+
+
+
 	if (GetKey(SDL_SCANCODE_KP_1) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BASE, EVENT_ENUM::NULL_EVENT);
