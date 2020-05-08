@@ -466,7 +466,7 @@ bool Enemy::CheckAttackRange()
 	fMPoint objPosW = shortTermObjective->GetPosition();
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size()  <= attackRange + shortTermObjective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size()  < attackRange + shortTermObjective->GetRadiusSize())
 	{
 		return true;
 
