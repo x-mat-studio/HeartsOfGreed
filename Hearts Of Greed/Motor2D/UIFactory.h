@@ -86,7 +86,6 @@ public:
 	// Hover menu creation functions
 
 	UI_Group* CreateBasicInGameUI();
-	UI_Group* CreateDataPageComponents();
 	UI_Group* CreatePauseMenu();
 	UI_Group* CreateOnHoverReviveMenu(Button* button);
 	UI_Group* CreateOnHoverBuyTurretMenu();

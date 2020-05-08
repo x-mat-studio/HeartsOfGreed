@@ -220,16 +220,6 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 }
 
 
-UI_Group* UIFactory::CreateDataPageComponents()
-{
-	UI_Group* group = new UI_Group(GROUP_TAG::DATA_PAGE);
-
-	UI* background;
-
-	return group;
-}
-
-
 UI_Group* UIFactory::CreatePauseMenu()
 {
 	float x((app->win->width * 0.5 / app->win->GetUIScale()) - (pauseMenuBackground.w * 0.5));
