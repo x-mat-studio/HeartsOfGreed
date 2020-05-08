@@ -111,6 +111,9 @@ private:
 
 	HeroesPortraitManager* portraitManager;
 
+	int hoverSound;
+	int clickSound;
+
 	bool isMenuOn;
 };
 

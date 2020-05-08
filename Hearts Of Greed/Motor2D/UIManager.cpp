@@ -34,7 +34,9 @@ ModuleUIManager::ModuleUIManager() :
 	hoverElement(nullptr),
 	dragElement(nullptr),
 	isMenuOn(false),
-	factory(nullptr)
+	factory(nullptr),
+	clickSound(-1),
+	hoverSound(-1)
 {
 	name.create("UIManager");
 }
@@ -44,6 +46,9 @@ ModuleUIManager::ModuleUIManager() :
 ModuleUIManager::~ModuleUIManager()
 {
 	delete factory;
+
+	app->tex->UnLoad(atlas);
+	atlas = nullptr;
 
 	UnregisterEvents();
 
@@ -94,6 +99,9 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	factory = new UIFactory();
+
+	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
+	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
 
 	return ret;
 }
@@ -625,6 +633,9 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		assert(true); //you forgot to add the case of the button tag :D
 		break;
 	}
+
+	app->audio->PlayFx(app->uiManager->clickSound, 0, -1);
+
 }
 
 
@@ -710,6 +721,9 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	}
+
+	app->audio->PlayFx(app->uiManager->hoverSound, 0, -1);
+
 }
 
 HeroesPortraitManager* ModuleUIManager::GetPortraitManager()
