@@ -146,24 +146,20 @@ void Particle::SetAngularSpeed(float aspd)
 }
 
 
-bool Particle::Update(float dt)
+void Particle::Update(float dt)
 {
 	if (active)
 	{
 		Move(dt);
 		CheckLife(dt);
 	}
-
-	return true;
 }
 
 
-bool Particle::PostUpdate(float dt)
+void Particle::PostUpdate(float dt)
 {
 	if (active)
 		Draw(dt);
-
-	return true;
 }
 
 

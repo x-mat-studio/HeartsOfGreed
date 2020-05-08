@@ -3,15 +3,14 @@
 
 #include "vector"
 #include "Animation.h"
-#include "Entity.h"
 
 struct SDL_Texture;
 
-class Particle : public Entity
+class Particle
 {
 public:
 	Particle();
-	Particle(float life, SDL_Texture* texture, Animation animation, bool fade = false); //The emiter uses this constructor
+	Particle(float life, SDL_Texture* texture, Animation animation, bool fade = false); //The Emitter uses this constructor
 	Particle(fMPoint& position, fMPoint& speed, fMPoint& acceleration, float angle, float angularSpeed, float life, SDL_Texture* texture, Animation animation, bool fade = false);
 	Particle(float positionX, float positionY, float speedX, float speedY, float accelerationX, float accelerationY, float angle, float angularSpeed, float life, SDL_Texture* texture, Animation animation, bool fade = false);
 	~Particle();
@@ -35,8 +34,8 @@ public:
 	void SetAngularSpeed(float);
 
 	//the actual useful functions
-	bool Update(float dt);
-	bool PostUpdate(float dt);
+	void Update(float dt);
+	void PostUpdate(float dt);
 
 	bool Activate();
 	void Reset(float x, float y, float speedX, float speedY, float accX, float accY, float angularSpeed);
