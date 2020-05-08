@@ -646,7 +646,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	case ENTITY_TYPE::PARTICLE:
 		break;
 
-	case ENTITY_TYPE::EMITER:
+	case ENTITY_TYPE::Emitter:
 		break;
 
 	case ENTITY_TYPE::PARTICLE_SYSTEM:
@@ -2619,7 +2619,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			break;
 
 
-		case ENTITY_TYPE::EMITER:
+		case ENTITY_TYPE::Emitter:
 			break;
 
 
