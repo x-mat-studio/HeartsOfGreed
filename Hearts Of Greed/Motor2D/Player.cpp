@@ -928,3 +928,23 @@ bool ModulePlayer::SetMenuState(bool menuState)
 
 	return UIMenuOn;
 }
+
+
+bool ModulePlayer::Load(pugi::xml_node& data)
+{
+	pugi::xml_node iterator = data.first_child();
+
+	resources = iterator.attribute("cristals").as_int();
+
+	return true;
+}
+
+
+bool ModulePlayer::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node iterator = data.append_child("resources");
+
+	iterator.append_attribute("cristals") = resources;
+
+	return true;
+}

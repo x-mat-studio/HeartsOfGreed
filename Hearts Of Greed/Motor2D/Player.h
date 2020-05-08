@@ -51,6 +51,9 @@ public:
 
 	bool SetMenuState(bool menuState);
 
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
+
 private:
 	
 	bool HandleInput();
