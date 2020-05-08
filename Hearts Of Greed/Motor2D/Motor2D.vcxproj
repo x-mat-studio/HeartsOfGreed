@@ -89,6 +89,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DataPages.cpp" />
     <ClCompile Include="DynamicEntity.cpp" />
+    <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -114,6 +115,8 @@
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="FadeToBlack.cpp" />
     <ClCompile Include="NightEnemy.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quest.cpp" />
@@ -154,6 +157,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DataPages.h" />
     <ClInclude Include="DynamicEntity.h" />
+    <ClInclude Include="Emitter.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
@@ -178,6 +182,8 @@
     <ClInclude Include="FadeToBlack.h" />
     <ClInclude Include="Minimap.h" />
     <ClInclude Include="NightEnemy.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quest.h" />
