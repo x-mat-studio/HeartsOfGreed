@@ -33,6 +33,9 @@
 #include "Base.h"
 #include "Turret.h"
 
+#include "ParticleSystem.h"
+#include "Emitter.h"
+
 #include "p2SString.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
@@ -218,6 +221,16 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	buildingsdoc.reset();
 
+	//ParticleSystems and emitters
+	filename = config.child("load").attribute("docnameParticleSystems").as_string();
+	pugi::xml_document particleSystemsdoc;
+	particleSystemsdoc.load_file(filename.GetString());
+	pugi::xml_node particleSystem = particleSystemsdoc.child("particle_systems");
+
+	LoadSampleParticleSystemsAndEmitters(particleSystem);
+
+	particleSystemsdoc.reset();
+
 	//Generate Areas------------------------------------
 	filename = config.child("load").attribute("docnameSkillAreas").as_string();
 	pugi::xml_document skillAreassdoc;
@@ -342,6 +355,7 @@ bool ModuleEntityManager::Start()
 	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
 	moveHero = app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
 
+	//Load textures of the emmiters and push them to their particle systems
 
 	return ret;
 }
@@ -379,8 +393,6 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			switch (entityVector[i]->GetType())
 			{
-			case ENTITY_TYPE::PARTICLE:
-				break;
 
 			case ENTITY_TYPE::HERO_MELEE:
 				entityVector[i]->Start(armorMaleTexture);
@@ -643,13 +655,9 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		ret = new Spawner({ (float)x,(float)y }, sampleSpawner);
 		app->ai->PushSpawner((Spawner*)ret);
 		break;
-	case ENTITY_TYPE::PARTICLE:
-		break;
-
-	case ENTITY_TYPE::Emitter:
-		break;
 
 	case ENTITY_TYPE::PARTICLE_SYSTEM:
+		assert("Not here, call add particle system");
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
@@ -738,6 +746,28 @@ Entity* ModuleEntityManager::AddDecorativeBuilding(BUILDING_DECOR decor, int x, 
 		break;
 
 	default:
+		break;
+	}
+
+	if (ret != nullptr)
+	{
+		entityVector.push_back(ret);
+	}
+
+	return ret;
+}
+
+
+Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y)
+{
+	Entity* ret = nullptr;
+
+	switch (type)
+	{
+	
+
+	default:
+		ret = new ParticleSystem();
 		break;
 	}
 
@@ -2296,6 +2326,18 @@ bool ModuleEntityManager::LoadSampleBase(pugi::xml_node& baseNode)
 }
 
 
+bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode)
+{
+	bool ret = true;
+
+	sampleParticleSystem = new ParticleSystem();
+	//Code to fill
+
+	return ret;
+}
+
+
+
 bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
 {
 	bool ret = true;
@@ -2612,14 +2654,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 		switch (entityVector[i]->GetType())
 		{
 		case ENTITY_TYPE::UNKNOWN:
-			break;
-
-
-		case ENTITY_TYPE::PARTICLE:
-			break;
-
-
-		case ENTITY_TYPE::Emitter:
 			break;
 
 
