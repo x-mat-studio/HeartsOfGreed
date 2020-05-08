@@ -45,6 +45,7 @@ public:
 
 	// Button creation functions
 
+	UI* CreateContinueGameButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateNewGameButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateOptionsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateFullscreenButton(float x, float y, UI* parent, UI_Group* group);

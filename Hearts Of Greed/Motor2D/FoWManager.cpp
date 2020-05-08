@@ -105,7 +105,7 @@ bool ModuleFoWManager::PreUpdate(float dt)
 	//deletes all the entities that request to do so
 	for (int i = 0; i < fowEntities.size(); i++)
 	{
-		if (fowEntities[i]->deleteEntity)
+		if (fowEntities[i]->deleteEntity==true)
 		{
 			delete fowEntities[i];
 			fowEntities[i] = nullptr;

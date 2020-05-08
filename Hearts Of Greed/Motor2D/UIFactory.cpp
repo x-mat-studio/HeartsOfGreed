@@ -99,17 +99,15 @@ UI_Group* UIFactory::CreateMainMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::MAIN_MENU);
 
-	//CreateContinueGameButton(x, y, nullptr, group);
+	CreateNewGameButton(x, y, nullptr, group);
 
-	CreateNewGameButton(x, y + 40, nullptr, group);
+	CreateContinueGameButton(x, y + 40, nullptr, group);
 
 	CreateOptionsButton(x, y + 80, nullptr, group);
 
 	CreateCreditsButton(x, y + 120, nullptr, group);
 
 	CreateExitGameButton(x, y + 160, nullptr, group);
-
-	//CreateText(x + 5, y + 5, nullptr, "C O N T I N U E    G A M E", group);
 	
 	return group;
 }
@@ -280,9 +278,9 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 		break;
 	}
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-500", group);
+	CreateText(25, 20, background, "-500", group);
 
 	return group;
 }
@@ -298,9 +296,9 @@ UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 
 	CreateText(5, 0, background, "Buy turret:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-120", group);
+	CreateText(25, 20, background, "-120", group);
 
 	return group;
 }
@@ -316,9 +314,9 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 
 	CreateText(5, 0, background, "Upgrade turret:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-200", group);
+	CreateText(25, 20, background, "-200", group);
 
 	return group;
 }
@@ -334,9 +332,9 @@ UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 
 	CreateText(5, 0, background, "Buy barricade:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-100", group);
+	CreateText(25, 20, background, "-100", group);
 
 	return group;
 }
@@ -352,9 +350,9 @@ UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu()
 
 	CreateText(5, 0, background, "Upgrade barricade:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-150", group);
+	CreateText(25, 20, background, "-150", group);
 
 	return group;
 }
@@ -370,9 +368,9 @@ UI_Group* UIFactory::CreateOnHoverGathererLifeUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade gatherer HP:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -388,9 +386,9 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade gatherer damage:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -406,9 +404,9 @@ UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade melee HP:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -424,9 +422,9 @@ UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade melee damage:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -442,9 +440,9 @@ UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
 
 	CreateText(5, 0, background, "Upgrade ranged HP:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -460,9 +458,9 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade ranged damage:", group);
 
-	CreateImage(5, 20, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 15, background, "-25", group);
+	CreateText(25, 20, background, "-25", group);
 
 	return group;
 }
@@ -474,6 +472,14 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade gatherer passive:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+
 	return group;
 }
 
@@ -484,6 +490,14 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade grenade:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -493,6 +507,14 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade melee passive:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
 
 	return group;
 }
@@ -504,6 +526,14 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade hammer crush:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -514,6 +544,14 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade ranged passive:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -524,6 +562,14 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade :", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-100", group);
+	
 	return group;
 }
 
@@ -559,6 +605,7 @@ UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* gr
 	return uiText;
 }
 
+
 UI* UIFactory::CreateNonGroupText(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, char* text, bool interactable)
 {
 	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
@@ -568,6 +615,7 @@ UI* UIFactory::CreateNonGroupText(float x, float y, UI* parent, std::vector<UI*>
 	return uiText;
 }
 
+
 UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group)
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEW_GAME);
@@ -575,6 +623,18 @@ UI* UIFactory::CreateNewGameButton(float x, float y, UI* parent, UI_Group* group
 	group->AddUiElement(button);
 
 	CreateText(55, 5, button, "N E W  G A M E", group);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateContinueGameButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, menuButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CONTINUE_GAME);
+
+	group->AddUiElement(button);
+
+	CreateText(25, 5, button, "C O N T I N U E    G A M E", group);
 
 	return button;
 }

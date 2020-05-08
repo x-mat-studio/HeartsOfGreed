@@ -14,6 +14,7 @@
 #include "Input.h"
 #include "Player.h"
 #include "EntityManager.h"
+#include "MainMenuScene.h"
 #include "TestScene.h"
 #include "EventManager.h"
 #include "Textures.h"
@@ -34,7 +35,9 @@ ModuleUIManager::ModuleUIManager() :
 	hoverElement(nullptr),
 	dragElement(nullptr),
 	isMenuOn(false),
-	factory(nullptr)
+	factory(nullptr),
+	clickSound(-1),
+	hoverSound(-1)
 {
 	name.create("UIManager");
 }
@@ -44,6 +47,9 @@ ModuleUIManager::ModuleUIManager() :
 ModuleUIManager::~ModuleUIManager()
 {
 	delete factory;
+
+	app->tex->UnLoad(atlas);
+	atlas = nullptr;
 
 	UnregisterEvents();
 
@@ -82,7 +88,6 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
-	
 
 	return ret;
 }
@@ -94,6 +99,11 @@ bool ModuleUIManager::Start()
 	bool ret = true;
 
 	factory = new UIFactory();
+
+	LoadAtlas();
+
+	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
+	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
 
 	return ret;
 }
@@ -478,6 +488,8 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::CONTINUE_GAME:
+		app->testScene->startFromLoad = true;
+		app->fadeToBlack->FadeToBlack(app->mainMenu, app->testScene, 3);
 		break;
 
 	case BUTTON_TAG::OPTIONS:
@@ -625,6 +637,9 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		assert(true); //you forgot to add the case of the button tag :D
 		break;
 	}
+
+	PlayClickSound();
+
 }
 
 
@@ -710,6 +725,9 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	}
+
+	PlayHoverSound();
+
 }
 
 HeroesPortraitManager* ModuleUIManager::GetPortraitManager()
@@ -765,6 +783,18 @@ void ModuleUIManager::CheckFocusedUI()
 			hoverElement = nullptr;
 		}
 	}
+}
+
+
+void ModuleUIManager::PlayHoverSound()
+{
+	app->audio->PlayFx(hoverSound, 0, -1);
+}
+
+
+void ModuleUIManager::PlayClickSound()
+{
+	app->audio->PlayFx(clickSound, 0, -1);
 }
 
 

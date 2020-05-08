@@ -75,7 +75,7 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	radiusSize = 5;
 
 	//FoW Related
-	if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+	if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
 	{
 		visionEntity = app->fowManager->CreateFoWEntity(position, true, 15,5);//TODO that 15 needs to be passed as a parameter
 	}

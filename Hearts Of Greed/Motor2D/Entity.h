@@ -21,7 +21,7 @@ enum class ENTITY_TYPE : int
 	UNKNOWN = -1,
 
 	PARTICLE,
-	EMITER,
+	Emitter,
 	PARTICLE_SYSTEM,
 
 	SPAWNER,
