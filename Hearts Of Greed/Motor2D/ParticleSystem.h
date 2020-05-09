@@ -19,7 +19,7 @@ class ParticleSystem : public Entity
 {
 public:
 	ParticleSystem();
-	ParticleSystem(float x, float y);
+	ParticleSystem(float x, float y, ParticleSystem* copy, bool active);
 
 	~ParticleSystem();
 
