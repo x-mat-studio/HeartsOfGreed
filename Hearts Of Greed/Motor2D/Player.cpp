@@ -518,10 +518,6 @@ bool ModulePlayer::BuildClick()
 		y = mousePos.y;
 	}
 
-	SDL_Rect rect = app->entityManager->GetSample(buildingToBuild)->GetCollider()->rect;
-
-	x -= rect.w * 0.5f;
-	y -= rect.h;
 
 	if (baseInBuild != nullptr)
 	{
