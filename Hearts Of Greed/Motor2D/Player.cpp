@@ -92,6 +92,7 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_GATHERER, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
 	return true;
 }
@@ -119,7 +120,7 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_GATHERER, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
-
+	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
 	constrAreaInfo = nullptr;
 	constrArea.clear();
@@ -741,6 +742,25 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 		heroesVector.push_back(hero);
 		break;
+
+
+	case EVENT_ENUM::FOCUS_HERO_ROBO:
+
+		numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->selectedByPlayer = false;
+		}
+
+		heroesVector.clear();
+
+		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_ROBO);
+		hero->selectedByPlayer = true;
+
+		heroesVector.push_back(hero);
+		break;
+		
 	}
 
 
