@@ -31,11 +31,12 @@ public:
 
 private:
 
-	void Die();
+	void RemoveFromOngoing();
 
 private:
 
 	int id;
+	//int queuePos;
 	QUEST_STATE myState;
 
 	
