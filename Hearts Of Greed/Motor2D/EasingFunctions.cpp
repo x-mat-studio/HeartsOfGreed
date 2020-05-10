@@ -294,7 +294,7 @@ float Easing::UpdateEasingFromNewTime(float newCurrentTime)
 float Easing::UpdateEasingAddingTime(float addTimeToCurrent)
 {
 	float ret;
-	currentTime += abs(addTimeToCurrent);
+	currentTime += abs(int(addTimeToCurrent));
 
 	currentTime = MAX(currentTime, 0.0f);
 	currentTime = MIN(currentTime, duration);
