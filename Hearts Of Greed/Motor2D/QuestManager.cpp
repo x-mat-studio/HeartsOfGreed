@@ -68,12 +68,18 @@ bool ModuleQuestManager::CleanUp()
 
 	app->tex->UnLoad(questMarker);		questMarker = nullptr;
 	
-	//for (std::vector<Quest*>::iterator it = ongoing.begin(); it != ongoing.end(); it++)
-	//	ongoing.erase(it);
+	for (std::unordered_map <int, Quest*>::iterator it = ongoing.begin(); it != ongoing.end(); it++) {
+		
+		ongoing.erase(it);
+	}
 
-	//for (std::vector<Quest*>::iterator it = finished.begin(); it != finished.end(); it++)
-	//	finished.erase(it);
+	for (std::unordered_map <int, Quest*>::iterator it = finished.begin(); it != finished.end(); it++) {
+		
+		finished.erase(it);
+	}
 	
+	//Quests are entities. We delete them at entity manager, not here.
+
 	return ret;
 }
 
@@ -101,6 +107,7 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FINISH_QUEST:
 
 		app->audio->PlayFx(questSfx, 0, -1);
+
 		app->player->AddResources(400);
 
 		break;
