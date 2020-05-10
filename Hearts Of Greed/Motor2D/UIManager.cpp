@@ -677,9 +677,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::ROBO_PORTRAIT:
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
+		break;
 
 	default:
-		assert(true); //you forgot to add the case of the button tag :D
+		assert("you forgot to add the case of the button tag :D"); 
 		break;
 	}
 

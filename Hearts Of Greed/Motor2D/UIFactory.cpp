@@ -1236,9 +1236,18 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		break;
 
+	case ENTITY_TYPE::HERO_ROBO: //TODO: add ui art
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(7, 3, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		portrait->AddElement(icon);
+
+		break;
+
 
 	default:
-		assert(true); //shouldt have anything that is not a hero
+		assert("shouldt have anything that is not a hero");
 		break;
 	}
 

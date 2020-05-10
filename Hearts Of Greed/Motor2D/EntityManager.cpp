@@ -1467,6 +1467,41 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_RESURRECT:
 
 		break;
+
+	case EVENT_ENUM::GATHERER_LIFE_UPGRADE: 	
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * 1.1f));
+				break;
+			}
+		}
+
+		break;
+	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * 1.1f));
+				break;
+			}
+		}
+
+		break;
+	case EVENT_ENUM::MELEE_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * 1.1f));
+				break;
+			}
+		}
+
+		break;
+
 	}
 
 }
@@ -1532,16 +1567,9 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 
 void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 {
-	SDL_Rect rect;
-
 	switch (type)
 	{
 	case ENTITY_TYPE::BUILDING:
-
-		SDL_QueryTexture(sampleBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
-
-		x -= rect.w / 2;
-		y -= rect.h / 2;
 
 		sampleBuilding->ActivateTransparency();
 		sampleBuilding->SetPosition(x, y);
@@ -1551,16 +1579,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 	case ENTITY_TYPE::BLDG_TURRET:
 
-		rect = sampleTurret->GetCollider()->rect;
-
-		x -= rect.w * 0.5f;
-		y -= rect.h;
-
 		sampleTurret->ActivateTransparency();
 		sampleTurret->SetPosition(x, y);
 		sampleTurret->Draw(0.0000001);
-
-
 		break;
 
 
@@ -1569,11 +1590,6 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_BASE:
-
-		SDL_QueryTexture(sampleBase->GetTexture(), NULL, NULL, &rect.w, &rect.h);
-
-		x -= rect.w / 2;
-		y -= rect.h / 2;
 
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);

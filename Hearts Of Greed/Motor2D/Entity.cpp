@@ -260,6 +260,29 @@ void Entity::SetPosition(int x, int y)
 	position.y = y;
 }
 
+int Entity::GetMaxHP() const
+{
+	return hitPointsMax;
+}
+
+void Entity::SetMaxHP(int newMaxHp)
+{
+	hitPointsMax = newMaxHp;
+}
+
+int Entity::GetCurrentHP() const
+{
+	return hitPointsCurrent;
+}
+
+void Entity::SetCurrentHP(int newcurrHp)
+{
+	hitPointsCurrent = newcurrHp;
+
+	if (hitPointsCurrent > hitPointsMax)
+		hitPointsCurrent = 0;
+}
+
 
 void Entity::SetTexture(SDL_Texture* tex)
 {
