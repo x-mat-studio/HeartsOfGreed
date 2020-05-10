@@ -1343,8 +1343,6 @@ void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* d
 	CreateBuyBarricadeButton(68, 50, dataPage, dataPagesVector);
 
 	CreateUpgradeBarricadeButton(108, 50, dataPage, dataPagesVector);
-
-
 }
 
 
@@ -1358,6 +1356,7 @@ void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 
 
+ 
 UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* group)
 {
 	UI* element = new HeroesPortraitManager(x, y, nullptr, false);

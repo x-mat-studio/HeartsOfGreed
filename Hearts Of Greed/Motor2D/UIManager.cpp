@@ -21,12 +21,14 @@
 #include "FadeToBlack.h"
 
 #include "Minimap.h"
+
+
 #include "Base.h"
-
-
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() :
+
+	Module(),
 
 	mouseOverUI(false),
 	atlas(nullptr),

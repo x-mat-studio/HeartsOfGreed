@@ -115,6 +115,7 @@
     <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="FadeToBlack.cpp" />
+    <ClCompile Include="DialogManager.cpp" />
     <ClCompile Include="NightEnemy.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="MeleeHero.h" />
     <ClInclude Include="FadeToBlack.h" />
     <ClInclude Include="Minimap.h" />
+    <ClInclude Include="DialogManager.h" />
     <ClInclude Include="NightEnemy.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />

@@ -193,6 +193,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
     </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
     <ClCompile Include="EasingFunctions.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -410,6 +413,9 @@
     </ClInclude>
     <ClInclude Include="EasingFunctions.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

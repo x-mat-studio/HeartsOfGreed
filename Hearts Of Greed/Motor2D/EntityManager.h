@@ -64,7 +64,7 @@ class ModuleEntityManager : public Module
 public:
 
 	ModuleEntityManager();
-	virtual ~ModuleEntityManager();
+	~ModuleEntityManager();
 
 
 	bool Awake(pugi::xml_node&);
