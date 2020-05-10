@@ -214,16 +214,28 @@ public:
 
 	float gathererLifeUpgradeCost;
 	float gathererDamageUpgradeCost;
+	float gathererManaUpgradeCost;
+	float gathererSpeedUpgradeCost;
 	float gathererLifeUpgradeValue;
 	float gathererDamageUpgradeValue;
+	float gathererManaUpgradeValue;
+	float gathererSpeedUpgradeValue;
 
 	float meleeLifeUpgradeCost;
 	float meleeDamageUpgradeCost;
+	float meleeManaUpgradeCost;
+	float meleeSpeedUpgradeCost;
 	float meleeLifeUpgradeValue;
 	float meleeDamageUpgradeValue;
+	float meleeManaUpgradeValue;
+	float meleeSpeedUpgradeValue;
 
 	float rangedLifeUpgradeCost;
 	float rangedDamageUpgradeCost;
+	float rangedLifeUpgradeCost;
+	float rangedDamageUpgradeCost;
+	float rangedLifeUpgradeValue;
+	float rangedDamageUpgradeValue;
 	float rangedLifeUpgradeValue;
 	float rangedDamageUpgradeValue;
 };

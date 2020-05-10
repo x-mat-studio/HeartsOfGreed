@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
+#include "UIFactory.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -1473,7 +1474,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * 1.1f));
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->gathererLifeUpgradeValue));
 				break;
 			}
 		}
@@ -1484,7 +1485,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * 1.1f));
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->rangedLifeUpgradeValue));
 				break;
 			}
 		}
@@ -1495,7 +1496,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * 1.1f));
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->meleeLifeUpgradeValue));
 				break;
 			}
 		}
