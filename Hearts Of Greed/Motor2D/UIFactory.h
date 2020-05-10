@@ -75,6 +75,8 @@ public:
 
 	UI* CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
 	UI* CreateDamageUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
+	UI* CreateEnergyUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
+	UI* CreateAttackSpeedUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag);
 
 	UI* CreateGathererPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateGathererActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
@@ -204,6 +206,8 @@ private:
 
 	SDL_Rect lifeUpgradeButton;
 	SDL_Rect damageUpgradeButton;
+	SDL_Rect energyUpgradeButton;
+	SDL_Rect attackSpeedUpgradeButton;
 
 	SDL_Rect gathererPassive1Button;
 	SDL_Rect meleePassive1Button;
