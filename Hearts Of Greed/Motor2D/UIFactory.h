@@ -94,10 +94,16 @@ public:
 	UI_Group* CreateOnHoverUpgradeBarricadeMenu();
 	UI_Group* CreateOnHoverGathererLifeUpgradeMenu();
 	UI_Group* CreateOnHoverGathererDamageUpgradeMenu();
+	UI_Group* CreateOnHoverGathererEnergyUpgradeMenu();
+	UI_Group* CreateOnHoverGathererAttackSpeedUpgradeMenu();
 	UI_Group* CreateOnHoverMeleeLifeUpgradeMenu();
 	UI_Group* CreateOnHoverMeleeDamageUpgradeMenu();
+	UI_Group* CreateOnHoverMeleeEnergyUpgradeMenu();
+	UI_Group* CreateOnHoverMeleeAttackSpeedUpgradeMenu();
 	UI_Group* CreateOnHoverRangedLifeMenuMenu();
 	UI_Group* CreateOnHoverRangedDamageUpgradeMenu();
+	UI_Group* CreateOnHoverRangedEnergyUpgradeMenu();
+	UI_Group* CreateOnHoverRangedAttackSpeedUpgradeMenu();
 	UI_Group* CreateOnHoverGathererPassive1Menu();
 	UI_Group* CreateOnHoverGathererActive1Menu();
 	UI_Group* CreateOnHoverMeleePassive1Menu();
@@ -210,6 +216,34 @@ private:
 	SDL_Rect reviveHoverBackground;
 	SDL_Rect upgradeHoverBackground;
 
+public:
+
+	float gathererLifeUpgradeCost;
+	float gathererDamageUpgradeCost;
+	float gathererEnergyUpgradeCost;
+	float gathererAtkSpeedUpgradeCost;
+	float gathererLifeUpgradeValue;
+	float gathererDamageUpgradeValue;
+	float gathererEnergyUpgradeValue;
+	float gathererAtkSpeedUpgradeValue;
+
+	float meleeLifeUpgradeCost;
+	float meleeDamageUpgradeCost;
+	float meleeEnergyUpgradeCost;
+	float meleeAtkSpeedUpgradeCost;
+	float meleeLifeUpgradeValue;
+	float meleeDamageUpgradeValue;
+	float meleeEnergyUpgradeValue;
+	float meleeAtkSpeedUpgradeValue;
+
+	float rangedLifeUpgradeCost;
+	float rangedDamageUpgradeCost;
+	float rangedEnergyUpgradeCost;
+	float rangedAtkSpeedUpgradeCost;
+	float rangedLifeUpgradeValue;
+	float rangedDamageUpgradeValue;
+	float rangedEnergyUpgradeValue;
+	float rangedAtkSpeedUpgradeValue;
 };
 
 #endif __UIFACTORY_H__

@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
+#include "UIFactory.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -1467,6 +1468,41 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_RESURRECT:
 
 		break;
+
+	case EVENT_ENUM::GATHERER_LIFE_UPGRADE: 	
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->gathererLifeUpgradeValue));
+				break;
+			}
+		}
+
+		break;
+	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->rangedLifeUpgradeValue));
+				break;
+			}
+		}
+
+		break;
+	case EVENT_ENUM::MELEE_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->meleeLifeUpgradeValue));
+				break;
+			}
+		}
+
+		break;
+
 	}
 
 }
