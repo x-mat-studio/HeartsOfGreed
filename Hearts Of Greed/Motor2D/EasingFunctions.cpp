@@ -1,7 +1,7 @@
 #include "EasingFunctions.h"
+#include "p2Defs.h"
 #include <math.h>
 
-#define PI 3.14159265359
 
 float EaseFunctions::Ease(float& currentTime, float& initialPos, float& finalPos, float& duration)
 {
@@ -201,4 +201,211 @@ float EaseFunctions::EaseOutElastic(float& currentTime, float& initialPos, float
 		return (finalPos * pow(2, -10 * currentTime) * sin((currentTime * duration - ((duration * 0.3) / 4)) * (2 * 3.14) / (duration * 0.3)) + finalPos + initialPos);
 	}
 
+}
+
+
+Easing::Easing() :initialPos(0.0f), finalPos(0.0f), currentTime(0.0f), duration(0.0f), lastRequestedPos(0.0f), type(EASING_TYPE::NONE), active(false)
+{
+}
+
+
+Easing::Easing(EASING_TYPE type, float initialPos, float finalPos, float duration, float currentTime) : lastRequestedPos(initialPos)
+{
+	NewEasing(type, initialPos, finalPos, duration, currentTime);
+}
+
+
+Easing::~Easing()
+{
+	type = EASING_TYPE::NONE;
+	initialPos = 0.0f;
+	finalPos = 0.0f;
+	duration = 0.0f;
+	currentTime = 0.0f;
+	lastRequestedPos = 0.0f;
+	active = false;
+}
+
+
+void Easing::NewEasing(EASING_TYPE ntype, float ninitialPos, float nfinalPos, float nduration, float ncurrentTime)
+{
+	type = ntype;
+	if (type == EASING_TYPE::NONE) type = EASING_TYPE::EASE;
+	initialPos = ninitialPos;
+	finalPos = nfinalPos;
+	duration = MAX(nduration, 0.0f);
+
+	currentTime = MAX(ncurrentTime, 0.0f);
+	currentTime = MIN(currentTime, duration);
+
+	lastRequestedPos = initialPos;
+
+	active = true;
+}
+
+
+bool Easing::IsActive() const
+{
+	return active;
+}
+
+
+void Easing::Activate()
+{
+	active = true;
+}
+
+void Easing::Deactivate()
+{
+	active = false;
+}
+
+
+void Easing::ChangeActiveState(bool isActive)
+{
+	active = isActive;
+}
+
+
+EASING_TYPE Easing::GetType() const
+{
+	return type;
+}
+
+
+float Easing::UpdateEasingFromNewTime(float newCurrentTime)
+{
+	float ret;
+
+	currentTime = MAX(newCurrentTime, 0.0f);
+	currentTime = MIN(currentTime, duration);
+
+	ret= ExecuteFunctionFromType(type, currentTime, initialPos, finalPos, duration);
+	
+	if (currentTime == duration)
+	{
+		active = false;
+	}
+
+	return ret;
+}
+
+
+float Easing::UpdateEasingAddingTime(float addTimeToCurrent)
+{
+	float ret;
+	currentTime += abs(addTimeToCurrent);
+
+	currentTime = MAX(currentTime, 0.0f);
+	currentTime = MIN(currentTime, duration);
+
+	ret=ExecuteFunctionFromType(type, currentTime, initialPos, finalPos, duration);
+	
+	if (currentTime == duration)
+	{
+		active = false;
+	}
+	
+	return ret;
+}
+
+
+float Easing::GetLastRequestedPos() const
+{
+	return lastRequestedPos;
+}
+
+
+float Easing::ExecuteFunctionFromType(EASING_TYPE type, float& currentTime, float& initialPos, float& finalPos, float& duration)
+{
+	switch (type)
+	{
+	case EASING_TYPE::EASE:
+		lastRequestedPos = functions.Ease(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_QUAD:
+		lastRequestedPos = functions.EaseInQuad(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_QUAD:
+		lastRequestedPos = functions.EaseOutQuad(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_QUAD:
+		lastRequestedPos = functions.EaseInOutQuad(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_CUBIC:
+		lastRequestedPos = functions.EaseInCubic(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_CUBIC:
+		lastRequestedPos = functions.EaseOutCubic(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_CUBIC:
+		lastRequestedPos = functions.EaseInOutCubic(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_QUART:
+		lastRequestedPos = functions.EaseInQuart(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_QUART:
+		lastRequestedPos = functions.EaseOutQuart(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_QUART:
+		lastRequestedPos = functions.EaseInOutQuart(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_QUINT:
+		lastRequestedPos = functions.EaseInQuint(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_QUINT:
+		lastRequestedPos = functions.EaseOutQuint(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_QUINT:
+		lastRequestedPos = functions.EaseInOutQuint(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_SINE:
+		lastRequestedPos = functions.EaseInSine(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_SINE:
+		lastRequestedPos = functions.EaseOutSine(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_SINE:
+		lastRequestedPos = functions.EaseInOutSine(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_EXPO:
+		lastRequestedPos = functions.EaseInExpo(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_EXPO:
+		lastRequestedPos = functions.EaseOutExpo(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_EXPO:
+		lastRequestedPos = functions.EaseInOutExpo(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_CIRC:
+		lastRequestedPos = functions.EaseInCirc(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_CIRC:
+		lastRequestedPos = functions.EaseOutCirc(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_CIRC:
+		lastRequestedPos = functions.EaseInOutCirc(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_BOUNCE:
+		lastRequestedPos = functions.EaseOutBounce(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_BACK:
+		lastRequestedPos = functions.EaseInBack(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_BACK:
+		lastRequestedPos = functions.EaseOutBack(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_IN_OUT_BACK:
+		lastRequestedPos = functions.EaseInOutBack(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::EASE_OUT_ELASTIC:
+		lastRequestedPos = functions.EaseOutElastic(currentTime, initialPos, finalPos, duration);
+		break;
+	case EASING_TYPE::NONE:
+		break;
+	}
+
+	active = true;
+
+	return lastRequestedPos;
 }
