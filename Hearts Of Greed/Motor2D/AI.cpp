@@ -160,6 +160,7 @@ void ModuleAI::CommandSpawners()
 {
 	std::multimap<int, Spawner*> spawners;
 	FindNearestSpawners(&spawners);
+
 	int spawnersAbaliable = spawners.size();
 
 	int spawnersToActivate = CalculateSpawnersToActivate();

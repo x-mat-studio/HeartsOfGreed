@@ -6,13 +6,16 @@ ParticleSystem::ParticleSystem() :
 
 	Entity(fMPoint(0, 0), ENTITY_TYPE::PARTICLE_SYSTEM, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 0, 0),
 	
-	active(true)
+	active(false)
 {}
 
-ParticleSystem::ParticleSystem(float x, float y) :
+ParticleSystem::ParticleSystem(float x, float y, ParticleSystem* copy, bool active) :
 
 	Entity(fMPoint(x, y), ENTITY_TYPE::PARTICLE_SYSTEM, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 0, 0),
-	active(true)
+
+	emitterVector(copy->emitterVector),
+
+	active(active)
 {}
 
 ParticleSystem::~ParticleSystem()

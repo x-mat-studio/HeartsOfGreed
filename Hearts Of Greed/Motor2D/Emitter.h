@@ -31,6 +31,8 @@ public:
 	void Activate();
 	void Desactivate();
 
+	void SetTexture(SDL_Texture* tex);
+
 private:
 	void Start();
 	void CreateParticle();
@@ -47,6 +49,8 @@ private:
 	float GenerateAccelerationY();
 
 	float GenerateAngularSpeed();
+
+	void CheckTimeSinceStopped(float dt);
 
 private:
 	fMPoint position;
@@ -86,6 +90,9 @@ private:
 	bool fadeParticles;
 
 	bool active;
+
+	bool stopped;
+	float timeSinceStopped;
 };
 
 #endif //__EMITTER_H__
