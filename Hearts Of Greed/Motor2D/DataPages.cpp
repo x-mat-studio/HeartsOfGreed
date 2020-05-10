@@ -200,7 +200,7 @@ bool DataPages::PostUpdate(float dt)
 }
 
 
-bool DataPages::CheckData(int previous, int current)
+bool DataPages::CheckData(float previous, float current)
 {
 	if (previous == current)
 	{

@@ -76,7 +76,7 @@ template <class VALUE_TYPE> VALUE_TYPE  lerp(VALUE_TYPE& start, VALUE_TYPE& end,
 
 template <class VALUE_TYPE> VALUE_TYPE  Abs(VALUE_TYPE& start)
 {
-	if (start >= 0)
+	if (start >= 0.0f)
 		return start;
 	else
 		return -start;
