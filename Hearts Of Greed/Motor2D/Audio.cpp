@@ -202,6 +202,7 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel, LOUDNESS loud
 void ModuleAudio::SetVolume(float volume)
 {
 	float auxVolume = volume;
+
 	if (auxVolume > 128)auxVolume = 128;
 	if (auxVolume < 0)auxVolume = 0;
 
