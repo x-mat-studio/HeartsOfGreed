@@ -193,6 +193,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
     </ClCompile>
+    <ClCompile Include="EasingFunctions.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -405,6 +408,9 @@
     <ClInclude Include="Particle.h">
       <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
     </ClInclude>
+    <ClInclude Include="EasingFunctions.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -470,6 +476,12 @@
     <Filter Include="Desenvolupament  ========\Entities\header files">
       <UniqueIdentifier>{cbdc8652-8c70-4841-bde0-e62fe4536b86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Enemies">
+      <UniqueIdentifier>{ef24dc2f-2b30-4a4e-bb05-bac8e5afb625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\ParticleSystem">
+      <UniqueIdentifier>{2a56a668-c908-482b-9d25-0822290fd17b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Desenvolupament  ========\Entities\Fog of War">
       <UniqueIdentifier>{53cbac33-f01a-48a1-a742-aee1c7a5dc85}</UniqueIdentifier>
     </Filter>
@@ -478,12 +490,6 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities\Fog of War\header files">
       <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Desenvolupament  ========\Entities\Enemies">
-      <UniqueIdentifier>{ef24dc2f-2b30-4a4e-bb05-bac8e5afb625}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Desenvolupament  ========\Entities\ParticleSystem">
-      <UniqueIdentifier>{2a56a668-c908-482b-9d25-0822290fd17b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
