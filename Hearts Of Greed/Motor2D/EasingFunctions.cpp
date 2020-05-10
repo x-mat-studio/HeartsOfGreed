@@ -273,6 +273,27 @@ EASING_TYPE Easing::GetType() const
 }
 
 
+float Easing::GetInitialPos() const
+{
+	return initialPos;
+}
+
+float Easing::GetFinalPos() const
+{
+	return finalPos;
+}
+
+float Easing::GetDuration() const
+{
+	return duration;
+}
+
+float Easing::GetCurrentTime() const
+{
+	return currentTime;
+}
+
+
 float Easing::UpdateEasingFromNewTime(float newCurrentTime)
 {
 	float ret;
