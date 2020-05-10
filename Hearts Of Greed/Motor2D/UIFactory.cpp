@@ -393,7 +393,7 @@ UI_Group* UIFactory::CreateOnHoverGathererLifeUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererLifeUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -416,7 +416,7 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererDamageUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -439,7 +439,7 @@ UI_Group* UIFactory::CreateOnHoverGathererEnergyUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -462,7 +462,7 @@ UI_Group* UIFactory::CreateOnHoverGathererAttackSpeedUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -485,7 +485,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", meleeLifeUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", meleeLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -508,7 +508,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", meleeDamageUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", meleeDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -531,7 +531,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeEnergyUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -554,7 +554,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeAttackSpeedUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -577,7 +577,7 @@ UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", rangedLifeUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", rangedLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -600,7 +600,7 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", rangedDamageUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", rangedDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -623,7 +623,7 @@ UI_Group* UIFactory::CreateOnHoverRangedEnergyUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -646,7 +646,7 @@ UI_Group* UIFactory::CreateOnHoverRangedAttackSpeedUpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
