@@ -309,6 +309,19 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
+
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
@@ -656,6 +669,19 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_RANGED, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
 
 	return true;
 }
@@ -1480,6 +1506,46 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 
 		break;
+
+	case EVENT_ENUM::GATHERER_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*) entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->gathererDamageUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::GATHERER_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->gathererEnergyUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->gathererAtkSpeedUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+	
 	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
@@ -1491,6 +1557,46 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 
 		break;
+
+	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->rangedDamageUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->rangedEnergyUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->rangedAtkSpeedUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
 	case EVENT_ENUM::MELEE_LIFE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
@@ -1502,6 +1608,46 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 
 		break;
+
+	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage()* app->uiManager->GetFactory()->meleeDamageUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints()* app->uiManager->GetFactory()->meleeEnergyUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed()* app->uiManager->GetFactory()->meleeAtkSpeedUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
 
 	}
 
