@@ -577,73 +577,61 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
 		AugmentValueByTenPercent(&factory->gathererLifeUpgradeCost);
-		AugmentValueByTenPercent(&factory->gathererLifeUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
 		AugmentValueByTenPercent(&factory->gathererDamageUpgradeCost);
-		AugmentValueByTenPercent(&factory->gathererDamageUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_ENERGY_UPGRADE:
 		AugmentValueByTenPercent(&factory->gathererEnergyUpgradeCost);
-		AugmentValueByTenPercent(&factory->gathererEnergyUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE:
 		AugmentValueByTenPercent(&factory->gathererAtkSpeedUpgradeCost);
-		AugmentValueByTenPercent(&factory->gathererAtkSpeedUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
 		AugmentValueByTenPercent(&factory->meleeLifeUpgradeCost);
-		AugmentValueByTenPercent(&factory->meleeLifeUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
 		AugmentValueByTenPercent(&factory->meleeDamageUpgradeCost);
-		AugmentValueByTenPercent(&factory->meleeDamageUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_ENERGY_UPGRADE:
 		AugmentValueByTenPercent(&factory->meleeEnergyUpgradeCost);
-		AugmentValueByTenPercent(&factory->meleeEnergyUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE:
 		AugmentValueByTenPercent(&factory->meleeAtkSpeedUpgradeCost);
-		AugmentValueByTenPercent(&factory->meleeAtkSpeedUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
 		AugmentValueByTenPercent(&factory->rangedLifeUpgradeCost);
-		AugmentValueByTenPercent(&factory->rangedLifeUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
 		AugmentValueByTenPercent(&factory->rangedDamageUpgradeCost);
-		AugmentValueByTenPercent(&factory->rangedDamageUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_ENERGY_UPGRADE:
 		AugmentValueByTenPercent(&factory->rangedEnergyUpgradeCost);
-		AugmentValueByTenPercent(&factory->rangedEnergyUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE:
 		AugmentValueByTenPercent(&factory->rangedAtkSpeedUpgradeCost);
-		AugmentValueByTenPercent(&factory->rangedAtkSpeedUpgradeValue);
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 

@@ -229,6 +229,20 @@ public:
 	SDL_Texture* base2TextureSelected;
 	SDL_Texture* base2TextureSelectedEnemy;
 
+	// Upgrades multipliers
+	float gathererLifeUpgradeValue;
+	float gathererDamageUpgradeValue;
+	float gathererEnergyUpgradeValue;
+	float gathererAtkSpeedUpgradeValue;
+	float meleeLifeUpgradeValue;
+	float meleeDamageUpgradeValue;
+	float meleeEnergyUpgradeValue;
+	float meleeAtkSpeedUpgradeValue;
+	float rangedLifeUpgradeValue;
+	float rangedDamageUpgradeValue;
+	float rangedEnergyUpgradeValue;
+	float rangedAtkSpeedUpgradeValue;
+
 private:
 
 	//The list where we will store all the entities
