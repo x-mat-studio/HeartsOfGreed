@@ -1122,8 +1122,6 @@ void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* d
 	CreateBuyBarricadeButton(68, 50, dataPage, dataPagesVector);
 
 	CreateUpgradeBarricadeButton(108, 50, dataPage, dataPagesVector);
-
-
 }
 
 
@@ -1132,8 +1130,6 @@ void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 
 }
-
-
 
 
  

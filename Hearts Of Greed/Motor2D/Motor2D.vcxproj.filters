@@ -193,6 +193,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
     </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -404,6 +407,9 @@
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
