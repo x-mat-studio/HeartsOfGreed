@@ -210,6 +210,22 @@ private:
 	SDL_Rect reviveHoverBackground;
 	SDL_Rect upgradeHoverBackground;
 
+public:
+
+	float gathererLifeUpgradeCost;
+	float gathererDamageUpgradeCost;
+	float gathererLifeUpgradeValue;
+	float gathererDamageUpgradeValue;
+
+	float meleeLifeUpgradeCost;
+	float meleeDamageUpgradeCost;
+	float meleeLifeUpgradeValue;
+	float meleeDamageUpgradeValue;
+
+	float rangedLifeUpgradeCost;
+	float rangedDamageUpgradeCost;
+	float rangedLifeUpgradeValue;
+	float rangedDamageUpgradeValue;
 };
 
 #endif __UIFACTORY_H__
