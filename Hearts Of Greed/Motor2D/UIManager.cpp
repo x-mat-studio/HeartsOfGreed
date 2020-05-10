@@ -799,6 +799,10 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
+	case BUTTON_TAG::NEXT_DIALOG:
+		//TODO, finish this
+		break;
+
 	default:
 		break;
 
