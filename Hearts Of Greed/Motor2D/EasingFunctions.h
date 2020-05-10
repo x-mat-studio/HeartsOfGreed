@@ -104,6 +104,10 @@ public:
 	void ChangeActiveState(bool isActive);
 
 	EASING_TYPE GetType()const;
+	float GetInitialPos()const;
+	float GetFinalPos()const;
+	float GetDuration()const;
+	float GetCurrentTime()const;
 
 	//outputs the current position based on an input time (it also changes the state to active if it isn't already)
 	float UpdateEasingFromNewTime(float newCurrentTime);
