@@ -86,18 +86,30 @@ UIFactory::UIFactory() :
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
+	gathererEnergyUpgradeCost(100),
+	gathererAtkSpeedUpgradeCost(100),
 	gathererLifeUpgradeValue(1),
 	gathererDamageUpgradeValue(1),
+	gathererEnergyUpgradeValue(1),
+	gathererAtkSpeedUpgradeValue(1),
 
 	meleeLifeUpgradeCost(100),
 	meleeDamageUpgradeCost(100),
+	meleeEnergyUpgradeCost(100),
+	meleeAtkSpeedUpgradeCost(100),
 	meleeLifeUpgradeValue(1),
 	meleeDamageUpgradeValue(1),
+	meleeEnergyUpgradeValue(1),
+	meleeAtkSpeedUpgradeValue(1),
 
 	rangedLifeUpgradeCost(100),
 	rangedDamageUpgradeCost(100),
+	rangedEnergyUpgradeCost(100),
+	rangedAtkSpeedUpgradeCost(100),
 	rangedLifeUpgradeValue(1),
-	rangedDamageUpgradeValue(1)
+	rangedDamageUpgradeValue(1),
+	rangedEnergyUpgradeValue(1),
+	rangedAtkSpeedUpgradeValue(1)
 {}
 
 
@@ -409,6 +421,52 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 }
 
 
+UI_Group* UIFactory::CreateOnHoverGathererEnergyUpgradeMenu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	sprintf_s(stats, 40, "Upgrade energy: +%.2f", gathererEnergyUpgradeValue);
+	strcat_s(stats, " %");
+	CreateText(5, 0, background, stats, group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	CreateText(25, 20, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverGathererAttackSpeedUpgradeMenu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", gathererAtkSpeedUpgradeValue);
+	strcat_s(stats, " %");
+	CreateText(5, 0, background, stats, group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	CreateText(25, 20, background, stats, group);
+
+	return group;
+}
+
+
 UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
 {
 	char stats[40];
@@ -455,6 +513,52 @@ UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
 }
 
 
+UI_Group* UIFactory::CreateOnHoverMeleeEnergyUpgradeMenu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	sprintf_s(stats, 40, "Upgrade energy: +%.2f", gathererEnergyUpgradeValue);
+	strcat_s(stats, " %");
+	CreateText(5, 0, background, stats, group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	CreateText(25, 20, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleeAttackSpeedUpgradeMenu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", gathererAtkSpeedUpgradeValue);
+	strcat_s(stats, " %");
+	CreateText(5, 0, background, stats, group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	CreateText(25, 20, background, stats, group);
+
+	return group;
+}
+
+
 UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
 {
 	char stats[40];
@@ -495,6 +599,52 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
 	sprintf_s(stats, 40, "- %.2f", rangedDamageUpgradeCost);
+	CreateText(25, 20, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedEnergyUpgradeMenu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	sprintf_s(stats, 40, "Upgrade energy: +%.2f", gathererEnergyUpgradeValue);
+	strcat_s(stats, " %");
+	CreateText(5, 0, background, stats, group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	CreateText(25, 20, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedAttackSpeedUpgradeMenu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", gathererAtkSpeedUpgradeValue);
+	strcat_s(stats, " %");
+	CreateText(5, 0, background, stats, group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
