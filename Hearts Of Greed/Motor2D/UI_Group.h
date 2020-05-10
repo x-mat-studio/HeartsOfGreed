@@ -19,6 +19,8 @@ enum class GROUP_TAG : int
 	DATA_PAGE,
 	IN_HOVER_MENU,
 
+	DIALOG,
+
 	LOSE_SCENE,
 	WIN_SCENE,
 

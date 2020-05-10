@@ -1020,7 +1020,7 @@ iMPoint ModulePathfinding::GetDestination(Entity* request)
 	BROFILER_CATEGORY("RequestPath", Profiler::Color::Khaki);
 
 	if (generatedPaths.size() < 1)
-		return { -1,-1 };
+		return { INT_MIN,INT_MIN };
 
 	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
 

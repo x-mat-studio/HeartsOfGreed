@@ -42,7 +42,7 @@ private:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	bool CheckData(int previous, int current);
+	bool CheckData(float previous, float current);
 	void AdjustHealthBars(int newValue, int maxValue);
 	void AdjustManaBars(int newValue, int maxValue);
 
@@ -78,16 +78,16 @@ private:
 	SDL_Rect* manaRect;
 	int originalBarsWidth;
 
-	int life;
-	int mana;
-	int resources;
-	int level;
-	int attackDamage;
-	int attackSpeed;
-	int range;
-	int vision;
-	int hpRecovery;
-	int xpToNextLevel;
+	float life;
+	float mana;
+	float resources;
+	float level;
+	float attackDamage;
+	float attackSpeed;
+	float range;
+	float vision;
+	float hpRecovery;
+	float xpToNextLevel;
 	ENTITY_ALIGNEMENT alignment;
 
 };

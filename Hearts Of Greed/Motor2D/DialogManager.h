@@ -6,7 +6,7 @@
 
 enum class DIALOG_INPUT : int
 {
-	ERROR = -1,
+	INPUT_ERROR = -1,
 
 	NULL_INPUT,
 
@@ -77,6 +77,7 @@ public:
 
 	bool PushInput(DIALOG_INPUT input);
 
+	P2SString* GetCurrentString() const;
 private:
 
 	void InternalInput(float dt);

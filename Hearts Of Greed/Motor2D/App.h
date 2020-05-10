@@ -35,6 +35,7 @@ class ModuleTestScene;
 class ModuleWinScene;
 class ModuleLoseScene;
 class Minimap;
+class ModuleDialogManager;
 
 
 class App
@@ -124,6 +125,7 @@ public:
 	ModuleLoseScene*		loseScene;
 	Minimap*				minimap;
 	ModuleQuestManager*		questManager;
+	ModuleDialogManager*	dialogManager;
 
 	uint32_t			frames;
 	

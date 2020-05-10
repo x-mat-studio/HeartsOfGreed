@@ -3,7 +3,7 @@
 #include <math.h>
 
 
-float EaseFunctions::Ease(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::Ease(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if (currentTime <= 0) return initialPos;
 	if (currentTime >= duration) return initialPos + finalPos;
@@ -12,113 +12,113 @@ float EaseFunctions::Ease(float& currentTime, float& initialPos, float& finalPos
 }
 
 
-float EaseFunctions::EaseInQuad(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInQuad(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * (currentTime /= duration) * currentTime + initialPos;
 }
 
 
-float EaseFunctions::EaseOutQuad(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutQuad(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return -finalPos * (currentTime /= duration) * (currentTime - 2) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutQuad(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutQuad(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if ((currentTime /= duration / 2) < 1) return finalPos / 2 * currentTime * currentTime + initialPos;
 	return -finalPos / 2 * ((--currentTime) * (currentTime - 2) - 1) + initialPos;
 }
 
 
-float EaseFunctions::EaseInCubic(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInCubic(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * pow((currentTime / duration), 3) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutCubic(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutCubic(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * (pow((currentTime / duration - 1), 3) + 1) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutCubic(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutCubic(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if ((currentTime /= duration / 2) < 1)return finalPos / 2 * pow(currentTime, 3) + initialPos;
 	return finalPos / 2 * (pow(currentTime - 2, 3) + 2) + initialPos;
 }
 
 
-float EaseFunctions::EaseInQuart(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInQuart(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * pow(currentTime / duration, 4) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutQuart(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutQuart(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return -finalPos * (pow(currentTime / duration - 1, 4) - 1) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutQuart(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutQuart(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if ((currentTime /= duration / 2) < 1)return finalPos / 2 * pow(currentTime, 4) + initialPos;
 	return -finalPos / 2 * (pow(currentTime - 2, 4) - 2) + initialPos;
 }
 
 
-float EaseFunctions::EaseInQuint(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInQuint(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * pow(currentTime / duration, 5) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutQuint(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutQuint(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * (pow(currentTime / duration - 1, 5) + 1) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutQuint(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutQuint(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if ((currentTime /= duration / 2) < 1) return finalPos / 2 * pow(currentTime, 5) + initialPos;
 	return finalPos / 2 * (pow(currentTime - 2, 5) + 2) + initialPos;
 }
 
 
-float EaseFunctions::EaseInSine(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInSine(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * (1 - cos(currentTime / duration * (PI / 2))) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutSine(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutSine(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * sin(currentTime / duration * (PI / 2)) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutSine(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutSine(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos / 2 * (1 - cos(PI * currentTime / duration)) + initialPos;
 }
 
 
-float EaseFunctions::EaseInExpo(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInExpo(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * pow(2, 10 * (currentTime / duration - 1)) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutExpo(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutExpo(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * (-pow(2, -10 * currentTime / duration) + 1) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutExpo(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutExpo(float currentTime, float initialPos, float finalPos, float duration)
 {
 
 	if ((currentTime /= duration / 2) < 1)	return finalPos / 2 * pow(2, 10 * (currentTime - 1)) + initialPos;
@@ -127,26 +127,26 @@ float EaseFunctions::EaseInOutExpo(float& currentTime, float& initialPos, float&
 }
 
 
-float EaseFunctions::EaseInCirc(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInCirc(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return finalPos * (1 - sqrt(1 - (currentTime /= duration) * currentTime)) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutCirc(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutCirc(float currentTime, float initialPos, float finalPos, float duration)
 {
 	return  finalPos * sqrt(1 - (currentTime = currentTime / duration - 1) * currentTime) + initialPos;
 }
 
 
-float EaseFunctions::EaseInOutCirc(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutCirc(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if ((currentTime /= duration / 2) < 1) return finalPos / 2 * (1 - sqrt(1 - currentTime * currentTime)) + initialPos;
 	return finalPos / 2 * (sqrt(1 - (currentTime -= 2) * currentTime) + 1) + initialPos;
 }
 
 
-float EaseFunctions::EaseOutBounce(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutBounce(float currentTime, float initialPos, float finalPos, float duration)
 {
 	if ((currentTime /= duration) < (1 / 2.75)) {
 		return finalPos * (7.5625 * currentTime * currentTime) + initialPos;
@@ -164,7 +164,7 @@ float EaseFunctions::EaseOutBounce(float& currentTime, float& initialPos, float&
 }
 
 
-float EaseFunctions::EaseInBack(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInBack(float currentTime, float initialPos, float finalPos, float duration)
 {
 	float s = 1.70158;
 	return finalPos * (currentTime /= duration) * currentTime * ((s + 1) * currentTime - s) + initialPos;
@@ -172,7 +172,7 @@ float EaseFunctions::EaseInBack(float& currentTime, float& initialPos, float& fi
 }
 
 
-float EaseFunctions::EaseOutBack(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutBack(float currentTime, float initialPos, float finalPos, float duration)
 {
 
 	float s = 1.70158;
@@ -181,7 +181,7 @@ float EaseFunctions::EaseOutBack(float& currentTime, float& initialPos, float& f
 }
 
 
-float EaseFunctions::EaseInOutBack(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseInOutBack(float currentTime, float initialPos, float finalPos, float duration)
 {
 
 	float s = 1.70158;
@@ -191,7 +191,7 @@ float EaseFunctions::EaseInOutBack(float& currentTime, float& initialPos, float&
 }
 
 
-float EaseFunctions::EaseOutElastic(float& currentTime, float& initialPos, float& finalPos, float& duration)
+float EaseFunctions::EaseOutElastic(float currentTime, float initialPos, float finalPos, float duration)
 {
 
 	if ((currentTime /= duration) == 1) {
@@ -273,6 +273,27 @@ EASING_TYPE Easing::GetType() const
 }
 
 
+float Easing::GetInitialPos() const
+{
+	return initialPos;
+}
+
+float Easing::GetFinalPos() const
+{
+	return finalPos;
+}
+
+float Easing::GetDuration() const
+{
+	return duration;
+}
+
+float Easing::GetCurrentTime() const
+{
+	return currentTime;
+}
+
+
 float Easing::UpdateEasingFromNewTime(float newCurrentTime)
 {
 	float ret;
@@ -280,8 +301,8 @@ float Easing::UpdateEasingFromNewTime(float newCurrentTime)
 	currentTime = MAX(newCurrentTime, 0.0f);
 	currentTime = MIN(currentTime, duration);
 
-	ret= ExecuteFunctionFromType(type, currentTime, initialPos, finalPos, duration);
-	
+	ret = ExecuteFunctionFromType(type, currentTime, initialPos, finalPos, duration);
+
 	if (currentTime == duration)
 	{
 		active = false;
@@ -299,13 +320,13 @@ float Easing::UpdateEasingAddingTime(float addTimeToCurrent)
 	currentTime = MAX(currentTime, 0.0f);
 	currentTime = MIN(currentTime, duration);
 
-	ret=ExecuteFunctionFromType(type, currentTime, initialPos, finalPos, duration);
-	
+	ret = ExecuteFunctionFromType(type, currentTime, initialPos, finalPos, duration);
+
 	if (currentTime == duration)
 	{
 		active = false;
 	}
-	
+
 	return ret;
 }
 
