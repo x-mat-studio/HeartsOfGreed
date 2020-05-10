@@ -9,6 +9,8 @@
 #undef NULL
 #endif
 #define NULL  0
+#define PI 3.14159265359
+
 
 // Deletes a buffer
 #define RELEASE( x ) \
@@ -71,6 +73,14 @@ template <class VALUE_TYPE> VALUE_TYPE  lerp(VALUE_TYPE& start, VALUE_TYPE& end,
 	return start + t * (end - start);
 }
 
+
+template <class VALUE_TYPE> VALUE_TYPE  Abs(VALUE_TYPE& start)
+{
+	if (start >= 0.0f)
+		return start;
+	else
+		return -start;
+}
 
 
 

@@ -9,13 +9,14 @@
 #include "Render.h"
 #include "Input.h"
 #include "Map.h"
+#include "Pathfinding.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
-	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, 
+	Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
-	int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale) :
+	int recoveryHitPointsRate, int vision, int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 15, 25),
 	walkLeft(walkLeft),
@@ -222,23 +223,22 @@ void Enemy::StateMachine(float dt)
 		{
 			if (CheckAttackRange() == true)
 			{
-				if (Attack() == true)
-				{
+				if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame * 0.5f)
+					if (Attack() == true)
+					{
+						if (shortTermObjective != nullptr)
+							dir = DetermineDirection(shortTermObjective->position - position);
 
-					if (shortTermObjective != nullptr)
-						dir = DetermineDirection(shortTermObjective->position - position);
-
-					attackCooldown += 0.01f;
-
-				}
+						attackCooldown += 0.01f;
+					}
 			}
-			else
+			else 
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
 			}
 
 		}
-		else
+		else if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
 		{
 			inputs.push_back(ENEMY_INPUTS::IN_CHARGING_ATTACK);
 		}
@@ -313,12 +313,9 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-	Frame currFrame;
 
-	if (state == ENEMY_STATES::CHARGING_ATTACK)
-		currFrame = currentAnimation->GetCurrentFrame();
-	else
-		currFrame = currentAnimation->GetCurrentFrame(dt);
+	Frame currFrame = GetAnimationCurrentFrame(dt);
+
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, scale, currFrame.pivotPositionX, currFrame.pivotPositionY/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
@@ -329,6 +326,19 @@ void Enemy::Draw(float dt)
 	DebugDraw();
 }
 
+Frame Enemy::GetAnimationCurrentFrame(float dt)
+{
+	Frame currFrame;
+
+	if (state == ENEMY_STATES::ATTACK)
+	{
+		currFrame = currentAnimation->GetCurrentFrame(dt * attackSpeed);
+	}
+	else
+		currFrame = currentAnimation->GetCurrentFrame(dt);
+
+	return currFrame;
+}
 
 bool Enemy::Attack()
 {
@@ -456,7 +466,7 @@ bool Enemy::CheckAttackRange()
 	fMPoint objPosW = shortTermObjective->GetPosition();
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
-	if (myPos.DistanceTo(objPosM) < attackRange + shortTermObjective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size()  < attackRange + shortTermObjective->GetRadiusSize())
 	{
 		return true;
 
@@ -475,13 +485,12 @@ void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		currentAnimation->GetCurrentFrame(attackSpeed * dt);
-
-		if (&currentAnimation->GetCurrentFrame() >= &currentAnimation->frames[currentAnimation->lastFrame - 1])
+		if (attackCooldown > (1 / attackSpeed))
 		{
 			inputs.push_back(ENEMY_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0;
 		}
+
 	}
 
 	if (framePathfindingCount < framesPerPathfinding)
@@ -686,6 +695,7 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 	}
 
 	case ENEMY_STATES::CHARGING_ATTACK:
+	case ENEMY_STATES::ATTACK:
 	{
 		switch (dir)
 		{

@@ -215,9 +215,13 @@ public:
 	float GetVisionInPx() const;
 	void SetVisionInPx(float visPx);
 
+protected:
+	void SetAnimation(HERO_STATES currState);
+
 private:
 
 	bool CheckAttackRange();
+	Frame GetAnimationCurrentFrame(float dt);
 	void Attack();
 	void Die();
 
@@ -238,8 +242,7 @@ private:
 
 	virtual void PlayOnHitSound();
 
-protected:
-	void SetAnimation(HERO_STATES currState);
+
 
 public:
 	bool skill1Charged;

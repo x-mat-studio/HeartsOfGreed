@@ -1,23 +1,32 @@
 #ifndef __PARTICLE_SYSTEM_H__
 #define __PARTICLE_SYSTEM_H__
 
+#include "Entity.h"
 #include "vector"
 #include "p2Point.h"
 
 class Emitter;
 
-class ParticleSystem
+enum class TYPE_PARTICLE_SYSTEM : int
+{
+	NONE = -1,
+
+
+	MAX
+};
+
+class ParticleSystem : public Entity
 {
 public:
 	ParticleSystem();
-	ParticleSystem(float x, float y);
+	ParticleSystem(float x, float y, ParticleSystem* copy, bool active);
 
 	~ParticleSystem();
 
 	void PushEmiter(Emitter& emitter);
 
-	void Update(float dt);
-	void PostUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
 
 	void Desactivate();
 	void Activate();
@@ -28,7 +37,6 @@ public:
 
 private:
 	std::vector<Emitter> emitterVector;
-	fMPoint	position;
 
 	bool active;
 };

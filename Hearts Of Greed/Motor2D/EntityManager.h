@@ -23,8 +23,11 @@ class NightEnemy;
 class Spawner;
 class Base;
 class Turret;
+class ParticleSystem;
+class Emitter;
 
 enum class BUILDING_DECOR;
+enum class TYPE_PARTICLE_SYSTEM;
 
 enum class AREA_TYPE
 {
@@ -61,7 +64,7 @@ class ModuleEntityManager : public Module
 public:
 
 	ModuleEntityManager();
-	virtual ~ModuleEntityManager();
+	~ModuleEntityManager();
 
 
 	bool Awake(pugi::xml_node&);
@@ -85,6 +88,8 @@ public:
 
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
 	Entity* AddDecorativeBuilding(BUILDING_DECOR decor, int x, int y);
+	Entity* AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y);
+
 	Entity* GetSample(ENTITY_TYPE);
 
 
@@ -156,6 +161,7 @@ private:
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
+	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
 
@@ -251,6 +257,9 @@ private:
 	SDL_Texture* turretTexture;
 
 	SDL_Texture* enemyTexture;
+	SDL_Texture* enemyNightTexture;
+	SDL_Texture* enemyGigaTexture;
+	SDL_Texture* enemyRangedTexture;
 
 	//Samples
 
@@ -270,6 +279,9 @@ private:
 	Base* sampleBase;
 
 	Turret* sampleTurret;
+
+	ParticleSystem* sampleParticleSystem;
+	Emitter* sampleEmitter;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
 };

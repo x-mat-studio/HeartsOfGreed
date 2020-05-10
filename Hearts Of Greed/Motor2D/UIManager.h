@@ -80,6 +80,7 @@ public:
 	void PlayClickSound();
 
 private:
+
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	bool CheckGroupTag(GROUP_TAG tag);
@@ -93,6 +94,8 @@ private:
 	void UnregisterEvents();
 
 	void AddPendingPortraits();
+
+	void AugmentValueByTenPercent(float* value);
 
 public:
 	Base* lastShop;

@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
+#include "UIFactory.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -32,6 +33,9 @@
 #include "Building.h"
 #include "Base.h"
 #include "Turret.h"
+
+#include "ParticleSystem.h"
+#include "Emitter.h"
 
 #include "p2SString.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -168,19 +172,19 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
-	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo");
+	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo").child("sample");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY);
 
-	wanamingo = wanamingodoc.child("sampleRanged");
+	wanamingo = wanamingodoc.child("wanamingo").child("sampleRanged");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_RANGED);
 
-	wanamingo = wanamingodoc.child("sampleSpeed");
+	wanamingo = wanamingodoc.child("wanamingo").child("sampleSpeed");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_NIGHT);
 
-	wanamingo = wanamingodoc.child("sampleGiga");
+	wanamingo = wanamingodoc.child("wanamingo").child("sampleGiga");
 
 	LoadSampleEnemy(wanamingo, ENTITY_TYPE::ENEMY_GIGA);
 
@@ -218,6 +222,16 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	buildingsdoc.reset();
 
+	//ParticleSystems and emitters
+	filename = config.child("load").attribute("docnameParticleSystems").as_string();
+	pugi::xml_document particleSystemsdoc;
+	particleSystemsdoc.load_file(filename.GetString());
+	pugi::xml_node particleSystem = particleSystemsdoc.child("particle_systems");
+
+	LoadSampleParticleSystemsAndEmitters(particleSystem);
+
+	particleSystemsdoc.reset();
+
 	//Generate Areas------------------------------------
 	filename = config.child("load").attribute("docnameSkillAreas").as_string();
 	pugi::xml_document skillAreassdoc;
@@ -243,6 +257,9 @@ bool ModuleEntityManager::Start()
 	roboTexture = app->tex->Load("spritesheets/characters/robotto.png");
 
 	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
+	enemyRangedTexture = app->tex->Load("spritesheets/Enemies/Snipermingo.png");
+	enemyGigaTexture = app->tex->Load("spritesheets/Enemies/Gigamingo.png");
+	enemyNightTexture = app->tex->Load("spritesheets/Enemies/Speedomingo.png");
 
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
@@ -287,6 +304,23 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_RANGED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
 
 
 	sampleBuilding->SetTexture(base1Texture);
@@ -342,6 +376,7 @@ bool ModuleEntityManager::Start()
 	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
 	moveHero = app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
 
+	//Load textures of the emmiters and push them to their particle systems
 
 	return ret;
 }
@@ -379,8 +414,6 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			switch (entityVector[i]->GetType())
 			{
-			case ENTITY_TYPE::PARTICLE:
-				break;
 
 			case ENTITY_TYPE::HERO_MELEE:
 				entityVector[i]->Start(armorMaleTexture);
@@ -410,8 +443,26 @@ void ModuleEntityManager::CheckIfStarted() {
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::HERO, entityVector[i]->GetCenter());
 				break;
 
-			case ENTITY_TYPE::ENEMY: case ENTITY_TYPE::ENEMY_NIGHT: case ENTITY_TYPE::ENEMY_RANGED: case ENTITY_TYPE::ENEMY_GIGA:
+			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				break;
+
+			case ENTITY_TYPE::ENEMY_NIGHT:
+				entityVector[i]->Start(enemyNightTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				break;
+
+			case ENTITY_TYPE::ENEMY_RANGED:
+				entityVector[i]->Start(enemyRangedTexture);
+
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				break;
+
+			case ENTITY_TYPE::ENEMY_GIGA:
+				entityVector[i]->Start(enemyGigaTexture);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
 				break;
@@ -615,6 +666,23 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_RANGED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
+
 	return true;
 }
 
@@ -643,13 +711,9 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		ret = new Spawner({ (float)x,(float)y }, sampleSpawner);
 		app->ai->PushSpawner((Spawner*)ret);
 		break;
-	case ENTITY_TYPE::PARTICLE:
-		break;
-
-	case ENTITY_TYPE::Emitter:
-		break;
 
 	case ENTITY_TYPE::PARTICLE_SYSTEM:
+		assert("Not here, call add particle system");
 		break;
 
 	case ENTITY_TYPE::HERO_MELEE:
@@ -738,6 +802,28 @@ Entity* ModuleEntityManager::AddDecorativeBuilding(BUILDING_DECOR decor, int x, 
 		break;
 
 	default:
+		break;
+	}
+
+	if (ret != nullptr)
+	{
+		entityVector.push_back(ret);
+	}
+
+	return ret;
+}
+
+
+Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y)
+{
+	Entity* ret = nullptr;
+
+	switch (type)
+	{
+	
+
+	default:
+		ret = new ParticleSystem();
 		break;
 	}
 
@@ -1408,6 +1494,161 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_RESURRECT:
 
 		break;
+
+	case EVENT_ENUM::GATHERER_LIFE_UPGRADE: 	
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->gathererLifeUpgradeValue));
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::GATHERER_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*) entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->gathererDamageUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::GATHERER_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->gathererEnergyUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->gathererAtkSpeedUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+	
+	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->rangedLifeUpgradeValue));
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->rangedDamageUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->rangedEnergyUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->rangedAtkSpeedUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::MELEE_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->meleeLifeUpgradeValue));
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage()* app->uiManager->GetFactory()->meleeDamageUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints()* app->uiManager->GetFactory()->meleeEnergyUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed()* app->uiManager->GetFactory()->meleeAtkSpeedUpgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+
 	}
 
 }
@@ -1459,7 +1700,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -1473,16 +1714,9 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 
 void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 {
-	SDL_Rect rect;
-
 	switch (type)
 	{
 	case ENTITY_TYPE::BUILDING:
-
-		SDL_QueryTexture(sampleBuilding->GetTexture(), NULL, NULL, &rect.w, &rect.h);
-
-		x -= rect.w / 2;
-		y -= rect.h / 2;
 
 		sampleBuilding->ActivateTransparency();
 		sampleBuilding->SetPosition(x, y);
@@ -1492,16 +1726,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 	case ENTITY_TYPE::BLDG_TURRET:
 
-		rect = sampleTurret->GetCollider()->rect;
-
-		x -= rect.w * 0.5f;
-		y -= rect.h;
-
 		sampleTurret->ActivateTransparency();
 		sampleTurret->SetPosition(x, y);
 		sampleTurret->Draw(0.0000001);
-
-
 		break;
 
 
@@ -1510,11 +1737,6 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_BASE:
-
-		SDL_QueryTexture(sampleBase->GetTexture(), NULL, NULL, &rect.w, &rect.h);
-
-		x -= rect.w / 2;
-		y -= rect.h / 2;
 
 		sampleBase->ActivateTransparency();
 		sampleBase->SetPosition(x, y);
@@ -2040,34 +2262,37 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType)
 {
 	bool ret = true;
+
 	//collider
 	SDL_Rect r;
-	r.x = enemyNode.child("sample").child("collider").child("rect").attribute("x").as_int(0);
-	r.y = enemyNode.child("sample").child("collider").child("rect").attribute("y").as_int(0);
-	r.w = enemyNode.child("sample").child("collider").child("rect").attribute("w").as_int(0);
-	r.h = enemyNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
-	COLLIDER_TYPE cType = (COLLIDER_TYPE)enemyNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
+	r.x = enemyNode.child("collider").child("rect").attribute("x").as_int(0);
+	r.y = enemyNode.child("collider").child("rect").attribute("y").as_int(0);
+	r.w = enemyNode.child("collider").child("rect").attribute("w").as_int(0);
+	r.h = enemyNode.child("collider").child("rect").attribute("h").as_int(0);
+	COLLIDER_TYPE cType = (COLLIDER_TYPE)enemyNode.child("collider").child("type").attribute("id").as_int(0);
 	Collider* enemyCollider = new Collider(r, cType, this);
 
 	//stats
 	fMPoint pos;
-	pos.x = enemyNode.child("sample").child("position").attribute("x").as_float(0);
-	pos.y = enemyNode.child("sample").child("position").attribute("y").as_float(0);
+	pos.x = enemyNode.child("position").attribute("x").as_float(0);
+	pos.y = enemyNode.child("position").attribute("y").as_float(0);
 
-	int maxHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
-	int currentHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
-	int recoveryHP = enemyNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
-	int atkDmg = enemyNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
-	float atkSpd = enemyNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
-	int atkRange = enemyNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
+	int maxHP = enemyNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = enemyNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = enemyNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
-	int movSpd = enemyNode.child("sample").child("stats").attribute("movementSpeed").as_int(0);
-	int vision = enemyNode.child("sample").child("stats").attribute("vision").as_int(0);
-	int xp = enemyNode.child("sample").child("stats").attribute("xp").as_int(0);
+	int atkDmg = enemyNode.child("stats").child("attack").attribute("damage").as_int(0);
+	float atkSpd = enemyNode.child("stats").child("attack").attribute("speed").as_float(0);
+	int atkRange = enemyNode.child("stats").child("attack").attribute("range").as_int(0);
 
-	float scale = enemyNode.child("sample").child("stats").attribute("scale").as_float(1.0f);
+	int movSpd = enemyNode.child("stats").attribute("movementSpeed").as_int(0);
+	int vision = enemyNode.child("stats").attribute("vision").as_int(0);
+	int xp = enemyNode.child("stats").attribute("xp").as_int(0);
 
+	float scale = enemyNode.child("stats").attribute("scale").as_float(1.0f);
+
+	enemyNode = enemyNode.parent();
 	Animation enemyWalkLeft = enemyWalkLeft.PushAnimation(enemyNode, "wanamingoLeftWalk"); // looks good
 	Animation enemyWalkLeftUp = enemyWalkLeftUp.PushAnimation(enemyNode, "wanamingoUpLeftWalk");// looks good
 	Animation enemyWalkLeftDown = enemyWalkLeftDown.PushAnimation(enemyNode, "wanamingoDownLeftWalk"); // last frame teleports to the left
@@ -2105,7 +2330,7 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
 		break;
 	case ENTITY_TYPE::ENEMY_RANGED:
-		sampleEnemy = new RangedEnemy(pos, ENTITY_TYPE::ENEMY_RANGED, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		sampleEnemyRanged = new RangedEnemy(pos, ENTITY_TYPE::ENEMY_RANGED, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
@@ -2117,7 +2342,7 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
 		break;
 	case ENTITY_TYPE::ENEMY_GIGA:
-		sampleEnemy = new GigaEnemy(pos, ENTITY_TYPE::ENEMY_GIGA, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
+		sampleEnemyGiga = new GigaEnemy(pos, ENTITY_TYPE::ENEMY_GIGA, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
@@ -2294,6 +2519,18 @@ bool ModuleEntityManager::LoadSampleBase(pugi::xml_node& baseNode)
 	return ret;
 
 }
+
+
+bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode)
+{
+	bool ret = true;
+
+	sampleParticleSystem = new ParticleSystem();
+	//Code to fill
+
+	return ret;
+}
+
 
 
 bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
@@ -2551,7 +2788,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 		else if (type == "base")
 		{
-		
+
 			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)
@@ -2612,14 +2849,6 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 		switch (entityVector[i]->GetType())
 		{
 		case ENTITY_TYPE::UNKNOWN:
-			break;
-
-
-		case ENTITY_TYPE::PARTICLE:
-			break;
-
-
-		case ENTITY_TYPE::Emitter:
 			break;
 
 

@@ -46,7 +46,7 @@ public:
 		  Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
 		  Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, 
 		  Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
-		  int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale = 1.0f);
+		  int recoveryHitPointsRate, int vision, int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale = 1.0f);
 
 
 	Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align);
@@ -67,6 +67,7 @@ public:
 
 	void Draw(float dt);
 
+
 	void Die();
 
 	int GetHP();
@@ -85,6 +86,8 @@ public:
 private:
 
 	bool Attack();
+	Frame GetAnimationCurrentFrame(float dt);
+
 
 	void RecoverHealth();
 
@@ -110,7 +113,7 @@ private:
 	int vision;
 
 	int attackDamage;
-	int attackSpeed;
+	float attackSpeed;
 	int attackRange;
 
 	int xpOnDeath;

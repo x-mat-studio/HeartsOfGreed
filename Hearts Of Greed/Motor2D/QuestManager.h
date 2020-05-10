@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Collision.h"
 #include "Quest.h"
+#include <unordered_map>
 
 class ModuleQuestManager : public Module
 {
@@ -19,8 +20,8 @@ public:
 	bool PostUpdate(float dt);
 	bool CleanUp();
 
-	//std::vector <Quest*> ongoing;
-	//std::vector <Quest*> finished;
+	std::unordered_map <int , Quest*> ongoing;
+	std::unordered_map <int, Quest*> finished;
 
 	void OnCollision(Collider * c1, Collider* c2);
 

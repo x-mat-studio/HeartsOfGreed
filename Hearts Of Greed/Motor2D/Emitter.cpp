@@ -34,9 +34,12 @@ Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVar
 
 	randomizeAngularSpeed(true),
 
-	active(true),
+	active(false),
+	stopped(false),
 
-	fadeParticles(fade)
+	fadeParticles(fade),
+
+	timeSinceStopped(0)
 
 {
 	Start();
@@ -73,9 +76,13 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 
 	randomizeAngularSpeed(true),
 
-	active(true),
+	active(false),
+	stopped(false),
 
-	fadeParticles(fade)
+	fadeParticles(fade),
+
+	timeSinceStopped(0)
+
 {
 	Start();
 }
@@ -152,7 +159,7 @@ void Emitter::CreateParticle()
 }
 
 
-Emitter::~Emitter() 
+Emitter::~Emitter()
 {
 	int numParticles = particleVector.size();
 
@@ -163,30 +170,41 @@ Emitter::~Emitter()
 }
 
 
-void Emitter::Update(float dt) {
+void Emitter::Update(float dt)
+{
 
-	if (active)
+	if (stopped == false && active == true)
 	{
 		ThrowParticles();
 	}
-
-	int numParticles = particleVector.size();
-
-
-	for (int i = 0; i < numParticles; i++)
+	else if (stopped == true && active == true)
 	{
-		particleVector[i].Update(dt);
+		CheckTimeSinceStopped(dt);
+	}
+
+	if (active == true)
+	{
+		int numParticles = particleVector.size();
+
+
+		for (int i = 0; i < numParticles; i++)
+		{
+			particleVector[i].Update(dt);
+		}
 	}
 }
 
 
-void Emitter::PostUpdate(float dt) {
-
-	int numParticles = particleVector.size();
-
-	for (int i = 0; i < numParticles; i++)
+void Emitter::PostUpdate(float dt)
+{
+	if (active == true)
 	{
-		particleVector[i].PostUpdate(dt);
+		int numParticles = particleVector.size();
+
+		for (int i = 0; i < numParticles; i++)
+		{
+			particleVector[i].PostUpdate(dt);
+		}
 	}
 
 }
@@ -194,12 +212,26 @@ void Emitter::PostUpdate(float dt) {
 
 void Emitter::Desactivate()
 {
-	active = false;
+	stopped = true;
 }
+
 
 void Emitter::Activate()
 {
 	active = true;
+	stopped = false;
+}
+
+
+void Emitter::CheckTimeSinceStopped(float dt)
+{
+	timeSinceStopped += dt;
+
+	if (timeSinceStopped <= particlesLifeTime)
+	{
+		timeSinceStopped = 0;
+		active = false;
+	}
 }
 
 
@@ -333,8 +365,15 @@ void Emitter::GetPosition(int& x, int& y) const
 	y = position.y;
 }
 
+
 void Emitter::SetPosition(int x, int y)
 {
 	position.x = x;
 	position.y = y;
+}
+
+
+void Emitter::SetTexture(SDL_Texture* tex)
+{
+	particleTexture = tex;
 }

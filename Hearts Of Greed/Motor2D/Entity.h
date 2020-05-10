@@ -20,8 +20,6 @@ enum class ENTITY_TYPE : int
 {
 	UNKNOWN = -1,
 
-	PARTICLE,
-	Emitter,
 	PARTICLE_SYSTEM,
 
 	SPAWNER,
@@ -105,6 +103,12 @@ public:
 	fMPoint GetCenter();
 	fMPoint GetOffset();
 	void SetPosition(int x, int y);
+
+	int GetMaxHP() const;
+	void SetMaxHP(int newMaxHp) ;
+
+	int GetCurrentHP() const;
+	void SetCurrentHP(int newcurrHp);
 
 	void SetTexture(SDL_Texture* texture);
 	SDL_Texture* GetTexture();

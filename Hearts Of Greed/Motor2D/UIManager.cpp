@@ -21,15 +21,17 @@
 #include "FadeToBlack.h"
 
 #include "Minimap.h"
+
+
 #include "Base.h"
-
-
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() :
 
+	Module(),
+
 	mouseOverUI(false),
-	atlas(nullptr), 
+	atlas(nullptr),
 	lastShop(nullptr),
 	portraitManager(nullptr),
 	hoverElement(nullptr),
@@ -69,7 +71,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_OPTION_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_INTRO_MENU, this);
-	
+
 	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU, this);
@@ -77,14 +79,27 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::MUSIC_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SFX_ADJUSTMENT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
-	
+
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_OPTIONS_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
-	
+
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
+
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
@@ -244,7 +259,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddUIGroup(group);
 		break;
 
-	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:	
+	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
@@ -265,7 +280,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::UNHIDE_MENU:				break;
 
 	case EVENT_ENUM::EXIT_MENUS:
-		
+
 		//If none of this menus is open and you are in the Game Scene, create pause menu
 		if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
 			break;
@@ -275,7 +290,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
 			break;
-		
+
 		else if (app->testScene->IsEnabled() == true)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
@@ -288,12 +303,12 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 
-	case EVENT_ENUM::DELETE_CREDITS_MENU:		
+	case EVENT_ENUM::DELETE_CREDITS_MENU:
 		DeleteUIGroup(GROUP_TAG::CREDITS_MENU);
 		break;
 
 
-	case EVENT_ENUM::DELETE_PAUSE_MENU:			
+	case EVENT_ENUM::DELETE_PAUSE_MENU:
 		DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
 		break;
 
@@ -301,6 +316,67 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::DELETE_IN_HOVER_MENU:
 		DeleteUIGroup(GROUP_TAG::IN_HOVER_MENU);
 		break;
+
+	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:
+		AugmentValueByTenPercent(&factory->gathererLifeUpgradeCost);
+		AugmentValueByTenPercent(&factory->gathererLifeUpgradeValue);
+		break;
+
+	case EVENT_ENUM::GATHERER_DAMAGE_UPGRADE:
+		AugmentValueByTenPercent(&factory->gathererDamageUpgradeCost);
+		AugmentValueByTenPercent(&factory->gathererDamageUpgradeValue);
+		break;
+
+	case EVENT_ENUM::GATHERER_ENERGY_UPGRADE:
+		AugmentValueByTenPercent(&factory->gathererEnergyUpgradeCost);
+		AugmentValueByTenPercent(&factory->gathererEnergyUpgradeValue);
+		break;
+
+	case EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE:
+		AugmentValueByTenPercent(&factory->gathererAtkSpeedUpgradeCost);
+		AugmentValueByTenPercent(&factory->gathererAtkSpeedUpgradeValue);
+		break;
+
+	case EVENT_ENUM::MELEE_LIFE_UPGRADE:
+		AugmentValueByTenPercent(&factory->meleeLifeUpgradeCost);
+		AugmentValueByTenPercent(&factory->meleeLifeUpgradeValue);
+		break;
+
+	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
+		AugmentValueByTenPercent(&factory->meleeDamageUpgradeCost);
+		AugmentValueByTenPercent(&factory->meleeDamageUpgradeValue);
+		break;
+
+	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
+		AugmentValueByTenPercent(&factory->meleeEnergyUpgradeCost);
+		AugmentValueByTenPercent(&factory->meleeEnergyUpgradeValue);
+		break;
+
+	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
+		AugmentValueByTenPercent(&factory->meleeAtkSpeedUpgradeCost);
+		AugmentValueByTenPercent(&factory->meleeAtkSpeedUpgradeValue);
+		break;
+
+	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
+		AugmentValueByTenPercent(&factory->rangedLifeUpgradeCost);
+		AugmentValueByTenPercent(&factory->rangedLifeUpgradeValue);
+		break;
+
+	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
+		AugmentValueByTenPercent(&factory->rangedDamageUpgradeCost);
+		AugmentValueByTenPercent(&factory->rangedDamageUpgradeValue);
+		break;
+
+	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
+		AugmentValueByTenPercent(&factory->rangedEnergyUpgradeCost);
+		AugmentValueByTenPercent(&factory->rangedEnergyUpgradeValue);
+		break;
+
+	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
+		AugmentValueByTenPercent(&factory->rangedAtkSpeedUpgradeCost);
+		AugmentValueByTenPercent(&factory->rangedAtkSpeedUpgradeValue);
+		break;
+
 	}
 }
 
@@ -419,7 +495,7 @@ void ModuleUIManager::DragElement()
 		dragMouse = app->input->GetMousePosScreen() / app->win->GetUIScale();
 		dragElement = SearchFocusUI();
 	}
-	
+
 	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 	{
 		if (dragElement != nullptr)
@@ -434,7 +510,7 @@ void ModuleUIManager::DragElement()
 			}
 		}
 	}
-	
+
 	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_UP)
 	{
 		dragElement = nullptr;
@@ -460,6 +536,20 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
+
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
@@ -574,10 +664,18 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
-	break;
+		break;
 
 	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::GATHERER_ENERGY_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
@@ -588,12 +686,28 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::MELEE_ENERGY_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
 	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::RANGED_ENERGY_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
@@ -632,9 +746,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::ROBO_PORTRAIT:
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
+		break;
 
 	default:
-		assert(true); //you forgot to add the case of the button tag :D
+		assert("you forgot to add the case of the button tag :D"); 
 		break;
 	}
 
@@ -663,7 +780,7 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::UPGRADE_TURRET:
 		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu());
-	break;
+		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
 		AddUIGroup(factory->CreateOnHoverBuyBarricadeMenu());
@@ -681,6 +798,14 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		AddUIGroup(factory->CreateOnHoverGathererDamageUpgradeMenu());
 		break;
 
+	case BUTTON_TAG::GATHERER_ENERGY_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererEnergyUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererAttackSpeedUpgradeMenu());
+		break;
+
 	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverMeleeLifeUpgradeMenu());
 		break;
@@ -689,12 +814,28 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		AddUIGroup(factory->CreateOnHoverMeleeDamageUpgradeMenu());
 		break;
 
+	case BUTTON_TAG::MELEE_ENERGY_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeEnergyUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeAttackSpeedUpgradeMenu());
+		break;
+
 	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverRangedLifeMenuMenu());
 		break;
 
 	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverRangedDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_ENERGY_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedEnergyUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedAttackSpeedUpgradeMenu());
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
@@ -795,6 +936,12 @@ void ModuleUIManager::PlayHoverSound()
 void ModuleUIManager::PlayClickSound()
 {
 	app->audio->PlayFx(clickSound, 0, -1);
+}
+
+
+void ModuleUIManager::AugmentValueByTenPercent(float* value)
+{
+	*value = *value + (*value * 0.1);
 }
 
 
