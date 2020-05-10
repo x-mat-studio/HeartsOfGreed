@@ -309,6 +309,9 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_GIGA, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ENEMY_NIGHT, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_LIFE_UPGRADE, this);
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
