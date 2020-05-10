@@ -88,6 +88,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DataPages.cpp" />
+    <ClCompile Include="DialogText.cpp" />
     <ClCompile Include="DynamicEntity.cpp" />
     <ClCompile Include="EasingFunctions.cpp" />
     <ClCompile Include="Emitter.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DataPages.h" />
+    <ClInclude Include="DialogText.h" />
     <ClInclude Include="DynamicEntity.h" />
     <ClInclude Include="EasingFunctions.h" />
     <ClInclude Include="Emitter.h" />

@@ -33,7 +33,7 @@ ModuleDialogManager::~ModuleDialogManager()
 	dialogMission1_END_B3.Clear();
 	dialogMission1_END_A2.Clear();
 
-	input = DIALOG_INPUT::ERROR;
+	input = DIALOG_INPUT::INPUT_ERROR;
 	state = DIALOG_STATE::ERROR_DIALOG;
 
 	currentDialog = nullptr;
@@ -81,4 +81,10 @@ bool ModuleDialogManager::PushInput(DIALOG_INPUT inp)
 		input = inp;
 		
 	return true;
+}
+
+
+P2SString* ModuleDialogManager::GetCurrentString() const
+{
+	return currentDialog;
 }

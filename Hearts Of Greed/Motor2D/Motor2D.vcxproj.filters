@@ -199,6 +199,9 @@
     <ClCompile Include="EasingFunctions.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="DialogText.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -416,6 +419,9 @@
     </ClInclude>
     <ClInclude Include="DialogManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogText.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
