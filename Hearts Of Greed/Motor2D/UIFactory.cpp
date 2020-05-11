@@ -32,11 +32,14 @@ UIFactory::UIFactory() :
 	dataPageBackground{ 678, 369, 190, 67 },
 	dataPageImageBackground{ 721, 202, 65, 51 },
 	gathererPicture{ 352, 149, 61, 47 },
+	gathererBigPicture{ 224, 105, 123, 96 },
 	gathererShopPicture{ 581, 24, 36, 27 },
 	meleePicture{ 566, 149, 61, 47 },
 	meleeShopPicture{ 658, 24, 36, 27 },
+	meleeBigPicture{ 425, 105, 123, 96 },
 	rangedPicture{ 150, 149, 61, 47 },
 	rangedShopPicture{ 619, 24, 36, 27 },
+	rangedBigPicture{ 17, 105, 123, 96 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
 	turretDataPagePicture{ 561, 77, 60, 45 },
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
@@ -216,10 +219,51 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 	UI_Group* group = new UI_Group(GROUP_TAG::DIALOG);
 
 	Button* button = new Button(fMPoint(0, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
-
 	group->AddUiElement(button);
 
-	DialogText* text = new DialogText(5, 5, button, false);
+	DialogText* text = new DialogText(170, 82, fMPoint(0,0), fMPoint(30, 275), button, false);
+	group->AddUiElement(text);
+
+	switch (character1)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		CreateImage(126, 78, button, meleeBigPicture, group, false, false);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		CreateImage(126, 78, button, rangedBigPicture, group, false, false);
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		CreateImage(126, 78, button, gathererBigPicture, group, false, false);
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		//TODO
+		break;
+	
+	default:
+		assert("wrong type");
+		break;
+	}
+
+	switch (character2)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		CreateImage(591, 262, button, meleeBigPicture, group, false, false);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		CreateImage(591, 262, button, rangedBigPicture, group, false, false);
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		CreateImage(591, 262, button, gathererBigPicture, group, false, false);
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		//TODO
+		break;
+
+	default:
+		assert("wrong type");
+		break;
+	}
+
 
 	return group;
 }
