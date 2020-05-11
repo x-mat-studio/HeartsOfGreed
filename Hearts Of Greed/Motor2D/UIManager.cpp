@@ -870,7 +870,7 @@ void ModuleUIManager::PlayClickSound()
 
 void ModuleUIManager::AugmentValueByTenPercent(float* value)
 {
-	*value = *value + (*value * 0.1);
+	*value *= 1.1;
 }
 
 
