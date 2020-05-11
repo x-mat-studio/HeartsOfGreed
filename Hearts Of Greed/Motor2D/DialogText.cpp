@@ -1,13 +1,21 @@
 #include "DialogText.h"
 #include "DialogManager.h"
 #include "Textures.h"
+#include "Render.h"
 
 
-DialogText::DialogText(float x, float y, UI* parent, bool interactable) :
+DialogText::DialogText(float x, float y, fMPoint& posText1, fMPoint& posText2, UI* parent, bool interactable) :
 
-	UI({ x, y }, parent, UI_TYPE::RESOURCES_COUNTER, { 0, 0, 0, 0 }, interactable, false, nullptr)
+	UI({ x, y }, parent, UI_TYPE::RESOURCES_COUNTER, { 0, 0, 0, 0 }, interactable, false, nullptr),
+
+	text1(),
+	text2(),
+
+	posText1(posText1),
+	posText2(posText2),
+
+	texture2(nullptr)
 {
-	ChangeTexture();
 }
 
 
@@ -20,18 +28,46 @@ DialogText::~DialogText()
 
 void DialogText::HandleInput()
 {
-	if (text != *app->dialogManager->GetCurrentString())
-	{
-		app->tex->UnLoad(texture);
+	P2SString* string = nullptr;
 
-		ChangeTexture();
+	string = app->dialogManager->GetCurrentString();
+
+	if (text1 != *string)
+	{
+		text1 = *string;
+
+		ChangeTexture(texture, &text1);
+	}
+
+
+	string = app->dialogManager->GetCurrentString();
+
+	if (text2 != *string)
+	{
+		text2 = *string;
+
+		ChangeTexture(texture2, &text2);
 	}
 }
 
 
-void DialogText::ChangeTexture()
+void DialogText::ChangeTexture(SDL_Texture* tex, P2SString* string)
 {
-	text = *app->dialogManager->GetCurrentString();
+	app->tex->UnLoad(tex);
 
-	texture = app->fonts->Print(text.GetCharArray(), { 255, 255, 255 }, app->fonts->fonts[0]);
+	tex = app->fonts->Print(string->GetCharArray(), { 255, 255, 255 }, app->fonts->fonts[0]);
+}
+
+
+void DialogText::Draw(float dt)
+{
+	if (texture != nullptr)
+	{
+		app->render->Blit(texture, position.x + posText1.x, position.y + posText1.y, nullptr, false, false, '\000', 255, 255, 255);
+	}
+
+	if (texture2 != nullptr)
+	{
+		app->render->Blit(texture2, position.x + posText2.x, position.y + posText2.y, nullptr, false, false, '\000', 255, 255, 255);
+	}
 }
