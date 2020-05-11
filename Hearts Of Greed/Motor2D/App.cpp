@@ -25,6 +25,7 @@
 #include "LoseScene.h"
 #include "Minimap.h"
 #include "QuestManager.h"
+#include "DialogManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
@@ -58,6 +59,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	winScene = new ModuleWinScene();
 	loseScene = new ModuleLoseScene();
 	minimap = new Minimap();
+	dialogManager = new ModuleDialogManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -76,6 +78,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	AddModule(coll);
 	AddModule(entityManager);
 	AddModule(fowManager);
+	AddModule(dialogManager);
 	AddModule(uiManager);
 	AddModule(pathfinding);
 	AddModule(player);

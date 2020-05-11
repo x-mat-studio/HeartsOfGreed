@@ -75,12 +75,14 @@ void UI_Scrollbar::Move() {
 
 float UI_Scrollbar::PositionToValue() const
 {
-	return (localPosition.x + (rect.w * 0.5)) * maxValue / father->rect.w;
+	if (localPosition.x < 1 || father->rect.w < 1 || rect.w < 1) { return 0; }
+	else return (localPosition.x + int(rect.w * 0.5)) * maxValue / father->rect.w;
 }
 
 
 float UI_Scrollbar::ValueToPosition(float value) const
 {
-	return (value * father->rect.w / maxValue);
+	if (value < 1 || maxValue == 0) { return 0; }
+	else return (value * father->rect.w / maxValue) - int(rect.w * 0.5);
 }
 

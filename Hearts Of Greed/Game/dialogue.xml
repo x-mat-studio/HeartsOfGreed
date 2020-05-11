@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<dialogues>
+  
+	<tutorial> 
+		<start>
+			<entry text="Damn monsters... They managed to split us. I must find my  companions, but first I should fortify this position or we’ll not have a place to fall back"/>
+		</start>
+
+		<finish>
+			<entry text="This might be enough to stop those vermin for a while. Time to find my comrades." />
+		</finish>
+	</tutorial>
+    
+	<dialog1> 
+		<start>
+			<entry text="Does anyone copy me? I need reinforcements!  They have overrun my position, I need backup ASAP. I repeat, I need backup ASAP!" />
+			<entry text="Copy! It’s me, where are you?" />
+			<entry text="Thank God! I’m close to your position, head towards the X (East, South, anyway), and you shall find me. Hurry up!" />
+		</start>
+
+		<finish>
+			<entry text="I began to think that was the end of me… Thanks, really. I couldn’t have done it without you" />
+			<entry text="No sweat, but don’t think we’re in the clear, not just yet. We have to find the others." />
+		</finish>
+	</dialog1>    
+    
+	<dialog2> 
+		<start>
+			<entry text="They . . .****** killed the captain. . . ****** way too many . . . ****** need help" />
+			<entry text="It looks like they really could use a hand over there. Ready your weapons, we better get going." />
+		</start>
+
+		<finish>
+			<entry text="Damn that was close! I was about to run out of ammo the second you showed up." />
+			<entry text= "Don’t mention it, you would’ve done the same. Here, I have some ammo to spare… you’re gonna need it." />
+		</finish>
+	</dialog2>
+
+
+    
+	<dialog3> 
+		<start>
+			<entry text="It seems those damn monsters got to him before we could make it… Wait, what’s that? A coordinates sheet? What’s even there?" />
+		</start>
+
+		<finish>
+			<entry text="That was too close for comfort, but we managed to take out one of their hives. I’d call that a win." />
+			<entry text="Absolutely, just… don’t get used to it, we could have lost way too much in that assault" />
+			<entry text="Copy that." />
+		</finish>
+	</dialog3>
+
+
+
+    
+	<dialog4> 
+		<start>
+			<entry text="Good news everyone: I’ve picked up a signal from our mechanical combat unit. However, it seems to be right in the middle of a wanamingo nest. Yall up for some action?" />
+			<entry text="I’d say it’s worth the risk… that machine is an absolute unit, it’d be an invaluable asset." />
+		</start>
+
+		<finish>
+			<entry text="COMMAND::REBOOT --- … ---...--- RESULT::SUCCESS --- STATUS::ONLINE --- UNIT GOLIATH, WAITING FOR ORDERS" />
+			<entry text="Hello beauty… we’re gonna have some fun together." />
+		</finish>
+	</dialog4>
+
+</dialogues>

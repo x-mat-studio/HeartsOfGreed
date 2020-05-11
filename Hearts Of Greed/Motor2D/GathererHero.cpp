@@ -171,14 +171,14 @@ bool GathererHero::ExecuteSkill3()
 void GathererHero::LevelUp()
 {
 
-	hitPointsMax += 5;
+	hitPointsMax += (5 * app->entityManager->gathererLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;
 	recoveryHitPointsRate;
-	energyPoints += 10;
+	energyPoints += (10 * app->entityManager->gathererEnergyUpgradeValue);
 	recoveryEnergyRate += 1;
 
-	attackDamage += 2;
-	attackSpeed;
+	attackDamage += (2 * app->entityManager->gathererDamageUpgradeValue);
+	attackSpeed += (0 * app->entityManager->gathererAtkSpeedUpgradeValue);
 	attackRange;
 
 	unitSpeed += 6;

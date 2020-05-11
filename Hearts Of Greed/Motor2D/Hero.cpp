@@ -453,7 +453,7 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 		movingTo = app->pathfinding->GetDestination(this);
 
-		if (movingTo.x == -1 && !path.empty())
+		if (movingTo.x == INT_MIN && !path.empty())
 			movingTo = path.back();
 
 		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
@@ -514,6 +514,10 @@ Frame Hero::GetAnimationCurrentFrame(float dt)
 	if (state == HERO_STATES::ATTACK)
 	{
 		currFrame = currentAnimation->GetCurrentFrame(dt * attackSpeed);
+	}
+	else if (state == HERO_STATES::PREPARE_SKILL1)
+	{
+		currFrame = currentAnimation->GetCurrentFrame();
 	}
 	else
 		currFrame = currentAnimation->GetCurrentFrame(dt);

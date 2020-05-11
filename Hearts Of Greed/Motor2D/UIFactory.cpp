@@ -10,6 +10,7 @@
 #include "DataPages.h"
 #include "HeroesPortraitManager.h"
 #include "HeroPortrait.h"
+#include "DialogText.h"
 
 #include "Base.h"
 #include "Turret.h"
@@ -19,6 +20,7 @@
 #include "Window.h"
 #include "Input.h"
 #include "Minimap.h"
+#include "EntityManager.h"
 #include "Player.h"
 #include "Hero.h"
 
@@ -86,32 +88,22 @@ UIFactory::UIFactory() :
 	meleeActive1Button{ 250, 410, 15, 15 },
 	rangedActive1Button{ 250, 410, 15, 15 },
 
+	dialogWindow{1110, 41, 859, 615},
+
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
 	gathererEnergyUpgradeCost(100),
 	gathererAtkSpeedUpgradeCost(100),
-	gathererLifeUpgradeValue(1),
-	gathererDamageUpgradeValue(1),
-	gathererEnergyUpgradeValue(1),
-	gathererAtkSpeedUpgradeValue(1),
 
 	meleeLifeUpgradeCost(100),
 	meleeDamageUpgradeCost(100),
 	meleeEnergyUpgradeCost(100),
 	meleeAtkSpeedUpgradeCost(100),
-	meleeLifeUpgradeValue(1),
-	meleeDamageUpgradeValue(1),
-	meleeEnergyUpgradeValue(1),
-	meleeAtkSpeedUpgradeValue(1),
 
 	rangedLifeUpgradeCost(100),
 	rangedDamageUpgradeCost(100),
 	rangedEnergyUpgradeCost(100),
-	rangedAtkSpeedUpgradeCost(100),
-	rangedLifeUpgradeValue(1),
-	rangedDamageUpgradeValue(1),
-	rangedEnergyUpgradeValue(1),
-	rangedAtkSpeedUpgradeValue(1)
+	rangedAtkSpeedUpgradeCost(100)
 {}
 
 
@@ -214,6 +206,20 @@ UI_Group* UIFactory::CreateCreditsMenu()
 	CreateText(5, 175, background, "Oscar Perez Martin", group);
 
 	CreateText(15, 185, background, "QA", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE character2)
+{
+	UI_Group* group = new UI_Group(GROUP_TAG::DIALOG);
+
+	Button* button = new Button(fMPoint(0, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
+
+	group->AddUiElement(button);
+
+	DialogText* text = new DialogText(5, 5, button, false);
 
 	return group;
 }
@@ -387,13 +393,13 @@ UI_Group* UIFactory::CreateOnHoverGathererLifeUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade HP: +%.2f", gathererLifeUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade HP: +%.2f", app->entityManager->gathererLifeUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererLifeUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -410,13 +416,13 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade damage: +%.2f", gathererDamageUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade damage: +%.2f", app->entityManager->gathererDamageUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererDamageUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -433,13 +439,13 @@ UI_Group* UIFactory::CreateOnHoverGathererEnergyUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade energy: +%.2f", gathererEnergyUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade energy: +%.2f", app->entityManager->gathererEnergyUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -456,13 +462,13 @@ UI_Group* UIFactory::CreateOnHoverGathererAttackSpeedUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", gathererAtkSpeedUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->gathererAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -479,13 +485,13 @@ UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade HP: +%.2f", meleeLifeUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade HP: +%.2f", app->entityManager->meleeLifeUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", meleeLifeUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", meleeLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -502,13 +508,13 @@ UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade damage: +%.2f", meleeDamageUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade damage: +%.2f", app->entityManager->meleeDamageUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", meleeDamageUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", meleeDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -525,13 +531,13 @@ UI_Group* UIFactory::CreateOnHoverMeleeEnergyUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade energy: +%.2f", gathererEnergyUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade energy: +%.2f", app->entityManager->gathererEnergyUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -548,13 +554,13 @@ UI_Group* UIFactory::CreateOnHoverMeleeAttackSpeedUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", gathererAtkSpeedUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->gathererAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -571,13 +577,13 @@ UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade HP: +%.2f", rangedLifeUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade HP: +%.2f", app->entityManager->rangedLifeUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", rangedLifeUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", rangedLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -594,13 +600,13 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade damage: +%.2f", rangedDamageUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade damage: +%.2f", app->entityManager->rangedDamageUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", rangedDamageUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", rangedDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -617,13 +623,13 @@ UI_Group* UIFactory::CreateOnHoverRangedEnergyUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade energy: +%.2f", gathererEnergyUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade energy: +%.2f", app->entityManager->gathererEnergyUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererEnergyUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
@@ -640,13 +646,13 @@ UI_Group* UIFactory::CreateOnHoverRangedAttackSpeedUpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", gathererAtkSpeedUpgradeValue);
+	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->gathererAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	sprintf_s(stats, 40, "- %.2f", gathererAtkSpeedUpgradeCost);
+	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
 
 	return group;
