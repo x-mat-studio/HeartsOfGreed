@@ -242,6 +242,7 @@ public:
 	float rangedDamageUpgradeValue;
 	float rangedEnergyUpgradeValue;
 	float rangedAtkSpeedUpgradeValue;
+	const float upgradeValue;
 
 private:
 
