@@ -142,8 +142,8 @@ public:
 	MinimapIcon* minimapIcon;
 	fMPoint position;
 
-	int hitPointsMax;
-	int hitPointsCurrent;
+	float hitPointsMax;
+	float hitPointsCurrent;
 
 protected:
 	

@@ -166,10 +166,13 @@ private:
 
 	SDL_Rect gathererPicture;
 	SDL_Rect gathererShopPicture;
+	SDL_Rect gathererBigPicture;
 	SDL_Rect meleePicture;
 	SDL_Rect meleeShopPicture;
+	SDL_Rect meleeBigPicture;
 	SDL_Rect rangedPicture;
 	SDL_Rect rangedShopPicture;
+	SDL_Rect rangedBigPicture;
 	SDL_Rect baseDataPagePicture;
 	SDL_Rect turretDataPagePicture;
 	SDL_Rect wanamingoDataPagePicture;
