@@ -275,10 +275,6 @@ bool Hero::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 	
-	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) //Debug key to lock camera movement
-	{
-		LevelUp();
-	}
 	StateMachine(dt);
 	GroupMovement(dt);
 
