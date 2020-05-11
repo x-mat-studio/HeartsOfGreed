@@ -34,8 +34,8 @@ public:
 	void LevelUp();
 
 
-	fMPoint granadePosLaunch;
-	skillArea* granadeArea;
+	fMPoint skill1PosLaunch;
+	skillArea* skill1Area;
 
 	//This is a placeholder for particles
 	SDL_Rect explosionRect;

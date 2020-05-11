@@ -44,6 +44,12 @@
 
   <minimap width="450" posX="-35" posY="520"/>
 
+  <dialogManager>
+    <load
+      docnameDialogues="dialogue.xml"
+	/>
+  </dialogManager>
+
   <entityManager>
 	<load 
     docnameSuitman="suitman.xml" 

@@ -75,6 +75,11 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEnemyGiga(nullptr),
 	sampleEnemyRanged(nullptr),
 	sampleEnemyNight(nullptr),
+	enemyNightTexture(nullptr),
+	enemyGigaTexture(nullptr),
+	enemyRangedTexture(nullptr),
+	sampleEmitter(nullptr),
+	sampleParticleSystem(nullptr),
 
 	wanamingoRoar2(-1),
 	wanamingoRoar(-1),
@@ -383,6 +388,10 @@ bool ModuleEntityManager::Start()
 	rangedGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
 	rangedDies = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
 
+	ranged1Skill = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
+	ranged1Skil2 = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
+
+
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
@@ -634,6 +643,10 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
 	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
 
+	app->tex->UnLoad(enemyNightTexture);			enemyNightTexture = nullptr;
+	app->tex->UnLoad(enemyGigaTexture);				enemyGigaTexture = nullptr;
+	app->tex->UnLoad(enemyRangedTexture);			enemyRangedTexture = nullptr;
+
 	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
 	RELEASE(sampleMelee);							sampleMelee = nullptr;
 
@@ -643,6 +656,10 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
+
+	RELEASE(sampleEnemyNight);						sampleEnemyNight = nullptr;
+	RELEASE(sampleEnemyGiga);						sampleEnemyGiga = nullptr;
+	RELEASE(sampleEnemyRanged);						sampleEnemyRanged = nullptr;
 
 
 	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
@@ -833,7 +850,7 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 
 	switch (type)
 	{
-	
+
 
 	default:
 		ret = new ParticleSystem();
@@ -1508,7 +1525,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		break;
 
-	case EVENT_ENUM::GATHERER_LIFE_UPGRADE: 	
+	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
@@ -1562,7 +1579,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 
 		break;
-	
+
 	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
@@ -1579,7 +1596,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				rangedDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1593,7 +1610,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				rangedEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1607,7 +1624,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				rangedAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1634,7 +1651,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				meleeDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1648,7 +1665,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				meleeEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1662,7 +1679,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				meleeAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -2776,17 +2793,17 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 		else if (type == "enemy_night")
 		{
-		enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
-		enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
 		}
 
 
 		else if (type == "enemy_giga")
 		{
-		enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
-		enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
 		}
 
 
