@@ -68,12 +68,14 @@ bool ModuleQuestManager::CleanUp()
 
 	app->tex->UnLoad(questMarker);		questMarker = nullptr;
 	
-	for (std::unordered_map <int, Quest*>::iterator it = ongoing.begin(); it != ongoing.end(); it++) {
+	for (std::unordered_map <int, Quest*>::iterator it = ongoing.begin(); it != ongoing.end(); it++) 
+	{
 		
 		ongoing.erase(it);
 	}
 
-	for (std::unordered_map <int, Quest*>::iterator it = finished.begin(); it != finished.end(); it++) {
+	for (std::unordered_map <int, Quest*>::iterator it = finished.begin(); it != finished.end(); it++) 
+	{
 		
 		finished.erase(it);
 	}

@@ -24,7 +24,7 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
 		skill1Dmg, skill1Id, skill1Type, skill1Target),
 
-	granadeArea(nullptr),
+	skill1Area(nullptr),
 
 	currentVfx(nullptr),
 	explosionRect{ 0,0,0,0 }
@@ -35,7 +35,7 @@ RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT ali
 
 	Hero(position, copy, alignement),
 
-	granadeArea(nullptr),
+	skill1Area(nullptr),
 
 	currentVfx(nullptr),
 	explosionRect{ 0,0,0,0 }
@@ -73,11 +73,11 @@ bool RangedHero::PreProcessSkill1()
 	}
 
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
-	granadePosLaunch = app->input->GetMousePosWorld();
+	skill1PosLaunch = app->input->GetMousePosWorld();
 
-	if (center.InsideCircle(app->map->WorldToMap(granadePosLaunch.x, granadePosLaunch.y), currAreaInfo->radius))
+	if (center.InsideCircle(app->map->WorldToMap(skill1PosLaunch.x, skill1PosLaunch.y), currAreaInfo->radius))
 	{
-		granadeArea = app->entityManager->RequestArea(SKILL_ID::RANGED_SKILL1_MOUSE, &this->suplAoE, { (int)granadePosLaunch.x, (int)granadePosLaunch.y });
+		skill1Area = app->entityManager->RequestArea(SKILL_ID::RANGED_SKILL1_MOUSE, &this->suplAoE, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y });
 	}
 
 	return true;
@@ -98,7 +98,7 @@ bool RangedHero::PreProcessSkill3()
 bool RangedHero::ExecuteSkill1()
 {
 
-	if (granadeArea)
+	if (skill1Area)
 	{
 		if (!skillExecutionDelay)
 		{
@@ -113,12 +113,10 @@ bool RangedHero::ExecuteSkill1()
 		else
 		{
 
-			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
-
-
 			int ret = 0;
 
-			ret = app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+			app->audio->PlayFx(app->entityManager->ranged1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ret = app->entityManager->ExecuteSkill(skill1.dmg, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y }, this->skill1Area, skill1.target, skill1.type, true, (Entity*)this);
 
 			currAoE.clear();
 			suplAoE.clear();
@@ -177,7 +175,7 @@ bool RangedHero::DrawVfx(float dt)
 		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
 			currentVfx = false;
 
-		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
+		app->render->Blit(app->entityManager->explosionTexture, skill1PosLaunch.x, skill1PosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
 	}
 
 
