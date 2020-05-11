@@ -13,13 +13,13 @@ Quest::Quest(int x, int y) :
 	SDL_Rect auxQ{ x, y,128,128 };
 	this->collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST, app->questManager, this);
 
-	this->id = app->questManager->ongoing.size() + app->questManager->finished.size() +1;
+	this->id = app->questManager->ongoing.size() + app->questManager->finished.size() + 1;
 
 
-	app->questManager->ongoing.insert({ id, this});
+	app->questManager->ongoing.insert({ id, this });
 
-	this->position =	{ (float)x,(float)y };
-	this->texture =		app->questManager->questMarker;
+	this->position = { (float)x,(float)y };
+	this->texture = app->questManager->questMarker;
 }
 
 
@@ -35,13 +35,13 @@ Quest::Quest(Collider* col) :
 
 	this->position = { (float)col->rect.x, (float)col->rect.y };
 	this->texture = app->questManager->questMarker;
-	
+
 }
 
 
 void Quest::Draw(float dt)
 {
-	
+
 	if (this->myState == QUEST_STATE::ACTIVE) {
 		app->render->Blit(texture, position.x, position.y, 0, false, true, 0, 255, 255, 255, 1.0f);
 	}
@@ -62,7 +62,7 @@ void Quest::RemoveFromOngoing()
 {
 	//toDelete = true;
 	//app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
-	
+
 	app->questManager->ongoing.erase(this->id);
 	app->questManager->finished.insert({ id, this });
 

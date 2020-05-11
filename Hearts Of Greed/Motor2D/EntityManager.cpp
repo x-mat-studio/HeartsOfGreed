@@ -15,7 +15,6 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
-#include "UIFactory.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -113,7 +112,21 @@ ModuleEntityManager::ModuleEntityManager() :
 	suitman1Skill2(0),
 	buildingGetsHit(-1),
 	buildingGetsHit2(-1),
-	armored1Skill2(-1)
+	armored1Skill2(-1),
+
+	gathererLifeUpgradeValue(1),
+	gathererDamageUpgradeValue(1),
+	gathererEnergyUpgradeValue(1),
+	gathererAtkSpeedUpgradeValue(1),
+	meleeLifeUpgradeValue(1),
+	meleeDamageUpgradeValue(1),
+	meleeEnergyUpgradeValue(1),
+	meleeAtkSpeedUpgradeValue(1),
+	rangedLifeUpgradeValue(1),
+	rangedDamageUpgradeValue(1),
+	rangedEnergyUpgradeValue(1),
+	rangedAtkSpeedUpgradeValue(1),
+	upgradeValue(1.1f)
 
 {
 	name.create("entityManager");
@@ -1517,7 +1530,8 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->gathererLifeUpgradeValue));
+				gathererLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
 				break;
 			}
 		}
@@ -1529,8 +1543,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
-				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->gathererDamageUpgradeValue);
+				gathererDamageUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*) entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
 		}
@@ -1542,8 +1557,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
+				gathererEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->gathererEnergyUpgradeValue);
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
 				break;
 			}
 		}
@@ -1555,8 +1571,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
+				gathererAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->gathererAtkSpeedUpgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
 				break;
 			}
 		}
@@ -1568,7 +1585,8 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->rangedLifeUpgradeValue));
+				rangedLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
 				break;
 			}
 		}
@@ -1578,10 +1596,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
+				rangedDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->rangedDamageUpgradeValue);
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
 		}
@@ -1591,10 +1610,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
+				rangedEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->rangedEnergyUpgradeValue);
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
 				break;
 			}
 		}
@@ -1604,10 +1624,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
+				rangedAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->rangedAtkSpeedUpgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
 				break;
 			}
 		}
@@ -1619,7 +1640,8 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * app->uiManager->GetFactory()->meleeLifeUpgradeValue));
+				meleeLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
 				break;
 			}
 		}
@@ -1629,10 +1651,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
+				meleeDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage() * app->uiManager->GetFactory()->meleeDamageUpgradeValue);
+				hero->SetAttackDamage(hero->GetAttackDamage()* upgradeValue);
 				break;
 			}
 		}
@@ -1642,10 +1665,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
+				meleeEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * app->uiManager->GetFactory()->meleeEnergyUpgradeValue);
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints()* upgradeValue);
 				break;
 			}
 		}
@@ -1655,10 +1679,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
+				meleeAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed() * app->uiManager->GetFactory()->meleeAtkSpeedUpgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed()* upgradeValue);
 				break;
 			}
 		}

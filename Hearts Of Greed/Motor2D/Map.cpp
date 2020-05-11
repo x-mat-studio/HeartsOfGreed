@@ -764,14 +764,14 @@ bool ModuleMap::InsideCamera(float& posX, float& posY) const {
 	int camH;
 	app->render->GetCameraMeasures(camW, camH);
 	float scale = app->win->GetScale();
-
+	float inverseScale = 1 / scale;
 	float up_left_cam_cornerX = -app->render->currentCamX;
 	float up_left_cam_cornerY = -app->render->currentCamY;
 	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
 	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
 
-	if ((posX > (up_left_cam_cornerX / scale) - data.tileWidth && posX < down_right_cam_cornerX / scale) &&
-		(posY > (up_left_cam_cornerY / scale) - data.tileWidth && posY < down_right_cam_cornerY / scale)) {
+	if ((posX > (up_left_cam_cornerX *inverseScale) - data.tileWidth && posX < down_right_cam_cornerX * inverseScale) &&
+		(posY > (up_left_cam_cornerY * inverseScale) - data.tileWidth && posY < down_right_cam_cornerY * inverseScale)) {
 		return true;
 	}
 }
@@ -782,14 +782,15 @@ bool ModuleMap::EntityInsideCamera(float& posX, float& posY, float& w, float& h)
 	int camH;
 	app->render->GetCameraMeasures(camW, camH);
 	float scale = app->win->GetScale();
+	float inverseScale = 1 / scale;
 
 	float up_left_cam_cornerX = -app->render->currentCamX;
 	float up_left_cam_cornerY = -app->render->currentCamY;
 	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
 	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
 
-	if ((posX + (2 * w) > up_left_cam_cornerX / scale && posX - w < down_right_cam_cornerX / scale) &&
-		((posY + 2 * h > up_left_cam_cornerY / scale) && posY - h < (down_right_cam_cornerY + data.tileHeight) / scale)) {
+	if ((posX + (2 * w) > up_left_cam_cornerX * inverseScale && posX - w < down_right_cam_cornerX * inverseScale) &&
+		((posY + 2 * h > up_left_cam_cornerY * inverseScale) && posY - h < (down_right_cam_cornerY + data.tileHeight) * inverseScale)) {
 		return true;
 	}
 }

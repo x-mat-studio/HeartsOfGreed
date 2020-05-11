@@ -78,7 +78,7 @@ Twitter:	https://twitter.com/ii_rts
 
 
 ### Jose Luís Redondo Tello
-* Code
+* Code + UI
 * [jose-tello](https://github.com/jose-tello)
 
 

@@ -133,14 +133,14 @@ bool MeleeHero::ExecuteSkill3()
 void MeleeHero::LevelUp()
 {
 
-	hitPointsMax += 15;
-	hitPointsCurrent = hitPointsMax;		
+	hitPointsMax += (15 * app->entityManager->meleeLifeUpgradeValue);
+	hitPointsCurrent = hitPointsMax;	
 	recoveryHitPointsRate += 1;
-	energyPoints += 5;
+	energyPoints += (5 * app->entityManager->meleeEnergyUpgradeValue);
 	recoveryEnergyRate;
 
-	attackDamage += 3;
-	attackSpeed;
+	attackDamage += (3 * app->entityManager->meleeDamageUpgradeValue);
+	attackSpeed += (0 * app->entityManager->meleeAtkSpeedUpgradeValue);
 	attackRange;
 
 	unitSpeed += 5;

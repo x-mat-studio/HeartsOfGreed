@@ -149,14 +149,14 @@ bool RangedHero::ExecuteSkill3()
 void RangedHero::LevelUp()
 {
 	
-	hitPointsMax;
-	hitPointsCurrent; 
+	hitPointsMax += (0 * app->entityManager->rangedLifeUpgradeValue);
+	hitPointsCurrent = hitPointsMax; 
 	recoveryHitPointsRate;
-	energyPoints;
+	energyPoints += (0 * app->entityManager->rangedEnergyUpgradeValue);
 	recoveryEnergyRate;
 
-	attackDamage;
-	attackSpeed;
+	attackDamage += (0 * app->entityManager->rangedDamageUpgradeValue);
+	attackSpeed += (0 * app->entityManager->rangedAtkSpeedUpgradeValue);
 	attackRange;
 
 	unitSpeed;
