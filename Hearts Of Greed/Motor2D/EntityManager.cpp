@@ -1579,7 +1579,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				rangedDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1593,7 +1593,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				rangedEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1607,7 +1607,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				rangedAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1634,7 +1634,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				meleeDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1648,7 +1648,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				meleeEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
@@ -1662,7 +1662,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				meleeAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];

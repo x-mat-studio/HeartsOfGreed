@@ -1201,7 +1201,7 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::MELEE_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::MELEE_DAMAGE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::MELEE_ENERGY_UPGRADE);
-	CreateDamageUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE);
+	CreateDamageUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE);
 
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
