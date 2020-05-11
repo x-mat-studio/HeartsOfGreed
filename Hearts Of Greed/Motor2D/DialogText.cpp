@@ -30,7 +30,7 @@ void DialogText::HandleInput()
 {
 	P2SString* string = nullptr;
 
-	string = app->dialogManager->GetCurrentString();
+	string = app->dialogManager->GetCurrentString1();
 
 	if (text1 != *string)
 	{
@@ -40,7 +40,7 @@ void DialogText::HandleInput()
 	}
 
 
-	string = app->dialogManager->GetCurrentString();
+	string = app->dialogManager->GetCurrentString1();
 
 	if (text2 != *string)
 	{
@@ -61,16 +61,16 @@ void DialogText::ChangeTexture(SDL_Texture* tex, P2SString* string)
 
 void DialogText::Draw(float dt)
 {
+	
 	if (texture != nullptr)
 	{
 		app->render->Blit(texture, position.x + posText1.x, position.y + posText1.y, nullptr, false, false, '\000', 255, 255, 255);
 	}
-void DialogText::ChangeTexture()
-{
-	text = *app->dialogManager->GetCurrentString1();
-
 	if (texture2 != nullptr)
 	{
 		app->render->Blit(texture2, position.x + posText2.x, position.y + posText2.y, nullptr, false, false, '\000', 255, 255, 255);
 	}
 }
+
+
+
