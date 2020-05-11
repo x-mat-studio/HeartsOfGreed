@@ -77,7 +77,8 @@ public:
 
 	bool PushInput(DIALOG_INPUT input);
 
-	P2SString* GetCurrentString() const;
+	P2SString* GetCurrentString1() const;
+	P2SString* GetCurrentString2() const;
 private:
 
 	void InternalInput(float dt);
@@ -86,25 +87,44 @@ private:
 
 private:
 
-	P2SString* currentDialog;
-	//Pay attention to the dialog nomenclature
+	P2SString* currentDialog1stCharacter;
+	P2SString* currentDialog2ndCharacter;
+	
+	DIALOG_INPUT input;
+	DIALOG_STATE state;
 
+	//TUTORIAL-------------
 	P2SString dialogTutorialStart;
 	P2SString dialogTutorialEnd;
 
-
+	//Quest 1 ------------
 	P2SString dialogMission1_ST_B1;
 	P2SString dialogMission1_ST_A1;
 	P2SString dialogMission1_ST_B2;
 
-	P2SString dialogMission1_END_B3;
 	P2SString dialogMission1_END_A2;
+	P2SString dialogMission1_END_B3;
+	
+	//Quest 2 ------------
+	P2SString dialogMission2_ST_B1;
+	P2SString dialogMission2_ST_A1;
 
-	DIALOG_INPUT input;
-	DIALOG_STATE state;
+	P2SString dialogMission2_END_A2;
+	P2SString dialogMission2_END_B2;
 
+	//Quest 3 ------------
+	P2SString dialogMission3_ST_A1;
 
+	P2SString dialogMission3_END_B1;
+	P2SString dialogMission3_END_A2;
+	P2SString dialogMission3_END_B2;
 
+	//Quest 4 ------------
+	P2SString dialogMission4_ST_A1;
+	P2SString dialogMission4_ST_B1;
+
+	P2SString dialogMission4_END_C1;
+	P2SString dialogMission4_END_A2;
 };
 
 
