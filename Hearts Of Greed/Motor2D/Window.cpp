@@ -10,7 +10,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleWindow::ModuleWindow() : Module(), scale(.0f), minScaleValue(.0f), maxScaleValue(.0f), height(0u), width(0u), window(NULL), screenSurface(NULL), scaleFactor(.0f)
+ModuleWindow::ModuleWindow() : Module(), scale(.0f), minScaleValue(.0f), maxScaleValue(.0f), height(0u), width(0u), window(NULL), screenSurface(NULL), scaleFactor(.0f), stateResolution(RESOLUTION_MODE::STATIC)
 {
 	name.create("window");
 }

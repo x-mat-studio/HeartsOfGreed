@@ -21,6 +21,8 @@ enum class UI_TYPE : int
 	HEALTHBAR,
 	DATA_PAGES,
 	
+	HERO_PORTRAIT,
+	HERO_PORTRAIT_MANAGER,
 	RESOURCES_COUNTER,
 
 	MAX
@@ -40,10 +42,15 @@ public:
 
 	void Drag(int x, int y);
 
-	bool OnAbove();
+	virtual bool OnAbove();
+	virtual void UnFocus();
+	virtual UI* SearchFocus();
 
 	fMPoint GetPosition();
 	fMPoint GetLocalPosition();
+	void SetLocalPosition(fMPoint locPos);
+
+	void SetFather(UI* father);
 
 	bool GetDragable();
 

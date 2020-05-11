@@ -5,9 +5,10 @@
 #include "Render.h"
 #include "EventManager.h"
 #include "Collision.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 
-ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr)
+ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr), viewport{ 0,0,0,0 }, currentCamX(0), currentCamY(0), camera{0,0,0,0}
 {
 	name.create("renderer");
 }
@@ -90,10 +91,12 @@ bool ModuleRender::Update(float dt)
 
 bool ModuleRender::PostUpdate(float dt)
 {
+	//BROFILER_CATEGORY("Render PostUpdate", Profiler::Color::LightYellow);
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
-	
+
 	SDL_RenderPresent(renderer);
-	
+
 	CheckListener(this);
 
 	if (gameExit)
@@ -164,7 +167,7 @@ void ModuleRender::ExecuteEvent(EVENT_ENUM eventId)
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, bool cameraUse, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b,
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, bool cameraUse, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b, float additionalScale,
 	float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
 	camera.x = currentCamX;
@@ -173,17 +176,17 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	float scale = 2.0f; //TODO THIS IS AN ARBITRARY NUMBER
 
 	SDL_Rect rect;
-	
-	if (cameraUse == true) 
+
+	if (cameraUse == true)
 	{
 		scale = app->win->GetScale();
-		rect.x = (int)(camera.x * speedX) + x * scale;
-		rect.y = (int)(camera.y * speedY) + y * scale;
+		rect.x = (int)(camera.x * speedX) + (x - (pivotX * additionalScale)) * scale;
+		rect.y = (int)(camera.y * speedY) + (y - (pivotY * additionalScale)) * scale;
 	}
 	else
 	{
-		rect.x = (int) x * scale;
-		rect.y = (int) y * scale;
+		rect.x = (int)x * scale;
+		rect.y = (int)y * scale;
 	}
 
 	if (alpha != 0)
@@ -210,8 +213,9 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	}
 
 
-	rect.w *= scale;
-	rect.h *= scale;
+	rect.w *= (scale * additionalScale);
+	rect.h *= (scale * additionalScale);
+
 
 	SDL_Point* p = NULL;
 	SDL_Point rotPivot;
@@ -241,9 +245,6 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* sect
 	}
 	else
 	{
-		rect.x = rect.x - pivotX;
-		rect.y = rect.y + pivotY;
-
 
 		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
 		{
@@ -288,7 +289,7 @@ bool ModuleRender::MinimapBlit(SDL_Texture* texture, int x, int y, const SDL_Rec
 	rect.w *= scale;
 	rect.h *= scale;
 
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, NULL,NULL, SDL_FLIP_NONE) != 0)
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, NULL, NULL, SDL_FLIP_NONE) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
@@ -334,7 +335,7 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 }
 
 
-bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) 
+bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
 	camera.x = currentCamX;
 	camera.y = currentCamY;

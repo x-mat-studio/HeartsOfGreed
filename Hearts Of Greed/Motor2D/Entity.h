@@ -20,8 +20,6 @@ enum class ENTITY_TYPE : int
 {
 	UNKNOWN = -1,
 
-	PARTICLE,
-	EMITER,
 	PARTICLE_SYSTEM,
 
 	SPAWNER,
@@ -29,14 +27,20 @@ enum class ENTITY_TYPE : int
 	HERO_MELEE,
 	HERO_RANGED,
 	HERO_GATHERER,
+	HERO_ROBO,
 
 	ENEMY,
+	ENEMY_RANGED,
+	ENEMY_NIGHT,
+	ENEMY_GIGA,
 
 	BUILDING,
 	BLDG_TURRET,
 	BLDG_UPGRADE_CENTER,
 	BLDG_BASE,
 	BLDG_BARRICADE,
+
+	QUEST,
 
 	MAX_TYPE
 };
@@ -99,6 +103,12 @@ public:
 	fMPoint GetCenter();
 	fMPoint GetOffset();
 	void SetPosition(int x, int y);
+
+	int GetMaxHP() const;
+	void SetMaxHP(int newMaxHp) ;
+
+	int GetCurrentHP() const;
+	void SetCurrentHP(int newcurrHp);
 
 	void SetTexture(SDL_Texture* texture);
 	SDL_Texture* GetTexture();

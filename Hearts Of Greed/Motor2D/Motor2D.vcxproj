@@ -70,8 +70,8 @@
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -88,7 +88,10 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DataPages.cpp" />
+    <ClCompile Include="DialogText.cpp" />
     <ClCompile Include="DynamicEntity.cpp" />
+    <ClCompile Include="EasingFunctions.cpp" />
+    <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -97,7 +100,10 @@
     <ClCompile Include="FoWEntity.cpp" />
     <ClCompile Include="FoWManager.cpp" />
     <ClCompile Include="GathererHero.cpp" />
+    <ClCompile Include="GigaEnemy.cpp" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="HeroesPortraitManager.cpp" />
+    <ClCompile Include="HeroPortrait.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="LoseScene.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -110,8 +116,15 @@
     <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="FadeToBlack.cpp" />
+    <ClCompile Include="DialogManager.cpp" />
+    <ClCompile Include="NightEnemy.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Quest.cpp" />
+    <ClCompile Include="QuestManager.cpp" />
+    <ClCompile Include="RangedEnemy.cpp" />
     <ClCompile Include="RangedHero.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="ResourcesPortrait.cpp" />
@@ -146,7 +159,10 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DataPages.h" />
+    <ClInclude Include="DialogText.h" />
     <ClInclude Include="DynamicEntity.h" />
+    <ClInclude Include="EasingFunctions.h" />
+    <ClInclude Include="Emitter.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
@@ -158,7 +174,10 @@
     <ClInclude Include="Frame.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="GathererHero.h" />
+    <ClInclude Include="GigaEnemy.h" />
     <ClInclude Include="Hero.h" />
+    <ClInclude Include="HeroesPortraitManager.h" />
+    <ClInclude Include="HeroPortrait.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="LoseScene.h" />
@@ -167,8 +186,15 @@
     <ClInclude Include="MeleeHero.h" />
     <ClInclude Include="FadeToBlack.h" />
     <ClInclude Include="Minimap.h" />
+    <ClInclude Include="DialogManager.h" />
+    <ClInclude Include="NightEnemy.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Quest.h" />
+    <ClInclude Include="QuestManager.h" />
+    <ClInclude Include="RangedEnemy.h" />
     <ClInclude Include="RangedHero.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="ResourcesPortrait.h" />

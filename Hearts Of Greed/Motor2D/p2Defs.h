@@ -9,6 +9,8 @@
 #undef NULL
 #endif
 #define NULL  0
+#define PI 3.14159265359
+
 
 // Deletes a buffer
 #define RELEASE( x ) \
@@ -30,6 +32,7 @@
 	    }                            \
                               \
     }
+
 
 #define IN_RANGE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 #define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
@@ -64,5 +67,21 @@ inline const char* const PATH(const char* folder, const char* file)
 template <typename T> int sgn(T val) {
 	return (T(0) < val) - (val < T(0));
 }
+
+template <class VALUE_TYPE> VALUE_TYPE  lerp(VALUE_TYPE& start, VALUE_TYPE& end, float t)
+{
+	return start + t * (end - start);
+}
+
+
+template <class VALUE_TYPE> VALUE_TYPE  Abs(VALUE_TYPE& start)
+{
+	if (start >= 0.0f)
+		return start;
+	else
+		return -start;
+}
+
+
 
 #endif

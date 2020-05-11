@@ -57,6 +57,9 @@ public:
 
 	void CreateMinimapText();
 	void LoadMinimap();
+	void UpdateMinimapFoW();
+	void MinimapFoWNeedsUpdate();
+
 
 	bool ClickingOnMinimap(int x, int y);
 	iMPoint WorldToMinimap(int x, int y);
@@ -82,6 +85,7 @@ private:
 	SDL_Rect camRect;
 
 	bool minimapLoaded;
+	bool minimapFoWNeedsUpdate;
 
 };
 

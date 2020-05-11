@@ -10,6 +10,7 @@
 #include "UIManager.h"
 #include "UI.h"
 #include "Player.h"
+#include "FoWManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
@@ -39,7 +40,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 }
 
 
-Minimap::Minimap() :minimapLoaded(false)
+Minimap::Minimap() :minimapLoaded(false),minimapFoWNeedsUpdate(false)
 {
 	name = "minimap";
 }
@@ -105,6 +106,9 @@ bool Minimap::PreUpdate(float dt)
 // Called each loop iteration
 bool Minimap::Update(float dt)
 {
+	BROFILER_CATEGORY("Minimap Update", Profiler::Color::DarkBlue);
+
+
 	CheckListener(this);
 
 	if (minimapLoaded==true)
@@ -137,9 +141,17 @@ bool Minimap::Update(float dt)
 bool Minimap::PostUpdate(float dt)
 {
 	bool ret = true;
+	BROFILER_CATEGORY("Minimap PostUpdate", Profiler::Color::DarkSlateBlue);
 
 	if (minimapLoaded==true)
 	{
+		if (minimapFoWNeedsUpdate == true)
+		{
+			UpdateMinimapFoW();
+			minimapFoWNeedsUpdate = false;
+		}
+		//app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
+		//FoW Draw
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 
 		//Draw icons
@@ -174,6 +186,8 @@ bool Minimap::PostUpdate(float dt)
 			minimapIcons[i]->Draw(iconRect);
 
 		}
+
+
 
 
 		//camera rect representation
@@ -277,6 +291,7 @@ void Minimap::CreateMinimapText()
 
 	app->map->DrawMinimap();
 	app->entityManager->DrawOnlyStaticBuildings();
+	//app->fowManager->DrawFoWMinimap(); //detalis & bases are not visible in the minimap so we can not draw the FoW
 	app->render->currentCamX = auxCam.x;
 	app->render->currentCamY = auxCam.y;
 }
@@ -300,7 +315,32 @@ void Minimap::LoadMinimap()
 	SDL_SetRenderTarget(app->render->renderer, minimapTexture);
 	CreateMinimapText();
 	SDL_SetRenderTarget(app->render->renderer, NULL);
+	minimapFoWNeedsUpdate = true;
 	
+}
+
+void Minimap::UpdateMinimapFoW()
+{
+	if (minimapLoaded == true)
+	{
+		BROFILER_CATEGORY("Update Minimap FoW", Profiler::Color::LightCoral);
+		app->tex->UnLoad(minimapTexture);
+		minimapTexture = nullptr;
+
+		uint windowWidth, windowHeight;
+		app->win->GetWindowSize(windowWidth, windowHeight);
+
+		minimapTexture = SDL_CreateTexture(app->render->renderer, SDL_GetWindowPixelFormat(app->win->window), SDL_TEXTUREACCESS_TARGET, 1.05f * width, 1.05f * height);
+
+		SDL_SetRenderTarget(app->render->renderer, minimapTexture);
+		CreateMinimapText();
+		SDL_SetRenderTarget(app->render->renderer, NULL);
+	}
+}
+void Minimap::MinimapFoWNeedsUpdate()
+{
+	if (minimapFoWNeedsUpdate == false)
+		minimapFoWNeedsUpdate = true;
 }
 
 

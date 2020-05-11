@@ -44,8 +44,9 @@ public:
 
 	Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 		  Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
-		  Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, int maxHitPoints, int currentHitPoints,
-		  int recoveryHitPointsRate, int vision, int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int xpOnDeath);
+		  Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, 
+		  Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
+		  int recoveryHitPointsRate, int vision, int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale = 1.0f);
 
 
 	Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align);
@@ -66,6 +67,7 @@ public:
 
 	void Draw(float dt);
 
+
 	void Die();
 
 	int GetHP();
@@ -75,9 +77,17 @@ public:
 	int GetRecov();
 
 	void DrawOnSelect();
+
+	int GetLongTermObjectiveX();
+	int GetLongTermObjectiveY();
+
+	void SetLongTermObjective(fMPoint point);
+
 private:
 
 	bool Attack();
+	Frame GetAnimationCurrentFrame(float dt);
+
 
 	void RecoverHealth();
 
@@ -103,7 +113,7 @@ private:
 	int vision;
 
 	int attackDamage;
-	int attackSpeed;
+	float attackSpeed;
 	int attackRange;
 
 	int xpOnDeath;
@@ -135,6 +145,12 @@ private:
 	Animation punchRightUp;
 	Animation punchRightDown;
 	Animation punchRight;
+	Animation deathRight;
+	Animation deathRightUp;
+	Animation deathRightDown;
+	Animation deathLeft;
+	Animation deathLeftUp;
+	Animation deathLeftDown;
 
 	Animation* currentAnimation;
 
@@ -142,7 +158,7 @@ private:
 	std::vector<ENEMY_INPUTS> inputs;
 
 	float damageTakenTimer;
-
+	float scale;
 };
 
 

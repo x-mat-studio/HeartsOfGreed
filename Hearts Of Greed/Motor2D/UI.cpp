@@ -22,6 +22,7 @@ UI::UI() :
 	focused(false)
 {}
 
+
 UI::UI(fMPoint positionValue, UI* father, UI_TYPE uiType, SDL_Rect rect, bool interactable, bool dragable, SDL_Texture* texture) :
 
 	localPosition(positionValue),
@@ -98,7 +99,6 @@ void UI::Draw(float dt)
 			app->render->Blit(texture, position.x, position.y, &rect, false, false, '\000', 255, 255, 255);
 		}
 	}
-	
 }
 
 
@@ -163,8 +163,36 @@ fMPoint UI::GetLocalPosition()
 }
 
 
+void UI::SetLocalPosition(fMPoint locPos)
+{
+	localPosition = locPos;
+}
+
+
 bool UI::GetDragable()
 {
 	return dragable;
 }
 
+
+UI* UI::SearchFocus()
+{
+	if (OnAbove() == true)
+	{
+		return this;
+	}
+
+	return nullptr;
+}
+
+
+void UI::UnFocus()
+{
+	focused = false;
+}
+
+
+void UI::SetFather(UI* element)
+{
+	father = element;
+}

@@ -1,7 +1,7 @@
 #ifndef __Collision_H__
 #define __Collision_H__
 
-#define MAX_COLLIDERS 3500
+#define MAX_COLLIDERS 450
 
 #include "SDL/include/SDL.h"
 #include "Module.h"
@@ -20,6 +20,8 @@ enum COLLIDER_TYPE
 
 	COLLIDER_BASE_ALERT,
 	COLLIDER_RECLUIT_IA,
+
+	COLLIDER_QUEST,
 
 	COLLIDER_MAX,
 };
@@ -92,7 +94,7 @@ public:
 	bool PostUpdate(float dt);
 	bool CleanUp();
 
-	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = nullptr);
+	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, Module* callback = nullptr, Entity* entCallback = nullptr);
 
 	void AddColliderEntity(Collider* collider);
 	void DebugDraw();
@@ -100,8 +102,9 @@ public:
 private:
 
 	bool		debug = false;
-	std::vector <Collider*> colliders;
+	Collider* colliders [MAX_COLLIDERS];
 	bool		matrix[COLLIDER_MAX][COLLIDER_MAX];
+
 
 };
 

@@ -19,7 +19,7 @@ class ModuleRender;
 class ModuleTextures;
 class ModuleCollision;
 class ModuleMap;
-
+class ModuleQuestManager;
 class ModulePlayer;
 class ModuleEntityManager;
 class ModuleUIManager;
@@ -35,6 +35,7 @@ class ModuleTestScene;
 class ModuleWinScene;
 class ModuleLoseScene;
 class Minimap;
+class ModuleDialogManager;
 
 
 class App
@@ -123,6 +124,8 @@ public:
 	ModuleWinScene*			winScene;
 	ModuleLoseScene*		loseScene;
 	Minimap*				minimap;
+	ModuleQuestManager*		questManager;
+	ModuleDialogManager*	dialogManager;
 
 	uint32_t			frames;
 	

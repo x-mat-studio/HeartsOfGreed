@@ -77,7 +77,6 @@ private:
 
 	_Mix_Music* music;
 
-	int sfxList[MAX_SFX];
 	
 	std::vector<Mix_Chunk*>	fx;  //We need a Array of Numbers: sfx are stored as unsigned int
 

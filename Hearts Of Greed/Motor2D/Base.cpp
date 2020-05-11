@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "EntityManager.h"
 #include "Player.h"
+#include "FoWManager.h"
 
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
@@ -65,16 +66,23 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 	turretsVector(copy->turretsVector),
 	barricadesVector(copy->barricadesVector)
 {
-	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback);
+	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback, this);
 
-	int x = position.x;
-	int y = position.y;
-
-	y -= baseAreaAlarm->rect.h * 0.25; //TODO make this work with new entity offsets
+	int x = position.x - baseAreaAlarm->rect.w *0.5f;
+	int y = position.y - baseAreaAlarm->rect.h * 0.6f;
 
 	baseAreaAlarm->SetPos(x, y);
 	radiusSize = 5;
 
+	//FoW Related
+	if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
+	{
+		visionEntity = app->fowManager->CreateFoWEntity(position, true, 15,5);//TODO that 15 needs to be passed as a parameter
+	}
+	else
+	{
+		visionEntity = app->fowManager->CreateFoWEntity(position, false, 15,5);
+	}
 }
 
 
@@ -84,6 +92,11 @@ Base::~Base()
 
 	baseUpgradeCenter = nullptr;
 
+	if (visionEntity != nullptr)
+	{
+		visionEntity->deleteEntity = true;
+		visionEntity = nullptr;
+	}
 	turretsVector.clear();
 	barricadesVector.clear();
 }
@@ -214,11 +227,35 @@ void Base::ChangeAligment()
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
 
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetEntityProvideVision(true);
+			
+		}
+
+
+		if(minimapIcon!=nullptr)
+		{
+			minimapIcon->type = MINIMAP_ICONS::BASE;
+		}
 	}
 
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
+
+
+		if (visionEntity != nullptr)
+		{
+			visionEntity->SetEntityProvideVision(false);
+		}
+
+		if (minimapIcon != nullptr)
+		{
+			minimapIcon->type = MINIMAP_ICONS::ENEMY_BASE;
+		}
+
 	}
 
 	if (baseUpgradeCenter != nullptr)
@@ -363,4 +400,22 @@ int Base::GetcurrentTurrets()
 int Base::GetmaxTurrets()
 {
 	return maxTurrets;
+}
+
+
+std::vector<Turret*>* Base::GetTurretVector()
+{
+	return &turretsVector;
+}
+
+
+std::vector<Barricade*>* Base::GetBarricadeVector()
+{
+	return &barricadesVector;
+}
+
+
+UpgradeCenter* Base::GetUpgradeCenter()
+{
+	return baseUpgradeCenter;
 }

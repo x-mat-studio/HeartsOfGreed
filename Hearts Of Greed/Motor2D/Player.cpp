@@ -87,10 +87,12 @@ bool ModulePlayer::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
 
-
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
-
+	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_GATHERER, this);
+	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
 	return true;
 }
@@ -115,6 +117,10 @@ bool ModulePlayer::CleanUp()
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_GATHERER, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
 	constrAreaInfo = nullptr;
 	constrArea.clear();
@@ -141,12 +147,6 @@ bool ModulePlayer::PreUpdate(float dt)
 	{
 		DesactivateBuildMode();
 	}
-
-	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_STATE::KEY_DOWN) // For debug purposes
-	{
-		resources += 1000;
-	}
-
 
 
 	CheckListener(this);
@@ -238,6 +238,7 @@ bool ModulePlayer::HandleInput()
 			focusedEntity = nullptr;
 			LeftClick();
 		}
+
 		else if (selectUnits && hasClicked)
 		{
 			Select();
@@ -316,8 +317,11 @@ void ModulePlayer::RightClick()
 	{
 		enemyFound = heroesVector[i]->LockOn(obj);
 
-		heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound);
+		if (heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound))
+			app->audio->PlayFx(app->entityManager->moveHero, 0, 1);;
+
 	}
+
 
 }
 
@@ -396,7 +400,7 @@ void ModulePlayer::PrepareHeroSkills()
 
 	if (skill1 == true)
 	{
-		if (heroesVector[focusedHero]->skill1Charged == true && (heroesVector[focusedHero]->energyPoints >= heroesVector[focusedHero]->skill1Cost))
+		if (heroesVector[focusedHero]->skill1Charged == true && (heroesVector[focusedHero]->GetEnergyPoints() >= heroesVector[focusedHero]->GetSkill1Cost()))
 		{
 			doSkill = heroesVector[focusedHero]->PrepareSkill1();
 			prepareSkill = !doSkill;
@@ -514,10 +518,6 @@ bool ModulePlayer::BuildClick()
 		y = mousePos.y;
 	}
 
-	SDL_Rect rect = app->entityManager->GetSample(buildingToBuild)->GetCollider()->rect;
-
-	x -= rect.w * 0.5f;
-	y -= rect.h;
 
 	if (baseInBuild != nullptr)
 	{
@@ -563,6 +563,8 @@ void ModulePlayer::SubstractBuildResources()
 void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 {
 	iMPoint mouse = app->input->GetMousePosScreen();
+	Hero* hero;
+	int numHeroes;
 
 	switch (eventId)
 	{
@@ -580,13 +582,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		doingAction = false;
 		focusedHero = 0;
 
-		if(heroesVector.size() > 0)
-		{ 
+		if (heroesVector.size() > 0)
+		{
 			int random = rand() % heroesVector.size();
 
 			heroesVector[random]->PlayGenericNoise(100);
 		}
-			
+
 
 		break;
 
@@ -659,9 +661,14 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
-		if (resources >= turretCost && app->uiManager->lastShop->TurretCapacityExceed())
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
 		{
-			ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, app->uiManager->lastShop);
+			Base* base = (Base*)focusedEntity;
+
+			if (resources >= turretCost && base->TurretCapacityExceed())
+			{
+				ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, base);
+			}
 		}
 		break;
 
@@ -669,12 +676,87 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		resources -= turretCost;
 		break;
 
+
 	case EVENT_ENUM::EXIT_CONSTRUCTION_MODE:
 		if (buildMode)
 		{
 			DesactivateBuildMode();
 		}
 		break;
+
+
+	case EVENT_ENUM::FOCUS_HERO_GATHERER:
+
+		numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->selectedByPlayer = false;
+		}
+
+		heroesVector.clear();
+
+
+		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_GATHERER);
+		hero->selectedByPlayer = true;
+
+		heroesVector.push_back(hero);
+		break;
+
+
+	case EVENT_ENUM::FOCUS_HERO_MELEE:
+
+		numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->selectedByPlayer = false;
+		}
+
+		heroesVector.clear();
+
+		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_MELEE);
+		hero->selectedByPlayer = true;
+
+		heroesVector.push_back(hero);
+		break;
+
+
+	case EVENT_ENUM::FOCUS_HERO_RANGED:
+
+		numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->selectedByPlayer = false;
+		}
+
+		heroesVector.clear();
+
+		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_RANGED);
+		hero->selectedByPlayer = true;
+
+		heroesVector.push_back(hero);
+		break;
+
+
+	case EVENT_ENUM::FOCUS_HERO_ROBO:
+
+		numHeroes = heroesVector.size();
+
+		for (int i = 0; i < numHeroes; i++)
+		{
+			heroesVector[i]->selectedByPlayer = false;
+		}
+
+		heroesVector.clear();
+
+		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_ROBO);
+		hero->selectedByPlayer = true;
+
+		heroesVector.push_back(hero);
+		break;
+		
 	}
 
 
@@ -856,4 +938,24 @@ bool ModulePlayer::SetMenuState(bool menuState)
 	}
 
 	return UIMenuOn;
+}
+
+
+bool ModulePlayer::Load(pugi::xml_node& data)
+{
+	pugi::xml_node iterator = data.first_child();
+
+	resources = iterator.attribute("cristals").as_int();
+
+	return true;
+}
+
+
+bool ModulePlayer::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node iterator = data.append_child("resources");
+
+	iterator.append_attribute("cristals") = resources;
+
+	return true;
 }

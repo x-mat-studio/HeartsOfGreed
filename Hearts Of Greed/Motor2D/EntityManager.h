@@ -12,13 +12,22 @@ class Hero;
 class GathererHero;
 class MeleeHero;
 class RangedHero;
+class RoboHero;
 
 class Building;
 class DynamicEntity;
 class Enemy;
+class RangedEnemy;
+class GigaEnemy;
+class NightEnemy;
 class Spawner;
 class Base;
 class Turret;
+class ParticleSystem;
+class Emitter;
+
+enum class BUILDING_DECOR;
+enum class TYPE_PARTICLE_SYSTEM;
 
 enum class AREA_TYPE
 {
@@ -55,7 +64,7 @@ class ModuleEntityManager : public Module
 public:
 
 	ModuleEntityManager();
-	virtual ~ModuleEntityManager();
+	~ModuleEntityManager();
 
 
 	bool Awake(pugi::xml_node&);
@@ -70,14 +79,17 @@ public:
 	bool CleanUp();
 
 	
-	bool Load(pugi::xml_node&) { return true; };
-	bool Save(pugi::xml_node&) { return true; };
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 
 
 	void OnCollision(Collider*, Collider*);
 
 
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
+	Entity* AddDecorativeBuilding(BUILDING_DECOR decor, int x, int y);
+	Entity* AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y);
+
 	Entity* GetSample(ENTITY_TYPE);
 
 
@@ -122,6 +134,8 @@ public:
 
 	void ResetEntityManager();
 
+	Entity* SearchEntity(ENTITY_TYPE type);
+
 private:
 
 	void CheckIfStarted();
@@ -142,11 +156,12 @@ private:
 	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
 
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
-	bool LoadSampleEnemy(pugi::xml_node& enemyNode);
+	bool LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType);
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
+	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
 
@@ -155,7 +170,11 @@ public:
 	SDL_Texture* selectedTexture;
 	SDL_Texture* targetedTexture;
 	SDL_Texture* debugPathTexture;
-	SDL_Texture* moveCommandTile;
+
+	SDL_Texture* moveCommandTileRng;
+	SDL_Texture* moveCommandTileGath;
+	SDL_Texture* moveCommandTileMelee;
+
 	SDL_Texture* explosionTexture;
 
 	
@@ -170,6 +189,9 @@ public:
 	int suitmanGetsHit2;
 	int suitmanGetsDeath;
 	int suitmanGetsDeath2;
+
+	int rangedGetsHit;
+	int rangedDies;
 
 	int buildingGetsHit;
 	int buildingGetsHit2;
@@ -191,6 +213,11 @@ public:
 	int noise3Armored;
 	int noise4Armored;
 
+	int noise1Ranged;
+	int noise2Ranged;
+	int noise3Ranged;
+	int noise4Ranged;
+
 	int lvlup;
 	int selectHero;
 	int moveHero;
@@ -201,6 +228,20 @@ public:
 	SDL_Texture* base2TextureEnemy;
 	SDL_Texture* base2TextureSelected;
 	SDL_Texture* base2TextureSelectedEnemy;
+
+	// Upgrades multipliers
+	float gathererLifeUpgradeValue;
+	float gathererDamageUpgradeValue;
+	float gathererEnergyUpgradeValue;
+	float gathererAtkSpeedUpgradeValue;
+	float meleeLifeUpgradeValue;
+	float meleeDamageUpgradeValue;
+	float meleeEnergyUpgradeValue;
+	float meleeAtkSpeedUpgradeValue;
+	float rangedLifeUpgradeValue;
+	float rangedDamageUpgradeValue;
+	float rangedEnergyUpgradeValue;
+	float rangedAtkSpeedUpgradeValue;
 
 private:
 
@@ -216,6 +257,8 @@ private:
 	SDL_Texture* suitManTexture;
 	SDL_Texture* armorMaleTexture;
 	SDL_Texture* combatFemaleTexture;
+	SDL_Texture* roboTexture;
+
 	SDL_Texture* buildingTexture;
 
 	
@@ -228,14 +271,21 @@ private:
 	SDL_Texture* turretTexture;
 
 	SDL_Texture* enemyTexture;
+	SDL_Texture* enemyNightTexture;
+	SDL_Texture* enemyGigaTexture;
+	SDL_Texture* enemyRangedTexture;
 
 	//Samples
 
 	GathererHero* sampleGatherer;
 	MeleeHero* sampleMelee;
 	RangedHero* sampleRanged;
+	RoboHero* sampleRobo;
 
 	Enemy* sampleEnemy;
+	NightEnemy* sampleEnemyNight;
+	GigaEnemy* sampleEnemyGiga;
+	RangedEnemy* sampleEnemyRanged;
 
 	Spawner* sampleSpawner;
 
@@ -243,6 +293,9 @@ private:
 	Base* sampleBase;
 
 	Turret* sampleTurret;
+
+	ParticleSystem* sampleParticleSystem;
+	Emitter* sampleEmitter;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
 };

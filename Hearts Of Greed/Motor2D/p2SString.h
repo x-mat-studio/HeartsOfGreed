@@ -48,6 +48,7 @@ public:
 	P2SString(const char* format, ...)
 	{
 		size = 0;
+		str = nullptr;
 
 
 		if (format != NULL)

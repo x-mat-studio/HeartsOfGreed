@@ -53,6 +53,9 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 	void DrawNightRect();
 
+public:
+	bool startFromLoad;
+
 private:
 	int prevMousePosX;
 	int prevmousePosY;

@@ -2,6 +2,22 @@
 #include "Render.h"
 #include "Textures.h"
 #include "EntityManager.h"
+#include "Brofiler/Brofiler/Brofiler.h"
+
+Building::Building() :
+	recoveryHitPointsRate(0),
+	xpOnDeath(0),
+	buildingCost(0),
+	transparencyValue(0),
+
+	myBase(nullptr),
+	selectedTexture(nullptr),
+	transparent(false),
+	selected(false),
+	currentState(BUILDING_STATE::ST_UNKNOWN),
+	myDecor(BUILDING_DECOR::NONE)
+{
+}
 
 Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
 	ENTITY_TYPE type, BUILDING_DECOR decor) :
@@ -41,10 +57,6 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 {
 }
 
-
-Building::Building()
-{
-}
 
 
 void Building::Destroy()
@@ -106,12 +118,13 @@ void Building::Contruct()
 
 void Building::Draw(float dt)
 {
+	BROFILER_CATEGORY("DRAW Static Buildings", Profiler::Color::DarkGoldenRod);
 
 	fMPoint newPos = position + offset;
 
 	if (selectedByPlayer)
 	{
-		if (transparent) 
+		if (transparent)
 		{
 			app->render->Blit(selectedTexture, newPos.x, newPos.y, nullptr, false, true, transparencyValue);
 		}
@@ -120,7 +133,7 @@ void Building::Draw(float dt)
 			app->render->Blit(selectedTexture, newPos.x, newPos.y, nullptr, false, true);
 		}
 	}
-	else 
+	else
 	{
 		if (transparent)
 		{
@@ -135,32 +148,24 @@ void Building::Draw(float dt)
 
 void Building::MinimapDraw(float scale, float halfWidth)
 {
-	float worldX = position.x+offset.x;
-	float worldY = position.y+offset.y;
+	float worldX = position.x + offset.x;
+	float worldY = position.y + offset.y;
 
 	worldX += app->render->currentCamX;
 	worldY += app->render->currentCamY;
 
 	SDL_Texture* auxTexture = nullptr;
 
-	switch (GetDecor())
-	{
-	case BUILDING_DECOR::ST_01:
-		auxTexture = app->tex->Load("maps/base01.png");
-		break;
-	case BUILDING_DECOR::ST_02:
-		auxTexture = app->tex->Load("maps/base02.png");
-		break;
-	case BUILDING_DECOR::ST_03:
-		auxTexture = app->tex->Load("maps/base03.png");
-		break;
 
+	if (texture != nullptr)
+	{
+		app->render->MinimapBlit(texture, worldX + halfWidth, worldY, NULL, scale);
+	}
+	else
+	{
+		app->minimap->MinimapFoWNeedsUpdate();
 	}
 
-	
-	app->render->MinimapBlit(auxTexture, worldX + halfWidth, worldY, NULL, scale);
-
-	app->tex->UnLoad(auxTexture);
 }
 
 void Building::ActivateTransparency()

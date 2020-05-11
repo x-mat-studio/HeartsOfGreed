@@ -16,14 +16,16 @@ private:
 
 	void HandleInput();
 	void Move();
-	float PositionToValue();
-	float ValueToPosition(float value);
-
+	float PositionToValue() const;
+	float ValueToPosition(float value) const;
+	
 private:
 
 	float previousX;
 	float currentValue;
 	float maxValue;
+
+	bool clickCheck;
 };
 
 #endif//__UI_SCROLLBAR_H__

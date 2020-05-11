@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Render.h"
 #include "Input.h"
+#include "Minimap.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleFoWManager::ModuleFoWManager() :
@@ -12,8 +13,14 @@ ModuleFoWManager::ModuleFoWManager() :
 	smoothFoWtexture(nullptr),
 	debugFoWtexture(nullptr),
 	debugMode(false),
-	foWMapNeedsRefresh(false)
-{}
+	foWMapNeedsRefresh(false),
+
+	width(0),
+	height(0),
+	fowUpdateTimer(0)
+{
+	name.create("FOWManager");
+}
 
 
 ModuleFoWManager::~ModuleFoWManager()
@@ -35,8 +42,8 @@ bool ModuleFoWManager::Start()
 	smoothFoWtexture = app->tex->Load("spritesheets/VFX/fogTiles.png");
 	debugFoWtexture = app->tex->Load("spritesheets/VFX/fogTilesDebug.png");
 
-	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr);
-	ret = false;
+	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr)
+		ret = false;
 
 	foWMapVisible = true;
 
@@ -98,7 +105,7 @@ bool ModuleFoWManager::PreUpdate(float dt)
 	//deletes all the entities that request to do so
 	for (int i = 0; i < fowEntities.size(); i++)
 	{
-		if (fowEntities[i]->deleteEntity)
+		if (fowEntities[i]->deleteEntity==true)
 		{
 			delete fowEntities[i];
 			fowEntities[i] = nullptr;
@@ -147,6 +154,7 @@ bool ModuleFoWManager::Update(float dt)
 		if (foWMapNeedsRefresh)
 		{
 			UpdateFoWMap();
+			app->minimap->MinimapFoWNeedsUpdate();
 			foWMapNeedsRefresh = false;
 		}
 	}
@@ -279,11 +287,8 @@ void ModuleFoWManager::UpdateFoWMap()
 		{
 			for (int i = 0; i < fowEntities.size(); i++)
 			{
-				if (CheckTileVisibility(fowEntities[i]->GetPos()))
-				{
-					fowEntities[i]->isVisible = true;
-				}
-				else fowEntities[i]->isVisible = false;
+
+				fowEntities.at(i)->UpdateVisibility();
 
 			}
 		}
@@ -341,17 +346,18 @@ void ModuleFoWManager::DrawFoWMap()
 
 
 					//draw fog
-					if (fogId != -1)
-					{
-
-						SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
-						SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
-						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
-					}
+					
 					if (shroudId != -1)
 					{
 						SDL_SetTextureAlphaMod(displayFogTexture, 255);//set the alpha to white again
 						SDL_Rect r = { shroudId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
+					}
+					if (tileInfo->tileShroudBits!=fow_ALL && fogId != -1)
+					{
+
+						SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
+						SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
 						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
 					}
 
@@ -363,11 +369,63 @@ void ModuleFoWManager::DrawFoWMap()
 	}
 }
 
-FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius)
+
+void ModuleFoWManager::DrawFoWMinimap()
+{
+	BROFILER_CATEGORY("FOW MINIMAP DRAW", Profiler::Color::NavajoWhite);
+	if (foWMapVisible)
+	{
+		float scale = app->minimap->minimapScaleRelation;
+		float halfWidth = app->minimap->minimapWidth * 0.5f;
+
+		float halfTileHeight = app->map->data.tileHeight * 0.5f;
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+
+				fMPoint worldPos;
+				app->map->MapToWorldCoords(x, y, app->map->data, worldPos.x, worldPos.y);
+
+				FoWDataStruct* tileInfo = GetFoWTileState({ x, y });
+				int shroudId = -1;
+
+				if (tileInfo != nullptr)
+				{
+
+					if (bitToTextureTable.find(tileInfo->tileShroudBits) != bitToTextureTable.end())
+					{
+						shroudId = bitToTextureTable[tileInfo->tileShroudBits];
+					}
+
+
+
+					//draw fog
+					if (shroudId != -1)
+					{
+
+						//SDL_SetTextureAlphaMod(smoothFoWtexture, 255);//set the alpha of the texture to half to reproduce fog
+						SDL_Rect r = { shroudId * 64 ,0,64 ,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						app->render->MinimapBlit(smoothFoWtexture, worldPos.x + halfWidth, worldPos.y - halfTileHeight, &r, scale);
+						/*SDL_Rect r = { (worldPos.x + halfWidth) * scale,worldPos.y * scale,64 * scale,64 * scale };
+						app->render->DrawQuad(r, 255, 255, 255, 255, true, false);*/
+					}
+
+				}
+
+
+			}
+		}
+	}
+}
+
+
+FoWEntity* ModuleFoWManager::CreateFoWEntity(fMPoint pos, bool providesVisibility, int visionRadius, int visibleRadius)
 {
 	FoWEntity* entity = nullptr;
 
-	entity = new FoWEntity(pos, providesVisibility, visionRadius);
+	entity = new FoWEntity(pos, providesVisibility, visionRadius, visibleRadius);
 
 	if (entity != nullptr)
 	{
@@ -720,3 +778,30 @@ unsigned short ModuleFoWManager::CheckJointsFromNeighbours(iMPoint pos, int diam
 	return ret;
 }
 
+
+bool ModuleFoWManager::Load(pugi::xml_node& data)
+{
+	int i = 0;
+
+	for (pugi::xml_node iterator = data.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		fowMap[i].tileShroudBits = iterator.first_attribute().as_int();
+	}
+
+	return true;
+}
+
+
+bool ModuleFoWManager::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node iterator;
+
+	for (int i = 0; i < width * height; i++)
+	{
+		iterator = data.append_child("fow_tile");
+
+		iterator.append_attribute("visited") = fowMap[i].tileShroudBits;
+	}
+
+	return true;
+}

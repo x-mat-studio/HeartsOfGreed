@@ -6,7 +6,30 @@
 #include "Minimap.h"
 #include "Map.h"
 
-Entity::Entity()
+Entity::Entity() : position(position),
+	type(ENTITY_TYPE::UNKNOWN),
+	align(ENTITY_ALIGNEMENT::UNKNOWN),
+	dynamic(false),
+
+	started(false),
+	toDelete(false),
+	flip(false),
+	selectedByPlayer(false),
+	UIAssigned(false),
+
+	collider(nullptr),
+
+	visionEntity(nullptr),
+	minimapIcon(nullptr),
+	texture(nullptr),
+
+	hitPointsMax(0),
+	hitPointsCurrent(0),
+
+	offset{ 0, 0 },
+	center{ 0, 0 },
+
+	radiusSize(0)
 {}
 
 
@@ -22,7 +45,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	flip(false),
 	selectedByPlayer(false),
 	UIAssigned(false),
-	
+
 	collider(collider),
 
 	visionEntity(nullptr),
@@ -32,17 +55,18 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	hitPointsMax(maxHealth),
 	hitPointsCurrent(currentHealth),
 
-	offset {0, 0},
-	center {0, 0},
+	offset{ 0, 0 },
+	center{ 0, 0 },
 
 	radiusSize(1)
-	
+
 {
-	offset.x = -((float)collider->rect.w * 0.5f);
+	if (collider != nullptr)
+	{
+		offset.x = -((float)collider->rect.w * 0.5f);
 
-	offset.y = -((float)collider->rect.h * 0.66f);
-
-;
+		offset.y = -((float)collider->rect.h * 0.66f);
+	}
 }
 
 Entity::~Entity()
@@ -53,7 +77,7 @@ Entity::~Entity()
 		collider->thisEntity = nullptr;
 		collider = nullptr;
 	}
-	
+
 
 	texture = nullptr;
 
@@ -111,7 +135,7 @@ bool Entity::PostUpdate(float dt)
 
 void Entity::OnCollision(Collider* collider)
 {
-	
+
 }
 
 
@@ -136,13 +160,13 @@ void Entity::MinimapDraw(float scale, float halfWidth)
 
 DIRECTION Entity::GetMyDirection()
 {
-	int width = app->win->width; 
+	int width = app->win->width;
 	float scale = app->win->GetScale();
-	int MidX = (-app->render->currentCamX + (width * 0.5f))/scale;
-	
-	int relativeX = (position.x - MidX)*scale;
+	int MidX = (-app->render->currentCamX + (width * 0.5f)) / scale;
 
-	if (relativeX > width*0.33f) {
+	int relativeX = (position.x - MidX) * scale;
+
+	if (relativeX > width * 0.33f) {
 
 		return DIRECTION::RIGHT;
 	}
@@ -151,7 +175,7 @@ DIRECTION Entity::GetMyDirection()
 
 		return DIRECTION::LEFT;
 	}
-	
+
 	return DIRECTION::FRONT;
 }
 
@@ -164,27 +188,27 @@ LOUDNESS Entity::GetMyLoudness()
 	int width = app->win->width;
 	int height = app->win->height;
 
-	int MidX = (-app->render->currentCamX + (width* 0.5f))  /scale;
-	int MidY = (-app->render->currentCamY + (height* 0.5f)) /scale;
+	int MidX = (-app->render->currentCamX + (width * 0.5f)) / scale;
+	int MidY = (-app->render->currentCamY + (height * 0.5f)) / scale;
 
 	float SQRDistance = sqrt((position.x - MidX) * (position.x - MidX) + (position.y - MidY) * (position.y - MidY));
 
-	if (SQRDistance < width *0.25f) 
+	if (SQRDistance < width * 0.25f)
 	{
 
 		ret = LOUDNESS::LOUD;
 	}
-	else if (SQRDistance < width *0.33f) 
+	else if (SQRDistance < width * 0.33f)
 	{
 
 		ret = LOUDNESS::NORMAL;
 	}
-	else if (SQRDistance < width * 0.5f) 
+	else if (SQRDistance < width * 0.5f)
 	{
 
 		ret = LOUDNESS::QUIET;
 	}
-	
+
 	//distance from camera loudness
 	float minScale;
 	float maxScale;
@@ -192,7 +216,7 @@ LOUDNESS Entity::GetMyLoudness()
 	float scaleRange = abs(maxScale - minScale);
 
 
-	if (scale >= minScale+(scaleRange*0.66f))
+	if (scale >= minScale + (scaleRange * 0.66f))
 	{
 		ret -= 1;
 	}
@@ -234,6 +258,29 @@ void Entity::SetPosition(int x, int y)
 {
 	position.x = x;
 	position.y = y;
+}
+
+int Entity::GetMaxHP() const
+{
+	return hitPointsMax;
+}
+
+void Entity::SetMaxHP(int newMaxHp)
+{
+	hitPointsMax = newMaxHp;
+}
+
+int Entity::GetCurrentHP() const
+{
+	return hitPointsCurrent;
+}
+
+void Entity::SetCurrentHP(int newcurrHp)
+{
+	hitPointsCurrent = newcurrHp;
+
+	if (hitPointsCurrent > hitPointsMax)
+		hitPointsCurrent = 0;
 }
 
 

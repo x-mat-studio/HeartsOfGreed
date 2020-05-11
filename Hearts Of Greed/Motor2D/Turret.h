@@ -62,6 +62,8 @@ public:
 	int GetAS();
 	int GetRng();
 
+	void SetLevel(int level);
+
 	void DrawSelected();
 
 	int RecieveDamage(int damage);

@@ -17,16 +17,26 @@
 #include "UIManager.h"
 #include "MainMenuScene.h"
 #include "EventManager.h"
+#include "QuestManager.h"
 #include "Minimap.h"
 #include "Render.h"
 #include "Player.h"
 #include "AI.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
 	timer(0),
 	dayNumber(1),
+	
+	dayTimer(INT_MAX),
+	nightTimer(INT_MAX),
+	camVel(0.f),
+	fadeTime(0),
+	startingScale(1.0f),
+
+	camToReset(false),
 	camUp(false),
 	camDown(false),
 	camRight(false),
@@ -35,16 +45,10 @@ ModuleTestScene::ModuleTestScene() :
 	allowCamMovement(true),
 	menuScene(false),
 	isNightTime(false),
-	dayTimer(INT_MAX),
-	nightTimer(INT_MAX),
-	camVel(0.f),
-	fadeTime(0),
-	camToReset(false),
-	startingScale(1.0f),
-	mapLoaded(false)
+	mapLoaded(false),
+	startFromLoad(false)
 {
 	name.create("testScene");
-
 }
 
 
@@ -94,7 +98,7 @@ bool ModuleTestScene::Start()
 	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, app->audio->musicVolume);
 
 	//Load sfx used in this scene
-	if (app->map->LoadNew("map_prototype2.tmx") == true)
+	if (app->map->LoadNew("finalMap.tmx") == true)
 	{
 		int w, h;
 		uchar* data = nullptr;
@@ -106,55 +110,71 @@ bool ModuleTestScene::Start()
 		app->fowManager->CreateFoWMap(app->map->data.width, app->map->data.height);
 
 		fMPoint pos;
-		pos.create(100, 600);
+		pos.create(950, 4100);
 
 		//Test Hero
+		if (startFromLoad == false)
+		{
 
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
-		app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
-		//mid
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
+			/*
+			//mid
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
 
-		//Left
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
+			//Left
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
 
-		//Right down
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
+			//Right down
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
 
 
-		//Right 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
+			//Right
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
 
-		//Base
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -50, 165);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -64, 190);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -45, 175);
+			//Base
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -50, 165);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -64, 190);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -45, 175);
 
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
-		app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
+			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
+				*/
 
-		//Spawners------------------
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
-		app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+			//Spawners------------------
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
 
-		//Debug
-		//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
+			//Debug
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
 
+
+
+			//Quests-------------
+		}
+		
 	}
 
+	if (startFromLoad == true)
+	{
+		app->entityManager->DeleteAllEntities();
+		app->LoadGame();
+		startFromLoad = false;
+	}
 
 
 
@@ -327,6 +347,8 @@ bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
+	BROFILER_CATEGORY("Game Scene PostUpdate", Profiler::Color::LightYellow);
+
 	app->map->Draw();
 
 	if (isNightTime)
@@ -347,6 +369,7 @@ bool  ModuleTestScene::PostUpdate(float dt)
 // Called before quitting
 bool  ModuleTestScene::CleanUp()
 {
+
 	app->pathfinding->CleanUp();
 	app->uiManager->CleanUp();
 	app->entityManager->ResetEntityManager();
@@ -365,14 +388,26 @@ bool  ModuleTestScene::CleanUp()
 }
 
 
-bool  ModuleTestScene::Load(pugi::xml_node&)
+bool  ModuleTestScene::Load(pugi::xml_node& data)
 {
+	pugi::xml_node iterator = data.first_child();
+
+	dayNumber = iterator.attribute("days_passed").as_int();
+	isNightTime = iterator.attribute("is_night").as_bool();
+
+	timer = iterator.attribute("timer").as_float();
+
 	return true;
 }
 
 
-bool  ModuleTestScene::Save(pugi::xml_node&) const
+bool  ModuleTestScene::Save(pugi::xml_node& data) const
 {
+	pugi::xml_node iterator = data.append_child("time_info");
+
+	iterator.append_attribute("days_passed") = dayNumber;
+	iterator.append_attribute("is_night") = isNightTime;
+	iterator.append_attribute("timer") = timer;
 	return true;
 }
 

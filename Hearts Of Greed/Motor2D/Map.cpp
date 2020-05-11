@@ -125,9 +125,18 @@ void ModuleMap::DrawMinimap()
 
 						worldX += app->render->currentCamX;
 						worldY += app->render->currentCamY;
-
-						app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
-
+						FoWDataStruct* fogData = app->fowManager->GetFoWTileState({ j,i });
+						if (fogData != nullptr && app->fowManager->foWMapVisible)
+						{
+							if (fogData->tileShroudBits != fow_ALL)
+							{
+								app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
+							}
+						}
+						else
+						{
+							app->render->MinimapBlit(GetTilesetFromTileId(id)->texture, worldX + halfWidth, worldY, &RectFromTileId(id, GetTilesetFromTileId(id)), scale);
+						}
 
 					}
 
@@ -492,7 +501,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 		gidIterator = &gidIterator->next_sibling("tile");
 	}
 
-	if (layer->name == P2SString("Collision")) 
+	/*if (layer->name == P2SString("Collision")) 
 	{
 
 		for (int i = 0; i < layer->width * layer->height; i++)
@@ -514,7 +523,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 			}
 		}
-	}
+	}*/
 	if (layer->name == P2SString("BuildingGeneration")) {
 
 		for (int i = 0; i < layer->width * layer->height; i++)
@@ -533,54 +542,51 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				colliderRectAux.w /= 2;
 
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
+				LOG(" gid was %i", layer->gid[i]);
 
 
 				// 6* because we need to undo offset and isometric conversion. 2*3 = 6.
 
 				switch (layer->gid[i])
 				{
-				case 390:
+					//250 = id of the first tile of the tileset that codifies for building generation
+				case 250 + 0:
 				{
 					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 				}
 					break;
 
-				case 391:
+				case 250 + 1:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
-				case 392:
-					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y);
+				case 250 + 2:
+					app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					break;
 
-				case 393:
+				case 250 + 3:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
 					break;
 
-				case 394:
+				case 250 + 4:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::PLAYER);
 					break;
 
-				case 395:
+				case 250 + 5:
 					app->entityManager->AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, colliderRectAux.x, colliderRectAux.y);
 					break;
 
-				case 396:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-					bld = (Building*)bldgToBe;
-					bld->myDecor = BUILDING_DECOR::ST_01;
+				case 250 + 6:
+					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_01, colliderRectAux.x, colliderRectAux.y);
 					break;
 
-				case 397:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-					bld = (Building*)bldgToBe;
-					bld->myDecor = BUILDING_DECOR::ST_02;
+				case 250 + 7:
+					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_02, colliderRectAux.x, colliderRectAux.y);
 					break;
 
-				case 398:
-					bldgToBe = app->entityManager->AddEntity(ENTITY_TYPE::BUILDING, colliderRectAux.x, colliderRectAux.y);
-					bld = (Building*)bldgToBe;
-					bld->myDecor = BUILDING_DECOR::ST_03;
+				case 250 + 8:
+					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_03, colliderRectAux.x, colliderRectAux.y);
+					
 					break;
 
 				default:
@@ -758,14 +764,14 @@ bool ModuleMap::InsideCamera(float& posX, float& posY) const {
 	int camH;
 	app->render->GetCameraMeasures(camW, camH);
 	float scale = app->win->GetScale();
-
+	float inverseScale = 1 / scale;
 	float up_left_cam_cornerX = -app->render->currentCamX;
 	float up_left_cam_cornerY = -app->render->currentCamY;
 	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
 	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
 
-	if ((posX > (up_left_cam_cornerX / scale) - data.tileWidth && posX < down_right_cam_cornerX / scale) &&
-		(posY > (up_left_cam_cornerY / scale) - data.tileWidth && posY < down_right_cam_cornerY / scale)) {
+	if ((posX > (up_left_cam_cornerX *inverseScale) - data.tileWidth && posX < down_right_cam_cornerX * inverseScale) &&
+		(posY > (up_left_cam_cornerY * inverseScale) - data.tileWidth && posY < down_right_cam_cornerY * inverseScale)) {
 		return true;
 	}
 }
@@ -776,14 +782,15 @@ bool ModuleMap::EntityInsideCamera(float& posX, float& posY, float& w, float& h)
 	int camH;
 	app->render->GetCameraMeasures(camW, camH);
 	float scale = app->win->GetScale();
+	float inverseScale = 1 / scale;
 
 	float up_left_cam_cornerX = -app->render->currentCamX;
 	float up_left_cam_cornerY = -app->render->currentCamY;
 	float down_right_cam_cornerX = up_left_cam_cornerX + camW;
 	float down_right_cam_cornerY = up_left_cam_cornerY + camH;
 
-	if ((posX + (2 * w) > up_left_cam_cornerX / scale && posX - w < down_right_cam_cornerX / scale) &&
-		((posY + 2 * h > up_left_cam_cornerY / scale) && posY - h < (down_right_cam_cornerY + data.tileHeight) / scale)) {
+	if ((posX + (2 * w) > up_left_cam_cornerX * inverseScale && posX - w < down_right_cam_cornerX * inverseScale) &&
+		((posY + 2 * h > up_left_cam_cornerY * inverseScale) && posY - h < (down_right_cam_cornerY + data.tileHeight) * inverseScale)) {
 		return true;
 	}
 }

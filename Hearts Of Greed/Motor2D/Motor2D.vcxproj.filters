@@ -109,9 +109,6 @@
     <ClCompile Include="DynamicEntity.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
     </ClCompile>
@@ -160,8 +157,50 @@
     <ClCompile Include="DataPages.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="HeroesPortraitManager.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroPortrait.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClCompile>
     <ClCompile Include="RoboHero.cpp">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>Desenvolupament  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedEnemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="NightEnemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="GigaEnemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="EasingFunctions.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogText.cpp">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,9 +330,6 @@
     <ClInclude Include="DynamicEntity.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Desenvolupament  ========\Entities\header files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Desenvolupament  ========\Entities\header files</Filter>
     </ClInclude>
@@ -344,6 +380,48 @@
     </ClInclude>
     <ClInclude Include="RoboHero.h">
       <Filter>Desenvolupament  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroesPortraitManager.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroPortrait.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
+      <Filter>Desenvolupament  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedEnemy.h">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="NightEnemy.h">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GigaEnemy.h">
+      <Filter>Desenvolupament  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Desenvolupament  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EasingFunctions.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogManager.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogText.h">
+      <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -409,6 +487,12 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities\header files">
       <UniqueIdentifier>{cbdc8652-8c70-4841-bde0-e62fe4536b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Enemies">
+      <UniqueIdentifier>{ef24dc2f-2b30-4a4e-bb05-bac8e5afb625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\ParticleSystem">
+      <UniqueIdentifier>{2a56a668-c908-482b-9d25-0822290fd17b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities\Fog of War">
       <UniqueIdentifier>{53cbac33-f01a-48a1-a742-aee1c7a5dc85}</UniqueIdentifier>

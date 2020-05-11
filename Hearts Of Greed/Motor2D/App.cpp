@@ -24,7 +24,9 @@
 #include "WinScene.h"
 #include "LoseScene.h"
 #include "Minimap.h"
-
+#include "QuestManager.h"
+#include "DialogManager.h"
+#include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
@@ -50,13 +52,14 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	fonts = new ModuleFonts();
 	fowManager = new ModuleFoWManager();
 	fadeToBlack = new ModuleFadeToBlack();
-
+	questManager = new ModuleQuestManager();
 	introScene = new ModuleIntroScene();
 	mainMenu = new ModuleMainMenuScene();
 	testScene = new ModuleTestScene();
 	winScene = new ModuleWinScene();
 	loseScene = new ModuleLoseScene();
 	minimap = new Minimap();
+	dialogManager = new ModuleDialogManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -75,11 +78,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	AddModule(coll);
 	AddModule(entityManager);
 	AddModule(fowManager);
+	AddModule(dialogManager);
 	AddModule(uiManager);
 	AddModule(pathfinding);
 	AddModule(player);
 	AddModule(ai);
-
+	AddModule(questManager);
 	AddModule(minimap);
 
 	//Fade to black before render
@@ -149,11 +153,11 @@ bool App::Awake()
 	//Set disabled modules here-------------
 	
 	//Scenes
-	introScene->Disable();
+	//introScene->Disable();
 	mainMenu->Disable();
 	winScene->Disable();
 	loseScene->Disable();
-	//testScene->Disable();
+	testScene->Disable();
 	
 	//Other
 	player->Disable();
@@ -169,8 +173,6 @@ bool App::Start()
 {
 	bool ret = true;
 	int numModules = modules.size();
-
-	uiManager->LoadAtlas();
 
 	for (int i = 0; i < numModules; i++)
 	{
@@ -345,6 +347,7 @@ bool App::PreUpdate()
 	bool ret = true;
 	int numModules = modules.size();
 
+	BROFILER_CATEGORY("App PreUpdate", Profiler::Color::Aquamarine);
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{
@@ -371,6 +374,7 @@ bool App::DoUpdate()
 	bool ret = true;
 	int numModules = modules.size();
 
+	BROFILER_CATEGORY("App Update", Profiler::Color::Aquamarine);
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{
@@ -394,6 +398,7 @@ bool App::PostUpdate()
 {
 	bool ret = true;
 	int numModules = modules.size();
+
 
 	for (int i = 0; i < numModules && ret == true; i++)
 	{
@@ -433,14 +438,10 @@ int App::GetArgc() const
 // ---------------------------------------
 const char* App::GetArgv(int index) const
 {
-
-
 	if (index < argc)
 		return args[index];
 	else
 		return NULL;
-
-
 }
 
 // ---------------------------------------

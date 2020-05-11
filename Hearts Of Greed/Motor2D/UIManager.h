@@ -14,6 +14,12 @@ class Base;
 
 class UI;
 class Button;
+class HeroesPortraitManager;
+class HeroPortrait;
+
+class Entity;
+class Hero;
+
 enum class GROUP_TAG;
 enum class BUTTON_TAG;
 
@@ -57,16 +63,29 @@ public:
 
 	bool MouseOnUI();
 
-	void CheckFocusEntity();
+	void CheckFocusEntity(Entity* entity);
 
 	void CheckDragElement(UI* element);
 
 	void ExecuteButton(BUTTON_TAG tag, Button* button);
+	void ExecuteHoverButton(BUTTON_TAG tag, Button* button);
+
+	HeroesPortraitManager* GetPortraitManager();
+	void SetPortraitManager(HeroesPortraitManager* portraitManager);
+
+	void AddPortrait(Hero* portrait);
+	void RemovePortrait(Hero* portrait);
+
+	void PlayHoverSound();
+	void PlayClickSound();
 
 private:
+
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	bool CheckGroupTag(GROUP_TAG tag);
+
+	void CheckFocusedUI();
 
 	UI* SearchFocusUI() const;
 
@@ -74,20 +93,32 @@ private:
 
 	void UnregisterEvents();
 
+	void AddPendingPortraits();
+
+	void AugmentValueByTenPercent(float* value);
 
 public:
 	Base* lastShop;
 	bool mouseOverUI;
 
 private:
-
 	std::vector<UI_Group*> uiGroupVector;
+	std::vector<HeroPortrait*> portraitsToAdd;
+	
 	SDL_Texture* atlas;
 
 	UI* dragElement;
 	iMPoint dragMouse;
 
+	// DO NOT USE THIS IF YOU AREN'T FERRAN >:3
+	UI* hoverElement;
+
 	UIFactory* factory;
+
+	HeroesPortraitManager* portraitManager;
+
+	int hoverSound;
+	int clickSound;
 
 	bool isMenuOn;
 };

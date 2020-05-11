@@ -16,7 +16,7 @@ public:
 
 	TYPE x, y;
 
-	MAT_Point()
+	MAT_Point() : x(0), y(0)
 	{}
 
 	~MAT_Point()
@@ -225,6 +225,19 @@ public:
 		}
 	}
 
+	void RoundPoint()
+	{
+		x = round(x);
+		y = round(y);
+	}
+
+
+	MAT_Point LerpPoint(MAT_Point&  p1,float t)
+	{
+		return  { lerp(x, p1.x, t), lerp(y, p1.y, t) };
+	}
+
+
 	// Distances ---------------------------------------------
 	TYPE DistanceTo(const MAT_Point& v) const
 	{
@@ -232,6 +245,14 @@ public:
 		TYPE fy = y - v.y;
 
 		return sqrtf((fx * fx) + (fy * fy));
+	}
+
+	float OctileDistance(const MAT_Point& v) const
+	{
+		int dx = abs(v.x - x);
+		int dy = abs(v.y - y);
+
+		return  max(dx, dy) + (0.41f) * min(dx, dy);
 	}
 
 	TYPE DistanceNoSqrt(const MAT_Point& v) const
@@ -245,6 +266,12 @@ public:
 	TYPE DistanceManhattan(const MAT_Point& v) const
 	{
 		return abs(v.x - x) + abs(v.y - y);
+	}
+
+	float DiagonalDistance(const MAT_Point& v) const
+	{
+		float dx = v.x - x, dy = v.y - y;
+		return (MAX(abs(dx), abs(dy)));
 	}
 
 	bool PointInRect( const SDL_Rect* r)
@@ -265,5 +292,8 @@ public:
 typedef MAT_Point<int> iMPoint;
 typedef MAT_Point<float> fMPoint;
 typedef MAT_Point<double> dMPoint;
+
+
+
 
 #endif // __MATPOINT_H__

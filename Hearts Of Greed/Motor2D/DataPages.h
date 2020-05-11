@@ -4,7 +4,8 @@
 #include "UI.h"
 
 class Entity;
-class UIFactory;
+struct UIFactory;
+enum class ENTITY_ALIGNEMENT;
 
 enum class DATA_PAGE_ENUM
 {
@@ -28,9 +29,12 @@ class DataPages : public UI
 {
 public:
 
-	DataPages(UI* parent, Entity* entity);
+	DataPages(float x, float y, UI* parent, Entity* entity);
 	~DataPages();
 
+	bool OnAbove();
+	UI* SearchFocus();
+	void UnFocus();
 
 private:
 
@@ -38,29 +42,27 @@ private:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	bool CheckData(int previous, int current);
-	void ChangeTexture();
-
-	// Create Data Page
-	void CreateGathererPage();
-	void CreateMeleePage();
-	void CreateRangedPage();
-	void CreateWanamingoPage();
-	void CreateBasePage();
-	void CreateTurretPage();
-	void CreateUpgradeCenterPage();
-	void CreateBarricadePage();
+	bool CheckData(float previous, float current);
+	void AdjustHealthBars(int newValue, int maxValue);
+	void AdjustManaBars(int newValue, int maxValue);
 
 	// Check Data Page Values
-	void CheckGathererValues();
-	void CheckMeleeValues();
-	void CheckRangedValues();
+	void CheckHeroesValues();
 	void CheckWanamingoValues();
 	void CheckBaseValues();
 	void CheckTurretValues();
 	void CheckUpgradeCenterValues();
 	void CheckBarricadeValues();
 
+	// Get Data Page Values
+
+	void GetHeroValue();
+	void GetWanamingoValue();
+	void GetBaseValue();
+	void GetTurretValue();
+	void GetUpgradeCenterValue();
+	void GetBarricadeValue();
+	void GetHealthBarValues();
 
 	void DeleteCurrentData();
 
@@ -71,6 +73,22 @@ private:
 	DATA_PAGE_ENUM state;
 	Entity* focusEntity;
 	UIFactory* factory;
+
+	SDL_Rect* healthRect;
+	SDL_Rect* manaRect;
+	int originalBarsWidth;
+
+	float life;
+	float mana;
+	float resources;
+	float level;
+	float attackDamage;
+	float attackSpeed;
+	float range;
+	float vision;
+	float hpRecovery;
+	float xpToNextLevel;
+	ENTITY_ALIGNEMENT alignment;
 
 };
 

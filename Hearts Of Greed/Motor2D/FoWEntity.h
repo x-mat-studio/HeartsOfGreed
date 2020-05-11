@@ -8,7 +8,7 @@ class FoWEntity
 {
 	//FUNCTIONS
 public:
-	FoWEntity(fMPoint WorldPos,bool providesVisibility, int visionRadius);
+	FoWEntity(fMPoint WorldPos,bool providesVisibility, int visionRadius, int isVisbleRadius);
 	~FoWEntity();
 
 	bool CleanUp();
@@ -19,14 +19,18 @@ public:
 
 	void SetNewVisionRadius(uint radius);
 	void SetEntityProvideVision(bool providesVision);
+	bool GetEntityProvideVision();
 
-	std::vector<iMPoint> GetTilesInsideRadius()const;
+	void SetNewVisibleRadius(uint radius);
+	bool UpdateVisibility();
+
+	std::vector<iMPoint> GetTilesInsideRadius(uint radius)const;
 
 
 private:
 	
 	void ApplyMaskToTilesAuto(std::vector<iMPoint>tilesAffected);
-
+	bool IsEntityVisible();
 
 	//VARIABLES
 public:
@@ -39,6 +43,9 @@ private:
 
 	//Max radius from the entity at which tiles are affected (square to be checked)
 	uint boundingBoxRadius;
+
+	uint isVisibleRadius;
+
 };
 
 #endif // !__FOW_ENTITY_H__

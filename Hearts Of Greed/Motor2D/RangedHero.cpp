@@ -8,7 +8,9 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
-	Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk, int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
+	Animation& skill1LeftUp, Animation& skill1LeftDown, 
+	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
+	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
 	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
@@ -16,7 +18,8 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Hero(position, ENTITY_TYPE::HERO_RANGED, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
-		skill1LeftUp, skill1LeftDown, tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
+		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
+		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
 		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
 		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
 		skill1Dmg, skill1Id, skill1Type, skill1Target),
@@ -24,7 +27,6 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	granadeArea(nullptr),
 
 	currentVfx(nullptr),
-	vfxExplosion(vfxExplosion),
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -36,7 +38,6 @@ RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT ali
 	granadeArea(nullptr),
 
 	currentVfx(nullptr),
-	vfxExplosion(copy->vfxExplosion),
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -111,9 +112,6 @@ bool RangedHero::ExecuteSkill1()
 		}
 		else
 		{
-			currentVfx = &vfxExplosion;
-			currentVfx->ResetAnimation();
-			currentVfx->loop = false;
 
 			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
@@ -179,9 +177,44 @@ bool RangedHero::DrawVfx(float dt)
 		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
 			currentVfx = false;
 
-		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x - currFrame.pivotPositionX, granadePosLaunch.y - currFrame.pivotPositionY, &currFrame.frame);
+		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
 	}
 
 
 	return false;
+}
+
+void RangedHero::BlitCommandVfx(Frame& currframe, int alphaValue)
+{
+	app->render->Blit(app->entityManager->moveCommandTileRng, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+}
+
+void RangedHero::PlayGenericNoise(int probability)
+{
+	int random = rand() % ((100 * 4) / probability) + 1;
+
+	switch (random)
+	{
+	case 1:
+		app->audio->PlayFx(app->entityManager->noise1Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 2:
+		app->audio->PlayFx(app->entityManager->noise2Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 3:
+		app->audio->PlayFx(app->entityManager->noise3Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+	case 4:
+		app->audio->PlayFx(app->entityManager->noise4Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		break;
+
+	default:
+		break;
+	}
+
+}
+
+void RangedHero::PlayOnHitSound()
+{
+	app->audio->PlayFx(app->entityManager->rangedGetsHit, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
 }
