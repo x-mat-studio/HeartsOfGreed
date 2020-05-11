@@ -2,9 +2,11 @@
 #define __QUESTMANAGER_H__
 
 #include "Module.h"
-#include "Collision.h"
-#include "Quest.h"
-#include <unordered_map>
+
+struct Collider;
+struct SDL_Texture;
+
+class Quest;
 
 class ModuleQuestManager : public Module
 {
@@ -15,23 +17,28 @@ public:
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	bool PostUpdate(float dt);
-	bool CleanUp();
 
-	std::unordered_map <int , Quest*> ongoing;
-	std::unordered_map <int, Quest*> finished;
+	bool PreUpdate(float dt);
+
+	bool CleanUp();
 
 	void OnCollision(Collider * c1, Collider* c2);
 
-	int questSfx;
+	SDL_Texture* GetTexture();
 
-	SDL_Texture* questMarker;
-	
+	void QuestStarted(int questId);
+
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);
+
+
+private:
+
+	int questSfx;
+	SDL_Texture* questMarker;
+	
+
 };
 
 #endif //__QUESTMANAGER_H__
