@@ -199,6 +199,9 @@ public:
 	int turretShooting;
 
 	int suitman1Skill;
+	
+	int ranged1Skill;
+	int ranged1Skil2;
 
 	int suitman1Skill2;
 	int armored1Skill2;
