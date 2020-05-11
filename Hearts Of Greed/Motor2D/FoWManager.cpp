@@ -346,17 +346,18 @@ void ModuleFoWManager::DrawFoWMap()
 
 
 					//draw fog
-					if (fogId != -1)
-					{
-
-						SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
-						SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
-						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
-					}
+					
 					if (shroudId != -1)
 					{
 						SDL_SetTextureAlphaMod(displayFogTexture, 255);//set the alpha to white again
 						SDL_Rect r = { shroudId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
+						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
+					}
+					if (tileInfo->tileShroudBits!=fow_ALL && fogId != -1)
+					{
+
+						SDL_SetTextureAlphaMod(displayFogTexture, 128);//set the alpha of the texture to half to reproduce fog
+						SDL_Rect r = { fogId * 64,0,64,64 }; //this rect crops the desired fog Id texture from the fogTiles spritesheet
 						app->render->Blit(displayFogTexture, worldPos.x, worldPos.y - halfTileHeight, &r);
 					}
 
