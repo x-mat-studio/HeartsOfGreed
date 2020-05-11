@@ -181,8 +181,8 @@ public:
 	float GetFeelingSecure() const;
 	void SetFeelingSecure(float feelingSecure);
 
-	int GetAttackDamage() const;
-	void SetAttackDamage(int atkDamage);
+	float GetAttackDamage() const;
+	void SetAttackDamage(float atkDamage);
 
 	int GetAttackRange() const;
 	void SetAttackRange(int atkRange);
@@ -257,15 +257,15 @@ protected:
 	int heroXP;
 
 	int recoveryHitPointsRate;
-	int energyPoints;
-	int maxEnergyPoints;
+	float energyPoints;
+	float maxEnergyPoints;
 	int recoveryEnergyRate;
 
 	float recoveringHealth;
 	float recoveringEnergy;
 	float feelingSecure;
 
-	int attackDamage;
+	float attackDamage;
 	int attackRange;
 
 	bool gettingAttacked;

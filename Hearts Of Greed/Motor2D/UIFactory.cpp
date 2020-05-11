@@ -1281,7 +1281,7 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 	CreateNonGroupImage(69, 25, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
 
 	//stats
-	sprintf_s(stats, 40, "AD: %i", focus->GetAttackDamage());
+	sprintf_s(stats, 40, "AD: %.0f", focus->GetAttackDamage());
 	CreateNonGroupText(133, 10, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
