@@ -132,6 +132,7 @@ enum class EVENT_ENUM
 
 	//Quest Events
 	FINISH_QUEST,
+	FAIL_QUEST,
 
 	// Camera related events
 	CAMERA_UP,

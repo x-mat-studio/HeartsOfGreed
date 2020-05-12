@@ -33,7 +33,7 @@ Quest::Quest(Collider* col) :
 Quest::~Quest()
 {
 	id = -1;
-
+	myState = QUEST_STATE::ST_UNKNOWN;
 }
 
 

@@ -64,6 +64,7 @@ bool ModuleQuestManager::Start()
 	bool ret = true;
 
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FINISH_QUEST, this);
+	ret = app->eventManager->EventRegister(EVENT_ENUM::FAIL_QUEST, this);
 
 	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
 
@@ -86,6 +87,9 @@ bool ModuleQuestManager::PreUpdate(float dt)
 bool ModuleQuestManager::CleanUp()
 {
 	bool ret = true;
+
+	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FINISH_QUEST, this);
+	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FAIL_QUEST, this);
 
 	app->tex->UnLoad(questMarker);
 
@@ -112,6 +116,9 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FINISH_QUEST:
 
 		app->audio->PlayFx(questSfx, 0, -1);
+		break;
+
+	case EVENT_ENUM::FAIL_QUEST:
 
 		break;
 	}
@@ -126,6 +133,10 @@ SDL_Texture* ModuleQuestManager::GetTexture()
 
 void ModuleQuestManager::QuestStarted(int questId)
 {
+	if (questId == -1)
+	{
+		assert("Quest id not initialized");
+	}
 	questInfoVector[questId].StartQuest();
 }
 
@@ -138,7 +149,11 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 	{
 		if (questInfoVector[i].active == true)
 		{
-			questInfoVector[i].CheckQuestStatus(entity);
+			if (questInfoVector[i].CheckQuestStatus(entity))
+			{
+				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+			}
+
 		}
 	}
 }
@@ -167,7 +182,7 @@ void QuestInfo::StartQuest()
 	for (int i = 0; i < numberToSpawn; i++)
 	{
 		entity = app->entityManager->AddEntity(entitysToSpawnVector[i], positionsToSpawnVector[i].x, positionsToSpawnVector[i].y);
-		entity->selectedByPlayer = true; //maiby this causes problems, maiby not, ill put it here and see later
+		entity->selectedByPlayer = true; 
 
 		switch (entity->GetType())
 		{
@@ -209,7 +224,16 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 
 			if (entity->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
 			{
+				int size = questEntitysVector.size();
+
+				for (int j = 0; j < size; j++)
+				{
+					questEntitysVector[j]->selectedByPlayer = false;
+				}
+
 				questEntitysVector.clear();
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::FAIL_QUEST, EVENT_ENUM::NULL_EVENT);
 				active = false;
 
 				return false;
@@ -221,6 +245,7 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 				active = false;
 
 				GiveReward();
+				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
 
 				return true;
 			}

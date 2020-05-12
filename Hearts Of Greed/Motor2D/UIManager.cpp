@@ -19,6 +19,7 @@
 #include "EventManager.h"
 #include "Textures.h"
 #include "FadeToBlack.h"
+#include "DialogManager.h"
 
 #include "Minimap.h"
 
@@ -723,6 +724,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::NEXT_DIALOG:
+		app->dialogManager->PushInput(DIALOG_INPUT::NEXT_DIALOG);
+		break;
+
 	default:
 		assert("you forgot to add the case of the button tag :D"); 
 		break;
@@ -835,9 +840,7 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
-	case BUTTON_TAG::NEXT_DIALOG:
-		//TODO, finish this
-		break;
+	
 
 	default:
 		break;
