@@ -59,13 +59,14 @@ private:
 
 	//fadecouner
 	Easing alphaCounter;
+	Easing gameIconPosXfunction;
 
 	//Canon counter
 	bool canon;
 	float soundDelay;
 
 	float fadeTime;
-
+	float gameIconPosX;
 
 };
 

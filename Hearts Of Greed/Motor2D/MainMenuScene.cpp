@@ -12,7 +12,7 @@
 #include "Render.h"
 #include "EventManager.h"
 
-ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false), changeSceneContinue(-1), fadeTime(0), BG(nullptr),
+ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false), changeSceneContinue(-1), fadeTime(0), BG(nullptr), gameIconPosX(0.0f),
 canon(0), gameIcon(nullptr), gameTitle(nullptr), soundDelay(0), titleSound(-1)
 {
 	name.create("menuScene");
@@ -51,7 +51,8 @@ bool ModuleMainMenuScene::Start()
 
 	app->audio->PlayMusic("audio/music/IntroMenu.ogg", fadeTime, app->audio->musicVolume);
 
-	alphaCounter.NewEasing(EASING_TYPE::EASE_IN_OUT_CUBIC, 1, 255, 2);
+	alphaCounter.NewEasing(EASING_TYPE::EASE_OUT_CUBIC, 1.0, 255.0, 4.0);
+	gameIconPosXfunction.NewEasing(EASING_TYPE::EASE_OUT_QUINT, -140, 140, 3.0);
 	soundDelay = 0;
 	canon = false;
 
@@ -84,12 +85,18 @@ bool  ModuleMainMenuScene::Update(float dt)
 
 	if (alphaCounter.IsActive() == true)
 	{
-		alpha=alphaCounter.UpdateEasingAddingTime(dt);
+		alpha = alphaCounter.UpdateEasingAddingTime(dt);
 	}
+
+	if (gameIconPosXfunction.IsActive() == true)
+	{
+		gameIconPosX = gameIconPosXfunction.UpdateEasingAddingTime(dt);
+	}
+
 	if (soundDelay < 210) { soundDelay += dt * 100; }
 
 	app->render->Blit(BG, 0, 0, NULL, false, false, 250);
-	app->render->Blit(gameIcon, 140, 70, false, false, NULL, alpha);
+	app->render->Blit(gameIcon, gameIconPosX, 70, false, false, NULL, alpha);
 	app->render->Blit(gameTitle, 20, 20, false, false, NULL, alpha);
 
 	if (soundDelay > 210) {

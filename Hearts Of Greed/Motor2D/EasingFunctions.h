@@ -47,43 +47,43 @@ enum class EASING_TYPE
 
 struct EaseFunctions {
 
-	float Ease(float currentTime, float initialPos, float finalPos, float duration);
+	double Ease(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInQuad(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutQuad(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutQuad(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInQuad(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutQuad(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutQuad(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInCubic(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutCubic(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutCubic(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInCubic(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutCubic(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutCubic(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInQuart(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutQuart(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutQuart(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInQuart(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutQuart(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutQuart(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInQuint(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutQuint(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutQuint(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInQuint(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutQuint(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutQuint(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInSine(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutSine(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutSine(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInSine(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutSine(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutSine(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInExpo(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutExpo(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutExpo(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInExpo(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutExpo(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutExpo(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInCirc(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutCirc(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutCirc(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInCirc(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutCirc(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutCirc(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseOutBounce(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseOutBounce(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseInBack(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseOutBack(float currentTime, float initialPos, float finalPos, float duration);
-	float EaseInOutBack(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseInBack(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseOutBack(double currentTime, double initialPos, double finalPos, double duration);
+	double EaseInOutBack(double currentTime, double initialPos, double finalPos, double duration);
 
-	float EaseOutElastic(float currentTime, float initialPos, float finalPos, float duration);
+	double EaseOutElastic(double currentTime, double initialPos, double finalPos, double duration);
 
 };
 
@@ -92,11 +92,11 @@ class Easing
 {
 public:
 	Easing();
-	Easing(EASING_TYPE type, float initialPos, float finalPos, float duration,float currentTime=0.0f);
+	Easing(EASING_TYPE type, double initialPos, double finalPos, double duration,double currentTime=0.0f);
 	~Easing();
 
 	//creates a new easing and sets it to active
-	void NewEasing(EASING_TYPE type, float initialPos, float finalPos, float duration, float currentTime = 0.0f);
+	void NewEasing(EASING_TYPE type, double initialPos, double finalPos, double duration, double currentTime = 0.0f);
 	
 	bool IsActive()const;
 	void Activate();
@@ -104,30 +104,30 @@ public:
 	void ChangeActiveState(bool isActive);
 
 	EASING_TYPE GetType()const;
-	float GetInitialPos()const;
-	float GetFinalPos()const;
-	float GetDuration()const;
-	float GetCurrentTime()const;
+	double GetInitialPos()const;
+	double GetFinalPos()const;
+	double GetDuration()const;
+	double GetCurrentTime()const;
 
 	//outputs the current position based on an input time (it also changes the state to active if it isn't already)
-	float UpdateEasingFromNewTime(float newCurrentTime);
+	double UpdateEasingFromNewTime(double newCurrentTime);
 	//outputs the current position based on an input time (it also changes the state to active if it isn't already)
-	float UpdateEasingAddingTime(float addTimeToCurrent);
+	double UpdateEasingAddingTime(double addTimeToCurrent);
 
 	//returns the last output that was given when the function last updated without the need to execute the function again
-	float GetLastRequestedPos()const;
+	double GetLastRequestedPos()const;
 
 private:
-	float ExecuteFunctionFromType(EASING_TYPE type, float& currentTime, float& initialPos, float& finalPos, float& duration);
+	double ExecuteFunctionFromType(EASING_TYPE type, double currentTime, double initialPos, double finalPos, double duration);
 
 
 private:
-	float initialPos;
-	float finalPos;
-	float currentTime;
-	float duration;
+	double initialPos;
+	double finalPos;
+	double currentTime;
+	double duration;
 
-	float lastRequestedPos;
+	double lastRequestedPos;
 
 	EASING_TYPE type;
 	EaseFunctions functions;
