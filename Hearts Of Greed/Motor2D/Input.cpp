@@ -77,7 +77,6 @@ bool ModuleInput::Start()
 	AddKeyBinding(SDL_SCANCODE_R, KEY_STATE::KEY_DOWN, EVENT_ENUM::SKILL2);
 	AddKeyBinding(SDL_SCANCODE_T, KEY_STATE::KEY_DOWN, EVENT_ENUM::SKILL3);
 
-
 	return true;
 }
 
@@ -186,6 +185,7 @@ bool ModuleInput::PreUpdate(float dt)
 			case SDL_WINDOWEVENT_MAXIMIZED:
 			case SDL_WINDOWEVENT_RESTORED:
 				windowEvents[(int)EVENT_WINDOW::WE_SHOW] = true;
+				app->eventManager->GenerateEvent(EVENT_ENUM::FULLSCREEN_REGAIN_FOCUS, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 

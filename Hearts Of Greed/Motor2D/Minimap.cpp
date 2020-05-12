@@ -69,6 +69,7 @@ bool Minimap::Start()
 {
 
 	bool ret = true;
+	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_REGAIN_FOCUS, this);
 
 	return ret;
 
@@ -257,6 +258,7 @@ bool Minimap::CleanUp()
 
 	minimapIcons.clear();
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_REGAIN_FOCUS, this);
 
 	app->tex->UnLoad(minimapTexture);
 	minimapLoaded = false;
@@ -278,7 +280,12 @@ bool Minimap::Save(pugi::xml_node&) const
 
 void Minimap::ExecuteEvent(EVENT_ENUM eventId)
 {
-
+	switch (eventId)
+	{
+	case EVENT_ENUM::FULLSCREEN_REGAIN_FOCUS:
+		UpdateMinimapFoW();
+		break;
+	}
 }
 
 void Minimap::CreateMinimapText()
