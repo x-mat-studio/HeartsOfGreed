@@ -91,7 +91,7 @@ UIFactory::UIFactory() :
 	meleeActive1Button{ 250, 410, 15, 15 },
 	rangedActive1Button{ 250, 410, 15, 15 },
 
-	dialogWindow{1110, 41, 859, 615},
+	dialogWindow{ 1110, 41, 859, 615 },
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -221,7 +221,7 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 	Button* button = new Button(fMPoint(0, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
 	group->AddUiElement(button);
 
-	DialogText* text = new DialogText(170, 82, fMPoint(0,0), fMPoint(30, 275), button, false);
+	DialogText* text = new DialogText(170, 82, fMPoint(0, 0), fMPoint(30, 275), button, false);
 	group->AddUiElement(text);
 
 	switch (character1)
@@ -238,7 +238,7 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 	case ENTITY_TYPE::HERO_ROBO:
 		//TODO
 		break;
-	
+
 	default:
 		assert("wrong type");
 		break;
@@ -1406,7 +1406,7 @@ void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 
 
- 
+
 UI* UIFactory::CreatePortraitManager(float x, float y, UI* parent, UI_Group* group)
 {
 	UI* element = new HeroesPortraitManager(x, y, nullptr, false);
@@ -1507,6 +1507,25 @@ SDL_Rect UIFactory::GetGreenHealthBar()
 SDL_Rect UIFactory::GetBlueHealthBar()
 {
 	return dataPageHealthbarBlueImage;
+}
+
+
+void UIFactory::ResetUpgradeCost()
+{
+	gathererLifeUpgradeCost = 100;
+	gathererDamageUpgradeCost = 100;
+	gathererEnergyUpgradeCost = 100;
+	gathererAtkSpeedUpgradeCost = 100;
+
+	meleeLifeUpgradeCost = 100;
+	meleeDamageUpgradeCost = 100;
+	meleeEnergyUpgradeCost = 100;
+	meleeAtkSpeedUpgradeCost = 100;
+
+	rangedLifeUpgradeCost = 100;
+	rangedDamageUpgradeCost = 100;
+	rangedEnergyUpgradeCost = 100;
+	rangedAtkSpeedUpgradeCost = 100;
 }
 
 

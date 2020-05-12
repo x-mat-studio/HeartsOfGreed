@@ -2,6 +2,7 @@
 #include "Render.h"
 #include "Textures.h"
 #include "EntityManager.h"
+#include "FoWManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 Building::Building() :
@@ -55,6 +56,10 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
 {
+	if (type == ENTITY_TYPE::BUILDING && visionEntity == nullptr)
+	{
+		visionEntity = app->fowManager->CreateFoWEntity(position, false, 1, 3);
+	}
 }
 
 
@@ -68,6 +73,15 @@ Building::~Building()
 {
 	myBase = nullptr;
 	selectedTexture = nullptr;
+
+	if (type == ENTITY_TYPE::BUILDING)
+	{
+		if (visionEntity != nullptr)
+		{
+			visionEntity->deleteEntity = true;
+			visionEntity = nullptr;
+		}
+	}
 }
 
 
