@@ -1,11 +1,15 @@
 #include "App.h"
 #include "QuestManager.h"
+#include "Quest.h"
+
+
 #include "EventManager.h"
 #include "Collision.h"
 #include "Audio.h"
 #include "Textures.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Player.h"
+
 
 
 ModuleQuestManager::ModuleQuestManager():
@@ -15,8 +19,10 @@ ModuleQuestManager::ModuleQuestManager():
 	name.create("QuestManager");
 }
 
+
 ModuleQuestManager::~ModuleQuestManager()
 {}
+
 
 bool ModuleQuestManager::Awake(pugi::xml_node& config)
 {
@@ -25,6 +31,7 @@ bool ModuleQuestManager::Awake(pugi::xml_node& config)
 
 	return ret;
 }
+
 
 bool ModuleQuestManager::Start()
 {
@@ -39,14 +46,8 @@ bool ModuleQuestManager::Start()
 	return ret;
 }
 
+
 bool ModuleQuestManager::PreUpdate(float dt)
-{
-	bool ret = true;
-
-	return ret;
-}
-
-bool ModuleQuestManager::Update(float dt)
 {
 	bool ret = true;
 
@@ -55,50 +56,26 @@ bool ModuleQuestManager::Update(float dt)
 	return ret;
 }
 
-bool ModuleQuestManager::PostUpdate(float dt)
-{
-	bool ret = true;
-
-	return ret;
-}
 
 bool ModuleQuestManager::CleanUp()
 {
 	bool ret = true;
 
-	app->tex->UnLoad(questMarker);		questMarker = nullptr;
+	app->tex->UnLoad(questMarker);		
 	
-	for (std::unordered_map <int, Quest*>::iterator it = ongoing.begin(); it != ongoing.end(); it++) 
-	{
-		
-		ongoing.erase(it);
-	}
-
-	for (std::unordered_map <int, Quest*>::iterator it = finished.begin(); it != finished.end(); it++) 
-	{
-		
-		finished.erase(it);
-	}
-	
+	questMarker = nullptr;
 	//Quests are entities. We delete them at entity manager, not here.
 
 	return ret;
 }
 
+
 void ModuleQuestManager::OnCollision(Collider* c1, Collider* c2)
 {
-	
 	if (c1->thisEntity != nullptr && c1->type == COLLIDER_TYPE::COLLIDER_QUEST) 
 	{
-		
 		c1->thisEntity->OnCollision(c2);
-	} 
-	else if (c2->thisEntity != nullptr && c2->type == COLLIDER_TYPE::COLLIDER_QUEST)
-	{
-	
-		c2->thisEntity->OnCollision(c1);
 	}
-
 }
 
 
@@ -117,3 +94,13 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 }
 
 
+SDL_Texture* ModuleQuestManager::GetTexture()
+{
+	return questMarker;
+}
+
+
+void ModuleQuestManager::QuestStarted(int questId)
+{
+	//Do something, idfk yet, YET
+}

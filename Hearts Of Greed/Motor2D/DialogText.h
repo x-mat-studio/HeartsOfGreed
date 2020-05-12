@@ -13,7 +13,7 @@ private:
 
 	void HandleInput();
 	void Draw(float dt);
-
+	
 	void ChangeTexture(SDL_Texture* tex, P2SString* string);
 
 

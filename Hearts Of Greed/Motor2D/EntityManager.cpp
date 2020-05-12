@@ -126,6 +126,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	rangedDamageUpgradeValue(1),
 	rangedEnergyUpgradeValue(1),
 	rangedAtkSpeedUpgradeValue(1),
+
 	upgradeValue(1.1f)
 
 {
@@ -1544,7 +1545,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
 				gathererDamageUpgradeValue *= upgradeValue;
-				Hero* hero = (Hero*) entityVector[i];
+				Hero* hero = (Hero*)entityVector[i];
 				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
@@ -1655,7 +1656,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				meleeDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage()* upgradeValue);
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
 		}
@@ -1669,7 +1670,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				meleeEnergyUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints()* upgradeValue);
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
 				break;
 			}
 		}
@@ -1683,7 +1684,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				meleeAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed()* upgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
 				break;
 			}
 		}
@@ -3195,4 +3196,21 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 
 	return true;
+}
+
+
+void ModuleEntityManager::ResetUpgradeValues()
+{
+	gathererLifeUpgradeValue = 1;
+	gathererDamageUpgradeValue = 1;
+	gathererEnergyUpgradeValue = 1;
+	gathererAtkSpeedUpgradeValue = 1;
+	meleeLifeUpgradeValue = 1;
+	meleeDamageUpgradeValue = 1;
+	meleeEnergyUpgradeValue = 1;
+	meleeAtkSpeedUpgradeValue = 1;
+	rangedLifeUpgradeValue = 1;
+	rangedDamageUpgradeValue = 1;
+	rangedEnergyUpgradeValue = 1;
+	rangedAtkSpeedUpgradeValue = 1;
 }

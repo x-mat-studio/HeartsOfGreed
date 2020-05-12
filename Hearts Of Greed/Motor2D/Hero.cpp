@@ -275,10 +275,6 @@ bool Hero::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 	
-	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) //Debug key to lock camera movement
-	{
-		LevelUp();
-	}
 	StateMachine(dt);
 	GroupMovement(dt);
 
@@ -1457,6 +1453,7 @@ Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(s
 
 
 //Getters and setters hellish nightmare
+// PD: Now I have to enter this nightmare as well. The quest for an efficient code has started
 
 int Hero::GetHeroLevel() const
 {
@@ -1578,13 +1575,13 @@ void Hero::SetFeelingSecure(float feelSecure)
 }
 
 
-int Hero::GetAttackDamage() const
+float Hero::GetAttackDamage() const
 {
 	return attackDamage;
 }
 
 
-void Hero::SetAttackDamage(int atkDamage)
+void Hero::SetAttackDamage(float atkDamage)
 {
 	attackDamage = atkDamage;
 }

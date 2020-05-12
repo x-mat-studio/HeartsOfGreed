@@ -100,6 +100,7 @@ private:
 public:
 	Base* lastShop;
 	bool mouseOverUI;
+	UIFactory* factory;
 
 private:
 	std::vector<UI_Group*> uiGroupVector;
@@ -112,8 +113,6 @@ private:
 
 	// DO NOT USE THIS IF YOU AREN'T FERRAN >:3
 	UI* hoverElement;
-
-	UIFactory* factory;
 
 	HeroesPortraitManager* portraitManager;
 
