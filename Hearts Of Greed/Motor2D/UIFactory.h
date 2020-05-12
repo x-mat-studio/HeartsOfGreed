@@ -22,6 +22,8 @@ public:
 	UIFactory();
 	~UIFactory();
 
+	void ResetUpgradeCost();
+
 	// Getters
 
 	SDL_Rect GetHealthBarBackground();

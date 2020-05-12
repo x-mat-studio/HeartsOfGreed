@@ -7,6 +7,8 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "UIManager.h"
+#include "UIFactory.h"
+#include "EntityManager.h"
 #include "Render.h"
 #include "EventManager.h"
 
@@ -171,6 +173,11 @@ void ModuleMainMenuScene::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::START_GAME:
+		if (app->uiManager->factory != nullptr)
+		{
+			app->uiManager->factory->ResetUpgradeCost();
+		}
+		app->entityManager->ResetUpgradeValues();
 		changeScene = true;
 		break;
 	}
