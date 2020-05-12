@@ -136,6 +136,8 @@ public:
 
 	Entity* SearchEntity(ENTITY_TYPE type);
 
+	void ResetUpgradeValues();
+
 private:
 
 	void CheckIfStarted();
