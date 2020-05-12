@@ -65,6 +65,12 @@
     />
   </entityManager>
 
+  <QuestManager>
+    <load
+      docnameQuests="quests.xml"
+    />
+  </QuestManager>
+  
   <testScene 
     fadeTime="1.0"
     startingScale="2.0"

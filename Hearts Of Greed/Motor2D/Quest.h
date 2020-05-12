@@ -3,14 +3,6 @@
 
 #include "Entity.h"
 
-struct QuestInfo
-{
-public:
-	QuestInfo();
-
-};
-
-
 enum class QUEST_STATE : int
 {
 	ST_UNKNOWN = -1,
