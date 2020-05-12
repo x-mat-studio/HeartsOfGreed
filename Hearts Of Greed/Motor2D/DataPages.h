@@ -75,11 +75,13 @@ private:
 	UIFactory* factory;
 
 	SDL_Rect* healthRect;
-	SDL_Rect* manaRect;
+	SDL_Rect* energyRect;
 	int originalBarsWidth;
 
 	float life;
-	float mana;
+	float energy;
+	float lifeMax;
+	float energyMax;
 	float resources;
 	float level;
 	float attackDamage;
