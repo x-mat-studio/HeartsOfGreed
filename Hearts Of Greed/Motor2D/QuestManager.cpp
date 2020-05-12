@@ -46,14 +46,14 @@ bool ModuleQuestManager::Awake(pugi::xml_node& config)
 void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 {
 	int i = 0;
-	
+
 	for (pugi::xml_node iterator = node.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
 	{
 		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int()));
-		
+
 		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
 		{
-			questInfoVector[i].PushEntityToSpawn((ENTITY_TYPE)iterator2.attribute("type").as_int(), iterator2.attribute("posX").as_int(), iterator2.attribute("posY").as_int());
+			questInfoVector[i].PushEntityToSpawn((ENTITY_TYPE)iterator2.attribute("type").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
 		}
 	}
 }
@@ -113,8 +113,6 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		app->audio->PlayFx(questSfx, 0, -1);
 
-		app->player->AddResources(400);
-
 		break;
 	}
 }
@@ -128,10 +126,22 @@ SDL_Texture* ModuleQuestManager::GetTexture()
 
 void ModuleQuestManager::QuestStarted(int questId)
 {
-	
+	questInfoVector[questId].StartQuest();
 }
 
 
+void ModuleQuestManager::CheckEntityDead(Entity* entity)
+{
+	int questNumber = questInfoVector.size();
+
+	for (int i = 0; i < questNumber; i++)
+	{
+		if (questInfoVector[i].active == true)
+		{
+			questInfoVector[i].CheckQuestStatus(entity);
+		}
+	}
+}
 
 //Struct QuestInfo
 
@@ -183,6 +193,42 @@ void QuestInfo::StartQuest()
 		questEntitysVector.push_back(entity);
 	}
 
+	active = true;
+}
+
+
+bool QuestInfo::CheckQuestStatus(Entity* entity)
+{
+	int numberEntitys = questEntitysVector.size();
+
+	for (int i = 0; i < numberEntitys; i++)
+	{
+		if (questEntitysVector[i] == entity)
+		{
+			questEntitysVector.erase(questEntitysVector.begin() + i);
+
+			if (entity->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
+			{
+				questEntitysVector.clear();
+				active = false;
+
+				return false;
+			}
+
+			else if (questEntitysVector.size() == 1) //Only remains the hero
+			{
+				questEntitysVector.clear();
+				active = false;
+
+				GiveReward();
+
+				return true;
+			}
+			
+		}
+	}
+
+	return false;
 }
 
 
@@ -190,4 +236,10 @@ void QuestInfo::PushEntityToSpawn(ENTITY_TYPE entity, float x, float y)
 {
 	entitysToSpawnVector.push_back(entity);
 	positionsToSpawnVector.push_back(fMPoint(x, y));
+}
+
+
+void QuestInfo::GiveReward()
+{
+	app->player->AddResources(resourcesReward);
 }

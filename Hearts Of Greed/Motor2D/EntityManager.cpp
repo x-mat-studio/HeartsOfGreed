@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
+#include "QuestManager.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -1113,6 +1114,7 @@ void ModuleEntityManager::RemoveDeletedEntities()
 			CheckDynamicEntitysObjectives(entityVector[i]);
 			app->player->CheckFocusedEntity(entityVector[i]);
 			app->uiManager->CheckFocusEntity(entityVector[i]);
+			app->questManager->CheckEntityDead(entityVector[i]);
 
 
 			type = entityVector[i]->GetType();

@@ -19,20 +19,29 @@ public:
 	~QuestInfo();
 
 	void StartQuest();
+	bool CheckQuestStatus(Entity* entity);
 
 	void PushEntityToSpawn(ENTITY_TYPE, float x, float y);
 
+
 private:
+	void GiveReward();
 
+
+public:
+	bool active;
+
+
+private:
 	std::vector<ENTITY_TYPE> entitysToSpawnVector;
-	std::vector<fMPoint>	 positionsToSpawnVector;
+	std::vector<fMPoint> positionsToSpawnVector;
 
-	std::vector<Entity*>  questEntitysVector;
+	std::vector<Entity*> questEntitysVector;
 
 	int resourcesReward;
 
 	int id;
-	bool active;
+
 };
 
 
@@ -44,11 +53,9 @@ public:
 	virtual ~ModuleQuestManager();
 
 	bool Awake(pugi::xml_node&);
-	
 	bool Start();
 
 	bool PreUpdate(float dt);
-
 	bool CleanUp();
 
 	void OnCollision(Collider * c1, Collider* c2);
@@ -56,6 +63,7 @@ public:
 	SDL_Texture* GetTexture();
 
 	void QuestStarted(int questId);
+	void CheckEntityDead(Entity* entity);
 
 private:
 	void LoadQuests(pugi::xml_node&);
