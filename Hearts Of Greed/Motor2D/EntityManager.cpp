@@ -1377,8 +1377,10 @@ void ModuleEntityManager::DrawOnlyStaticBuildings()
 	{
 		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
 		{
-
-			entityVector[i]->MinimapDraw(scale, halfWidth);
+			if (entityVector[i]->visionEntity != nullptr && entityVector[i]->visionEntity->isVisible == true)
+			{
+				entityVector[i]->MinimapDraw(scale, halfWidth);
+			}
 		}
 
 	}
