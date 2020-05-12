@@ -2,6 +2,7 @@
 #define __MAIN_MENU_SCENE__
 
 #include "Module.h"
+#include "EasingFunctions.h"
 #include "SDL/include/SDL.h"
 
 
@@ -57,7 +58,7 @@ private:
 	int titleSound;
 
 	//fadecouner
-	float alphaCounter;
+	Easing alphaCounter;
 
 	//Canon counter
 	bool canon;

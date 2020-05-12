@@ -12,7 +12,7 @@
 #include "Render.h"
 #include "EventManager.h"
 
-ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false),changeSceneContinue(-1), fadeTime(0), BG(nullptr), alphaCounter(0),
+ModuleMainMenuScene::ModuleMainMenuScene() : changeScene(false), changeSceneContinue(-1), fadeTime(0), BG(nullptr),
 canon(0), gameIcon(nullptr), gameTitle(nullptr), soundDelay(0), titleSound(-1)
 {
 	name.create("menuScene");
@@ -25,7 +25,7 @@ ModuleMainMenuScene::~ModuleMainMenuScene()
 }
 
 
-bool  ModuleMainMenuScene::Awake(pugi::xml_node&config)
+bool  ModuleMainMenuScene::Awake(pugi::xml_node& config)
 {
 
 	app->eventManager->EventRegister(EVENT_ENUM::START_GAME, this);
@@ -51,7 +51,7 @@ bool ModuleMainMenuScene::Start()
 
 	app->audio->PlayMusic("audio/music/IntroMenu.ogg", fadeTime, app->audio->musicVolume);
 
-	alphaCounter = 0;
+	alphaCounter.NewEasing(EASING_TYPE::EASE_IN_OUT_CUBIC, 1, 255, 2);
 	soundDelay = 0;
 	canon = false;
 
@@ -79,25 +79,29 @@ bool  ModuleMainMenuScene::PreUpdate(float dt)
 // Called each loop iteration
 bool  ModuleMainMenuScene::Update(float dt)
 {
+	float alpha = 0;
 	CheckListener(this);
 
-	if (alphaCounter < 255) { alphaCounter += dt * 70; }
+	if (alphaCounter.IsActive() == true)
+	{
+		alpha=alphaCounter.UpdateEasingAddingTime(dt);
+	}
 	if (soundDelay < 210) { soundDelay += dt * 100; }
 
-	app->render->Blit(BG, 0,0, NULL, false, false, 250);
-	app->render->Blit(gameIcon, 140, 70, false, false, NULL, alphaCounter);
-	app->render->Blit(gameTitle, 20, 20, false, false, NULL, alphaCounter);
+	app->render->Blit(BG, 0, 0, NULL, false, false, 250);
+	app->render->Blit(gameIcon, 140, 70, false, false, NULL, alpha);
+	app->render->Blit(gameTitle, 20, 20, false, false, NULL, alpha);
 
 	if (soundDelay > 210) {
 
 		if (canon == false) {
-			
+
 			canon = true;
 			app->audio->PlayFx(titleSound, 0, 2, LOUDNESS::QUIET, DIRECTION::RIGHT);
-		
+
 		}
 	}
-	
+
 	return true;
 }
 
@@ -108,10 +112,10 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 	bool ret = true;
 
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MAIN SCENE
-	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true) 
+	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true)
 	{
 
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene,fadeTime*2))
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2))
 		{
 			changeScene = false;
 		}
@@ -119,7 +123,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 
 	if (changeSceneContinue == 0)
 	{
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2)==true)
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2) == true)
 		{
 			changeSceneContinue = 1;
 		}
