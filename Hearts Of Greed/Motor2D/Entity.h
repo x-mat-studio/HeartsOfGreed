@@ -77,6 +77,15 @@ enum class SKILL_TYPE
 	AREA_OF_EFFECT
 };
 
+enum SKILL_EFFECT : int
+{
+	NO_EFFECT = -1,
+
+	SLOWDOWN,
+
+	EFFECT_ALL
+};
+
 
 class Entity
 {
@@ -123,6 +132,7 @@ public:
 	virtual void Draw(float dt);	
 	virtual void MinimapDraw(float scale, float halfWidth);
 	virtual void DebugDraw();
+	virtual void ApplyEffect();
 
 	//Sound related
 	DIRECTION GetMyDirection();

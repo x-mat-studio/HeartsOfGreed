@@ -127,7 +127,7 @@ public:
 	skillArea* RequestArea(SKILL_ID id, std::vector<iMPoint>* toFill, iMPoint center);
 
 	//This & skill Struct need re-work to accept single target
-	int ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr);
+	int ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
 
 	//function used for minimap
 	void DrawOnlyStaticBuildings();
