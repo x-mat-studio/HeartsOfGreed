@@ -15,7 +15,8 @@
 
 ModuleQuestManager::ModuleQuestManager() :
 	questMarker(nullptr),
-	questSfx(-1)
+	questSfx(-1),
+	questFailed(-1)
 {
 	name.create("QuestManager");
 }
@@ -67,6 +68,7 @@ bool ModuleQuestManager::Start()
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FAIL_QUEST, this);
 
 	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
+	questFailed = app->audio->LoadFx("audio/sfx/Interface/MissionFailed.wav");
 
 	questMarker = app->tex->Load("spritesheets/VFX/questMarker.png");
 
@@ -120,6 +122,7 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::FAIL_QUEST:
 
+		app->audio->PlayFx(questFailed, 0, -1);
 		break;
 	}
 }

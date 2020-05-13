@@ -7,7 +7,7 @@
 #include "Animation.h"
 
 enum class ENEMY_STATES : int
-{
+{	
 	UNKNOWN = -1,
 	IDLE,
 
@@ -25,7 +25,7 @@ enum class ENEMY_INPUTS : int
 {
 	IN_IDLE,
 	IN_MOVE,
-	
+
 	IN_ATTACK,
 	IN_CHARGING_ATTACK,
 	IN_ATTACK_CHARGED,
@@ -43,10 +43,10 @@ class Enemy : public DynamicEntity
 public:
 
 	Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
-		  Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
-		  Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight, 
-		  Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
-		  int recoveryHitPointsRate, int vision, int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale = 1.0f);
+		Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
+		Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp, Animation& punchRightDown, Animation& punchRight,
+		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, int maxHitPoints, int currentHitPoints,
+		int recoveryHitPointsRate, int vision, int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int xpOnDeath, float scale = 1.0f);
 
 
 	Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align);
@@ -105,10 +105,10 @@ private:
 	void SetAnimation(ENEMY_STATES state);
 
 	void Roar();
-	
+
 
 private:
-	
+
 	int recoveryHitPointsRate;
 	int vision;
 
@@ -159,6 +159,7 @@ private:
 
 	float damageTakenTimer;
 	float scale;
+
 };
 
 

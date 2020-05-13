@@ -237,6 +237,16 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 	return separationSpeed;
 }
 
+void DynamicEntity::SetSpeed(int speed)
+{
+	this->unitSpeed = speed;
+}
+
+int DynamicEntity::GetSpeed()
+{
+	return unitSpeed;
+}
+
 fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_list, fMPoint position)
 {
 	BROFILER_CATEGORY("COHESION SPEED", Profiler::Color::DarkOliveGreen);

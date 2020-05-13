@@ -411,3 +411,8 @@ void Entity::DebugDraw()
 	app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
 
 }
+
+void Entity::ApplyEffect()
+{
+	return;
+}
