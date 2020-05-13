@@ -73,6 +73,7 @@ private:
 private:
 
 	int questSfx;
+	int questFailed;
 	SDL_Texture* questMarker;
 	
 	std::vector<QuestInfo> questInfoVector;
