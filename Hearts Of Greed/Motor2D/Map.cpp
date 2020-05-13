@@ -625,7 +625,7 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 				case 250 + 14:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
-					qst->SetId(6);
+					qst->SetId(0);
 					break;
 
 				default:
