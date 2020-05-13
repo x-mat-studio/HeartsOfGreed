@@ -68,7 +68,7 @@ enum class BUTTON_TAG : int
 class Button : public UI
 {
 public:
-	Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, SDL_Texture* texture, BUTTON_TAG buttonTag);
+	Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, SDL_Texture* texture, BUTTON_TAG buttonTag, SDL_Rect scaled = {0, 0, 0, 0});
 	~Button();
 
 	BUTTON_TAG GetTag();
@@ -83,6 +83,7 @@ private:
 	bool clicked;
 	bool focusedFirstFrame;
 	BUTTON_TAG buttonTag;
+	SDL_Rect scaledRect;
 };
 
 #endif //__BUTTON_H__

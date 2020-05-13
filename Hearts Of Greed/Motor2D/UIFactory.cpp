@@ -79,17 +79,17 @@ UIFactory::UIFactory() :
 
 	reviveHoverBackground{ 20, 300, 150, 50 },
 	upgradeHoverBackground{ 20, 300, 180, 50 },
-	lifeUpgradeButton{ 250, 410, 15, 15 },
-	damageUpgradeButton{ 250, 410, 15, 15 },
-	energyUpgradeButton{ 250, 410, 15, 15 },
-	attackSpeedUpgradeButton{ 250, 410, 15, 15 },
+	lifeUpgradeButton{ 430, 581, 88, 87 },
+	damageUpgradeButton{ 34, 581, 88, 87 },
+	energyUpgradeButton{ 532, 581, 88, 87 },
+	attackSpeedUpgradeButton{ 328, 581, 88, 87 },
 
-	gathererPassive1Button{ 250, 410, 15, 15 },
-	meleePassive1Button{ 250, 410, 15, 15 },
-	rangedPassive1Button{ 250, 410, 15, 15 },
-	gathererActive1Button{ 250, 410, 15, 15 },
-	meleeActive1Button{ 250, 410, 15, 15 },
-	rangedActive1Button{ 250, 410, 15, 15 },
+	gathererPassive1Button{ 140, 827, 93, 91 },
+	meleePassive1Button{ 245, 826, 93, 91 },
+	rangedPassive1Button{ 36, 828, 93, 91 },
+	gathererActive1Button{ 36, 708, 93, 91 },
+	meleeActive1Button{ 244, 708, 93, 91 },
+	rangedActive1Button{ 140, 707, 93, 91 },
 
 	dialogWindow{ 1110, 41, 859, 615 },
 
@@ -1052,7 +1052,7 @@ UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, std::vecto
 
 UI* UIFactory::CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, lifeUpgradeButton, false, app->uiManager->GetAtlasTexture(), tag);
+	Button* button = new Button(fMPoint{ x, y }, parent, {0, 0, 15, 15}, false, app->uiManager->GetAtlasTexture(), tag, lifeUpgradeButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1061,7 +1061,7 @@ UI* UIFactory::CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector
 
 UI* UIFactory::CreateDamageUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, damageUpgradeButton, false, app->uiManager->GetAtlasTexture(), tag);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), tag, damageUpgradeButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1070,7 +1070,7 @@ UI* UIFactory::CreateDamageUpgradeButton(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateEnergyUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, energyUpgradeButton, false, app->uiManager->GetAtlasTexture(), tag);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), tag, energyUpgradeButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1079,7 +1079,7 @@ UI* UIFactory::CreateEnergyUpgradeButton(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateAttackSpeedUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, attackSpeedUpgradeButton, false, app->uiManager->GetAtlasTexture(), tag);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), tag, attackSpeedUpgradeButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1088,7 +1088,7 @@ UI* UIFactory::CreateAttackSpeedUpgradeButton(float x, float y, UI* parent, std:
 
 UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, gathererPassive1Button, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE, gathererPassive1Button);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1097,7 +1097,7 @@ UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::v
 
 UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, gathererActive1Button, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE, gathererActive1Button);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1106,7 +1106,7 @@ UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::ve
 
 UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, meleePassive1Button, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE, meleePassive1Button);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1115,7 +1115,7 @@ UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, meleeActive1Button, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE, meleeActive1Button);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1124,7 +1124,7 @@ UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vecto
 
 UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, rangedPassive1Button, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE, rangedPassive1Button);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1133,7 +1133,7 @@ UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vec
 
 UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, rangedActive1Button, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE, rangedActive1Button);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1142,7 +1142,7 @@ UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_TURRET);
+	Button* button = new Button(fMPoint{ x, y }, parent, {0, 0, 15, 15}, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_TURRET);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1228,8 +1228,8 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_DAMAGE_UPGRADE);
-	CreateDamageUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_ENERGY_UPGRADE);
-	CreateDamageUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE);
+	CreateEnergyUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_ENERGY_UPGRADE);
+	CreateAttackSpeedUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE);
 
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
@@ -1244,8 +1244,8 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::MELEE_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::MELEE_DAMAGE_UPGRADE);
-	CreateDamageUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::MELEE_ENERGY_UPGRADE);
-	CreateDamageUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE);
+	CreateEnergyUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::MELEE_ENERGY_UPGRADE);
+	CreateAttackSpeedUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE);
 
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
@@ -1260,8 +1260,8 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::RANGED_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::RANGED_DAMAGE_UPGRADE);
-	CreateDamageUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::RANGED_ENERGY_UPGRADE);
-	CreateDamageUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE);
+	CreateEnergyUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::RANGED_ENERGY_UPGRADE);
+	CreateAttackSpeedUpgradeButton(-15, 51, dataPage, dataPagesVector, BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE);
 
 	CreateGenericHeroPage(dataPagesVector, dataPage);
 }
