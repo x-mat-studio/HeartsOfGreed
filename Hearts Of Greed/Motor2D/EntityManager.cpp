@@ -2063,7 +2063,7 @@ void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillAr
 
 
 int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
-	SKILL_TYPE type, bool hurtYourself, Entity* objective)
+	SKILL_TYPE type, bool hurtYourself, Entity* objective, SKILL_EFFECT effect)
 {
 	int ret = -1;
 
@@ -2103,6 +2103,11 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 				if (entColl->CheckCollisionCircle(pivot, newRad))
 				{
 					ret += entityVector[i]->RecieveDamage(dmg);
+
+					if (effect != SKILL_EFFECT::SLOWDOWN)
+					{
+
+					}
 				}
 			}
 			break;
@@ -2179,6 +2184,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	SKILL_ID skill1ID = (SKILL_ID)heroNode.child("sample").child("skills").child("skill1").attribute("id").as_int(0);
 	SKILL_TYPE skill1Type = (SKILL_TYPE)heroNode.child("sample").child("skills").child("skill1").attribute("type").as_int(0);
 	ENTITY_ALIGNEMENT skill1Target = (ENTITY_ALIGNEMENT)heroNode.child("sample").child("skills").child("skill1").attribute("targetAligment").as_int(0);
+	SKILL_EFFECT skill1Effect = (SKILL_EFFECT)heroNode.child("sample").child("skills").child("skill1").attribute("effect").as_int(-1);
 
 	//skill2
 	float skill2ExecTime = heroNode.child("sample").child("skills").child("skill2").attribute("executionTime").as_float(0);
@@ -2244,7 +2250,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect);
 
 		ret = true;
 		break;
@@ -2259,7 +2265,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect);
 
 		ret = true;
 		break;
@@ -2274,7 +2280,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect);
 
 		ret = true;
 		break;
@@ -2293,7 +2299,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion, skill1Effect);
 
 		ret = true;
 		break;
