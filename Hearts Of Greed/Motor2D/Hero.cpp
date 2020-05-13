@@ -23,7 +23,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
+	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, SKILL_EFFECT skill1Effect) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
 
@@ -110,7 +110,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	drawingVfx(false),
 
 	state(HERO_STATES::IDLE),
-	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target),
+	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target, skill1Effect),
 	objective(nullptr)
 {
 	currentAnimation = &walkLeft;
@@ -1445,10 +1445,10 @@ bool Hero::DrawVfx(float dt)
 }
 
 
-Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target) : id(id), dmg(dmg), type(type), target(target)
+Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target, SKILL_EFFECT effect) : id(id), dmg(dmg), type(type), target(target), effect(effect)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect)
 {}
 
 

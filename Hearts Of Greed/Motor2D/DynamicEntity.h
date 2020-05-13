@@ -61,6 +61,9 @@ public:
 	int framesSinceRequest;
 	int framesToRquest;
 
+	void SetSpeed(int speed);
+	int GetSpeed();
+
 protected:
 
 	iMPoint origin, mouse;
@@ -70,9 +73,6 @@ protected:
 
 private:
 	fMPoint toMove;
-
-
-
 
 };
 
