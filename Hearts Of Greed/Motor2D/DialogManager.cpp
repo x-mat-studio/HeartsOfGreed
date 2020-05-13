@@ -1,4 +1,6 @@
+#include "App.h"
 #include "DialogManager.h"
+#include "EventManager.h"
 
 ModuleDialogManager::ModuleDialogManager() :
 
@@ -279,6 +281,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -295,6 +299,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -341,6 +347,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -372,6 +380,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -403,6 +413,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -434,6 +446,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -450,6 +464,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -496,6 +512,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -527,6 +545,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -556,6 +576,8 @@ void ModuleDialogManager::ProcessFsm()
 
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 

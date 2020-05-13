@@ -10,6 +10,7 @@
 #include "Textures.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Player.h"
+#include "DialogManager.h"
 
 
 
@@ -141,6 +142,38 @@ void ModuleQuestManager::QuestStarted(int questId)
 		assert("Quest id not initialized");
 	}
 	questInfoVector[questId].StartQuest();
+
+	switch (questId)
+	{
+	case 0:
+		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END);
+		break;
+
+	case 1:
+		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_1_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_1_END);
+		break;
+
+	case 2:
+		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_2_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_2_END);
+		break;
+
+	case 3:
+		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_3_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_3_END);
+		break;
+
+	case 4:
+		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_4_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_4_END);
+		break;
+	default:
+		break;
+	}
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 }
 
 
@@ -167,6 +200,7 @@ QuestInfo::QuestInfo(int resourcesReward, int id) :
 
 	resourcesReward(resourcesReward),
 	id(id),
+	dialogInput(-1),
 
 	active(false)
 {}
@@ -248,8 +282,10 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 				active = false;
 
 				GiveReward();
-				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+				app->dialogManager->PushInput((DIALOG_INPUT)dialogInput);
 
+				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+				app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				return true;
 			}
 			
@@ -270,4 +306,10 @@ void QuestInfo::PushEntityToSpawn(ENTITY_TYPE entity, float x, float y)
 void QuestInfo::GiveReward()
 {
 	app->player->AddResources(resourcesReward);
+}
+
+
+void QuestInfo::SetDialogInput(int input)
+{
+	dialogInput = input;
 }

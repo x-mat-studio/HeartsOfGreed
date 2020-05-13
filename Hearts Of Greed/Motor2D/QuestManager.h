@@ -23,6 +23,8 @@ public:
 
 	void PushEntityToSpawn(ENTITY_TYPE, float x, float y);
 
+	void SetDialogInput(int input);
+
 
 private:
 	void GiveReward();
@@ -41,7 +43,7 @@ private:
 	int resourcesReward;
 
 	int id;
-
+	int dialogInput;
 };
 
 
