@@ -9,6 +9,7 @@
 #include "FoWManager.h"
 #include "EntityManager.h"
 #include "Building.h" //necessary to read buildings from tiled
+#include "Quest.h"    //idem
 #include "Minimap.h"
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -542,6 +543,8 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				colliderRectAux.w /= 2;
 
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
+				Quest* qst = nullptr;
+
 				LOG(" gid was %i", layer->gid[i]);
 
 
@@ -550,6 +553,9 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				switch (layer->gid[i])
 				{
 					//250 = id of the first tile of the tileset that codifies for building generation
+				
+				
+				//BUILDINGS----------------
 				case 250 + 0:
 				{
 					Base* base = (Base*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_BASE, colliderRectAux.x, colliderRectAux.y, ENTITY_ALIGNEMENT::ENEMY);
@@ -587,6 +593,39 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				case 250 + 8:
 					bldgToBe = app->entityManager->AddDecorativeBuilding(BUILDING_DECOR::ST_03, colliderRectAux.x, colliderRectAux.y);
 					
+					break;
+
+					
+				//QUESTS---------------------------------------
+
+				case 250 + 9:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(1);
+					break;
+
+				case 250 + 10:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(2);
+					break;
+
+				case 250 + 11:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(3);
+					break;
+
+				case 250 + 12:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(4);
+					break;
+
+				case 250 + 13:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(5);
+					break;
+
+				case 250 + 14:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(6);
 					break;
 
 				default:
