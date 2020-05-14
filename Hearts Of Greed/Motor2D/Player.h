@@ -47,6 +47,9 @@ public:
 	iMPoint GetClickPosition();
 
 	int GetResources() const;
+	int GetResourcesSkill() const;
+	int GetResourcesBoost() const;
+
 	int GetTurretCost() const;
 
 	bool IsBuilding() const;

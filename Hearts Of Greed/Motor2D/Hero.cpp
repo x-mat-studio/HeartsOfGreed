@@ -596,7 +596,7 @@ void Hero::Attack()
 
 		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
 			app->player->AddResources(ret * 0.5f);
-			app->player->AddResourcesBoost(1);
+			
 		}
 		true;
 	}
@@ -820,6 +820,7 @@ void Hero::PlayOnHitSound()
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
+	app->player->AddResourcesBoost(1);
 	return GetLevel();
 }
 

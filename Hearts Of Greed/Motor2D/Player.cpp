@@ -667,11 +667,11 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES_SKILL:
-		resourcesSkill += 10;
+		resourcesSkill += 1;
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
-		resourcesSkill += 100;
+		resourcesBoost+= 3;
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
@@ -962,6 +962,16 @@ iMPoint ModulePlayer::GetClickPosition()
 int ModulePlayer::GetResources() const
 {
 	return resources;
+}
+
+int ModulePlayer::GetResourcesSkill() const
+{
+	return resourcesSkill;
+}
+
+int ModulePlayer::GetResourcesBoost() const
+{
+	return resourcesBoost;
 }
 
 bool ModulePlayer::IsBuilding() const
