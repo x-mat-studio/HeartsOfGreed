@@ -97,6 +97,10 @@ private:
 
 	void AugmentValueByTenPercent(float* value);
 
+	bool Save(pugi::xml_node& data) const;
+
+	bool Load(pugi::xml_node& data);
+
 public:
 	Base* lastShop;
 	bool mouseOverUI;

@@ -2181,6 +2181,11 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	float atkSpd = heroNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
 	int atkRange = heroNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
 
+	int lifeLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("hp").as_int(0);
+	int damageLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("damage").as_int(0);
+	int energyLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("energy").as_int(0);
+	int attackSpeedLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("atkSpeed").as_int(0);
+
 	//skill1
 	float skill1ExecTime = heroNode.child("sample").child("skills").child("skill1").attribute("executionTime").as_float(0);
 	float skill1RecovTime = heroNode.child("sample").child("skills").child("skill1").attribute("recoverTime").as_float(0);
@@ -2254,7 +2259,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, 15, 3, 5, 0);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2269,7 +2274,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, 0, 0, 0, 0);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2284,7 +2289,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, 0, 0, 0, 0);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2303,7 +2308,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion, skill1Effect, 5, 2, 10, 0);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2703,6 +2708,11 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+
+			meleeLifeUpgradeValue = iterator.attribute("hp").as_float();
+			meleeDamageUpgradeValue = iterator.attribute("damage").as_float();
+			meleeEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			meleeAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2734,6 +2744,11 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+
+			rangedLifeUpgradeValue = iterator.attribute("hp").as_float();
+			rangedDamageUpgradeValue = iterator.attribute("damage").as_float();
+			rangedEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			rangedAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2765,6 +2780,11 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+
+			gathererLifeUpgradeValue = iterator.attribute("hp").as_float();
+			gathererDamageUpgradeValue = iterator.attribute("damage").as_float();
+			gathererEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			gathererAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2796,6 +2816,11 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+
+			robottoLifeUpgradeValue = iterator.attribute("hp").as_float();
+			robottoDamageUpgradeValue = iterator.attribute("damage").as_float();
+			robottoEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			robottoAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2963,6 +2988,11 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+
+			iterator.append_attribute("hp") = meleeLifeUpgradeValue;
+			iterator.append_attribute("damage") = meleeDamageUpgradeValue;
+			iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
+			iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
 			break;
 
 
@@ -2999,6 +3029,11 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+
+			iterator.append_attribute("hp") = rangedLifeUpgradeValue;
+			iterator.append_attribute("damage") = rangedDamageUpgradeValue;
+			iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
+			iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
 			break;
 
 
@@ -3034,6 +3069,11 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+
+			iterator.append_attribute("hp") = gathererLifeUpgradeValue;
+			iterator.append_attribute("damage") = gathererDamageUpgradeValue;
+			iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
+			iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
 			break;
 
 
@@ -3067,6 +3107,11 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+
+			iterator.append_attribute("hp") = robottoLifeUpgradeValue;
+			iterator.append_attribute("damage") = robottoDamageUpgradeValue;
+			iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
+			iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
 			break;
 
 

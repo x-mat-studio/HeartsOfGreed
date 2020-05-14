@@ -12,6 +12,7 @@
       <hitPoints max="100" current="100" recoveryRate="2"/>
       <energyPoints max="40" current="40" recoveryRate="4"/>
       <attack damage="8" speed="0.75" range="1"/>
+      <levelUp hp="5" damage="2" energy="10" atkSpeed="0" />
     </stats>
     
     <skills>

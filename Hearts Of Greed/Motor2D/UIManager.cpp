@@ -939,3 +939,58 @@ void ModuleUIManager::AugmentValueByTenPercent(float* value)
 }
 
 
+bool ModuleUIManager::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node iterator = data.append_child("UIManager");
+
+	iterator.append_attribute("gathererLifeShop") = factory->gathererLifeUpgradeCost;
+	iterator.append_attribute("gathererDamageShop") = factory->gathererDamageUpgradeCost;
+	iterator.append_attribute("gathererEnergyShop") = factory->gathererEnergyUpgradeCost;
+	iterator.append_attribute("gathererAtkSpeedShop") = factory->gathererAtkSpeedUpgradeCost;
+
+	iterator.append_attribute("meleeLifeShop") = factory->meleeLifeUpgradeCost;
+	iterator.append_attribute("meleeDamageShop") = factory->meleeDamageUpgradeCost;
+	iterator.append_attribute("meleeEnergyShop") = factory->meleeEnergyUpgradeCost;
+	iterator.append_attribute("meleeAtkSpeedShop") = factory->meleeAtkSpeedUpgradeCost;
+
+	iterator.append_attribute("rangedLifeShop") = factory->rangedLifeUpgradeCost;
+	iterator.append_attribute("rangedDamageShop") = factory->rangedDamageUpgradeCost;
+	iterator.append_attribute("rangedEnergyShop") = factory->rangedEnergyUpgradeCost;
+	iterator.append_attribute("rangedAtkSpeedShop") = factory->rangedAtkSpeedUpgradeCost;
+	
+	iterator.append_attribute("robottoLifeShop") = factory->robottoLifeUpgradeCost;
+	iterator.append_attribute("robottoDamageShop") = factory->robottoDamageUpgradeCost;
+	iterator.append_attribute("robottoEnergyShop") = factory->robottoEnergyUpgradeCost;
+	iterator.append_attribute("robottoAtkSpeedShop") = factory->robottoAtkSpeedUpgradeCost;
+	
+	return true;
+}
+
+
+bool ModuleUIManager::Load(pugi::xml_node& data)
+{
+	pugi::xml_node iterator = data;
+
+	factory->gathererLifeUpgradeCost = iterator.child("UIManager").attribute("gathererLifeShop").as_float();
+	factory->gathererDamageUpgradeCost = iterator.child("UIManager").attribute("gathererDamageShop").as_float();
+	factory->gathererEnergyUpgradeCost = iterator.child("UIManager").attribute("gathererEnergyShop").as_float();
+	factory->gathererAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("gathererAtkSpeedShop").as_float();
+
+	factory->meleeLifeUpgradeCost = iterator.child("UIManager").attribute("meleeLifeShop").as_float();
+	factory->meleeDamageUpgradeCost = iterator.child("UIManager").attribute("meleeDamageShop").as_float();
+	factory->meleeEnergyUpgradeCost = iterator.child("UIManager").attribute("meleeEnergyShop").as_float();
+	factory->meleeAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("meleeAtkSpeedShop").as_float();
+
+	factory->rangedLifeUpgradeCost = iterator.child("UIManager").attribute("rangedLifeShop").as_float();
+	factory->rangedDamageUpgradeCost = iterator.child("UIManager").attribute("rangedDamageShop").as_float();
+	factory->rangedEnergyUpgradeCost = iterator.child("UIManager").attribute("rangedEnergyShop").as_float();
+	factory->rangedAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("rangedAtkSpeedShop").as_float();
+
+	factory->robottoLifeUpgradeCost = iterator.child("UIManager").attribute("robottoLifeShop").as_float();
+	factory->robottoDamageUpgradeCost = iterator.child("UIManager").attribute("robottoDamageShop").as_float();
+	factory->robottoEnergyUpgradeCost = iterator.child("UIManager").attribute("robottoEnergyShop").as_float();
+	factory->robottoAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("robottoAtkSpeedShop").as_float();
+
+	return true;
+}
+
