@@ -247,6 +247,10 @@ public:
 	float rangedDamageUpgradeValue;
 	float rangedEnergyUpgradeValue;
 	float rangedAtkSpeedUpgradeValue;
+	float robottoLifeUpgradeValue;
+	float robottoDamageUpgradeValue;
+	float robottoEnergyUpgradeValue;
+	float robottoAtkSpeedUpgradeValue;
 	const float upgradeValue;
 
 private:
