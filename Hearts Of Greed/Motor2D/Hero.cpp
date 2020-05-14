@@ -23,7 +23,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, SKILL_EFFECT skill1Effect) :
+	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, SKILL_EFFECT skill1Effect, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
 
@@ -111,7 +111,13 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target, skill1Effect),
-	objective(nullptr)
+	objective(nullptr),
+
+	hpLevelUpConstant(hpLevelUp),
+	damageLevelUpConstant(damageLevelUp),
+	energyLevelUpConstant(energyLevelUp),
+	attackSpeedLevelUpConstant(atkSpeedLevelUp)
+
 {
 	currentAnimation = &walkLeft;
 
@@ -205,6 +211,11 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	skill1(copy->skill1),
 
+	hpLevelUpConstant(copy->hpLevelUpConstant),
+	damageLevelUpConstant(copy->damageLevelUpConstant),
+	energyLevelUpConstant(copy->energyLevelUpConstant),
+	attackSpeedLevelUpConstant(copy->attackSpeedLevelUpConstant),
+
 	drawingVfx(false)
 {
 	currentAnimation = &walkLeft;
@@ -263,6 +274,11 @@ Hero::~Hero()
 
 bool Hero::PreUpdate(float dt)
 {
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN)
+	{
+		LevelUp();
+	}
+
 	return true;
 }
 
@@ -274,7 +290,7 @@ bool Hero::Update(float dt)
 	//check inputs to traverse state matrix
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
-	
+
 	StateMachine(dt);
 	GroupMovement(dt);
 
@@ -498,7 +514,7 @@ void Hero::Draw(float dt)
 	Frame currFrame = GetAnimationCurrentFrame(dt);
 
 	if (damageTakenTimer > 0.f)
-		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0,0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
+		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, 0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
 
 	else
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 255, 255, 0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
@@ -569,7 +585,7 @@ bool Hero::CheckAttackRange()
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size() < attackRange + objective->GetRadiusSize() )
+	if (app->pathfinding->CreateLine(myPos, objPosM).size() < attackRange + objective->GetRadiusSize())
 	{
 		return true;
 
@@ -673,7 +689,7 @@ void Hero::PlayGenericNoise(int random)
 	return;
 }
 
-void Hero::BlitCommandVfx (Frame& currframe, int alphaValue)
+void Hero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
 
 	return;

@@ -127,6 +127,10 @@ ModuleEntityManager::ModuleEntityManager() :
 	rangedDamageUpgradeValue(1),
 	rangedEnergyUpgradeValue(1),
 	rangedAtkSpeedUpgradeValue(1),
+	robottoLifeUpgradeValue(1),
+	robottoDamageUpgradeValue(1),
+	robottoEnergyUpgradeValue(1),
+	robottoAtkSpeedUpgradeValue(1),
 
 	upgradeValue(1.1f)
 
@@ -2250,7 +2254,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, 15, 3, 5, 0);
 
 		ret = true;
 		break;
@@ -2265,7 +2269,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, 0, 0, 0, 0);
 
 		ret = true;
 		break;
@@ -2280,7 +2284,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, 0, 0, 0, 0);
 
 		ret = true;
 		break;
@@ -2299,7 +2303,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion, skill1Effect);
+			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion, skill1Effect, 5, 2, 10, 0);
 
 		ret = true;
 		break;
@@ -2874,6 +2878,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 		}
 	}
+
 	return true;
 }
 
@@ -3228,4 +3233,8 @@ void ModuleEntityManager::ResetUpgradeValues()
 	rangedDamageUpgradeValue = 1;
 	rangedEnergyUpgradeValue = 1;
 	rangedAtkSpeedUpgradeValue = 1;
+	robottoLifeUpgradeValue = 1;
+	robottoDamageUpgradeValue = 1;
+	robottoEnergyUpgradeValue = 1;
+	robottoAtkSpeedUpgradeValue = 1;
 }

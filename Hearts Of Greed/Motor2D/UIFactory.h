@@ -250,6 +250,11 @@ public:
 	float rangedDamageUpgradeCost;
 	float rangedEnergyUpgradeCost;
 	float rangedAtkSpeedUpgradeCost;
+
+	float robottoLifeUpgradeCost;
+	float robottoDamageUpgradeCost;
+	float robottoEnergyUpgradeCost;
+	float robottoAtkSpeedUpgradeCost;
 };
 
 #endif __UIFACTORY_H__
