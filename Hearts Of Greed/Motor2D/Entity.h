@@ -147,6 +147,7 @@ public:
 	bool UIAssigned;
 
 	bool selectedByPlayer;
+	bool missionEntity;
 
 	FoWEntity* visionEntity;
 	MinimapIcon* minimapIcon;

@@ -108,7 +108,12 @@ UIFactory::UIFactory() :
 	rangedLifeUpgradeCost(100),
 	rangedDamageUpgradeCost(100),
 	rangedEnergyUpgradeCost(100),
-	rangedAtkSpeedUpgradeCost(100)
+	rangedAtkSpeedUpgradeCost(100),
+
+	robottoLifeUpgradeCost(100),
+	robottoDamageUpgradeCost(100),
+	robottoEnergyUpgradeCost(100),
+	robottoAtkSpeedUpgradeCost(100)
 {}
 
 

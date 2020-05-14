@@ -13,7 +13,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 	Animation& tileOnWalk, int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, Animation& explosion, SKILL_EFFECT skill1Effect) :
+	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, Animation& explosion, SKILL_EFFECT skill1Effect, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
 
 	Hero(position, ENTITY_TYPE::HERO_GATHERER, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
@@ -22,7 +22,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
 		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
 		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
-		skill1Dmg, skill1Id, skill1Type, skill1Target, skill1Effect),
+		skill1Dmg, skill1Id, skill1Type, skill1Target, skill1Effect, hpLevelUp, damageLevelUp, energyLevelUp, atkSpeedLevelUp),
 
 	granadeArea(nullptr),
 
@@ -171,14 +171,14 @@ bool GathererHero::ExecuteSkill3()
 void GathererHero::LevelUp()
 {
 
-	hitPointsMax += (5 * app->entityManager->gathererLifeUpgradeValue);
+	hitPointsMax += (hpLevelUpConstant * app->entityManager->gathererLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;
 	recoveryHitPointsRate;
-	energyPoints += (10 * app->entityManager->gathererEnergyUpgradeValue);
+	energyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
 	recoveryEnergyRate += 1;
 
-	attackDamage += (2 * app->entityManager->gathererDamageUpgradeValue);
-	attackSpeed += (0 * app->entityManager->gathererAtkSpeedUpgradeValue);
+	attackDamage += (damageLevelUpConstant * app->entityManager->gathererDamageUpgradeValue);
+	attackSpeed += (attackSpeedLevelUpConstant * app->entityManager->gathererAtkSpeedUpgradeValue);
 	attackRange;
 
 	unitSpeed += 6;
