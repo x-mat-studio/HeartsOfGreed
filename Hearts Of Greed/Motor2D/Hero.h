@@ -109,7 +109,7 @@ public:
 		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
 		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
 		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, SKILL_EFFECT skill1Effect);
+		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, SKILL_EFFECT skill1Effect, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -267,6 +267,11 @@ public:
 	bool skill3Charged;
 
 	bool godMode;
+
+	const int hpLevelUpConstant;
+	const int damageLevelUpConstant;
+	const int energyLevelUpConstant;
+	const int attackSpeedLevelUpConstant;
 
 protected:
 	int level;
