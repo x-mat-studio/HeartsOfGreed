@@ -181,6 +181,9 @@ private:
 	SDL_Rect turretShopPicture;
 
 	SDL_Rect resourceIcon;
+	SDL_Rect resourceIconSkill;
+	SDL_Rect resourceIconBoost;
+
 	SDL_Rect creditsBackgroundImage;
 
 	SDL_Rect pauseMenuBackground;

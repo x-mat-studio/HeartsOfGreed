@@ -574,6 +574,8 @@ void ModuleInput::HandleDebugKeys()
 	if (GetKey(SDL_SCANCODE_0) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::GIVE_RESOURCES, EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::GIVE_RESOURCES_SKILL, EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::GIVE_RESOURCES_BOOST, EVENT_ENUM::NULL_EVENT);
 	}
 
 

@@ -119,6 +119,7 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FINISH_QUEST:
 
 		app->audio->PlayFx(questSfx, 0, -1);
+		app->player->AddResourcesSkill(2);
 		break;
 
 	case EVENT_ENUM::FAIL_QUEST:
@@ -194,6 +195,46 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 	}
 }
 
+
+bool ModuleQuestManager::Load(pugi::xml_node& data)
+{
+	questInfoVector.clear(); //Just in case :D
+
+	Entity* entity = nullptr;
+	int i = 0;
+
+	for (pugi::xml_node iterator = data.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int()));
+
+		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
+		{
+			entity = app->entityManager->AddEntity((ENTITY_TYPE)iterator2.attribute("type").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
+			entity->SetCurrentHP(iterator2.attribute("hp").as_int());
+
+			questInfoVector[i].PushEntity(entity);
+		}
+	}
+
+	return true;
+}
+
+
+bool ModuleQuestManager::Save(pugi::xml_node& data) const
+{
+	int questNumber = questInfoVector.size();
+
+	for (int i = 0; i < questNumber; i++)
+	{
+		pugi::xml_node iterator = data.append_child("quest");
+
+		questInfoVector[i].Save(iterator);
+	}
+
+	return true;
+}
+
+
 //Struct QuestInfo
 
 QuestInfo::QuestInfo(int resourcesReward, int id) :
@@ -261,31 +302,14 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 
 			if (entity->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
 			{
-				int size = questEntitysVector.size();
-
-				for (int j = 0; j < size; j++)
-				{
-					questEntitysVector[j]->selectedByPlayer = false;
-				}
-
-				questEntitysVector.clear();
-
-				app->eventManager->GenerateEvent(EVENT_ENUM::FAIL_QUEST, EVENT_ENUM::NULL_EVENT);
-				active = false;
-
+				LoseQuest();
 				return false;
 			}
 
 			else if (questEntitysVector.size() == 1) //Only remains the hero
 			{
-				questEntitysVector.clear();
-				active = false;
-
-				GiveReward();
-				app->dialogManager->PushInput((DIALOG_INPUT)dialogInput);
-
-				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
-				app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				questEntitysVector[0]->missionEntity = false;
+				WinQuest();
 				return true;
 			}
 			
@@ -303,6 +327,43 @@ void QuestInfo::PushEntityToSpawn(ENTITY_TYPE entity, float x, float y)
 }
 
 
+void QuestInfo::PushEntity(Entity* entity)
+{
+	entity->missionEntity = true;
+	questEntitysVector.push_back(entity);
+}
+
+
+void QuestInfo::WinQuest()
+{
+	questEntitysVector.clear();
+	active = false;
+
+	GiveReward();
+	app->dialogManager->PushInput((DIALOG_INPUT)dialogInput);
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+	app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+}
+
+
+void QuestInfo::LoseQuest()
+{
+	int size = questEntitysVector.size();
+
+	for (int j = 0; j < size; j++)
+	{
+		questEntitysVector[j]->missionEntity = false;
+	}
+
+	questEntitysVector.clear();
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::FAIL_QUEST, EVENT_ENUM::NULL_EVENT);
+	active = false;
+
+}
+
+
 void QuestInfo::GiveReward()
 {
 	app->player->AddResources(resourcesReward);
@@ -312,4 +373,32 @@ void QuestInfo::GiveReward()
 void QuestInfo::SetDialogInput(int input)
 {
 	dialogInput = input;
+}
+
+
+bool QuestInfo::Save(pugi::xml_node& node) const
+{
+	node.append_attribute("active") = active;
+	node.append_attribute("id") = id;
+
+	node.append_attribute("dialogInput") = dialogInput;
+	node.append_attribute("reward") = resourcesReward;
+
+	pugi::xml_node iterator1 = node.append_child("questEntitys");
+
+	int numEntitys = questEntitysVector.size();
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		pugi::xml_node iterator2 = iterator1.append_child("entity");
+
+		iterator2.append_attribute("entityType") = (int)questEntitysVector[i]->GetType();
+		iterator2.append_attribute("posX") = questEntitysVector[i]->GetPosition().x;
+		iterator2.append_attribute("posX") = questEntitysVector[i]->GetPosition().y;
+
+		iterator2.append_attribute("hp") = questEntitysVector[i]->GetCurrentHP();
+	}
+
+
+	return true;
 }

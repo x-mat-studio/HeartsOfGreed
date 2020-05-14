@@ -45,6 +45,8 @@ UIFactory::UIFactory() :
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
 	turretShopPicture{ 696, 12, 34, 40 },
 	resourceIcon{ 18, 209, 11, 19 },
+	resourceIconSkill{ 111, 209, 20, 20 },
+	resourceIconBoost{ 83, 209, 17, 19 },
 	creditsBackgroundImage{ 563, 237, 117, 122 },
 	pauseMenuBackground{ 15, 271, 194, 231 },
 	optionsMenuBackground{ 677, 369, 278, 153 },
@@ -1205,7 +1207,25 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 {
 	UI* background = CreateImage(x, y, nullptr, resourcesBackground, group);
 
+	//resources
+
 	CreateImage(6, 7, background, resourceIcon, group);
+
+		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
+
+		//group->AddUiElement(resourcesPortrait);
+
+	//skill
+
+	CreateImage(20, 7, background, resourceIconSkill, group);
+
+		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
+
+		//group->AddUiElement(resourcesPortrait);
+
+	//boost
+
+	CreateImage(46, 7, background, resourceIconBoost, group);
 
 	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 

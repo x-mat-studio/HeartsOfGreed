@@ -22,11 +22,16 @@ public:
 	bool CheckQuestStatus(Entity* entity);
 
 	void PushEntityToSpawn(ENTITY_TYPE, float x, float y);
+	void PushEntity(Entity* entity);
 
 	void SetDialogInput(int input);
 
+	bool Save(pugi::xml_node&) const;
+
 
 private:
+	void WinQuest();
+	void LoseQuest();
 	void GiveReward();
 
 
@@ -66,6 +71,9 @@ public:
 
 	void QuestStarted(int questId);
 	void CheckEntityDead(Entity* entity);
+
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 
 private:
 	void LoadQuests(pugi::xml_node&);
