@@ -32,7 +32,11 @@ public:
 	bool PostUpdate(float dt);
 
 	void AddResources(int gain);
+	void AddResourcesSkill(int gain);
+	void AddResourcesBoost(int gain);
 	bool UseResources(int cost);
+	bool UseResourcesSkill(int cost);
+	bool UseResourcesBoost(int cost);
 
 	bool ActivateBuildMode(ENTITY_TYPE building, Base* contrBase);
 	void DesactivateBuildMode();
@@ -107,6 +111,8 @@ private:
 	bool UIMenuOn;
 
 	int resources;
+	int resourcesSkill;
+	int resourcesBoost;
 
 	skillArea* constrAreaInfo;
 	std::vector <iMPoint> constrArea;

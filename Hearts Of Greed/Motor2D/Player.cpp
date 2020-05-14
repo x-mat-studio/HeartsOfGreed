@@ -21,6 +21,8 @@ ModulePlayer::ModulePlayer() :
 	Module(),
 
 	resources(0),
+	resourcesSkill(0),
+	resourcesBoost(0),
 	selectRect{ 0,0,0,0 },
 
 	selectUnits(false),
@@ -84,6 +86,8 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES_SKILL, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES_BOOST, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
 
@@ -112,6 +116,8 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES_SKILL, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES_BOOST, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
 
@@ -660,6 +666,14 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		resources += 1000;
 		break;
 
+	case EVENT_ENUM::GIVE_RESOURCES_SKILL:
+		resourcesSkill += 10;
+		break;
+
+	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
+		resourcesSkill += 100;
+		break;
+
 	case EVENT_ENUM::TURRET_CONSTRUCT:
 		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
 		{
@@ -782,6 +796,16 @@ void ModulePlayer::AddResources(int gain)
 	resources += gain;
 }
 
+void ModulePlayer::AddResourcesSkill(int gain)
+{
+	resourcesSkill += gain;
+}
+
+void ModulePlayer::AddResourcesBoost(int gain)
+{
+	resourcesBoost += gain;
+}
+
 
 bool ModulePlayer::UseResources(int cost)
 {
@@ -794,6 +818,27 @@ bool ModulePlayer::UseResources(int cost)
 	}
 }
 
+bool ModulePlayer::UseResourcesSkill(int cost)
+{
+	if (cost > resourcesSkill)
+		return false;
+	else
+	{
+		resourcesSkill -= cost;
+		return true;
+	}
+}
+
+bool ModulePlayer::UseResourcesBoost(int cost)
+{
+	if (cost > resourcesBoost)
+		return false;
+	else
+	{
+		resourcesBoost -= cost;
+		return true;
+	}
+}
 
 bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 {

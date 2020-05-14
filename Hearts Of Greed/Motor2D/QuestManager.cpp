@@ -118,6 +118,7 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FINISH_QUEST:
 
 		app->audio->PlayFx(questSfx, 0, -1);
+		app->player->AddResourcesSkill(2);
 		break;
 
 	case EVENT_ENUM::FAIL_QUEST:
