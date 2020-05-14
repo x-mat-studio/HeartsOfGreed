@@ -2879,8 +2879,6 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 		}
 	}
 
-	AdjustUpgradeValues();
-
 	return true;
 }
 
