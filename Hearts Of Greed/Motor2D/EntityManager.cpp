@@ -81,6 +81,10 @@ ModuleEntityManager::ModuleEntityManager() :
 	enemyRangedTexture(nullptr),
 	sampleEmitter(nullptr),
 	sampleParticleSystem(nullptr),
+	deadGatherer(nullptr),
+	deadMelee(nullptr),
+	deadRanged(nullptr),
+	deadRobo(nullptr),
 
 	wanamingoRoar2(-1),
 	wanamingoRoar(-1),
@@ -621,6 +625,8 @@ bool ModuleEntityManager::CleanUp()
 {
 	LOG("Entity Manager Clean Up");
 	DeleteAllEntities();
+	DeleteAllDeadHeroes();
+
 
 	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
 	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
@@ -1038,6 +1044,174 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 	{
 		entityVector[i]->CheckObjective(entity);
 	}
+}
+
+
+//Note that a hero is dead only if it has been alive first, so this function doesn't include heroes not found yet
+bool ModuleEntityManager::CheckIfHeroIsDead(ENTITY_TYPE heroType) const
+{
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		if (deadMelee != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		if (deadRanged != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		if (deadGatherer != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		if (deadRobo != nullptr)
+		{
+			return true;
+		}
+		break;
+	}
+	return false;
+}
+
+
+//Note that this function erases what was inside the target variable (dead hero) before creating a new one to prevent 
+//memory leaks when Saving/Loading and creating more than 1 hero of type. To check if a certain hero is dead use the CheckIfHeroIsDead() function
+DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
+{
+	ENTITY_TYPE heroType = dyingHero.GetType();
+	DeadHero** refhero;
+
+	//assinging the correct dead hero variable to refhero to make it easy to work with
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+
+	default:
+		return nullptr;
+	}
+
+	//deletes information about any hero stored in that variable
+	if (*refhero != nullptr)
+	{
+		delete* refhero;
+		*refhero = nullptr;
+	}
+
+
+	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType());
+
+	return *refhero;
+}
+
+
+void ModuleEntityManager::DeleteDeadHero(ENTITY_TYPE heroType)
+{
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		if (deadMelee != nullptr)
+		{
+			delete deadMelee;
+			deadMelee = nullptr;
+		}
+	case ENTITY_TYPE::HERO_RANGED:
+		if (deadRanged != nullptr)
+		{
+			delete deadRanged;
+			deadRanged = nullptr;
+		}
+	case ENTITY_TYPE::HERO_GATHERER:
+		if (deadGatherer != nullptr)
+		{
+			delete deadGatherer;
+			deadGatherer = nullptr;
+		}
+	case ENTITY_TYPE::HERO_ROBO:
+		if (deadRobo != nullptr)
+		{
+			delete deadRobo;
+			deadRobo = nullptr;
+		}
+	}
+
+}
+
+
+void ModuleEntityManager::DeleteAllDeadHeroes()
+{
+
+	if (deadMelee != nullptr)
+	{
+		delete deadMelee;
+		deadMelee = nullptr;
+	}
+
+	if (deadRanged != nullptr)
+	{
+		delete deadRanged;
+		deadRanged = nullptr;
+	}
+
+	if (deadGatherer != nullptr)
+	{
+		delete deadGatherer;
+		deadGatherer = nullptr;
+	}
+
+	if (deadRobo != nullptr)
+	{
+		delete deadRobo;
+		deadRobo = nullptr;
+	}
+
+}
+
+
+void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType) const
+{
+	DeadHero* refhero=nullptr;
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = deadRobo;
+		break;
+	}
+
+	if (refhero != nullptr)
+	{	
+		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
+
+		statsnode.append_attribute("level") = refhero->GetLevel();
+	}
+
 }
 
 
@@ -2929,63 +3103,67 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 	{
 		pugi::xml_node iterator = data.append_child("entity");
 
-		switch (entityVector[i]->GetType())
+		if (entityVector[i]->missionEntity == false)
 		{
-		case ENTITY_TYPE::UNKNOWN:
-			break;
 
 
-		case ENTITY_TYPE::PARTICLE_SYSTEM:
-			break;
+			switch (entityVector[i]->GetType())
+			{
+			case ENTITY_TYPE::UNKNOWN:
+				break;
 
 
-		case ENTITY_TYPE::SPAWNER:
-
-			iterator.append_attribute("type") = "spawner";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			spawner = (Spawner*)entityVector[i];
-
-			iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
-			iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
-			iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
-			iterator.append_attribute("active") = spawner->GetActive();
-			break;
+			case ENTITY_TYPE::PARTICLE_SYSTEM:
+				break;
 
 
-		case ENTITY_TYPE::HERO_MELEE:
+			case ENTITY_TYPE::SPAWNER:
 
-			iterator.append_attribute("type") = "hero_melee";
+				iterator.append_attribute("type") = "spawner";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			hero = (Hero*)entityVector[i];
+				spawner = (Spawner*)entityVector[i];
 
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+				iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
+				iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
+				iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
+				iterator.append_attribute("active") = spawner->GetActive();
+				break;
 
-			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+			case ENTITY_TYPE::HERO_MELEE:
 
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+				iterator.append_attribute("type") = "hero_melee";
 
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+				hero = (Hero*)entityVector[i];
+
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
@@ -2996,37 +3174,37 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			break;
 
 
-		case ENTITY_TYPE::HERO_RANGED:
+			case ENTITY_TYPE::HERO_RANGED:
 
-			iterator.append_attribute("type") = "hero_ranged";
+				iterator.append_attribute("type") = "hero_ranged";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			hero = (Hero*)entityVector[i];
+				hero = (Hero*)entityVector[i];
 
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
 
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
 
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
 
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
@@ -3037,36 +3215,36 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			break;
 
 
-		case ENTITY_TYPE::HERO_GATHERER:
-			iterator.append_attribute("type") = "hero_gatherer";
+			case ENTITY_TYPE::HERO_GATHERER:
+				iterator.append_attribute("type") = "hero_gatherer";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			hero = (Hero*)entityVector[i];
+				hero = (Hero*)entityVector[i];
 
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
 
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
 
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
 
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
@@ -3077,34 +3255,34 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			break;
 
 
-		case ENTITY_TYPE::HERO_ROBO:
+			case ENTITY_TYPE::HERO_ROBO:
 
-			iterator.append_attribute("type") = "hero_robot";
+				iterator.append_attribute("type") = "hero_robot";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			hero = (Hero*)entityVector[i];
+				hero = (Hero*)entityVector[i];
 
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
 
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
 
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
 
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
@@ -3115,144 +3293,165 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 			break;
 
 
-		case ENTITY_TYPE::ENEMY:
+			case ENTITY_TYPE::ENEMY:
 
-			iterator.append_attribute("type") = "enemy";
+				iterator.append_attribute("type") = "enemy";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			enemy = (Enemy*)entityVector[i];
+				enemy = (Enemy*)entityVector[i];
 
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
-			break;
-
-
-		case ENTITY_TYPE::ENEMY_RANGED:
-
-			iterator.append_attribute("type") = "enemy_ranged";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			enemy = (Enemy*)entityVector[i];
-
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
-
-			break;
+				break;
 
 
-		case ENTITY_TYPE::ENEMY_NIGHT:
+			case ENTITY_TYPE::ENEMY_RANGED:
 
-			iterator.append_attribute("type") = "enemy_night";
+				iterator.append_attribute("type") = "enemy_ranged";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			enemy = (Enemy*)entityVector[i];
+				enemy = (Enemy*)entityVector[i];
 
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
-			break;
-
-
-		case ENTITY_TYPE::ENEMY_GIGA:
-
-			iterator.append_attribute("type") = "enemy_giga";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			enemy = (Enemy*)entityVector[i];
-
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
-
-			break;
+				break;
 
 
-		case ENTITY_TYPE::BUILDING:
+			case ENTITY_TYPE::ENEMY_NIGHT:
 
-			iterator.append_attribute("type") = "building";
+				iterator.append_attribute("type") = "enemy_night";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			building = (Building*)entityVector[i];
+				enemy = (Enemy*)entityVector[i];
 
-			iterator.append_attribute("decor") = (int)building->GetDecor();
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
-			break;
+				break;
 
 
-		case ENTITY_TYPE::BLDG_BASE:
+			case ENTITY_TYPE::ENEMY_GIGA:
 
-			iterator.append_attribute("type") = "base";
+				iterator.append_attribute("type") = "enemy_giga";
 
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
 
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+				enemy = (Enemy*)entityVector[i];
 
-			base = (Base*)entityVector[i];
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
-			turretVector = base->GetTurretVector();
-			barricadeVector = base->GetBarricadeVector();
-			upgradeCenter = base->GetUpgradeCenter();
+				break;
 
-			for (int i = 0; i < turretVector->size(); i++)
-			{
-				iterator2 = iterator.append_child("turret");
-				iterator2.append_attribute("name") = "turret";
-				iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
-				iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
 
-				iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
+			case ENTITY_TYPE::BUILDING:
+
+				iterator.append_attribute("type") = "building";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				building = (Building*)entityVector[i];
+
+				iterator.append_attribute("decor") = (int)building->GetDecor();
+
+				break;
+
+
+			case ENTITY_TYPE::BLDG_BASE:
+
+				iterator.append_attribute("type") = "base";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+				base = (Base*)entityVector[i];
+
+				turretVector = base->GetTurretVector();
+				barricadeVector = base->GetBarricadeVector();
+				upgradeCenter = base->GetUpgradeCenter();
+
+				for (int i = 0; i < turretVector->size(); i++)
+				{
+					iterator2 = iterator.append_child("turret");
+					iterator2.append_attribute("name") = "turret";
+					iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
+					iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
+
+					iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
+				}
+
+				for (int i = 0; i < barricadeVector->size(); i++)
+				{
+					//TODO
+					iterator2 = iterator.append_child("barricade");
+					iterator2.append_attribute("name") = "barricade";
+					//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
+					//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+				}
+
+				if (upgradeCenter != nullptr)
+				{
+					iterator2 = iterator.append_child("upgrade_center");
+					iterator2.append_attribute("name") = "upgrade_center";
+					//iterator2.append_attribute("x") = upgradeCenter->position.x;
+					//iterator2.append_attribute("y") = upgradeCenter->position.y;
+				}
+
+				break;
+
+			case ENTITY_TYPE::QUEST:
+
+				iterator.append_attribute("type") = "quest";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				quest = (Quest*)entityVector[i];
+
+				iterator.append_attribute("id") = quest->GetId();
+
+				break;
+
+			case ENTITY_TYPE::MAX_TYPE:
+				break;
+			default:
+				break;
 			}
-
-			for (int i = 0; i < barricadeVector->size(); i++)
-			{
-				//TODO
-				iterator2 = iterator.append_child("barricade");
-				iterator2.append_attribute("name") = "barricade";
-				//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
-				//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
-			}
-
-			if (upgradeCenter != nullptr)
-			{
-				iterator2 = iterator.append_child("upgrade_center");
-				iterator2.append_attribute("name") = "upgrade_center";
-				//iterator2.append_attribute("x") = upgradeCenter->position.x;
-				//iterator2.append_attribute("y") = upgradeCenter->position.y;
-			}
-
-			break;
-
-		case ENTITY_TYPE::QUEST:
-
-			iterator.append_attribute("type") = "quest";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			quest = (Quest*)entityVector[i];
-
-			iterator.append_attribute("id") = quest->GetId();
-
-			break;
-
-		case ENTITY_TYPE::MAX_TYPE:
-			break;
-		default:
-			break;
 		}
 	}
 
+
+	//deathEntitesSaving
+	pugi::xml_node deadEntities = data.append_child("deadEntities");
+
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_GATHERER) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_RANGED) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadRanged"), ENTITY_TYPE::HERO_RANGED);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_MELEE) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadMelee"), ENTITY_TYPE::HERO_MELEE);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_ROBO) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadRobo"), ENTITY_TYPE::HERO_ROBO);
+	}
 
 
 	return true;

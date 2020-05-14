@@ -205,11 +205,12 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 
 	for (pugi::xml_node iterator = data.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
 	{
-		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int()));
+		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int(), iterator.attribute("active").as_bool()));
+		questInfoVector[i].SetDialogInput(iterator.attribute("dialogInput").as_int());
 
 		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
 		{
-			entity = app->entityManager->AddEntity((ENTITY_TYPE)iterator2.attribute("type").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
+			entity = app->entityManager->AddEntity((ENTITY_TYPE)iterator2.attribute("entityType").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
 			entity->SetCurrentHP(iterator2.attribute("hp").as_int());
 
 			questInfoVector[i].PushEntity(entity);
@@ -237,13 +238,13 @@ bool ModuleQuestManager::Save(pugi::xml_node& data) const
 
 //Struct QuestInfo
 
-QuestInfo::QuestInfo(int resourcesReward, int id) :
+QuestInfo::QuestInfo(int resourcesReward, int id, bool active) :
 
 	resourcesReward(resourcesReward),
 	id(id),
 	dialogInput(-1),
 
-	active(false)
+	active(active)
 {}
 
 
@@ -260,7 +261,7 @@ void QuestInfo::StartQuest()
 	for (int i = 0; i < numberToSpawn; i++)
 	{
 		entity = app->entityManager->AddEntity(entitysToSpawnVector[i], positionsToSpawnVector[i].x, positionsToSpawnVector[i].y);
-		entity->selectedByPlayer = true; 
+		entity->missionEntity = true;
 
 		switch (entity->GetType())
 		{
@@ -394,7 +395,7 @@ bool QuestInfo::Save(pugi::xml_node& node) const
 
 		iterator2.append_attribute("entityType") = (int)questEntitysVector[i]->GetType();
 		iterator2.append_attribute("posX") = questEntitysVector[i]->GetPosition().x;
-		iterator2.append_attribute("posX") = questEntitysVector[i]->GetPosition().y;
+		iterator2.append_attribute("posY") = questEntitysVector[i]->GetPosition().y;
 
 		iterator2.append_attribute("hp") = questEntitysVector[i]->GetCurrentHP();
 	}

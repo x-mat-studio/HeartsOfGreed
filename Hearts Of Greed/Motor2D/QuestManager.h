@@ -15,7 +15,7 @@ struct QuestInfo
 {
 public:
 
-	QuestInfo(int resourcesReward, int id);
+	QuestInfo(int resourcesReward, int id, bool active = false);
 	~QuestInfo();
 
 	void StartQuest();
