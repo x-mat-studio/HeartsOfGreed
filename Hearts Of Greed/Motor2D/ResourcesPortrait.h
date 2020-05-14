@@ -16,11 +16,20 @@ private:
 	void HandleInput();
 
 	void ChangeTexture();
+	void ChangeTexture2();
+	void ChangeTexture3();
+
+	void Draw(float dt);
 
 
 private:
 
+	SDL_Texture* texture2;
+	SDL_Texture* texture3;
+
 	int resourcesNumber;
+	int resourcesNumberSKill;
+	int resourcesNumberBoost;
 };
 
 
