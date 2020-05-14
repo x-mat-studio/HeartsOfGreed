@@ -86,6 +86,9 @@ enum class EVENT_ENUM
 	EXIT_MENUS,
 
 	UNPAUSE_GAME,
+
+	CREATE_DIALOG_WINDOW,
+	CLOSE_DIALOG_WINDOW,
 	//Hero ressurection
 
 	GATHERER_RESURRECT,
@@ -163,6 +166,8 @@ enum class EVENT_ENUM
 	//End game
 	GAME_WIN,
 	GAME_LOSE,
+
+
 
 	NULL_EVENT
 };

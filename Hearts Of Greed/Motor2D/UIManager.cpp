@@ -92,6 +92,9 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_DIALOG_WINDOW, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
+
 	return ret;
 }
 
@@ -305,6 +308,14 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		DeleteUIGroup(GROUP_TAG::IN_HOVER_MENU);
 		break;
 
+	case EVENT_ENUM::CREATE_DIALOG_WINDOW:
+		group = factory->CreateDialogMenu(ENTITY_TYPE::HERO_GATHERER, ENTITY_TYPE::HERO_GATHERER);
+		AddUIGroup(group);
+		break;
+
+	case EVENT_ENUM::CLOSE_DIALOG_WINDOW:
+		DeleteUIGroup(GROUP_TAG::DIALOG);
+		break;
 	}
 }
 
@@ -468,6 +479,9 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_DIALOG_WINDOW, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
 }
 
 

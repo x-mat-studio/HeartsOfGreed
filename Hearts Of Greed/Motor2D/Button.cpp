@@ -3,7 +3,7 @@
 #include "Render.h"
 #include "UIManager.h"
 
-Button::Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, SDL_Texture* texture, BUTTON_TAG buttonTag) :
+Button::Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, SDL_Texture* texture, BUTTON_TAG buttonTag, SDL_Rect scaled) :
 
 	UI(positionValue, father, UI_TYPE::BUTTON, rect, true, dragable, texture),
 
@@ -11,6 +11,10 @@ Button::Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, 
 	clicked(false),
 	focusedFirstFrame(true)
 {
+	if (scaled.w != 0)
+	{
+		scaledRect = scaled;
+	}
 }
 
 
@@ -91,6 +95,14 @@ void Button::Draw(float dt)
       
     }
 
-    app->render->Blit(texture, position.x, position.y, &rect, false, false, alpha, r, g, b);
+   if (rect.w == 15)
+   {
+	   app->render->Blit(texture, position.x, position.y, &scaledRect, false, false, alpha, r, g, b, 0.15f);
+   }
+
+   else
+   {
+	   app->render->Blit(texture, position.x, position.y, &rect, false, false, alpha, r, g, b);
+   }
 
 }

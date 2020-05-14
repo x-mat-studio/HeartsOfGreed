@@ -14,7 +14,7 @@ private:
 	void HandleInput();
 	void Draw(float dt);
 	
-	void ChangeTexture(SDL_Texture* tex, P2SString* string);
+	SDL_Texture* ChangeTexture(SDL_Texture* tex, P2SString* string);
 
 
 private:

@@ -11,7 +11,6 @@ enum class DIALOG_INPUT : int
 	NULL_INPUT,
 
 	NEXT_DIALOG,
-	END_DIALOG,
 
 	TUTORIAL_START,
 	TUTORIAL_END,
@@ -36,31 +35,38 @@ enum class DIALOG_STATE : int
 
 	IDLE_DIALOG,
 
-	//Tutorial
-	TUTORIAL_START,
+	//TUTORIAL-------------
+	TUTORIAL_ST,
 	TUTORIAL_END,
 
-	//Mission 1
-	MISSION_1_ST_B1,
-	MISSION_1_ST_A1,
-	MISSION_1_ST_B2,
+	//Quest 1 ------------
+	MISSION1_ST_B1,
+	MISSION1_ST_A1,
+	MISSION1_ST_B2,
 
-	MISSION_1_END_B3,
-	MISSION_1_END_A2,
+	MISSION1_END_A2,
+	MISSION1_END_B3,
 
-	//Mission2
-	MISSION_2_ST_C1,
-	MISSION_2_ST_A1,
+	//Quest 2 ------------
+	MISSION2_ST_B1,
+	MISSION2_ST_A1,
 
-	MISSION_2_END_C2,
-	MISSION_2_END_A2,
-	MISSION_2_END_C3,
-	MISSION_2_END_A3,
+	MISSION2_END_A2,
+	MISSION2_END_B2,
 
-	//Mission3
+	//Quest 3 ------------
+	MISSION3_ST_A1,
 
+	MISSION3_END_B1,
+	MISSION3_END_A2,
+	MISSION3_END_B2,
 
+	//Quest 4 ------------
+	MISSION4_ST_A1,
+	MISSION4_ST_A2,
 
+	MISSION4_END_B1,
+	MISSION4_END_A3,
 
 };
 
@@ -87,9 +93,9 @@ private:
 
 private:
 
-	P2SString* currentDialog1stCharacter;
-	P2SString* currentDialog2ndCharacter;
-	
+	P2SString* currentDialog1;
+	P2SString* currentDialog2;
+
 	DIALOG_INPUT input;
 	DIALOG_STATE state;
 
@@ -104,7 +110,7 @@ private:
 
 	P2SString dialogMission1_END_A2;
 	P2SString dialogMission1_END_B3;
-	
+
 	//Quest 2 ------------
 	P2SString dialogMission2_ST_B1;
 	P2SString dialogMission2_ST_A1;
@@ -121,10 +127,10 @@ private:
 
 	//Quest 4 ------------
 	P2SString dialogMission4_ST_A1;
-	P2SString dialogMission4_ST_B1;
+	P2SString dialogMission4_ST_A2;
 
-	P2SString dialogMission4_END_C1;
-	P2SString dialogMission4_END_A2;
+	P2SString dialogMission4_END_B1;
+	P2SString dialogMission4_END_A3;
 };
 
 
