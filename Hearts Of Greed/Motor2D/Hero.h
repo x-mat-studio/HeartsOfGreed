@@ -77,6 +77,24 @@ struct Skill
 
 struct skillArea;
 
+
+class DeadHero
+{
+public:
+	DeadHero(int level, ENTITY_TYPE type);
+	~DeadHero();
+
+	ENTITY_TYPE GetType()const;
+	int GetLevel()const;
+
+private:
+	ENTITY_TYPE heroType;
+	int level;
+	//skills?
+
+
+};
+
 class Hero : public DynamicEntity
 {
 public:

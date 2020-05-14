@@ -1699,3 +1699,21 @@ void Hero::SetVisionInPx(float visPx)
 {
 	visionInPx = visPx;
 }
+
+
+DeadHero::DeadHero(int level, ENTITY_TYPE type): level(level), heroType(type)
+{}
+
+
+DeadHero::~DeadHero()
+{}
+
+ENTITY_TYPE DeadHero::GetType() const
+{
+	return heroType;
+}
+
+int DeadHero::GetLevel() const
+{
+	return level;
+}

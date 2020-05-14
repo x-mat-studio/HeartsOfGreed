@@ -8,6 +8,7 @@
 #include <list>
 #include <unordered_map>
 
+class DeadHero;
 class Hero;
 class GathererHero;
 class MeleeHero;
@@ -80,7 +81,7 @@ public:
 
 	
 	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
+	bool Save(pugi::xml_node&)const;
 
 
 	void OnCollision(Collider*, Collider*);
@@ -100,6 +101,14 @@ public:
 	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true);
 	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
+
+
+	bool CheckIfHeroIsDead(ENTITY_TYPE heroType)const;
+	DeadHero* AssignNewDeadHero(Hero& dyingHero);
+	void DeleteDeadHero(ENTITY_TYPE heroType);
+	void DeleteAllDeadHeroes();
+
+	void SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)const;
 
 
 	void SearchHeroesAlive();
@@ -304,6 +313,11 @@ private:
 	Emitter* sampleEmitter;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
+
+	DeadHero* deadMelee;
+	DeadHero* deadGatherer;
+	DeadHero* deadRanged;
+	DeadHero* deadRobo;
 };
 
 #endif //__ENTITYMANAGER_H__

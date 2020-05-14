@@ -81,6 +81,10 @@ ModuleEntityManager::ModuleEntityManager() :
 	enemyRangedTexture(nullptr),
 	sampleEmitter(nullptr),
 	sampleParticleSystem(nullptr),
+	deadGatherer(nullptr),
+	deadMelee(nullptr),
+	deadRanged(nullptr),
+	deadRobo(nullptr),
 
 	wanamingoRoar2(-1),
 	wanamingoRoar(-1),
@@ -617,6 +621,8 @@ bool ModuleEntityManager::CleanUp()
 {
 	LOG("Entity Manager Clean Up");
 	DeleteAllEntities();
+	DeleteAllDeadHeroes();
+
 
 	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
 	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
@@ -1034,6 +1040,174 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 	{
 		entityVector[i]->CheckObjective(entity);
 	}
+}
+
+
+//Note that a hero is dead only if it has been alive first, so this function doesn't include heroes not found yet
+bool ModuleEntityManager::CheckIfHeroIsDead(ENTITY_TYPE heroType) const
+{
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		if (deadMelee != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		if (deadRanged != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		if (deadGatherer != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		if (deadRobo != nullptr)
+		{
+			return true;
+		}
+		break;
+	}
+	return false;
+}
+
+
+//Note that this function erases what was inside the target variable (dead hero) before creating a new one to prevent 
+//memory leaks when Saving/Loading and creating more than 1 hero of type. To check if a certain hero is dead use the CheckIfHeroIsDead() function
+DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
+{
+	ENTITY_TYPE heroType = dyingHero.GetType();
+	DeadHero** refhero;
+
+	//assinging the correct dead hero variable to refhero to make it easy to work with
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+
+	default:
+		return nullptr;
+	}
+
+	//deletes information about any hero stored in that variable
+	if (*refhero != nullptr)
+	{
+		delete* refhero;
+		*refhero = nullptr;
+	}
+
+
+	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType());
+
+	return *refhero;
+}
+
+
+void ModuleEntityManager::DeleteDeadHero(ENTITY_TYPE heroType)
+{
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		if (deadMelee != nullptr)
+		{
+			delete deadMelee;
+			deadMelee = nullptr;
+		}
+	case ENTITY_TYPE::HERO_RANGED:
+		if (deadRanged != nullptr)
+		{
+			delete deadRanged;
+			deadRanged = nullptr;
+		}
+	case ENTITY_TYPE::HERO_GATHERER:
+		if (deadGatherer != nullptr)
+		{
+			delete deadGatherer;
+			deadGatherer = nullptr;
+		}
+	case ENTITY_TYPE::HERO_ROBO:
+		if (deadRobo != nullptr)
+		{
+			delete deadRobo;
+			deadRobo = nullptr;
+		}
+	}
+
+}
+
+
+void ModuleEntityManager::DeleteAllDeadHeroes()
+{
+
+	if (deadMelee != nullptr)
+	{
+		delete deadMelee;
+		deadMelee = nullptr;
+	}
+
+	if (deadRanged != nullptr)
+	{
+		delete deadRanged;
+		deadRanged = nullptr;
+	}
+
+	if (deadGatherer != nullptr)
+	{
+		delete deadGatherer;
+		deadGatherer = nullptr;
+	}
+
+	if (deadRobo != nullptr)
+	{
+		delete deadRobo;
+		deadRobo = nullptr;
+	}
+
+}
+
+
+void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType) const
+{
+	DeadHero* refhero=nullptr;
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = deadRobo;
+		break;
+	}
+
+	if (refhero != nullptr)
+	{	
+		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
+
+		statsnode.append_attribute("level") = refhero->GetLevel();
+	}
+
 }
 
 
@@ -3203,6 +3377,26 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 		}
 	}
 
+
+	//deathEntitesSaving
+	pugi::xml_node deadEntities = data.append_child("deadEntities");
+
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_GATHERER) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_RANGED) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadRanged"), ENTITY_TYPE::HERO_RANGED);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_MELEE) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadMelee"), ENTITY_TYPE::HERO_MELEE);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_ROBO) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadRobo"), ENTITY_TYPE::HERO_ROBO);
+	}
 
 
 	return true;
