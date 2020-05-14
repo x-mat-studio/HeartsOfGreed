@@ -62,7 +62,7 @@ SDL_Texture* DialogText::ChangeTexture(SDL_Texture* tex, P2SString* string)
 {
 	app->tex->UnLoad(tex);
 
-	tex = app->fonts->Print(string->GetCharArray(), { 255, 255, 255 }, app->fonts->fonts[0]);
+	tex = app->fonts->Print(string->GetCharArray(), { 255, 255, 255 }, app->fonts->fonts[0], 230);
 
 	return tex;
 }

@@ -93,7 +93,7 @@ UIFactory::UIFactory() :
 	meleeActive1Button{ 244, 708, 93, 91 },
 	rangedActive1Button{ 140, 707, 93, 91 },
 
-	dialogWindow{ 1110, 41, 859, 615 },
+	dialogWindow{ 1096, 41, 859, 615 },
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -225,22 +225,22 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::DIALOG);
 
-	Button* button = new Button(fMPoint(0, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
+	Button* button = new Button(fMPoint(20, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
 	group->AddUiElement(button);
 
-	DialogText* text = new DialogText(170, 82, fMPoint(0, 0), fMPoint(30, 275), button, false);
+	DialogText* text = new DialogText(0, 0, fMPoint(160, 41), fMPoint(85, 130), button, false);
 	group->AddUiElement(text);
 
 	switch (character1)
 	{
 	case ENTITY_TYPE::HERO_MELEE:
-		CreateImage(126, 78, button, meleeBigPicture, group, false, false);
+		CreateImage(76, 49, button, meleePicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
-		CreateImage(126, 78, button, rangedBigPicture, group, false, false);
+		CreateImage(76, 49, button, rangedPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
-		CreateImage(126, 78, button, gathererBigPicture, group, false, false);
+		CreateImage(76, 49, button, gathererPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
 		//TODO
@@ -254,13 +254,13 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 	switch (character2)
 	{
 	case ENTITY_TYPE::HERO_MELEE:
-		CreateImage(591, 262, button, meleeBigPicture, group, false, false);
+		CreateImage(338, 153, button, meleePicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
-		CreateImage(591, 262, button, rangedBigPicture, group, false, false);
+		CreateImage(338, 153, button, rangedPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_GATHERER:
-		CreateImage(591, 262, button, gathererBigPicture, group, false, false);
+		CreateImage(338, 153, button, gathererPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
 		//TODO

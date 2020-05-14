@@ -82,14 +82,14 @@ TTF_Font* const ModuleFonts::Load(const char* path, int size)
 }
 
 // Print text using font
-SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* font)
+SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* font, Uint32 maxLenght)
 {
 	SDL_Texture* ret = nullptr;
 
 	if (font == nullptr)
 		font = default;
 
-	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
+	SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped((font) ? font : font, text, color, maxLenght);
 
 	if (surface == nullptr || surface->pixels == nullptr || surface->format == nullptr)
 	{

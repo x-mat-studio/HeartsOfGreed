@@ -75,7 +75,7 @@ void Button::Draw(float dt)
 	Uint8 b = 255;
 
  
-   if (focused == true)
+   if (focused == true && buttonTag != BUTTON_TAG::NEXT_DIALOG)
     {
 		if (clicked == false)
 		{
