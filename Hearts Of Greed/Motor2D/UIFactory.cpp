@@ -56,7 +56,7 @@ UIFactory::UIFactory() :
 	creditsMenuBackground{ 15, 271, 194, 231 },
 	minimapBackground{ 221, 317, 162, 150 },
 	shopBackground{ 15, 271, 194, 231 },
-	resourcesBackground{ 415, 435, 65, 30 },
+	resourcesBackground{ 415, 435, 70, 60 },
 
 	menuButton{ 17, 12, 195, 36 },
 	pauseButton{ 449, 24, 24, 24 },
@@ -301,7 +301,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
-	CreateResourcesPortrait(x - 65, y - 97, nullptr, group);
+	CreateResourcesPortrait(x - 70, y - 127, nullptr, group);
 
 	background = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
@@ -1341,7 +1341,7 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 	//resources
 
-	CreateImage(6, 7, background, resourceIcon, group);
+	CreateImage(9, 37, background, resourceIcon, group);
 
 		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 
@@ -1349,7 +1349,7 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 	//skill
 
-	CreateImage(20, 7, background, resourceIconSkill, group);
+	CreateImage(4, 7, background, resourceIconSkill, group);
 
 		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 
@@ -1357,7 +1357,7 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 	//boost
 
-	CreateImage(46, 7, background, resourceIconBoost, group);
+	CreateImage(37, 7, background, resourceIconBoost, group);
 
 	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 
