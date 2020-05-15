@@ -20,6 +20,7 @@
 #include "Textures.h"
 #include "FadeToBlack.h"
 #include "DialogManager.h"
+#include "Render.h"
 
 #include "Minimap.h"
 
@@ -164,6 +165,11 @@ bool ModuleUIManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("UI Manager Post Update", Profiler::Color::Purple);
 
 	bool ret = true;
+
+	if (app->gamePause == true)
+	{
+		app->render->DrawQuad(SDL_Rect{ 0, 0, (int)app->win->width, (int)app->win->height }, 0, 0, 0, 200, true, false);
+	}
 
 	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
@@ -791,6 +797,14 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
 	case BUTTON_TAG::GATHERER_PORTRAIT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
 		break;
@@ -940,7 +954,13 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
-	
+	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoPassive1Menu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoActive1Menu());
+		break;
 
 	default:
 		break;
