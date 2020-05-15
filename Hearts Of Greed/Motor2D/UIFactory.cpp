@@ -82,8 +82,8 @@ UIFactory::UIFactory() :
 	littleHealthbarGreenImage{ 319, 73, 29, 4 },
 	littleHealthbarBlueImage{ 352, 73, 29, 4 },
 
-	reviveHoverBackground{ 20, 300, 150, 50 },
-	upgradeHoverBackground{ 20, 300, 180, 50 },
+	reviveHoverBackground{ 222, 508, 150, 50 },
+	upgradeHoverBackground{ 222, 508, 180, 50 },
 	lifeUpgradeButton{ 430, 581, 88, 87 },
 	damageUpgradeButton{ 34, 581, 88, 87 },
 	energyUpgradeButton{ 532, 581, 88, 87 },
