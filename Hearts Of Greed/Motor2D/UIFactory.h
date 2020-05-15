@@ -67,6 +67,8 @@ public:
 	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
 
+	UI* CreateSaveOKButton(float x, float y, UI* parent, UI_Group* group);
+
 	// Data Page Buttons
 
 	UI* CreateGathererReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
