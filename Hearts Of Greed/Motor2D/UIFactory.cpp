@@ -1525,7 +1525,7 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
 	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
 	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
@@ -1590,7 +1590,7 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	sprintf_s(stats, 40, "Rng: %i", focus->GetRng());
 	CreateNonGroupText(-45, -45, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %i", focus->GetAS());
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
 	CreateNonGroupText(-45, -60, dataPage, dataPagesVector, stats);
 }
 
@@ -1612,9 +1612,6 @@ void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 
 }
-
-
-
 
 
 
