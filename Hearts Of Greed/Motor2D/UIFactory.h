@@ -162,7 +162,6 @@ public:
 	SDL_Rect fullscreenOnButton;
 	SDL_Rect fullscreenOffButton;
 
-
 private:
 	// Image SDL_Rect
 
@@ -207,6 +206,9 @@ private:
 	SDL_Rect shopBackground;
 	SDL_Rect resourcesBackground;
 
+	SDL_Rect upgradeArrowIcon;
+	SDL_Rect plusIcon;
+
 	// Button SDL_Rect
 
 	SDL_Rect menuButton;
@@ -216,6 +218,8 @@ private:
 	//	SDL_Rect hideRightButton;
 	SDL_Rect shopButton;
 	SDL_Rect reviveButton;
+
+	SDL_Rect okButton;
 
 	// Scrollbar SDL_Rect
 

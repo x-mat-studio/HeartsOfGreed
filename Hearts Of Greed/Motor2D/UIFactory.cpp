@@ -63,8 +63,12 @@ UIFactory::UIFactory() :
 	closeButton{ 424, 25, 23, 23 },
 	fullscreenOnButton{ 739, 27, 23, 23 },
 	fullscreenOffButton{ 763, 27, 23, 23 },
+	okButton{ 763, 53, 23, 23 },
 	shopButton{ 480, 62, 33, 33 },
 	reviveButton{ 653, 54, 46, 14 },
+
+	upgradeArrowIcon{ 740, 57, 15, 11 },
+	plusIcon{ 740, 71, 14, 14 },
 
 	scrollbarBar{ 272, 45, 90, 4 },
 	scrollbarButton{ 257, 15, 13, 34 },
@@ -85,8 +89,6 @@ UIFactory::UIFactory() :
 	damageUpgradeButton{ 34, 581, 88, 87 },
 	energyUpgradeButton{ 532, 581, 88, 87 },
 	attackSpeedUpgradeButton{ 328, 581, 88, 87 },
-
-	miniFrame{ 509, 706, 238, 125 },
 
 	gathererPassive1Button{ 140, 827, 93, 91 },
 	meleePassive1Button{ 245, 826, 93, 91 },
@@ -161,7 +163,6 @@ UI_Group* UIFactory::CreateOptionsMenu()
 	UI* scrollbar;
 
 	background = CreateImage(x, y, nullptr, optionsMenuBackground, group, true);
-
 
 	scrollbar = CreateImage(20, 60, background, scrollbarBar, group, false);
 	CreateMusicScrollbar(0, 0, scrollbar, group);
@@ -297,9 +298,6 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
-
-	CreateImage(- 12, app->minimap->position.y - 273, nullptr, miniFrame, group);
-
 	CreatePortraitManager(640, 0, nullptr, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
@@ -1194,7 +1192,7 @@ UI* UIFactory::CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group
 
 UI* UIFactory::CreateSaveOKButton(float x, float y, UI* parent, UI_Group* group)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_SAVE_OK_MENU);
+	Button* button = new Button(fMPoint{ x, y }, parent, okButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_SAVE_OK_MENU);
 	group->AddUiElement(button);
 
 	return button;
