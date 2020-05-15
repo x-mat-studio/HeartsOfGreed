@@ -20,6 +20,7 @@
 #include "Textures.h"
 #include "FadeToBlack.h"
 #include "DialogManager.h"
+#include "Render.h"
 
 #include "Minimap.h"
 
@@ -164,6 +165,11 @@ bool ModuleUIManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("UI Manager Post Update", Profiler::Color::Purple);
 
 	bool ret = true;
+
+	if (app->gamePause == true)
+	{
+		app->render->DrawQuad(SDL_Rect{ 0, 0, (int)app->win->width, (int)app->win->height }, 0, 0, 0, 200, true, false);
+	}
 
 	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
