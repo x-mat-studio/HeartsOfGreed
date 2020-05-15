@@ -576,15 +576,27 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::REVIVE_GATHERER:
-		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->reviveCost)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::REVIVE_RANGED:
-		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->reviveCost)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::REVIVE_MELEE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->reviveCost)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:

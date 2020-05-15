@@ -113,7 +113,9 @@ UIFactory::UIFactory() :
 	robottoLifeUpgradeCost(100),
 	robottoDamageUpgradeCost(100),
 	robottoEnergyUpgradeCost(100),
-	robottoAtkSpeedUpgradeCost(100)
+	robottoAtkSpeedUpgradeCost(100),
+
+	reviveCost(500)
 {}
 
 
@@ -333,6 +335,8 @@ UI_Group* UIFactory::CreatePauseMenu()
 
 UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
@@ -356,6 +360,7 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
+	sprintf_s(stats, 40, "- %i", reviveCost);
 	CreateText(25, 20, background, "-500", group);
 
 	return group;

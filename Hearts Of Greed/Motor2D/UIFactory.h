@@ -255,6 +255,8 @@ public:
 	float robottoDamageUpgradeCost;
 	float robottoEnergyUpgradeCost;
 	float robottoAtkSpeedUpgradeCost;
+
+	int reviveCost;
 };
 
 #endif __UIFACTORY_H__
