@@ -329,6 +329,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
@@ -349,7 +350,10 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
-
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
@@ -704,6 +708,7 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
@@ -724,7 +729,10 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
-
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 	return true;
 }
 
@@ -1700,11 +1708,15 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		// TODO REVIVE HEROES FUNCTION
 		break;
 
+	case EVENT_ENUM::MELEE_RESURRECT:
+
+		break;
+
 	case EVENT_ENUM::RANGED_RESURRECT:
 
 		break;
 
-	case EVENT_ENUM::MELEE_RESURRECT:
+	case EVENT_ENUM::ROBOTTO_RESURRECT:
 
 		break;
 
@@ -1873,6 +1885,60 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		break;
 
+	case EVENT_ENUM::ROBOTTO_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoDamageUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoEnergyUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoAtkSpeedUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
 
 	}
 

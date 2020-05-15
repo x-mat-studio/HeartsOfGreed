@@ -731,6 +731,42 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		}
 		break;
 
+	case BUTTON_TAG::ROBOTTO_LIFE_UPGRADE:
+		if (app->player->GetResources() >= factory->robottoLifeUpgradeCost)
+		{
+			app->player->AddResources(-factory->robottoLifeUpgradeCost);
+			AugmentValueByTenPercent(&factory->robottoLifeUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
+	case BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE:
+		if (app->player->GetResources() >= factory->robottoDamageUpgradeCost)
+		{
+			app->player->AddResources(-factory->robottoDamageUpgradeCost);
+			AugmentValueByTenPercent(&factory->robottoDamageUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ENERGY_UPGRADE:
+		if (app->player->GetResources() >= factory->robottoEnergyUpgradeCost)
+		{
+			app->player->AddResources(-factory->robottoEnergyUpgradeCost);
+			AugmentValueByTenPercent(&factory->robottoEnergyUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		if (app->player->GetResources() >= factory->robottoAtkSpeedUpgradeCost)
+		{
+			app->player->AddResources(-factory->robottoAtkSpeedUpgradeCost);
+			AugmentValueByTenPercent(&factory->robottoAtkSpeedUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
@@ -862,6 +898,22 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverRangedAttackSpeedUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoLifeMenuMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ENERGY_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoEnergyUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoAttackSpeedUpgradeMenu());
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:

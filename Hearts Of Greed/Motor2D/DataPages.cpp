@@ -79,6 +79,13 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_RANGED;
 				break;
 
+			case ENTITY_TYPE::HERO_ROBO:
+
+				factory->CreateRobottoPage(&dataPageVector, this);
+				GetHeroValue();
+				state = DATA_PAGE_ENUM::FOCUSED_ROBOTTO;
+				break;
+
 			case ENTITY_TYPE::ENEMY:
 
 				factory->CreateWanamingoPage(&dataPageVector, this);
@@ -140,6 +147,10 @@ bool DataPages::PreUpdate(float dt)
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_RANGED:
+			CheckHeroesValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_ROBOTTO:
 			CheckHeroesValues();
 			break;
 
