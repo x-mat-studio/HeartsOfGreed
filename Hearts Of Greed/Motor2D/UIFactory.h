@@ -172,14 +172,10 @@ private:
 	SDL_Rect portraitHealthbarGreenImage;
 
 	SDL_Rect healthBarContainer;
-	SDL_Rect dataPageHealthbarGreenImage;
-	SDL_Rect dataPageHealthbarBlueImage;
+	SDL_Rect healthbarGreenImage;
+	SDL_Rect healthbarBlueImage;
 	SDL_Rect dataPageBackground;
 	SDL_Rect dataPageImageBackground;
-
-	SDL_Rect littleHealthBarContainer;
-	SDL_Rect littleHealthbarGreenImage;
-	SDL_Rect littleHealthbarBlueImage;
 
 	SDL_Rect gathererPicture;
 	SDL_Rect gathererShopPicture;

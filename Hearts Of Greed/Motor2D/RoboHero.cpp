@@ -99,7 +99,8 @@ void RoboHero::LevelUp()
 	hitPointsMax += (hpLevelUpConstant * app->entityManager->robottoLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;
 	//recoveryHitPointsRate;
-	energyPoints += (energyLevelUpConstant * app->entityManager->robottoEnergyUpgradeValue);
+	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
+	energyPoints = maxEnergyPoints; 
 	recoveryEnergyRate;
 
 	attackDamage += (damageLevelUpConstant * app->entityManager->robottoDamageUpgradeValue);

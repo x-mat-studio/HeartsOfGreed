@@ -69,19 +69,15 @@ UIFactory::UIFactory() :
 	scrollbarBar{ 272, 45, 90, 4 },
 	scrollbarButton{ 257, 15, 13, 34 },
 
-	dataPageHealthbarGreenImage{ 313, 81, 59, 4 },
-	dataPageHealthbarBlueImage{ 375, 81, 59, 4 },
+	healthbarGreenImage{ 313, 81, 59, 4 },
+	healthbarBlueImage{ 375, 81, 59, 4 },
 	healthBarContainer{ 251, 86, 61, 8 },
 
 	deadHeroIcon{ 478, 328, 33, 40 },
 	gathererHeroIcon{ 100, 521, 33, 39 },
 	meleHeroIcon{ 17, 518, 43, 42 },
 	rangedHeroIcon{ 59, 518, 40, 41 },
-	robottoHeroIcon{ 157, 526, 18, 19 },
-
-	littleHealthBarContainer{ 251, 72, 31, 7 },
-	littleHealthbarGreenImage{ 319, 73, 29, 4 },
-	littleHealthbarBlueImage{ 352, 73, 29, 4 },
+	robottoHeroIcon{ 136, 520, 40, 40 },
 
 	reviveHoverBackground{ 222, 508, 150, 50 },
 	upgradeHoverBackground{ 222, 508, 180, 50 },
@@ -1512,11 +1508,11 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupImage(68, 15, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 17, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 17, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupImage(68, 23, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 25, dataPage, dataPagesVector, dataPageHealthbarBlueImage);
+	CreateNonGroupImage(69, 25, dataPage, dataPagesVector, healthbarBlueImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %.0f", focus->GetAttackDamage());
@@ -1545,7 +1541,7 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
@@ -1571,7 +1567,7 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	CreateNonGroupImage(68, 18, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 20, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 20, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateGathererReviveButton(140, 20, dataPage, dataPagesVector);
 
@@ -1594,7 +1590,7 @@ void UIFactory::CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* d
 
 	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
 }
 
 
@@ -1607,7 +1603,7 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, dataPageHealthbarGreenImage);
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
@@ -1702,7 +1698,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(7, 3, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(7, 3, BackGround, robottoHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -1714,16 +1710,16 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	}
 
 
-	healthBar = new UI_Image(1, 25, BackGround, littleHealthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
+	healthBar = new UI_Image(1, 25, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(0, 24, BackGround, littleHealthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	healthBarCont = new UI_Image(0, 24, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(1, 33, BackGround, littleHealthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
+	manaBar = new UI_Image(1, 33, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(0, 32, BackGround, littleHealthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	manaBarCont = new UI_Image(0, 32, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
 	return portrait;
@@ -1737,13 +1733,13 @@ SDL_Rect UIFactory::GetHealthBarBackground()
 
 SDL_Rect UIFactory::GetGreenHealthBar()
 {
-	return dataPageHealthbarGreenImage;
+	return healthbarGreenImage;
 }
 
 
 SDL_Rect UIFactory::GetBlueHealthBar()
 {
-	return dataPageHealthbarBlueImage;
+	return healthbarBlueImage;
 }
 
 

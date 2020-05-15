@@ -174,7 +174,8 @@ void GathererHero::LevelUp()
 	hitPointsMax += (hpLevelUpConstant * app->entityManager->gathererLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;
 	recoveryHitPointsRate;
-	energyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
+	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
+	energyPoints = maxEnergyPoints;
 	recoveryEnergyRate += 1;
 
 	attackDamage += (damageLevelUpConstant * app->entityManager->gathererDamageUpgradeValue);

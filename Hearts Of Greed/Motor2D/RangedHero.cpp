@@ -152,7 +152,8 @@ void RangedHero::LevelUp()
 	hitPointsMax += (hpLevelUpConstant * app->entityManager->rangedLifeUpgradeValue);		// Those variables that serve as values are on XML, because maths were supposed to avoid me going to the XML, but I had to anyway, but I'm too prideful to not make use of my maths, so I'm going to the XML, but less, which is a plus
 	hitPointsCurrent = hitPointsMax; 
 	recoveryHitPointsRate;
-	energyPoints += (energyLevelUpConstant * app->entityManager->rangedEnergyUpgradeValue);
+	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
+	energyPoints = maxEnergyPoints;
 	recoveryEnergyRate;
 
 	attackDamage += (damageLevelUpConstant * app->entityManager->rangedDamageUpgradeValue);
