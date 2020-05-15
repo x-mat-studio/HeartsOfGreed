@@ -73,10 +73,11 @@ UIFactory::UIFactory() :
 	dataPageHealthbarBlueImage{ 375, 81, 59, 4 },
 	healthBarContainer{ 251, 86, 61, 8 },
 
-	heroPortrait{ 478, 328, 33, 40 },
-	gathererHeroIcon{ 178, 529, 13, 16 },
-	meleHeroIcon{ 134, 528, 20, 17 },
-	rangedHeroIcon{ 157, 526, 18, 19 },
+	deadHeroIcon{ 478, 328, 33, 40 },
+	gathererHeroIcon{ 100, 521, 33, 39 },
+	meleHeroIcon{ 17, 518, 43, 42 },
+	rangedHeroIcon{ 59, 518, 40, 41 },
+	robottoHeroIcon{ 157, 526, 18, 19 },
 
 	littleHealthBarContainer{ 251, 72, 31, 7 },
 	littleHealthbarGreenImage{ 319, 73, 29, 4 },
@@ -959,6 +960,18 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 }
 
 
+UI_Group* UIFactory::CreateSaveConfirmationMenu()
+{
+	UI_Group* group = new UI_Group(GROUP_TAG::SAVE_CHECK_MENU);
+
+	UI* background = CreateImage(-upgradeHoverBackground.w * 0.5, -upgradeHoverBackground.h * 0.5, nullptr, upgradeHoverBackground, group, true, false);
+
+	CreateText(5, 0, background, "The game has saved correctly.", group);
+
+	return group;
+}
+
+
 // Element specific functions
 
 UI* UIFactory::CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable, bool interactable)
@@ -1644,7 +1657,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	switch (hero->GetType())
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(10, 5, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -1654,7 +1667,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 
 	case ENTITY_TYPE::HERO_MELEE:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(6, 5, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -1664,7 +1677,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 
 	case ENTITY_TYPE::HERO_RANGED:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(7, 3, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
@@ -1673,7 +1686,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		break;
 
 	case ENTITY_TYPE::HERO_ROBO: //TODO: add ui art
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, heroPortrait, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
+		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
 		portrait->AddElement(BackGround);
 
 		icon = new UI_Image(7, 3, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);

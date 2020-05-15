@@ -153,6 +153,8 @@ public:
 	UI* CreatePortraitManager(float x, float y, UI* parent, UI_Group* group);
 	HeroPortrait* CreatePortrait(Hero* hero);
 
+	UI_Group* CreateSaveConfirmationMenu();
+
 public:
 
 	SDL_Rect fullscreenOnButton;
@@ -223,10 +225,11 @@ private:
 	SDL_Rect scrollbarButton;
 
 
-	SDL_Rect heroPortrait;
+	SDL_Rect deadHeroIcon;
 	SDL_Rect gathererHeroIcon;
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
+	SDL_Rect robottoHeroIcon;
 
 	SDL_Rect lifeUpgradeButton;
 	SDL_Rect damageUpgradeButton;
