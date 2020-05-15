@@ -86,6 +86,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
@@ -288,7 +289,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		else if (DeleteUIGroup(GROUP_TAG::OPTIONS_MENU) == true)
 			break;
 
-		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true) 
+		else if (DeleteUIGroup(GROUP_TAG::SAVE_CHECK_MENU) == true)
+			break;
+
+		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
 		{
 			app->gamePause = false;
 			break;
@@ -309,6 +313,11 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::DELETE_CREDITS_MENU:
 		DeleteUIGroup(GROUP_TAG::CREDITS_MENU);
+		break;
+
+
+	case EVENT_ENUM::DELETE_SAVE_CHECK_MENU:
+		DeleteUIGroup(GROUP_TAG::SAVE_CHECK_MENU);
 		break;
 
 
@@ -489,6 +498,7 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
@@ -515,6 +525,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::CLOSE_CREDITS_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_CREDITS_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::CLOSE_SAVE_OK_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::NEW_GAME:
@@ -564,6 +578,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 	case BUTTON_TAG::RESUME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, EVENT_ENUM::NULL_EVENT);
 
 		app->gamePause = false;
 		break;
@@ -574,7 +589,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::SAVE:
 		app->SaveGame();
-//		AddUIGroup(factory->CreateSaveConfirmationMenu());
+		AddUIGroup(factory->CreateSaveConfirmationMenu());
 		break;
 
 	case BUTTON_TAG::LOAD:

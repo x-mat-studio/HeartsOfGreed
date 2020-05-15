@@ -968,11 +968,18 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 
 UI_Group* UIFactory::CreateSaveConfirmationMenu()
 {
+	float x((app->win->width * 0.5 / app->win->GetUIScale()) - (upgradeHoverBackground.w * 0.5));
+	float y((app->win->height * 0.5 / app->win->GetUIScale()) - (upgradeHoverBackground.h * 0.5));
+
 	UI_Group* group = new UI_Group(GROUP_TAG::SAVE_CHECK_MENU);
 
-	UI* background = CreateImage(-upgradeHoverBackground.w * 0.5, -upgradeHoverBackground.h * 0.5, nullptr, upgradeHoverBackground, group, true, false);
+	UI* background = CreateImage(x, y, nullptr, upgradeHoverBackground, group, true, true);
 
-	CreateText(5, 0, background, "The game has saved correctly.", group);
+	CreateText(5, -3, background, "        The game has saved", group);
+
+	CreateText(5, 7, background, "             correctly.", group);
+
+	CreateClosePauseMenuButton(upgradeHoverBackground.w * 0.5, 20, background, group);
 
 	return group;
 }
@@ -1181,8 +1188,17 @@ UI* UIFactory::CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* 
 
 UI* UIFactory::CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RESUME);
+	Button* button = new Button(fMPoint{ x, y }, parent, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_SAVE_OK_MENU);
 
+	group->AddUiElement(button);
+
+	return button;
+}
+
+
+UI* UIFactory::CreateSaveOKButton(float x, float y, UI* parent, UI_Group* group)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_SAVE_OK_MENU);
 	group->AddUiElement(button);
 
 	return button;
