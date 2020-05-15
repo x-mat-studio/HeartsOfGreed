@@ -89,6 +89,9 @@ public:
 	UI* CreateMeleeActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateRangedPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateRangedActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateRobottoPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateRobottoActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+
 
 	// Hover menu creation functions
 
@@ -111,12 +114,18 @@ public:
 	UI_Group* CreateOnHoverRangedDamageUpgradeMenu();
 	UI_Group* CreateOnHoverRangedEnergyUpgradeMenu();
 	UI_Group* CreateOnHoverRangedAttackSpeedUpgradeMenu();
+	UI_Group* CreateOnHoverRobottoLifeMenuMenu();
+	UI_Group* CreateOnHoverRobottoDamageUpgradeMenu();
+	UI_Group* CreateOnHoverRobottoEnergyUpgradeMenu();
+	UI_Group* CreateOnHoverRobottoAttackSpeedUpgradeMenu();
 	UI_Group* CreateOnHoverGathererPassive1Menu();
 	UI_Group* CreateOnHoverGathererActive1Menu();
 	UI_Group* CreateOnHoverMeleePassive1Menu();
 	UI_Group* CreateOnHoverMeleeActive1Menu();
 	UI_Group* CreateOnHoverRangedPassive1Menu();
 	UI_Group* CreateOnHoverRangedActive1Menu();
+	UI_Group* CreateOnHoverRobottoPassive1Menu();
+	UI_Group* CreateOnHoverRobottoActive1Menu();
 
 	// Scrollbar creation functions
 
@@ -132,6 +141,7 @@ public:
 	void CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateRobottoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
@@ -176,6 +186,9 @@ private:
 	SDL_Rect rangedPicture;
 	SDL_Rect rangedShopPicture;
 	SDL_Rect rangedBigPicture;
+	SDL_Rect robottoPicture;
+	SDL_Rect robottoShopPicture;
+	SDL_Rect robottoBigPicture;
 	SDL_Rect baseDataPagePicture;
 	SDL_Rect turretDataPagePicture;
 	SDL_Rect wanamingoDataPagePicture;
@@ -223,9 +236,11 @@ private:
 	SDL_Rect gathererPassive1Button;
 	SDL_Rect meleePassive1Button;
 	SDL_Rect rangedPassive1Button;
+	SDL_Rect robottoPassive1Button;
 	SDL_Rect gathererActive1Button;
 	SDL_Rect meleeActive1Button;
 	SDL_Rect rangedActive1Button;
+	SDL_Rect robottoActive1Button;
 
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;

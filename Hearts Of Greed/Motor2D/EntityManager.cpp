@@ -329,6 +329,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
@@ -349,7 +350,10 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
-
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
@@ -704,6 +708,7 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
@@ -724,7 +729,10 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
-
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 	return true;
 }
 
@@ -1187,7 +1195,7 @@ void ModuleEntityManager::DeleteAllDeadHeroes()
 
 void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType) const
 {
-	DeadHero* refhero=nullptr;
+	DeadHero* refhero = nullptr;
 
 	switch (heroType)
 	{
@@ -1206,7 +1214,7 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 	}
 
 	if (refhero != nullptr)
-	{	
+	{
 		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
 
 		statsnode.append_attribute("level") = refhero->GetLevel();
@@ -1700,11 +1708,15 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		// TODO REVIVE HEROES FUNCTION
 		break;
 
+	case EVENT_ENUM::MELEE_RESURRECT:
+
+		break;
+
 	case EVENT_ENUM::RANGED_RESURRECT:
 
 		break;
 
-	case EVENT_ENUM::MELEE_RESURRECT:
+	case EVENT_ENUM::ROBOTTO_RESURRECT:
 
 		break;
 
@@ -1873,6 +1885,60 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		break;
 
+	case EVENT_ENUM::ROBOTTO_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoDamageUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoEnergyUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoAtkSpeedUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
 
 	}
 
@@ -3165,13 +3231,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = meleeLifeUpgradeValue;
-			iterator.append_attribute("damage") = meleeDamageUpgradeValue;
-			iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = meleeLifeUpgradeValue;
+				iterator.append_attribute("damage") = meleeDamageUpgradeValue;
+				iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::HERO_RANGED:
@@ -3206,13 +3273,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = rangedLifeUpgradeValue;
-			iterator.append_attribute("damage") = rangedDamageUpgradeValue;
-			iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = rangedLifeUpgradeValue;
+				iterator.append_attribute("damage") = rangedDamageUpgradeValue;
+				iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::HERO_GATHERER:
@@ -3246,13 +3314,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = gathererLifeUpgradeValue;
-			iterator.append_attribute("damage") = gathererDamageUpgradeValue;
-			iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = gathererLifeUpgradeValue;
+				iterator.append_attribute("damage") = gathererDamageUpgradeValue;
+				iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::HERO_ROBO:
@@ -3268,7 +3337,10 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
+				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
 				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
 				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
@@ -3284,13 +3356,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = robottoLifeUpgradeValue;
-			iterator.append_attribute("damage") = robottoDamageUpgradeValue;
-			iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = robottoLifeUpgradeValue;
+				iterator.append_attribute("damage") = robottoDamageUpgradeValue;
+				iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::ENEMY:
