@@ -49,7 +49,7 @@ UIFactory::UIFactory() :
 	resourceIconBoost{ 83, 209, 17, 19 },
 	creditsBackgroundImage{ 563, 237, 117, 122 },
 	pauseMenuBackground{ 15, 271, 194, 231 },
-	optionsMenuBackground{ 677, 369, 278, 153 },
+	optionsMenuBackground{ 677, 369, 278, 133 },
 	creditsMenuBackground{ 15, 271, 194, 231 },
 	minimapBackground{ 221, 317, 162, 150 },
 	shopBackground{ 15, 271, 194, 231 },
