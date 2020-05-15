@@ -273,18 +273,25 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::EXIT_MENUS:
 
 		//If none of this menus is open and you are in the Game Scene, create pause menu
-		if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
+		if (CheckGroupTag(GROUP_TAG::DIALOG) == false)
+			break;
+
+		else if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
 			break;
 
 		else if (DeleteUIGroup(GROUP_TAG::OPTIONS_MENU) == true)
 			break;
 
-		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
+		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true) 
+		{
+			app->gamePause = false;
 			break;
+		}
 
 		else if (app->testScene->IsEnabled() == true)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+			app->gamePause = true;
 		}
 		break;
 
@@ -301,6 +308,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::DELETE_PAUSE_MENU:
 		DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
+		app->gamePause = false;
 		break;
 
 
@@ -311,10 +319,12 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::CREATE_DIALOG_WINDOW:
 		group = factory->CreateDialogMenu(ENTITY_TYPE::HERO_GATHERER, ENTITY_TYPE::HERO_GATHERER);
 		AddUIGroup(group);
+		app->gamePause = true;
 		break;
 
 	case EVENT_ENUM::CLOSE_DIALOG_WINDOW:
 		DeleteUIGroup(GROUP_TAG::DIALOG);
+		app->gamePause = false;
 		break;
 	}
 }
@@ -542,11 +552,14 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::PAUSE:
 		AddUIGroup(factory->CreatePauseMenu());
+		app->gamePause = true;
 		break;
 
 	case BUTTON_TAG::RESUME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
+
+		app->gamePause = false;
 		break;
 
 	case BUTTON_TAG::MAIN_MENU:

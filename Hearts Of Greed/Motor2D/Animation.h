@@ -84,21 +84,23 @@ public:
 
 	Frame& GetCurrentFrame(float dt)
 	{
-		if (framesPassed * dt < frames[currentFrame].maxFrames * dt)
-			framesPassed += dt;
-		else 
+		if (dt != 0)
 		{
-			framesPassed = 0;
-			currentFrame ++;
+			if (framesPassed * dt < frames[currentFrame].maxFrames * dt)
+				framesPassed += dt;
+			else
+			{
+				framesPassed = 0;
+				currentFrame++;
+			}
+
+
+			if (currentFrame >= lastFrame)
+			{
+				currentFrame = (loop) ? 0 : lastFrame - 1;
+				loops++;
+			}
 		}
-
-
-		if (currentFrame >= lastFrame)
-		{
-			currentFrame = (loop) ? 0 : lastFrame - 1;
-			loops++;
-		}
-
 
 		return frames[currentFrame];
 	}

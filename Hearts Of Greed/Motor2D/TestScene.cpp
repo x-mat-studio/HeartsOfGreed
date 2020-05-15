@@ -112,6 +112,7 @@ bool ModuleTestScene::Start()
 		fMPoint pos;
 		pos.create(950, 4100);
 
+		isNightTime = false;
 		//Test Hero
 		if (startFromLoad == false)
 		{
@@ -192,8 +193,6 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
-	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
-	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
@@ -201,7 +200,7 @@ bool ModuleTestScene::Start()
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
-	isNightTime = false;
+	app->gamePause = false;
 
 	return true;
 }
@@ -466,12 +465,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::LOAD_GAME:
 		// TODO Load game from here
 		break;
-	case EVENT_ENUM::PAUSE_GAME:
-		app->gamePause = true;
-		break;
-	case EVENT_ENUM::UNPAUSE_GAME:
-		app->gamePause = false;
-		break;
+
 	case EVENT_ENUM::RETURN_TO_MAIN_MENU:
 		menuScene = true;
 		break;

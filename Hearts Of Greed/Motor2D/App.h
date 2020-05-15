@@ -72,9 +72,6 @@ public:
 	void LoadGame();
 	void SaveGame() const;
 	
-	bool SetPause(bool pause);
-	bool GetPause();
-
 private:
 
 	// Load config file
@@ -135,6 +132,8 @@ public:
 	bool				debugMode = false;
 	bool				gamePause;
 
+	float				necessaryDt;
+
 private:
 	std::vector<Module*>	modules;
 
@@ -162,8 +161,8 @@ private:
 	mutable bool		wantToSave;
 
 	float				dt;
+	
 
-	bool				paused;
 };
 
 extern App* app; 
