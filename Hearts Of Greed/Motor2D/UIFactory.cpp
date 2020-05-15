@@ -971,9 +971,9 @@ UI_Group* UIFactory::CreateSaveConfirmationMenu()
 
 	CreateText(5, -3, background, "        The game has saved", group);
 
-	CreateText(5, 7, background, "             correctly.", group);
+	CreateText(5, 7, background, "               correctly.", group);
 
-	CreateClosePauseMenuButton(upgradeHoverBackground.w * 0.5, 20, background, group);
+	CreateSaveOKButton((upgradeHoverBackground.w * 0.5) - (okButton.w * 0.5), 30, background, group);
 
 	return group;
 }
@@ -1628,7 +1628,11 @@ void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* d
 {
 	CreateBuyTurretButton(68, 30, dataPage, dataPagesVector);
 
+	CreateNonGroupImage(68, 30, dataPage, dataPagesVector, plusIcon, false, false);
+
 	CreateUpgradeTurretButton(108, 30, dataPage, dataPagesVector);
+
+	CreateNonGroupImage(108, 30, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
 
 	CreateBuyBarricadeButton(68, 50, dataPage, dataPagesVector);
 
