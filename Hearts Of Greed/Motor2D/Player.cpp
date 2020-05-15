@@ -297,7 +297,7 @@ void ModulePlayer::LeftClick()
 	if (focusedEntity != nullptr)
 	{
 		type = focusedEntity->GetType();
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
 		{
 			heroesVector.clear();
 			heroesVector.push_back((Hero*)focusedEntity);
