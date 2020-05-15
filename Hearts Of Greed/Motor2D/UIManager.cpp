@@ -583,6 +583,14 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		}
 		break;
 
+	case BUTTON_TAG::REVIVE_MELEE:
+		if (app->player->GetResources() >= factory->reviveCost)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
 	case BUTTON_TAG::REVIVE_RANGED:
 		if (app->player->GetResources() >= factory->reviveCost)
 		{
@@ -591,13 +599,13 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		}
 		break;
 
-	case BUTTON_TAG::REVIVE_MELEE:
+	case BUTTON_TAG::REVIVE_ROBOTTO:
 		if (app->player->GetResources() >= factory->reviveCost)
 		{
 			app->player->AddResources(-factory->reviveCost);
-			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
+			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		}
-		break;
+	break;
 
 	case BUTTON_TAG::BUY_TURRET:
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
@@ -786,8 +794,9 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 	{
 
 	case BUTTON_TAG::REVIVE_GATHERER:
-	case BUTTON_TAG::REVIVE_RANGED:
 	case BUTTON_TAG::REVIVE_MELEE:
+	case BUTTON_TAG::REVIVE_RANGED:
+	case BUTTON_TAG::REVIVE_ROBOTTO:
 		AddUIGroup(factory->CreateOnHoverReviveMenu(button));
 		break;
 

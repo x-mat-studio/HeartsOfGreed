@@ -354,6 +354,9 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 	case BUTTON_TAG::REVIVE_RANGED:
 		CreateText(5, 0, background, "Revive ranged hero:", group);
 		break;
+	case BUTTON_TAG::REVIVE_ROBOTTO:
+		CreateText(5, 0, background, "Revive robot hero:", group);
+	break;
 	default:
 		break;
 	}
@@ -361,7 +364,7 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
 	sprintf_s(stats, 40, "- %i", reviveCost);
-	CreateText(25, 20, background, "-500", group);
+	CreateText(25, 20, background, stats, group);
 
 	return group;
 }
@@ -1062,6 +1065,15 @@ UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, std::vecto
 }
 
 
+UI* UIFactory::CreateRobottoReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_ROBOTTO);
+	dataPagesVector->push_back(button);
+
+	return button;
+}
+
+
 UI* UIFactory::CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, {0, 0, 15, 15}, false, app->uiManager->GetAtlasTexture(), tag, lifeUpgradeButton);
@@ -1370,6 +1382,8 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	CreateMeleeReviveButton(140, 30, dataPage, dataPagesVector);
 
 	CreateRangedReviveButton(140, 40, dataPage, dataPagesVector);
+
+	CreateRobottoReviveButton(140, 50, dataPage, dataPagesVector);
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());

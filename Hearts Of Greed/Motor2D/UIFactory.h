@@ -72,6 +72,7 @@ public:
 	UI* CreateGathererReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateMeleeReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateRangedReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateRobottoReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateBuyBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
