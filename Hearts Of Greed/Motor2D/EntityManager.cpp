@@ -1195,7 +1195,7 @@ void ModuleEntityManager::DeleteAllDeadHeroes()
 
 void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType) const
 {
-	DeadHero* refhero=nullptr;
+	DeadHero* refhero = nullptr;
 
 	switch (heroType)
 	{
@@ -1214,7 +1214,7 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 	}
 
 	if (refhero != nullptr)
-	{	
+	{
 		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
 
 		statsnode.append_attribute("level") = refhero->GetLevel();
@@ -3231,13 +3231,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = meleeLifeUpgradeValue;
-			iterator.append_attribute("damage") = meleeDamageUpgradeValue;
-			iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = meleeLifeUpgradeValue;
+				iterator.append_attribute("damage") = meleeDamageUpgradeValue;
+				iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::HERO_RANGED:
@@ -3272,13 +3273,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = rangedLifeUpgradeValue;
-			iterator.append_attribute("damage") = rangedDamageUpgradeValue;
-			iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = rangedLifeUpgradeValue;
+				iterator.append_attribute("damage") = rangedDamageUpgradeValue;
+				iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::HERO_GATHERER:
@@ -3312,13 +3314,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = gathererLifeUpgradeValue;
-			iterator.append_attribute("damage") = gathererDamageUpgradeValue;
-			iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = gathererLifeUpgradeValue;
+				iterator.append_attribute("damage") = gathererDamageUpgradeValue;
+				iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::HERO_ROBO:
@@ -3334,7 +3337,10 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
+				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
 				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
 				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
@@ -3350,13 +3356,14 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 
-			iterator.append_attribute("hp") = robottoLifeUpgradeValue;
-			iterator.append_attribute("damage") = robottoDamageUpgradeValue;
-			iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
-			iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
-			break;
+				iterator.append_attribute("hp") = robottoLifeUpgradeValue;
+				iterator.append_attribute("damage") = robottoDamageUpgradeValue;
+				iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
+
+				break;
 
 
 			case ENTITY_TYPE::ENEMY:
