@@ -86,6 +86,8 @@ UIFactory::UIFactory() :
 	energyUpgradeButton{ 532, 581, 88, 87 },
 	attackSpeedUpgradeButton{ 328, 581, 88, 87 },
 
+	miniFrame{ 509, 706, 238, 125 },
+
 	gathererPassive1Button{ 140, 827, 93, 91 },
 	meleePassive1Button{ 245, 826, 93, 91 },
 	rangedPassive1Button{ 36, 828, 93, 91 },
@@ -159,6 +161,7 @@ UI_Group* UIFactory::CreateOptionsMenu()
 	UI* scrollbar;
 
 	background = CreateImage(x, y, nullptr, optionsMenuBackground, group, true);
+
 
 	scrollbar = CreateImage(20, 60, background, scrollbarBar, group, false);
 	CreateMusicScrollbar(0, 0, scrollbar, group);
@@ -294,6 +297,9 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
 
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
+
+	CreateImage(- 12, app->minimap->position.y - 273, nullptr, miniFrame, group);
+
 	CreatePortraitManager(640, 0, nullptr, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
