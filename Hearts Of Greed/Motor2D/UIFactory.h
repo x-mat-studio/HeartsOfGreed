@@ -249,6 +249,8 @@ private:
 	SDL_Rect reviveHoverBackground;
 	SDL_Rect upgradeHoverBackground;
 
+	// Minimap Frame
+	SDL_Rect miniFrame;
 
 	//Dialog things
 	SDL_Rect dialogWindow;
