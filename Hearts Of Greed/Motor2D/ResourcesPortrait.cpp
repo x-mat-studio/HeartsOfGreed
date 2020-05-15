@@ -90,16 +90,16 @@ void ResourcesPortrait::Draw(float dt)
 {
 	if (texture != nullptr)
 	{
-		app->render->Blit(texture, position.x-20, position.y, nullptr, false, false, '\000', 255, 255, 255);
+		app->render->Blit(texture, position.x +1, position.y + 30, nullptr, false, false, '\000', 255, 255, 255);
 	}
 
 	if (texture2 != nullptr)
 	{
-		app->render->Blit(texture2, position.x +2, position.y, nullptr, false, false, '\000', 255, 255, 255);
+		app->render->Blit(texture2, position.x +1 , position.y , nullptr, false, false, '\000', 255, 255, 255);
 	}
 
 	if (texture3 != nullptr)
 	{
-		app->render->Blit(texture3, position.x+ 27, position.y, nullptr, false, false, '\000', 255, 255, 255);
+		app->render->Blit(texture3, position.x+ 33, position.y , nullptr, false, false, '\000', 255, 255, 255);
 	}
 }
