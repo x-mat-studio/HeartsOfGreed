@@ -1,7 +1,7 @@
 #include "Particle.h"
 #include "Textures.h"
 #include "Render.h"
-
+#include "Map.h"
 
 Particle::Particle()
 {}
@@ -165,15 +165,20 @@ void Particle::PostUpdate(float dt)
 
 void Particle::Draw(float dt)
 {
-	if (fade == true)
+	float w = animation.GetRect().w;
+	float h = animation.GetRect().h;
+
+	if (app->map->EntityInsideCamera(position.x, position.y, w, h) == true)
 	{
-		Uint8 transparency = life / originalLife * 255;
-		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), transparency, 0, angle);
+		if (fade == true)
+		{
+			Uint8 transparency = life / originalLife * 255;
+			app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), transparency, 0, angle);
+		}
+
+		else
+			app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), 255, 0, angle);
 	}
-
-	else
-		app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), 255, 0, angle);
-
 }
 
 void Particle::Move(float dt)
@@ -182,7 +187,6 @@ void Particle::Move(float dt)
 	
 	position += speed * dt * TIME_CONST;
 	
-
 	angle += angularSpeed * dt * TIME_CONST;
 }
 

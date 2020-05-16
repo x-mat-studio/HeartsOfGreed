@@ -2,6 +2,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Particle.h"
+#include "App.h"
 #include "math.h"
 
 Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVariationSpeed,
@@ -173,10 +174,11 @@ Emitter::~Emitter()
 void Emitter::Update(float dt)
 {
 
-	if (stopped == false && active == true)
+	if (stopped == false && active == true && app->gamePause == false)
 	{
 		ThrowParticles();
 	}
+
 	else if (stopped == true && active == true)
 	{
 		CheckTimeSinceStopped(dt);
