@@ -39,6 +39,9 @@ public:
 	void RemoveBarricade(Barricade* barricade);
 	void RemoveUpgradeCenter();
 
+	void LevelUpTurrets(int lvl);
+	void LevelUpBarricades(int lvl);
+
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
