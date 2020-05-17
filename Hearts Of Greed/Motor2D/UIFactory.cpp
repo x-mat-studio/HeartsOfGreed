@@ -90,6 +90,8 @@ UIFactory::UIFactory() :
 	energyUpgradeButton{ 532, 581, 88, 87 },
 	attackSpeedUpgradeButton{ 328, 581, 88, 87 },
 
+	miniFrame{ 509, 706, 238, 125 },
+
 	ugradeSkillButton{ 763, 79, 15, 11 },
 	gathererPassive1Button{ 140, 827, 93, 91 },
 	meleePassive1Button{ 245, 826, 93, 91 },
@@ -300,6 +302,8 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
 	CreatePortraitManager(640, 0, nullptr, group);
+
+	CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
