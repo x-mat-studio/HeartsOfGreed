@@ -1,35 +1,35 @@
 #ifndef _UPGRADECENTER_H_
 #define _UPGRADECENTER_H_
 
-#include "Module.h"
 #include "Building.h"
-#include "Collision.h"
 
+struct Collider;
+class Base;
 
 class UpgradeCenter : public Building
 {
 
 public:
 
-	UpgradeCenter(int turretLvl, int barricadeLvl);
+	UpgradeCenter(fMPoint pos, int upgradeTurretCost, int upgradeBarricadeCost, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider);
 	UpgradeCenter(fMPoint position, UpgradeCenter* copy, ENTITY_ALIGNEMENT alignement);
 	~UpgradeCenter();
-
-
-	bool Start();
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	bool PostUpdate(float dt);
 
 	void UpgradeTurrets();
 	void UpgradeBarricades();
 
+	int RecieveDamage(int damage);
+
+private:
+	void Die();
 
 private:
 
 	int turretLvl;
 	int barricadeLvl;
 
+	int upgradeTurretCost;
+	int upgradeBarricadeCost;
 };
 
 

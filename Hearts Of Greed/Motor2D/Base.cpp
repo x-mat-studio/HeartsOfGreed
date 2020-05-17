@@ -159,10 +159,10 @@ bool Base::AddBarricade(Barricade* barricade)
 	if (barricadesVector.size() == maxBarricades)
 		return false;
 
-
 	else
 	{
 		barricadesVector.push_back(barricade);
+		barricade->myBase = this;
 		return true;
 	}
 }
@@ -174,6 +174,7 @@ bool Base::AddUpgradeCenter(UpgradeCenter* upgradeCenter)
 	if (baseUpgradeCenter == nullptr)
 	{
 		baseUpgradeCenter = upgradeCenter;
+		upgradeCenter->myBase = this;
 		return true;
 	}
 
@@ -216,6 +217,34 @@ void Base::RemoveBarricade(Barricade* barricade)
 void Base::RemoveUpgradeCenter()
 {
 	baseUpgradeCenter = nullptr;
+}
+
+
+void Base::LevelUpTurrets(int lvl)
+{
+	int numberTurrets = turretsVector.size();
+
+	for (int i = 0; i < numberTurrets; i++)
+	{
+		if (turretsVector[i]->GetLvl() < lvl)
+		{
+			//turretsVector[i]->LevelUp()
+		}
+	}
+}
+
+
+void Base::LevelUpBarricades(int lvl)
+{
+	int numberBarricades = barricadesVector.size();
+
+	for (int i = 0; i < numberBarricades; i++)
+	{
+		//if (barricadesVector[i]->GetLvl() < lvl)
+		{
+			//turretsVector[i]->LevelUp()
+		}
+	}
 }
 
 
@@ -359,16 +388,16 @@ void Base::Die()
 
 void Base::ChangeTexturesOnDeath()
 {
-	switch (this->GetAlignment()) { //change texture
+	switch (GetAlignment()) { //change texture
 
 	case ENTITY_ALIGNEMENT::ENEMY:
-		this->texture = app->entityManager->base2Texture;
-		this->selectedTexture = app->entityManager->base2TextureSelected;
+		texture = app->entityManager->base2Texture;
+		selectedTexture = app->entityManager->base2TextureSelected;
 		break;
 
 	case ENTITY_ALIGNEMENT::PLAYER:
-		this->texture = app->entityManager->base2TextureEnemy;
-		this->selectedTexture = app->entityManager->base2TextureSelectedEnemy;
+		texture = app->entityManager->base2TextureEnemy;
+		selectedTexture = app->entityManager->base2TextureSelectedEnemy;
 		break;
 
 	default:

@@ -67,6 +67,8 @@ public:
 	UI* CreateCloseCreditsButton(float x, float y, UI* parent, UI_Group* group);
 	UI* CreateClosePauseMenuButton(float x, float y, UI* parent, UI_Group* group);
 
+	UI* CreateSaveOKButton(float x, float y, UI* parent, UI_Group* group);
+
 	// Data Page Buttons
 
 	UI* CreateGathererReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
@@ -124,6 +126,8 @@ public:
 	UI_Group* CreateOnHoverMeleeActive1Menu();
 	UI_Group* CreateOnHoverRangedPassive1Menu();
 	UI_Group* CreateOnHoverRangedActive1Menu();
+	UI_Group* CreateOnHoverRobottoPassive1Menu();
+	UI_Group* CreateOnHoverRobottoActive1Menu();
 
 	// Scrollbar creation functions
 
@@ -151,11 +155,12 @@ public:
 	UI* CreatePortraitManager(float x, float y, UI* parent, UI_Group* group);
 	HeroPortrait* CreatePortrait(Hero* hero);
 
+	UI_Group* CreateSaveConfirmationMenu();
+
 public:
 
 	SDL_Rect fullscreenOnButton;
 	SDL_Rect fullscreenOffButton;
-
 
 private:
 	// Image SDL_Rect
@@ -166,14 +171,10 @@ private:
 	SDL_Rect portraitHealthbarGreenImage;
 
 	SDL_Rect healthBarContainer;
-	SDL_Rect dataPageHealthbarGreenImage;
-	SDL_Rect dataPageHealthbarBlueImage;
+	SDL_Rect healthbarGreenImage;
+	SDL_Rect healthbarBlueImage;
 	SDL_Rect dataPageBackground;
 	SDL_Rect dataPageImageBackground;
-
-	SDL_Rect littleHealthBarContainer;
-	SDL_Rect littleHealthbarGreenImage;
-	SDL_Rect littleHealthbarBlueImage;
 
 	SDL_Rect gathererPicture;
 	SDL_Rect gathererShopPicture;
@@ -205,6 +206,9 @@ private:
 	SDL_Rect shopBackground;
 	SDL_Rect resourcesBackground;
 
+	SDL_Rect upgradeArrowIcon;
+	SDL_Rect plusIcon;
+
 	// Button SDL_Rect
 
 	SDL_Rect menuButton;
@@ -215,16 +219,19 @@ private:
 	SDL_Rect shopButton;
 	SDL_Rect reviveButton;
 
+	SDL_Rect okButton;
+
 	// Scrollbar SDL_Rect
 
 	SDL_Rect scrollbarBar;
 	SDL_Rect scrollbarButton;
 
 
-	SDL_Rect heroPortrait;
+	SDL_Rect deadHeroIcon;
 	SDL_Rect gathererHeroIcon;
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
+	SDL_Rect robottoHeroIcon;
 
 	SDL_Rect lifeUpgradeButton;
 	SDL_Rect damageUpgradeButton;
@@ -244,6 +251,8 @@ private:
 	SDL_Rect reviveHoverBackground;
 	SDL_Rect upgradeHoverBackground;
 
+	// Minimap Frame
+	SDL_Rect miniFrame;
 
 	//Dialog things
 	SDL_Rect dialogWindow;

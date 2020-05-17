@@ -3238,6 +3238,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("damage") = meleeDamageUpgradeValue;
 				iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
 				iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
+
 				break;
 
 
@@ -3279,6 +3280,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("damage") = rangedDamageUpgradeValue;
 				iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
 				iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
+
 				break;
 
 
@@ -3319,6 +3321,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("damage") = gathererDamageUpgradeValue;
 				iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
 				iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
+
 				break;
 
 
@@ -3335,7 +3338,10 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
+				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
+				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
 				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
 				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
@@ -3357,6 +3363,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("damage") = robottoDamageUpgradeValue;
 				iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
 				iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
+
 				break;
 
 

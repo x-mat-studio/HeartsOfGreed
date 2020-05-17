@@ -132,7 +132,8 @@ void MeleeHero::LevelUp()
 	hitPointsMax += (hpLevelUpConstant * app->entityManager->meleeLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;	
 	recoveryHitPointsRate += 1;
-	energyPoints += (energyLevelUpConstant * app->entityManager->meleeEnergyUpgradeValue);
+	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
+	energyPoints = maxEnergyPoints;
 	recoveryEnergyRate;
 
 	attackDamage += (damageLevelUpConstant * app->entityManager->meleeDamageUpgradeValue);
