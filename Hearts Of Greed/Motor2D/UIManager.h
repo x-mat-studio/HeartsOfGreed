@@ -97,6 +97,9 @@ private:
 
 	void AugmentValueByTenPercent(float* value);
 
+	void StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost);
+	void SkillResourceManagement();
+
 	bool Save(pugi::xml_node& data) const;
 
 	bool Load(pugi::xml_node& data);

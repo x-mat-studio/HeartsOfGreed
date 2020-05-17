@@ -14,6 +14,7 @@
 #include "Base.h"
 #include "UIManager.h"
 #include "Base.h"
+#include "ParticleSystem.h"
 #include "Pathfinding.h"
 
 ModulePlayer::ModulePlayer() :
@@ -664,6 +665,15 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	break;
 
 	case EVENT_ENUM::GIVE_RESOURCES:
+
+
+		//snowball
+
+
+		app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, 250, 4100);
+
+
+
 		resources += 1000;
 		break;
 
@@ -672,7 +682,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
-		resourcesBoost+= 3;
+		resourcesBoost+= 300;
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
