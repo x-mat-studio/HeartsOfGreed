@@ -243,6 +243,9 @@ public:
 	float GetVisionInPx() const;
 	void SetVisionInPx(float visPx);
 
+	int GetHeroSkillPoints();
+	void AddHeroSkillPoints(int n);
+
 protected:
 	void SetAnimation(HERO_STATES currState);
 
@@ -384,6 +387,7 @@ protected:
 
 	iMPoint movingTo;
 
+	int heroSkillPoints;
 };
 
 

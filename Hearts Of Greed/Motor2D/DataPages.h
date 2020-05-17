@@ -91,6 +91,8 @@ private:
 	float vision;
 	float hpRecovery;
 	float xpToNextLevel;
+	int heroSkillPoints;
+	int skillResource;
 	ENTITY_ALIGNEMENT alignment;
 
 };

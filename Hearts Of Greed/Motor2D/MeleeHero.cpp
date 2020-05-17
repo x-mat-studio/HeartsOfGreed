@@ -147,6 +147,7 @@ void MeleeHero::LevelUp()
 	unitSpeed += 5;
 	visionDistance;
 
+	heroSkillPoints++;
 }
 
 void MeleeHero::PlayGenericNoise(int probability)
