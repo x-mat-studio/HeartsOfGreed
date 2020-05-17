@@ -93,16 +93,18 @@ struct skillArea;
 class DeadHero
 {
 public:
-	DeadHero(int level, ENTITY_TYPE type);
+	DeadHero(int level, ENTITY_TYPE type,Skill skill);
 	~DeadHero();
 
 	ENTITY_TYPE GetType()const;
 	int GetLevel()const;
+	void GetSkillInfo(SKILL_ID& id, int& skillLevel)const;
 
 private:
 	ENTITY_TYPE heroType;
 	int level;
-	//skills?
+	SKILL_ID skillId;
+	int skillLevel;
 
 
 };

@@ -1130,7 +1130,45 @@ DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
 	}
 
 
-	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType());
+	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType(),dyingHero.GetSkill1());
+
+	return *refhero;
+}
+
+DeadHero* ModuleEntityManager::AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill)
+{
+
+	DeadHero** refhero;
+
+	//assinging the correct dead hero variable to refhero to make it easy to work with
+	switch (type)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+
+	default:
+		return nullptr;
+	}
+
+	//deletes information about any hero stored in that variable
+	if (*refhero != nullptr)
+	{
+		delete* refhero;
+		*refhero = nullptr;
+	}
+
+
+	*refhero = new DeadHero(level, type, skill);
 
 	return *refhero;
 }
@@ -1224,7 +1262,54 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
 
 		statsnode.append_attribute("level") = refhero->GetLevel();
+		statsnode.append_attribute("type") = (int)heroType;
+		SKILL_ID skillId;
+		int skillLevel;
+		refhero->GetSkillInfo(skillId,skillLevel);
+		statsnode.append_attribute("skillId") = (int)skillId;
+		statsnode.append_attribute("skillLvl") = skillLevel;
+
 	}
+
+}
+
+void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)
+{
+	/*DeadHero** refhero = nullptr;
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+	}
+
+	if (*refhero != nullptr)
+	{
+		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
+
+		statsnode.attribute("level");
+		statsnode.attribute("type");
+		SKILL_ID skillId;
+		int skillLevel;
+
+
+		statsnode.attribute("skillId") = (int)skillId;
+		statsnode.attribute("skillLvl") = skillLevel;
+
+		*refhero= AssignNewDeadHero()
+	}*/
+
+	//Work in progress
 
 }
 
@@ -3143,6 +3228,29 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			}
 
 		}
+	}
+
+
+	//deathEntitesSaving
+	pugi::xml_node deadEntities = data.child("deadEntities");
+
+	DeleteAllDeadHeroes();
+
+	if (deadEntities.child("deadGatherer")!=NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
+	}
+	if (deadEntities.child("deadRanged") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadRanged"), ENTITY_TYPE::HERO_RANGED);
+	}
+	if (deadEntities.child("deadMelee") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadMelee"), ENTITY_TYPE::HERO_MELEE);
+	}
+	if (deadEntities.child("deadRobo") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadRobo"), ENTITY_TYPE::HERO_ROBO);
 	}
 
 	return true;

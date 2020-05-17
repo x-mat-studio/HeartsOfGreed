@@ -1742,8 +1742,11 @@ void Hero::SetVisionInPx(float visPx)
 }
 
 
-DeadHero::DeadHero(int level, ENTITY_TYPE type): level(level), heroType(type)
-{}
+DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill): level(level), heroType(type)
+{
+	skillLevel= skill.lvl;
+	skillId = skill.id;
+}
 
 
 DeadHero::~DeadHero()
@@ -1757,4 +1760,10 @@ ENTITY_TYPE DeadHero::GetType() const
 int DeadHero::GetLevel() const
 {
 	return level;
+}
+
+void DeadHero::GetSkillInfo(SKILL_ID& id, int& newskillLevel) const
+{
+	id = skillId;
+	newskillLevel = skillLevel;
 }
