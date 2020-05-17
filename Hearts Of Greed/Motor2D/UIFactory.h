@@ -37,6 +37,7 @@ public:
 	UI_Group* CreateCreditsMenu();
 
 	UI_Group* CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE character2);
+
 	// Image creation functions
 
 	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false, bool interactable = true);
@@ -156,6 +157,7 @@ public:
 	HeroPortrait* CreatePortrait(Hero* hero);
 
 	UI_Group* CreateSaveConfirmationMenu();
+	bool CheckSkillResources();
 
 public:
 
@@ -232,6 +234,8 @@ private:
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
 	SDL_Rect robottoHeroIcon;
+
+	SDL_Rect ugradeSkillButton;
 
 	SDL_Rect lifeUpgradeButton;
 	SDL_Rect damageUpgradeButton;
