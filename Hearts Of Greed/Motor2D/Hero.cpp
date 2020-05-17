@@ -20,7 +20,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
+	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
 	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
@@ -62,7 +62,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 	recoveryHitPointsRate(recoveryHitPointsRate),
 	maxEnergyPoints(maxEnergyPoints),
-	energyPoints(energyPoints),
+	energyPoints(maxEnergyPoints),
 	recoveryEnergyRate(recoveryEnergyRate),
 
 	attackDamage(attackDamage),
@@ -88,7 +88,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
 	feelingSecure(0),
-	skill1Cost(20),
 
 	expToLevelUp(100),
 	heroXP(0),
@@ -187,7 +186,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 	damageTakenTimer(0.f),
 	feelingSecure(0),
-	skill1Cost(40),
 
 	expToLevelUp(100),
 	heroXP(0),
@@ -1463,15 +1461,15 @@ bool Hero::DrawVfx(float dt)
 }
 
 
-Skill::Skill() : id(SKILL_ID::NO_TYPE), dmg(-1), coolDown(-1.f), rangeRadius(-1), attackRadius(-1), hurtYourself(false), type(SKILL_TYPE::NO_TYPE), target(ENTITY_ALIGNEMENT::UNKNOWN), effect(SKILL_EFFECT::NO_EFFECT), executionTime(-1.f)
+Skill::Skill() : id(SKILL_ID::NO_TYPE), dmg(-1), coolDown(-1.f), rangeRadius(-1), attackRadius(-1), hurtYourself(false), type(SKILL_TYPE::NO_TYPE), target(ENTITY_ALIGNEMENT::UNKNOWN), effect(SKILL_EFFECT::NO_EFFECT), executionTime(-1.f), lvl(-1), energyCost(-1)
 {
 }
 
-Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, SKILL_EFFECT effect) :
-	id(id), dmg(dmg), coolDown(cooldown), rangeRadius(rangeRadius), attackRadius(attackRadius), hurtYourself(hurtYourself), type(type), target(target), effect(effect), executionTime(executionTime)
+Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect) :
+	id(id), dmg(dmg), coolDown(cooldown), rangeRadius(rangeRadius), attackRadius(attackRadius), hurtYourself(hurtYourself), type(type), target(target), effect(effect), executionTime(executionTime), lvl(lvl), energyCost(energyCost)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime), lvl(skill1.lvl) , energyCost(skill1.energyCost)
 {}
 
 Skill Skill::operator=(Skill& newSkill)
@@ -1644,13 +1642,18 @@ void Hero::SetAttackRange(int atkRange)
 
 int Hero::GetSkill1Cost() const
 {
-	return skill1Cost;
+	return skill1.energyCost;
 }
 
 
 void Hero::SetSkill1Cost(int skillCost)
 {
-	skill1Cost = skillCost;
+	skill1.energyCost = skillCost;
+}
+
+Skill Hero::GetSkill1() const
+{
+	return skill1;
 }
 
 
@@ -1668,13 +1671,13 @@ void Hero::SetAttackSpeed(float atkSpeed)
 
 float Hero::GetSkill1RecoverTime() const
 {
-	return skill1RecoverTime;
+	return skill1.coolDown;
 }
 
 
 void Hero::SetSkill1RecoverTime(float skillRecoverTime)
 {
-	skill1RecoverTime = skillRecoverTime;
+	skill1RecoverTime = skill1.coolDown;;
 }
 
 
@@ -1744,8 +1747,11 @@ void Hero::SetVisionInPx(float visPx)
 }
 
 
-DeadHero::DeadHero(int level, ENTITY_TYPE type) : level(level), heroType(type)
-{}
+DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill): level(level), heroType(type)
+{
+	skillLevel= skill.lvl;
+	skillId = skill.id;
+}
 
 
 DeadHero::~DeadHero()
@@ -1761,6 +1767,12 @@ ENTITY_TYPE DeadHero::GetType() const
 int DeadHero::GetLevel() const
 {
 	return level;
+}
+
+void DeadHero::GetSkillInfo(SKILL_ID& id, int& newskillLevel) const
+{
+	id = skillId;
+	newskillLevel = skillLevel;
 }
 
 

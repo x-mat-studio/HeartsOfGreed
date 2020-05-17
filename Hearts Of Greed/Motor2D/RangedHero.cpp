@@ -10,14 +10,14 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, 
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
+	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
 	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
 
 	Hero(position, ENTITY_TYPE::HERO_RANGED, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
+		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, recoveryEnergyRate,
 		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1, hpLevelUp, damageLevelUp, energyLevelUp, atkSpeedLevelUp),
 
 	skill1Area(nullptr),
@@ -105,7 +105,7 @@ bool RangedHero::ExecuteSkill1()
 		if (!skillExecutionDelay)
 		{
 			if (!godMode)
-				energyPoints -= skill1Cost;
+				energyPoints -= skill1.energyCost;
 
 
 			skillExecutionDelay = true;

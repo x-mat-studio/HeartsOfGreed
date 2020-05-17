@@ -64,7 +64,7 @@ enum HERO_INPUTS
 struct Skill
 {
 	Skill();
-	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime,  SKILL_TYPE type, ENTITY_ALIGNEMENT target, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
+	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime,  SKILL_TYPE type, ENTITY_ALIGNEMENT target , int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
 	Skill(const Skill& skill1);
 
 	Skill operator= (Skill& newSkill);
@@ -74,6 +74,7 @@ struct Skill
 	int dmg;
 	int coolDown;
 	float executionTime;
+	int energyCost;
 
 	int rangeRadius;
 	int attackRadius;
@@ -93,16 +94,18 @@ struct skillArea;
 class DeadHero
 {
 public:
-	DeadHero(int level, ENTITY_TYPE type);
+	DeadHero(int level, ENTITY_TYPE type,Skill skill);
 	~DeadHero();
 
 	ENTITY_TYPE GetType()const;
 	int GetLevel()const;
+	void GetSkillInfo(SKILL_ID& id, int& skillLevel)const;
 
 private:
 	ENTITY_TYPE heroType;
 	int level;
-	//skills?
+	SKILL_ID skillId;
+	int skillLevel;
 
 
 };
@@ -118,7 +121,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
+		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
 		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision,
 		Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp);
 
@@ -243,6 +246,8 @@ public:
 	float GetVisionInPx() const;
 	void SetVisionInPx(float visPx);
 
+	Skill GetSkill1() const;
+
 	int GetHeroSkillPoints();
 	void AddHeroSkillPoints(int n);
 
@@ -306,7 +311,6 @@ protected:
 
 	bool gettingAttacked;
 
-	int skill1Cost;
 
 	float attackSpeed;
 	float skill1RecoverTime;

@@ -52,6 +52,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	combatFemaleTexture(nullptr),
 	buildingTexture(nullptr),
 	base1Texture(nullptr),
+	snowball(nullptr),
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
 	enemyTexture(nullptr),
@@ -80,6 +81,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	enemyGigaTexture(nullptr),
 	enemyRangedTexture(nullptr),
 	sampleEmitter(nullptr),
+	sampleEmitter2(nullptr),
+	sampleEmitter3(nullptr),
 	sampleParticleSystem(nullptr),
 	deadGatherer(nullptr),
 	deadMelee(nullptr),
@@ -285,38 +288,42 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 
 	//Textures load-----
-	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
-	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
-	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
-	roboTexture = app->tex->Load("spritesheets/characters/robotto.png");
+	
+	
+	//HEROES------
+	suitManTexture				= app->tex->Load("spritesheets/characters/suitmale.png");
+	armorMaleTexture			= app->tex->Load("spritesheets/characters/armormale.png");
+	combatFemaleTexture			= app->tex->Load("spritesheets/characters/combatfemale.png");
+	roboTexture					= app->tex->Load("spritesheets/characters/robotto.png");
 
-	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
-	enemyRangedTexture = app->tex->Load("spritesheets/Enemies/Snipermingo.png");
-	enemyGigaTexture = app->tex->Load("spritesheets/Enemies/Gigamingo.png");
-	enemyNightTexture = app->tex->Load("spritesheets/Enemies/Speedomingo.png");
+	//ENEMIES--------
+	enemyTexture				= app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
+	enemyRangedTexture			= app->tex->Load("spritesheets/Enemies/Snipermingo.png");
+	enemyGigaTexture			= app->tex->Load("spritesheets/Enemies/Gigamingo.png");
+	enemyNightTexture			= app->tex->Load("spritesheets/Enemies/Speedomingo.png");
 
-	buildingTexture = app->tex->Load("maps/base03.png");
-	base1Texture = app->tex->Load("maps/base01.png");
-	base2Texture = app->tex->Load("maps/base02.png");
-	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
-	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
-	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+	//BUILDINGS--------
+	buildingTexture				= app->tex->Load("maps/base03.png");
+	base1Texture				= app->tex->Load("maps/base01.png");
+	base2Texture				= app->tex->Load("maps/base02.png");
+	base2TextureSelected		= app->tex->Load("maps/base02_selected.png");
+	base2TextureEnemy			= app->tex->Load("maps/base02_enemy.png");
+	base2TextureSelectedEnemy	= app->tex->Load("maps/base02_enemy_selected.png");
+	turretTexture				= app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
-	deco3Selected = app->tex->Load("maps/base03_selected.png");
+	//SELECTIONS & FEEDBACK---------
+	deco3Selected				= app->tex->Load("maps/base03_selected.png");
+	selectedTexture				= app->tex->Load("spritesheets/VFX/selected.png");
+	targetedTexture				= app->tex->Load("spritesheets/VFX/target.png");
+	explosionTexture			= app->tex->Load("spritesheets/VFX/explosion.png");
+	moveCommandTileRng			= app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
+	moveCommandTileGath			= app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
+	moveCommandTileMelee		= app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
+	debugPathTexture			= app->tex->Load("maps/path.png");
 
-	selectedTexture = app->tex->Load("spritesheets/VFX/selected.png");
-	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
+	
 
-	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
-
-	moveCommandTileRng = app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
-	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
-	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
-
-
-	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
-
-	debugPathTexture = app->tex->Load("maps/path.png");
+	
 
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
@@ -363,62 +370,68 @@ bool ModuleEntityManager::Start()
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
-
 	sampleTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
-	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
-	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
-	wanamingoGetsHit = app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
-	wanamingoDies = app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
-	wanamingoDies2 = app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
+	wanamingoRoar		= app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
+	wanamingoRoar2		= app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
+	wanamingoGetsHit	= app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
+	wanamingoDies		= app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
+	wanamingoDies2		= app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
 
 	//Suitman sfx-----
-	suitmanGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetHit.wav");
-	suitmanGetsHit2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
-	suitmanGetsDeath = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
-	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
-	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
-	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
+	suitmanGetsHit		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetHit.wav");
+	suitmanGetsHit2		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
+	suitmanGetsDeath	= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
+	suitmanGetsDeath2	= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
+	suitman1Skill		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
+	suitman1Skill2		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
 
-	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
-	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
-	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
-	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+	noise1Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
+	noise2Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
+	noise3Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
+	noise4Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
 
 	//Buildings sfx--------
-	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
-	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
-	turretShooting = app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
+	buildingGetsHit		= app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
+	buildingGetsHit2	= app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
+	turretShooting		= app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
 
 	//Armored sfx--------
-	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
-	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
-	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
-	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
-
-	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
+	noise1Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
+	noise2Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
+	noise3Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
+	noise4Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
+	armored1Skill2		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
 
 	//Ranged sfx--------
-	noise1Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise1.wav");
-	noise2Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise2.wav");
-	noise3Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise3.wav");
-	noise4Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise4.wav");
+	noise1Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise1.wav");
+	noise2Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise2.wav");
+	noise3Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise3.wav");
+	noise4Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise4.wav");
 
-	rangedGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
-	rangedDies = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
+	rangedGetsHit		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
+	rangedDies			= app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
 
-	ranged1Skill = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
-	ranged1Skil2 = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
+	ranged1Skill		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
+	ranged1Skil2		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
 
 
 
 	//General hero sfx--------
-	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
-	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
-	moveHero = app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
+	lvlup				= app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
+	selectHero			= app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
+	moveHero			= app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
 
-	//Load textures of the emmiters and push them to their particle systems
+
+	//Emitters and particles systems------------
+
+	snowball = app->tex->Load("spritesheets/Particles/snowball.png");
+
+	sampleEmitter->SetTextureNStart(snowball);  sampleParticleSystem->PushEmiter(*sampleEmitter);
+	sampleEmitter2->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter2);
+	sampleEmitter3->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter3);
+
 
 	return ret;
 }
@@ -634,55 +647,9 @@ bool ModuleEntityManager::PostUpdate(float dt)
 bool ModuleEntityManager::CleanUp()
 {
 	LOG("Entity Manager Clean Up");
+
 	DeleteAllEntities();
 	DeleteAllDeadHeroes();
-
-
-	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
-	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
-	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
-	app->tex->UnLoad(roboTexture);					roboTexture = nullptr;
-	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
-
-	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
-	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
-	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
-	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
-	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
-	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
-
-	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
-
-	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
-
-	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
-
-	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
-	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
-	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
-
-	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
-	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
-	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
-
-	app->tex->UnLoad(enemyNightTexture);			enemyNightTexture = nullptr;
-	app->tex->UnLoad(enemyGigaTexture);				enemyGigaTexture = nullptr;
-	app->tex->UnLoad(enemyRangedTexture);			enemyRangedTexture = nullptr;
-
-	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
-	RELEASE(sampleMelee);							sampleMelee = nullptr;
-
-	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
-	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
-
-	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
-	RELEASE(sampleBase);							sampleBase = nullptr;
-	RELEASE(sampleTurret);							sampleTurret = nullptr;
-
-	RELEASE(sampleEnemyNight);						sampleEnemyNight = nullptr;
-	RELEASE(sampleEnemyGiga);						sampleEnemyGiga = nullptr;
-	RELEASE(sampleEnemyRanged);						sampleEnemyRanged = nullptr;
-
 
 	for (std::map<int, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
@@ -691,12 +658,76 @@ bool ModuleEntityManager::CleanUp()
 
 	}
 	skillAreas.clear();
-
 	renderVector.clear();
 	movableEntityVector.clear();
 	buildingVector.clear();
 	selectedVector.clear();
 
+
+	//Heros-----
+	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
+	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
+	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
+	app->tex->UnLoad(roboTexture);					roboTexture = nullptr;
+	
+	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
+	RELEASE(sampleMelee);							sampleMelee = nullptr;
+	RELEASE(sampleRanged);							sampleRanged = nullptr;
+	RELEASE(sampleRobo);							sampleRobo = nullptr;
+	
+	//Enemies-------
+	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
+	app->tex->UnLoad(enemyNightTexture);			enemyNightTexture = nullptr;
+	app->tex->UnLoad(enemyGigaTexture);				enemyGigaTexture = nullptr;
+	app->tex->UnLoad(enemyRangedTexture);			enemyRangedTexture = nullptr;
+
+	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
+	RELEASE(sampleEnemyNight);						sampleEnemyNight = nullptr;
+	RELEASE(sampleEnemyGiga);						sampleEnemyGiga = nullptr;
+	RELEASE(sampleEnemyRanged);						sampleEnemyRanged = nullptr;
+
+	//Spawners----------
+	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
+
+	//Buildings----------
+	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
+	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
+
+	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
+	RELEASE(sampleBase);							sampleBase = nullptr;
+	RELEASE(sampleTurret);							sampleTurret = nullptr;
+
+	//Feedback------------
+	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
+	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
+	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
+	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
+	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
+	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
+	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
+	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
+	
+	//Particles---------
+	app->tex->UnLoad(snowball);						snowball = nullptr;
+
+	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
+	RELEASE(sampleEmitter2);						sampleEmitter2 = nullptr;
+	RELEASE(sampleEmitter3);						sampleEmitter3 = nullptr;
+	RELEASE(sampleParticleSystem);					sampleParticleSystem = nullptr;
+
+	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
+	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
+
+	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
+	RELEASE(sampleBase);							sampleBase = nullptr;
+	RELEASE(sampleTurret);							sampleTurret = nullptr;
+
+	//Events-----------
 	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
 
@@ -873,13 +904,19 @@ Entity* ModuleEntityManager::AddDecorativeBuilding(BUILDING_DECOR decor, int x, 
 Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y)
 {
 	Entity* ret = nullptr;
-
+	
 	switch (type)
 	{
+	case TYPE_PARTICLE_SYSTEM::MAX:
+		ret = new ParticleSystem(x,y,sampleParticleSystem,true);
+		break;
 
+	case TYPE_PARTICLE_SYSTEM::NONE:
+		LOG(" Tried to add particle system, no type was found");
+		break;
 
 	default:
-		ret = new ParticleSystem();
+		
 		break;
 	}
 
@@ -1130,7 +1167,45 @@ DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
 	}
 
 
-	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType());
+	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType(),dyingHero.GetSkill1());
+
+	return *refhero;
+}
+
+DeadHero* ModuleEntityManager::AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill)
+{
+
+	DeadHero** refhero;
+
+	//assinging the correct dead hero variable to refhero to make it easy to work with
+	switch (type)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+
+	default:
+		return nullptr;
+	}
+
+	//deletes information about any hero stored in that variable
+	if (*refhero != nullptr)
+	{
+		delete* refhero;
+		*refhero = nullptr;
+	}
+
+
+	*refhero = new DeadHero(level, type, skill);
 
 	return *refhero;
 }
@@ -1224,7 +1299,54 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
 
 		statsnode.append_attribute("level") = refhero->GetLevel();
+		statsnode.append_attribute("type") = (int)heroType;
+		SKILL_ID skillId;
+		int skillLevel;
+		refhero->GetSkillInfo(skillId,skillLevel);
+		statsnode.append_attribute("skillId") = (int)skillId;
+		statsnode.append_attribute("skillLvl") = skillLevel;
+
 	}
+
+}
+
+void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)
+{
+	/*DeadHero** refhero = nullptr;
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+	}
+
+	if (*refhero != nullptr)
+	{
+		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
+
+		statsnode.attribute("level");
+		statsnode.attribute("type");
+		SKILL_ID skillId;
+		int skillLevel;
+
+
+		statsnode.attribute("skillId") = (int)skillId;
+		statsnode.attribute("skillLvl") = skillLevel;
+
+		*refhero= AssignNewDeadHero()
+	}*/
+
+	//Work in progress
 
 }
 
@@ -2304,6 +2426,7 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 					skillToFill.hurtYourself = iterator2.attribute("hurtYourself").as_bool(false);
 					skillToFill.lvl = currLvl;
 					skillToFill.rangeRadius = iterator2.attribute("rangeRadius").as_int(-1);
+					skillToFill.energyCost = iterator2.attribute("energyCost").as_int(-1);;
 
 					if (requestLvl == 1)
 					{
@@ -2510,7 +2633,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			level, maxHP, maxHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
@@ -2524,7 +2647,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			1, maxHP, maxHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
@@ -2538,7 +2661,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			1, maxHP, maxHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
@@ -2556,7 +2679,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			level, maxHP, currentHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, heroSkill, vfxExplosion,  lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
@@ -2836,8 +2959,42 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 {
 	bool ret = true;
 
+
+	//DATA--------------
+
+	Animation anim1;
+	anim1.PushBack(SDL_Rect{ 0, 0, 10, 10 }, 1, 0, 0);
+
+	Animation anim2;
+	anim2.PushBack(SDL_Rect{ 0, 12, 6, 6 }, 1, 0, 0);
+
+	Animation anim3;
+	anim3.PushBack(SDL_Rect{ 7, 11, 8, 8 }, 1, 0, 0);
+
+	float auxPosX = 0;							float auxPos2X = 0;							float auxPos3X = 0;
+	float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;
+	float auxSpeedX = 0;						float auxSpeed2X = 0;						float auxSpeed3X = 0;
+	float auxSpeedY = 4;						float auxSpeedY2 = 5;						float auxSpeedY3 = 6;
+	int particleVariationSpeedX = 0;			int particleVariationSpeedX2 = 0;			int particleVariationSpeedX3 = 0;
+	int particleVariationSpeedY = 2;			int particleVariationSpeedY2 = 2;			int particleVariationSpeedY3 = 2;
+	float particleAccelerationX = 0.2;			float particleAccelerationX2 = 0.2;			float particleAccelerationX3 = 0.2;
+	float particleAccelerationY = -1;			float particleAccelerationY2 = -1;			float particleAccelerationY3 = -1;
+	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX2 = 1;	int particleVariationAccelerationX3 = 1;
+	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0;
+	float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
+	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed2 = 1;		int particleVariableAngularSpeed3 = 1;
+	float particlesRate = 13;					float particlesRate2 = 13;					float particlesRate3 = 16;
+	float particlesLifeTime = 2;				float particlesLifeTime2 = 2;				float particlesLifeTime3 = 2;
+
+
+	//SAMPLES--------------
+
 	sampleParticleSystem = new ParticleSystem();
-	//Code to fill
+
+	sampleEmitter = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
+	sampleEmitter2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, nullptr, nullptr, anim2, true);
+	sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+
 
 	return ret;
 }
@@ -3143,6 +3300,29 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			}
 
 		}
+	}
+
+
+	//deathEntitesSaving
+	pugi::xml_node deadEntities = data.child("deadEntities");
+
+	DeleteAllDeadHeroes();
+
+	if (deadEntities.child("deadGatherer")!=NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
+	}
+	if (deadEntities.child("deadRanged") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadRanged"), ENTITY_TYPE::HERO_RANGED);
+	}
+	if (deadEntities.child("deadMelee") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadMelee"), ENTITY_TYPE::HERO_MELEE);
+	}
+	if (deadEntities.child("deadRobo") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadRobo"), ENTITY_TYPE::HERO_ROBO);
 	}
 
 	return true;
