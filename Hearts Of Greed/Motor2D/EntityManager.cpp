@@ -1167,7 +1167,7 @@ DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
 	}
 
 
-	*refhero = new DeadHero(dyingHero.GetLevel(), dyingHero.GetType(),dyingHero.GetSkill1());
+	*refhero = new DeadHero(dyingHero.GetHeroLevel(), dyingHero.GetType(),dyingHero.GetSkill1());
 
 	return *refhero;
 }
@@ -1312,7 +1312,7 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 
 void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)
 {
-	/*DeadHero** refhero = nullptr;
+	DeadHero** refhero = nullptr;
 
 	switch (heroType)
 	{
@@ -1330,21 +1330,24 @@ void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 		break;
 	}
 
-	if (*refhero != nullptr)
-	{
-		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
+	
+		pugi::xml_node statsnode = deadHeroesNode.child("stats");
 
-		statsnode.attribute("level");
-		statsnode.attribute("type");
+		int level= statsnode.attribute("level").as_int(-1);
+		ENTITY_TYPE type= (ENTITY_TYPE)statsnode.attribute("type").as_int(-1);
 		SKILL_ID skillId;
 		int skillLevel;
+		
 
+		skillId = (SKILL_ID)statsnode.attribute("skillId").as_int(-1);
+		skillLevel = statsnode.attribute("skillLvl").as_int(-1);
+		
+		Skill skill;
+		skill.id = skillId;
+		skill.lvl = skillLevel;
 
-		statsnode.attribute("skillId") = (int)skillId;
-		statsnode.attribute("skillLvl") = skillLevel;
-
-		*refhero= AssignNewDeadHero()
-	}*/
+		*refhero = AssignNewDeadHero(level, type, skill);
+	
 
 	//Work in progress
 

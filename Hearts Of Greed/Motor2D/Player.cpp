@@ -100,6 +100,10 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
+	resources = 0;
+	resourcesSkill = 0;
+	resourcesBoost = 0;
+
 	return true;
 }
 
