@@ -633,6 +633,7 @@ void Hero::Die()
 		visionEntity->deleteEntity = true;
 		visionEntity = nullptr;
 	}
+	app->entityManager->AssignNewDeadHero(*this);
 }
 
 
