@@ -29,7 +29,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
-App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0)
+App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gamePause(false)
 {
 	PERF_START(pTimer);
 	

@@ -2114,7 +2114,6 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 				if (distance < thisUnit->moveRange2)
 				{
 					colliding_entity_list->push_back(it);
-
 				}
 				if (distance < thisUnit->moveRange1)
 				{
@@ -2695,7 +2694,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
+			level, maxHP, currentHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
 			movSpd, visTiles, heroSkill, vfxExplosion, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
