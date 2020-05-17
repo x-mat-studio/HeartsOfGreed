@@ -136,7 +136,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	robottoEnergyUpgradeValue(1),
 	robottoAtkSpeedUpgradeValue(1),
 
-	upgradeValue(1.1f)
+	upgradeValue(1.1f),
+	skillFileName()
 
 {
 	name.create("entityManager");
@@ -154,6 +155,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	BROFILER_CATEGORY("Entity Manager Awake", Profiler::Color::DarkCyan);
 
 	bool ret = true;
+
+	// Skills filename-----
+	skillFileName = config.child("load").attribute("docnameSkillAreas").as_string();
 
 	// Sample Hero Gatherer---------------------
 
@@ -268,6 +272,8 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	LoadSkillAreas(skillAreasNode);
 	skillAreassdoc.reset();
+
+
 
 	return ret;
 }
@@ -678,7 +684,7 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleEnemyRanged);						sampleEnemyRanged = nullptr;
 
 
-	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
+	for (std::map<int, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
 		delete it->second.area;
 		it->second.area = nullptr;
@@ -2183,31 +2189,6 @@ void ModuleEntityManager::KillAllEnemies()
 }
 
 
-bool ModuleEntityManager::BuildArea(skillArea* areaToGenerate, int width, int height, int radius)
-{
-	switch (areaToGenerate->form)
-	{
-	case AREA_TYPE::CIRCLE:
-	{
-		areaToGenerate->area = BuildCircleArea(radius);
-		areaToGenerate->radius = radius;
-		return true;
-	}
-	break;
-	case AREA_TYPE::QUAD:
-	{
-		areaToGenerate->area = BuildQuadArea(width, height);
-		areaToGenerate->width = width;
-		areaToGenerate->heigth = height;
-		return true;
-	}
-	break;
-	}
-
-	return false;
-}
-
-
 unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 {
 	unsigned short* circle = nullptr;
@@ -2235,83 +2216,125 @@ unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 }
 
 
-unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
-{
-	unsigned short* quad = nullptr;
-
-	quad = new unsigned short[w * h];
-
-	for (int y = 0; y < h; y++)
-	{
-		for (int x = 0; x < w; x++)
-		{
-			quad[y + x] = 1;
-		}
-	}
-
-	return quad;
-}
-
-
-skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPoint>* toFill, iMPoint center)
+skillArea* ModuleEntityManager::GenerateNewArea(int radius)
 {
 	skillArea* ret = nullptr;
-	std::unordered_map<SKILL_ID, skillArea> ::iterator it;
+	std::map<int, skillArea> ::iterator it;
 
-	for (it = skillAreas.begin(); it != skillAreas.end(); it++)
+	if (skillAreas.count(radius) > 0)
 	{
-		if (it->first == callback)
-		{
-			ret = &it->second;
-			break;
-		}
+		skillAreas.at(radius).users++;
+	}
+	else
+	{
+		skillArea newArea;
+
+		newArea.area = BuildCircleArea(radius);
+		newArea.users = 1;
+
+		skillAreas.insert({ radius, newArea });
+
 	}
 
-	if (it == skillAreas.end())
-		return ret;
-
-	center = app->map->WorldToMap(round(center.x), round(center.y));
-	GenerateDynArea(toFill, ret, center);
-
-	return ret;
+	return &skillAreas.at(radius);
 }
 
-
-void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center)
+skillArea* ModuleEntityManager::RequestAreaInfo(int radius)
 {
-	switch (area->form)
+	if (skillAreas.count(radius) == 0)
 	{
-	case AREA_TYPE::CIRCLE:
-	{
-		int diameter = (area->radius * 2) + 1;
-		iMPoint posCheck = center - area->radius;
-		toFill->clear();
+		GenerateNewArea(radius);
+	}
+	return &skillAreas.at(radius);
 
+}
+
+void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int radius, iMPoint center, skillArea* skillArea)
+{
+
+	center = app->map->WorldToMap(round(center.x), round(center.y));
+	toFill->clear();
+
+	int diameter = (radius * 2) + 1;
+	iMPoint posCheck = center - radius;
+
+	if (skillArea == nullptr)
+	{
+		skillArea = RequestAreaInfo(radius);
+	}
+
+	if (skillArea != nullptr)
 		for (int y = 0; y < diameter; y++)
 		{
 			for (int x = 0; x < diameter; x++)
 			{
-				if (area->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
+				if (skillArea->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
 				{
 					toFill->push_back(posCheck + iMPoint{ x, y });
 				}
 			}
 		}
+
+}
+
+bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requestLvl)
+{
+	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
+	
+	pugi::xml_document skillDoc;
+	skillDoc.load_file(skillFileName.GetString());
+	pugi::xml_node skills = skillDoc.child("skills");
+
+	bool toRet(false);
+	int currLvl = 1;
+
+	for (pugi::xml_node iterator = skills.first_child(); iterator; iterator = iterator.next_sibling())
+	{
+		if (iterator.attribute("id").as_int(-1) == (int)id)
+		{
+			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2; iterator2 = iterator.next_sibling())
+			{
+				if (currLvl == requestLvl)
+				{
+					skillToFill.attackRadius = iterator2.attribute("attackRadius").as_int(-1);
+					skillToFill.coolDown = iterator2.attribute("cooldown").as_float(-1.f);
+					skillToFill.dmg = iterator2.attribute("dmg").as_int(-1);
+					skillToFill.effect = (SKILL_EFFECT)iterator2.attribute("effect").as_int(-1);
+					skillToFill.executionTime = iterator2.attribute("executionTime").as_float(-1.f);
+					skillToFill.hurtYourself = iterator2.attribute("hurtYourself").as_bool(false);
+					skillToFill.lvl = currLvl;
+					skillToFill.rangeRadius = iterator2.attribute("rangeRadius").as_int(-1);
+
+					if (requestLvl == 1)
+					{
+						skillToFill.type = (SKILL_TYPE)iterator.attribute("type").as_int(-1);
+						skillToFill.target = (ENTITY_ALIGNEMENT)iterator.attribute("alignTarget").as_int(-1);
+						skillToFill.id = (SKILL_ID)iterator.attribute("id").as_int();
+					}
+
+					toRet = true;
+					break;
+				}
+
+				currLvl++;
+			}
+
+			break;
+		}
+
 	}
-	break;
-	case AREA_TYPE::QUAD:
-	{}
-	break;
-	}
+
+	skillDoc.reset();
+
+	return toRet;
 }
 
 
-int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
-	SKILL_TYPE type, bool hurtYourself, Entity* objective, SKILL_EFFECT effect)
+int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objective)
 {
 	int ret = -1;
 
-	switch (type)
+	switch (skill.type)
 	{
 	case SKILL_TYPE::SINGLE_TARGET:
 	{}
@@ -2323,13 +2346,13 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 		Collider* entColl = nullptr;
 		float halfH = app->map->data.tileHeight * 0.5;
 		float halfW = app->map->data.tileWidth * 0.5;
-		float newRad = sqrt(halfW * halfW + halfH * halfH) * area->radius + 0.5f * area->radius;
+		float newRad = sqrt(halfW * halfW + halfH * halfH) * skill.attackRadius + 0.5f * skill.attackRadius;
 
 		for (int i = 0; i < numEntities; i++)
 		{
-			if (entityVector[i]->GetAlignment() != target)
+			if (entityVector[i]->GetAlignment() != skill.target)
 			{
-				if (!hurtYourself || entityVector[i] != objective)
+				if (!skill.hurtYourself || entityVector[i] != objective)
 				{
 					continue;
 				}
@@ -2340,31 +2363,22 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 			if (entColl == nullptr)
 				continue;
 
-			switch (area->form)
+
+			if (entColl->CheckCollisionCircle(pivot, newRad))
 			{
-			case AREA_TYPE::CIRCLE:
-			{
-				if (entColl->CheckCollisionCircle(pivot, newRad))
+				ret += entityVector[i]->RecieveDamage(skill.dmg);
+
+				if (skill.effect != SKILL_EFFECT::NO_EFFECT)
 				{
-					ret += entityVector[i]->RecieveDamage(dmg);
 
-					if (effect != SKILL_EFFECT::SLOWDOWN)
-					{
-
-					}
 				}
 			}
-			break;
-			case AREA_TYPE::QUAD:
-			{}
-			break;
 
-			}
 		}
 	}
-	break;
-	}
+
 	return ret;
+	}
 }
 
 
@@ -2427,13 +2441,12 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	int attackSpeedLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("atkSpeed").as_int(0);
 
 	//skill1
-	float skill1ExecTime = heroNode.child("sample").child("skills").child("skill1").attribute("executionTime").as_float(0);
-	float skill1RecovTime = heroNode.child("sample").child("skills").child("skill1").attribute("recoverTime").as_float(0);
-	int skill1Dmg = heroNode.child("sample").child("skills").child("skill1").attribute("damage").as_int(0);
+
 	SKILL_ID skill1ID = (SKILL_ID)heroNode.child("sample").child("skills").child("skill1").attribute("id").as_int(0);
-	SKILL_TYPE skill1Type = (SKILL_TYPE)heroNode.child("sample").child("skills").child("skill1").attribute("type").as_int(0);
-	ENTITY_ALIGNEMENT skill1Target = (ENTITY_ALIGNEMENT)heroNode.child("sample").child("skills").child("skill1").attribute("targetAligment").as_int(0);
-	SKILL_EFFECT skill1Effect = (SKILL_EFFECT)heroNode.child("sample").child("skills").child("skill1").attribute("effect").as_int(-1);
+
+	Skill heroSkill;
+
+	RequestSkill(heroSkill, skill1ID, 1);
 
 	//skill2
 	float skill2ExecTime = heroNode.child("sample").child("skills").child("skill2").attribute("executionTime").as_float(0);
@@ -2498,8 +2511,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2513,8 +2525,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2528,8 +2539,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2547,8 +2557,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion, skill1Effect, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			movSpd, visTiles, heroSkill, vfxExplosion,  lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
@@ -2840,21 +2849,13 @@ bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
 	bool ret = true;
 
 	skillArea area;
-	SKILL_ID id;
-	int w;
-	int h;
 	int r;
 
 	for (pugi::xml_node currentArea = areasNode.child("area"); currentArea; currentArea = currentArea.next_sibling("area"))
 	{
-		area.form = (AREA_TYPE)currentArea.attribute("type").as_int(0);
-		w = currentArea.child("measures").attribute("w").as_int(0);
-		h = currentArea.child("measures").attribute("h").as_int(0);
 		r = currentArea.child("measures").attribute("r").as_int(0);
-		id = (SKILL_ID)currentArea.attribute("id").as_int(0);
 
-		BuildArea(&area, w, h, r);
-		skillAreas.insert({ id, area });
+		GenerateNewArea(r);
 	}
 
 	return ret;
