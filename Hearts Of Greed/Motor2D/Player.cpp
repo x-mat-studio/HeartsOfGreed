@@ -671,7 +671,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
-		resourcesBoost+= 3;
+		resourcesBoost+= 300;
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
