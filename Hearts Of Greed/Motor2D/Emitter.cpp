@@ -43,7 +43,7 @@ Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVar
 	timeSinceStopped(0)
 
 {
-	Start();
+	//Start();
 }
 
 
@@ -85,7 +85,7 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 	timeSinceStopped(0)
 
 {
-	Start();
+	//Start();
 }
 
 
@@ -375,7 +375,8 @@ void Emitter::SetPosition(int x, int y)
 }
 
 
-void Emitter::SetTexture(SDL_Texture* tex)
+void Emitter::SetTextureNStart(SDL_Texture* tex)
 {
 	particleTexture = tex;
+	Start();
 }

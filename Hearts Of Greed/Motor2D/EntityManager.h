@@ -315,6 +315,9 @@ private:
 
 	ParticleSystem* sampleParticleSystem;
 	Emitter* sampleEmitter;
+	Emitter* sampleEmitter2;
+	Emitter* sampleEmitter3;
+	SDL_Texture* snowball;
 
 	std::unordered_map <SKILL_ID, skillArea> skillAreas;
 
