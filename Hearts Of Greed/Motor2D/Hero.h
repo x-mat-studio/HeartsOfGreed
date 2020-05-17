@@ -196,6 +196,7 @@ public:
 
 	int GetEnergyPoints() const;
 	void SetEnergyPoints(int energyPoints);
+	void AddEnergyPoints(int engPoints);
 
 	int GetMaxEnergyPoints() const;
 	void SetMaxEnergyPoints(int maxEnergyPoints);

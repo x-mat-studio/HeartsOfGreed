@@ -1556,6 +1556,12 @@ void Hero::SetEnergyPoints(int engPoints)
 }
 
 
+void Hero::AddEnergyPoints(int engPoints)
+{
+	energyPoints += engPoints;
+}
+
+
 int Hero::GetMaxEnergyPoints() const
 {
 	return maxEnergyPoints;
