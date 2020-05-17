@@ -165,6 +165,7 @@ void RangedHero::LevelUp()
 	unitSpeed;
 	visionDistance;
 
+	heroSkillPoints++;
 }
 
 

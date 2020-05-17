@@ -29,7 +29,9 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	range(0),
 	resources(0),
 	vision(0),
-	xpToNextLevel(0)
+	xpToNextLevel(0),
+	heroSkillPoints(0),
+	skillResource(0)
 {
 	originalBarsWidth = factory->GetHealthBarBackground().w;
 }
@@ -244,9 +246,15 @@ void DataPages::CheckHeroesValues()
 						{
 							if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
 							{
-								AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-								AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
-								check = true;
+								if (CheckData(heroSkillPoints, focus->GetHeroSkillPoints()))
+								{
+									if (CheckData(skillResource, app->player->GetResourcesSkill()))
+									{
+										AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+										AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
+										check = true;
+									}
+								}
 							}
 						}
 					}
@@ -374,7 +382,9 @@ void DataPages::GetHeroValue()
 	hpRecovery = focus->GetRecoveryHitPointsRate();
 	xpToNextLevel = focus->GetExpToLevelUp();
 	lifeMax = focus->GetMaxHP();
-	energyMax = focus->GetMaxEnergyPoints();;
+	energyMax = focus->GetMaxEnergyPoints();
+	heroSkillPoints = focus->GetHeroSkillPoints();
+	skillResource = app->player->GetResourcesSkill();
 
 	GetHealthBarValues();
 }
@@ -458,6 +468,8 @@ void DataPages::DeleteCurrentData()
 	vision = -1;
 	hpRecovery = -1;
 	xpToNextLevel = -1;
+	heroSkillPoints = -1;
+	skillResource = -1;
 	alignment = ENTITY_ALIGNEMENT::UNKNOWN;
 
 	healthRect = nullptr;

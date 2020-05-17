@@ -113,7 +113,8 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	hpLevelUpConstant(hpLevelUp),
 	damageLevelUpConstant(damageLevelUp),
 	energyLevelUpConstant(energyLevelUp),
-	attackSpeedLevelUpConstant(atkSpeedLevelUp)
+	attackSpeedLevelUpConstant(atkSpeedLevelUp),
+	heroSkillPoints(0)
 
 {
 	currentAnimation = &walkLeft;
@@ -210,6 +211,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	damageLevelUpConstant(copy->damageLevelUpConstant),
 	energyLevelUpConstant(copy->energyLevelUpConstant),
 	attackSpeedLevelUpConstant(copy->attackSpeedLevelUpConstant),
+	heroSkillPoints(0),
 
 	drawingVfx(false)
 {
@@ -607,7 +609,7 @@ void Hero::Attack()
 
 		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
 			app->player->AddResources(ret * 0.5f);
-			
+
 		}
 		true;
 	}
@@ -1471,7 +1473,7 @@ Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadi
 Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime), lvl(skill1.lvl) , energyCost(skill1.energyCost)
 {}
 
-Skill Skill::operator=(Skill & newSkill)
+Skill Skill::operator=(Skill& newSkill)
 {
 	this->attackRadius = newSkill.attackRadius;
 	this->coolDown = newSkill.coolDown;
@@ -1552,6 +1554,12 @@ int Hero::GetEnergyPoints() const
 void Hero::SetEnergyPoints(int engPoints)
 {
 	energyPoints = engPoints;
+}
+
+
+void Hero::AddEnergyPoints(int engPoints)
+{
+	energyPoints += engPoints;
 }
 
 
@@ -1756,10 +1764,12 @@ DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill): level(level), hero
 DeadHero::~DeadHero()
 {}
 
+
 ENTITY_TYPE DeadHero::GetType() const
 {
 	return heroType;
 }
+
 
 int DeadHero::GetLevel() const
 {
@@ -1770,4 +1780,22 @@ void DeadHero::GetSkillInfo(SKILL_ID& id, int& newskillLevel) const
 {
 	id = skillId;
 	newskillLevel = skillLevel;
+}
+
+
+int Hero::GetHeroSkillPoints()
+{
+	return heroSkillPoints;
+}
+
+
+void Hero::SetHeroSkillPoints(int n)
+{
+	heroSkillPoints = n;
+}
+
+
+void Hero::AddHeroSkillPoints(int n)
+{
+	heroSkillPoints += n;
 }

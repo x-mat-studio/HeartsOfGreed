@@ -16,7 +16,9 @@ ParticleSystem::ParticleSystem(float x, float y, ParticleSystem* copy, bool acti
 	emitterVector(copy->emitterVector),
 
 	active(active)
-{}
+{
+	Move(position.x, position.y);
+}
 
 ParticleSystem::~ParticleSystem()
 {
@@ -90,10 +92,8 @@ bool ParticleSystem::IsActive()
 //Move the particle system, and its emiters in relation to the particle system
 void ParticleSystem::Move(int x, int y)
 {
-	int previousX = position.x;
-	int previousY = position.y;
-
-	int xPos, yPos;
+	position.x = x;
+	position.y = y;
 
 	if (active)
 	{
@@ -101,15 +101,8 @@ void ParticleSystem::Move(int x, int y)
 
 		for (int i = 0; i < numEmiters; i++)
 		{
-			emitterVector[i].GetPosition(xPos, yPos);
-
-			xPos += x - previousX;
-			yPos += y - previousY;
-
-			emitterVector[i].SetPosition(xPos, yPos);
+			emitterVector[i].SetPosition(x, y);
 		}
 	}
 
-	position.x = x;
-	position.y = y;
 }

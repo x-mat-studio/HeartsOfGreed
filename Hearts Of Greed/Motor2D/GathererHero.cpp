@@ -186,6 +186,7 @@ void GathererHero::LevelUp()
 	unitSpeed += 6;
 	visionDistance;
 
+	heroSkillPoints++;
 }
 
 void GathererHero::PlayGenericNoise(int probability)

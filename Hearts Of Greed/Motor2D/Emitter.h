@@ -54,6 +54,7 @@ private:
 
 private:
 	fMPoint position;
+	fMPoint offSet;
 	fMPoint particleSpeed;
 	fMPoint particleAcceleration;
 

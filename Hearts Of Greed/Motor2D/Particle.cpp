@@ -162,6 +162,8 @@ void Particle::PostUpdate(float dt)
 		Draw(dt);
 }
 
+//(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, bool cameraUse, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b, float additionalScale,
+//float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y
 
 void Particle::Draw(float dt)
 {
@@ -173,11 +175,11 @@ void Particle::Draw(float dt)
 		if (fade == true)
 		{
 			Uint8 transparency = life / originalLife * 255;
-			app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), transparency, 0, angle);
+			app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), false, true, transparency, 255, 255, 255, 1.0f, 0, 0, 1, 1, angle);
 		}
 
 		else
-			app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), 255, 0, angle);
+			app->render->Blit(texture, position.x, position.y, &animation.GetCurrentFrameBox(dt), false, true, 255, 255, 255, 255, 1.0f, 0, 0, 1, 1, angle);
 	}
 }
 

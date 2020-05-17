@@ -1282,7 +1282,7 @@ UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::v
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1, gathererPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1297,7 +1297,7 @@ UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::ve
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1, gathererActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1312,7 +1312,7 @@ UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vect
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1, meleePassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1327,7 +1327,7 @@ UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vecto
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1, meleeActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1342,7 +1342,7 @@ UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vec
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1, rangedPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1357,7 +1357,7 @@ UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vect
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1, rangedActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1372,7 +1372,7 @@ UI* UIFactory::CreateRobottoPassive1Button(float x, float y, UI* parent, std::ve
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1, robottoPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1387,7 +1387,7 @@ UI* UIFactory::CreateRobottoActive1Button(float x, float y, UI* parent, std::vec
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1, robottoActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1828,18 +1828,20 @@ void UIFactory::ResetUpgradeCost()
 }
 
 
-bool CheckSkillResources()
+bool UIFactory::CheckSkillResources()
 {
-	if (app->player->GetResourcesSkill() > 1)
+	Hero* hero = (Hero*)app->player->focusedEntity;
+
+	if (app->player->GetResourcesSkill() > 0)
 	{
 		return true;
 	}
 
-	else if (app->player->focusedEntity) // A variable has to exist to check if he has leveled up and has the points
+	else if (hero->GetHeroSkillPoints() > 0) // A variable has to exist to check if he has leveled up and has the points
 	{
 		return true;
 	}
-
+	
 	return false;
 }
 

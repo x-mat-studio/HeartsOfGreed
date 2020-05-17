@@ -106,6 +106,7 @@ void RoboHero::LevelUp()
 	unitSpeed;
 	visionDistance;
 
+	heroSkillPoints++;
 }
 
 void RoboHero::PlayGenericNoise(int probability)

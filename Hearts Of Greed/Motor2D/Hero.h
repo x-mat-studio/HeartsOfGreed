@@ -196,6 +196,7 @@ public:
 
 	int GetEnergyPoints() const;
 	void SetEnergyPoints(int energyPoints);
+	void AddEnergyPoints(int engPoints);
 
 	int GetMaxEnergyPoints() const;
 	void SetMaxEnergyPoints(int maxEnergyPoints);
@@ -247,6 +248,10 @@ public:
 	void SetVisionInPx(float visPx);
 
 	Skill GetSkill1() const;
+
+	int GetHeroSkillPoints();
+	void SetHeroSkillPoints(int n);
+	void AddHeroSkillPoints(int n);
 
 protected:
 	void SetAnimation(HERO_STATES currState);
@@ -388,6 +393,7 @@ protected:
 
 	iMPoint movingTo;
 
+	int heroSkillPoints;
 };
 
 
