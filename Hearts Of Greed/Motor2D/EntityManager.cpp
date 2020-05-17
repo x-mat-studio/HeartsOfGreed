@@ -651,7 +651,7 @@ bool ModuleEntityManager::CleanUp()
 	DeleteAllEntities();
 	DeleteAllDeadHeroes();
 
-	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
+	for (std::map<int, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
 	{
 		delete it->second.area;
 		it->second.area = nullptr;
