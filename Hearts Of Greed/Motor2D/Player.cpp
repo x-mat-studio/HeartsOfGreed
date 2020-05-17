@@ -1013,6 +1013,8 @@ bool ModulePlayer::Load(pugi::xml_node& data)
 	pugi::xml_node iterator = data.first_child();
 
 	resources = iterator.attribute("cristals").as_int();
+	resourcesSkill = iterator.attribute("skillCoin").as_int();
+	resourcesBoost = iterator.attribute("enemyCoin").as_int();
 
 	return true;
 }
@@ -1023,6 +1025,8 @@ bool ModulePlayer::Save(pugi::xml_node& data) const
 	pugi::xml_node iterator = data.append_child("resources");
 
 	iterator.append_attribute("cristals") = resources;
+	iterator.append_attribute("skillCoin") = resourcesSkill;
+	iterator.append_attribute("enemyCoin") = resourcesBoost;
 
 	return true;
 }

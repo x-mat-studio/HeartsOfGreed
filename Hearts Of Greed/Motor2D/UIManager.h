@@ -97,6 +97,7 @@ private:
 
 	void AugmentValueByTenPercent(float* value);
 
+	void BasicResourceManagement(EVENT_ENUM eventN, float* cost);
 	void StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost);
 	void SkillResourceManagement();
 

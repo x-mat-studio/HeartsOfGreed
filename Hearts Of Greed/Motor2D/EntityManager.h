@@ -95,10 +95,12 @@ public:
 
 	bool CheckIfHeroIsDead(ENTITY_TYPE heroType)const;
 	DeadHero* AssignNewDeadHero(Hero& dyingHero);
+	DeadHero* AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill);
 	void DeleteDeadHero(ENTITY_TYPE heroType);
 	void DeleteAllDeadHeroes();
 
 	void SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)const;
+	void LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType);
 
 
 	void SearchHeroesAlive();

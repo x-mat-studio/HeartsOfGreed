@@ -21,6 +21,7 @@
 #include "FadeToBlack.h"
 #include "DialogManager.h"
 #include "Render.h"
+#include "Hero.h"
 
 #include "Minimap.h"
 
@@ -1076,6 +1077,16 @@ bool ModuleUIManager::Load(pugi::xml_node& data)
 }
 
 
+void ModuleUIManager::BasicResourceManagement(EVENT_ENUM eventN, float* cost)
+{
+	if (app->player->GetResources() >= *cost)
+	{
+		app->player->AddResources(-(*cost));
+		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
+	}
+}
+
+
 void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float *cost)
 {
 	if (app->player->GetResourcesBoost() >= *cost)
@@ -1089,9 +1100,11 @@ void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float *c
 	
 void ModuleUIManager::SkillResourceManagement()
 {
-	if (app->player->focusedEntity)
+	Hero* hero = (Hero*)app->player->focusedEntity;
+
+	if (hero->GetHeroSkillPoints() > 0)
 	{
-		-1;
+		hero->AddHeroSkillPoints(-1);
 	}
 	else
 	{
