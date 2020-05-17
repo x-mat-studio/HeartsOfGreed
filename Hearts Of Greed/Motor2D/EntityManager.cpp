@@ -288,42 +288,42 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 
 	//Textures load-----
-	
-	
+
+
 	//HEROES------
-	suitManTexture				= app->tex->Load("spritesheets/characters/suitmale.png");
-	armorMaleTexture			= app->tex->Load("spritesheets/characters/armormale.png");
-	combatFemaleTexture			= app->tex->Load("spritesheets/characters/combatfemale.png");
-	roboTexture					= app->tex->Load("spritesheets/characters/robotto.png");
+	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
+	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
+	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
+	roboTexture = app->tex->Load("spritesheets/characters/robotto.png");
 
 	//ENEMIES--------
-	enemyTexture				= app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
-	enemyRangedTexture			= app->tex->Load("spritesheets/Enemies/Snipermingo.png");
-	enemyGigaTexture			= app->tex->Load("spritesheets/Enemies/Gigamingo.png");
-	enemyNightTexture			= app->tex->Load("spritesheets/Enemies/Speedomingo.png");
+	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
+	enemyRangedTexture = app->tex->Load("spritesheets/Enemies/Snipermingo.png");
+	enemyGigaTexture = app->tex->Load("spritesheets/Enemies/Gigamingo.png");
+	enemyNightTexture = app->tex->Load("spritesheets/Enemies/Speedomingo.png");
 
 	//BUILDINGS--------
-	buildingTexture				= app->tex->Load("maps/base03.png");
-	base1Texture				= app->tex->Load("maps/base01.png");
-	base2Texture				= app->tex->Load("maps/base02.png");
-	base2TextureSelected		= app->tex->Load("maps/base02_selected.png");
-	base2TextureEnemy			= app->tex->Load("maps/base02_enemy.png");
-	base2TextureSelectedEnemy	= app->tex->Load("maps/base02_enemy_selected.png");
-	turretTexture				= app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
+	buildingTexture = app->tex->Load("maps/base03.png");
+	base1Texture = app->tex->Load("maps/base01.png");
+	base2Texture = app->tex->Load("maps/base02.png");
+	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
+	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
+	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 
 	//SELECTIONS & FEEDBACK---------
-	deco3Selected				= app->tex->Load("maps/base03_selected.png");
-	selectedTexture				= app->tex->Load("spritesheets/VFX/selected.png");
-	targetedTexture				= app->tex->Load("spritesheets/VFX/target.png");
-	explosionTexture			= app->tex->Load("spritesheets/VFX/explosion.png");
-	moveCommandTileRng			= app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
-	moveCommandTileGath			= app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
-	moveCommandTileMelee		= app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
-	debugPathTexture			= app->tex->Load("maps/path.png");
+	deco3Selected = app->tex->Load("maps/base03_selected.png");
+	selectedTexture = app->tex->Load("spritesheets/VFX/selected.png");
+	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
+	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
+	moveCommandTileRng = app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
+	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
+	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
+	debugPathTexture = app->tex->Load("maps/path.png");
 
-	
 
-	
+
+
 
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
@@ -373,55 +373,55 @@ bool ModuleEntityManager::Start()
 	sampleTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
-	wanamingoRoar		= app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
-	wanamingoRoar2		= app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
-	wanamingoGetsHit	= app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
-	wanamingoDies		= app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
-	wanamingoDies2		= app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
+	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
+	wanamingoRoar2 = app->audio->LoadFx("audio/sfx/Wanamingo/Roar2.wav");
+	wanamingoGetsHit = app->audio->LoadFx("audio/sfx/Wanamingo/Hit.wav");
+	wanamingoDies = app->audio->LoadFx("audio/sfx/Wanamingo/Death.wav");
+	wanamingoDies2 = app->audio->LoadFx("audio/sfx/Wanamingo/Death2.wav");
 
 	//Suitman sfx-----
-	suitmanGetsHit		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetHit.wav");
-	suitmanGetsHit2		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
-	suitmanGetsDeath	= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
-	suitmanGetsDeath2	= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
-	suitman1Skill		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
-	suitman1Skill2		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
+	suitmanGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetHit.wav");
+	suitmanGetsHit2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/GetsHit2.wav");
+	suitmanGetsDeath = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death.wav");
+	suitmanGetsDeath2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Death2.wav");
+	suitman1Skill = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1.wav");
+	suitman1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Suitman/Skill1_2.wav");
 
-	noise1Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
-	noise2Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
-	noise3Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
-	noise4Armored		= app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
+	noise1Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise1.wav");
+	noise2Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise2.wav");
+	noise3Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise3.wav");
+	noise4Armored = app->audio->LoadFx("audio/sfx/Heroes/Suitman/noise4.wav");
 
 	//Buildings sfx--------
-	buildingGetsHit		= app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
-	buildingGetsHit2	= app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
-	turretShooting		= app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
+	buildingGetsHit = app->audio->LoadFx("audio/sfx/Buildings/hit1.wav");
+	buildingGetsHit2 = app->audio->LoadFx("audio/sfx/Buildings/hit2.wav");
+	turretShooting = app->audio->LoadFx("audio/sfx/Buildings/shooting1.wav");
 
 	//Armored sfx--------
-	noise1Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
-	noise2Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
-	noise3Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
-	noise4Suitman		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
-	armored1Skill2		= app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
+	noise1Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise1.wav");
+	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
+	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
+	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
+	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
 
 	//Ranged sfx--------
-	noise1Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise1.wav");
-	noise2Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise2.wav");
-	noise3Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise3.wav");
-	noise4Ranged		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise4.wav");
+	noise1Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise1.wav");
+	noise2Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise2.wav");
+	noise3Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise3.wav");
+	noise4Ranged = app->audio->LoadFx("audio/sfx/Heroes/Ranged/noise4.wav");
 
-	rangedGetsHit		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
-	rangedDies			= app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
+	rangedGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
+	rangedDies = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
 
-	ranged1Skill		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
-	ranged1Skil2		= app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
+	ranged1Skill = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
+	ranged1Skil2 = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
 
 
 
 	//General hero sfx--------
-	lvlup				= app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
-	selectHero			= app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
-	moveHero			= app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
+	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
+	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
+	moveHero = app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
 
 
 	//Emitters and particles systems------------
@@ -669,12 +669,12 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
 	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
 	app->tex->UnLoad(roboTexture);					roboTexture = nullptr;
-	
+
 	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
 	RELEASE(sampleMelee);							sampleMelee = nullptr;
 	RELEASE(sampleRanged);							sampleRanged = nullptr;
 	RELEASE(sampleRobo);							sampleRobo = nullptr;
-	
+
 	//Enemies-------
 	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
 	app->tex->UnLoad(enemyNightTexture);			enemyNightTexture = nullptr;
@@ -711,7 +711,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
 	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
 	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
-	
+
 	//Particles---------
 	app->tex->UnLoad(snowball);						snowball = nullptr;
 
@@ -904,11 +904,11 @@ Entity* ModuleEntityManager::AddDecorativeBuilding(BUILDING_DECOR decor, int x, 
 Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y)
 {
 	Entity* ret = nullptr;
-	
+
 	switch (type)
 	{
 	case TYPE_PARTICLE_SYSTEM::MAX:
-		ret = new ParticleSystem(x,y,sampleParticleSystem,true);
+		ret = new ParticleSystem(x, y, sampleParticleSystem, true);
 		break;
 
 	case TYPE_PARTICLE_SYSTEM::NONE:
@@ -916,7 +916,7 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 		break;
 
 	default:
-		
+
 		break;
 	}
 
@@ -2034,7 +2034,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -2317,7 +2317,7 @@ void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int r
 bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requestLvl)
 {
 	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
-	
+
 	pugi::xml_document skillDoc;
 	skillDoc.load_file(skillFileName.GetString());
 	pugi::xml_node skills = skillDoc.child("skills");
@@ -2594,7 +2594,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
 			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, heroSkill, vfxExplosion,  lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			movSpd, visTiles, heroSkill, vfxExplosion, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
 
 		ret = true;
 		break;
