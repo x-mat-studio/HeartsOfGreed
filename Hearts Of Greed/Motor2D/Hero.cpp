@@ -21,9 +21,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
 	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target, SKILL_EFFECT skill1Effect, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
+	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
 
 	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
 
@@ -110,7 +108,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	drawingVfx(false),
 
 	state(HERO_STATES::IDLE),
-	skill1(skill1Id, skill1Dmg, skill1Type, skill1Target, skill1Effect),
+	skill1(skill1),
 	objective(nullptr),
 
 	hpLevelUpConstant(hpLevelUp),
@@ -120,7 +118,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 {
 	currentAnimation = &walkLeft;
-
 }
 
 
@@ -870,7 +867,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	{
 		skill1TimePassed += dt;
 
-		if (skill1TimePassed >= skill1ExecutionTime)
+		if (skill1TimePassed >= skill1.executionTime)
 		{
 
 			inputs.push_back(HERO_INPUTS::IN_SKILL_FINISHED);
@@ -892,7 +889,7 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 
 		drawingVfx = true;
 
-		if (cooldownHability1 >= skill1RecoverTime || godMode)
+		if (cooldownHability1 >= skill1.coolDown || godMode)
 		{
 			skill1Charged = true;
 			drawingVfx = false;
@@ -1428,7 +1425,7 @@ bool Hero::ExecuteSkill1()
 {
 	int ret = 0;
 
-	ret = app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+	ret = app->entityManager->ExecuteSkill(skill1, this->origin);
 
 	if (ret > 0)
 	{
@@ -1459,15 +1456,40 @@ bool Hero::DrawVfx(float dt)
 }
 
 
-Skill::Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target, SKILL_EFFECT effect) : id(id), dmg(dmg), type(type), target(target), effect(effect)
+Skill::Skill() : id(SKILL_ID::NO_TYPE), dmg(-1), coolDown(-1.f), rangeRadius(-1), attackRadius(-1), hurtYourself(false), type(SKILL_TYPE::NO_TYPE), target(ENTITY_ALIGNEMENT::UNKNOWN), effect(SKILL_EFFECT::NO_EFFECT), executionTime(-1.f)
+{
+}
+
+Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, SKILL_EFFECT effect) :
+	id(id), dmg(dmg), coolDown(cooldown), rangeRadius(rangeRadius), attackRadius(attackRadius), hurtYourself(hurtYourself), type(type), target(target), effect(effect), executionTime(executionTime)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime)
 {}
+
+Skill Skill::operator=(Skill & newSkill)
+{
+	this->attackRadius = newSkill.attackRadius;
+	this->coolDown = newSkill.coolDown;
+	this->dmg = newSkill.dmg;
+	this->effect = newSkill.effect;
+	this->executionTime = newSkill.executionTime;
+	this->hurtYourself = newSkill.hurtYourself;
+	this->id = newSkill.id;
+	this->rangeRadius = newSkill.rangeRadius;
+	this->target = newSkill.target;
+	this->type = newSkill.type;
+
+	this->lvl = newSkill.lvl;
+
+
+	return (*this);
+}
 
 
 //Getters and setters hellish nightmare
 // PD: Now I have to enter this nightmare as well. The quest for an efficient code has started
+// PD2: Ferran stop with this comments, we don't understand anything you say
 
 int Hero::GetHeroLevel() const
 {
