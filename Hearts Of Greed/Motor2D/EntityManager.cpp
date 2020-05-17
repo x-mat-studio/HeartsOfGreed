@@ -3106,6 +3106,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
 
 			meleeLifeUpgradeValue = iterator.attribute("hp").as_float();
 			meleeDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3142,6 +3143,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
 
 			rangedLifeUpgradeValue = iterator.attribute("hp").as_float();
 			rangedDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3178,6 +3180,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
 
 			gathererLifeUpgradeValue = iterator.attribute("hp").as_float();
 			gathererDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3214,6 +3217,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
 
 			robottoLifeUpgradeValue = iterator.attribute("hp").as_float();
 			robottoDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3413,6 +3417,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
 
 				iterator.append_attribute("hp") = meleeLifeUpgradeValue;
 				iterator.append_attribute("damage") = meleeDamageUpgradeValue;
@@ -3455,6 +3460,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
 
 				iterator.append_attribute("hp") = rangedLifeUpgradeValue;
 				iterator.append_attribute("damage") = rangedDamageUpgradeValue;
@@ -3496,6 +3502,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
 
 				iterator.append_attribute("hp") = gathererLifeUpgradeValue;
 				iterator.append_attribute("damage") = gathererDamageUpgradeValue;
@@ -3538,6 +3545,7 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
 
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
 
 				iterator.append_attribute("hp") = robottoLifeUpgradeValue;
 				iterator.append_attribute("damage") = robottoDamageUpgradeValue;

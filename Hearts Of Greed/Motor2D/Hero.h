@@ -249,6 +249,7 @@ public:
 	Skill GetSkill1() const;
 
 	int GetHeroSkillPoints();
+	void SetHeroSkillPoints(int n);
 	void AddHeroSkillPoints(int n);
 
 protected:

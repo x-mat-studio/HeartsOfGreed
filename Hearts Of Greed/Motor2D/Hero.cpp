@@ -1782,6 +1782,12 @@ int Hero::GetHeroSkillPoints()
 }
 
 
+void Hero::SetHeroSkillPoints(int n)
+{
+	heroSkillPoints = n;
+}
+
+
 void Hero::AddHeroSkillPoints(int n)
 {
 	heroSkillPoints += n;
