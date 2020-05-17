@@ -627,7 +627,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 			app->player->AddResources(-factory->reviveCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_RESURRECT, EVENT_ENUM::NULL_EVENT);
 		}
-	break;
+		break;
 
 	case BUTTON_TAG::BUY_TURRET:
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
@@ -646,178 +646,193 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
-		if (app->player->GetResources() >= factory->gathererLifeUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->gathererLifeUpgradeCost)
 		{
-			app->player->AddResources(-factory->gathererLifeUpgradeCost);
+			app->player->AddResourcesBoost(-factory->gathererLifeUpgradeCost);
 			AugmentValueByTenPercent(&factory->gathererLifeUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
-		if (app->player->GetResources() >= factory->gathererDamageUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->gathererDamageUpgradeCost)
 		{
-			app->player->AddResources(-factory->gathererDamageUpgradeCost);
+			app->player->AddResourcesBoost(-factory->gathererDamageUpgradeCost);
 			AugmentValueByTenPercent(&factory->gathererDamageUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::GATHERER_ENERGY_UPGRADE:
-		if (app->player->GetResources() >= factory->gathererEnergyUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->gathererEnergyUpgradeCost)
 		{
-			app->player->AddResources(-factory->gathererEnergyUpgradeCost);
+			app->player->AddResourcesBoost(-factory->gathererEnergyUpgradeCost);
 			AugmentValueByTenPercent(&factory->gathererEnergyUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE:
-		if (app->player->GetResources() >= factory->gathererAtkSpeedUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->gathererAtkSpeedUpgradeCost)
 		{
-			app->player->AddResources(-factory->gathererAtkSpeedUpgradeCost);
+			app->player->AddResourcesBoost(-factory->gathererAtkSpeedUpgradeCost);
 			AugmentValueByTenPercent(&factory->gathererAtkSpeedUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
-		if (app->player->GetResources() >= factory->meleeLifeUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->meleeLifeUpgradeCost)
 		{
-			app->player->AddResources(-factory->meleeLifeUpgradeCost);
+			app->player->AddResourcesBoost(-factory->meleeLifeUpgradeCost);
 			AugmentValueByTenPercent(&factory->meleeLifeUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
-		if (app->player->GetResources() >= factory->meleeDamageUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->meleeDamageUpgradeCost)
 		{
-			app->player->AddResources(-factory->meleeDamageUpgradeCost);
+			app->player->AddResourcesBoost(-factory->meleeDamageUpgradeCost);
 			AugmentValueByTenPercent(&factory->meleeDamageUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::MELEE_ENERGY_UPGRADE:
-		if (app->player->GetResources() >= factory->meleeEnergyUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->meleeEnergyUpgradeCost)
 		{
-			app->player->AddResources(-factory->meleeEnergyUpgradeCost);
+			app->player->AddResourcesBoost(-factory->meleeEnergyUpgradeCost);
 			AugmentValueByTenPercent(&factory->meleeEnergyUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE:
-		if (app->player->GetResources() >= factory->meleeAtkSpeedUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->meleeAtkSpeedUpgradeCost)
 		{
-			app->player->AddResources(-factory->meleeAtkSpeedUpgradeCost);
+			app->player->AddResourcesBoost(-factory->meleeAtkSpeedUpgradeCost);
 			AugmentValueByTenPercent(&factory->meleeAtkSpeedUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
-		if (app->player->GetResources() >= factory->rangedLifeUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->rangedLifeUpgradeCost)
 		{
-			app->player->AddResources(-factory->rangedLifeUpgradeCost);
+			app->player->AddResourcesBoost(-factory->rangedLifeUpgradeCost);
 			AugmentValueByTenPercent(&factory->rangedLifeUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
-		if (app->player->GetResources() >= factory->rangedDamageUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->rangedDamageUpgradeCost)
 		{
-			app->player->AddResources(-factory->rangedDamageUpgradeCost);
+			app->player->AddResourcesBoost(-factory->rangedDamageUpgradeCost);
 			AugmentValueByTenPercent(&factory->rangedDamageUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::RANGED_ENERGY_UPGRADE:
-		if (app->player->GetResources() >= factory->rangedEnergyUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->rangedEnergyUpgradeCost)
 		{
-			app->player->AddResources(-factory->rangedEnergyUpgradeCost);
+			app->player->AddResourcesBoost(-factory->rangedEnergyUpgradeCost);
 			AugmentValueByTenPercent(&factory->rangedEnergyUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE:
-		if (app->player->GetResources() >= factory->rangedAtkSpeedUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->rangedAtkSpeedUpgradeCost)
 		{
-			app->player->AddResources(-factory->rangedAtkSpeedUpgradeCost);
+			app->player->AddResourcesBoost(-factory->rangedAtkSpeedUpgradeCost);
 			AugmentValueByTenPercent(&factory->rangedAtkSpeedUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::ROBOTTO_LIFE_UPGRADE:
-		if (app->player->GetResources() >= factory->robottoLifeUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->robottoLifeUpgradeCost)
 		{
-			app->player->AddResources(-factory->robottoLifeUpgradeCost);
+			app->player->AddResourcesBoost(-factory->robottoLifeUpgradeCost);
 			AugmentValueByTenPercent(&factory->robottoLifeUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE:
-		if (app->player->GetResources() >= factory->robottoDamageUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->robottoDamageUpgradeCost)
 		{
-			app->player->AddResources(-factory->robottoDamageUpgradeCost);
+			app->player->AddResourcesBoost(-factory->robottoDamageUpgradeCost);
 			AugmentValueByTenPercent(&factory->robottoDamageUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::ROBOTTO_ENERGY_UPGRADE:
-		if (app->player->GetResources() >= factory->robottoEnergyUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->robottoEnergyUpgradeCost)
 		{
-			app->player->AddResources(-factory->robottoEnergyUpgradeCost);
+			app->player->AddResourcesBoost(-factory->robottoEnergyUpgradeCost);
 			AugmentValueByTenPercent(&factory->robottoEnergyUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::ROBOTTO_ATTACK_SPEED_UPGRADE:
-		if (app->player->GetResources() >= factory->robottoAtkSpeedUpgradeCost)
+		if (app->player->GetResourcesBoost() >= factory->robottoAtkSpeedUpgradeCost)
 		{
-			app->player->AddResources(-factory->robottoAtkSpeedUpgradeCost);
+			app->player->AddResourcesBoost(-factory->robottoAtkSpeedUpgradeCost);
 			AugmentValueByTenPercent(&factory->robottoAtkSpeedUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
+	case BUTTON_TAG::GATHERER_ACTIVE1:
+	case BUTTON_TAG::MELEE_ACTIVE1:
+	case BUTTON_TAG::RANGED_ACTIVE1:
+	case BUTTON_TAG::ROBOTTO_ACTIVE1:
+		app->eventManager->GenerateEvent(EVENT_ENUM::SKILL1, EVENT_ENUM::NULL_EVENT);
+		break;
+
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
@@ -842,7 +857,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	default:
-		assert("you forgot to add the case of the button tag :D"); 
+		assert("you forgot to add the case of the button tag :D");
 		break;
 	}
 
@@ -944,6 +959,30 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::ROBOTTO_ATTACK_SPEED_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverRobottoAttackSpeedUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1:
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1:
+		break;
+
+	case BUTTON_TAG::MELEE_PASSIVE1:
+		break;
+
+	case BUTTON_TAG::MELEE_ACTIVE1:
+		break;
+
+	case BUTTON_TAG::RANGED_PASSIVE1:
+		break;
+
+	case BUTTON_TAG::RANGED_ACTIVE1:
+		break;
+
+	case BUTTON_TAG::ROBOTTO_PASSIVE1:
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1:
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
@@ -1079,12 +1118,12 @@ bool ModuleUIManager::Save(pugi::xml_node& data) const
 	iterator.append_attribute("rangedDamageShop") = factory->rangedDamageUpgradeCost;
 	iterator.append_attribute("rangedEnergyShop") = factory->rangedEnergyUpgradeCost;
 	iterator.append_attribute("rangedAtkSpeedShop") = factory->rangedAtkSpeedUpgradeCost;
-	
+
 	iterator.append_attribute("robottoLifeShop") = factory->robottoLifeUpgradeCost;
 	iterator.append_attribute("robottoDamageShop") = factory->robottoDamageUpgradeCost;
 	iterator.append_attribute("robottoEnergyShop") = factory->robottoEnergyUpgradeCost;
 	iterator.append_attribute("robottoAtkSpeedShop") = factory->robottoAtkSpeedUpgradeCost;
-	
+
 	return true;
 }
 
@@ -1116,3 +1155,21 @@ bool ModuleUIManager::Load(pugi::xml_node& data)
 	return true;
 }
 
+
+void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN)
+{
+	
+}
+	
+	
+void ModuleUIManager::SkillResourceManagement()
+{
+	if (app->player->focusedEntity)
+	{
+		-1;
+	}
+	else
+	{
+		app->player->AddResourcesSkill(-1);
+	}
+}

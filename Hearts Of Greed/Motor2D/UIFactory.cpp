@@ -90,6 +90,7 @@ UIFactory::UIFactory() :
 	energyUpgradeButton{ 532, 581, 88, 87 },
 	attackSpeedUpgradeButton{ 328, 581, 88, 87 },
 
+	ugradeSkillButton{ 763, 79, 15, 11 },
 	gathererPassive1Button{ 140, 827, 93, 91 },
 	meleePassive1Button{ 245, 826, 93, 91 },
 	rangedPassive1Button{ 36, 828, 93, 91 },
@@ -462,7 +463,7 @@ UI_Group* UIFactory::CreateOnHoverGathererLifeUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", gathererLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -485,7 +486,7 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", gathererDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -508,7 +509,7 @@ UI_Group* UIFactory::CreateOnHoverGathererEnergyUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", gathererEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -531,7 +532,7 @@ UI_Group* UIFactory::CreateOnHoverGathererAttackSpeedUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", gathererAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -554,7 +555,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeLifeUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", meleeLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -577,7 +578,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeDamageUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", meleeDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -600,7 +601,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeEnergyUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", meleeEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -623,7 +624,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeAttackSpeedUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", meleeAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -646,7 +647,7 @@ UI_Group* UIFactory::CreateOnHoverRangedLifeMenuMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", rangedLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -669,7 +670,7 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", rangedDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -692,7 +693,7 @@ UI_Group* UIFactory::CreateOnHoverRangedEnergyUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", rangedEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -715,7 +716,7 @@ UI_Group* UIFactory::CreateOnHoverRangedAttackSpeedUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", rangedAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -738,7 +739,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoLifeMenuMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", robottoLifeUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -761,7 +762,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoDamageUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", robottoDamageUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -784,7 +785,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoEnergyUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", robottoEnergyUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -807,7 +808,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoAttackSpeedUpgradeMenu()
 	strcat_s(stats, " %");
 	CreateText(5, 0, background, stats, group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconBoost, group, false, false);
 
 	sprintf_s(stats, 40, "- %.0f", robottoAtkSpeedUpgradeCost);
 	CreateText(25, 20, background, stats, group);
@@ -826,9 +827,9 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 	CreateText(5, 0, background, "Upgrade gatherer passive:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -844,9 +845,9 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	CreateText(5, 0, background, "Upgrade grenade:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -862,9 +863,9 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 
 	CreateText(5, 0, background, "Upgrade melee passive:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -880,9 +881,9 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 	CreateText(5, 0, background, "Upgrade hammer crush:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -898,9 +899,9 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 
 	CreateText(5, 0, background, "Upgrade bleeding effect:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -916,9 +917,9 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 
 	CreateText(5, 0, background, "Upgrade :", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -934,9 +935,9 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
 
 	CreateText(5, 0, background, "Upgrade kill strike:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -952,9 +953,9 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 
 	CreateText(5, 0, background, "Upgrade self-destruction:", group);
 
-	CreateImage(5, 25, background, resourceIcon, group, false, false);
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	CreateText(25, 20, background, "   -1", group);
 
 	return group;
 }
@@ -1274,8 +1275,14 @@ UI* UIFactory::CreateAttackSpeedUpgradeButton(float x, float y, UI* parent, std:
 
 UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE, gathererPassive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1, gathererPassive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1283,8 +1290,14 @@ UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::v
 
 UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE, gathererActive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1, gathererActive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1292,8 +1305,14 @@ UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::ve
 
 UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE, meleePassive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1, meleePassive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1301,8 +1320,14 @@ UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE, meleeActive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1, meleeActive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1310,8 +1335,14 @@ UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vecto
 
 UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE, rangedPassive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1, rangedPassive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1319,8 +1350,14 @@ UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vec
 
 UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE, rangedActive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1, rangedActive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1328,8 +1365,14 @@ UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateRobottoPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE, robottoPassive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1, robottoPassive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1337,8 +1380,14 @@ UI* UIFactory::CreateRobottoPassive1Button(float x, float y, UI* parent, std::ve
 
 UI* UIFactory::CreateRobottoActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE, robottoActive1Button);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1, robottoActive1Button);
 	dataPagesVector->push_back(button);
+
+	if (true)
+	{
+		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE);
+		dataPagesVector->push_back(button);
+	}
 
 	return button;
 }
@@ -1772,6 +1821,22 @@ void UIFactory::ResetUpgradeCost()
 	robottoDamageUpgradeCost = 100;
 	robottoEnergyUpgradeCost = 100;
 	robottoAtkSpeedUpgradeCost = 100;
+}
+
+
+bool CheckSkillResources()
+{
+	if (app->player->GetResourcesSkill() > 1)
+	{
+		return true;
+	}
+
+	else if (app->player->focusedEntity) // A variable has to exist to check if he has leveled up and has the points
+	{
+		return true;
+	}
+
+	return false;
 }
 
 

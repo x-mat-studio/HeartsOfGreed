@@ -6,7 +6,7 @@
 #include "Animation.h"
 #include "Entity.h"
 #include <list>
-#include <unordered_map>
+#include <map>
 
 class DeadHero;
 class Hero;
@@ -30,22 +30,12 @@ class Emitter;
 enum class BUILDING_DECOR;
 enum class TYPE_PARTICLE_SYSTEM;
 
-enum class AREA_TYPE
-{
-	NO_TYPE = -1,
-
-	CIRCLE,
-	QUAD,
-	CONE,
-
-};
-
+struct Skill;
 
 struct skillArea
 {
 	unsigned short* area = nullptr;
-	AREA_TYPE form = AREA_TYPE::NO_TYPE;
-	int radius = 0, width = 0, heigth = 0;
+	int users = 0;
 };
 
 enum class SPRITE_POSITION : int
@@ -133,10 +123,10 @@ public:
 
 	void KillAllEnemies();
 
-	skillArea* RequestArea(SKILL_ID id, std::vector<iMPoint>* toFill, iMPoint center);
+	skillArea* GenerateNewArea(int radius);
 
 	//This & skill Struct need re-work to accept single target
-	int ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
+	int ExecuteSkill(Skill& skillExecution, iMPoint pivot, Entity* objective = nullptr);
 
 	//function used for minimap
 	void DrawOnlyStaticBuildings();
@@ -146,6 +136,13 @@ public:
 	Entity* SearchEntity(ENTITY_TYPE type);
 
 	void ResetUpgradeValues();
+
+	//Area----
+	skillArea* RequestAreaInfo(int radius);
+	void CreateDynamicArea(std::vector <iMPoint>* toFill, int area, iMPoint center, skillArea* skillArea = nullptr);
+
+	//Retuns false if it fails to load the skill
+	bool RequestSkill(Skill& skillToFill, SKILL_ID id, int lvl = 1);
 
 private:
 
@@ -159,12 +156,9 @@ private:
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
-	//Area Related
-	bool BuildArea(skillArea* areaToGenerate, int width, int heigth, int radius);
+	//Area----
 	unsigned short* BuildCircleArea(int radius);
-	unsigned short* BuildQuadArea(int width, int height);
 
-	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
 
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
 	bool LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType);
@@ -319,12 +313,14 @@ private:
 	Emitter* sampleEmitter3;
 	SDL_Texture* snowball;
 
-	std::unordered_map <SKILL_ID, skillArea> skillAreas;
+	std::map <int, skillArea> skillAreas;
 
 	DeadHero* deadMelee;
 	DeadHero* deadGatherer;
 	DeadHero* deadRanged;
 	DeadHero* deadRobo;
+
+	P2SString skillFileName;
 };
 
 #endif //__ENTITYMANAGER_H__

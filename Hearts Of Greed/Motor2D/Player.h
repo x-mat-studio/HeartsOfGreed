@@ -125,6 +125,8 @@ private:
 
 
 	int turretCost;
+
+	int buildAreaRadius;
 };
 
 

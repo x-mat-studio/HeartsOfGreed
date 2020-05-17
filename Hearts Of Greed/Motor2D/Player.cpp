@@ -49,6 +49,7 @@ ModulePlayer::ModulePlayer() :
 	buildingPrevPosition{ INT_MIN,INT_MIN },
 	baseDrawCenter{ FLT_MIN, FLT_MIN },
 	turretCost(0),
+	buildAreaRadius(5),
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
@@ -189,7 +190,7 @@ bool ModulePlayer::PostUpdate(float dt)
 			fMPoint wBuildPos = app->input->GetMousePosWorld();
 			iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-			if (center.InsideCircle(mBuildPos, constrAreaInfo->radius) && app->pathfinding->IsWalkable(mBuildPos))
+			if (center.InsideCircle(mBuildPos, buildAreaRadius) && app->pathfinding->IsWalkable(mBuildPos))
 			{
 				buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
 			}
@@ -681,7 +682,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
-		resourcesBoost+= 3;
+		resourcesBoost+= 300;
 		break;
 
 	case EVENT_ENUM::TURRET_CONSTRUCT:
@@ -871,7 +872,8 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
-			constrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
+			constrAreaInfo = app->entityManager->RequestAreaInfo(buildAreaRadius);
+
 		}
 		return true;
 	}
