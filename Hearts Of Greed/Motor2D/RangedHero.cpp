@@ -66,6 +66,10 @@ bool RangedHero::PreProcessSkill1()
 		origin = app->map->MapToWorld(origin.x, origin.y);
 
 		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.rangeRadius);
+
+
+		if (currAreaInfo != nullptr)
+			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.rangeRadius, origin, currAreaInfo);
 	}
 
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
