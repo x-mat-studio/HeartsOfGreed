@@ -3,27 +3,31 @@
 
 #include "Module.h"
 #include "Building.h"
-#include "Collision.h"
-
 
 class Barricade : public Building
 {
 
 public:
 
-	Barricade::Barricade(int barricadeLvl);
-	Barricade(Barricade* copy);
+	Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, int barricadeLvl);
+	Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align);
 	~Barricade();
 
+	void Flip();
+	void SetLevel(int level);
 
-	bool Start();
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	bool PostUpdate(float dt);
+	void DrawSelected();
+
+	int RecieveDamage(int damage);
+
+private:
+	void Die();
 
 
 private:
 	int barricadeLvl;
+
+	bool vertical;
 };
 
 

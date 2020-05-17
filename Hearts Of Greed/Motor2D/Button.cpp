@@ -95,7 +95,7 @@ void Button::Draw(float dt)
       
     }
 
-   if (rect.w == 15)
+   if (rect.h == 15)
    {
 	   app->render->Blit(texture, position.x, position.y, &scaledRect, false, false, alpha, r, g, b, 0.15f);
    }
