@@ -7,20 +7,27 @@
 #include "EventManager.h"
 #include "Collision.h"
 
-Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider) :
+Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect) :
 
 	Building(position, maxHitPoints, currenthitPoints, recoveryHitPointsRate, xpOnDeadth, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_BARRICADE),
 	
 	barricadeLvl(1),
-	direction(DIRECTION_BARRICADE::VERTICAL)
+	direction(DIRECTION_BARRICADE::VERTICAL),
+
+	verticalRect(verticalRect),
+	horizontalRect(horizontalRect)
 {}
+
 
 Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align) :
 
 	Building(position, copy, align),
 
 	barricadeLvl(1),
-	direction(copy->direction)
+	direction(copy->direction),
+
+	verticalRect(copy->verticalRect),
+	horizontalRect(copy->horizontalRect)
 {
 }
 

@@ -33,6 +33,7 @@
 #include "Building.h"
 #include "Base.h"
 #include "Turret.h"
+#include "Barricade.h"
 
 #include "ParticleSystem.h"
 #include "Emitter.h"
@@ -55,6 +56,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	snowball(nullptr),
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
+	barricadeTexture(nullptr),
 	enemyTexture(nullptr),
 	explosionTexture(nullptr),
 	targetedTexture(nullptr),
@@ -69,6 +71,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleBuilding(nullptr),
 	sampleBase(nullptr),
 	sampleTurret(nullptr),
+	sampleBarricade(nullptr),
 	moveCommandTileRng(nullptr),
 	moveCommandTileGath(nullptr),
 	moveCommandTileMelee(nullptr),
@@ -233,6 +236,16 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	LoadSampleTurret(turret);
 	turretdoc.reset();
+
+
+	//Sample Barricade -------------------
+	filename = config.child("load").attribute("docnameBarricade").as_string();
+	pugi::xml_document barricadedoc;
+	barricadedoc.load_file(filename.GetString());
+	pugi::xml_node barricadeNode = barricadedoc.child("barricade");
+
+	LoadSampleBarricade(barricadeNode);
+	barricadedoc.reset();
 
 	//spawner
 	filename = config.child("load").attribute("docnameSpawner").as_string();
@@ -697,10 +710,12 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
 	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
 	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
+	app->tex->UnLoad(barricadeTexture);				barricadeTexture = nullptr;
 
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
+	RELEASE(sampleBarricade);						sampleBarricade = nullptr;
 
 	//Feedback------------
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
@@ -2865,6 +2880,39 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 		maxHP, currentHP, recoveryHP, xp, buildingCost, transparency);
 
 	return ret;
+}
+
+
+bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
+{
+	barricadeNode = barricadeNode.first_child();
+
+	//Collider
+	int colW = barricadeNode.child("collider").child("rect").attribute("w").as_int();
+	int colH = barricadeNode.child("collider").child("rect").attribute("h").as_int();
+	COLLIDER_TYPE type = (COLLIDER_TYPE)barricadeNode.child("collider").child("type").attribute("id").as_int();
+
+	//Rects
+	SDL_Rect verticalRect{ barricadeNode.child("rect").child("verticalRect").attribute("x").as_int(), barricadeNode.child("rect").child("verticalRect").attribute("y").as_int(),
+	barricadeNode.child("rect").child("verticalRect").attribute("w").as_int() , barricadeNode.child("rect").child("verticalRect").attribute("h").as_int() };
+
+	SDL_Rect horizontalRect{ barricadeNode.child("rect").child("horizontalRect").attribute("x").as_int(), barricadeNode.child("rect").child("horizontalRect").attribute("y").as_int(),
+	barricadeNode.child("rect").child("horizontalRect").attribute("w").as_int() , barricadeNode.child("rect").child("horizontalRect").attribute("h").as_int() };
+
+	//Stats
+	int level = barricadeNode.child("stats").attribute("level").as_int(0);
+	int vision = barricadeNode.child("stats").attribute("vision").as_int(0);
+	int xp = barricadeNode.child("stats").attribute("xp").as_int(0);
+	int buildingCost = barricadeNode.child("stats").attribute("buildingCost").as_int(0);
+	int transparency = barricadeNode.child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = barricadeNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = barricadeNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = barricadeNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	//sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, ), SDL_Rect & verticalRect, SDL_Rect & horizontalRect)
+
+	return true;
 }
 
 
