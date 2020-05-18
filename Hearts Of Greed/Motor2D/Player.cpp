@@ -80,6 +80,7 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_INTERACTION, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
+	app->eventManager->EventRegister(EVENT_ENUM::LVL_UP_ALL, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
@@ -162,7 +163,7 @@ bool ModulePlayer::PreUpdate(float dt)
 	}
 	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) // For debug purposes
 	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL,EVENT_ENUM::LVL_UP_ALL);
+		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL,EVENT_ENUM::NULL_EVENT);
 	}
 
 
@@ -784,6 +785,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	
 
 	case EVENT_ENUM::LVL_UP_ALL:
+
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1);
 
 		for (int aux = 0; aux < heroesVector.size(); aux++) {
 
