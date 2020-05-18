@@ -11,7 +11,6 @@ enum class TYPE_PARTICLE_SYSTEM : int
 {
 	NONE = -1,
 
-
 	MAX
 };
 

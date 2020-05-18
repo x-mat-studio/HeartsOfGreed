@@ -313,6 +313,7 @@ private:
 	Emitter* sampleEmitter;
 	Emitter* sampleEmitter2;
 	Emitter* sampleEmitter3;
+	Emitter* sampleEmitter4;
 	SDL_Texture* snowball;
 
 	std::map <int, skillArea> skillAreas;

@@ -133,6 +133,7 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::LVL_UP_ALL, this);
 
 	constrAreaInfo = nullptr;
 	constrArea.clear();
@@ -158,6 +159,10 @@ bool ModulePlayer::PreUpdate(float dt)
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
 	{
 		DesactivateBuildMode();
+	}
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) // For debug purposes
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL,EVENT_ENUM::LVL_UP_ALL);
 	}
 
 
@@ -669,15 +674,6 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	break;
 
 	case EVENT_ENUM::GIVE_RESOURCES:
-
-
-		//snowball
-
-
-		app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, 250, 4100);
-
-
-
 		resources += 1000;
 		break;
 
@@ -785,7 +781,19 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 		heroesVector.push_back(hero);
 		break;
+	
+
+	case EVENT_ENUM::LVL_UP_ALL:
+
+		for (int aux = 0; aux < heroesVector.size(); aux++) {
+
+			if (heroesVector[aux] != nullptr) {
+			
+				heroesVector[aux]->LevelUp();
+			}
 		
+		}
+		break;
 	}
 
 

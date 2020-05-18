@@ -7,6 +7,7 @@
 
 #include "Animation.h"
 #include "DynamicEntity.h"
+#include "ParticleSystem.h"
 
 
 enum class HERO_STATES
@@ -255,6 +256,8 @@ public:
 
 protected:
 	void SetAnimation(HERO_STATES currState);
+	void HandleMyParticleSystem(float dt);
+	void TimeMyParticleSystem(float dt);
 
 private:
 
@@ -394,6 +397,10 @@ protected:
 	iMPoint movingTo;
 
 	int heroSkillPoints;
+
+	ParticleSystem* myParticleSystem;
+	float lvlUpSfxTimer;
+	
 };
 
 

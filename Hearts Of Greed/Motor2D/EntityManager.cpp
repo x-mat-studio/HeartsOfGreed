@@ -83,6 +83,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEmitter(nullptr),
 	sampleEmitter2(nullptr),
 	sampleEmitter3(nullptr),
+	sampleEmitter4(nullptr),
 	sampleParticleSystem(nullptr),
 	deadGatherer(nullptr),
 	deadMelee(nullptr),
@@ -431,6 +432,7 @@ bool ModuleEntityManager::Start()
 	sampleEmitter->SetTextureNStart(snowball);  sampleParticleSystem->PushEmiter(*sampleEmitter);
 	sampleEmitter2->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter2);
 	sampleEmitter3->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter3);
+	sampleEmitter4->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter4);
 
 
 	return ret;
@@ -718,6 +720,7 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
 	RELEASE(sampleEmitter2);						sampleEmitter2 = nullptr;
 	RELEASE(sampleEmitter3);						sampleEmitter3 = nullptr;
+	RELEASE(sampleEmitter4);						sampleEmitter4 = nullptr;
 	RELEASE(sampleParticleSystem);					sampleParticleSystem = nullptr;
 
 	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
@@ -2989,20 +2992,20 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	Animation anim3;
 	anim3.PushBack(SDL_Rect{ 7, 11, 8, 8 }, 1, 0, 0);
 
-	float auxPosX = 0;							float auxPos2X = 0;							float auxPos3X = 0;
-	float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;
-	float auxSpeedX = 0;						float auxSpeed2X = 0;						float auxSpeed3X = 0;
-	float auxSpeedY = 4;						float auxSpeedY2 = 5;						float auxSpeedY3 = 6;
-	int particleVariationSpeedX = 0;			int particleVariationSpeedX2 = 0;			int particleVariationSpeedX3 = 0;
-	int particleVariationSpeedY = 2;			int particleVariationSpeedY2 = 2;			int particleVariationSpeedY3 = 2;
-	float particleAccelerationX = 0.2;			float particleAccelerationX2 = 0.2;			float particleAccelerationX3 = 0.2;
-	float particleAccelerationY = -1;			float particleAccelerationY2 = -1;			float particleAccelerationY3 = -1;
-	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX2 = 1;	int particleVariationAccelerationX3 = 1;
-	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0;
-	float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
-	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed2 = 1;		int particleVariableAngularSpeed3 = 1;
-	float particlesRate = 13;					float particlesRate2 = 13;					float particlesRate3 = 16;
-	float particlesLifeTime = 2;				float particlesLifeTime2 = 2;				float particlesLifeTime3 = 2;
+	float auxPosX = 0;							float auxPos3X = 0;
+	float auxPosY = 0;							float auxPos3Y = 0;
+	float auxSpeedX = 0;						float auxSpeed3X = 0;
+	float auxSpeedY = 4;						float auxSpeedY3 = 6;
+	int particleVariationSpeedX = 0;			int particleVariationSpeedX3 = 0;
+	int particleVariationSpeedY = 2;			int particleVariationSpeedY3 = 2;
+	float particleAccelerationX = 0.2;			float particleAccelerationX3 = 0.2;
+	float particleAccelerationY = -1;			float particleAccelerationY3 = -1;
+	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX3 = 1;
+	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY3 = 0;
+	float particleAngularSpeed = 0;				float particleAngularSpeed3 = 0;
+	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed3 = 1;
+	float particlesRate = 8;					float particlesRate3 = 13;
+	float particlesLifeTime = 1;				float particlesLifeTime3 = 1;
 
 
 	//SAMPLES--------------
@@ -3010,9 +3013,10 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	sampleParticleSystem = new ParticleSystem();
 
 	sampleEmitter = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
-	sampleEmitter2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, nullptr, nullptr, anim2, true);
-	sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+	sampleEmitter2 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
 
+	sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+	sampleEmitter4 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
 
 	return ret;
 }
