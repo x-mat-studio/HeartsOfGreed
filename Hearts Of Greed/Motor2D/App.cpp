@@ -26,6 +26,7 @@
 #include "Minimap.h"
 #include "QuestManager.h"
 #include "DialogManager.h"
+#include "Video.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
@@ -60,6 +61,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	winScene = new ModuleWinScene();
 	loseScene = new ModuleLoseScene();
 	minimap = new Minimap();
+	video = new Video();
 	dialogManager = new ModuleDialogManager();
 
 	// Ordered for awake / Start / Update
@@ -86,6 +88,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	AddModule(ai);
 	AddModule(questManager);
 	AddModule(minimap);
+	AddModule(video);
 
 	//Fade to black before render
 	AddModule(fadeToBlack);
