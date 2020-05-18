@@ -7,12 +7,12 @@
 #include "EventManager.h"
 #include "Collision.h"
 
-Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, int barricadeLvl) :
+Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider) :
 
 	Building(position, maxHitPoints, currenthitPoints, recoveryHitPointsRate, xpOnDeadth, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_BARRICADE),
 	
 	barricadeLvl(1),
-	vertical(false)
+	direction(DIRECTION_BARRICADE::VERTICAL)
 {}
 
 Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align) :
@@ -20,13 +20,15 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 	Building(position, copy, align),
 
 	barricadeLvl(1),
-	vertical(copy->vertical)
+	direction(copy->direction)
 {
 }
 
 
 Barricade::~Barricade()
 {
+	barricadeLvl = -1;
+	direction = DIRECTION_BARRICADE::NONE;
 }
 
 
@@ -87,16 +89,37 @@ void Barricade::Die()
 
 void Barricade::Flip()
 {
-	//int w = collider->rect.w;
-	//int h = collider->rect.h;
+	int centerX = center.x;
+	int centerY = center.y;
 
-	//vertical = !vertical;
+	int w = collider->rect.w;
+	int h = collider->rect.h;
 
-	//collider->rect.w = 
+	if (direction == DIRECTION_BARRICADE::VERTICAL)
+	{
+		direction = DIRECTION_BARRICADE::HORIZONTAL;
+	}
+
+	else if (direction == DIRECTION_BARRICADE::HORIZONTAL)
+	{
+		direction = DIRECTION_BARRICADE::VERTICAL;
+	}
+
+	else
+		assert("Barricade has problem");
+
+	center.x = centerY;
+	center.y = centerX;
+
+	collider->rect.w = h;
+	collider->rect.h = w;
 }
 
 
-void Barricade::SetLevel(int level)
+void Barricade::SetLevel(int lvl)
 {
-
+	for (int i = 1; i < lvl; i++)
+	{
+		//LevelUp() TODO
+	}
 }
