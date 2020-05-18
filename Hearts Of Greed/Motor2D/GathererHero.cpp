@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
+#include "ParticleSystem.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -171,6 +172,12 @@ bool GathererHero::ExecuteSkill3()
 
 void GathererHero::LevelUp()
 {
+	//lvl up effect
+	if(myParticleSystem!=nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
 
 	hitPointsMax += (hpLevelUpConstant * app->entityManager->gathererLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;

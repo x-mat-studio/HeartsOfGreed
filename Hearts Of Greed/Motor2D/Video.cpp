@@ -8,7 +8,15 @@
 
 #include "SDL_mixer\include\SDL_mixer.h"
 
-Video::Video()
+Video::Video() :
+
+	pavi(nullptr),               
+	pgf(nullptr),
+	lastFrame(NULL),
+	width(NULL),
+	height(NULL),
+	pdata(NULL),
+	mpf(NULL)
 {
 	name.create("video");
 }
@@ -19,12 +27,22 @@ Video::~Video()
 
 bool Video::Update(float dt)
 {
-	if (!isVideoFinished)
+
+	if (pavi != nullptr) 
 	{
-		GrabAVIFrame();
+		if (!isVideoFinished)
+		{
+			GrabAVIFrame();
+		}
+		else
+			Mix_PauseMusic();
 	}
-	else
-		Mix_PauseMusic();
+
+
+	if (isVideoFinished && pavi != nullptr) 
+		CloseAVI();		
+	
+
 	return true;
 }
 
@@ -41,7 +59,7 @@ bool Video::CleanUp()
 void Video::Initialize(char* path)
 {
 	OpenAVI(path);                  // Open The AVI File
-	app->audio->PlayMusic("video/sample.ogg", 0.0f);
+	app->audio->PlayMusic("video/sample.ogg", 0.0f, -1);
 }
 
 void Video::OpenAVI(char* path)
@@ -95,13 +113,6 @@ bool Video::GrabAVIFrame()
 	app->tex->UnLoad(texture);
 	SDL_FreeSurface(surface);
 
-
-
-	char   title[100];
-	mpf = AVIStreamSampleToTime(pavi, lastFrame) / lastFrame;        // Calculate Rough Milliseconds Per Frame
-	wsprintf(title, "AVI Player: Width: %d, Height: %d, Frames: %d, Miliseconds per frame: %d", width, height, lastFrame, mpf);
-	app->win->SetTitle(title);
-
 	return true;
 }
 
@@ -112,4 +123,8 @@ void Video::CloseAVI()
 	AVIStreamRelease(pavi);                     // Release The Stream
 
 	AVIFileExit();                              // Release The File
+
+	pavi = nullptr;
+	pgf = nullptr;
+
 }

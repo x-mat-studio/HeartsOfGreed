@@ -44,7 +44,7 @@ UIFactory::UIFactory() :
 	robottoShopPicture{ 875, 512, 36, 27 },
 	robottoBigPicture{ 677, 512, 123, 96 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
-	turretDataPagePicture{ 561, 77, 60, 45 },
+	turretDataPagePicture{ 580, 400, 61, 47 },
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
 	turretShopPicture{ 696, 12, 34, 40 },
 	resourceIcon{ 18, 209, 11, 19 },
@@ -1664,16 +1664,16 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
-	CreateNonGroupText(-45, -15, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(69, 13, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(-45, -30, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(135, 13, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetRng());
-	CreateNonGroupText(-45, -45, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(69, 28, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(-45, -60, dataPage, dataPagesVector, stats);
+	sprintf_s(stats, 40, "AS: %.i", focus->GetAS());
+	CreateNonGroupText(135, 28, dataPage, dataPagesVector, stats);
 }
 
 

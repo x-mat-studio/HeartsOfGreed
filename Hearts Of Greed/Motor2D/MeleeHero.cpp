@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Map.h"
 #include "Render.h"
+#include "ParticleSystem.h"
 
 MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -132,7 +133,12 @@ bool MeleeHero::ExecuteSkill3()
 
 void MeleeHero::LevelUp()
 {
-
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
 	hitPointsMax += (hpLevelUpConstant * app->entityManager->meleeLifeUpgradeValue);
 	hitPointsCurrent = hitPointsMax;	
 	recoveryHitPointsRate += 1;
