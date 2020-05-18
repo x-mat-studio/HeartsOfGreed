@@ -67,7 +67,7 @@ UIFactory::UIFactory() :
 	shopButton{ 480, 62, 33, 33 },
 	reviveButton{ 653, 54, 46, 14 },
 
-	upgradeArrowIcon{ 740, 57, 15, 11 },
+	upgradeArrowIcon{ 740, 57, 14, 11 },
 	plusIcon{ 740, 71, 14, 14 },
 
 	scrollbarBar{ 272, 45, 90, 4 },
@@ -1578,6 +1578,14 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
 	CreateNonGroupText(133, 35, dataPage, dataPagesVector, stats);
+
+	if (focus->GetHeroSkillPoints() > 0)
+	{
+		CreateNonGroupImage(gathererPicture.w - 30, -upgradeArrowIcon.h - 1, dataPage, dataPagesVector, upgradeArrowIcon);
+
+		sprintf_s(stats, 40, "x%i", focus->GetHeroSkillPoints());
+		CreateNonGroupText(gathererPicture.w - 16, -upgradeArrowIcon.h - 10, dataPage, dataPagesVector, stats);
+	}
 }
 
 
