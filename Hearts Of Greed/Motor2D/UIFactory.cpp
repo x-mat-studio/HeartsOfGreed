@@ -44,7 +44,7 @@ UIFactory::UIFactory() :
 	robottoShopPicture{ 875, 512, 36, 27 },
 	robottoBigPicture{ 677, 512, 123, 96 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
-	turretDataPagePicture{ 561, 77, 60, 45 },
+	turretDataPagePicture{ 580, 400, 61, 47 },
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
 	turretShopPicture{ 696, 12, 34, 40 },
 	resourceIcon{ 18, 209, 11, 19 },
@@ -56,7 +56,7 @@ UIFactory::UIFactory() :
 	creditsMenuBackground{ 15, 271, 194, 231 },
 	minimapBackground{ 221, 317, 162, 150 },
 	shopBackground{ 15, 271, 194, 231 },
-	resourcesBackground{ 415, 435, 70, 60 },
+	resourcesBackground{ 415, 435, 95, 60 },
 
 	menuButton{ 17, 12, 195, 36 },
 	pauseButton{ 449, 24, 24, 24 },
@@ -67,7 +67,7 @@ UIFactory::UIFactory() :
 	shopButton{ 480, 62, 33, 33 },
 	reviveButton{ 653, 54, 46, 14 },
 
-	upgradeArrowIcon{ 740, 57, 15, 11 },
+	upgradeArrowIcon{ 740, 57, 14, 11 },
 	plusIcon{ 740, 71, 14, 14 },
 
 	scrollbarBar{ 272, 45, 90, 4 },
@@ -307,7 +307,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
-	CreateResourcesPortrait(x - 70, y - 127, nullptr, group);
+	CreateResourcesPortrait(x - 95, y - 127, nullptr, group);
 
 	background = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
@@ -1459,23 +1459,15 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 	//resources
 
-	CreateImage(9, 37, background, resourceIcon, group);
-
-		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
-
-		//group->AddUiElement(resourcesPortrait);
+	CreateImage(24, 7, background, resourceIcon, group);
 
 	//skill
 
-	CreateImage(4, 7, background, resourceIconSkill, group);
-
-		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
-
-		//group->AddUiElement(resourcesPortrait);
+	CreateImage(3, 37, background, resourceIconSkill, group);
 
 	//boost
 
-	CreateImage(37, 7, background, resourceIconBoost, group);
+	CreateImage(41, 37, background, resourceIconBoost, group);
 
 	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 
@@ -1586,6 +1578,14 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
 	CreateNonGroupText(133, 35, dataPage, dataPagesVector, stats);
+
+	if (focus->GetHeroSkillPoints() > 0)
+	{
+		CreateNonGroupImage(gathererPicture.w - 30, -upgradeArrowIcon.h - 1, dataPage, dataPagesVector, upgradeArrowIcon);
+
+		sprintf_s(stats, 40, "x%i", focus->GetHeroSkillPoints());
+		CreateNonGroupText(gathererPicture.w - 16, -upgradeArrowIcon.h - 10, dataPage, dataPagesVector, stats);
+	}
 }
 
 
@@ -1664,16 +1664,16 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
-	CreateNonGroupText(-45, -15, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(69, 13, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(-45, -30, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(135, 13, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetRng());
-	CreateNonGroupText(-45, -45, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(69, 28, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(-45, -60, dataPage, dataPagesVector, stats);
+	sprintf_s(stats, 40, "AS: %.i", focus->GetAS());
+	CreateNonGroupText(135, 28, dataPage, dataPagesVector, stats);
 }
 
 
