@@ -7,6 +7,7 @@
 #include "UIManager.h"
 #include "Textures.h"
 #include "Audio.h"
+#include "Video.h"
 #include "Render.h"
 
 
@@ -80,22 +81,23 @@ bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleIntroScene::Start()
 {
-	logoAlphaCounter = logoStartingValue;
-	bgAlphaCounter = bgStartingValue;
+	//logoAlphaCounter = logoStartingValue;
+	//bgAlphaCounter = bgStartingValue;
 
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
-
-
-	//images
-	logoXMat = app->tex->Load("intro_images/logoXMat.png");
-	logoBG = app->tex->Load("intro_images/logoBG.png");
-
-	//sounds
-	logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+	//SDL_Rect rect = { 0, 0, 0, 0 };
+	////app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, rect, (P2SString)"IntroScene", nullptr, DRAGGABLE::DRAG_OFF, "DEMO OF TEXT / Intro Scene  /  Press N to go to the Menu");
 
 
-	app->audio->PlayFx(logoSound);
+	////images
+	//logoXMat = app->tex->Load("intro_images/logoXMat.png");
+	//logoBG = app->tex->Load("intro_images/logoBG.png");
+
+	////sounds
+	//logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+
+	app->video->Initialize("video/sample(good).avi");
+
+	//app->audio->PlayFx(logoSound);
 	return true;
 }
 
@@ -123,7 +125,7 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) 
+	/*if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) 
 	{
 
 		ret = false;
@@ -161,9 +163,9 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 	if (logoAlphaCounter > 1) {
 
 		app->render->Blit(logoXMat, 155, 20, false, false, NULL, logoAlphaCounter);
-	}
+	}*/
 
-	if (logoAlphaCounter == logoTopValue && bgAlphaCounter == bgTopValue)
+	if (app->video->isVideoFinished)
 	{
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
 	}
@@ -178,7 +180,6 @@ bool  ModuleIntroScene::CleanUp()
 	app->tex->UnLoad(logoBG);
 	logoXMat = nullptr;
 	logoBG = nullptr;
-
 
 	app->uiManager->CleanUp();
 

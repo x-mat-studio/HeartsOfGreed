@@ -4,12 +4,21 @@
 #include "Module.h"
 #include "Building.h"
 
+enum class DIRECTION_BARRICADE : int
+{
+	NONE = -1,
+
+	HORIZONTAL,
+	VERTICAL
+};
+
+
 class Barricade : public Building
 {
 
 public:
 
-	Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, int barricadeLvl);
+	Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider);
 	Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align);
 	~Barricade();
 
@@ -27,7 +36,7 @@ private:
 private:
 	int barricadeLvl;
 
-	bool vertical;
+	DIRECTION_BARRICADE direction;
 };
 
 

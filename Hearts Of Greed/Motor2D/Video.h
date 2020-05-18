@@ -45,7 +45,7 @@ private:
 	long				lastFrame;                  // Last Frame Of The Stream
 	int					width;                      // Video Width
 	int					height;                     // Video Height
-	char* pdata;					    // Pointer To Texture Data
+	char*				pdata;					    // Pointer To Texture Data
 	int					mpf;                        // Will Hold Rough Milliseconds Per Frame
 
 	int i = 1;
