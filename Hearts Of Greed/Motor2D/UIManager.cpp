@@ -883,59 +883,67 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::GATHERER_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::MELEE_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::MELEE_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::RANGED_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::RANGED_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::ROBOTTO_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::ROBOTTO_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverGathererPassive1Menu());
 		break;
 
-	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::GATHERER_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverGathererActive1Menu());
 		break;
 
-	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::MELEE_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverMeleePassive1Menu());
 		break;
 
-	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::MELEE_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverMeleeActive1Menu());
 		break;
 
-	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::RANGED_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverRangedPassive1Menu());
 		break;
 
-	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::RANGED_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
-	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::ROBOTTO_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverRobottoPassive1Menu());
 		break;
 
-	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::ROBOTTO_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverRobottoActive1Menu());
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleePassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoActive1UpgradeMenu());
 		break;
 
 	default:
