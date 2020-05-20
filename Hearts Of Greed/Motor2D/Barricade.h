@@ -23,6 +23,8 @@ public:
 	~Barricade();
 
 	void Flip();
+
+	int GetLevel() const;
 	void SetLevel(int level);
 
 	void Draw(float dt);

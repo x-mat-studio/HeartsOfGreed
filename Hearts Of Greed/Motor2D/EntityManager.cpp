@@ -34,6 +34,7 @@
 #include "Base.h"
 #include "Turret.h"
 #include "Barricade.h"
+#include "UpgradeCenter.h"
 
 #include "ParticleSystem.h"
 #include "Emitter.h"
@@ -57,6 +58,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
 	barricadeTexture(nullptr),
+	upgradeCenterTexture(nullptr),
 	enemyTexture(nullptr),
 	explosionTexture(nullptr),
 	targetedTexture(nullptr),
@@ -72,6 +74,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleBase(nullptr),
 	sampleTurret(nullptr),
 	sampleBarricade(nullptr),
+	sampleUpgradeCenter(nullptr),
 	moveCommandTileRng(nullptr),
 	moveCommandTileGath(nullptr),
 	moveCommandTileMelee(nullptr),
@@ -323,8 +326,10 @@ bool ModuleEntityManager::Start()
 	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
 	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
 	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+	
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
+	upgradeCenterTexture = app->tex->Load("spritesheets/Structures/barricade.png");
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
@@ -577,7 +582,6 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
 				{
-
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter());
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
@@ -587,6 +591,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				entityVector[i]->Start(upgradeCenterTexture);
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
@@ -612,6 +617,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
+				entityVector[i]->Start(barricadeTexture);
 				break;
 
 			case ENTITY_TYPE::SPAWNER:
@@ -717,12 +723,13 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
 	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
 	app->tex->UnLoad(barricadeTexture);				barricadeTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterTexture);				upgradeCenterTexture = nullptr;
 
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
 	RELEASE(sampleBarricade);						sampleBarricade = nullptr;
-
+	RELEASE(sampleUpgradeCenter);					sampleUpgradeCenter = nullptr;
 	//Feedback------------
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
@@ -847,10 +854,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		ret = new Turret({ (float)x,(float)y }, sampleTurret, alignement);
-
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+		ret = new UpgradeCenter({ (float)x,(float)y }, sampleUpgradeCenter, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:
@@ -859,6 +866,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
+		ret = new Barricade({ (float)x,(float)y }, sampleBarricade, alignement);
 		break;
 
 	case ENTITY_TYPE::ENEMY:
@@ -3313,6 +3321,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_RANGED, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 		else if (type == "enemy_night")
@@ -3320,6 +3329,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 
@@ -3328,6 +3338,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 
@@ -3357,6 +3368,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
+			base->SetCurrentHP(iterator.attribute("hit_points").as_int());
+
 			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)
 			{
 				P2SString name(iterator2.attribute("name").as_string());
@@ -3366,6 +3379,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 					turret = (Turret*)AddEntity(ENTITY_TYPE::BLDG_TURRET, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 					turret->SetLevel(iterator2.attribute("level").as_int());
+					turret->SetCurrentHP(iterator.attribute("hit_points").as_int());
 
 					base->AddTurret(turret);
 				}
@@ -3373,6 +3387,9 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 				if (name == "barricade")
 				{
 					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+					barricade->SetLevel(iterator2.attribute("level").as_int());
+					barricade->SetCurrentHP(iterator.attribute("hit_points").as_int());
 
 					base->AddBarricade(barricade);
 				}
@@ -3649,6 +3666,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
 				break;
 
 
@@ -3663,6 +3682,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
 
 				break;
 
@@ -3679,6 +3700,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
 				break;
 
 
@@ -3693,6 +3716,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
 
 				break;
 
@@ -3722,6 +3747,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				base = (Base*)entityVector[i];
 
+				iterator.append_attribute("hit_points") = base->hitPointsCurrent;
+
 				turretVector = base->GetTurretVector();
 				barricadeVector = base->GetBarricadeVector();
 				upgradeCenter = base->GetUpgradeCenter();
@@ -3733,16 +3760,19 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 					iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
 					iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
 
+					iterator.append_attribute("hit_points") = turretVector->operator[](i)->hitPointsCurrent;
 					iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
 				}
 
 				for (int i = 0; i < barricadeVector->size(); i++)
 				{
-					//TODO
 					iterator2 = iterator.append_child("barricade");
 					iterator2.append_attribute("name") = "barricade";
-					//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
-					//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+					iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
+					iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+
+					iterator.append_attribute("hit_points") = barricadeVector->operator[](i)->hitPointsCurrent;
+					iterator2.append_attribute("level") = barricadeVector->operator[](i)->GetLevel();
 				}
 
 				if (upgradeCenter != nullptr)
