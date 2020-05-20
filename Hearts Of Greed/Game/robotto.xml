@@ -286,8 +286,8 @@
     </skill_1_right_down>
 
     <skill_1_left_down name="skill_1_left_down" frames="13">
-      <frame rposX="1329" rposY="15" rwidth="42" rheight="177" time="0.26f" pivotX="34" pivotY="153"/>
-      <frame rposX="1447" rposY="15" rwidth="67" rheight="177" time="0.26f" pivotX="45" pivotY="157"/>
+      <frame rposX="1329" rposY="15" rwidth="108" rheight="177" time="0.26f" pivotX="34" pivotY="153"/>
+      <frame rposX="1447" rposY="15" rwidth="167" rheight="177" time="0.26f" pivotX="45" pivotY="157"/>
       <frame rposX="1631" rposY="15" rwidth="102" rheight="177" time="0.26f" pivotX="17" pivotY="163"/>
       <frame rposX="1761" rposY="15" rwidth="114" rheight="177" time="0.26f" pivotX="16" pivotY="159"/>
       <frame rposX="1897" rposY="15" rwidth="126" rheight="177" time="0.26f" pivotX="16" pivotY="158"/>

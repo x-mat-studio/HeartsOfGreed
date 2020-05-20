@@ -291,6 +291,59 @@
       <frame rposX="1013" rposY="1468" rwidth="37" rheight="87"  time="0.15f" pivotX="37" pivotY="70"/>
     </skill_1_left_up>
 
+    <death_right_up name="death_right_up" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_right_up>
+
+    <death_right name="death_right" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_right>
+
+    <death_right_down name="death_right_down" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_right_down>
+
+    <death_left_down name="death_left_down" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_left_down>
+
+    <death_left name="death_left" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_left>
+
+    <death_left_up name="death_left_up" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_left_up>
 
     </Animations>
 </rangedman>
