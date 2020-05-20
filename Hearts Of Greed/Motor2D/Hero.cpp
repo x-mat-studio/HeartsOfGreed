@@ -274,6 +274,10 @@ Hero::~Hero()
 
 bool Hero::PreUpdate(float dt)
 {
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN)
+	{
+		LevelUp();
+	}
 	return true;
 }
 
