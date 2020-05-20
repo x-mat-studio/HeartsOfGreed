@@ -105,10 +105,12 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	visionInPx(0.f),
 	movingTo{ -1,-1 },
 	drawingVfx(false),
+	lvlUpSfxTimer(0),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1),
 	objective(nullptr),
+	myParticleSystem(nullptr),
 
 	hpLevelUpConstant(hpLevelUp),
 	damageLevelUpConstant(damageLevelUp),
@@ -117,7 +119,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	heroSkillPoints(0)
 
 {
-	currentAnimation = &walkLeft;
+	currentAnimation = &walkLeft; 
 }
 
 
@@ -234,6 +236,7 @@ Hero::~Hero()
 	objective = nullptr;
 	currAreaInfo = nullptr;
 	currentAnimation = nullptr;
+	myParticleSystem = nullptr;
 
 	inputs.clear();
 
@@ -275,7 +278,6 @@ bool Hero::PreUpdate(float dt)
 	{
 		LevelUp();
 	}
-
 	return true;
 }
 
@@ -300,7 +302,7 @@ bool Hero::Update(float dt)
 
 
 	CollisionPosUpdate();
-
+	HandleMyParticleSystem(dt);
 	return true;
 }
 
@@ -426,6 +428,8 @@ bool Hero::PostUpdate(float dt)
 	DrawArea();
 
 	CommandVfx(dt);
+
+	
 
 	return true;
 }
@@ -1409,6 +1413,32 @@ void Hero::SetAnimation(HERO_STATES currState)
 		currentAnimation->loop = false;
 
 	}
+	}
+}
+
+void Hero::HandleMyParticleSystem(float dt)
+{
+	if (myParticleSystem != nullptr) {
+	
+		myParticleSystem->Move(position.x, position.y);
+	
+		if (myParticleSystem->IsActive()) {
+		
+			TimeMyParticleSystem(dt);
+		}
+	}
+}
+
+void Hero::TimeMyParticleSystem(float dt)
+{
+	//implied that your system is not nullptr
+	if (myParticleSystem->IsActive()) {
+		lvlUpSfxTimer += dt;
+
+		if (lvlUpSfxTimer > 3) {
+			lvlUpSfxTimer = 0;
+			myParticleSystem->Desactivate();
+		}
 	}
 }
 

@@ -33,6 +33,8 @@
 #include "Building.h"
 #include "Base.h"
 #include "Turret.h"
+#include "Barricade.h"
+#include "UpgradeCenter.h"
 
 #include "ParticleSystem.h"
 #include "Emitter.h"
@@ -55,6 +57,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	snowball(nullptr),
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
+	barricadeTexture(nullptr),
+	upgradeCenterTexture(nullptr),
 	enemyTexture(nullptr),
 	explosionTexture(nullptr),
 	targetedTexture(nullptr),
@@ -69,6 +73,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleBuilding(nullptr),
 	sampleBase(nullptr),
 	sampleTurret(nullptr),
+	sampleBarricade(nullptr),
+	sampleUpgradeCenter(nullptr),
 	moveCommandTileRng(nullptr),
 	moveCommandTileGath(nullptr),
 	moveCommandTileMelee(nullptr),
@@ -83,6 +89,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEmitter(nullptr),
 	sampleEmitter2(nullptr),
 	sampleEmitter3(nullptr),
+	sampleEmitter4(nullptr),
 	sampleParticleSystem(nullptr),
 	deadGatherer(nullptr),
 	deadMelee(nullptr),
@@ -234,6 +241,16 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	LoadSampleTurret(turret);
 	turretdoc.reset();
 
+
+	//Sample Barricade -------------------
+	filename = config.child("load").attribute("docnameBarricade").as_string();
+	pugi::xml_document barricadedoc;
+	barricadedoc.load_file(filename.GetString());
+	pugi::xml_node barricadeNode = barricadedoc.child("barricade");
+
+	LoadSampleBarricade(barricadeNode);
+	barricadedoc.reset();
+
 	//spawner
 	filename = config.child("load").attribute("docnameSpawner").as_string();
 	pugi::xml_document spawnerdoc;
@@ -309,7 +326,15 @@ bool ModuleEntityManager::Start()
 	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
 	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
 	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
+	
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
+	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
+	upgradeCenterTexture = app->tex->Load("spritesheets/Structures/barricade.png");
+
+	sampleBuilding->SetTexture(base1Texture);
+	sampleBase->SetTexture(base2Texture);
+	sampleTurret->SetTexture(turretTexture);
+	sampleBarricade->SetTexture(barricadeTexture);
 
 	//SELECTIONS & FEEDBACK---------
 	deco3Selected = app->tex->Load("maps/base03_selected.png");
@@ -368,9 +393,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 
-	sampleBuilding->SetTexture(base1Texture);
-	sampleBase->SetTexture(base2Texture);
-	sampleTurret->SetTexture(turretTexture);
+	
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -431,6 +454,7 @@ bool ModuleEntityManager::Start()
 	sampleEmitter->SetTextureNStart(snowball);  sampleParticleSystem->PushEmiter(*sampleEmitter);
 	sampleEmitter2->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter2);
 	sampleEmitter3->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter3);
+	sampleEmitter4->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter4);
 
 
 	return ret;
@@ -558,7 +582,6 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
 				{
-
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter());
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
@@ -568,6 +591,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+				entityVector[i]->Start(upgradeCenterTexture);
 				break;
 
 			case ENTITY_TYPE::BLDG_BASE:
@@ -593,6 +617,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
+				entityVector[i]->Start(barricadeTexture);
 				break;
 
 			case ENTITY_TYPE::SPAWNER:
@@ -697,11 +722,14 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
 	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
 	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
+	app->tex->UnLoad(barricadeTexture);				barricadeTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterTexture);				upgradeCenterTexture = nullptr;
 
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
-
+	RELEASE(sampleBarricade);						sampleBarricade = nullptr;
+	RELEASE(sampleUpgradeCenter);					sampleUpgradeCenter = nullptr;
 	//Feedback------------
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
@@ -718,6 +746,7 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
 	RELEASE(sampleEmitter2);						sampleEmitter2 = nullptr;
 	RELEASE(sampleEmitter3);						sampleEmitter3 = nullptr;
+	RELEASE(sampleEmitter4);						sampleEmitter4 = nullptr;
 	RELEASE(sampleParticleSystem);					sampleParticleSystem = nullptr;
 
 	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
@@ -825,10 +854,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		ret = new Turret({ (float)x,(float)y }, sampleTurret, alignement);
-
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+		ret = new UpgradeCenter({ (float)x,(float)y }, sampleUpgradeCenter, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:
@@ -837,6 +866,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
+		ret = new Barricade({ (float)x,(float)y }, sampleBarricade, alignement);
 		break;
 
 	case ENTITY_TYPE::ENEMY:
@@ -2182,6 +2212,14 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
+		sampleBarricade->ActivateTransparency();
+		sampleBarricade->SetPosition(x, y);
+		sampleBarricade->Draw(0);
+
+		if (app->input->GetKey(SDL_SCANCODE_R) == KEY_STATE::KEY_DOWN)
+		{
+			sampleBarricade->Flip();
+		}
 		break;
 
 
@@ -2868,6 +2906,39 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 }
 
 
+bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
+{
+	barricadeNode = barricadeNode.first_child();
+
+	//Collider
+	int colW = barricadeNode.child("collider").child("rect").attribute("w").as_int();
+	int colH = barricadeNode.child("collider").child("rect").attribute("h").as_int();
+	COLLIDER_TYPE type = (COLLIDER_TYPE)barricadeNode.child("collider").child("type").attribute("id").as_int();
+
+	//Rects
+	SDL_Rect verticalRect{ barricadeNode.child("rect").child("verticalRect").attribute("x").as_int(), barricadeNode.child("rect").child("verticalRect").attribute("y").as_int(),
+	barricadeNode.child("rect").child("verticalRect").attribute("w").as_int() , barricadeNode.child("rect").child("verticalRect").attribute("h").as_int() };
+
+	SDL_Rect horizontalRect{ barricadeNode.child("rect").child("horizontalRect").attribute("x").as_int(), barricadeNode.child("rect").child("horizontalRect").attribute("y").as_int(),
+	barricadeNode.child("rect").child("horizontalRect").attribute("w").as_int() , barricadeNode.child("rect").child("horizontalRect").attribute("h").as_int() };
+
+	//Stats
+	int level = barricadeNode.child("stats").attribute("level").as_int(0);
+	int vision = barricadeNode.child("stats").attribute("vision").as_int(0);
+	int xp = barricadeNode.child("stats").attribute("xp").as_int(0);
+	int buildingCost = barricadeNode.child("stats").attribute("buildingCost").as_int(0);
+	int transparency = barricadeNode.child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = barricadeNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = barricadeNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = barricadeNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, type, this), verticalRect, horizontalRect);
+
+	return true;
+}
+
+
 bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
 {
 	bool ret = true;
@@ -2989,20 +3060,20 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	Animation anim3;
 	anim3.PushBack(SDL_Rect{ 7, 11, 8, 8 }, 1, 0, 0);
 
-	float auxPosX = 0;							float auxPos2X = 0;							float auxPos3X = 0;
-	float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;
-	float auxSpeedX = 0;						float auxSpeed2X = 0;						float auxSpeed3X = 0;
-	float auxSpeedY = 4;						float auxSpeedY2 = 5;						float auxSpeedY3 = 6;
-	int particleVariationSpeedX = 0;			int particleVariationSpeedX2 = 0;			int particleVariationSpeedX3 = 0;
-	int particleVariationSpeedY = 2;			int particleVariationSpeedY2 = 2;			int particleVariationSpeedY3 = 2;
-	float particleAccelerationX = 0.2;			float particleAccelerationX2 = 0.2;			float particleAccelerationX3 = 0.2;
-	float particleAccelerationY = -1;			float particleAccelerationY2 = -1;			float particleAccelerationY3 = -1;
-	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX2 = 1;	int particleVariationAccelerationX3 = 1;
-	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0;
-	float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
-	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed2 = 1;		int particleVariableAngularSpeed3 = 1;
-	float particlesRate = 13;					float particlesRate2 = 13;					float particlesRate3 = 16;
-	float particlesLifeTime = 2;				float particlesLifeTime2 = 2;				float particlesLifeTime3 = 2;
+	float auxPosX = 0;							float auxPos3X = 0;
+	float auxPosY = 0;							float auxPos3Y = 0;
+	float auxSpeedX = 0;						float auxSpeed3X = 0;
+	float auxSpeedY = 4;						float auxSpeedY3 = 6;
+	int particleVariationSpeedX = 0;			int particleVariationSpeedX3 = 0;
+	int particleVariationSpeedY = 2;			int particleVariationSpeedY3 = 2;
+	float particleAccelerationX = 0.2;			float particleAccelerationX3 = 0.2;
+	float particleAccelerationY = -0.5;			float particleAccelerationY3 = -0.5;
+	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX3 = 1;
+	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY3 = 0;
+	float particleAngularSpeed = 0;				float particleAngularSpeed3 = 0;
+	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed3 = 1;
+	float particlesRate = 8;					float particlesRate3 = 13;
+	float particlesLifeTime = 0.55;				float particlesLifeTime3 = 0.55;
 
 
 	//SAMPLES--------------
@@ -3010,9 +3081,10 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	sampleParticleSystem = new ParticleSystem();
 
 	sampleEmitter = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
-	sampleEmitter2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, nullptr, nullptr, anim2, true);
-	sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+	sampleEmitter2 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
 
+	sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+	sampleEmitter4 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
 
 	return ret;
 }
@@ -3249,6 +3321,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_RANGED, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 		else if (type == "enemy_night")
@@ -3256,6 +3329,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 
@@ -3264,6 +3338,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 
@@ -3293,6 +3368,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
+			base->SetCurrentHP(iterator.attribute("hit_points").as_int());
+
 			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)
 			{
 				P2SString name(iterator2.attribute("name").as_string());
@@ -3302,6 +3379,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 					turret = (Turret*)AddEntity(ENTITY_TYPE::BLDG_TURRET, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 					turret->SetLevel(iterator2.attribute("level").as_int());
+					turret->SetCurrentHP(iterator.attribute("hit_points").as_int());
 
 					base->AddTurret(turret);
 				}
@@ -3309,6 +3387,9 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 				if (name == "barricade")
 				{
 					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+					barricade->SetLevel(iterator2.attribute("level").as_int());
+					barricade->SetCurrentHP(iterator.attribute("hit_points").as_int());
 
 					base->AddBarricade(barricade);
 				}
@@ -3585,6 +3666,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
 				break;
 
 
@@ -3599,6 +3682,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
 
 				break;
 
@@ -3615,6 +3700,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
 
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
 				break;
 
 
@@ -3629,6 +3716,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
 				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
 
 				break;
 
@@ -3658,6 +3747,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				base = (Base*)entityVector[i];
 
+				iterator.append_attribute("hit_points") = base->hitPointsCurrent;
+
 				turretVector = base->GetTurretVector();
 				barricadeVector = base->GetBarricadeVector();
 				upgradeCenter = base->GetUpgradeCenter();
@@ -3669,16 +3760,19 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 					iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
 					iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
 
+					iterator.append_attribute("hit_points") = turretVector->operator[](i)->hitPointsCurrent;
 					iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
 				}
 
 				for (int i = 0; i < barricadeVector->size(); i++)
 				{
-					//TODO
 					iterator2 = iterator.append_child("barricade");
 					iterator2.append_attribute("name") = "barricade";
-					//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
-					//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+					iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
+					iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+
+					iterator.append_attribute("hit_points") = barricadeVector->operator[](i)->hitPointsCurrent;
+					iterator2.append_attribute("level") = barricadeVector->operator[](i)->GetLevel();
 				}
 
 				if (upgradeCenter != nullptr)

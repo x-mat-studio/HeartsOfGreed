@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<barricade>
+
+  <sample>
+    <position x="0" y="0"/>
+
+    <collider>
+      <rect x="0" y="0" w="70" h="80"/>
+      <type id="4"/>
+    </collider>
+
+    <stats level="1" xp="35" buildingCost="95" transparency="160">
+      <hitPoints max="210" current="210" recoveryRate="0"/>
+    </stats>
+
+    <rect>
+      <verticalRect x="728" y="24" w="121" h="179"></verticalRect>
+      <horizontalRect x="885" y="24" w="121" h="179"></horizontalRect>
+    </rect>
+
+  </sample>
+  
+	<Animations>
+           
+</Animations>
+</barricade>

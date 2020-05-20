@@ -823,17 +823,20 @@ UI_Group* UIFactory::CreateOnHoverRobottoAttackSpeedUpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 {
+	char stats[40];
+	
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade gatherer passive:", group);
+	CreateText(5, 0, background, "Handy mastery:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -841,17 +844,20 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade grenade:", group);
+	CreateText(5, 0, background, "Detonation:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -859,17 +865,20 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade melee passive:", group);
+	CreateText(5, 0, background, "Born to fight:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -877,17 +886,20 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade hammer crush:", group);
+	CreateText(5, 0, background, "Hammer slam:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -895,13 +907,97 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 {
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Bloodhsed:", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, ":", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Kill streak:", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Immolation:", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverGathererPassive1UpgradeMenu()
+{
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade bleeding effect:", group);
+	CreateText(5, 0, background, "Upgrade 'handy mastery':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
@@ -911,7 +1007,79 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 }
 
 
-UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
+UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'detonation':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleePassive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'born to fight':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'hammer slam':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedPassive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'bloodhsed':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedActive1UpgradeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -929,7 +1097,7 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 }
 
 
-UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
+UI_Group* UIFactory::CreateOnHoverRobottoPassive1UpgradeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -937,7 +1105,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade kill strike:", group);
+	CreateText(5, 0, background, "Upgrade 'kill strike':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
@@ -947,7 +1115,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
 }
 
 
-UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
+UI_Group* UIFactory::CreateOnHoverRobottoActive1UpgradeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -955,7 +1123,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade self-destruction:", group);
+	CreateText(5, 0, background, "Upgrade 'immolation':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 

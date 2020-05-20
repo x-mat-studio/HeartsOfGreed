@@ -55,6 +55,7 @@
     docnameSuitman="suitman.xml" 
     docnameWanamingo="wanamingo.xml" 
     docnameTurret="turret.xml" 
+    docnameBarricade="barricade.xml"
     docnameArmoredman="armoredman.xml" 
     docnameRangedman="rangedman.xml"
     docnameRobotto="robotto.xml"

@@ -129,6 +129,14 @@ public:
 	UI_Group* CreateOnHoverRangedActive1Menu();
 	UI_Group* CreateOnHoverRobottoPassive1Menu();
 	UI_Group* CreateOnHoverRobottoActive1Menu();
+	UI_Group* CreateOnHoverGathererPassive1UpgradeMenu();
+	UI_Group* CreateOnHoverGathererActive1UpgradeMenu();
+	UI_Group* CreateOnHoverMeleePassive1UpgradeMenu();
+	UI_Group* CreateOnHoverMeleeActive1UpgradeMenu();
+	UI_Group* CreateOnHoverRangedPassive1UpgradeMenu();
+	UI_Group* CreateOnHoverRangedActive1UpgradeMenu();
+	UI_Group* CreateOnHoverRobottoPassive1UpgradeMenu();
+	UI_Group* CreateOnHoverRobottoActive1UpgradeMenu();
 
 	// Scrollbar creation functions
 
