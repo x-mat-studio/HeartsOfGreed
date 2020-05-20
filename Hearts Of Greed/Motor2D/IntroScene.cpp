@@ -8,6 +8,7 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Video.h"
+#include "Window.h"
 #include "Render.h"
 
 
@@ -17,6 +18,8 @@ bgTransitionConst(0), logoBG(nullptr), bgAlphaCounter(0), logoSound(-1), logoSta
 logoXMat(nullptr), titleSound(-1)
 {
 	name.create("introScene");
+
+
 }
 
 
@@ -74,6 +77,7 @@ bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 		bgTransitionConst = 0;
 	}
 
+	app->win->SetScale(1.00f);
 	return true;
 }
 
@@ -181,6 +185,7 @@ bool  ModuleIntroScene::CleanUp()
 	logoXMat = nullptr;
 	logoBG = nullptr;
 
+	app->win->SetScale(2.0f);
 	app->uiManager->CleanUp();
 
 	return true;
