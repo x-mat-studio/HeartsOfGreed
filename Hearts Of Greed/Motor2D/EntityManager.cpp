@@ -3059,13 +3059,13 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	int particleVariationSpeedX = 0;			int particleVariationSpeedX3 = 0;
 	int particleVariationSpeedY = 2;			int particleVariationSpeedY3 = 2;
 	float particleAccelerationX = 0.2;			float particleAccelerationX3 = 0.2;
-	float particleAccelerationY = -1;			float particleAccelerationY3 = -1;
+	float particleAccelerationY = -0.5;			float particleAccelerationY3 = -0.5;
 	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX3 = 1;
 	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY3 = 0;
 	float particleAngularSpeed = 0;				float particleAngularSpeed3 = 0;
 	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed3 = 1;
 	float particlesRate = 8;					float particlesRate3 = 13;
-	float particlesLifeTime = 1;				float particlesLifeTime3 = 1;
+	float particlesLifeTime = 0.55;				float particlesLifeTime3 = 0.55;
 
 
 	//SAMPLES--------------
