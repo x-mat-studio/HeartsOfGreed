@@ -93,15 +93,19 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	visionInPx(0.f),
 	movingTo{ -1,-1 },
 	drawingVfx(false),
-	comeFromAttack(true),
+	lvlUpSfxTimer(0),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1),
-	objective(nullptr)
+	objective(nullptr),
+	myParticleSystem(nullptr),
 
+
+	heroSkillPoints(0),
+	comeFromAttack(true),
 
 {
-	currentAnimation = &walkLeft;
+	currentAnimation = &walkLeft; 
 }
 
 
@@ -182,6 +186,9 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	skill1(copy->skill1),
 
+
+	heroSkillPoints(0),
+
 	drawingVfx(false)
 {
 	currentAnimation = &walkLeft;
@@ -203,6 +210,7 @@ Hero::~Hero()
 	objective = nullptr;
 	currAreaInfo = nullptr;
 	currentAnimation = nullptr;
+	myParticleSystem = nullptr;
 
 	inputs.clear();
 
@@ -244,7 +252,6 @@ bool Hero::PreUpdate(float dt)
 	{
 		LevelUp();
 	}
-
 	return true;
 }
 
@@ -269,7 +276,7 @@ bool Hero::Update(float dt)
 
 
 	CollisionPosUpdate();
-
+	HandleMyParticleSystem(dt);
 	return true;
 }
 
@@ -395,6 +402,8 @@ bool Hero::PostUpdate(float dt)
 	DrawArea();
 
 	CommandVfx(dt);
+
+	
 
 	return true;
 }
@@ -604,6 +613,7 @@ void Hero::Die()
 		visionEntity->deleteEntity = true;
 		visionEntity = nullptr;
 	}
+	app->entityManager->AssignNewDeadHero(*this);
 }
 
 
@@ -1384,6 +1394,19 @@ void Hero::SetAnimation(HERO_STATES currState)
 	}
 }
 
+void Hero::HandleMyParticleSystem(float dt)
+{
+	if (myParticleSystem != nullptr) {
+	
+		myParticleSystem->Move(position.x, position.y);
+	
+		if (myParticleSystem->IsActive()) {
+		
+			TimeMyParticleSystem(dt);
+		}
+	}
+}
+
 void Hero::ResetAttackAnimation()
 {
 	punchRightUp.ResetAnimation();
@@ -1392,6 +1415,19 @@ void Hero::ResetAttackAnimation()
 	punchRightDown.ResetAnimation();
 	punchLeftDown.ResetAnimation();
 	punchLeft.ResetAnimation();
+}
+
+void Hero::TimeMyParticleSystem(float dt)
+{
+	//implied that your system is not nullptr
+	if (myParticleSystem->IsActive()) {
+		lvlUpSfxTimer += dt;
+
+		if (lvlUpSfxTimer > 3) {
+			lvlUpSfxTimer = 0;
+			myParticleSystem->Desactivate();
+		}
+	}
 }
 
 bool Hero::PreProcessSkill1()
@@ -1536,6 +1572,12 @@ int Hero::GetEnergyPoints() const
 void Hero::SetEnergyPoints(int engPoints)
 {
 	stats.currEnergy = engPoints;
+}
+
+
+void Hero::AddEnergyPoints(int engPoints)
+{
+	energyPoints += engPoints;
 }
 
 
@@ -1760,10 +1802,12 @@ DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill) : level(level), her
 DeadHero::~DeadHero()
 {}
 
+
 ENTITY_TYPE DeadHero::GetType() const
 {
 	return heroType;
 }
+
 
 int DeadHero::GetLevel() const
 {
@@ -1774,4 +1818,22 @@ void DeadHero::GetSkillInfo(SKILL_ID& id, int& newskillLevel) const
 {
 	id = skillId;
 	newskillLevel = skillLevel;
+}
+
+
+int Hero::GetHeroSkillPoints()
+{
+	return heroSkillPoints;
+}
+
+
+void Hero::SetHeroSkillPoints(int n)
+{
+	heroSkillPoints = n;
+}
+
+
+void Hero::AddHeroSkillPoints(int n)
+{
+	heroSkillPoints += n;
 }

@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include "Render.h"
 #include "Map.h"
+#include "ParticleSystem.h"
 
 RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -148,17 +149,23 @@ bool RangedHero::ExecuteSkill3()
 
 void RangedHero::LevelUp()
 {
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-	app->entityManager->RequestHeroStats(stats,this->type, stats.heroLevel + 1);
 
-
-	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue;
+	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue
 
 	stats.maxEnergy *= (app->entityManager->rangedEnergyUpgradeValue);
 
 	stats.damage *= (app->entityManager->rangedDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->rangedAtkSpeedUpgradeValue);
 
+	heroSkillPoints++;
 }
 
 

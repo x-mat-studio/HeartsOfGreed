@@ -9,7 +9,8 @@ Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVar
 	fMPoint& particleAcceleration, iMPoint& particleVariationAcceleration, float particleAngularSpeed,
 	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
 
-	position(position),
+	position(0, 0),
+	offSet(position),
 	particleSpeed(particleSpeed),
 	particleVariationSpeed(particleVariationSpeed),
 	particleAcceleration(particleAcceleration),
@@ -51,7 +52,8 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 	float particleAccelerationX, float particleAccelerationY, int particleVariationAccelerationX, int particleVariationAccelerationY, float particleAngularSpeed,
 	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
 
-	position{ positionX, positionY },
+	position(0, 0),
+	offSet{ positionX, positionY },
 	particleSpeed{ particleSpeedX, particleSpeedY },
 	particleVariationSpeed{ particleVariationSpeedX, particleVariationSpeedY },
 	particleAcceleration{ particleAccelerationX, particleAccelerationY },
@@ -273,12 +275,12 @@ float Emitter::GeneratePosX()
 {
 	if (randomizePosX == true)
 	{
-		float x = (rand() % areaOfSpawn->w) + position.x;
+		float x = (rand() % areaOfSpawn->w) + position.x + offSet.x;
 		return x;
 	}
 
 	else
-		return position.x;
+		return position.x + offSet.x;
 }
 
 
@@ -286,12 +288,12 @@ float Emitter::GeneratePosY()
 {
 	if (randomizePosY == true)
 	{
-		float y = (rand() % areaOfSpawn->h) + position.y;
+		float y = (rand() % areaOfSpawn->h) + position.y + offSet.y;
 		return y;
 	}
 
 	else
-		return position.y;
+		return position.y + offSet.y;
 }
 
 
@@ -379,4 +381,6 @@ void Emitter::SetTextureNStart(SDL_Texture* tex)
 {
 	particleTexture = tex;
 	Start();
+
+	active = true;
 }

@@ -205,6 +205,9 @@
     <ClCompile Include="EntityEffects.cpp">
       <Filter>Desenvolupament  ========\Entities\Entity Effects</Filter>
     </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -428,6 +431,9 @@
     </ClInclude>
     <ClInclude Include="EntityEffects.h">
       <Filter>Desenvolupament  ========\Entities\Entity Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

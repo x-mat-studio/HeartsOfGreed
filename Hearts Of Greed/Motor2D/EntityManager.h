@@ -22,8 +22,12 @@ class RangedEnemy;
 class GigaEnemy;
 class NightEnemy;
 class Spawner;
+
 class Base;
 class Turret;
+class Barricade;
+class UpgradeCenter;
+
 class ParticleSystem;
 class Emitter;
 
@@ -168,12 +172,13 @@ private:
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
 	bool LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType);
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
+	bool LoadSampleBarricade(pugi::xml_node& barricadeNode);
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
 	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
-
+	
 
 public:
 
@@ -278,15 +283,14 @@ private:
 	SDL_Texture* roboTexture;
 
 	SDL_Texture* buildingTexture;
-
-
+	
 	SDL_Texture* base1Texture;
-
-
 
 	SDL_Texture* deco3Selected;
 
 	SDL_Texture* turretTexture;
+	SDL_Texture* barricadeTexture;
+	SDL_Texture* upgradeCenterTexture;
 
 	SDL_Texture* enemyTexture;
 	SDL_Texture* enemyNightTexture;
@@ -311,11 +315,14 @@ private:
 	Base* sampleBase;
 
 	Turret* sampleTurret;
+	Barricade* sampleBarricade;
+	UpgradeCenter* sampleUpgradeCenter;
 
 	ParticleSystem* sampleParticleSystem;
 	Emitter* sampleEmitter;
 	Emitter* sampleEmitter2;
 	Emitter* sampleEmitter3;
+	Emitter* sampleEmitter4;
 	SDL_Texture* snowball;
 
 	std::map <int, skillArea> skillAreas;

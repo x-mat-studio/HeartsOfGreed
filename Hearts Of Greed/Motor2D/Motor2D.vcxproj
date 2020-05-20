@@ -143,6 +143,7 @@
     <ClCompile Include="UI_Scrollbar.cpp" />
     <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
+    <ClCompile Include="Video.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="UI_Scrollbar.h" />
     <ClInclude Include="UI_Text.h" />
     <ClInclude Include="UpgradeCenter.h" />
+    <ClInclude Include="Video.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PerfectTimer.h" />

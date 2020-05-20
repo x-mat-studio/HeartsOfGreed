@@ -49,7 +49,7 @@ public:
 
 
 	// Play a music file
-	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 180);
+	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 180, int loop = -1);
 
 
 	// Load a WAV in memory

@@ -7,6 +7,7 @@
 
 #include "Animation.h"
 #include "DynamicEntity.h"
+#include "ParticleSystem.h"
 
 
 enum class HERO_STATES
@@ -212,6 +213,7 @@ public:
 
 	int GetEnergyPoints() const;
 	void SetEnergyPoints(int energyPoints);
+	void AddEnergyPoints(int engPoints);
 
 	int GetMaxEnergyPoints() const;
 	void SetMaxEnergyPoints(int maxEnergyPoints);
@@ -269,8 +271,14 @@ public:
 
 	Skill GetSkill1() const;
 
+	int GetHeroSkillPoints();
+	void SetHeroSkillPoints(int n);
+	void AddHeroSkillPoints(int n);
+
 protected:
 	void SetAnimation(HERO_STATES currState);
+	void HandleMyParticleSystem(float dt);
+	void TimeMyParticleSystem(float dt);
 	void ResetAttackAnimation();
 
 private:
@@ -396,6 +404,11 @@ protected:
 
 	iMPoint movingTo;
 
+	int heroSkillPoints;
+
+	ParticleSystem* myParticleSystem;
+	float lvlUpSfxTimer;
+	
 	bool comeFromAttack;
 };
 

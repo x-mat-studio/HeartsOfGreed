@@ -44,7 +44,7 @@ UIFactory::UIFactory() :
 	robottoShopPicture{ 875, 512, 36, 27 },
 	robottoBigPicture{ 677, 512, 123, 96 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
-	turretDataPagePicture{ 561, 77, 60, 45 },
+	turretDataPagePicture{ 580, 400, 61, 47 },
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
 	turretShopPicture{ 696, 12, 34, 40 },
 	resourceIcon{ 18, 209, 11, 19 },
@@ -56,7 +56,7 @@ UIFactory::UIFactory() :
 	creditsMenuBackground{ 15, 271, 194, 231 },
 	minimapBackground{ 221, 317, 162, 150 },
 	shopBackground{ 15, 271, 194, 231 },
-	resourcesBackground{ 415, 435, 70, 60 },
+	resourcesBackground{ 415, 435, 95, 60 },
 
 	menuButton{ 17, 12, 195, 36 },
 	pauseButton{ 449, 24, 24, 24 },
@@ -67,7 +67,7 @@ UIFactory::UIFactory() :
 	shopButton{ 480, 62, 33, 33 },
 	reviveButton{ 653, 54, 46, 14 },
 
-	upgradeArrowIcon{ 740, 57, 15, 11 },
+	upgradeArrowIcon{ 740, 57, 14, 11 },
 	plusIcon{ 740, 71, 14, 14 },
 
 	scrollbarBar{ 272, 45, 90, 4 },
@@ -307,7 +307,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
-	CreateResourcesPortrait(x - 70, y - 127, nullptr, group);
+	CreateResourcesPortrait(x - 95, y - 127, nullptr, group);
 
 	background = CreateImage(x - dataPageBackground.w, y - dataPageBackground.h, nullptr, dataPageBackground, group);
 
@@ -823,17 +823,20 @@ UI_Group* UIFactory::CreateOnHoverRobottoAttackSpeedUpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 {
+	char stats[40];
+	
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade gatherer passive:", group);
+	CreateText(5, 0, background, "Handy mastery:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -841,17 +844,20 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade grenade:", group);
+	CreateText(5, 0, background, "Detonation:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -859,17 +865,20 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade melee passive:", group);
+	CreateText(5, 0, background, "Born to fight:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -877,17 +886,20 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade hammer crush:", group);
+	CreateText(5, 0, background, "Hammer slam:", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(5, 15, background, stats, group);
 
 	return group;
 }
@@ -895,13 +907,97 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 {
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Bloodhsed:", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, ":", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Kill streak:", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
+{
+	char stats[40];
+
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	Hero* hero = (Hero*)app->player->focusedEntity;
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Immolation:", group);
+
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+
+	CreateText(5, 15, background, stats, group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverGathererPassive1UpgradeMenu()
+{
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade bleeding effect:", group);
+	CreateText(5, 0, background, "Upgrade 'handy mastery':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
@@ -911,7 +1007,79 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 }
 
 
-UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
+UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'detonation':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleePassive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'born to fight':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'hammer slam':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedPassive1UpgradeMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Upgrade 'bloodhsed':", group);
+
+	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+
+	CreateText(25, 20, background, "   -1", group);
+
+	return group;
+}
+
+
+UI_Group* UIFactory::CreateOnHoverRangedActive1UpgradeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -929,7 +1097,7 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 }
 
 
-UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
+UI_Group* UIFactory::CreateOnHoverRobottoPassive1UpgradeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -937,7 +1105,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade kill strike:", group);
+	CreateText(5, 0, background, "Upgrade 'kill strike':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
@@ -947,7 +1115,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
 }
 
 
-UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
+UI_Group* UIFactory::CreateOnHoverRobottoActive1UpgradeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
@@ -955,7 +1123,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade self-destruction:", group);
+	CreateText(5, 0, background, "Upgrade 'immolation':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
@@ -1282,7 +1450,7 @@ UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::v
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1, gathererPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1297,7 +1465,7 @@ UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::ve
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1, gathererActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1312,7 +1480,7 @@ UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vect
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1, meleePassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1327,7 +1495,7 @@ UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vecto
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1, meleeActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1342,7 +1510,7 @@ UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vec
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1, rangedPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1357,7 +1525,7 @@ UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vect
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1, rangedActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1372,7 +1540,7 @@ UI* UIFactory::CreateRobottoPassive1Button(float x, float y, UI* parent, std::ve
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1, robottoPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1387,7 +1555,7 @@ UI* UIFactory::CreateRobottoActive1Button(float x, float y, UI* parent, std::vec
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1, robottoActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (true)
+	if (CheckSkillResources() == true)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1459,23 +1627,15 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 	//resources
 
-	CreateImage(9, 37, background, resourceIcon, group);
-
-		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
-
-		//group->AddUiElement(resourcesPortrait);
+	CreateImage(24, 7, background, resourceIcon, group);
 
 	//skill
 
-	CreateImage(4, 7, background, resourceIconSkill, group);
-
-		//ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
-
-		//group->AddUiElement(resourcesPortrait);
+	CreateImage(3, 37, background, resourceIconSkill, group);
 
 	//boost
 
-	CreateImage(37, 7, background, resourceIconBoost, group);
+	CreateImage(41, 37, background, resourceIconBoost, group);
 
 	ResourcesPortrait* resourcesPortrait = new ResourcesPortrait(24, 3, background, false);
 
@@ -1586,6 +1746,14 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
 	CreateNonGroupText(133, 35, dataPage, dataPagesVector, stats);
+
+	if (focus->GetHeroSkillPoints() > 0)
+	{
+		CreateNonGroupImage(gathererPicture.w - 30, -upgradeArrowIcon.h - 1, dataPage, dataPagesVector, upgradeArrowIcon);
+
+		sprintf_s(stats, 40, "x%i", focus->GetHeroSkillPoints());
+		CreateNonGroupText(gathererPicture.w - 16, -upgradeArrowIcon.h - 10, dataPage, dataPagesVector, stats);
+	}
 }
 
 
@@ -1664,16 +1832,16 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
-	CreateNonGroupText(-45, -15, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(69, 13, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(-45, -30, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(135, 13, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetRng());
-	CreateNonGroupText(-45, -45, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(69, 28, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(-45, -60, dataPage, dataPagesVector, stats);
+	sprintf_s(stats, 40, "AS: %.i", focus->GetAS());
+	CreateNonGroupText(135, 28, dataPage, dataPagesVector, stats);
 }
 
 
@@ -1828,18 +1996,20 @@ void UIFactory::ResetUpgradeCost()
 }
 
 
-bool CheckSkillResources()
+bool UIFactory::CheckSkillResources()
 {
-	if (app->player->GetResourcesSkill() > 1)
+	Hero* hero = (Hero*)app->player->focusedEntity;
+
+	if (app->player->GetResourcesSkill() > 0)
 	{
 		return true;
 	}
 
-	else if (app->player->focusedEntity) // A variable has to exist to check if he has leveled up and has the points
+	else if (hero->GetHeroSkillPoints() > 0) // A variable has to exist to check if he has leveled up and has the points
 	{
 		return true;
 	}
-
+	
 	return false;
 }
 

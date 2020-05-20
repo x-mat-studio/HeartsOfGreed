@@ -80,6 +80,7 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_INTERACTION, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
+	app->eventManager->EventRegister(EVENT_ENUM::LVL_UP_ALL, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
@@ -99,6 +100,10 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
+
+	resources = 0;
+	resourcesSkill = 0;
+	resourcesBoost = 0;
 
 	return true;
 }
@@ -129,6 +134,7 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::LVL_UP_ALL, this);
 
 	constrAreaInfo = nullptr;
 	constrArea.clear();
@@ -148,12 +154,16 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
-		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, nullptr);
+		ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, nullptr);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
 	{
 		DesactivateBuildMode();
+	}
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) // For debug purposes
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL,EVENT_ENUM::NULL_EVENT);
 	}
 
 
@@ -665,15 +675,6 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	break;
 
 	case EVENT_ENUM::GIVE_RESOURCES:
-
-
-		//snowball
-
-
-		app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, 250, 4100);
-
-
-
 		resources += 1000;
 		break;
 
@@ -781,7 +782,21 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 		heroesVector.push_back(hero);
 		break;
+	
+
+	case EVENT_ENUM::LVL_UP_ALL:
+
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1);
+
+		for (int aux = 0; aux < heroesVector.size(); aux++) {
+
+			if (heroesVector[aux] != nullptr) {
+			
+				heroesVector[aux]->LevelUp();
+			}
 		
+		}
+		break;
 	}
 
 
@@ -1013,6 +1028,8 @@ bool ModulePlayer::Load(pugi::xml_node& data)
 	pugi::xml_node iterator = data.first_child();
 
 	resources = iterator.attribute("cristals").as_int();
+	resourcesSkill = iterator.attribute("skillCoin").as_int();
+	resourcesBoost = iterator.attribute("enemyCoin").as_int();
 
 	return true;
 }
@@ -1023,6 +1040,8 @@ bool ModulePlayer::Save(pugi::xml_node& data) const
 	pugi::xml_node iterator = data.append_child("resources");
 
 	iterator.append_attribute("cristals") = resources;
+	iterator.append_attribute("skillCoin") = resourcesSkill;
+	iterator.append_attribute("enemyCoin") = resourcesBoost;
 
 	return true;
 }

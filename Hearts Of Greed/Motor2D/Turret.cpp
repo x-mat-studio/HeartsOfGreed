@@ -77,8 +77,6 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	currentAnimation = &idleRightDown;
 
 	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
-
-
 }
 
 
@@ -87,8 +85,20 @@ Turret::~Turret()
 	shortTermObjective = nullptr;
 	currentAnimation = nullptr;
 
-	inputs.clear();
+	idleRight = Animation();
+	idleRightUp = Animation();
+	idleRightDown = Animation();
+	idleLeft = Animation();
+	idleLeftUp = Animation();
+	idleLeftDown = Animation();
+	shootingRight = Animation();
+	shootingRightUp = Animation();
+	shootingRightDown = Animation();
+	shootingLeft = Animation();
+	shootingLeftUp = Animation();
+	shootingLeftDown = Animation();
 
+	inputs.clear();
 }
 
 
@@ -541,6 +551,4 @@ void Turret::SetLevel(int lvl)
 	{
 		//LevelUp() TODO
 	}
-
-	turretLvl = lvl;
 }

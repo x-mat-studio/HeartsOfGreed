@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
+#include "ParticleSystem.h"
 
 RoboHero::RoboHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -89,7 +90,13 @@ bool RoboHero::ExecuteSkill3()
 
 void RoboHero::LevelUp()
 {
-
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
+	
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
 
@@ -100,6 +107,7 @@ void RoboHero::LevelUp()
 	stats.damage *= (app->entityManager->robottoDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->robottoAtkSpeedUpgradeValue);
 
+	heroSkillPoints++;
 }
 
 void RoboHero::PlayGenericNoise(int probability)

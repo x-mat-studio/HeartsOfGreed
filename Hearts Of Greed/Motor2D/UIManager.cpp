@@ -21,6 +21,7 @@
 #include "FadeToBlack.h"
 #include "DialogManager.h"
 #include "Render.h"
+#include "Hero.h"
 
 #include "Minimap.h"
 
@@ -882,59 +883,67 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::GATHERER_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::MELEE_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::MELEE_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::RANGED_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::RANGED_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::ROBOTTO_PASSIVE1:
-		break;
-
-	case BUTTON_TAG::ROBOTTO_ACTIVE1:
-		break;
-
-	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
 		AddUIGroup(factory->CreateOnHoverGathererPassive1Menu());
 		break;
 
-	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::GATHERER_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverGathererActive1Menu());
 		break;
 
-	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::MELEE_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverMeleePassive1Menu());
 		break;
 
-	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::MELEE_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverMeleeActive1Menu());
 		break;
 
-	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::RANGED_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverRangedPassive1Menu());
 		break;
 
-	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::RANGED_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
-	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::ROBOTTO_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverRobottoPassive1Menu());
 		break;
 
-	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::ROBOTTO_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverRobottoActive1Menu());
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleePassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoActive1UpgradeMenu());
 		break;
 
 	default:
@@ -1076,6 +1085,16 @@ bool ModuleUIManager::Load(pugi::xml_node& data)
 }
 
 
+void ModuleUIManager::BasicResourceManagement(EVENT_ENUM eventN, float* cost)
+{
+	if (app->player->GetResources() >= *cost)
+	{
+		app->player->AddResources(-(*cost));
+		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
+	}
+}
+
+
 void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float *cost)
 {
 	if (app->player->GetResourcesBoost() >= *cost)
@@ -1089,9 +1108,11 @@ void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float *c
 	
 void ModuleUIManager::SkillResourceManagement()
 {
-	if (app->player->focusedEntity)
+	Hero* hero = (Hero*)app->player->focusedEntity;
+
+	if (hero->GetHeroSkillPoints() > 0)
 	{
-		-1;
+		hero->AddHeroSkillPoints(-1);
 	}
 	else
 	{

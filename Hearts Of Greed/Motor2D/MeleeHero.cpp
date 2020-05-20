@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Map.h"
 #include "Render.h"
+#include "ParticleSystem.h"
 
 MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -130,16 +131,29 @@ bool MeleeHero::ExecuteSkill3()
 
 void MeleeHero::LevelUp()
 {
-	app->entityManager->RequestHeroStats(stats,this->type, stats.heroLevel + 1);
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
+	hitPointsMax += (hpLevelUpConstant * app->entityManager->meleeLifeUpgradeValue);
+	hitPointsCurrent = hitPointsMax;	
+	recoveryHitPointsRate += 1;
+	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
+	energyPoints = maxEnergyPoints;
+	recoveryEnergyRate;
+
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
 
-	stats.maxHP *=  app->entityManager->meleeLifeUpgradeValue;
-
+	stats.maxHP *= app->entityManager->meleeLifeUpgradeValue;
 	stats.maxEnergy *= (app->entityManager->meleeEnergyUpgradeValue);
 
 	stats.damage *= (app->entityManager->meleeDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->meleeAtkSpeedUpgradeValue);
 
+	heroSkillPoints++;
 }
 
 void MeleeHero::PlayGenericNoise(int probability)
