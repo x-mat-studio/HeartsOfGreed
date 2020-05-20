@@ -25,6 +25,7 @@ public:
 	void Flip();
 	void SetLevel(int level);
 
+	void Draw(float dt);
 	void DrawSelected();
 
 	int RecieveDamage(int damage);
@@ -36,6 +37,8 @@ private:
 private:
 	SDL_Rect verticalRect;
 	SDL_Rect horizontalRect;
+
+	SDL_Rect* currentRect;
 
 	int barricadeLvl;
 

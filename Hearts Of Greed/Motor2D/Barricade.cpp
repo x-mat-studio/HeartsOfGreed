@@ -15,7 +15,9 @@ Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, i
 	direction(DIRECTION_BARRICADE::VERTICAL),
 
 	verticalRect(verticalRect),
-	horizontalRect(horizontalRect)
+	horizontalRect(horizontalRect),
+	
+	currentRect(&this->verticalRect)
 {}
 
 
@@ -27,7 +29,9 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 	direction(copy->direction),
 
 	verticalRect(copy->verticalRect),
-	horizontalRect(copy->horizontalRect)
+	horizontalRect(copy->horizontalRect),
+
+	currentRect(&this->verticalRect)
 {
 }
 
@@ -36,6 +40,19 @@ Barricade::~Barricade()
 {
 	barricadeLvl = -1;
 	direction = DIRECTION_BARRICADE::NONE;
+
+	currentRect = nullptr;
+}
+
+
+void Barricade::Draw(float dt)
+{
+	if (transparent)
+	{
+		app->render->Blit(texture, position.x, position.y, currentRect, false, true, transparencyValue, 255, 255, 255, 1.0f, -offset.x, -offset.y);
+	}
+	else
+		app->render->Blit(texture, position.x, position.y, currentRect, false, true, 0, 255, 255, 255, 1.0f, -offset.x, -offset.y);
 }
 
 
@@ -96,30 +113,22 @@ void Barricade::Die()
 
 void Barricade::Flip()
 {
-	int centerX = center.x;
-	int centerY = center.y;
-
-	int w = collider->rect.w;
-	int h = collider->rect.h;
-
 	if (direction == DIRECTION_BARRICADE::VERTICAL)
 	{
 		direction = DIRECTION_BARRICADE::HORIZONTAL;
+		
+		currentRect = &horizontalRect;
 	}
 
 	else if (direction == DIRECTION_BARRICADE::HORIZONTAL)
 	{
 		direction = DIRECTION_BARRICADE::VERTICAL;
+
+		currentRect = &verticalRect;
 	}
 
 	else
 		assert("Barricade has problem");
-
-	center.x = centerY;
-	center.y = centerX;
-
-	collider->rect.w = h;
-	collider->rect.h = w;
 }
 
 

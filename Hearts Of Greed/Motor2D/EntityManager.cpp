@@ -324,6 +324,12 @@ bool ModuleEntityManager::Start()
 	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
 	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
+	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
+
+	sampleBuilding->SetTexture(base1Texture);
+	sampleBase->SetTexture(base2Texture);
+	sampleTurret->SetTexture(turretTexture);
+	sampleBarricade->SetTexture(barricadeTexture);
 
 	//SELECTIONS & FEEDBACK---------
 	deco3Selected = app->tex->Load("maps/base03_selected.png");
@@ -382,9 +388,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 
-	sampleBuilding->SetTexture(base1Texture);
-	sampleBase->SetTexture(base2Texture);
-	sampleTurret->SetTexture(turretTexture);
+	
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -2200,6 +2204,14 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
+		sampleBarricade->ActivateTransparency();
+		sampleBarricade->SetPosition(x, y);
+		sampleBarricade->Draw(0);
+
+		if (app->input->GetKey(SDL_SCANCODE_R) == KEY_STATE::KEY_DOWN)
+		{
+			sampleBarricade->Flip();
+		}
 		break;
 
 
@@ -2913,7 +2925,7 @@ bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
 	int currentHP = barricadeNode.child("stats").child("hitPoints").attribute("current").as_int(0);
 	int recoveryHP = barricadeNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
-	//sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, ), SDL_Rect & verticalRect, SDL_Rect & horizontalRect)
+	sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, type, this), verticalRect, horizontalRect);
 
 	return true;
 }
