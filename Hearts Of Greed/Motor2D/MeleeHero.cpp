@@ -10,15 +10,13 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
+	HeroStats& stats,  Skill& skill1) :
 	
 	Hero(position, ENTITY_TYPE::HERO_MELEE, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, recoveryEnergyRate,
-		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1, hpLevelUp, damageLevelUp, energyLevelUp, atkSpeedLevelUp)
+		tileOnWalk, stats,  skill1)
 
 {}
 
@@ -88,7 +86,7 @@ bool MeleeHero::ExecuteSkill1()
 	if (!skillExecutionDelay)
 	{
 		if (!godMode)
-			energyPoints -= skill1.energyCost;
+			stats.currEnergy -= skill1.energyCost;
 
 		skillExecutionDelay = true;
 
@@ -132,20 +130,15 @@ bool MeleeHero::ExecuteSkill3()
 
 void MeleeHero::LevelUp()
 {
+	app->entityManager->RequestHeroStats(stats,this->type, stats.heroLevel + 1);
 
-	hitPointsMax += (hpLevelUpConstant * app->entityManager->meleeLifeUpgradeValue);
-	hitPointsCurrent = hitPointsMax;	
-	recoveryHitPointsRate += 1;
-	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
-	energyPoints = maxEnergyPoints;
-	recoveryEnergyRate;
 
-	attackDamage += (damageLevelUpConstant * app->entityManager->meleeDamageUpgradeValue);
-	attackSpeed += (attackSpeedLevelUpConstant * app->entityManager->meleeAtkSpeedUpgradeValue);
-	attackRange;
+	stats.maxHP *=  app->entityManager->meleeLifeUpgradeValue;
 
-	unitSpeed += 5;
-	visionDistance;
+	stats.maxEnergy *= (app->entityManager->meleeEnergyUpgradeValue);
+
+	stats.damage *= (app->entityManager->meleeDamageUpgradeValue);
+	stats.atkSpeed *= (app->entityManager->meleeAtkSpeedUpgradeValue);
 
 }
 

@@ -60,11 +60,10 @@ enum HERO_INPUTS
 };
 
 
-
 struct Skill
 {
 	Skill();
-	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime,  SKILL_TYPE type, ENTITY_ALIGNEMENT target , int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
+	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
 	Skill(const Skill& skill1);
 
 	Skill operator= (Skill& newSkill);
@@ -89,12 +88,31 @@ struct Skill
 };
 
 struct skillArea;
+struct HeroStats
+{
+	HeroStats();
+	HeroStats(HeroStats& newStats);
 
+	int maxHP;
+	int damage;
+	int maxEnergy;
+	float atkSpeed;
+	float recoveryHPRate;
+	float recoveryEnergyRate;
+	int heroLevel;
+	int movSpeed;
+	int visionDistance;
+	float attackRange;
+	int xpToLvlUp;
+
+	int currHP;
+	int currEnergy;
+};
 
 class DeadHero
 {
 public:
-	DeadHero(int level, ENTITY_TYPE type,Skill skill);
+	DeadHero(int level, ENTITY_TYPE type, Skill skill);
 	~DeadHero();
 
 	ENTITY_TYPE GetType()const;
@@ -121,9 +139,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
-		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision,
-		Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp);
+		HeroStats& stats, Skill& skill1);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -234,6 +250,11 @@ public:
 	float GetSkill3RecoverTime() const;
 	void SetSkill3RecoverTime(float skillRecoverTime);
 
+	int GetMaxHP() const;
+	void SetMaxHP(int newMaxHp);
+
+	int GetCurrentHP() const;
+	void SetCurrentHP(int newcurrHp);
 
 	float GetSkill1TimePassed() const;
 	float GetSkill2TimePassed() const;
@@ -250,6 +271,7 @@ public:
 
 protected:
 	void SetAnimation(HERO_STATES currState);
+	void ResetAttackAnimation();
 
 private:
 
@@ -283,33 +305,20 @@ public:
 	bool skill3Charged;
 
 	bool godMode;
-
-	const int hpLevelUpConstant;
-	const int damageLevelUpConstant;
-	const int energyLevelUpConstant;
-	const int attackSpeedLevelUpConstant;
-
 protected:
-	int level;
-	int expToLevelUp;
-	int heroXP;
 
-	int recoveryHitPointsRate;
-	float energyPoints;
-	float maxEnergyPoints;
-	int recoveryEnergyRate;
+	HeroStats stats;
 
 	float recoveringHealth;
 	float recoveringEnergy;
 	float feelingSecure;
 
-	float attackDamage;
-	int attackRange;
+	int heroXP;
+
 
 	bool gettingAttacked;
 
 
-	float attackSpeed;
 	float skill1RecoverTime;
 	float skill2RecoverTime;
 	float skill3RecoverTime;
@@ -325,7 +334,6 @@ protected:
 
 	bool skillExecutionDelay;
 
-	int visionDistance;
 
 	float attackCooldown;
 	float cooldownHability1;
@@ -388,6 +396,7 @@ protected:
 
 	iMPoint movingTo;
 
+	bool comeFromAttack;
 };
 
 

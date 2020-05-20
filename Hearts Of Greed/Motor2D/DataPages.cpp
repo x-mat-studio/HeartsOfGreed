@@ -244,7 +244,7 @@ void DataPages::CheckHeroesValues()
 						{
 							if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
 							{
-								AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+								AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
 								AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
 								check = true;
 							}
@@ -280,7 +280,7 @@ void DataPages::CheckWanamingoValues()
 				{
 					if (CheckData(lifeMax, focus->GetMaxHP()))
 					{
-						AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
 						check = true;
 					}
 				}
@@ -313,7 +313,7 @@ void DataPages::CheckBaseValues()
 		{
 			if (CheckData(lifeMax, focus->GetMaxHP()))
 			{
-				AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+				AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
 				check = true;
 			}
 		}
@@ -344,7 +344,7 @@ void DataPages::CheckTurretValues()
 				{
 					if (CheckData(lifeMax, focus->GetMaxHP()))
 					{
-						AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
 						check = true;
 					}
 				}

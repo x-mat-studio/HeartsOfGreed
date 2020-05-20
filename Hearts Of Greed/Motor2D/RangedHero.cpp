@@ -10,15 +10,13 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, 
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
+	HeroStats& stats, Skill& skill1) :
 
 	Hero(position, ENTITY_TYPE::HERO_RANGED, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, recoveryEnergyRate,
-		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1, hpLevelUp, damageLevelUp, energyLevelUp, atkSpeedLevelUp),
+		tileOnWalk, stats, skill1),
 
 	skill1Area(nullptr),
 
@@ -105,7 +103,7 @@ bool RangedHero::ExecuteSkill1()
 		if (!skillExecutionDelay)
 		{
 			if (!godMode)
-				energyPoints -= skill1.energyCost;
+				stats.currEnergy -= skill1.energyCost;
 
 
 			skillExecutionDelay = true;
@@ -150,20 +148,16 @@ bool RangedHero::ExecuteSkill3()
 
 void RangedHero::LevelUp()
 {
-	
-	hitPointsMax += (hpLevelUpConstant * app->entityManager->rangedLifeUpgradeValue);		// Those variables that serve as values are on XML, because maths were supposed to avoid me going to the XML, but I had to anyway, but I'm too prideful to not make use of my maths, so I'm going to the XML, but less, which is a plus
-	hitPointsCurrent = hitPointsMax; 
-	recoveryHitPointsRate;
-	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
-	energyPoints = maxEnergyPoints;
-	recoveryEnergyRate;
 
-	attackDamage += (damageLevelUpConstant * app->entityManager->rangedDamageUpgradeValue);
-	attackSpeed += (attackSpeedLevelUpConstant * app->entityManager->rangedAtkSpeedUpgradeValue);
-	attackRange;
+	app->entityManager->RequestHeroStats(stats,this->type, stats.heroLevel + 1);
 
-	unitSpeed;
-	visionDistance;
+
+	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue;
+
+	stats.maxEnergy *= (app->entityManager->rangedEnergyUpgradeValue);
+
+	stats.damage *= (app->entityManager->rangedDamageUpgradeValue);
+	stats.atkSpeed *= (app->entityManager->rangedAtkSpeedUpgradeValue);
 
 }
 

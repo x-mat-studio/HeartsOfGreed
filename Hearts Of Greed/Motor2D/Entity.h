@@ -109,11 +109,11 @@ public:
 	fMPoint GetOffset();
 	void SetPosition(int x, int y);
 
-	int GetMaxHP() const;
-	void SetMaxHP(int newMaxHp) ;
+	virtual int GetMaxHP() const;
+	virtual void SetMaxHP(int newMaxHp) ;
 
-	int GetCurrentHP() const;
-	void SetCurrentHP(int newcurrHp);
+	virtual int GetCurrentHP() const;
+	virtual void SetCurrentHP(int newcurrHp);
 
 	void SetTexture(SDL_Texture* texture);
 	SDL_Texture* GetTexture();

@@ -282,7 +282,7 @@ void Entity::SetCurrentHP(int newcurrHp)
 	hitPointsCurrent = newcurrHp;
 
 	if (hitPointsCurrent > hitPointsMax)
-		hitPointsCurrent = 0;
+		hitPointsCurrent = hitPointsMax;
 }
 
 

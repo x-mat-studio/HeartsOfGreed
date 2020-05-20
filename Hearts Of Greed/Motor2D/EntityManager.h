@@ -50,6 +50,8 @@ enum class SPRITE_POSITION : int
 	BOTH_NULL
 };
 
+struct HeroStats;
+
 class ModuleEntityManager : public Module
 {
 public:
@@ -66,10 +68,10 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	
+
 	bool CleanUp();
 
-	
+
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&)const;
 
@@ -89,7 +91,7 @@ public:
 
 
 	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true);
-	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
+	void CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
 
 
@@ -145,6 +147,7 @@ public:
 
 	//Retuns false if it fails to load the skill
 	bool RequestSkill(Skill& skillToFill, SKILL_ID id, int lvl = 1);
+	bool RequestHeroStats(HeroStats& heroStats, ENTITY_TYPE id, int lvl = 1);
 
 private:
 
@@ -184,14 +187,14 @@ public:
 
 	SDL_Texture* explosionTexture;
 
-	
+
 	//Sounds
 	int wanamingoRoar;
 	int wanamingoRoar2;
 	int wanamingoGetsHit;
 	int wanamingoDies;
-	int wanamingoDies2;	
-	
+	int wanamingoDies2;
+
 	int suitmanGetsHit;
 	int suitmanGetsHit2;
 	int suitmanGetsDeath;
@@ -206,7 +209,7 @@ public:
 	int turretShooting;
 
 	int suitman1Skill;
-	
+
 	int ranged1Skill;
 	int ranged1Skil2;
 
@@ -276,10 +279,10 @@ private:
 
 	SDL_Texture* buildingTexture;
 
-	
+
 	SDL_Texture* base1Texture;
 
-	
+
 
 	SDL_Texture* deco3Selected;
 
@@ -323,6 +326,10 @@ private:
 	DeadHero* deadRobo;
 
 	P2SString skillFileName;
+	P2SString suitmanFileName;
+	P2SString armoredFileName;
+	P2SString rangedFileName;
+	P2SString roboFileName;
 };
 
 #endif //__ENTITYMANAGER_H__

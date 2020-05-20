@@ -10,15 +10,13 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown,
-	Animation& tileOnWalk, int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
-	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, Animation& vfxExplosion, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
+	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Animation& vfxExplosion) :
 
 	Hero(position, ENTITY_TYPE::HERO_GATHERER, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown,
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, recoveryEnergyRate,
-		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1, hpLevelUp, damageLevelUp, energyLevelUp, atkSpeedLevelUp),
+		tileOnWalk, stats, skill1),
 
 	granadeArea(nullptr),
 
@@ -119,7 +117,7 @@ bool GathererHero::ExecuteSkill1()
 		if (!skillExecutionDelay)
 		{
 			if (!godMode)
-				energyPoints -= skill1.energyCost;
+				stats.currEnergy -= skill1.energyCost;
 
 
 			skillExecutionDelay = true;
@@ -171,20 +169,15 @@ bool GathererHero::ExecuteSkill3()
 
 void GathererHero::LevelUp()
 {
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-	hitPointsMax += (hpLevelUpConstant * app->entityManager->gathererLifeUpgradeValue);
-	hitPointsCurrent = hitPointsMax;
-	recoveryHitPointsRate;
-	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
-	energyPoints = maxEnergyPoints;
-	recoveryEnergyRate += 1;
 
-	attackDamage += (damageLevelUpConstant * app->entityManager->gathererDamageUpgradeValue);
-	attackSpeed += (attackSpeedLevelUpConstant * app->entityManager->gathererAtkSpeedUpgradeValue);
-	attackRange;
+	stats.maxHP *= app->entityManager->gathererLifeUpgradeValue;
 
-	unitSpeed += 6;
-	visionDistance;
+	stats.maxEnergy *= (app->entityManager->gathererEnergyUpgradeValue);
+
+	stats.damage *= (app->entityManager->gathererDamageUpgradeValue);
+	stats.atkSpeed *= (app->entityManager->gathererAtkSpeedUpgradeValue);
 
 }
 

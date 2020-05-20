@@ -8,11 +8,14 @@
       <type id="1"/>
     </collider>
 
-    <stats level="1" movementSpeed="100" vision="5">
-      <hitPoints max="170" current="170" recoveryRate="4"/>
-      <energyPoints max="80" current="80" recoveryRate="3"/>
-      <attack damage="15" speed="1.0" range="1"/>
-      <levelUp hp="0" damage="0" energy="0" atkSpeed="0" />
+    <stats level="1" movementSpeed="100" vision="5" attackRange="1">
+
+      <lvl xpToLvlUp="100" hp="210" damage="15" energy="80" atkSpeed="1.15" liferecoveryRate="0" energyrecoveryRate="3"/>
+      <lvl xpToLvlUp="175" hp="260" damage="18" energy="90" atkSpeed="1.2" liferecoveryRate="0" energyrecoveryRate="3"/>
+      <lvl xpToLvlUp="300" hp="300" damage="21" energy="120" atkSpeed="1.25" liferecoveryRate="0" energyrecoveryRate="4"/>
+      <lvl xpToLvlUp="450" hp="430" damage="23" energy="160" atkSpeed="1.3" liferecoveryRate="0" energyrecoveryRate="5"/>
+      <lvl xpToLvlUp="600" hp="490" damage="25" energy="200" atkSpeed="1.35" liferecoveryRate="0" energyrecoveryRate="7"/>
+      
     </stats>
 
     <skills>
