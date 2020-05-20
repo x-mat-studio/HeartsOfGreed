@@ -173,7 +173,8 @@ void GathererHero::LevelUp()
 	//lvl up effect
 	if (myParticleSystem != nullptr)
 		myParticleSystem->Activate();
-	else {
+	else 
+	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
 

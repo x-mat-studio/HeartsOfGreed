@@ -158,7 +158,7 @@ void RangedHero::LevelUp()
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
 
-	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue
+	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue;
 
 	stats.maxEnergy *= (app->entityManager->rangedEnergyUpgradeValue);
 

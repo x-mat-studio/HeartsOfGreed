@@ -137,12 +137,7 @@ void MeleeHero::LevelUp()
 	else {
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
-	hitPointsMax += (hpLevelUpConstant * app->entityManager->meleeLifeUpgradeValue);
-	hitPointsCurrent = hitPointsMax;	
-	recoveryHitPointsRate += 1;
-	maxEnergyPoints += (energyLevelUpConstant * app->entityManager->gathererEnergyUpgradeValue);
-	energyPoints = maxEnergyPoints;
-	recoveryEnergyRate;
+
 
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 

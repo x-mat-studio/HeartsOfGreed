@@ -2567,6 +2567,7 @@ bool ModuleEntityManager::RequestHeroStats(HeroStats& hero, ENTITY_TYPE id, int 
 			hero.recoveryHPRate = (iterator.attribute("liferecoveryRate").as_float(-1));
 			hero.recoveryEnergyRate = (iterator.attribute("energyrecoveryRate").as_float(-1));
 			hero.heroLevel = (lvl);
+			hero.xpToLvlUp = iterator.attribute("xpToLvlUp").as_int(-1);
 
 			hero.movSpeed = (stats.attribute("movementSpeed").as_int(-1));
 			hero.visionDistance = (stats.attribute("vision").as_int(-1));

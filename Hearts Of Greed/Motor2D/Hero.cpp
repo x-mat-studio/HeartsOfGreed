@@ -102,7 +102,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 
 
 	heroSkillPoints(0),
-	comeFromAttack(true),
+	comeFromAttack(true)
 
 {
 	currentAnimation = &walkLeft; 
@@ -1577,7 +1577,7 @@ void Hero::SetEnergyPoints(int engPoints)
 
 void Hero::AddEnergyPoints(int engPoints)
 {
-	energyPoints += engPoints;
+	stats.currEnergy += engPoints;
 }
 
 
