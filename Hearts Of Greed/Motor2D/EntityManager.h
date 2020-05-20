@@ -22,9 +22,11 @@ class RangedEnemy;
 class GigaEnemy;
 class NightEnemy;
 class Spawner;
+
 class Base;
 class Turret;
 class Barricade;
+class UpgradeCenter;
 
 class ParticleSystem;
 class Emitter;
@@ -278,16 +280,14 @@ private:
 	SDL_Texture* roboTexture;
 
 	SDL_Texture* buildingTexture;
-
 	
 	SDL_Texture* base1Texture;
-
-	
 
 	SDL_Texture* deco3Selected;
 
 	SDL_Texture* turretTexture;
 	SDL_Texture* barricadeTexture;
+	SDL_Texture* upgradeCenterTexture;
 
 	SDL_Texture* enemyTexture;
 	SDL_Texture* enemyNightTexture;
@@ -313,6 +313,7 @@ private:
 
 	Turret* sampleTurret;
 	Barricade* sampleBarricade;
+	UpgradeCenter* sampleUpgradeCenter;
 
 	ParticleSystem* sampleParticleSystem;
 	Emitter* sampleEmitter;

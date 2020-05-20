@@ -31,8 +31,13 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 	verticalRect(copy->verticalRect),
 	horizontalRect(copy->horizontalRect),
 
-	currentRect(&this->verticalRect)
+	currentRect(nullptr)
 {
+	if (direction == DIRECTION_BARRICADE::VERTICAL)
+		currentRect = &verticalRect;
+	
+	else if(direction == DIRECTION_BARRICADE::HORIZONTAL)
+		currentRect = &horizontalRect;
 }
 
 
@@ -129,6 +134,13 @@ void Barricade::Flip()
 
 	else
 		assert("Barricade has problem");
+}
+
+
+
+int Barricade::GetLevel() const
+{
+	return barricadeLvl;
 }
 
 
