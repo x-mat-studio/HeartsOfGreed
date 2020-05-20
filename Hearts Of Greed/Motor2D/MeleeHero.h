@@ -3,6 +3,7 @@
 
 #include "Hero.h"
 
+
 class MeleeHero : public Hero
 {
 public:
@@ -12,8 +13,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 		Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk,
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
-		int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp);
+		HeroStats& stats, Skill& skill1);
 
 	MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement);
 

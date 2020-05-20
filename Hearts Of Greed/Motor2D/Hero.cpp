@@ -12,7 +12,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 
 
-Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
+Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightUp,
 	Animation& idleRightDown, Animation& idleLeft, Animation& idleLeftUp, Animation& idleLeftDown,
@@ -20,10 +20,9 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 	Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int recoveryEnergyRate,
-	int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, Skill& skill1, int hpLevelUp, int damageLevelUp, int energyLevelUp, int atkSpeedLevelUp) :
+	HeroStats& stats, Skill& skill1) :
 
-	DynamicEntity(position, movementSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, collider, maxHitPoints, currentHitPoints, 25, 40),
+	DynamicEntity(position, stats.movSpeed, type, ENTITY_ALIGNEMENT::NEUTRAL, col, stats.maxHP, stats.maxHP, 25, 40),
 
 	walkLeft(walkLeft),
 	walkLeftUp(walkLeftUp),
@@ -58,17 +57,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 	tileOnWalk(tileOnWalk),
 
-	level(level),
-
-	recoveryHitPointsRate(recoveryHitPointsRate),
-	maxEnergyPoints(maxEnergyPoints),
-	energyPoints(maxEnergyPoints),
-	recoveryEnergyRate(recoveryEnergyRate),
-
-	attackDamage(attackDamage),
-	attackSpeed(attackSpeed),
-	attackRange(attackRange),
-	visionDistance(vision),
+	stats(stats),
 
 	skill1ExecutionTime(skill1ExecutionTime),
 	skill2ExecutionTime(skill2ExecutionTime),
@@ -89,7 +78,6 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	damageTakenTimer(0.f),
 	feelingSecure(0),
 
-	expToLevelUp(100),
 	heroXP(0),
 	recoveringHealth(0),
 	recoveringEnergy(0),
@@ -112,11 +100,9 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	objective(nullptr),
 	myParticleSystem(nullptr),
 
-	hpLevelUpConstant(hpLevelUp),
-	damageLevelUpConstant(damageLevelUp),
-	energyLevelUpConstant(energyLevelUp),
-	attackSpeedLevelUpConstant(atkSpeedLevelUp),
-	heroSkillPoints(0)
+
+	heroSkillPoints(0),
+	comeFromAttack(true)
 
 {
 	currentAnimation = &walkLeft; 
@@ -125,7 +111,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* collider,
 
 Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	DynamicEntity(position, copy->unitSpeed, copy->type, alignement, copy->collider, copy->hitPointsMax, copy->hitPointsCurrent, copy->moveRange1, copy->moveRange2),
+	DynamicEntity(position, copy->unitSpeed, copy->type, alignement, copy->collider, copy->stats.maxHP, copy->stats.maxHP, copy->moveRange1, copy->moveRange2),
 
 	walkLeft(copy->walkLeft),
 	walkLeftUp(copy->walkLeftUp),
@@ -160,15 +146,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	tileOnWalk(copy->tileOnWalk),
 
-	level(copy->level),
-	recoveryHitPointsRate(copy->recoveryHitPointsRate),
-	energyPoints(copy->energyPoints),
-	maxEnergyPoints(copy->maxEnergyPoints),
-	recoveryEnergyRate(copy->recoveryEnergyRate),
-	attackDamage(copy->attackDamage),
-	attackSpeed(copy->attackSpeed),
-	attackRange(copy->attackRange),
-	visionDistance(copy->visionDistance),
+	stats(copy->stats),
 
 	skill1ExecutionTime(copy->skill1ExecutionTime),
 	skill2ExecutionTime(copy->skill2ExecutionTime),
@@ -189,7 +167,6 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	damageTakenTimer(0.f),
 	feelingSecure(0),
 
-	expToLevelUp(100),
 	heroXP(0),
 	recoveringHealth(0),
 	recoveringEnergy(0),
@@ -209,10 +186,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	skill1(copy->skill1),
 
-	hpLevelUpConstant(copy->hpLevelUpConstant),
-	damageLevelUpConstant(copy->damageLevelUpConstant),
-	energyLevelUpConstant(copy->energyLevelUpConstant),
-	attackSpeedLevelUpConstant(copy->attackSpeedLevelUpConstant),
+
 	heroSkillPoints(0),
 
 	drawingVfx(false)
@@ -221,11 +195,11 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	tileOnWalk.loop = false;
 
 	//FoW Related
-	visionEntity = app->fowManager->CreateFoWEntity(position, true, visionDistance);
+	visionEntity = app->fowManager->CreateFoWEntity(position, true, stats.visionDistance);
 
 	float halfH = app->map->data.tileHeight * 0.5;
 	float halfW = app->map->data.tileWidth * 0.5;
-	visionInPx = sqrt(halfW * halfW + halfH * halfH) * visionDistance + 0.5f * visionDistance;
+	visionInPx = sqrt(halfW * halfW + halfH * halfH) * stats.visionDistance + 0.5f * stats.visionDistance;
 }
 
 
@@ -373,7 +347,7 @@ void Hero::StateMachine(float dt)
 				inputs.push_back(HERO_INPUTS::IN_OUT_OF_RANGE);
 			}
 		}
-		else if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
+		else
 			inputs.push_back(HERO_INPUTS::IN_CHARGING_ATTACK);
 
 		break;
@@ -528,11 +502,11 @@ Frame Hero::GetAnimationCurrentFrame(float dt)
 {
 	Frame currFrame;
 
-	if (state == HERO_STATES::ATTACK)
+	if (state == HERO_STATES::ATTACK || state == HERO_STATES::CHARGING_ATTACK)
 	{
-		currFrame = currentAnimation->GetCurrentFrame(dt * attackSpeed);
+		currFrame = currentAnimation->GetCurrentFrame(dt * stats.atkSpeed);
 	}
-	else if (state == HERO_STATES::PREPARE_SKILL1)
+	else if (state == HERO_STATES::PREPARE_SKILL1 || (state == HERO_STATES::CHARGING_ATTACK && !comeFromAttack))
 	{
 		currFrame = currentAnimation->GetCurrentFrame();
 	}
@@ -586,7 +560,7 @@ bool Hero::CheckAttackRange()
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size() < attackRange + objective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size() < stats.attackRange + objective->GetRadiusSize())
 	{
 		return true;
 
@@ -605,7 +579,7 @@ void Hero::Attack()
 	int ret = -1;
 
 	if (objective)
-		ret = objective->RecieveDamage(attackDamage);
+		ret = objective->RecieveDamage(stats.damage);
 
 	if (ret > 0)
 	{
@@ -700,13 +674,13 @@ void Hero::BlitCommandVfx(Frame& currframe, int alphaValue)
 
 void Hero::RecoverHealth(float dt)
 {
-	if (!gettingAttacked && (hitPointsMax > hitPointsCurrent))
+	if (!gettingAttacked && (stats.maxHP > stats.currHP))
 	{
 		recoveringHealth += 1.00f * dt;
 
 		if (recoveringHealth >= 2)
 		{
-			hitPointsCurrent += recoveryHitPointsRate;
+			stats.currHP += stats.recoveryHPRate;
 			recoveringHealth = 0;
 		}
 	}
@@ -715,13 +689,13 @@ void Hero::RecoverHealth(float dt)
 
 void Hero::RecoverEnergy(float dt)
 {
-	if (!gettingAttacked && (maxEnergyPoints > energyPoints))
+	if (!gettingAttacked && (stats.maxEnergy > stats.currEnergy))
 	{
 		recoveringEnergy += 1.00f * dt;
 
 		if (recoveringEnergy >= 2)
 		{
-			energyPoints += recoveryEnergyRate;
+			stats.currEnergy += stats.recoveryEnergyRate;
 			recoveringEnergy = 0;
 		}
 	}
@@ -802,13 +776,13 @@ int Hero::RecieveDamage(int damage)
 	gettingAttacked = true;
 	feelingSecure = 0;
 
-	if (hitPointsCurrent > 0 && godMode == false)
+	if (stats.currHP > 0 && godMode == false)
 	{
-		hitPointsCurrent -= damage;
+		stats.currHP -= damage;
 
 		damageTakenTimer = 0.3f;
 
-		if (hitPointsCurrent <= 0)
+		if (stats.currHP <= 0)
 		{
 			Die();
 			ret = 1;
@@ -845,12 +819,11 @@ bool Hero::GetExperience(int xp)
 
 bool Hero::GetLevel()
 {
-	if ((expToLevelUp * level) <= heroXP)
+	if ((stats.xpToLvlUp * stats.heroLevel) <= heroXP)
 	{
 		LevelUp();
 		heroXP = 0;
 		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
-		level++;
 		return true;
 	}
 
@@ -865,10 +838,13 @@ void Hero::InternalInput(std::vector<HERO_INPUTS>& inputs, float dt)
 	{
 		attackCooldown += dt;
 
-		if (attackCooldown > (1 / attackSpeed))
+		if (attackCooldown > (1 / stats.atkSpeed))
 		{
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
 			attackCooldown = 0.f;
+			comeFromAttack = true;
+
+			ResetAttackAnimation();
 		}
 
 	}
@@ -984,7 +960,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_ATTACK:
-				attackCooldown += TIME_TRIGGER;
+				attackCooldown += TIME_TRIGGER; comeFromAttack = false;
 				state = HERO_STATES::ATTACK;	PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
@@ -1009,6 +985,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_ATTACK:
 				PlayGenericNoise(33);
 				attackCooldown += TIME_TRIGGER;
+				comeFromAttack = false;
 				state = HERO_STATES::ATTACK;	break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
@@ -1028,7 +1005,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			{
 			case HERO_INPUTS::IN_CHARGING_ATTACK:state = HERO_STATES::CHARGING_ATTACK;			 break;
 
-			case HERO_INPUTS::IN_MOVE:  PlayGenericNoise(33); state = HERO_STATES::MOVE;								 break;
+			case HERO_INPUTS::IN_MOVE:  PlayGenericNoise(33); state = HERO_STATES::MOVE;		break;
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;					   	 break;
 
@@ -1047,7 +1024,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_ATTACK_CHARGED:currentAnimation->ResetAnimation();  state = HERO_STATES::ATTACK; break;
+			case HERO_INPUTS::IN_ATTACK_CHARGED: state = HERO_STATES::ATTACK; break;
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: state = HERO_STATES::IDLE;	 break;
 
@@ -1309,33 +1286,34 @@ void Hero::SetAnimation(HERO_STATES currState)
 	case HERO_STATES::ATTACK:
 	{
 
-		switch (dir)
-		{
+		if (!comeFromAttack)
+			switch (dir)
+			{
 
-		case FACE_DIR::NORTH_EAST:
-			currentAnimation = &punchRightUp;
-			break;
+			case FACE_DIR::NORTH_EAST:
+				currentAnimation = &punchRightUp;
+				break;
 
-		case FACE_DIR::NORTH_WEST:
-			currentAnimation = &punchLeftUp;
-			break;
+			case FACE_DIR::NORTH_WEST:
+				currentAnimation = &punchLeftUp;
+				break;
 
-		case FACE_DIR::EAST:
-			currentAnimation = &punchRight;
-			break;
+			case FACE_DIR::EAST:
+				currentAnimation = &punchRight;
+				break;
 
-		case FACE_DIR::SOUTH_EAST:
-			currentAnimation = &punchRightDown;
-			break;
+			case FACE_DIR::SOUTH_EAST:
+				currentAnimation = &punchRightDown;
+				break;
 
-		case FACE_DIR::SOUTH_WEST:
-			currentAnimation = &punchLeftDown;
-			break;
+			case FACE_DIR::SOUTH_WEST:
+				currentAnimation = &punchLeftDown;
+				break;
 
-		case FACE_DIR::WEST:
-			currentAnimation = &punchLeft;
-			break;
-		}
+			case FACE_DIR::WEST:
+				currentAnimation = &punchLeft;
+				break;
+			}
 
 		currentAnimation->loop = false;
 
@@ -1429,6 +1407,16 @@ void Hero::HandleMyParticleSystem(float dt)
 	}
 }
 
+void Hero::ResetAttackAnimation()
+{
+	punchRightUp.ResetAnimation();
+	punchLeftUp.ResetAnimation();
+	punchRight.ResetAnimation();
+	punchRightDown.ResetAnimation();
+	punchLeftDown.ResetAnimation();
+	punchLeft.ResetAnimation();
+}
+
 void Hero::TimeMyParticleSystem(float dt)
 {
 	//implied that your system is not nullptr
@@ -1500,7 +1488,7 @@ Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadi
 	id(id), dmg(dmg), coolDown(cooldown), rangeRadius(rangeRadius), attackRadius(attackRadius), hurtYourself(hurtYourself), type(type), target(target), effect(effect), executionTime(executionTime), lvl(lvl), energyCost(energyCost)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime), lvl(skill1.lvl) , energyCost(skill1.energyCost)
+Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime), lvl(skill1.lvl), energyCost(skill1.energyCost)
 {}
 
 Skill Skill::operator=(Skill& newSkill)
@@ -1529,25 +1517,25 @@ Skill Skill::operator=(Skill& newSkill)
 
 int Hero::GetHeroLevel() const
 {
-	return level;
+	return stats.heroLevel;
 }
 
 
 void Hero::SetHeroLevel(int lvl)
 {
-	level = lvl;
+	stats.heroLevel = lvl;
 }
 
 
 int Hero::GetExpToLevelUp() const
 {
-	return expToLevelUp;
+	return stats.xpToLvlUp;
 }
 
 
 void Hero::SetExpToLevelUp(int exp)
 {
-	expToLevelUp = exp;
+	stats.xpToLvlUp = exp;
 }
 
 
@@ -1565,55 +1553,55 @@ void Hero::SetHeroXP(int xp)
 
 int Hero::GetRecoveryHitPointsRate() const
 {
-	return recoveryHitPointsRate;
+	return stats.recoveryHPRate;
 }
 
 
 void Hero::SetRecoveryHitPointsRate(int hpRate)
 {
-	recoveryHitPointsRate = hpRate;
+	stats.recoveryHPRate = hpRate;
 }
 
 
 int Hero::GetEnergyPoints() const
 {
-	return energyPoints;
+	return stats.currEnergy;
 }
 
 
 void Hero::SetEnergyPoints(int engPoints)
 {
-	energyPoints = engPoints;
+	stats.currEnergy = engPoints;
 }
 
 
 void Hero::AddEnergyPoints(int engPoints)
 {
-	energyPoints += engPoints;
+	stats.currEnergy += engPoints;
 }
 
 
 int Hero::GetMaxEnergyPoints() const
 {
-	return maxEnergyPoints;
+	return stats.maxEnergy;
 }
 
 
 void Hero::SetMaxEnergyPoints(int maxEngPoints)
 {
-	maxEnergyPoints = maxEngPoints;
+	stats.maxEnergy = maxEngPoints;
 }
 
 
 int Hero::GetRecoveryEnergyRate() const
 {
-	return recoveryEnergyRate;
+	return stats.recoveryEnergyRate;
 }
 
 
 void Hero::SetRecoveryEnergyRate(int recEnergyRate)
 {
-	recoveryEnergyRate = recEnergyRate;
+	stats.recoveryEnergyRate = recEnergyRate;
 }
 
 
@@ -1655,25 +1643,25 @@ void Hero::SetFeelingSecure(float feelSecure)
 
 float Hero::GetAttackDamage() const
 {
-	return attackDamage;
+	return stats.damage;
 }
 
 
 void Hero::SetAttackDamage(float atkDamage)
 {
-	attackDamage = atkDamage;
+	stats.damage = atkDamage;
 }
 
 
 int Hero::GetAttackRange() const
 {
-	return attackRange;
+	return stats.attackRange;
 }
 
 
 void Hero::SetAttackRange(int atkRange)
 {
-	attackRange = atkRange;
+	stats.attackRange = atkRange;
 }
 
 
@@ -1696,13 +1684,13 @@ Skill Hero::GetSkill1() const
 
 float Hero::GetAttackSpeed() const
 {
-	return attackSpeed;
+	return stats.atkSpeed;
 }
 
 
 void Hero::SetAttackSpeed(float atkSpeed)
 {
-	attackSpeed = atkSpeed;
+	stats.atkSpeed = atkSpeed;
 }
 
 
@@ -1741,6 +1729,26 @@ void Hero::SetSkill3RecoverTime(float skillRecoverTime)
 	skill3RecoverTime = skillRecoverTime;
 }
 
+int Hero::GetMaxHP() const
+{
+	return stats.maxHP;
+}
+
+void Hero::SetMaxHP(int newMaxHp)
+{
+	stats.maxHP = newMaxHp;
+}
+
+int Hero::GetCurrentHP() const
+{
+	return stats.currHP;
+}
+
+void Hero::SetCurrentHP(int newcurrHp)
+{
+	stats.currHP = newcurrHp;
+}
+
 
 float Hero::GetSkill1TimePassed() const
 {
@@ -1762,13 +1770,13 @@ float Hero::GetSkill3TimePassed() const
 
 int Hero::GetVisionDistance() const
 {
-	return visionDistance;
+	return stats.visionDistance;
 }
 
 
 void Hero::SetVisionDistance(int visDistance)
 {
-	visionDistance = visDistance;
+	stats.visionDistance = visDistance;
 }
 
 
@@ -1784,9 +1792,9 @@ void Hero::SetVisionInPx(float visPx)
 }
 
 
-DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill): level(level), heroType(type)
+DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill) : level(level), heroType(type)
 {
-	skillLevel= skill.lvl;
+	skillLevel = skill.lvl;
 	skillId = skill.id;
 }
 
