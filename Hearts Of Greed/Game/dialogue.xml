@@ -4,14 +4,24 @@
   
 	<tutorial> 
 		<start>
-			<entry1 text="Damn monsters... They managed to split us. I must find my  companions, but first I should fortify this position or we’ll not have a place to fall back"/>
+			<entry1 text="Damn, they managed to split us. I must find my companions, but first I should fortify this position."/>
+		</start>
+
+		<finish>
+			<entry1 text="A base? Seems like there's no danger around... I guess I can advance the mission by myself." />
+		</finish>
+	</tutorial>
+    
+	<tutorial2> 
+		<start>
+			<entry1 text="I was lucky it was so few of them, but night has arrived. I should prepare for a bigger horde./>
 		</start>
 
 		<finish>
 			<entry1 text="This might be enough to stop those vermin for a while. Time to find my comrades." />
 		</finish>
-	</tutorial>
-    
+	</tutorial2>
+
 	<dialog1> 
 		<start>
 			<entry1 text="Does anyone copy me? I need reinforcements!  They have overrun my position, I need backup ASAP. I repeat, I need backup ASAP!" />
