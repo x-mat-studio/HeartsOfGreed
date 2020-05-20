@@ -251,6 +251,11 @@ public:
 	SDL_Texture* base2TextureSelected;
 	SDL_Texture* base2TextureSelectedEnemy;
 
+	SDL_Texture* upgradeCenterPlayerTexture;
+	SDL_Texture* upgradeCenterPlayerSelectedTexture;
+	SDL_Texture* upgradeCenterEnemyTexture;
+	SDL_Texture* upgradeCenterEnemySelectedTexture;
+
 	// Upgrades multipliers
 	float gathererLifeUpgradeValue;
 	float gathererDamageUpgradeValue;
@@ -294,7 +299,6 @@ private:
 
 	SDL_Texture* turretTexture;
 	SDL_Texture* barricadeTexture;
-	SDL_Texture* upgradeCenterTexture;
 
 	SDL_Texture* enemyTexture;
 	SDL_Texture* enemyNightTexture;

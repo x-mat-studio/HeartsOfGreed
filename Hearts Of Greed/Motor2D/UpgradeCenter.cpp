@@ -1,5 +1,7 @@
 #include "UpgradeCenter.h"
+
 #include "EventManager.h"
+#include "EntityManager.h"
 
 #include "Base.h"
 
@@ -90,4 +92,26 @@ void UpgradeCenter::Die()
 		myBase->RemoveUpgradeCenter();
 
 	myBase = nullptr;
+}
+
+
+void UpgradeCenter::ChangeTextures()
+{
+	switch (GetAlignment()) 
+	{ 
+
+	case ENTITY_ALIGNEMENT::ENEMY:
+		texture = app->entityManager->upgradeCenterEnemyTexture;
+		selectedTexture = app->entityManager->upgradeCenterEnemySelectedTexture;
+		break;
+
+	case ENTITY_ALIGNEMENT::PLAYER:
+		texture = app->entityManager->upgradeCenterPlayerTexture;
+		selectedTexture = app->entityManager->upgradeCenterPlayerSelectedTexture;
+		break;
+
+	default:
+		break;
+
+	}
 }

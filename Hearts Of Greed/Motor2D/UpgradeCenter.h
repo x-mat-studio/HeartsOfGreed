@@ -19,6 +19,8 @@ public:
 	void UpgradeTurrets();
 	void UpgradeBarricades();
 
+	void ChangeTextures();
+
 	int RecieveDamage(int damage);
 
 private:

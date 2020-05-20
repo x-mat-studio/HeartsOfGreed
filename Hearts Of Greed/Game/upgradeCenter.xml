@@ -4,7 +4,7 @@
   <sample>
 
     <collider>
-      <rect x="0" y="0" w="70" h="80"/>
+      <rect x="0" y="0" w="259" h="220"/>
       <type id="4"/>
     </collider>
 

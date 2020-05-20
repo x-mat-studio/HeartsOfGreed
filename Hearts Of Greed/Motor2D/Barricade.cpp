@@ -137,7 +137,6 @@ void Barricade::Flip()
 }
 
 
-
 int Barricade::GetLevel() const
 {
 	return barricadeLvl;

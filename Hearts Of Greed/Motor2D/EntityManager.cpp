@@ -58,7 +58,10 @@ ModuleEntityManager::ModuleEntityManager() :
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
 	barricadeTexture(nullptr),
-	upgradeCenterTexture(nullptr),
+	upgradeCenterPlayerTexture(nullptr),
+	upgradeCenterPlayerSelectedTexture(nullptr),
+	upgradeCenterEnemyTexture(nullptr),
+	upgradeCenterEnemySelectedTexture(nullptr),
 	enemyTexture(nullptr),
 	explosionTexture(nullptr),
 	targetedTexture(nullptr),
@@ -340,13 +343,17 @@ bool ModuleEntityManager::Start()
 	
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
-	upgradeCenterTexture = app->tex->Load("maps/base02_enemy_selected.png");
+
+	upgradeCenterPlayerTexture = app->tex->Load("maps/upgradeCenter.png");
+	upgradeCenterPlayerSelectedTexture = app->tex->Load("maps/upgradeCenter_selected.png");
+	upgradeCenterEnemyTexture = app->tex->Load("maps/upgradeCenter_enemy.png");
+	upgradeCenterEnemySelectedTexture = app->tex->Load("maps/upgradeCenter_enemy_selected.png");
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
 	sampleTurret->SetTexture(turretTexture);
 	sampleBarricade->SetTexture(barricadeTexture);
-	sampleUpgradeCenter->SetTexture(upgradeCenterTexture);
+	sampleUpgradeCenter->SetTexture(upgradeCenterPlayerTexture);
 
 
 	//SELECTIONS & FEEDBACK---------
@@ -586,6 +593,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_TURRET:
+
 				entityVector[i]->Start(turretTexture);
 
 				alignement = entityVector[i]->GetAlignment();
@@ -600,13 +608,33 @@ void ModuleEntityManager::CheckIfStarted() {
 				}
 				break;
 
+
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
-				entityVector[i]->Start(upgradeCenterTexture);
+
+				UpgradeCenter* upCenter;
+				upCenter = (UpgradeCenter*)entityVector[i];
+				
+				alignement = entityVector[i]->GetAlignment();
+
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					entityVector[i]->Start(upgradeCenterPlayerTexture);
+					upCenter->selectedTexture = upgradeCenterPlayerSelectedTexture;
+				}
+
+				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+				{
+					entityVector[i]->Start(upgradeCenterEnemyTexture);
+					upCenter->selectedTexture = upgradeCenterEnemySelectedTexture;
+				}
 				break;
+
 
 			case ENTITY_TYPE::BLDG_BASE:
 
-				Base* auxBase; auxBase = (Base*)entityVector[i];
+				Base* auxBase; 
+				auxBase = (Base*)entityVector[i];
+
 				alignement = entityVector[i]->GetAlignment();
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
@@ -725,21 +753,27 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
 
 	//Buildings----------
-	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
-	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
-	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
-	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
-	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
-	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
-	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
-	app->tex->UnLoad(barricadeTexture);				barricadeTexture = nullptr;
-	app->tex->UnLoad(upgradeCenterTexture);				upgradeCenterTexture = nullptr;
+	app->tex->UnLoad(buildingTexture);						buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);							base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);							base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);					base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);					base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);			base2TextureSelectedEnemy = nullptr;
+	app->tex->UnLoad(turretTexture);						turretTexture = nullptr;
+	app->tex->UnLoad(barricadeTexture);						barricadeTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterPlayerTexture);			upgradeCenterPlayerTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterPlayerSelectedTexture);	upgradeCenterPlayerSelectedTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterEnemyTexture);			upgradeCenterEnemyTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterEnemySelectedTexture);	upgradeCenterEnemySelectedTexture = nullptr;
+
 
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
 	RELEASE(sampleBarricade);						sampleBarricade = nullptr;
 	RELEASE(sampleUpgradeCenter);					sampleUpgradeCenter = nullptr;
+
+
 	//Feedback------------
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
@@ -2210,6 +2244,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+		sampleUpgradeCenter->ActivateTransparency();
+		sampleUpgradeCenter->SetPosition(x, y);
+		sampleUpgradeCenter->Draw(0.0000001);
 		break;
 
 

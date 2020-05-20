@@ -242,7 +242,7 @@ void Base::LevelUpBarricades(int lvl)
 	{
 		//if (barricadesVector[i]->GetLvl() < lvl)
 		{
-			//turretsVector[i]->LevelUp()
+			//barricadesVector[i]->LevelUp()
 		}
 	}
 }
@@ -290,6 +290,7 @@ void Base::ChangeAligment()
 	if (baseUpgradeCenter != nullptr)
 	{
 		baseUpgradeCenter->SetAlignment(aligment);
+		baseUpgradeCenter->ChangeTextures();
 	}
 
 	int numTurrets = turretsVector.size();
