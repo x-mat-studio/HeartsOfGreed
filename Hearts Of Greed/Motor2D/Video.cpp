@@ -69,8 +69,8 @@ void Video::OpenAVI(char* path)
 
 
 	AVIStreamInfo(pavi, &psi, sizeof(psi));					// Reads Information About The Stream Into psi
-	width = psi.rcFrame.right - psi.rcFrame.left;           // Width Is Right Side Of Frame Minus Left
-	height = psi.rcFrame.bottom - psi.rcFrame.top;          // Height Is Bottom Of Frame Minus Top
+	width = (psi.rcFrame.right - psi.rcFrame.left);           // Width Is Right Side Of Frame Minus Left
+	height = (psi.rcFrame.bottom - psi.rcFrame.top);          // Height Is Bottom Of Frame Minus Top
 	lastFrame = AVIStreamLength(pavi);						// The Last Frame Of The Stream
 
 
@@ -94,9 +94,11 @@ bool Video::GrabAVIFrame()
 	SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(pdata, width, height, lpbi->biBitCount, width * 3, 0, 0, 0, 0);
 	SDL_Texture* texture = app->tex->LoadSurface(surface);
 
+	SDL_Rect camera = { 0, 0, width, height};
+	SDL_Rect position = { (100 + width / 2) * app->win->GetScale(), (-70 + height / 2) * app->win->GetScale(), width * 1.5, height * 1.5};
+	SDL_Point point = { width / 2, height / 2 };
 
-	app->render->Blit(texture, 0, 0, NULL);
-
+	SDL_RenderCopyEx(app->render->renderer, texture, &camera, &position, 180, &point, SDL_FLIP_HORIZONTAL);
 
 	if (i % 2 == 0)
 	{

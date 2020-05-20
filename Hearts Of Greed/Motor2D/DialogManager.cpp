@@ -111,6 +111,10 @@ bool ModuleDialogManager::Awake(pugi::xml_node& data)
 
 	 dialogTutorialEnd			= (P2SString)dialogue.child("tutorial").child("finish").child("entry1").attribute("text").as_string();
 
+	 dialogTutorialStart2		= (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
+
+	 dialogTutorialEnd2			= (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
+
 	//Quest 1 ------------
 	 dialogMission1_ST_B1		= dialogue.child("dialog1").child("start").child("entry1").attribute("text").as_string();
 	 dialogMission1_ST_A1		= dialogue.child("dialog1").child("start").child("entry2").attribute("text").as_string();

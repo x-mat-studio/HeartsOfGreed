@@ -128,6 +128,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	buildingGetsHit(-1),
 	buildingGetsHit2(-1),
 	armored1Skill2(-1),
+	ranged1Skill(-1),
+	ranged1Skil2(-1),
 
 	gathererLifeUpgradeValue(1),
 	gathererDamageUpgradeValue(1),
@@ -171,9 +173,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	// Sample Hero Gatherer---------------------
 
-	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
+	suitmanFileName = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
-	suitmandoc.load_file(filename.GetString());
+	suitmandoc.load_file(suitmanFileName.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_GATHERER, suitman, config);
@@ -181,9 +183,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	suitmandoc.reset();
 
 	// Sample Hero Melee---------------------
-	filename = config.child("load").attribute("docnameArmoredman").as_string();
+	armoredFileName = config.child("load").attribute("docnameArmoredman").as_string();
 	pugi::xml_document armoredmanDoc;
-	armoredmanDoc.load_file(filename.GetString());
+	armoredmanDoc.load_file(armoredFileName.GetString());
 	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_MELEE, armoredman, config);
@@ -191,9 +193,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Ranged Hero---------------------
-	filename = config.child("load").attribute("docnameRangedman").as_string();
+	rangedFileName = config.child("load").attribute("docnameRangedman").as_string();
 	pugi::xml_document rangedmanDoc;
-	rangedmanDoc.load_file(filename.GetString());
+	rangedmanDoc.load_file(rangedFileName.GetString());
 	pugi::xml_node rangedman = rangedmanDoc.child("rangedman");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_RANGED, rangedman, config);
@@ -201,9 +203,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Robo Hero---------------------
-	filename = config.child("load").attribute("docnameRobotto").as_string();
+	roboFileName = config.child("load").attribute("docnameRobotto").as_string();
 	pugi::xml_document robottoDoc;
-	robottoDoc.load_file(filename.GetString());
+	robottoDoc.load_file(roboFileName.GetString());
 	pugi::xml_node robotto = robottoDoc.child("robotto");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_ROBO, robotto, config);
@@ -211,7 +213,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Enemy---------------------
-	filename = config.child("load").attribute("docnameWanamingo").as_string();
+	P2SString filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
 	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo").child("sample");
@@ -303,8 +305,6 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	LoadSkillAreas(skillAreasNode);
 	skillAreassdoc.reset();
-
-
 
 	return ret;
 }
@@ -1342,7 +1342,7 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 		statsnode.append_attribute("type") = (int)heroType;
 		SKILL_ID skillId;
 		int skillLevel;
-		refhero->GetSkillInfo(skillId,skillLevel);
+		refhero->GetSkillInfo(skillId, skillLevel);
 		statsnode.append_attribute("skillId") = (int)skillId;
 		statsnode.append_attribute("skillLvl") = skillLevel;
 
@@ -2494,12 +2494,11 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 					skillToFill.rangeRadius = iterator2.attribute("rangeRadius").as_int(-1);
 					skillToFill.energyCost = iterator2.attribute("energyCost").as_int(-1);;
 
-					if (requestLvl == 1)
-					{
-						skillToFill.type = (SKILL_TYPE)iterator.attribute("type").as_int(-1);
-						skillToFill.target = (ENTITY_ALIGNEMENT)iterator.attribute("alignTarget").as_int(-1);
-						skillToFill.id = (SKILL_ID)iterator.attribute("id").as_int();
-					}
+
+					skillToFill.type = (SKILL_TYPE)iterator.attribute("type").as_int(-1);
+					skillToFill.target = (ENTITY_ALIGNEMENT)iterator.attribute("alignTarget").as_int(-1);
+					skillToFill.id = (SKILL_ID)iterator.attribute("id").as_int();
+
 
 					toRet = true;
 					break;
@@ -2514,6 +2513,85 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 	}
 
 	skillDoc.reset();
+
+	return toRet;
+}
+
+bool ModuleEntityManager::RequestHeroStats(HeroStats& hero, ENTITY_TYPE id, int lvl)
+{
+	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
+
+	P2SString heroFileName;
+
+	switch (id)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		heroFileName = armoredFileName;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		heroFileName = rangedFileName;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		heroFileName = suitmanFileName;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		heroFileName = roboFileName;
+		break;
+	default:
+		break;
+	}
+
+	if (heroFileName.Length() == 0)
+		return false;
+
+	pugi::xml_document heroDoc;
+	heroDoc.load_file(heroFileName.GetString());
+	pugi::xml_node stats = heroDoc.first_child().child("sample").child("stats");
+
+	bool toRet(false);
+	int currLvl = 1;
+
+
+	for (pugi::xml_node iterator = stats.first_child(); iterator; iterator = iterator.next_sibling())
+	{
+		if (currLvl == lvl)
+		{
+			//hero.SetMaxHP(iterator.attribute("hp").as_int(-1));
+			//hero.SetAttackDamage(iterator.attribute("damage").as_int(-1));
+			//hero.SetMaxEnergyPoints(iterator.attribute("energy").as_int(-1));
+			//hero.SetAttackSpeed(iterator.attribute("atkSpeed").as_float(-1));
+			//hero.SetRecoveryHitPointsRate(iterator.attribute("liferecoveryRate").as_float(-1));
+			//hero.SetRecoveryEnergyRate(iterator.attribute("energyrecoveryRate").as_float(-1));
+			//hero.SetHeroLevel(lvl);
+
+			//hero.SetSpeed(stats.attribute("movementSpeed").as_int(-1));
+			//hero.SetVisionDistance(stats.attribute("vision").as_int(-1));
+			//hero.SetAttackRange(stats.attribute("attackRange").as_float(-1));
+
+			hero.maxHP = (iterator.attribute("hp").as_int(-1));
+			hero.currHP = hero.maxHP;
+			hero.damage = (iterator.attribute("damage").as_int(-1));
+			hero.maxEnergy = (iterator.attribute("energy").as_int(-1));
+			hero.currEnergy = hero.maxEnergy;
+			hero.atkSpeed = (iterator.attribute("atkSpeed").as_float(-1));
+			hero.recoveryHPRate = (iterator.attribute("liferecoveryRate").as_float(-1));
+			hero.recoveryEnergyRate = (iterator.attribute("energyrecoveryRate").as_float(-1));
+			hero.heroLevel = (lvl);
+			hero.xpToLvlUp = iterator.attribute("xpToLvlUp").as_int(-1);
+
+			hero.movSpeed = (stats.attribute("movementSpeed").as_int(-1));
+			hero.visionDistance = (stats.attribute("vision").as_int(-1));
+			hero.attackRange = (stats.attribute("attackRange").as_float(-1));
+
+			toRet = true;
+			break;
+		}
+
+		currLvl++;
+	}
+
+
+	heroDoc.reset();
 
 	return toRet;
 }
@@ -2607,34 +2685,12 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	pos.x = heroNode.child("sample").child("position").attribute("x").as_float(0);
 	pos.y = heroNode.child("sample").child("position").attribute("y").as_float(0);
 
-	int level = heroNode.child("sample").child("stats").attribute("level").as_int(0);
-	int movSpd = heroNode.child("sample").child("stats").attribute("movementSpeed").as_int(0);
-	int visTiles = heroNode.child("sample").child("stats").attribute("vision").as_int(0);
 
-
-	int maxHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
-	int currentHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
-	int recoveryHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
-
-	int maxEnergy = heroNode.child("sample").child("stats").child("energyPoints").attribute("max").as_int(0);
-	int currentEnergy = heroNode.child("sample").child("stats").child("energyPoints").attribute("current").as_int(0);
-	int recoveryE = heroNode.child("sample").child("stats").child("energyPoints").attribute("recoveryRate").as_int(0);
-
-	int atkDmg = heroNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
-	float atkSpd = heroNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
-	int atkRange = heroNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
-
-	int lifeLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("hp").as_int(0);
-	int damageLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("damage").as_int(0);
-	int energyLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("energy").as_int(0);
-	int attackSpeedLevelUp = heroNode.child("sample").child("stats").child("levelUp").attribute("atkSpeed").as_int(0);
 
 	//skill1
 
 	SKILL_ID skill1ID = (SKILL_ID)heroNode.child("sample").child("skills").child("skill1").attribute("id").as_int(0);
-
 	Skill heroSkill;
-
 	RequestSkill(heroSkill, skill1ID, 1);
 
 	//skill2
@@ -2689,6 +2745,10 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 
 	Animation tileOnWalk = tileOnWalk.PushAnimation(vfx, "onMyWay");
 
+	//Stats ---------------------------------
+	HeroStats sampleStats;
+
+	RequestHeroStats(sampleStats, heroType);
 
 	switch (heroType)
 	{
@@ -2699,8 +2759,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, maxHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			sampleStats, heroSkill);
 
 		ret = true;
 		break;
@@ -2713,8 +2772,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			1, maxHP, maxHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			sampleStats, heroSkill);
 
 		ret = true;
 		break;
@@ -2727,8 +2785,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			1, maxHP, maxHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, heroSkill, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			sampleStats, heroSkill);
 
 		ret = true;
 		break;
@@ -2745,8 +2802,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, currentHP, recoveryHP, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, heroSkill, vfxExplosion, lifeLevelUp, damageLevelUp, energyLevelUp, attackSpeedLevelUp);
+			sampleStats, heroSkill, vfxExplosion);
 
 		ret = true;
 		break;
@@ -3214,8 +3270,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -3251,8 +3307,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -3288,8 +3344,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -3325,8 +3381,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -3449,7 +3505,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 	DeleteAllDeadHeroes();
 
-	if (deadEntities.child("deadGatherer")!=NULL)
+	if (deadEntities.child("deadGatherer") != NULL)
 	{
 		LoadDeadHero(deadEntities.child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
 	}
@@ -3534,8 +3590,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
@@ -3577,8 +3633,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
@@ -3619,8 +3675,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
@@ -3662,8 +3718,8 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
 				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
 
-				iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-				iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
 				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
 
 				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
@@ -3889,3 +3945,12 @@ void ModuleEntityManager::ResetUpgradeValues()
 	robottoEnergyUpgradeValue = 1;
 	robottoAtkSpeedUpgradeValue = 1;
 }
+
+HeroStats::HeroStats() : maxHP(-1), damage(-1), maxEnergy(-1), atkSpeed(-1), recoveryHPRate(-1), recoveryEnergyRate(-1),
+heroLevel(-1), movSpeed(-1), visionDistance(-1), attackRange(-1), xpToLvlUp(-1), currHP(-1), currEnergy(-1)
+{}
+
+HeroStats::HeroStats(HeroStats & newStats): maxHP(newStats.maxHP), damage(newStats.damage), maxEnergy(newStats.maxEnergy), atkSpeed(newStats.atkSpeed), recoveryHPRate(newStats.recoveryHPRate),
+recoveryEnergyRate(newStats.recoveryEnergyRate), heroLevel(newStats.heroLevel), movSpeed(newStats.movSpeed), visionDistance(newStats.visionDistance), attackRange(newStats.attackRange), xpToLvlUp(newStats.xpToLvlUp),
+currHP(newStats.currHP), currEnergy(newStats.currEnergy)
+{}
