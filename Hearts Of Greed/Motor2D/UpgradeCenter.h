@@ -11,7 +11,8 @@ class UpgradeCenter : public Building
 
 public:
 
-	UpgradeCenter(fMPoint pos, int upgradeTurretCost, int upgradeBarricadeCost, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider);
+	UpgradeCenter(fMPoint pos, int upgradeTurretCost, int upgradeBarricadeCost, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, 
+				  int xpOnDeath, int buildingCost, int transparency, Collider* collider);
 	UpgradeCenter(fMPoint position, UpgradeCenter* copy, ENTITY_ALIGNEMENT alignement);
 	~UpgradeCenter();
 

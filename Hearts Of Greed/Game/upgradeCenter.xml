@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<upgradeCenter>
+
+  <sample>
+
+    <collider>
+      <rect x="0" y="0" w="70" h="80"/>
+      <type id="4"/>
+    </collider>
+
+    <stats xp="35" buildingCost="100" transparency="160">
+      <hitPoints max="100" current="100" recoveryRate="0"/>
+    </stats>
+
+    <rect>
+      <verticalRect x="728" y="24" w="121" h="179"></verticalRect>
+      <horizontalRect x="885" y="24" w="121" h="179"></horizontalRect>
+    </rect>
+
+    <costs upgradeTurret="250" upgradeBarricade="150"></costs>
+
+  </sample>
+  
+</upgradeCenter>

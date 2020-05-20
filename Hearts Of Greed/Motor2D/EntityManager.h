@@ -168,11 +168,15 @@ private:
 
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
 	bool LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType);
+
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
 	bool LoadSampleBarricade(pugi::xml_node& barricadeNode);
+	bool LoadSampleUpgradeCenter(pugi::xml_node& upgradeCenterNode);
+	
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
+
 	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
 	

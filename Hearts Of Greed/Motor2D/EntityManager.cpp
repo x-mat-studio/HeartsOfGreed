@@ -251,6 +251,17 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	LoadSampleBarricade(barricadeNode);
 	barricadedoc.reset();
 
+
+	//Sample Upgrade center --------------
+	filename = config.child("load").attribute("docnameUpgradeCenter").as_string();
+	pugi::xml_document upgradeCenterdoc;
+	upgradeCenterdoc.load_file(filename.GetString());
+	pugi::xml_node upgradeCenterNode = upgradeCenterdoc.child("upgradeCenter");
+
+	LoadSampleUpgradeCenter(upgradeCenterNode);
+	upgradeCenterdoc.reset();
+
+
 	//spawner
 	filename = config.child("load").attribute("docnameSpawner").as_string();
 	pugi::xml_document spawnerdoc;
@@ -329,12 +340,14 @@ bool ModuleEntityManager::Start()
 	
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
-	upgradeCenterTexture = app->tex->Load("spritesheets/Structures/barricade.png");
+	upgradeCenterTexture = app->tex->Load("maps/base02_enemy_selected.png");
 
 	sampleBuilding->SetTexture(base1Texture);
 	sampleBase->SetTexture(base2Texture);
 	sampleTurret->SetTexture(turretTexture);
 	sampleBarricade->SetTexture(barricadeTexture);
+	sampleUpgradeCenter->SetTexture(upgradeCenterTexture);
+
 
 	//SELECTIONS & FEEDBACK---------
 	deco3Selected = app->tex->Load("maps/base03_selected.png");
@@ -345,9 +358,6 @@ bool ModuleEntityManager::Start()
 	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
 	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
 	debugPathTexture = app->tex->Load("maps/path.png");
-
-
-
 
 
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
@@ -2934,6 +2944,34 @@ bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
 	int recoveryHP = barricadeNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
 	sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, type, this), verticalRect, horizontalRect);
+
+	return true;
+}
+
+
+bool ModuleEntityManager::LoadSampleUpgradeCenter(pugi::xml_node& upgradeCenterNode)
+{
+	upgradeCenterNode = upgradeCenterNode.first_child();
+	
+	//Collider
+	int colW = upgradeCenterNode.child("collider").child("rect").attribute("w").as_int();
+	int colH = upgradeCenterNode.child("collider").child("rect").attribute("h").as_int();
+	COLLIDER_TYPE type = (COLLIDER_TYPE)upgradeCenterNode.child("collider").child("type").attribute("id").as_int();
+	SDL_Rect rect = { 0, 0, colW, colH };
+
+	//Stats
+	int xp = upgradeCenterNode.child("stats").attribute("xp").as_int(0);
+	int buildingCost = upgradeCenterNode.child("stats").attribute("buildingCost").as_int(0);
+	int transparency = upgradeCenterNode.child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = upgradeCenterNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = upgradeCenterNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = upgradeCenterNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int upgradeTurretCost = upgradeCenterNode.child("costs").attribute("upgradeTurret").as_int(0);
+	int upgradeBarricadeCost = upgradeCenterNode.child("costs").attribute("upgradeBarricade").as_int(0);
+
+	sampleUpgradeCenter = new UpgradeCenter(fMPoint(0, 0), upgradeTurretCost, upgradeBarricadeCost, maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(rect, type, this));
 
 	return true;
 }
