@@ -686,10 +686,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		resourcesBoost+= 300;
 		break;
 
+
 	case EVENT_ENUM::TURRET_CONSTRUCT:
-		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
+
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_UPGRADE_CENTER)
 		{
-			Base* base = (Base*)focusedEntity;
+			Building* building = (Building*)focusedEntity;
+			Base* base = building->myBase;
 
 			if (resources >= turretCost && base->TurretCapacityExceed())
 			{
@@ -697,6 +700,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			}
 		}
 		break;
+
 
 	case EVENT_ENUM::TURRET_PURCHASE:
 		resources -= turretCost;

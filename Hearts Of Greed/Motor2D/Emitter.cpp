@@ -164,8 +164,6 @@ void Emitter::CreateParticle()
 
 Emitter::~Emitter()
 {
-	int numParticles = particleVector.size();
-
 	particleVector.clear();
 
 	areaOfSpawn = nullptr;

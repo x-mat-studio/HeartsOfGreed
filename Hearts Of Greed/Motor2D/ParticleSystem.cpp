@@ -2,6 +2,8 @@
 #include "Emitter.h"
 #include "Particle.h"
 
+#include "EventManager.h"
+
 ParticleSystem::ParticleSystem() :
 
 	Entity(fMPoint(0, 0), ENTITY_TYPE::PARTICLE_SYSTEM, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 0, 0),
@@ -105,4 +107,12 @@ void ParticleSystem::Move(int x, int y)
 		}
 	}
 
+}
+
+
+void ParticleSystem::Die()
+{
+	toDelete = true;
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 }

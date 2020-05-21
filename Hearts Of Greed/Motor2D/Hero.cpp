@@ -614,6 +614,8 @@ void Hero::Die()
 		visionEntity = nullptr;
 	}
 	app->entityManager->AssignNewDeadHero(*this);
+
+	myParticleSystem->Die();
 }
 
 

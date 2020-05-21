@@ -34,6 +34,8 @@ public:
 
 	void Move(int x, int y);
 
+	void Die();
+
 private:
 	std::vector<Emitter> emitterVector;
 
