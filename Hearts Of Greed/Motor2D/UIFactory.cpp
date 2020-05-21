@@ -417,6 +417,24 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 }
 
 
+UI_Group* UIFactory::CreateOnHoverBuyUpgradeCenterMenu()
+{
+	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
+
+	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+
+	CreateText(5, 0, background, "Buy upgrade center:", group);
+
+	CreateImage(5, 25, background, resourceIcon, group, false, false);
+
+	CreateText(25, 20, background, "-500", group);
+
+	return group;
+}
+
+
 UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 {
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
@@ -1583,6 +1601,15 @@ UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, std::vect
 }
 
 
+UI* UIFactory::CreateBuyUpgradeMenuButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
+{
+	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_UPGRADE_CENTER);
+	dataPagesVector->push_back(button);
+
+	return button;
+}
+
+
 UI* UIFactory::CreateBuyBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
 	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_BARRICADE);
@@ -1801,6 +1828,8 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	CreateRangedReviveButton(140, 40, dataPage, dataPagesVector);
 
 	CreateRobottoReviveButton(140, 50, dataPage, dataPagesVector);
+
+	CreateBuyUpgradeMenuButton(68, 40, dataPage, dataPagesVector);
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());

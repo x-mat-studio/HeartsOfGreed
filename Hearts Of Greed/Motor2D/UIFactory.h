@@ -78,6 +78,7 @@ public:
 	UI* CreateRobottoReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
+	UI* CreateBuyUpgradeMenuButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateBuyBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 	UI* CreateUpgradeBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector);
 
@@ -103,6 +104,7 @@ public:
 	UI_Group* CreateOnHoverReviveMenu(Button* button);
 	UI_Group* CreateOnHoverBuyTurretMenu();
 	UI_Group* CreateOnHoverUpgradeTurretMenu();
+	UI_Group* CreateOnHoverBuyUpgradeCenterMenu();
 	UI_Group* CreateOnHoverBuyBarricadeMenu();
 	UI_Group* CreateOnHoverUpgradeBarricadeMenu();
 	UI_Group* CreateOnHoverGathererLifeUpgradeMenu();
