@@ -638,6 +638,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::BUY_UPGRADE_CENTER:
+		app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		break;
+
 	case BUTTON_TAG::BUY_BARRICADE:
 		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		break;
@@ -808,6 +812,10 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::UPGRADE_TURRET:
 		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu());
+		break;
+
+	case BUTTON_TAG::BUY_UPGRADE_CENTER:
+		AddUIGroup(factory->CreateOnHoverBuyUpgradeCenterMenu());
 		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
