@@ -1063,12 +1063,13 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 
 
 // Checks if there is an entity in the mouse Click position 
-Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
+Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus, ENTITY_ALIGNEMENT alignement)
 {
 	Entity* ret = nullptr;
 
 	Collider* col = nullptr;
 	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
 
 	int numEntities = entityVector.size();
 
@@ -1076,6 +1077,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 	{
 		type = entityVector[i]->GetType();
 		col = entityVector[i]->GetCollider();
+		align = entityVector[i]->GetAlignment();
 
 		if (col == nullptr)
 			continue;
@@ -1083,7 +1085,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 		//dynamic entities get priority over static entities
 		if (mousePos.PointInRect(&col->rect))
 		{
-			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO))
+			if (col != nullptr && (align == alignement))
 			{
 				if (focus == true)
 				{

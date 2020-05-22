@@ -4,7 +4,7 @@
   
 	<tutorial> 
 		<start>
-			<entry1 text="Damn, they managed to split us. I must find my companions, but first I should fortify this position."/>
+			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should fortify this position first."/>
 		</start>
 
 		<finish>
