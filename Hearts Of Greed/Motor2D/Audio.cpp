@@ -307,4 +307,3 @@ void ModuleAudio::SilenceAll()
 	SilenceAllChannels(-1);
 	Mix_HaltMusic();
 }
-

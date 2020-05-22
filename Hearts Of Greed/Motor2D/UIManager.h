@@ -79,6 +79,11 @@ public:
 	void PlayHoverSound();
 	void PlayClickSound();
 
+	//Pause Game volume logic
+
+	void LowerVolumeOnPause();
+	void RaiseVolumeOnUnpause();
+
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);

@@ -74,7 +74,7 @@
   </QuestManager>
   
   <testScene 
-    fadeTime="1.0"
+    fadeTime="1.5"
     startingScale="2.0"
     camVel="700" 
     initialCamPosX="408" 
