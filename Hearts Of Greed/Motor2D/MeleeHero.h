@@ -13,7 +13,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 		Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk,
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-		HeroStats& stats, Skill& skill1);
+		HeroStats& stats, Skill& skill1, Skill& passiveSkill);
 
 	MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -32,12 +32,18 @@ public:
 	bool ExecuteSkill2();
 	bool ExecuteSkill3();
 
+	void UpdatePasiveSkill(float dt);
+
 	void LevelUp();
 
 	void PlayGenericNoise(int random);
 
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
+
+private:
+	Skill passiveSkill;
+
 
 };
 

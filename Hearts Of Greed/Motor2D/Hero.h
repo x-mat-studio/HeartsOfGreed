@@ -166,6 +166,9 @@ public:
 	void Draw(float dt);
 	void DrawArea();
 
+	
+	virtual void UpdatePasiveSkill(float dt);
+
 	//Skill Related-----------------
 	// Tells the Hero to get in the launch skill state
 	bool PrepareSkill1();
@@ -281,6 +284,8 @@ protected:
 	void TimeMyParticleSystem(float dt);
 	void ResetAttackAnimation();
 
+	void RecoverHealth(float dt);
+
 private:
 
 	bool CheckAttackRange();
@@ -288,7 +293,6 @@ private:
 	void Attack();
 	void Die();
 
-	void RecoverHealth(float dt);
 	void RecoverEnergy(float dt);
 
 	void InternalInput(std::vector<HERO_INPUTS>& inputs, float dt);
