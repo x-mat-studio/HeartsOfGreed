@@ -95,7 +95,7 @@ bool Video::GrabAVIFrame()
 	SDL_Texture* texture = app->tex->LoadSurface(surface);
 
 	SDL_Rect camera = { 0, 0, width, height};
-	SDL_Rect position = { (100 + width / 2) * app->win->GetScale(), (-70 + height / 2) * app->win->GetScale(), width * 1.5, height * 1.5};
+	SDL_Rect position = { ( width / 2) * 1.8, ( height / 2) + 50, width * 2, height * 2};
 	SDL_Point point = { width / 2, height / 2 };
 
 	SDL_RenderCopyEx(app->render->renderer, texture, &camera, &position, 180, &point, SDL_FLIP_HORIZONTAL);

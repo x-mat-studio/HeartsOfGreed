@@ -265,6 +265,8 @@ bool Hero::Update(float dt)
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
+	UpdatePasiveSkill(dt);
+
 	GroupMovement(dt);
 
 	FeelingSecure(dt);
@@ -539,6 +541,12 @@ void Hero::DrawArea()
 
 }
 
+
+void Hero::UpdatePasiveSkill(float dt)
+{
+}
+
+
 bool Hero::CheckAttackRange()
 {
 	//check if the maxDistance is equal or bigger than the actual distance between the objective and the unit 
@@ -619,6 +627,7 @@ void Hero::Die()
 	{
 		myParticleSystem->Die();
 	}
+	
 }
 
 
