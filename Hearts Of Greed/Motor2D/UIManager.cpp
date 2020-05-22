@@ -253,6 +253,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::PAUSE_GAME:
+		LowerVolumeOnPause();
 		group = factory->CreatePauseMenu();
 		AddUIGroup(group);
 
@@ -260,6 +261,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
+		RaiseVolumeOnUnpause();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
@@ -1028,6 +1030,21 @@ void ModuleUIManager::PlayHoverSound()
 void ModuleUIManager::PlayClickSound()
 {
 	app->audio->PlayFx(clickSound, 0, -1);
+}
+
+void ModuleUIManager::LowerVolumeOnPause()
+{
+	app->audio->musicVolume *= 0.5;
+	app->audio->SetVolume(app->audio->musicVolume);
+}
+
+void ModuleUIManager::RaiseVolumeOnUnpause()
+{
+	app->audio->musicVolume *= 2;
+	if (app->audio->musicVolume > 128) {
+		app->audio->musicVolume = 128;
+	}
+	app->audio->SetVolume(app->audio->musicVolume);
 }
 
 

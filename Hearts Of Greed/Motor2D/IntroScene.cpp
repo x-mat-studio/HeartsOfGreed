@@ -99,7 +99,7 @@ bool ModuleIntroScene::Start()
 	////sounds
 	//logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
 
-	app->video->Initialize("video/sample(good).avi");
+	app->video->Initialize("video/introAVI.avi");
 
 	//app->audio->PlayFx(logoSound);
 	return true;

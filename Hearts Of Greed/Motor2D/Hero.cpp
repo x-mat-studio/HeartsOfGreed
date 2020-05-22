@@ -1695,6 +1695,16 @@ Skill Hero::GetSkill1() const
 	return skill1;
 }
 
+void Hero::ReplaceSkill1(Skill newSkill)
+{
+	skill1 = newSkill;
+}
+
+void Hero::ReplaceHeroStats(HeroStats newStats)
+{
+	stats = newStats;
+}
+
 
 float Hero::GetAttackSpeed() const
 {

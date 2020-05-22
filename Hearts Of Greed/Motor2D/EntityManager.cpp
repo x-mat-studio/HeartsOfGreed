@@ -340,7 +340,7 @@ bool ModuleEntityManager::Start()
 	base2TextureSelected = app->tex->Load("maps/base02_selected.png");
 	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
 	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
-	
+
 	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
 	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
 
@@ -410,7 +410,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 
-	
+
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -613,7 +613,7 @@ void ModuleEntityManager::CheckIfStarted() {
 
 				UpgradeCenter* upCenter;
 				upCenter = (UpgradeCenter*)entityVector[i];
-				
+
 				alignement = entityVector[i]->GetAlignment();
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
@@ -632,7 +632,7 @@ void ModuleEntityManager::CheckIfStarted() {
 
 			case ENTITY_TYPE::BLDG_BASE:
 
-				Base* auxBase; 
+				Base* auxBase;
 				auxBase = (Base*)entityVector[i];
 
 				alignement = entityVector[i]->GetAlignment();
@@ -1241,7 +1241,7 @@ DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
 	}
 
 
-	*refhero = new DeadHero(dyingHero.GetHeroLevel(), dyingHero.GetType(),dyingHero.GetSkill1());
+	*refhero = new DeadHero(dyingHero.GetHeroLevel(), dyingHero.GetType(), dyingHero.GetSkill1());
 
 	return *refhero;
 }
@@ -1295,24 +1295,28 @@ void ModuleEntityManager::DeleteDeadHero(ENTITY_TYPE heroType)
 			delete deadMelee;
 			deadMelee = nullptr;
 		}
+		break;
 	case ENTITY_TYPE::HERO_RANGED:
 		if (deadRanged != nullptr)
 		{
 			delete deadRanged;
 			deadRanged = nullptr;
 		}
+		break;
 	case ENTITY_TYPE::HERO_GATHERER:
 		if (deadGatherer != nullptr)
 		{
 			delete deadGatherer;
 			deadGatherer = nullptr;
 		}
+		break;
 	case ENTITY_TYPE::HERO_ROBO:
 		if (deadRobo != nullptr)
 		{
 			delete deadRobo;
 			deadRobo = nullptr;
 		}
+		break;
 	}
 
 }
@@ -1404,24 +1408,24 @@ void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 		break;
 	}
 
-	
-		pugi::xml_node statsnode = deadHeroesNode.child("stats");
 
-		int level= statsnode.attribute("level").as_int(-1);
-		ENTITY_TYPE type= (ENTITY_TYPE)statsnode.attribute("type").as_int(-1);
-		SKILL_ID skillId;
-		int skillLevel;
-		
+	pugi::xml_node statsnode = deadHeroesNode.child("stats");
 
-		skillId = (SKILL_ID)statsnode.attribute("skillId").as_int(-1);
-		skillLevel = statsnode.attribute("skillLvl").as_int(-1);
-		
-		Skill skill;
-		skill.id = skillId;
-		skill.lvl = skillLevel;
+	int level = statsnode.attribute("level").as_int(-1);
+	ENTITY_TYPE type = (ENTITY_TYPE)statsnode.attribute("type").as_int(-1);
+	SKILL_ID skillId;
+	int skillLevel;
 
-		*refhero = AssignNewDeadHero(level, type, skill);
-	
+
+	skillId = (SKILL_ID)statsnode.attribute("skillId").as_int(-1);
+	skillLevel = statsnode.attribute("skillLvl").as_int(-1);
+
+	Skill skill;
+	skill.id = skillId;
+	skill.lvl = skillLevel;
+
+	*refhero = AssignNewDeadHero(level, type, skill);
+
 
 	//Work in progress
 
@@ -1910,19 +1914,23 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GATHERER_RESURRECT:
-		// TODO REVIVE HEROES FUNCTION
+		ReviveHero(*deadGatherer);
+		DeleteDeadHero(ENTITY_TYPE::HERO_GATHERER);
 		break;
 
 	case EVENT_ENUM::MELEE_RESURRECT:
-
+		ReviveHero(*deadMelee);
+		DeleteDeadHero(ENTITY_TYPE::HERO_MELEE);
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:
-
+		ReviveHero(*deadRanged);
+		DeleteDeadHero(ENTITY_TYPE::HERO_RANGED);
 		break;
 
 	case EVENT_ENUM::ROBOTTO_RESURRECT:
-
+		ReviveHero(*deadRobo);
+		DeleteDeadHero(ENTITY_TYPE::HERO_ROBO);
 		break;
 
 	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:
@@ -2211,7 +2219,7 @@ SPRITE_POSITION ModuleEntityManager::CheckSpriteHeight(Entity* movEntity, Entity
 	}
 
 	else if ((movEntity->GetPosition().y < building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h > building->GetPosition().y)
-		|| (movEntity->GetPosition().y > building->GetPosition().y&& movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
+		|| (movEntity->GetPosition().y > building->GetPosition().y && movEntity->GetPosition().y + movEntity->GetCollider()->rect.h < building->GetPosition().y + building->GetCollider()->rect.h))
 	{
 		return SPRITE_POSITION::BEHIND_BUILDING;
 	}
@@ -2634,6 +2642,35 @@ bool ModuleEntityManager::RequestHeroStats(HeroStats& hero, ENTITY_TYPE id, int 
 }
 
 
+
+bool ModuleEntityManager::ReviveHero(DeadHero heroToRevive)
+{
+	HeroStats newStats;
+	Skill newSkill;
+	SKILL_ID newSkillId;
+	int newSkillLvl;
+
+	//Requests the hero stats and skill to build a new hero
+	RequestHeroStats(newStats, heroToRevive.GetType(), heroToRevive.GetLevel());
+	heroToRevive.GetSkillInfo(newSkillId, newSkillLvl);
+	RequestSkill(newSkill, newSkillId, newSkillLvl);
+
+	Hero* newHero = nullptr;
+	fMPoint spawnpoint = app->player->focusedEntity->position;
+	newHero = (Hero*)AddEntity(heroToRevive.GetType(), spawnpoint.x, spawnpoint.y, ENTITY_ALIGNEMENT::PLAYER);
+
+	if (newHero != nullptr)
+	{
+		newHero->ReplaceSkill1(newSkill);
+		newHero->ReplaceHeroStats(newStats);
+
+		return true;
+	}
+
+	return false;
+}
+
+
 int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objective)
 {
 	int ret = -1;
@@ -3045,7 +3082,7 @@ bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
 bool ModuleEntityManager::LoadSampleUpgradeCenter(pugi::xml_node& upgradeCenterNode)
 {
 	upgradeCenterNode = upgradeCenterNode.first_child();
-	
+
 	//Collider
 	int colW = upgradeCenterNode.child("collider").child("rect").attribute("w").as_int();
 	int colH = upgradeCenterNode.child("collider").child("rect").attribute("h").as_int();
@@ -3987,7 +4024,27 @@ HeroStats::HeroStats() : maxHP(-1), damage(-1), maxEnergy(-1), atkSpeed(-1), rec
 heroLevel(-1), movSpeed(-1), visionDistance(-1), attackRange(-1), xpToLvlUp(-1), currHP(-1), currEnergy(-1)
 {}
 
-HeroStats::HeroStats(HeroStats & newStats): maxHP(newStats.maxHP), damage(newStats.damage), maxEnergy(newStats.maxEnergy), atkSpeed(newStats.atkSpeed), recoveryHPRate(newStats.recoveryHPRate),
+HeroStats::HeroStats(HeroStats& newStats) : maxHP(newStats.maxHP), damage(newStats.damage), maxEnergy(newStats.maxEnergy), atkSpeed(newStats.atkSpeed), recoveryHPRate(newStats.recoveryHPRate),
 recoveryEnergyRate(newStats.recoveryEnergyRate), heroLevel(newStats.heroLevel), movSpeed(newStats.movSpeed), visionDistance(newStats.visionDistance), attackRange(newStats.attackRange), xpToLvlUp(newStats.xpToLvlUp),
 currHP(newStats.currHP), currEnergy(newStats.currEnergy)
 {}
+
+HeroStats HeroStats::operator=(HeroStats& newStats)
+{
+	this->atkSpeed = newStats.atkSpeed;
+	this->attackRange = newStats.attackRange;
+	this->currEnergy = newStats.currEnergy;
+	this->currHP = newStats.currHP;
+	this->damage = newStats.damage;
+	this->heroLevel = newStats.heroLevel;
+	this->maxEnergy = newStats.maxEnergy;
+	this->maxHP = newStats.maxHP;
+	this->movSpeed = newStats.movSpeed;
+	this->recoveryEnergyRate = newStats.recoveryEnergyRate;
+	this->recoveryHPRate = newStats.recoveryHPRate;
+	this->visionDistance = newStats.visionDistance;
+	this->xpToLvlUp = newStats.xpToLvlUp;
+
+
+	return (*this);
+}
