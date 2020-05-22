@@ -248,17 +248,20 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::CREATE_INTRO_MENU:
-
 		group = factory->CreateMainMenu();
 		AddUIGroup(group);
 		break;
 
 	case EVENT_ENUM::PAUSE_GAME:
+		LowerVolumeOnPause();
 		group = factory->CreatePauseMenu();
 		AddUIGroup(group);
+
+		app->gamePause = true;
 		break;
 
 	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
+		RaiseVolumeOnUnpause();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
@@ -293,8 +296,9 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		else if (DeleteUIGroup(GROUP_TAG::SAVE_CHECK_MENU) == true)
 			break;
 
-		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
+		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
 		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 			app->gamePause = false;
 			break;
 		}
@@ -302,7 +306,6 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		else if (app->testScene->IsEnabled() == true)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
-			app->gamePause = true;
 		}
 		break;
 
@@ -572,8 +575,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::PAUSE:
-		AddUIGroup(factory->CreatePauseMenu());
-		app->gamePause = true;
+		app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RESUME:
@@ -1028,6 +1030,21 @@ void ModuleUIManager::PlayHoverSound()
 void ModuleUIManager::PlayClickSound()
 {
 	app->audio->PlayFx(clickSound, 0, -1);
+}
+
+void ModuleUIManager::LowerVolumeOnPause()
+{
+	app->audio->musicVolume *= 0.5;
+	app->audio->SetVolume(app->audio->musicVolume);
+}
+
+void ModuleUIManager::RaiseVolumeOnUnpause()
+{
+	app->audio->musicVolume *= 2;
+	if (app->audio->musicVolume > 128) {
+		app->audio->musicVolume = 128;
+	}
+	app->audio->SetVolume(app->audio->musicVolume);
 }
 
 

@@ -153,6 +153,9 @@ public:
 	bool RequestSkill(Skill& skillToFill, SKILL_ID id, int lvl = 1);
 	bool RequestHeroStats(HeroStats& heroStats, ENTITY_TYPE id, int lvl = 1);
 
+	//Revive
+	bool ReviveHero(DeadHero heroToRevive);
+
 private:
 
 	void CheckIfStarted();

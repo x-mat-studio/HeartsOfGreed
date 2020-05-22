@@ -64,7 +64,6 @@ public:
 	//Configure Channel
 	bool ConfigureChannel(unsigned int channel, int volume, float angle);
 
-
 	bool ConfigureChannel(unsigned int channel,LOUDNESS loudness, DIRECTION direction);
 
 	void SilenceAllChannels(int id);

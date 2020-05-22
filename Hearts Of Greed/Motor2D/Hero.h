@@ -89,10 +89,13 @@ struct Skill
 };
 
 struct skillArea;
+
 struct HeroStats
 {
 	HeroStats();
 	HeroStats(HeroStats& newStats);
+	HeroStats operator=(HeroStats& newStats);
+	
 
 	int maxHP;
 	int damage;
@@ -165,6 +168,9 @@ public:
 	void CheckObjective(Entity* entity);
 	void Draw(float dt);
 	void DrawArea();
+
+	
+	virtual void UpdatePasiveSkill(float dt);
 
 	//Skill Related-----------------
 	// Tells the Hero to get in the launch skill state
@@ -270,6 +276,9 @@ public:
 	void SetVisionInPx(float visPx);
 
 	Skill GetSkill1() const;
+	void ReplaceSkill1(Skill newSkill);
+
+	void ReplaceHeroStats(HeroStats newStats);
 
 	int GetHeroSkillPoints();
 	void SetHeroSkillPoints(int n);
@@ -281,6 +290,8 @@ protected:
 	void TimeMyParticleSystem(float dt);
 	void ResetAttackAnimation();
 
+	void RecoverHealth(float dt);
+
 private:
 
 	bool CheckAttackRange();
@@ -288,7 +299,6 @@ private:
 	void Attack();
 	void Die();
 
-	void RecoverHealth(float dt);
 	void RecoverEnergy(float dt);
 
 	void InternalInput(std::vector<HERO_INPUTS>& inputs, float dt);

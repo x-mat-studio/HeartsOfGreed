@@ -11,20 +11,24 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	HeroStats& stats,  Skill& skill1) :
+	HeroStats& stats,  Skill& skill1, Skill& passiveSkill) :
 	
 	Hero(position, ENTITY_TYPE::HERO_MELEE, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, stats,  skill1)
+		tileOnWalk, stats,  skill1),
+
+	passiveSkill(passiveSkill)
 
 {}
 
 
 MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Hero(position, copy, alignement)
+	Hero(position, copy, alignement),
+
+	passiveSkill(copy->passiveSkill)
 {}
 
 
@@ -129,12 +133,24 @@ bool MeleeHero::ExecuteSkill3()
 	return true;
 }
 
+
+void MeleeHero::UpdatePasiveSkill(float dt)
+{
+	if (gettingAttacked == false)
+	{
+		RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
+	}
+}
+
+
 void MeleeHero::LevelUp()
 {
 	//lvl up effect
 	if (myParticleSystem != nullptr)
-	myParticleSystem->Activate();
-	else {
+		myParticleSystem->Activate();
+
+	else 
+	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
 
