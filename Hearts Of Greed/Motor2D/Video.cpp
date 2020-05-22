@@ -59,7 +59,7 @@ bool Video::CleanUp()
 void Video::Initialize(char* path)
 {
 	OpenAVI(path);                  // Open The AVI File
-	app->audio->PlayMusic("video/sample.ogg", 0.0f, -1);
+	app->audio->PlayMusic("video/introOGG.ogg");
 }
 
 void Video::OpenAVI(char* path)
