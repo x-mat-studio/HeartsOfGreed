@@ -207,7 +207,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 {
 	GROUP_TAG tag = element->GetTag();
 
-	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false)
+	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == true)
 	{
 		delete element;
 		return;
@@ -284,7 +284,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::EXIT_MENUS:
 
 		//If none of this menus is open and you are in the Game Scene, create pause menu
-		if (CheckGroupTag(GROUP_TAG::DIALOG) == false)
+		if (CheckGroupTag(GROUP_TAG::DIALOG) == true)
 			break;
 
 		else if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
@@ -428,11 +428,11 @@ bool ModuleUIManager::CheckGroupTag(GROUP_TAG tag)
 	{
 		if (uiGroupVector[i]->GetTag() == tag)
 		{
-			return false;
+			return true;
 		}
 	}
 
-	return true;
+	return false;
 }
 
 

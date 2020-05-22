@@ -2767,6 +2767,10 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	Skill heroSkill;
 	RequestSkill(heroSkill, skill1ID, 1);
 
+	SKILL_ID passiveSkillID = (SKILL_ID)heroNode.child("sample").child("skills").child("passive").attribute("id").as_int(0);
+	Skill passiveSkill;
+	RequestSkill(passiveSkill, passiveSkillID, 1);
+
 	//skill2
 	float skill2ExecTime = heroNode.child("sample").child("skills").child("skill2").attribute("executionTime").as_float(0);
 	float skill2RecovTime = heroNode.child("sample").child("skills").child("skill2").attribute("recoverTime").as_float(0);
