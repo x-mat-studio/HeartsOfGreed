@@ -94,7 +94,7 @@ public:
 	void DeleteAllEntities();
 
 
-	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true);
+	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::PLAYER);
 	void CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
 

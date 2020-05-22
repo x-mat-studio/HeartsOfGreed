@@ -337,7 +337,7 @@ void ModulePlayer::RightClick()
 
 	Click();
 
-	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false);
+	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false, ENTITY_ALIGNEMENT::ENEMY);
 
 	int numHeroes = heroesVector.size();
 

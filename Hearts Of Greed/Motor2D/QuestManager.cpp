@@ -307,7 +307,7 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 				return false;
 			}
 
-			else if (questEntitysVector.size() == 1) //Only remains the hero
+			else if (questEntitysVector.size() == 1 || questEntitysVector.size() == 0) //Only remains the hero
 			{
 				questEntitysVector[0]->missionEntity = false;
 				WinQuest();

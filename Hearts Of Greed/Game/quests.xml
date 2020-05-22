@@ -11,20 +11,20 @@
 9 = big wanamingo
 -->
 <quests>
+
   <tutorial id="0" reward="100">
-    
+    <entitysToSpawn>
+      <entity type="6" posX="450" posY="4090"/>
+    </entitysToSpawn>    
   </tutorial>
 
-  
   <gathererQuest id="1" reward="200">
     <entitysToSpawn>
-      <entity type="4" posX="172" posY="3300"/>
-      
+      <entity type="4" posX="172" posY="3300"/>      
       <entity type="6" posX="172" posY="3500"/>
       <entity type="6" posX="172" posY="3500"/>
       <entity type="6" posX="172" posY="3500"/>
-      <entity type="6" posX="172" posY="3500"/>
-      
+      <entity type="6" posX="172" posY="3500"/>      
     </entitysToSpawn>
   </gathererQuest>
 
@@ -42,4 +42,12 @@
   <roboQuest id="4" reward="500">
     
   </roboQuest>
+
+  <tutorial2 id="5" reward="100">
+    <entitysToSpawn>
+      <entity type="4" posX="172" posY="3300"/>
+    </entitysToSpawn>    
+  </tutorial2>
+  
+
 </quests>
