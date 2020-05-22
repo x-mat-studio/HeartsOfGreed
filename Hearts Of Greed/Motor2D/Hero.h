@@ -89,10 +89,13 @@ struct Skill
 };
 
 struct skillArea;
+
 struct HeroStats
 {
 	HeroStats();
 	HeroStats(HeroStats& newStats);
+	HeroStats operator=(HeroStats& newStats);
+	
 
 	int maxHP;
 	int damage;
@@ -270,6 +273,9 @@ public:
 	void SetVisionInPx(float visPx);
 
 	Skill GetSkill1() const;
+	void ReplaceSkill1(Skill newSkill);
+
+	void ReplaceHeroStats(HeroStats newStats);
 
 	int GetHeroSkillPoints();
 	void SetHeroSkillPoints(int n);

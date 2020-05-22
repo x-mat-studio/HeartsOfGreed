@@ -615,7 +615,10 @@ void Hero::Die()
 	}
 	app->entityManager->AssignNewDeadHero(*this);
 
-	myParticleSystem->Die();
+	if (myParticleSystem != nullptr)
+	{
+		myParticleSystem->Die();
+	}
 }
 
 
@@ -1681,6 +1684,16 @@ void Hero::SetSkill1Cost(int skillCost)
 Skill Hero::GetSkill1() const
 {
 	return skill1;
+}
+
+void Hero::ReplaceSkill1(Skill newSkill)
+{
+	skill1 = newSkill;
+}
+
+void Hero::ReplaceHeroStats(HeroStats newStats)
+{
+	stats = newStats;
 }
 
 
