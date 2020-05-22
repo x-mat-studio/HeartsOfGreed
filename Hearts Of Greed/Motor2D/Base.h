@@ -34,6 +34,8 @@ public:
 	bool AddUpgradeCenter(UpgradeCenter* upgradeCenter);
 
 	bool TurretCapacityExceed();
+	bool BarricadeCapacityExceed();
+	bool UpgradeCenterCapacityExceed();
 
 	void RemoveTurret(Turret* turret);
 	void RemoveBarricade(Barricade* barricade);

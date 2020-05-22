@@ -49,6 +49,9 @@ ModulePlayer::ModulePlayer() :
 	buildingPrevPosition{ INT_MIN,INT_MIN },
 	baseDrawCenter{ FLT_MIN, FLT_MIN },
 	turretCost(0),
+	barricadeCost(0),
+	upgradeCenterCost(0),
+
 	buildAreaRadius(5),
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
@@ -68,6 +71,9 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
 	turretCost = 120;
+	barricadeCost = 100;
+	upgradeCenterCost = 400;
+
 	return true;
 }
 
@@ -93,6 +99,8 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES_BOOST, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::BARRICADE_CONSTRUCT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
@@ -127,6 +135,8 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES_BOOST, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::BARRICADE_CONSTRUCT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
@@ -154,7 +164,7 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
-		ActivateBuildMode(ENTITY_TYPE::BLDG_UPGRADE_CENTER, nullptr);
+		ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, nullptr);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
@@ -163,7 +173,7 @@ bool ModulePlayer::PreUpdate(float dt)
 	}
 	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) // For debug purposes
 	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL,EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL, EVENT_ENUM::NULL_EVENT);
 	}
 
 
@@ -547,6 +557,18 @@ bool ModulePlayer::BuildClick()
 
 				baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
 				break;
+
+
+			case ENTITY_TYPE::BLDG_BARRICADE:
+
+				baseInBuild->AddBarricade((Barricade*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+				break;
+
+
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+
+				baseInBuild->AddUpgradeCenter((UpgradeCenter*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+				break;
 			}
 			SubstractBuildResources();
 			DesactivateBuildMode();
@@ -683,7 +705,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
-		resourcesBoost+= 300;
+		resourcesBoost += 300;
 		break;
 
 
@@ -697,6 +719,35 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			if (resources >= turretCost && base->TurretCapacityExceed())
 			{
 				ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, base);
+			}
+		}
+		break;
+
+
+	case EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT:
+
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
+		{
+			Base* base = (Base*)focusedEntity;
+
+			if (resources >= upgradeCenterCost && base->UpgradeCenterCapacityExceed())
+			{
+				ActivateBuildMode(ENTITY_TYPE::BLDG_UPGRADE_CENTER, base);
+			}
+		}
+		break;
+
+
+	case EVENT_ENUM::BARRICADE_CONSTRUCT:
+
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_UPGRADE_CENTER)
+		{
+			Building* building = (Building*)focusedEntity;
+			Base* base = building->myBase;
+
+			if (resources >= barricadeCost && base->BarricadeCapacityExceed())
+			{
+				ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, base);
 			}
 		}
 		break;
@@ -786,7 +837,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 		heroesVector.push_back(hero);
 		break;
-	
+
 
 	case EVENT_ENUM::LVL_UP_ALL:
 
@@ -795,10 +846,10 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		for (int aux = 0; aux < heroesVector.size(); aux++) {
 
 			if (heroesVector[aux] != nullptr) {
-			
+
 				heroesVector[aux]->LevelUp();
 			}
-		
+
 		}
 		break;
 	}

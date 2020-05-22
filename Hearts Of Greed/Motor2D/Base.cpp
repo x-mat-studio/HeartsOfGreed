@@ -145,6 +145,7 @@ bool Base::AddTurret(Turret* turret)
 	}
 }
 
+
 bool Base::TurretCapacityExceed()
 {
 	if (turretsVector.size() >= maxTurrets)
@@ -153,6 +154,27 @@ bool Base::TurretCapacityExceed()
 	}
 	return true;
 }
+
+
+bool Base::BarricadeCapacityExceed()
+{
+	if (barricadesVector.size() >= maxBarricades)
+	{
+		return false;
+	}
+	return true;
+}
+
+
+bool Base::UpgradeCenterCapacityExceed()
+{
+	if (baseUpgradeCenter != nullptr)
+	{
+		return false;
+	}
+	return true;
+}
+
 
 bool Base::AddBarricade(Barricade* barricade)
 {
