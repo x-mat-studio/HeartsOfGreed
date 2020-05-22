@@ -568,7 +568,7 @@ bool Hero::CheckAttackRange()
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size() < stats.attackRange + objective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size()-1 < stats.attackRange + objective->GetRadiusSize())
 	{
 		return true;
 
