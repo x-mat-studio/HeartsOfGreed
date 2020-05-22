@@ -253,6 +253,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::PAUSE_GAME:
+		LowerVolumeOnPause();
 		group = factory->CreatePauseMenu();
 		AddUIGroup(group);
 
@@ -297,7 +298,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
 		{
-			RaiseVolumeOnUnpause();
+		
 			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 			app->gamePause = false;
 			break;
@@ -305,7 +306,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (app->testScene->IsEnabled() == true)
 		{
-			LowerVolumeOnPause();
+			
 			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
@@ -327,6 +328,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 
 	case EVENT_ENUM::DELETE_PAUSE_MENU:
+		RaiseVolumeOnUnpause();
 		DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
 		app->gamePause = false;
 		break;
