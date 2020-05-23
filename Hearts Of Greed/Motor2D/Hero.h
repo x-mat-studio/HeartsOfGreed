@@ -296,7 +296,7 @@ private:
 
 	bool CheckAttackRange();
 	Frame GetAnimationCurrentFrame(float dt);
-	void Attack();
+	virtual void Attack();
 	void Die();
 
 	void RecoverEnergy(float dt);

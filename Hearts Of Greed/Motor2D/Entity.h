@@ -78,6 +78,7 @@ enum SKILL_EFFECT : int
 	NO_EFFECT = -1,
 
 	SLOWDOWN,
+	BLOOD_LOSS,
 
 	EFFECT_ALL
 };

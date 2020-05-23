@@ -32,13 +32,22 @@
     <lvl  dmg="0" cooldown="3.0" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="1.5"  effect = "1" energyCost="30"/>
   </skill>
 
-  <!-- Passive skill melee -->
+  <!-- Passive skills melee -->
   <skill id="4" type="1"  alignTarget="1">
     <lvl  dmg="0" cooldown="4.0" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="30.0"  effect ="0" energyCost="0"/>
     <lvl  dmg="0" cooldown="5.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="33.0"  effect ="0" energyCost="0"/>
     <lvl  dmg="0" cooldown="5.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="35.0"  effect ="0" energyCost="0"/>
     <lvl  dmg="0" cooldown="6.0" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="37.0"  effect ="0" energyCost="0"/>
     <lvl  dmg="0" cooldown="7.0" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="40.0"  effect ="0" energyCost="0"/>
+  </skill>
+
+  <!-- Passive skills gatherer -->
+  <skill id="5" type="1"  alignTarget="1">
+    <lvl  dmg="25" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="20.0"  effect ="0" energyCost="0"/>
+    <lvl  dmg="25" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="23.0"  effect ="0" energyCost="0"/>
+    <lvl  dmg="30" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="25.0"  effect ="0" energyCost="0"/>
+    <lvl  dmg="30" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="27.0"  effect ="0" energyCost="0"/>
+    <lvl  dmg="35" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="30.0"  effect ="0" energyCost="0"/>
   </skill>
   
 </skills>

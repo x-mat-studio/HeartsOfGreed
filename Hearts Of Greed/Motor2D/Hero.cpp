@@ -270,12 +270,12 @@ bool Hero::Update(float dt)
 	GroupMovement(dt);
 
 	FeelingSecure(dt);
+
 	if (!gettingAttacked)
 	{
 		RecoverHealth(dt);
 		RecoverEnergy(dt);
 	}
-
 
 	CollisionPosUpdate();
 	HandleMyParticleSystem(dt);

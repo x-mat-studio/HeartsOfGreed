@@ -30,6 +30,8 @@ public:
 	bool ExecuteSkill2();
 	bool ExecuteSkill3();
 
+	void Attack();
+
 	void LevelUp();
 
 

@@ -6,15 +6,16 @@ struct SkillEffect
 
 	float time;
 	float severity;
-	int statTaken;
+	float statTaken;
 };
 
 struct EntityEffects
 {
 	EntityEffects();
+	~EntityEffects();
 
 public:
-	void UpdateEffects();
+	void UpdateEffects(float dt);
 
 	void DeleteEffect(SKILL_EFFECT& effect);
 	void DeleteAllEffects();
@@ -23,6 +24,7 @@ public:
 
 private:
 
+	void StartEffect(SKILL_EFFECT effect);
 	void UpdateEffect(SKILL_EFFECT effect);
 
 private:

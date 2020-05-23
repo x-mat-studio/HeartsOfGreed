@@ -4,6 +4,7 @@
 #include "Render.h"
 #include "Map.h"
 #include "ParticleSystem.h"
+#include "Player.h"
 
 RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -146,6 +147,28 @@ bool RangedHero::ExecuteSkill3()
 
 	return true;
 }
+
+
+void RangedHero::Attack()
+{
+	int ret = -1;
+
+	if (objective)
+		ret = objective->RecieveDamage(stats.damage);
+
+	if (ret > 0)
+	{
+		GetExperience(ret);
+
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
+		{
+			app->player->AddResources(ret * 0.5f);
+			
+		}
+		true;
+	}
+}
+
 
 void RangedHero::LevelUp()
 {

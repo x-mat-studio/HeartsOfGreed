@@ -1,17 +1,19 @@
 #include "GathererHero.h"
+
 #include "EntityManager.h"
 #include "Map.h"
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
 #include "ParticleSystem.h"
+#include "Player.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown,
-	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Animation& vfxExplosion) :
+	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Skill& passiveSkill, Animation& vfxExplosion) :
 
 	Hero(position, ENTITY_TYPE::HERO_GATHERER, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
@@ -20,9 +22,11 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 		tileOnWalk, stats, skill1),
 
 	granadeArea(nullptr),
+	currentVfx(nullptr),
 
 	vfxExplosion(vfxExplosion),
-	currentVfx(nullptr),
+	passiveSkill(passiveSkill),
+
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -30,10 +34,13 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement) :
 
 	Hero(position, copy, alignement),
-	granadeArea(nullptr),
 
+	granadeArea(nullptr),
 	currentVfx(nullptr),
+
 	vfxExplosion(copy->vfxExplosion),
+	passiveSkill(copy->passiveSkill),
+
 	explosionRect{ 0,0,0,0 }
 {}
 
@@ -46,6 +53,7 @@ GathererHero::~GathererHero()
 	granadeArea = nullptr;
 	currentVfx = nullptr;
 }
+
 
 bool GathererHero::ActivateSkill1(fMPoint mouseClick)
 {
@@ -61,17 +69,20 @@ bool GathererHero::ActivateSkill1(fMPoint mouseClick)
 	return ret;
 }
 
+
 bool GathererHero::ActivateSkill2()
 {
 
 	return true;
 }
 
+
 bool GathererHero::ActivateSkill3()
 {
 
 	return true;
 }
+
 
 bool GathererHero::PreProcessSkill1()
 {
@@ -99,17 +110,20 @@ bool GathererHero::PreProcessSkill1()
 	return true;
 }
 
+
 bool GathererHero::PreProcessSkill2()
 {
 
 	return true;
 }
 
+
 bool GathererHero::PreProcessSkill3()
 {
 
 	return true;
 }
+
 
 bool GathererHero::ExecuteSkill1()
 {
@@ -156,17 +170,48 @@ bool GathererHero::ExecuteSkill1()
 	return false;
 }
 
+
 bool GathererHero::ExecuteSkill2()
 {
 
 	return true;
 }
 
+
 bool GathererHero::ExecuteSkill3()
 {
 
 	return true;
 }
+
+
+void GathererHero::UpdatePasiveSkill(float dt)
+{
+
+}
+
+
+void GathererHero::Attack()
+{
+	int ret = -1;
+
+	if (objective)
+		ret = objective->RecieveDamage(stats.damage);
+
+	if (ret > 0)
+	{
+		GetExperience(ret);
+
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
+			
+			app->player->AddResources(ret * 0.5f);
+			app->player->AddResources(passiveSkill.dmg); //dmg codifies the extra resources gained when killing an alien
+		}
+		true;
+	}
+}
+
+
 
 void GathererHero::LevelUp()
 {
@@ -189,6 +234,7 @@ void GathererHero::LevelUp()
 
 	heroSkillPoints++;
 }
+
 
 void GathererHero::PlayGenericNoise(int probability)
 {
@@ -214,6 +260,7 @@ void GathererHero::PlayGenericNoise(int probability)
 	}
 }
 
+
 bool GathererHero::DrawVfx(float dt)
 {
 	if (currentVfx == nullptr)
@@ -234,6 +281,7 @@ bool GathererHero::DrawVfx(float dt)
 
 	return false;
 }
+
 
 void GathererHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
