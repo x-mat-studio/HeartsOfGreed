@@ -204,7 +204,7 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 			{
 				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
 				
-				if (i == 5)
+				if (i == 5)	// Tutorial 2 ID
 				{
 					app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
 				}

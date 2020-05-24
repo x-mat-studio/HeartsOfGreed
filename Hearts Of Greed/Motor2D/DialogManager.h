@@ -106,9 +106,12 @@ private:
 
 	//TUTORIAL-------------
 	P2SString dialogTutorialStart;
+	P2SString dialogTutorialStart_B;
 	P2SString dialogTutorialEnd;
+	P2SString dialogTutorialEnd_B;
 
 	P2SString dialogTutorialStart2;
+	P2SString dialogTutorialStart2_B;
 	P2SString dialogTutorialEnd2;
 
 	//Quest 1 ------------
