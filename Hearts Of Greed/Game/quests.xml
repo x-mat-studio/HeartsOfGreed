@@ -14,7 +14,7 @@
 
   <tutorial id="0" reward="100">
     <entitysToSpawn>
-      <entity type="6" posX="450" posY="4090"/>
+      <entity type="6" posX="100" posY="4000"/>
     </entitysToSpawn>    
   </tutorial>
 
@@ -45,7 +45,9 @@
 
   <tutorial2 id="5" reward="100">
     <entitysToSpawn>
-      <entity type="4" posX="172" posY="3300"/>
+      <entity type="6" posX="180" posY="4000"/>
+      <entity type="6" posX="180" posY="4000"/>
+      <entity type="6" posX="180" posY="4000"/>
     </entitysToSpawn>    
   </tutorial2>
   

@@ -185,6 +185,8 @@ private:
 
 	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
+
+	int CheckPlayerBases();
 	
 
 public:

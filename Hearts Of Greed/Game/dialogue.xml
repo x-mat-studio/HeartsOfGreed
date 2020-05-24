@@ -4,7 +4,7 @@
   
 	<tutorial> 
 		<start>
-			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should fortify this position first."/>
+			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should secure this position first."/>
 		</start>
 
 		<finish>
@@ -14,7 +14,7 @@
     
 	<tutorial2> 
 		<start>
-			<entry1 text="I was lucky it was so few of them, but night has arrived. I should prepare for a bigger horde."/>
+			<entry1 text="Already night time? I'd better get ready for a bigger horde."/>
 		</start>
 
 		<finish>
