@@ -180,6 +180,8 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skillExecutionDelay(false),
 	currAreaInfo(nullptr),
 
+	myParticleSystem(nullptr),
+
 	state(HERO_STATES::IDLE),
 
 	objective(nullptr),
