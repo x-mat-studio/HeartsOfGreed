@@ -339,14 +339,13 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 
 			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
-			app->gamePause = false;
 			break;
 		}
 
 		else if (app->testScene->IsEnabled() == true)
 		{
 
-			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+			app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
