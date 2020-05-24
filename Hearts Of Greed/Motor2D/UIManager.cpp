@@ -194,7 +194,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 	//generates pause menu open event
 
 
-	if (pauseAnimPosX.IsActive() == true)
+	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
 	{
 		SDL_Rect r = { 1107, 392, 388,462 };
 		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, 255, 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
@@ -384,9 +384,12 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::START_PAUSE_ANIM:
-		pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
-		pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
-		pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
+		if (app->gamePause == false&&pauseAnimPosX.IsActive()==false)
+		{
+			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
+			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
+			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
+		}
 
 		break;
 	}
