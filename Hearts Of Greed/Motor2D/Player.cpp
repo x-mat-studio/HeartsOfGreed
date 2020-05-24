@@ -52,7 +52,7 @@ ModulePlayer::ModulePlayer() :
 	barricadeCost(0),
 	upgradeCenterCost(0),
 
-	buildAreaRadius(5),
+	buildAreaRadius(10),
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
@@ -206,7 +206,7 @@ bool ModulePlayer::PostUpdate(float dt)
 	{
 		if (constrAreaInfo != nullptr)
 		{
-			iMPoint center = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
+			iMPoint center = app->map->WorldToMap((baseDrawCenter.x), (baseDrawCenter.y));
 			fMPoint wBuildPos = app->input->GetMousePosWorld();
 			iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
@@ -943,6 +943,9 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
 			constrAreaInfo = app->entityManager->RequestAreaInfo(buildAreaRadius);
+
+			if (constrAreaInfo != nullptr)
+				app->entityManager->CreateDynamicArea(&this->constrArea, buildAreaRadius, origin, constrAreaInfo);
 
 		}
 		return true;

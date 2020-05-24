@@ -979,6 +979,21 @@ float ModulePathfinding::SimpleAPathfinding(const iMPoint& origin, const iMPoint
 	return -1.f;
 }
 
+void ModulePathfinding::SetWalkabilityMap(bool state, iMPoint& position, int width, int height)
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (CheckBoundaries({ position.x + i, position.y + j }))
+			{
+				walkabilityMap[((position.y + j) * this->width) + (position.x + i)] = state;
+			}
+		}
+
+	}
+}
+
 bool ModulePathfinding::RequestPath(Entity* request, std::vector <iMPoint>* path)
 {
 	BROFILER_CATEGORY("RequestPath", Profiler::Color::Khaki);

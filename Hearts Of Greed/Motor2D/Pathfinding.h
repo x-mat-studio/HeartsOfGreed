@@ -192,6 +192,8 @@ public:
 
 	float SimpleAPathfinding(const iMPoint& origin, const iMPoint& destination, int limitpath = -1);
 
+	void SetWalkabilityMap(bool state, iMPoint& position, int width = 1, int height = 1);
+
 private:
 
 
