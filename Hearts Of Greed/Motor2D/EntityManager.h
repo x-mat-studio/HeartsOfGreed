@@ -245,6 +245,8 @@ public:
 	int noise3Ranged;
 	int noise4Ranged;
 
+	int roboDying;
+
 	int lvlup;
 	int selectHero;
 	int moveHero;

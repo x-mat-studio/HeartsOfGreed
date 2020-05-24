@@ -93,7 +93,7 @@ bool RoboHero::ExecuteSkill1()
 
 		skillExecutionDelay = true;
 
-
+		ExecuteSFX(app->entityManager->suitman1Skill2); // Provisional SFX
 
 		return skillExecutionDelay;
 	}
@@ -108,7 +108,7 @@ bool RoboHero::ExecuteSkill1()
 		suplAoE.clear();
 		currAreaInfo = nullptr;
 
-	
+		ExecuteSFX(app->entityManager->roboDying); // Provisional SFX
 		Die();
 
 		return true;

@@ -628,7 +628,7 @@ void Hero::Die()
 	
 }
 
-void Hero::ExecuteDyingFX(int sfx)
+void Hero::ExecuteSFX(int sfx)
 {
 	app->audio->PlayFx(sfx, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 }

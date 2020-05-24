@@ -291,7 +291,7 @@ protected:
 	void ResetAttackAnimation();
 
 	void Die();
-	void ExecuteDyingFX(int sfx);
+	void ExecuteSFX(int sfx);
 
 	void RecoverHealth(float dt);
 

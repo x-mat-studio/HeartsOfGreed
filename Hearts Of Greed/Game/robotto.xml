@@ -20,9 +20,6 @@
 
     <skills>
       <skill1 id="6"/>
-      <skill2 executionTime="20.0" recoverTime="15.0"/>
-      <skill3 executionTime="20.0" recoverTime="15.0"/>
-      <passive id="4"/>
     </skills>
   </sample>
 

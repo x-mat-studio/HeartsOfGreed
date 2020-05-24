@@ -457,7 +457,8 @@ bool ModuleEntityManager::Start()
 	ranged1Skill = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
 	ranged1Skil2 = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
 
-
+	//Robotto sfx-----------
+	roboDying = app->audio->LoadFx("audio/sfx/Heroes/Robotto/provisionalDie.wav"); //Provisional SFX
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
