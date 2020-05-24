@@ -44,7 +44,8 @@ ModuleUIManager::ModuleUIManager() :
 	factory(nullptr),
 	clickSound(-1),
 	hoverSound(-1),
-	lastFramePauseEasingActive(false)
+	lastFramePauseEasingActive(false),
+	goingToPause(false)
 {
 	name.create("UIManager");
 }
@@ -101,6 +102,7 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM, this);
+	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS, this);
 
 	return ret;
 }
@@ -129,15 +131,17 @@ bool ModuleUIManager::PreUpdate(float dt)
 	bool ret = true;
 
 	CheckFocusedUI();
-
-	if (lastFramePauseEasingActive == true && pauseAnimPosX.IsActive() == false)
+	if (goingToPause == true)
 	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
-		lastFramePauseEasingActive = false;
-	}
-	else
-	{
-		lastFramePauseEasingActive = pauseAnimPosX.IsActive();
+		if (lastFramePauseEasingActive == true && pauseAnimPosX.IsActive() == false)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+			lastFramePauseEasingActive = false;
+		}
+		else
+		{
+			lastFramePauseEasingActive = pauseAnimPosX.IsActive();
+		}
 	}
 
 	CheckListener(this);
@@ -173,6 +177,7 @@ bool ModuleUIManager::Update(float dt)
 		pauseAnimPosX.UpdateEasingAddingTime(dt);
 		pauseAnimPosY.UpdateEasingAddingTime(dt);
 		pauseAnimScale.UpdateEasingAddingTime(dt);
+		pauseAnimAlpha.UpdateEasingAddingTime(dt);
 	}
 
 
@@ -197,7 +202,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
 	{
 		SDL_Rect r = { 1107, 392, 388,462 };
-		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, 255, 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
+		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, pauseAnimAlpha.GetLastRequestedPos(), 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
 
 		//SDL_RenderCopy(app->render->renderer, atlas, &r, &blitR);
 	}
@@ -365,6 +370,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		RaiseVolumeOnUnpause();
 		DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
 		app->gamePause = false;
+		app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
@@ -389,8 +395,20 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
+			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 1, 255, 0.7);
+			goingToPause = true;
 		}
+		break;
 
+	case EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS:
+		if (app->gamePause == false && pauseAnimPosX.IsActive() == false)
+		{
+			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 223, 610, 0.7);
+			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 64, 6, 0.7);
+			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.5, 0.01, 0.7);
+			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 255, 1, 0.7);
+			goingToPause = false;
+		}
 		break;
 	}
 }
@@ -561,6 +579,8 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::START_PAUSE_ANIM, this);
+	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS, this);
+
 
 }
 

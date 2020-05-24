@@ -136,9 +136,11 @@ private:
 	bool isMenuOn;
 
 	bool lastFramePauseEasingActive;
+	bool goingToPause;
 	Easing pauseAnimPosX;
 	Easing pauseAnimPosY;
 	Easing pauseAnimScale;
+	Easing pauseAnimAlpha;
 };
 
 #endif //__UIMANAGER_H__
