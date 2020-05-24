@@ -67,9 +67,9 @@ void EntityEffects::StartEffect(SKILL_EFFECT effect)
 
 	case SKILL_EFFECT::BLOOD_LOSS:
 
-		float currHp = callback->GetCurrentHP();
+		float maxHp = callback->GetMaxHP();
 
-		effects[effect].statTaken = currHp / effects[effect].severity / effects[effect].time / 60;
+		effects[effect].statTaken = maxHp / effects[effect].severity / effects[effect].time / 60;
 
 		break;
 	}
@@ -102,10 +102,16 @@ void EntityEffects::UpdateEffect(SKILL_EFFECT effect)
 		break;
 
 	}
+}
 
 
+void EntityEffects::SetCallBack(Entity* entity)
+{
+	callback = entity;
 }
 
 
 SkillEffect::SkillEffect() : time(0.f), severity(0.f), statTaken(0)
 {}
+
+

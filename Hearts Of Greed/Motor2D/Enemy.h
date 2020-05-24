@@ -5,6 +5,7 @@
 
 #include "DynamicEntity.h"
 #include "Animation.h"
+#include "EntityEffects.h"
 
 enum class ENEMY_STATES : int
 {	
@@ -98,7 +99,7 @@ private:
 	bool ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	ENEMY_STATES ProcessFsm(std::vector<ENEMY_INPUTS>& inputs);
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 	void SearchForNewObjective();
 
 	void StateMachine(float dt);
@@ -106,6 +107,10 @@ private:
 
 	void Roar();
 
+
+public:
+
+	EntityEffects debuffs;
 
 private:
 

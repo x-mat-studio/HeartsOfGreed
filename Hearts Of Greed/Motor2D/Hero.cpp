@@ -593,12 +593,6 @@ void Hero::Attack()
 	if (ret > 0)
 	{
 		GetExperience(ret);
-
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
-		{
-			app->player->AddResources(ret * 0.5f);
-		}
-		true;
 	}
 }
 
@@ -840,8 +834,7 @@ int Hero::RecieveDamage(int damage)
 
 void Hero::PlayOnHitSound()
 {
-	app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
-
+	ExecuteSFX(app->entityManager->suitmanGetsHit2);
 }
 
 

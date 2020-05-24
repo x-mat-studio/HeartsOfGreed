@@ -101,7 +101,7 @@ public:
 	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
 
-	virtual int RecieveDamage(int damage);
+	virtual int RecieveDamage(float damage);
 	virtual void CheckObjective(Entity* deleted);
 
 	fMPoint GetPosition();
