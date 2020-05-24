@@ -838,8 +838,7 @@ int Hero::RecieveDamage(int damage)
 
 void Hero::PlayOnHitSound()
 {
-	app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
-
+	ExecuteSFX(app->entityManager->suitmanGetsHit2);
 }
 
 
