@@ -592,12 +592,6 @@ void Hero::Attack()
 	if (ret > 0)
 	{
 		GetExperience(ret);
-
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
-			app->player->AddResources(ret * 0.5f);
-
-		}
-		true;
 	}
 }
 

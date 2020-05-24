@@ -9,61 +9,31 @@
 	<map name="finalMap.tmx" />
 	<menuScene />
 	<testScene>
-		<time_info days_passed="1" is_night="false" timer="16.0558109" />
+		<time_info days_passed="1" is_night="false" timer="7.77100897" />
 	</testScene>
 	<winScene />
 	<loseScene />
 	<introScene />
 	<colliders />
 	<entityManager>
-		<entity type="base" x="2336" y="1712" aligment="1" />
-		<entity type="base" x="1632" y="1488" aligment="1" />
-		<entity type="base" x="2816" y="2528" aligment="1" />
-		<entity type="base" x="2880" y="3200" aligment="1" />
-		<entity type="base" x="-384" y="1760" aligment="1" />
-		<entity type="base" x="2432" y="3424" aligment="1" />
-		<entity type="base" x="-1056" y="2800" aligment="1" />
+		<entity type="base" x="2336" y="1712" aligment="1" hit_points="500" />
+		<entity type="base" x="1632" y="1488" aligment="1" hit_points="500" />
+		<entity type="base" x="2816" y="2528" aligment="1" hit_points="500" />
+		<entity type="base" x="2880" y="3200" aligment="1" hit_points="500" />
+		<entity type="base" x="-384" y="1760" aligment="1" hit_points="500" />
+		<entity type="base" x="2432" y="3424" aligment="1" hit_points="500" />
+		<entity type="base" x="-1056" y="2800" aligment="1" hit_points="500" />
 		<entity type="quest" x="0" y="0" id="1" />
 		<entity type="building" x="640" y="3872" decor="2" />
-		<entity type="base" x="192" y="3680" aligment="1" />
-		<entity type="quest" x="0" y="0" id="1" />
-		<entity type="base" x="672" y="4336" aligment="0" />
-		<entity type="hero_gatherer" x="281.820007" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="100" max_hit_points="100" recovery_hit_points_rate="2" energy_points="40" max_energy_points="40" recovery_energy_rate="4" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="8" attack_range="1" attack_speed="0.75" vision_distance="7" vision_in_px="253.939621" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
+		<entity type="base" x="192" y="3680" aligment="1" hit_points="500" />
+		<entity type="quest" x="0" y="0" id="0" />
+		<entity type="base" x="672" y="4336" aligment="0" hit_points="500" />
+		<entity type="hero_gatherer" x="285" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="100" max_hit_points="100" recovery_hit_points_rate="2" energy_points="40" max_energy_points="40" recovery_energy_rate="4" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="8" attack_range="1" attack_speed="0.75" vision_distance="7" vision_in_px="253.939621" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
 		<entity type="hero_melee" x="240.100006" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="170" max_hit_points="170" recovery_hit_points_rate="4" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="1" attack_speed="1" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
-		<entity type="hero_ranged" x="150" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="100" max_hit_points="100" recovery_hit_points_rate="4" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="5" attack_speed="1" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
-		<entity type="hero_robot" x="50" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="170" max_hit_points="170" recovery_hit_points_rate="4" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="1" attack_speed="1" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
+		<entity type="hero_ranged" x="150" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="85" max_hit_points="85" recovery_hit_points_rate="2" energy_points="65" max_energy_points="65" recovery_energy_rate="2" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="20" attack_range="5" attack_speed="1.35000002" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
+		<entity type="hero_robot" x="50" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="210" max_hit_points="210" recovery_hit_points_rate="0" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="1" attack_speed="1.14999998" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
 		<entity type="spawner" x="-1370" y="800" entitys_to_spawn="0" spawn_rate="0" entities_per_wave="1" active="true" />
 		<entity type="spawner" x="410" y="1025" entitys_to_spawn="0" spawn_rate="0" entities_per_wave="1" active="true" />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
-		<entity />
 		<deadEntities />
 	</entityManager>
 	<FOWManager>
@@ -18791,158 +18761,158 @@
 		<fow_tile visited="511" />
 		<fow_tile visited="511" />
 		<fow_tile visited="511" />
-		<fow_tile visited="95" />
-		<fow_tile visited="9" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="0" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
-		<fow_tile visited="511" />
 		<fow_tile visited="511" />
 		<fow_tile visited="73" />
 		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="0" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="511" />
+		<fow_tile visited="95" />
+		<fow_tile visited="9" />
 		<fow_tile visited="0" />
 		<fow_tile visited="0" />
 		<fow_tile visited="0" />
@@ -19574,7 +19544,7 @@
 	</UIManager>
 	<pathfinding />
 	<player>
-		<resources cristals="30015" skillCoin="30" enemyCoin="9000" />
+		<resources cristals="5" skillCoin="0" enemyCoin="0" />
 	</player>
 	<AI />
 	<QuestManager>
@@ -19593,10 +19563,14 @@
 		<quest active="false" id="4" dialogInput="-1" reward="500">
 			<questEntitys />
 		</quest>
+		<quest active="false" id="5" dialogInput="-1" reward="100">
+			<questEntitys />
+		</quest>
 	</QuestManager>
 	<minimap />
+	<video />
 	<:anonymous />
 	<renderer>
-		<camera x="-198" y="-7856" />
+		<camera x="1025" y="-2809" />
 	</renderer>
 </game_state>

@@ -120,6 +120,8 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
 	int randomCounter = rand() % 20;
 	framesPerPathfinding += randomCounter;
+
+	debuffs.SetCallBack(this);
 }
 
 
@@ -164,6 +166,9 @@ bool Enemy::Update(float dt)
 	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Blue);
 
 	//check inputs to traverse state matrix
+
+	debuffs.UpdateEffects(dt);
+
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
@@ -617,7 +622,7 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 
 }
 
-int Enemy::RecieveDamage(int damage)
+int Enemy::RecieveDamage(float damage)
 {
 	int ret = -1;
 

@@ -14,7 +14,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 		Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk, 
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-		HeroStats& stats, Skill& skill1);
+		HeroStats& stats, Skill& skill1, Skill& passiveSkill);
 
 	RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -34,18 +34,22 @@ public:
 
 	void LevelUp();
 
-
-	fMPoint skill1PosLaunch;
-	skillArea* skill1Area;
-
-	//This is a placeholder for particles
-	SDL_Rect explosionRect;
-	Animation* currentVfx;
 	bool DrawVfx(float dt);
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 
 	void PlayGenericNoise(int random);
 	void PlayOnHitSound();
+
+public:
+
+	fMPoint skill1PosLaunch;
+	skillArea* skill1Area;
+	Skill passiveSkill;
+
+	//This is a placeholder for particles
+	SDL_Rect explosionRect;
+	Animation* currentVfx;
+	
 
 };
 
