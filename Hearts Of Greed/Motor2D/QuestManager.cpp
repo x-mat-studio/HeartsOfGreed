@@ -67,6 +67,7 @@ bool ModuleQuestManager::Start()
 
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FINISH_QUEST, this);
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FAIL_QUEST, this);
+	ret = app->eventManager->EventRegister(EVENT_ENUM::FIRST_BASE_CONQUERED, this);
 
 	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
 	questFailed = app->audio->LoadFx("audio/sfx/Interface/MissionFailed.wav");
@@ -93,6 +94,7 @@ bool ModuleQuestManager::CleanUp()
 
 	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FINISH_QUEST, this);
 	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FAIL_QUEST, this);
+	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FIRST_BASE_CONQUERED, this);
 
 	app->tex->UnLoad(questMarker);
 
@@ -125,6 +127,12 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::FAIL_QUEST:
 
 		app->audio->PlayFx(questFailed, 0, -1);
+		break;
+
+	case EVENT_ENUM::FIRST_BASE_CONQUERED:
+
+		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
+		QuestStarted(5);
 		break;
 	}
 }
@@ -170,6 +178,12 @@ void ModuleQuestManager::QuestStarted(int questId)
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_4_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_4_END);
 		break;
+
+	case 5:
+		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START2);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END2);
+		break;
+
 	default:
 		break;
 	}
@@ -189,6 +203,11 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 			if (questInfoVector[i].CheckQuestStatus(entity))
 			{
 				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+				
+				if (i == 5)
+				{
+					app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
+				}
 			}
 
 		}
@@ -307,7 +326,7 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 				return false;
 			}
 
-			else if (questEntitysVector.size() == 1 || questEntitysVector.size() == 0) //Only remains the hero
+			else if ((questEntitysVector.size() == 1 && questEntitysVector[0]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)|| questEntitysVector.size() == 0) //Only remains the hero or all enemies are dead
 			{
 				questEntitysVector[0]->missionEntity = false;
 				WinQuest();

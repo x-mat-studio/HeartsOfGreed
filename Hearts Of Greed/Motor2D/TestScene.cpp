@@ -28,7 +28,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
 	timer(0),
-	dayNumber(1),
+	dayNumber(0),
 	
 	dayTimer(INT_MAX),
 	nightTimer(INT_MAX),
