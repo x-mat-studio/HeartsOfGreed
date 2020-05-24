@@ -19,9 +19,7 @@
     </stats>
 
     <skills>
-      <skill1 executionTime="1.0" recoverTime="7.5" damage="30" id="2" type="1" targetAligment="1"/>
-      <skill2 executionTime="20.0" recoverTime="15.0"/>
-      <skill3 executionTime="20.0" recoverTime="15.0"/>
+      <skill1 id="6"/>
     </skills>
   </sample>
 

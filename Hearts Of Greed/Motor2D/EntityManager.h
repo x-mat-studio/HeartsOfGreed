@@ -185,6 +185,8 @@ private:
 
 	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
+
+	int CheckPlayerBases();
 	
 
 public:
@@ -242,6 +244,8 @@ public:
 	int noise2Ranged;
 	int noise3Ranged;
 	int noise4Ranged;
+
+	int roboDying;
 
 	int lvlup;
 	int selectHero;

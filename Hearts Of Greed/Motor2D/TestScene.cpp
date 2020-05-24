@@ -28,7 +28,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
 	timer(0),
-	dayNumber(1),
+	dayNumber(0),
 	
 	dayTimer(INT_MAX),
 	nightTimer(INT_MAX),
@@ -358,6 +358,20 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	//	ret = false;
 	//}
 
+	//DEBUG WALKABILITY
+	//for (int i = 0; i < app->map->data.width; i++)
+	//{
+	//	for (int j = 0; j < app->map->data.height; j++)
+	//	{
+	//		if (app->pathfinding->IsWalkable({ i,j }))
+	//		{
+	//			iMPoint p = app->map->MapToWorld(i, j);
+
+	//			app->render->Blit(app->entityManager->debugPathTexture, p.x, p.y);
+	//		}
+
+	//	}
+	//}
 
 	return ret;
 }

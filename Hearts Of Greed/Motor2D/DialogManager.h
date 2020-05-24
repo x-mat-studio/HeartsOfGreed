@@ -15,6 +15,9 @@ enum class DIALOG_INPUT : int
 	TUTORIAL_START,
 	TUTORIAL_END,
 
+	TUTORIAL_START2,
+	TUTORIAL_END2,
+
 	MISSION_1_START,
 	MISSION_1_END,
 
@@ -38,6 +41,8 @@ enum class DIALOG_STATE : int
 	//TUTORIAL-------------
 	TUTORIAL_ST,
 	TUTORIAL_END,
+	TUTORIAL_ST2,
+	TUTORIAL_END2,
 
 	//Quest 1 ------------
 	MISSION1_ST_B1,
@@ -101,9 +106,12 @@ private:
 
 	//TUTORIAL-------------
 	P2SString dialogTutorialStart;
+	P2SString dialogTutorialStart_B;
 	P2SString dialogTutorialEnd;
+	P2SString dialogTutorialEnd_B;
 
 	P2SString dialogTutorialStart2;
+	P2SString dialogTutorialStart2_B;
 	P2SString dialogTutorialEnd2;
 
 	//Quest 1 ------------

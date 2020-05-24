@@ -8,6 +8,8 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "FoWManager.h"
+#include "EventManager.h"
+#include "App.h"
 
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
@@ -92,11 +94,7 @@ Base::~Base()
 
 	baseUpgradeCenter = nullptr;
 
-	if (visionEntity != nullptr)
-	{
-		visionEntity->deleteEntity = true;
-		visionEntity = nullptr;
-	}
+
 	turretsVector.clear();
 	barricadesVector.clear();
 }
@@ -407,6 +405,8 @@ void Base::Die()
 	ChangeTexturesOnDeath();
 
 	ChangeAligment();
+
+	app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 }
 
 void Base::ChangeTexturesOnDeath()

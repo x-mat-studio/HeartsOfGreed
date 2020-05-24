@@ -5,6 +5,7 @@
 #include "FoWManager.h"
 #include "Base.h"
 #include "EventManager.h"
+#include "Pathfinding.h"
 
 
 Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
@@ -77,6 +78,8 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	currentAnimation = &idleRightDown;
 
 	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
+
+	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x, position.y));
 }
 
 
@@ -298,6 +301,9 @@ void Turret::Die()
 	{
 		myBase->RemoveTurret(this);
 	}
+
+	app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x, position.y));
+
 }
 
 

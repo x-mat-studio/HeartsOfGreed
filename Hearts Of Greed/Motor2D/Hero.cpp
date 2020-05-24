@@ -504,7 +504,7 @@ Frame Hero::GetAnimationCurrentFrame(float dt)
 {
 	Frame currFrame;
 
-	if (state == HERO_STATES::ATTACK || state == HERO_STATES::CHARGING_ATTACK)
+	if (state == HERO_STATES::ATTACK || (state == HERO_STATES::CHARGING_ATTACK && comeFromAttack))
 	{
 		currFrame = currentAnimation->GetCurrentFrame(dt * stats.atkSpeed);
 	}
@@ -543,8 +543,7 @@ void Hero::DrawArea()
 
 
 void Hero::UpdatePasiveSkill(float dt)
-{
-}
+{}
 
 
 bool Hero::CheckAttackRange()
@@ -600,6 +599,25 @@ void Hero::Die()
 {
 	toDelete = true;
 
+
+	// Death SFX
+	switch (this->type)
+	{
+	case ENTITY_TYPE::HERO_GATHERER:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_MELEE:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		ExecuteSFX(app->entityManager->roboDying);
+		break;
+	}
+
+
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
 	if (minimapIcon != nullptr)
@@ -607,8 +625,6 @@ void Hero::Die()
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
 	}
-
-	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 	if (visionEntity != nullptr)
 	{
@@ -622,6 +638,11 @@ void Hero::Die()
 		myParticleSystem->Die();
 	}
 	
+}
+
+void Hero::ExecuteSFX(int sfx)
+{
+	app->audio->PlayFx(sfx, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 }
 
 
@@ -811,8 +832,7 @@ int Hero::RecieveDamage(int damage)
 
 void Hero::PlayOnHitSound()
 {
-	app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
-
+	ExecuteSFX(app->entityManager->suitmanGetsHit2);
 }
 
 
@@ -968,7 +988,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_ATTACK:
-				attackCooldown += TIME_TRIGGER; comeFromAttack = false;
+				comeFromAttack = false;
+				ResetAttackAnimation();
 				state = HERO_STATES::ATTACK;	PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
@@ -992,8 +1013,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_ATTACK:
 				PlayGenericNoise(33);
-				attackCooldown += TIME_TRIGGER;
 				comeFromAttack = false;
+				ResetAttackAnimation();
 				state = HERO_STATES::ATTACK;	break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
@@ -1191,7 +1212,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCEL: {
+			case HERO_INPUTS::IN_SKILL_CANCEL: 
+			{
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;

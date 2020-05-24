@@ -115,7 +115,7 @@ bool RangedHero::ExecuteSkill1()
 
 
 			skillExecutionDelay = true;
-			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ExecuteSFX(app->entityManager->suitman1Skill);
 			return skillExecutionDelay;
 		}
 		else
@@ -123,7 +123,7 @@ bool RangedHero::ExecuteSkill1()
 
 			int ret = 0;
 
-			app->audio->PlayFx(app->entityManager->ranged1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ExecuteSFX(app->entityManager->ranged1Skill);
 			ret = app->entityManager->ExecuteSkill(skill1, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y });
 
 			currAoE.clear();
@@ -232,16 +232,16 @@ void RangedHero::PlayGenericNoise(int probability)
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise1Ranged);
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise2Ranged);
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise3Ranged);
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Ranged, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise4Ranged);
 		break;
 
 	default:
@@ -252,5 +252,5 @@ void RangedHero::PlayGenericNoise(int probability)
 
 void RangedHero::PlayOnHitSound()
 {
-	app->audio->PlayFx(app->entityManager->rangedGetsHit, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
+	ExecuteSFX(app->entityManager->rangedGetsHit);
 }

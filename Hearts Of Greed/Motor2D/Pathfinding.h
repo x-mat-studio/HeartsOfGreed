@@ -13,6 +13,8 @@
 #include <map>
 #include <algorithm>
 #include <unordered_map>
+#include <unordered_set>
+#include "SDL/include/SDL.h"
 
 //HPA*-------------------------------------------
 #define NODE_MIN_DISTANCE 4
@@ -96,6 +98,8 @@ struct graphLevel
 	void ConnectNodeToBorder(HierNode* node, Cluster* c, int lvl);
 
 	HierNode* NodeExists(iMPoint pos, Cluster* lvl);
+
+	void ReCreateIntraEdges(Cluster* c);
 };
 
 //Basic A*---------------------------------------
@@ -156,6 +160,8 @@ public:
 	float CalculateF(const iMPoint& destination);
 	std::vector <Edge*> edges;
 	uint FindWalkableAdjacents(std::vector<HierNode>& list_to_fill);
+
+	bool active;
 };
 
 
@@ -189,8 +195,13 @@ public:
 
 	bool LineRayCast(iMPoint& p0, iMPoint& p1);
 	std::vector<iMPoint> CreateLine(const iMPoint& p0, const iMPoint& p1, int maxDistance = INT_MAX);
+	std::vector<iMPoint>* GetLastLine();
 
 	float SimpleAPathfinding(const iMPoint& origin, const iMPoint& destination, int limitpath = -1);
+
+	void SetWalkabilityMap(bool state, iMPoint& position, int width = 1, int height = 1);
+
+	bool IsAreaWalkable(iMPoint& position, int width, int height);
 
 private:
 

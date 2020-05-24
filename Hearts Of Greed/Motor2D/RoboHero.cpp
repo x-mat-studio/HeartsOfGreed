@@ -37,6 +37,8 @@ RoboHero::~RoboHero()
 bool RoboHero::ActivateSkill1(fMPoint clickPosition)
 {
 
+	inputs.push_back(IN_SKILL1);
+
 	return true;
 }
 
@@ -55,6 +57,17 @@ bool RoboHero::ActivateSkill3()
 bool RoboHero::PreProcessSkill1()
 {
 
+	if (currAoE.size() == 0)
+	{
+		origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.rangeRadius);
+
+
+		if (currAreaInfo != nullptr)
+			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.rangeRadius, origin, currAreaInfo);
+	}
+
 	return true;
 }
 
@@ -72,6 +85,33 @@ bool RoboHero::PreProcessSkill3()
 
 bool RoboHero::ExecuteSkill1()
 {
+
+	if (!skillExecutionDelay)
+	{
+		if (!godMode)
+			stats.currEnergy -= skill1.energyCost;
+
+		skillExecutionDelay = true;
+
+		ExecuteSFX(app->entityManager->suitman1Skill2); // Provisional SFX
+
+		return skillExecutionDelay;
+	}
+	else
+	{
+
+		int ret = 0;
+
+		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
+
+		currAoE.clear();
+		suplAoE.clear();
+		currAreaInfo = nullptr;
+
+		Die();
+
+		return true;
+	}
 
 	return true;
 }

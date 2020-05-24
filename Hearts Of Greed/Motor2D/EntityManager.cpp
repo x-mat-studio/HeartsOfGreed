@@ -371,6 +371,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
@@ -456,7 +457,8 @@ bool ModuleEntityManager::Start()
 	ranged1Skill = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
 	ranged1Skil2 = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
 
-
+	//Robotto sfx-----------
+	roboDying = app->audio->LoadFx("audio/sfx/Heroes/Robotto/provisionalDie.wav"); //Provisional SFX
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
@@ -805,6 +807,7 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
@@ -1835,6 +1838,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	{
 	case EVENT_ENUM::ENTITY_DEAD:
 		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::PLAYER_CONQUERED_A_BASE:
+		if (CheckPlayerBases() == 2)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::FIRST_BASE_CONQUERED, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case EVENT_ENUM::DAY_START:
@@ -4054,3 +4064,22 @@ HeroStats HeroStats::operator=(HeroStats& newStats)
 
 	return (*this);
 }
+
+
+int ModuleEntityManager::CheckPlayerBases()
+{
+	int numEntities = entityVector.size();
+	int baseNumber = 0;
+
+	for(int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER && entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE)
+		{
+			baseNumber++;
+		}
+	}
+
+	return baseNumber;
+}
+
+

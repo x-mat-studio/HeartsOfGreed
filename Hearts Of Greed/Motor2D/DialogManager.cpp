@@ -108,10 +108,13 @@ bool ModuleDialogManager::Awake(pugi::xml_node& data)
 
 	//TUTORIAL-------------
 	 dialogTutorialStart		= (P2SString)dialogue.child("tutorial").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorialStart_B		= (P2SString)dialogue.child("tutorial").child("start").child("entry2").attribute("text").as_string();
 
 	 dialogTutorialEnd			= (P2SString)dialogue.child("tutorial").child("finish").child("entry1").attribute("text").as_string();
+	 dialogTutorialEnd_B		= (P2SString)dialogue.child("tutorial").child("finish").child("entry2").attribute("text").as_string();
 
 	 dialogTutorialStart2		= (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorialStart2_B		= (P2SString)dialogue.child("tutorial2").child("start").child("entry2").attribute("text").as_string();
 
 	 dialogTutorialEnd2			= (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
 
@@ -196,7 +199,7 @@ void ModuleDialogManager::ProcessFsm()
 				state = DIALOG_STATE::TUTORIAL_ST;
 
 				currentDialog1 = &dialogTutorialStart;
-				currentDialog2 = nullptr;
+				currentDialog2 = &dialogTutorialStart_B;
 				break;
 
 
@@ -204,6 +207,22 @@ void ModuleDialogManager::ProcessFsm()
 				state = DIALOG_STATE::TUTORIAL_END;
 
 				currentDialog1 = &dialogTutorialEnd;
+				currentDialog2 = &dialogTutorialEnd_B;
+				break;
+
+
+			case DIALOG_INPUT::TUTORIAL_START2:
+				state = DIALOG_STATE::TUTORIAL_ST2;
+
+				currentDialog1 = &dialogTutorialStart2;
+				currentDialog2 = &dialogTutorialStart2_B;
+				break;
+
+
+			case DIALOG_INPUT::TUTORIAL_END2:
+				state = DIALOG_STATE::TUTORIAL_END2;
+
+				currentDialog1 = &dialogTutorialEnd2;
 				currentDialog2 = nullptr;
 				break;
 
@@ -295,6 +314,42 @@ void ModuleDialogManager::ProcessFsm()
 
 
 		case DIALOG_STATE::TUTORIAL_END:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::IDLE_DIALOG;
+
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_ST2:
+			
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::IDLE_DIALOG;
+
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_END2:
 
 			switch (input)
 			{

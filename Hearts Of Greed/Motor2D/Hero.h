@@ -290,6 +290,9 @@ protected:
 	void TimeMyParticleSystem(float dt);
 	void ResetAttackAnimation();
 
+	void Die();
+	void ExecuteSFX(int sfx);
+
 	void RecoverHealth(float dt);
 
 private:
@@ -297,7 +300,6 @@ private:
 	bool CheckAttackRange();
 	Frame GetAnimationCurrentFrame(float dt);
 	virtual void Attack();
-	void Die();
 
 	void RecoverEnergy(float dt);
 
