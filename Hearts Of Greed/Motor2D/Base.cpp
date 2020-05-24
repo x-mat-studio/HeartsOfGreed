@@ -94,11 +94,7 @@ Base::~Base()
 
 	baseUpgradeCenter = nullptr;
 
-	if (visionEntity != nullptr)
-	{
-		visionEntity->deleteEntity = true;
-		visionEntity = nullptr;
-	}
+
 	turretsVector.clear();
 	barricadesVector.clear();
 }
