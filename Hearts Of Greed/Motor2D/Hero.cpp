@@ -504,7 +504,7 @@ Frame Hero::GetAnimationCurrentFrame(float dt)
 {
 	Frame currFrame;
 
-	if (state == HERO_STATES::ATTACK || state == HERO_STATES::CHARGING_ATTACK)
+	if (state == HERO_STATES::ATTACK || (state == HERO_STATES::CHARGING_ATTACK && comeFromAttack))
 	{
 		currFrame = currentAnimation->GetCurrentFrame(dt * stats.atkSpeed);
 	}
@@ -543,8 +543,7 @@ void Hero::DrawArea()
 
 
 void Hero::UpdatePasiveSkill(float dt)
-{
-}
+{}
 
 
 bool Hero::CheckAttackRange()
@@ -593,9 +592,9 @@ void Hero::Attack()
 	{
 		GetExperience(ret);
 
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
+		{
 			app->player->AddResources(ret * 0.5f);
-
 		}
 		true;
 	}
@@ -977,7 +976,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			case HERO_INPUTS::IN_MOVE:   state = HERO_STATES::MOVE;		PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_ATTACK:
-				attackCooldown += TIME_TRIGGER; comeFromAttack = false;
+				comeFromAttack = false;
+				ResetAttackAnimation();
 				state = HERO_STATES::ATTACK;	PlayGenericNoise(33); break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
@@ -1001,8 +1001,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_ATTACK:
 				PlayGenericNoise(33);
-				attackCooldown += TIME_TRIGGER;
 				comeFromAttack = false;
+				ResetAttackAnimation();
 				state = HERO_STATES::ATTACK;	break;
 
 			case HERO_INPUTS::IN_PREPARE_SKILL1: state = HERO_STATES::PREPARE_SKILL1;  break;
@@ -1200,7 +1200,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCEL: {
+			case HERO_INPUTS::IN_SKILL_CANCEL: 
+			{
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
