@@ -614,8 +614,6 @@ void Hero::Die()
 		minimapIcon->minimapPos = nullptr;
 	}
 
-	app->audio->PlayFx(app->entityManager->suitmanGetsDeath2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
-
 	if (visionEntity != nullptr)
 	{
 		visionEntity->deleteEntity = true;
@@ -628,6 +626,11 @@ void Hero::Die()
 		myParticleSystem->Die();
 	}
 	
+}
+
+void Hero::ExecuteDyingFX(int sfx)
+{
+	app->audio->PlayFx(sfx, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 }
 
 
