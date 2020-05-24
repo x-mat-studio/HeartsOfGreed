@@ -605,6 +605,25 @@ void Hero::Die()
 {
 	toDelete = true;
 
+
+	// Death SFX
+	switch (this->type)
+	{
+	case ENTITY_TYPE::HERO_GATHERER:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_MELEE:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		ExecuteSFX(app->entityManager->roboDying);
+		break;
+	}
+
+
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
 	if (minimapIcon != nullptr)

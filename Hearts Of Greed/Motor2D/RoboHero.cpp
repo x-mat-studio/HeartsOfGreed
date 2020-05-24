@@ -108,7 +108,6 @@ bool RoboHero::ExecuteSkill1()
 		suplAoE.clear();
 		currAreaInfo = nullptr;
 
-		ExecuteSFX(app->entityManager->roboDying); // Provisional SFX
 		Die();
 
 		return true;
