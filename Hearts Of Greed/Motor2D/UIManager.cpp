@@ -44,6 +44,8 @@ ModuleUIManager::ModuleUIManager() :
 	factory(nullptr),
 	clickSound(-1),
 	hoverSound(-1),
+	easyIn(-1),
+	easyOut(-1),
 	lastFramePauseEasingActive(false),
 	goingToPause(false)
 {
@@ -119,6 +121,8 @@ bool ModuleUIManager::Start()
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
+	easyIn = app->audio->LoadFx("audio/sfx/Interface/Easy_in.wav");
+	easyOut = app->audio->LoadFx("audio/sfx/Interface/Easy_out.wav");
 
 	return ret;
 }
@@ -337,14 +341,14 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
 		{
-
+			
 			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 			break;
 		}
 
 		else if (app->testScene->IsEnabled() == true)
 		{
-
+			
 			app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
@@ -389,8 +393,10 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::START_PAUSE_ANIM:
+		
 		if (app->gamePause == false&&pauseAnimPosX.IsActive()==false)
 		{
+			app->audio->PlayFx(easyIn, 0, -1);
 			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
@@ -402,6 +408,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS:
 		if (app->gamePause == false && pauseAnimPosX.IsActive() == false)
 		{
+			app->audio->PlayFx(easyOut, 0, -1);
 			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 223, 610, 0.7);
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 64, 6, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.5, 0.01, 0.7);
@@ -1103,13 +1110,13 @@ void ModuleUIManager::PlayClickSound()
 
 void ModuleUIManager::LowerVolumeOnPause()
 {
-	app->audio->musicVolume *= 0.5;
+	app->audio->musicVolume *= 0.2;
 	app->audio->SetVolume(app->audio->musicVolume);
 }
 
 void ModuleUIManager::RaiseVolumeOnUnpause()
 {
-	app->audio->musicVolume *= 2;
+	app->audio->musicVolume *= 5;
 	if (app->audio->musicVolume > 128) {
 		app->audio->musicVolume = 128;
 	}

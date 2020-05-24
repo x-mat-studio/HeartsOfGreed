@@ -132,6 +132,8 @@ private:
 
 	int hoverSound;
 	int clickSound;
+	int easyIn;
+	int easyOut;
 
 	bool isMenuOn;
 
