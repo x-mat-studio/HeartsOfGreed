@@ -55,7 +55,6 @@ public:
 	~Enemy();
 
 
-	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 

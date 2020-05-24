@@ -153,14 +153,6 @@ Enemy::~Enemy()
 }
 
 
-bool Enemy::PreUpdate(float dt)
-{
-
-
-	return true;
-}
-
-
 bool Enemy::Update(float dt)
 {
 	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Blue);

@@ -237,14 +237,14 @@ void App::PrepareUpdate()
 	lastSecFrameCount++;
 
 	// Calculate the dt
-
 	dt = frameTime.ReadSec();
-	necessaryDt = dt;
 
 
 	//just to when we debug, the player doesnt trespass the floor
 	if (dt > MAX_DT)
 		dt = MAX_DT;
+
+	necessaryDt = dt;
 
 	if (gamePause)
 		dt = 0;
