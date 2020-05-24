@@ -108,10 +108,13 @@ bool ModuleDialogManager::Awake(pugi::xml_node& data)
 
 	//TUTORIAL-------------
 	 dialogTutorialStart		= (P2SString)dialogue.child("tutorial").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorialStart_B		= (P2SString)dialogue.child("tutorial").child("start").child("entry2").attribute("text").as_string();
 
 	 dialogTutorialEnd			= (P2SString)dialogue.child("tutorial").child("finish").child("entry1").attribute("text").as_string();
+	 dialogTutorialEnd_B		= (P2SString)dialogue.child("tutorial").child("finish").child("entry2").attribute("text").as_string();
 
 	 dialogTutorialStart2		= (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorialStart2_B		= (P2SString)dialogue.child("tutorial2").child("start").child("entry2").attribute("text").as_string();
 
 	 dialogTutorialEnd2			= (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
 
@@ -196,7 +199,7 @@ void ModuleDialogManager::ProcessFsm()
 				state = DIALOG_STATE::TUTORIAL_ST;
 
 				currentDialog1 = &dialogTutorialStart;
-				currentDialog2 = nullptr;
+				currentDialog2 = &dialogTutorialStart_B;
 				break;
 
 
@@ -204,7 +207,7 @@ void ModuleDialogManager::ProcessFsm()
 				state = DIALOG_STATE::TUTORIAL_END;
 
 				currentDialog1 = &dialogTutorialEnd;
-				currentDialog2 = nullptr;
+				currentDialog2 = &dialogTutorialEnd_B;
 				break;
 
 
@@ -212,7 +215,7 @@ void ModuleDialogManager::ProcessFsm()
 				state = DIALOG_STATE::TUTORIAL_ST2;
 
 				currentDialog1 = &dialogTutorialStart2;
-				currentDialog2 = nullptr;
+				currentDialog2 = &dialogTutorialStart2_B;
 				break;
 
 

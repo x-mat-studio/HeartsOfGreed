@@ -25,6 +25,7 @@
 
 #include "Minimap.h"
 
+#include "EasingFunctions.h"
 
 #include "Base.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -42,7 +43,8 @@ ModuleUIManager::ModuleUIManager() :
 	isMenuOn(false),
 	factory(nullptr),
 	clickSound(-1),
-	hoverSound(-1)
+	hoverSound(-1),
+	lastFramePauseEasingActive(false)
 {
 	name.create("UIManager");
 }
@@ -98,6 +100,8 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_DIALOG_WINDOW, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM, this);
+
 	return ret;
 }
 
@@ -126,6 +130,16 @@ bool ModuleUIManager::PreUpdate(float dt)
 
 	CheckFocusedUI();
 
+	if (lastFramePauseEasingActive == true && pauseAnimPosX.IsActive() == false)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+		lastFramePauseEasingActive = false;
+	}
+	else
+	{
+		lastFramePauseEasingActive = pauseAnimPosX.IsActive();
+	}
+
 	CheckListener(this);
 
 	AddPendingPortraits();
@@ -153,6 +167,15 @@ bool ModuleUIManager::Update(float dt)
 
 	DragElement();
 
+
+	if (pauseAnimPosX.IsActive())
+	{
+		pauseAnimPosX.UpdateEasingAddingTime(dt);
+		pauseAnimPosY.UpdateEasingAddingTime(dt);
+		pauseAnimScale.UpdateEasingAddingTime(dt);
+	}
+
+
 	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
 		uiGroupVector[i]->Update(dt);
@@ -167,6 +190,17 @@ bool ModuleUIManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("UI Manager Post Update", Profiler::Color::Purple);
 
 	bool ret = true;
+
+	//generates pause menu open event
+
+
+	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
+	{
+		SDL_Rect r = { 1107, 392, 388,462 };
+		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, 255, 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
+
+		//SDL_RenderCopy(app->render->renderer, atlas, &r, &blitR);
+	}
 
 	if (app->gamePause == true)
 	{
@@ -298,7 +332,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
 		{
-		
+
 			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 			app->gamePause = false;
 			break;
@@ -306,7 +340,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (app->testScene->IsEnabled() == true)
 		{
-			
+
 			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
@@ -347,6 +381,16 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::CLOSE_DIALOG_WINDOW:
 		DeleteUIGroup(GROUP_TAG::DIALOG);
 		app->gamePause = false;
+		break;
+
+	case EVENT_ENUM::START_PAUSE_ANIM:
+		if (app->gamePause == false&&pauseAnimPosX.IsActive()==false)
+		{
+			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
+			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
+			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
+		}
+
 		break;
 	}
 }
@@ -515,6 +559,9 @@ void ModuleUIManager::UnregisterEvents()
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_DIALOG_WINDOW, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::START_PAUSE_ANIM, this);
+
 }
 
 
@@ -578,7 +625,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::PAUSE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RESUME:
@@ -1123,7 +1170,7 @@ void ModuleUIManager::BasicResourceManagement(EVENT_ENUM eventN, float* cost)
 }
 
 
-void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float *cost)
+void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost)
 {
 	if (app->player->GetResourcesBoost() >= *cost)
 	{
@@ -1132,8 +1179,8 @@ void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float *c
 		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
 	}
 }
-	
-	
+
+
 void ModuleUIManager::SkillResourceManagement()
 {
 	Hero* hero = (Hero*)app->player->focusedEntity;
