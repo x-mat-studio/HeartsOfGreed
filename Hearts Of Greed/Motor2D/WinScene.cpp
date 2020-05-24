@@ -41,7 +41,7 @@ bool ModuleWinScene::Start()
 	youWon = app->tex->Load("intro_images/youWon.png");
 	medalWin = app->tex->Load("intro_images/medalWin.png");
 
-	app->audio->PlayMusic("audio/music/youWon.ogg", 15.0F, app->audio->musicVolume);
+	app->audio->PlayMusic("audio/music/youWon.ogg", 3*fadeTime, app->audio->musicVolume);
 
 	return true;
 }

@@ -6,9 +6,9 @@
 enum class QUEST_STATE : int
 {
 	ST_UNKNOWN = -1,
-
+	
+	INACTIVE,
 	ACTIVE,
-	FINISHED,
 
 	ST_ALL,
 };
@@ -21,17 +21,15 @@ public:
 	Quest(int x, int y);
 	Quest(Collider* col);
 
+	~Quest();
+
 	void Draw(float dt);
 
 	void OnCollision(Collider* collider);
 	void BlitMyAnimation(float dt);
 
-	int GetId();
+	int GetId() const;
 	void SetId(int i);
-
-private:
-
-	void RemoveFromOngoing();
 
 private:
 

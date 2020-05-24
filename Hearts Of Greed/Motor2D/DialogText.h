@@ -6,19 +6,25 @@
 class DialogText : public UI
 {
 public:
-	DialogText(float x, float y, UI* parent, bool interactable);
+	DialogText(float x, float y, fMPoint& posText1, fMPoint& posText2, UI* parent, bool interactable);
 	~DialogText();
 
 private:
 
 	void HandleInput();
-
-	void ChangeTexture();
+	void Draw(float dt);
+	
+	SDL_Texture* ChangeTexture(SDL_Texture* tex, P2SString* string);
 
 
 private:
+	SDL_Texture* texture2;
 
-	P2SString text;
+	fMPoint posText1;
+	fMPoint posText2;
+
+	P2SString text1;
+	P2SString text2;
 };
 
 

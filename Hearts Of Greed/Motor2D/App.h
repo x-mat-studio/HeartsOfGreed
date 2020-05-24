@@ -35,7 +35,9 @@ class ModuleTestScene;
 class ModuleWinScene;
 class ModuleLoseScene;
 class Minimap;
+class Video;
 class ModuleDialogManager;
+
 
 
 class App
@@ -72,9 +74,6 @@ public:
 	void LoadGame();
 	void SaveGame() const;
 	
-	bool SetPause(bool pause);
-	bool GetPause();
-
 private:
 
 	// Load config file
@@ -124,6 +123,7 @@ public:
 	ModuleWinScene*			winScene;
 	ModuleLoseScene*		loseScene;
 	Minimap*				minimap;
+	Video*					video;
 	ModuleQuestManager*		questManager;
 	ModuleDialogManager*	dialogManager;
 
@@ -134,6 +134,8 @@ public:
 	bool				vSyncActivated;
 	bool				debugMode = false;
 	bool				gamePause;
+
+	float				necessaryDt;
 
 private:
 	std::vector<Module*>	modules;
@@ -162,8 +164,8 @@ private:
 	mutable bool		wantToSave;
 
 	float				dt;
+	
 
-	bool				paused;
 };
 
 extern App* app; 

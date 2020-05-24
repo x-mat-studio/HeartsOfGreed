@@ -19,7 +19,7 @@ ModuleCollision::ModuleCollision() : colliders{}
 	matrix[COLLIDER_HERO][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_HERO][COLLIDER_RECLUIT_IA] = false;
 	matrix[COLLIDER_HERO][COLLIDER_VISIBILITY] = false;
-	matrix[COLLIDER_HERO][COLLIDER_QUEST] = true;
+	matrix[COLLIDER_HERO][COLLIDER_QUEST] = false;
 
 	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
 	matrix[COLLIDER_WALL][COLLIDER_HERO] = true;

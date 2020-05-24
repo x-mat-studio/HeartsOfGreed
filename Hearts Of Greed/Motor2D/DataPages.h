@@ -19,6 +19,7 @@ enum class DATA_PAGE_ENUM
 	FOCUSED_GATHERER,
 	FOCUSED_MELEE,
 	FOCUSED_RANGED,
+	FOCUSED_ROBOTTO,
 
 	FOCUSED_WANAMINGO,
 
@@ -75,11 +76,13 @@ private:
 	UIFactory* factory;
 
 	SDL_Rect* healthRect;
-	SDL_Rect* manaRect;
+	SDL_Rect* energyRect;
 	int originalBarsWidth;
 
 	float life;
-	float mana;
+	float energy;
+	float lifeMax;
+	float energyMax;
 	float resources;
 	float level;
 	float attackDamage;
@@ -88,6 +91,8 @@ private:
 	float vision;
 	float hpRecovery;
 	float xpToNextLevel;
+	int heroSkillPoints;
+	int skillResource;
 	ENTITY_ALIGNEMENT alignment;
 
 };

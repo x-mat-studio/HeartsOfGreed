@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
+#include "ParticleSystem.h"
 
 RoboHero::RoboHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -11,19 +12,13 @@ RoboHero::RoboHero(fMPoint position, Collider* col, Animation& walkLeft, Animati
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, 
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-	Animation& tileOnWalk, int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
+	Animation& tileOnWalk, HeroStats& stats, Skill& skill1) :
 
 	Hero(position, ENTITY_TYPE::HERO_ROBO, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
-		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
-		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
-		skill1Dmg, skill1Id, skill1Type, skill1Target)
+		tileOnWalk, stats, skill1)
 
 {}
 
@@ -41,6 +36,8 @@ RoboHero::~RoboHero()
 
 bool RoboHero::ActivateSkill1(fMPoint clickPosition)
 {
+
+	inputs.push_back(IN_SKILL1);
 
 	return true;
 }
@@ -60,6 +57,17 @@ bool RoboHero::ActivateSkill3()
 bool RoboHero::PreProcessSkill1()
 {
 
+	if (currAoE.size() == 0)
+	{
+		origin = app->map->WorldToMap(round(position.x), round(position.y));
+		origin = app->map->MapToWorld(origin.x, origin.y);
+		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.rangeRadius);
+
+
+		if (currAreaInfo != nullptr)
+			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.rangeRadius, origin, currAreaInfo);
+	}
+
 	return true;
 }
 
@@ -78,6 +86,34 @@ bool RoboHero::PreProcessSkill3()
 bool RoboHero::ExecuteSkill1()
 {
 
+	if (!skillExecutionDelay)
+	{
+		if (!godMode)
+			stats.currEnergy -= skill1.energyCost;
+
+		skillExecutionDelay = true;
+
+		ExecuteSFX(app->entityManager->suitman1Skill2); // Provisional SFX
+
+		return skillExecutionDelay;
+	}
+	else
+	{
+
+		int ret = 0;
+
+		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
+
+		currAoE.clear();
+		suplAoE.clear();
+		currAreaInfo = nullptr;
+
+		ExecuteSFX(app->entityManager->roboDying); // Provisional SFX
+		Die();
+
+		return true;
+	}
+
 	return true;
 }
 
@@ -95,20 +131,24 @@ bool RoboHero::ExecuteSkill3()
 
 void RoboHero::LevelUp()
 {
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
+	
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-	hitPointsMax;
-	hitPointsCurrent = hitPointsMax;
-	//recoveryHitPointsRat;
-	energyPoints;
-	recoveryEnergyRate;
 
-	attackDamage;
-	attackSpeed;
-	attackRange;
+	stats.maxHP *= app->entityManager->robottoLifeUpgradeValue;
 
-	unitSpeed;
-	visionDistance;
+	stats.maxEnergy *= (app->entityManager->robottoEnergyUpgradeValue);
 
+	stats.damage *= (app->entityManager->robottoDamageUpgradeValue);
+	stats.atkSpeed *= (app->entityManager->robottoAtkSpeedUpgradeValue);
+
+	heroSkillPoints++;
 }
 
 void RoboHero::PlayGenericNoise(int probability)

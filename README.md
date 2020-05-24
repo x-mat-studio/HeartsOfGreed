@@ -66,6 +66,7 @@ Twitter:	https://twitter.com/ii_rts
 * KP 4: Spawn gatherer hero (Suit Man).
 * KP 5: Spawn melee hero (Armored Man).
 * KP 7: Spawn turret.
+* L: Level up all heroes by 1.
 * N: Win if in-game.
 * M: Lose if in-game.
 
@@ -78,7 +79,7 @@ Twitter:	https://twitter.com/ii_rts
 
 
 ### Jose Luís Redondo Tello
-* Code
+* Code + UI
 * [jose-tello](https://github.com/jose-tello)
 
 

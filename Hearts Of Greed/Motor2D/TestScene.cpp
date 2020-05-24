@@ -28,7 +28,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevMousePosX(0),
 	prevmousePosY(0),
 	timer(0),
-	dayNumber(1),
+	dayNumber(0),
 	
 	dayTimer(INT_MAX),
 	nightTimer(INT_MAX),
@@ -95,7 +95,7 @@ bool ModuleTestScene::Start()
 
 	camToReset = true;
 	//Play Music
-	app->audio->PlayMusic("audio/music/Map.ogg", 0.0F, app->audio->musicVolume);
+	app->audio->PlayMusic("audio/music/Map.ogg", fadeTime, app->audio->musicVolume);
 
 	//Load sfx used in this scene
 	if (app->map->LoadNew("finalMap.tmx") == true)
@@ -112,6 +112,7 @@ bool ModuleTestScene::Start()
 		fMPoint pos;
 		pos.create(950, 4100);
 
+		isNightTime = false;
 		//Test Hero
 		if (startFromLoad == false)
 		{
@@ -192,8 +193,6 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SAVE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::LOAD_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_SCENE_ENTERED, this);
-	app->eventManager->EventRegister(EVENT_ENUM::PAUSE_GAME, this);
-	app->eventManager->EventRegister(EVENT_ENUM::UNPAUSE_GAME, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RETURN_TO_MAIN_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
@@ -201,9 +200,7 @@ bool ModuleTestScene::Start()
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
-	isNightTime = false;
-	timer = 0;
-	dayTimer = INT_MAX;
+	app->gamePause = false;
 
 	return true;
 }
@@ -361,6 +358,20 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	//	ret = false;
 	//}
 
+	//DEBUG WALKABILITY
+	//for (int i = 0; i < app->map->data.width; i++)
+	//{
+	//	for (int j = 0; j < app->map->data.height; j++)
+	//	{
+	//		if (app->pathfinding->IsWalkable({ i,j }))
+	//		{
+	//			iMPoint p = app->map->MapToWorld(i, j);
+
+	//			app->render->Blit(app->entityManager->debugPathTexture, p.x, p.y);
+	//		}
+
+	//	}
+	//}
 
 	return ret;
 }
@@ -468,12 +479,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::LOAD_GAME:
 		// TODO Load game from here
 		break;
-	case EVENT_ENUM::PAUSE_GAME:
-		app->gamePause = true;
-		break;
-	case EVENT_ENUM::UNPAUSE_GAME:
-		app->gamePause = false;
-		break;
+
 	case EVENT_ENUM::RETURN_TO_MAIN_MENU:
 		menuScene = true;
 		break;

@@ -16,18 +16,22 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	factory(app->uiManager->GetFactory()),
 	focusEntity(entity),
 	healthRect(nullptr),
-	manaRect(nullptr),
+	energyRect(nullptr),
 	alignment(ENTITY_ALIGNEMENT::UNKNOWN),
 	attackDamage(0),
 	attackSpeed(0),
 	hpRecovery(0),
 	level(0),
 	life(0),
-	mana(0),
+	lifeMax(0),
+	energy(0),
+	energyMax(0),
 	range(0),
 	resources(0),
 	vision(0),
-	xpToNextLevel(0)
+	xpToNextLevel(0),
+	heroSkillPoints(0),
+	skillResource(0)
 {
 	originalBarsWidth = factory->GetHealthBarBackground().w;
 }
@@ -75,6 +79,13 @@ bool DataPages::PreUpdate(float dt)
 				factory->CreateRangedPage(&dataPageVector, this);
 				GetHeroValue();
 				state = DATA_PAGE_ENUM::FOCUSED_RANGED;
+				break;
+
+			case ENTITY_TYPE::HERO_ROBO:
+
+				factory->CreateRobottoPage(&dataPageVector, this);
+				GetHeroValue();
+				state = DATA_PAGE_ENUM::FOCUSED_ROBOTTO;
 				break;
 
 			case ENTITY_TYPE::ENEMY:
@@ -138,6 +149,10 @@ bool DataPages::PreUpdate(float dt)
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_RANGED:
+			CheckHeroesValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_ROBOTTO:
 			CheckHeroesValues();
 			break;
 
@@ -217,9 +232,6 @@ void DataPages::CheckHeroesValues()
 
 	Hero* focus = (Hero*)focusEntity;
 
-	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-	AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
-
 	if (CheckData(attackDamage, focus->GetAttackDamage()))
 	{
 		if (CheckData(attackSpeed, focus->GetAttackSpeed()))
@@ -230,7 +242,21 @@ void DataPages::CheckHeroesValues()
 				{
 					if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
 					{
-						check = true;
+						if (CheckData(lifeMax, focus->GetMaxHP()))
+						{
+							if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
+							{
+								if (CheckData(heroSkillPoints, focus->GetHeroSkillPoints()))
+								{
+									if (CheckData(skillResource, app->player->GetResourcesSkill()))
+									{
+										AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+										AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
+										check = true;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -252,8 +278,6 @@ void DataPages::CheckWanamingoValues()
 
 	Enemy* focus = (Enemy*)focusEntity;
 
-	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-
 	if (CheckData(attackDamage, focus->GetAD()))
 	{
 		if (CheckData(attackSpeed, focus->GetAS()))
@@ -262,7 +286,11 @@ void DataPages::CheckWanamingoValues()
 			{
 				if (CheckData(vision, focus->GetVision()))
 				{
-					check = true;
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
 				}
 			}
 		}
@@ -287,13 +315,15 @@ void DataPages::CheckBaseValues()
 
 	Base* focus = (Base*)focusEntity;
 
-	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-
 	if (CheckData(resources, focus->GetRsrc()))
 	{
 		if (CheckData((int)alignment, (int)focus->GetAlignment()))
 		{
-			check = true;
+			if (CheckData(lifeMax, focus->GetMaxHP()))
+			{
+				AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+				check = true;
+			}
 		}
 	}
 
@@ -312,8 +342,6 @@ void DataPages::CheckTurretValues()
 
 	Turret* focus = (Turret*)focusEntity;
 
-	AdjustHealthBars(focus->hitPointsCurrent, focus->hitPointsMax);
-
 	if (CheckData(level, focus->GetLvl()))
 	{
 		if (CheckData(attackDamage, focus->GetAD()))
@@ -322,7 +350,11 @@ void DataPages::CheckTurretValues()
 			{
 				if (CheckData(range, focus->GetRng()))
 				{
-					check = true;
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
 				}
 			}
 		}
@@ -349,6 +381,10 @@ void DataPages::GetHeroValue()
 	range = focus->GetAttackRange();
 	hpRecovery = focus->GetRecoveryHitPointsRate();
 	xpToNextLevel = focus->GetExpToLevelUp();
+	lifeMax = focus->GetMaxHP();
+	energyMax = focus->GetMaxEnergyPoints();
+	heroSkillPoints = focus->GetHeroSkillPoints();
+	skillResource = app->player->GetResourcesSkill();
 
 	GetHealthBarValues();
 }
@@ -362,6 +398,7 @@ void DataPages::GetWanamingoValue()
 	attackSpeed = focus->GetAS();
 	vision = focus->GetVision();
 	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
 
 	GetHealthBarValues();
 }
@@ -373,6 +410,7 @@ void DataPages::GetBaseValue()
 
 	resources = focus->GetRsrc();
 	alignment = focus->GetAlignment();
+	lifeMax = focus->GetMaxHP();
 
 	GetHealthBarValues();
 }
@@ -386,6 +424,7 @@ void DataPages::GetTurretValue()
 	attackDamage = focus->GetAD();
 	attackSpeed = focus->GetAS();
 	range = focus->GetRng();
+	lifeMax = focus->GetMaxHP();
 
 	GetHealthBarValues();
 }
@@ -418,7 +457,9 @@ void DataPages::DeleteCurrentData()
 	dataPageVector.clear();
 
 	life = -1;
-	mana = -1;
+	lifeMax = -1;
+	energy = -1;
+	energyMax = -1;
 	resources = -1;
 	level = -1;
 	attackDamage = -1;
@@ -427,10 +468,12 @@ void DataPages::DeleteCurrentData()
 	vision = -1;
 	hpRecovery = -1;
 	xpToNextLevel = -1;
+	heroSkillPoints = -1;
+	skillResource = -1;
 	alignment = ENTITY_ALIGNEMENT::UNKNOWN;
 
 	healthRect = nullptr;
-	manaRect = nullptr;
+	energyRect = nullptr;
 	focusEntity = nullptr;
 	state = DATA_PAGE_ENUM::FOCUSED_NONE;
 }
@@ -509,15 +552,15 @@ void DataPages::AdjustHealthBars(int newValue, int maxValue)
 
 void DataPages::AdjustManaBars(int newValue, int maxValue)
 {
-	if (newValue != mana && newValue > 0)
+	if (newValue != energy && newValue > 0)
 	{
-		mana = newValue;
+		energy = newValue;
 
-		manaRect->w = mana * originalBarsWidth / maxValue;
+		energyRect->w = energy * originalBarsWidth / maxValue;
 
-		if (manaRect->w == 0)
+		if (energyRect->w == 0)
 		{
-			manaRect->w = 1;
+			energyRect->w = 1;
 		}
 	}
 }
@@ -540,7 +583,7 @@ void DataPages::GetHealthBarValues()
 		else if (dataPageVector[i]->rect.x == rect2.x && dataPageVector[i]->rect.y == rect2.y
 			&& dataPageVector[i]->rect.w == rect2.w && dataPageVector[i]->rect.h == rect2.h)
 		{
-			manaRect = &dataPageVector[i]->rect;
+			energyRect = &dataPageVector[i]->rect;
 		}
 	}
 }

@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Fonts.h"
+#include "EasingFunctions.h"
 
 #include <list>
 
@@ -79,6 +80,11 @@ public:
 	void PlayHoverSound();
 	void PlayClickSound();
 
+	//Pause Game volume logic
+
+	void LowerVolumeOnPause();
+	void RaiseVolumeOnUnpause();
+
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);
@@ -97,9 +103,18 @@ private:
 
 	void AugmentValueByTenPercent(float* value);
 
+	void BasicResourceManagement(EVENT_ENUM eventN, float* cost);
+	void StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost);
+	void SkillResourceManagement();
+
+	bool Save(pugi::xml_node& data) const;
+
+	bool Load(pugi::xml_node& data);
+
 public:
 	Base* lastShop;
 	bool mouseOverUI;
+	UIFactory* factory;
 
 private:
 	std::vector<UI_Group*> uiGroupVector;
@@ -113,14 +128,19 @@ private:
 	// DO NOT USE THIS IF YOU AREN'T FERRAN >:3
 	UI* hoverElement;
 
-	UIFactory* factory;
-
 	HeroesPortraitManager* portraitManager;
 
 	int hoverSound;
 	int clickSound;
 
 	bool isMenuOn;
+
+	bool lastFramePauseEasingActive;
+	bool goingToPause;
+	Easing pauseAnimPosX;
+	Easing pauseAnimPosY;
+	Easing pauseAnimScale;
+	Easing pauseAnimAlpha;
 };
 
 #endif //__UIMANAGER_H__

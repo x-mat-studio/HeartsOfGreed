@@ -31,7 +31,7 @@ public:
 	void Activate();
 	void Desactivate();
 
-	void SetTexture(SDL_Texture* tex);
+	void SetTextureNStart(SDL_Texture* tex);
 
 private:
 	void Start();
@@ -54,6 +54,7 @@ private:
 
 private:
 	fMPoint position;
+	fMPoint offSet;
 	fMPoint particleSpeed;
 	fMPoint particleAcceleration;
 

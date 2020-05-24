@@ -202,6 +202,12 @@
     <ClCompile Include="DialogText.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="EntityEffects.cpp">
+      <Filter>Desenvolupament  ========\Entities\Entity Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -423,6 +429,12 @@
     <ClInclude Include="DialogText.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
+    <ClInclude Include="EntityEffects.h">
+      <Filter>Desenvolupament  ========\Entities\Entity Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desenvolupament  ========">
@@ -502,6 +514,9 @@
     </Filter>
     <Filter Include="Desenvolupament  ========\Entities\Fog of War\header files">
       <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desenvolupament  ========\Entities\Entity Effects">
+      <UniqueIdentifier>{3cef0484-55bd-400a-8dc3-60f8e9114d9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

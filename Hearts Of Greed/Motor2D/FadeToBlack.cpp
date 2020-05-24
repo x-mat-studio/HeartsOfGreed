@@ -63,7 +63,7 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 	if (currentStep == FADE_STEP::NONE)
 		return true;
 
-	timeSpent += dt;
+	timeSpent += app->necessaryDt;
 	float normalized = MIN(1.0f, timeSpent / totalTime);
 
 	switch (currentStep)
@@ -87,6 +87,8 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 			currentStep = FADE_STEP::NONE;
 			timeSpent = 0.0f;
 			totalTime = 0.0f;
+
+			app->gamePause = false;
 		}
 	} break;
 	}

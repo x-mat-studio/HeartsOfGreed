@@ -32,7 +32,11 @@ public:
 	bool PostUpdate(float dt);
 
 	void AddResources(int gain);
+	void AddResourcesSkill(int gain);
+	void AddResourcesBoost(int gain);
 	bool UseResources(int cost);
+	bool UseResourcesSkill(int cost);
+	bool UseResourcesBoost(int cost);
 
 	bool ActivateBuildMode(ENTITY_TYPE building, Base* contrBase);
 	void DesactivateBuildMode();
@@ -43,6 +47,9 @@ public:
 	iMPoint GetClickPosition();
 
 	int GetResources() const;
+	int GetResourcesSkill() const;
+	int GetResourcesBoost() const;
+
 	int GetTurretCost() const;
 
 	bool IsBuilding() const;
@@ -107,6 +114,8 @@ private:
 	bool UIMenuOn;
 
 	int resources;
+	int resourcesSkill;
+	int resourcesBoost;
 
 	skillArea* constrAreaInfo;
 	std::vector <iMPoint> constrArea;
@@ -116,6 +125,10 @@ private:
 
 
 	int turretCost;
+	int barricadeCost;
+	int upgradeCenterCost;
+
+	int buildAreaRadius;
 };
 
 

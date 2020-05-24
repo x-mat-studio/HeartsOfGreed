@@ -8,7 +8,7 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 
 	hero(hero),
 
-	life(hero->hitPointsCurrent),
+	life(hero->GetCurrentHP()),
 	mana(hero->GetEnergyPoints()),
 
 	healthRect(nullptr),
@@ -17,8 +17,7 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 	focused(false),
 	heroType(ENTITY_TYPE::UNKNOWN),
 	originalBarsWidth(0)
-{
-}
+{}
 
 
 HeroPortrait::~HeroPortrait()
@@ -45,9 +44,9 @@ bool HeroPortrait::PreUpdate(float dt)
 {
 	focused = hero->selectedByPlayer;
 
-	if (hero->hitPointsCurrent != life && hero->hitPointsCurrent > 0)
+	if (hero->GetCurrentHP() != life && hero->GetCurrentHP() > 0)
 	{
-		life = hero->hitPointsCurrent;
+		life = hero->GetCurrentHP();
 
 		healthRect->w = life * originalBarsWidth / hero->hitPointsMax;
 

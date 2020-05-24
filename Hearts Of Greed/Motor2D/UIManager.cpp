@@ -19,9 +19,13 @@
 #include "EventManager.h"
 #include "Textures.h"
 #include "FadeToBlack.h"
+#include "DialogManager.h"
+#include "Render.h"
+#include "Hero.h"
 
 #include "Minimap.h"
 
+#include "EasingFunctions.h"
 
 #include "Base.h"
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -39,7 +43,9 @@ ModuleUIManager::ModuleUIManager() :
 	isMenuOn(false),
 	factory(nullptr),
 	clickSound(-1),
-	hoverSound(-1)
+	hoverSound(-1),
+	lastFramePauseEasingActive(false),
+	goingToPause(false)
 {
 	name.create("UIManager");
 }
@@ -84,12 +90,19 @@ bool ModuleUIManager::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
+	app->eventManager->EventRegister(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_MENUS, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::CREATE_DIALOG_WINDOW, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM, this);
+	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS, this);
 
 	return ret;
 }
@@ -118,6 +131,18 @@ bool ModuleUIManager::PreUpdate(float dt)
 	bool ret = true;
 
 	CheckFocusedUI();
+	if (goingToPause == true)
+	{
+		if (lastFramePauseEasingActive == true && pauseAnimPosX.IsActive() == false)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+			lastFramePauseEasingActive = false;
+		}
+		else
+		{
+			lastFramePauseEasingActive = pauseAnimPosX.IsActive();
+		}
+	}
 
 	CheckListener(this);
 
@@ -146,6 +171,16 @@ bool ModuleUIManager::Update(float dt)
 
 	DragElement();
 
+
+	if (pauseAnimPosX.IsActive())
+	{
+		pauseAnimPosX.UpdateEasingAddingTime(dt);
+		pauseAnimPosY.UpdateEasingAddingTime(dt);
+		pauseAnimScale.UpdateEasingAddingTime(dt);
+		pauseAnimAlpha.UpdateEasingAddingTime(dt);
+	}
+
+
 	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
 		uiGroupVector[i]->Update(dt);
@@ -160,6 +195,22 @@ bool ModuleUIManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("UI Manager Post Update", Profiler::Color::Purple);
 
 	bool ret = true;
+
+	//generates pause menu open event
+
+
+	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
+	{
+		SDL_Rect r = { 1107, 392, 388,462 };
+		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, pauseAnimAlpha.GetLastRequestedPos(), 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
+
+		//SDL_RenderCopy(app->render->renderer, atlas, &r, &blitR);
+	}
+
+	if (app->gamePause == true)
+	{
+		app->render->DrawQuad(SDL_Rect{ 0, 0, (int)app->win->width, (int)app->win->height }, 0, 0, 0, 200, true, false);
+	}
 
 	for (uint i = 0; i < uiGroupVector.size(); i++)
 	{
@@ -195,7 +246,7 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 {
 	GROUP_TAG tag = element->GetTag();
 
-	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == false)
+	if (tag == GROUP_TAG::NONE || CheckGroupTag(tag) == true)
 	{
 		delete element;
 		return;
@@ -236,17 +287,20 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	switch (eventId)
 	{
 	case EVENT_ENUM::CREATE_INTRO_MENU:
-
 		group = factory->CreateMainMenu();
 		AddUIGroup(group);
 		break;
 
 	case EVENT_ENUM::PAUSE_GAME:
+		LowerVolumeOnPause();
 		group = factory->CreatePauseMenu();
 		AddUIGroup(group);
+
+		app->gamePause = true;
 		break;
 
 	case EVENT_ENUM::UNPAUSE_GAME_AND_RETURN_TO_MAIN_MENU:
+		RaiseVolumeOnUnpause();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RETURN_TO_MAIN_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
@@ -269,18 +323,29 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::EXIT_MENUS:
 
 		//If none of this menus is open and you are in the Game Scene, create pause menu
-		if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
+		if (CheckGroupTag(GROUP_TAG::DIALOG) == true)
+			break;
+
+		else if (DeleteUIGroup(GROUP_TAG::CREDITS_MENU) == true)
 			break;
 
 		else if (DeleteUIGroup(GROUP_TAG::OPTIONS_MENU) == true)
 			break;
 
-		else if (DeleteUIGroup(GROUP_TAG::PAUSE_MENU) == true)
+		else if (DeleteUIGroup(GROUP_TAG::SAVE_CHECK_MENU) == true)
 			break;
+
+		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
+		{
+
+			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
+			break;
+		}
 
 		else if (app->testScene->IsEnabled() == true)
 		{
-			app->eventManager->GenerateEvent(EVENT_ENUM::PAUSE_GAME, EVENT_ENUM::NULL_EVENT);
+
+			app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
@@ -295,8 +360,16 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 
+	case EVENT_ENUM::DELETE_SAVE_CHECK_MENU:
+		DeleteUIGroup(GROUP_TAG::SAVE_CHECK_MENU);
+		break;
+
+
 	case EVENT_ENUM::DELETE_PAUSE_MENU:
+		RaiseVolumeOnUnpause();
 		DeleteUIGroup(GROUP_TAG::PAUSE_MENU);
+		app->gamePause = false;
+		app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS, EVENT_ENUM::NULL_EVENT);
 		break;
 
 
@@ -304,6 +377,38 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		DeleteUIGroup(GROUP_TAG::IN_HOVER_MENU);
 		break;
 
+	case EVENT_ENUM::CREATE_DIALOG_WINDOW:
+		group = factory->CreateDialogMenu(ENTITY_TYPE::HERO_GATHERER, ENTITY_TYPE::HERO_GATHERER);
+		AddUIGroup(group);
+		app->gamePause = true;
+		break;
+
+	case EVENT_ENUM::CLOSE_DIALOG_WINDOW:
+		DeleteUIGroup(GROUP_TAG::DIALOG);
+		app->gamePause = false;
+		break;
+
+	case EVENT_ENUM::START_PAUSE_ANIM:
+		if (app->gamePause == false&&pauseAnimPosX.IsActive()==false)
+		{
+			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
+			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
+			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
+			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 1, 255, 0.7);
+			goingToPause = true;
+		}
+		break;
+
+	case EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS:
+		if (app->gamePause == false && pauseAnimPosX.IsActive() == false)
+		{
+			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 223, 610, 0.7);
+			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 64, 6, 0.7);
+			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.5, 0.01, 0.7);
+			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 255, 1, 0.7);
+			goingToPause = false;
+		}
+		break;
 	}
 }
 
@@ -387,11 +492,11 @@ bool ModuleUIManager::CheckGroupTag(GROUP_TAG tag)
 	{
 		if (uiGroupVector[i]->GetTag() == tag)
 		{
-			return false;
+			return true;
 		}
 	}
 
-	return true;
+	return false;
 }
 
 
@@ -461,12 +566,21 @@ void ModuleUIManager::UnregisterEvents()
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_CREDITS_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_PAUSE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_IN_HOVER_MENU, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_INPUT, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::HIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::UNHIDE_MENU, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_MENUS, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::CREATE_DIALOG_WINDOW, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::CLOSE_DIALOG_WINDOW, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::START_PAUSE_ANIM, this);
+	app->eventManager->EventRegister(EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS, this);
+
+
 }
 
 
@@ -484,6 +598,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::CLOSE_CREDITS_MENU:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_CREDITS_MENU, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::CLOSE_SAVE_OK_MENU:
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::NEW_GAME:
@@ -526,12 +644,15 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::PAUSE:
-		AddUIGroup(factory->CreatePauseMenu());
+		app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RESUME:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_OPTIONS_MENU, EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_SAVE_CHECK_MENU, EVENT_ENUM::NULL_EVENT);
+
+		app->gamePause = false;
 		break;
 
 	case BUTTON_TAG::MAIN_MENU:
@@ -540,6 +661,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::SAVE:
 		app->SaveGame();
+		AddUIGroup(factory->CreateSaveConfirmationMenu());
 		break;
 
 	case BUTTON_TAG::LOAD:
@@ -548,15 +670,35 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::REVIVE_GATHERER:
-		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_RESURRECT, EVENT_ENUM::NULL_EVENT);
-		break;
-
-	case BUTTON_TAG::REVIVE_RANGED:
-		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->reviveCost && app->entityManager->CheckIfHeroIsDead(ENTITY_TYPE::HERO_GATHERER) == true)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::REVIVE_MELEE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->reviveCost && app->entityManager->CheckIfHeroIsDead(ENTITY_TYPE::HERO_MELEE) == true)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
+	case BUTTON_TAG::REVIVE_RANGED:
+		if (app->player->GetResources() >= factory->reviveCost && app->entityManager->CheckIfHeroIsDead(ENTITY_TYPE::HERO_RANGED) == true)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
+		break;
+
+	case BUTTON_TAG::REVIVE_ROBOTTO:
+		if (app->player->GetResources() >= factory->reviveCost && app->entityManager->CheckIfHeroIsDead(ENTITY_TYPE::HERO_ROBO) == true)
+		{
+			app->player->AddResources(-factory->reviveCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_RESURRECT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:
@@ -565,6 +707,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::UPGRADE_TURRET:
 		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::BUY_UPGRADE_CENTER:
+		app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
@@ -576,87 +722,114 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
-		AugmentValueByTenPercent(&factory->gathererLifeUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::GATHERER_LIFE_UPGRADE, &factory->gathererLifeUpgradeCost);
 		break;
 
 	case BUTTON_TAG::GATHERER_DAMAGE_UPGRADE:
-		AugmentValueByTenPercent(&factory->gathererDamageUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::GATHERER_DAMAGE_UPGRADE, &factory->gathererDamageUpgradeCost);
 		break;
 
 	case BUTTON_TAG::GATHERER_ENERGY_UPGRADE:
-		AugmentValueByTenPercent(&factory->gathererEnergyUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::GATHERER_ENERGY_UPGRADE, &factory->gathererEnergyUpgradeCost);
 		break;
 
 	case BUTTON_TAG::GATHERER_ATTACK_SPEED_UPGRADE:
-		AugmentValueByTenPercent(&factory->gathererAtkSpeedUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE, &factory->gathererAtkSpeedUpgradeCost);
 		break;
 
 	case BUTTON_TAG::MELEE_LIFE_UPGRADE:
-		AugmentValueByTenPercent(&factory->meleeLifeUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::MELEE_LIFE_UPGRADE, &factory->meleeLifeUpgradeCost);
 		break;
 
 	case BUTTON_TAG::MELEE_DAMAGE_UPGRADE:
-		AugmentValueByTenPercent(&factory->meleeDamageUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::MELEE_DAMAGE_UPGRADE, &factory->meleeDamageUpgradeCost);
 		break;
 
 	case BUTTON_TAG::MELEE_ENERGY_UPGRADE:
-		AugmentValueByTenPercent(&factory->meleeEnergyUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::MELEE_ENERGY_UPGRADE, &factory->meleeEnergyUpgradeCost);
 		break;
 
 	case BUTTON_TAG::MELEE_ATTACK_SPEED_UPGRADE:
-		AugmentValueByTenPercent(&factory->meleeAtkSpeedUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE, &factory->meleeAtkSpeedUpgradeCost);
 		break;
 
 	case BUTTON_TAG::RANGED_LIFE_UPGRADE:
-		AugmentValueByTenPercent(&factory->rangedLifeUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_LIFE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::RANGED_LIFE_UPGRADE, &factory->rangedLifeUpgradeCost);
 		break;
 
 	case BUTTON_TAG::RANGED_DAMAGE_UPGRADE:
-		AugmentValueByTenPercent(&factory->rangedDamageUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, &factory->rangedDamageUpgradeCost);
 		break;
 
 	case BUTTON_TAG::RANGED_ENERGY_UPGRADE:
-		AugmentValueByTenPercent(&factory->rangedEnergyUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ENERGY_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::RANGED_ENERGY_UPGRADE, &factory->rangedEnergyUpgradeCost);
 		break;
 
 	case BUTTON_TAG::RANGED_ATTACK_SPEED_UPGRADE:
-		AugmentValueByTenPercent(&factory->rangedAtkSpeedUpgradeCost);
-		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		StatsUpgradeResourceManagement(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, &factory->rangedAtkSpeedUpgradeCost);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_LIFE_UPGRADE:
+		StatsUpgradeResourceManagement(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, &factory->robottoLifeUpgradeCost);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE:
+		StatsUpgradeResourceManagement(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, &factory->robottoDamageUpgradeCost);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ENERGY_UPGRADE:
+		StatsUpgradeResourceManagement(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, &factory->robottoEnergyUpgradeCost);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		StatsUpgradeResourceManagement(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, &factory->robottoAtkSpeedUpgradeCost);
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1:
+	case BUTTON_TAG::MELEE_ACTIVE1:
+	case BUTTON_TAG::RANGED_ACTIVE1:
+	case BUTTON_TAG::ROBOTTO_ACTIVE1:
+		app->eventManager->GenerateEvent(EVENT_ENUM::SKILL1, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
 		app->eventManager->GenerateEvent(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		SkillResourceManagement();
+		app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		SkillResourceManagement();
+		app->eventManager->GenerateEvent(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, EVENT_ENUM::NULL_EVENT);
 		break;
 
 	case BUTTON_TAG::GATHERER_PORTRAIT:
@@ -675,8 +848,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
 		break;
 
+	case BUTTON_TAG::NEXT_DIALOG:
+		app->dialogManager->PushInput(DIALOG_INPUT::NEXT_DIALOG);
+		break;
+
 	default:
-		assert("you forgot to add the case of the button tag :D"); 
+		assert("you forgot to add the case of the button tag :D");
 		break;
 	}
 
@@ -694,8 +871,9 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 	{
 
 	case BUTTON_TAG::REVIVE_GATHERER:
-	case BUTTON_TAG::REVIVE_RANGED:
 	case BUTTON_TAG::REVIVE_MELEE:
+	case BUTTON_TAG::REVIVE_RANGED:
+	case BUTTON_TAG::REVIVE_ROBOTTO:
 		AddUIGroup(factory->CreateOnHoverReviveMenu(button));
 		break;
 
@@ -705,6 +883,10 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::UPGRADE_TURRET:
 		AddUIGroup(factory->CreateOnHoverUpgradeTurretMenu());
+		break;
+
+	case BUTTON_TAG::BUY_UPGRADE_CENTER:
+		AddUIGroup(factory->CreateOnHoverBuyUpgradeCenterMenu());
 		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
@@ -763,32 +945,84 @@ void ModuleUIManager::ExecuteHoverButton(BUTTON_TAG tag, Button* button)
 		AddUIGroup(factory->CreateOnHoverRangedAttackSpeedUpgradeMenu());
 		break;
 
-	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::ROBOTTO_LIFE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoLifeMenuMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoDamageUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ENERGY_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoEnergyUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoAttackSpeedUpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverGathererPassive1Menu());
 		break;
 
-	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::GATHERER_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverGathererActive1Menu());
 		break;
 
-	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::MELEE_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverMeleePassive1Menu());
 		break;
 
-	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::MELEE_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverMeleeActive1Menu());
 		break;
 
-	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+	case BUTTON_TAG::RANGED_PASSIVE1:
 		AddUIGroup(factory->CreateOnHoverRangedPassive1Menu());
 		break;
 
-	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+	case BUTTON_TAG::RANGED_ACTIVE1:
 		AddUIGroup(factory->CreateOnHoverRangedActive1Menu());
 		break;
 
-	case BUTTON_TAG::NEXT_DIALOG:
-		//TODO, finish this
+	case BUTTON_TAG::ROBOTTO_PASSIVE1:
+		AddUIGroup(factory->CreateOnHoverRobottoPassive1Menu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1:
+		AddUIGroup(factory->CreateOnHoverRobottoActive1Menu());
+		break;
+
+	case BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverGathererActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleePassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::MELEE_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverMeleeActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::RANGED_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRangedActive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoPassive1UpgradeMenu());
+		break;
+
+	case BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE:
+		AddUIGroup(factory->CreateOnHoverRobottoActive1UpgradeMenu());
 		break;
 
 	default:
@@ -867,10 +1101,115 @@ void ModuleUIManager::PlayClickSound()
 	app->audio->PlayFx(clickSound, 0, -1);
 }
 
-
-void ModuleUIManager::AugmentValueByTenPercent(float* value)
+void ModuleUIManager::LowerVolumeOnPause()
 {
-	*value = *value + (*value * 0.1);
+	app->audio->musicVolume *= 0.5;
+	app->audio->SetVolume(app->audio->musicVolume);
+}
+
+void ModuleUIManager::RaiseVolumeOnUnpause()
+{
+	app->audio->musicVolume *= 2;
+	if (app->audio->musicVolume > 128) {
+		app->audio->musicVolume = 128;
+	}
+	app->audio->SetVolume(app->audio->musicVolume);
 }
 
 
+void ModuleUIManager::AugmentValueByTenPercent(float* value)
+{
+	*value *= 1.1;
+}
+
+
+bool ModuleUIManager::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node iterator = data.append_child("UIManager");
+
+	iterator.append_attribute("gathererLifeShop") = factory->gathererLifeUpgradeCost;
+	iterator.append_attribute("gathererDamageShop") = factory->gathererDamageUpgradeCost;
+	iterator.append_attribute("gathererEnergyShop") = factory->gathererEnergyUpgradeCost;
+	iterator.append_attribute("gathererAtkSpeedShop") = factory->gathererAtkSpeedUpgradeCost;
+
+	iterator.append_attribute("meleeLifeShop") = factory->meleeLifeUpgradeCost;
+	iterator.append_attribute("meleeDamageShop") = factory->meleeDamageUpgradeCost;
+	iterator.append_attribute("meleeEnergyShop") = factory->meleeEnergyUpgradeCost;
+	iterator.append_attribute("meleeAtkSpeedShop") = factory->meleeAtkSpeedUpgradeCost;
+
+	iterator.append_attribute("rangedLifeShop") = factory->rangedLifeUpgradeCost;
+	iterator.append_attribute("rangedDamageShop") = factory->rangedDamageUpgradeCost;
+	iterator.append_attribute("rangedEnergyShop") = factory->rangedEnergyUpgradeCost;
+	iterator.append_attribute("rangedAtkSpeedShop") = factory->rangedAtkSpeedUpgradeCost;
+
+	iterator.append_attribute("robottoLifeShop") = factory->robottoLifeUpgradeCost;
+	iterator.append_attribute("robottoDamageShop") = factory->robottoDamageUpgradeCost;
+	iterator.append_attribute("robottoEnergyShop") = factory->robottoEnergyUpgradeCost;
+	iterator.append_attribute("robottoAtkSpeedShop") = factory->robottoAtkSpeedUpgradeCost;
+
+	return true;
+}
+
+
+bool ModuleUIManager::Load(pugi::xml_node& data)
+{
+	pugi::xml_node iterator = data;
+
+	factory->gathererLifeUpgradeCost = iterator.child("UIManager").attribute("gathererLifeShop").as_float();
+	factory->gathererDamageUpgradeCost = iterator.child("UIManager").attribute("gathererDamageShop").as_float();
+	factory->gathererEnergyUpgradeCost = iterator.child("UIManager").attribute("gathererEnergyShop").as_float();
+	factory->gathererAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("gathererAtkSpeedShop").as_float();
+
+	factory->meleeLifeUpgradeCost = iterator.child("UIManager").attribute("meleeLifeShop").as_float();
+	factory->meleeDamageUpgradeCost = iterator.child("UIManager").attribute("meleeDamageShop").as_float();
+	factory->meleeEnergyUpgradeCost = iterator.child("UIManager").attribute("meleeEnergyShop").as_float();
+	factory->meleeAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("meleeAtkSpeedShop").as_float();
+
+	factory->rangedLifeUpgradeCost = iterator.child("UIManager").attribute("rangedLifeShop").as_float();
+	factory->rangedDamageUpgradeCost = iterator.child("UIManager").attribute("rangedDamageShop").as_float();
+	factory->rangedEnergyUpgradeCost = iterator.child("UIManager").attribute("rangedEnergyShop").as_float();
+	factory->rangedAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("rangedAtkSpeedShop").as_float();
+
+	factory->robottoLifeUpgradeCost = iterator.child("UIManager").attribute("robottoLifeShop").as_float();
+	factory->robottoDamageUpgradeCost = iterator.child("UIManager").attribute("robottoDamageShop").as_float();
+	factory->robottoEnergyUpgradeCost = iterator.child("UIManager").attribute("robottoEnergyShop").as_float();
+	factory->robottoAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("robottoAtkSpeedShop").as_float();
+
+	return true;
+}
+
+
+void ModuleUIManager::BasicResourceManagement(EVENT_ENUM eventN, float* cost)
+{
+	if (app->player->GetResources() >= *cost)
+	{
+		app->player->AddResources(-(*cost));
+		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
+	}
+}
+
+
+void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost)
+{
+	if (app->player->GetResourcesBoost() >= *cost)
+	{
+		app->player->AddResourcesBoost(-(*cost));
+		AugmentValueByTenPercent(cost);
+		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
+	}
+}
+
+
+void ModuleUIManager::SkillResourceManagement()
+{
+	Hero* hero = (Hero*)app->player->focusedEntity;
+
+	if (hero->GetHeroSkillPoints() > 0)
+	{
+		hero->AddHeroSkillPoints(-1);
+	}
+	else
+	{
+		app->player->AddResourcesSkill(-1);
+	}
+}

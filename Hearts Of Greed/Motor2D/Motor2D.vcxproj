@@ -94,6 +94,7 @@
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityEffects.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Fonts.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="UI_Scrollbar.cpp" />
     <ClCompile Include="UI_Text.cpp" />
     <ClCompile Include="UpgradeCenter.cpp" />
+    <ClCompile Include="Video.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="PerfectTimer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
@@ -165,6 +167,7 @@
     <ClInclude Include="Emitter.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityEffects.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="Fonts.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="UI_Scrollbar.h" />
     <ClInclude Include="UI_Text.h" />
     <ClInclude Include="UpgradeCenter.h" />
+    <ClInclude Include="Video.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PerfectTimer.h" />

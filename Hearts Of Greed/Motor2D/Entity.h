@@ -56,17 +56,13 @@ enum class ENTITY_ALIGNEMENT : int
 	MAX_ALIGN
 };
 
-//Provisional
 enum class SKILL_ID : int
 {
 	NO_TYPE = -1,
 
-	GATHERER_SKILL1,
-	GATHERER_SKILL1_MOUSE,
-	MELEE_SKILL1,
-	BASE_AREA,
-	RANGED_SKILL1,
-	RANGED_SKILL1_MOUSE
+	GATHERER_GRENADE,
+	MELEE_HAMMER,
+	RANGED_SLOW_GRENADE
 };
 
 enum class SKILL_TYPE
@@ -75,6 +71,16 @@ enum class SKILL_TYPE
 
 	SINGLE_TARGET,
 	AREA_OF_EFFECT
+};
+
+enum SKILL_EFFECT : int
+{
+	NO_EFFECT = -1,
+
+	SLOWDOWN,
+	BLOOD_LOSS,
+
+	EFFECT_ALL
 };
 
 
@@ -104,11 +110,11 @@ public:
 	fMPoint GetOffset();
 	void SetPosition(int x, int y);
 
-	int GetMaxHP() const;
-	void SetMaxHP(int newMaxHp) ;
+	virtual int GetMaxHP() const;
+	virtual void SetMaxHP(int newMaxHp) ;
 
-	int GetCurrentHP() const;
-	void SetCurrentHP(int newcurrHp);
+	virtual int GetCurrentHP() const;
+	virtual void SetCurrentHP(int newcurrHp);
 
 	void SetTexture(SDL_Texture* texture);
 	SDL_Texture* GetTexture();
@@ -123,6 +129,7 @@ public:
 	virtual void Draw(float dt);	
 	virtual void MinimapDraw(float scale, float halfWidth);
 	virtual void DebugDraw();
+	virtual void ApplyEffect();
 
 	//Sound related
 	DIRECTION GetMyDirection();
@@ -137,13 +144,14 @@ public:
 	bool UIAssigned;
 
 	bool selectedByPlayer;
+	bool missionEntity;
 
 	FoWEntity* visionEntity;
 	MinimapIcon* minimapIcon;
 	fMPoint position;
 
-	int hitPointsMax;
-	int hitPointsCurrent;
+	float hitPointsMax;
+	float hitPointsCurrent;
 
 protected:
 	

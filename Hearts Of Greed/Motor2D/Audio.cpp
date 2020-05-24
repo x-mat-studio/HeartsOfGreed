@@ -80,9 +80,10 @@ bool ModuleAudio::CleanUp()
 
 
 // Play a music file
-bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume)
+bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume, int loop)
 {
 	bool ret = true;
+	int loops = loop;
 
 	if (volume < 0) {
 		volume = 0;
@@ -126,12 +127,12 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume)
 	{
 		if (fade_time > 0.0f)
 		{
-			if (Mix_FadeInMusic(music, -1, (int)(fade_time * 1000.0f)) < 0)
+			if (Mix_FadeInMusic(music, loops, (int)(fade_time * 1000.0f)) < 0)
 				ret = false;
 		}
 		else
 		{
-			if (Mix_PlayMusic(music, -1) < 0)
+			if (Mix_PlayMusic(music, loops) < 0)
 				ret = false;
 		}
 	}
@@ -306,4 +307,3 @@ void ModuleAudio::SilenceAll()
 	SilenceAllChannels(-1);
 	Mix_HaltMusic();
 }
-

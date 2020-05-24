@@ -7,6 +7,7 @@
 
 #include "Animation.h"
 #include "DynamicEntity.h"
+#include "ParticleSystem.h"
 
 
 enum class HERO_STATES
@@ -60,23 +61,76 @@ enum HERO_INPUTS
 };
 
 
-
 struct Skill
 {
-	Skill(SKILL_ID id, int dmg, SKILL_TYPE type, ENTITY_ALIGNEMENT target);
+	Skill();
+	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
 	Skill(const Skill& skill1);
 
+	Skill operator= (Skill& newSkill);
+
+
+	int lvl;
 	int dmg;
+	int coolDown;
+	float executionTime;
+	int energyCost;
+
+	int rangeRadius;
+	int attackRadius;
+
+	bool hurtYourself;
 
 	ENTITY_ALIGNEMENT target;
 	SKILL_TYPE type;
 	SKILL_ID id;
 
-	// For the Future (?)
-	//EFFECT effect = EFFECT::KNOCKDOWN
+	SKILL_EFFECT effect;
 };
 
 struct skillArea;
+
+struct HeroStats
+{
+	HeroStats();
+	HeroStats(HeroStats& newStats);
+	HeroStats operator=(HeroStats& newStats);
+	
+
+	int maxHP;
+	int damage;
+	int maxEnergy;
+	float atkSpeed;
+	float recoveryHPRate;
+	float recoveryEnergyRate;
+	int heroLevel;
+	int movSpeed;
+	int visionDistance;
+	float attackRange;
+	int xpToLvlUp;
+
+	int currHP;
+	int currEnergy;
+};
+
+class DeadHero
+{
+public:
+	DeadHero(int level, ENTITY_TYPE type, Skill skill);
+	~DeadHero();
+
+	ENTITY_TYPE GetType()const;
+	int GetLevel()const;
+	void GetSkillInfo(SKILL_ID& id, int& skillLevel)const;
+
+private:
+	ENTITY_TYPE heroType;
+	int level;
+	SKILL_ID skillId;
+	int skillLevel;
+
+
+};
 
 class Hero : public DynamicEntity
 {
@@ -89,10 +143,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp,
 		Animation& skill1RightDown, Animation& skill1Left, Animation& skill1LeftUp, Animation& skill1LeftDown,
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-		int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
-		int attackDamage, float attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-		float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-		int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target);
+		HeroStats& stats, Skill& skill1);
 
 	Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -117,6 +168,9 @@ public:
 	void CheckObjective(Entity* entity);
 	void Draw(float dt);
 	void DrawArea();
+
+	
+	virtual void UpdatePasiveSkill(float dt);
 
 	//Skill Related-----------------
 	// Tells the Hero to get in the launch skill state
@@ -165,6 +219,7 @@ public:
 
 	int GetEnergyPoints() const;
 	void SetEnergyPoints(int energyPoints);
+	void AddEnergyPoints(int engPoints);
 
 	int GetMaxEnergyPoints() const;
 	void SetMaxEnergyPoints(int maxEnergyPoints);
@@ -181,8 +236,8 @@ public:
 	float GetFeelingSecure() const;
 	void SetFeelingSecure(float feelingSecure);
 
-	int GetAttackDamage() const;
-	void SetAttackDamage(int atkDamage);
+	float GetAttackDamage() const;
+	void SetAttackDamage(float atkDamage);
 
 	int GetAttackRange() const;
 	void SetAttackRange(int atkRange);
@@ -203,6 +258,11 @@ public:
 	float GetSkill3RecoverTime() const;
 	void SetSkill3RecoverTime(float skillRecoverTime);
 
+	int GetMaxHP() const;
+	void SetMaxHP(int newMaxHp);
+
+	int GetCurrentHP() const;
+	void SetCurrentHP(int newcurrHp);
 
 	float GetSkill1TimePassed() const;
 	float GetSkill2TimePassed() const;
@@ -215,17 +275,32 @@ public:
 	float GetVisionInPx() const;
 	void SetVisionInPx(float visPx);
 
+	Skill GetSkill1() const;
+	void ReplaceSkill1(Skill newSkill);
+
+	void ReplaceHeroStats(HeroStats newStats);
+
+	int GetHeroSkillPoints();
+	void SetHeroSkillPoints(int n);
+	void AddHeroSkillPoints(int n);
+
 protected:
 	void SetAnimation(HERO_STATES currState);
+	void HandleMyParticleSystem(float dt);
+	void TimeMyParticleSystem(float dt);
+	void ResetAttackAnimation();
+
+	void Die();
+	void ExecuteSFX(int sfx);
+
+	void RecoverHealth(float dt);
 
 private:
 
 	bool CheckAttackRange();
 	Frame GetAnimationCurrentFrame(float dt);
-	void Attack();
-	void Die();
+	virtual void Attack();
 
-	void RecoverHealth(float dt);
 	void RecoverEnergy(float dt);
 
 	void InternalInput(std::vector<HERO_INPUTS>& inputs, float dt);
@@ -250,29 +325,20 @@ public:
 	bool skill3Charged;
 
 	bool godMode;
-
 protected:
-	int level;
-	int expToLevelUp;
-	int heroXP;
 
-	int recoveryHitPointsRate;
-	int energyPoints;
-	int maxEnergyPoints;
-	int recoveryEnergyRate;
+	HeroStats stats;
 
 	float recoveringHealth;
 	float recoveringEnergy;
 	float feelingSecure;
 
-	int attackDamage;
-	int attackRange;
+	int heroXP;
+
 
 	bool gettingAttacked;
 
-	int skill1Cost;
 
-	float attackSpeed;
 	float skill1RecoverTime;
 	float skill2RecoverTime;
 	float skill3RecoverTime;
@@ -288,7 +354,6 @@ protected:
 
 	bool skillExecutionDelay;
 
-	int visionDistance;
 
 	float attackCooldown;
 	float cooldownHability1;
@@ -351,6 +416,12 @@ protected:
 
 	iMPoint movingTo;
 
+	int heroSkillPoints;
+
+	ParticleSystem* myParticleSystem;
+	float lvlUpSfxTimer;
+	
+	bool comeFromAttack;
 };
 
 

@@ -11,7 +11,6 @@ enum class TYPE_PARTICLE_SYSTEM : int
 {
 	NONE = -1,
 
-
 	MAX
 };
 
@@ -34,6 +33,8 @@ public:
 	bool IsActive();
 
 	void Move(int x, int y);
+
+	void Die();
 
 private:
 	std::vector<Emitter> emitterVector;

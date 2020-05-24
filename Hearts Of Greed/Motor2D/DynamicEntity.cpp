@@ -101,12 +101,12 @@ FACE_DIR DynamicEntity::DetermineDirection(fMPoint faceDir)
 
 	if (faceDir.x > 0)
 	{
-		if (faceDir.y < -0.1f)
+		if (faceDir.y < -0.3f)
 		{
 			newDir = FACE_DIR::NORTH_EAST;
 
 		}
-		else if (faceDir.y > 0.1f)
+		else if (faceDir.y > 0.3f)
 		{
 			newDir = FACE_DIR::SOUTH_EAST;
 		}
@@ -117,11 +117,11 @@ FACE_DIR DynamicEntity::DetermineDirection(fMPoint faceDir)
 	}
 	else if (faceDir.x < 0)
 	{
-		if (faceDir.y < -0.1f)
+		if (faceDir.y < -0.3f)
 		{
 			newDir = FACE_DIR::NORTH_WEST;
 		}
-		else if (faceDir.y > 0.1f)
+		else if (faceDir.y > 0.3f)
 		{
 			newDir = FACE_DIR::SOUTH_WEST;
 
@@ -235,6 +235,16 @@ fMPoint DynamicEntity::GetSeparationSpeed(std::vector<DynamicEntity*>colliding_e
 	colliding_entity_list.clear();
 
 	return separationSpeed;
+}
+
+void DynamicEntity::SetSpeed(int speed)
+{
+	this->unitSpeed = speed;
+}
+
+int DynamicEntity::GetSpeed()
+{
+	return unitSpeed;
 }
 
 fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_list, fMPoint position)

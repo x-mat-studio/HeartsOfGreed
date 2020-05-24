@@ -26,12 +26,14 @@
 #include "Minimap.h"
 #include "QuestManager.h"
 #include "DialogManager.h"
+#include "Video.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
-App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
+App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gamePause(false)
 {
 	PERF_START(pTimer);
+	
 
 	wantToSave = wantToLoad = false;
 
@@ -59,6 +61,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	winScene = new ModuleWinScene();
 	loseScene = new ModuleLoseScene();
 	minimap = new Minimap();
+	video = new Video();
 	dialogManager = new ModuleDialogManager();
 
 	// Ordered for awake / Start / Update
@@ -85,6 +88,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), paused(false)
 	AddModule(ai);
 	AddModule(questManager);
 	AddModule(minimap);
+	AddModule(video);
 
 	//Fade to black before render
 	AddModule(fadeToBlack);
@@ -138,13 +142,10 @@ bool App::Awake()
 	{
 		int numModules = modules.size();
 
-
 		for (int i = 0; i < numModules; i++)
 		{
 			ret = modules[i]->Awake(config.child(modules[i]->name.GetString()));
 		}
-
-
 	}
 
 
@@ -153,11 +154,11 @@ bool App::Awake()
 	//Set disabled modules here-------------
 	
 	//Scenes
-	//introScene->Disable();
+	introScene->Disable();
 	mainMenu->Disable();
 	winScene->Disable();
 	loseScene->Disable();
-	testScene->Disable();
+	//testScene->Disable();
 	
 	//Other
 	player->Disable();
@@ -236,12 +237,17 @@ void App::PrepareUpdate()
 	lastSecFrameCount++;
 
 	// Calculate the dt
+
 	dt = frameTime.ReadSec();
+	necessaryDt = dt;
 
 
 	//just to when we debug, the player doesnt trespass the floor
 	if (dt > MAX_DT)
 		dt = MAX_DT;
+
+	if (gamePause)
+		dt = 0;
 
 
 	frameTime.Start();
@@ -534,17 +540,3 @@ bool App::SavegameNow() const
 	return ret;
 }
 
-bool App::SetPause(bool newPause)
-{
-	if(newPause != paused)
-	{
-		paused = !paused;
-	}
-
-	return paused;
-}
-
-bool App::GetPause()
-{
-	return paused;
-}

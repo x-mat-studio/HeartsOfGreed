@@ -3,6 +3,8 @@
 #include "EntityManager.h"
 #include "Render.h"
 #include "Map.h"
+#include "ParticleSystem.h"
+#include "Player.h"
 
 RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -10,21 +12,15 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, 
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
+	HeroStats& stats, Skill& skill1) :
 
 	Hero(position, ENTITY_TYPE::HERO_RANGED, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
-		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
-		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
-		skill1Dmg, skill1Id, skill1Type, skill1Target),
+		tileOnWalk, stats, skill1),
 
-	granadeArea(nullptr),
+	skill1Area(nullptr),
 
 	currentVfx(nullptr),
 	explosionRect{ 0,0,0,0 }
@@ -35,7 +31,7 @@ RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT ali
 
 	Hero(position, copy, alignement),
 
-	granadeArea(nullptr),
+	skill1Area(nullptr),
 
 	currentVfx(nullptr),
 	explosionRect{ 0,0,0,0 }
@@ -69,15 +65,21 @@ bool RangedHero::PreProcessSkill1()
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
 
-		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.rangeRadius);
+
+
+		if (currAreaInfo != nullptr)
+			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.rangeRadius, origin, currAreaInfo);
 	}
 
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
-	granadePosLaunch = app->input->GetMousePosWorld();
+	skill1PosLaunch = app->input->GetMousePosWorld();
 
-	if (center.InsideCircle(app->map->WorldToMap(granadePosLaunch.x, granadePosLaunch.y), currAreaInfo->radius))
+	if (center.InsideCircle(app->map->WorldToMap(skill1PosLaunch.x, skill1PosLaunch.y), skill1.rangeRadius))
 	{
-		granadeArea = app->entityManager->RequestArea(SKILL_ID::RANGED_SKILL1_MOUSE, &this->suplAoE, { (int)granadePosLaunch.x, (int)granadePosLaunch.y });
+		skill1Area = app->entityManager->RequestAreaInfo(skill1.attackRadius);
+
+		app->entityManager->CreateDynamicArea(&this->suplAoE, skill1.attackRadius, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y }, skill1Area);
 	}
 
 	return true;
@@ -98,12 +100,12 @@ bool RangedHero::PreProcessSkill3()
 bool RangedHero::ExecuteSkill1()
 {
 
-	if (granadeArea)
+	if (skill1Area)
 	{
 		if (!skillExecutionDelay)
 		{
 			if (!godMode)
-				energyPoints -= skill1Cost;
+				stats.currEnergy -= skill1.energyCost;
 
 
 			skillExecutionDelay = true;
@@ -113,12 +115,10 @@ bool RangedHero::ExecuteSkill1()
 		else
 		{
 
-			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
-
-
 			int ret = 0;
 
-			ret = app->entityManager->ExecuteSkill(skill1.dmg, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, this->granadeArea, skill1.target, skill1.type, true, (Entity*)this);
+			app->audio->PlayFx(app->entityManager->ranged1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ret = app->entityManager->ExecuteSkill(skill1, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y });
 
 			currAoE.clear();
 			suplAoE.clear();
@@ -148,22 +148,47 @@ bool RangedHero::ExecuteSkill3()
 	return true;
 }
 
+
+void RangedHero::Attack()
+{
+	int ret = -1;
+
+	if (objective)
+		ret = objective->RecieveDamage(stats.damage);
+
+	if (ret > 0)
+	{
+		GetExperience(ret);
+
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
+		{
+			app->player->AddResources(ret * 0.5f);
+			
+		}
+		true;
+	}
+}
+
+
 void RangedHero::LevelUp()
 {
-	
-	hitPointsMax;
-	hitPointsCurrent; 
-	recoveryHitPointsRate;
-	energyPoints;
-	recoveryEnergyRate;
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+	myParticleSystem->Activate();
+	else {
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-	attackDamage;
-	attackSpeed;
-	attackRange;
 
-	unitSpeed;
-	visionDistance;
+	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue;
 
+	stats.maxEnergy *= (app->entityManager->rangedEnergyUpgradeValue);
+
+	stats.damage *= (app->entityManager->rangedDamageUpgradeValue);
+	stats.atkSpeed *= (app->entityManager->rangedAtkSpeedUpgradeValue);
+
+	heroSkillPoints++;
 }
 
 
@@ -177,7 +202,7 @@ bool RangedHero::DrawVfx(float dt)
 		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
 			currentVfx = false;
 
-		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
+		app->render->Blit(app->entityManager->explosionTexture, skill1PosLaunch.x, skill1PosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
 	}
 
 

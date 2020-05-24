@@ -49,7 +49,7 @@ public:
 
 
 	// Play a music file
-	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 180);
+	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME, int volume = 180, int loop = -1);
 
 
 	// Load a WAV in memory
@@ -63,7 +63,6 @@ public:
 
 	//Configure Channel
 	bool ConfigureChannel(unsigned int channel, int volume, float angle);
-
 
 	bool ConfigureChannel(unsigned int channel,LOUDNESS loudness, DIRECTION direction);
 

@@ -14,6 +14,7 @@
 #include "Base.h"
 #include "UIManager.h"
 #include "Base.h"
+#include "ParticleSystem.h"
 #include "Pathfinding.h"
 
 ModulePlayer::ModulePlayer() :
@@ -21,6 +22,8 @@ ModulePlayer::ModulePlayer() :
 	Module(),
 
 	resources(0),
+	resourcesSkill(0),
+	resourcesBoost(0),
 	selectRect{ 0,0,0,0 },
 
 	selectUnits(false),
@@ -46,6 +49,10 @@ ModulePlayer::ModulePlayer() :
 	buildingPrevPosition{ INT_MIN,INT_MIN },
 	baseDrawCenter{ FLT_MIN, FLT_MIN },
 	turretCost(0),
+	barricadeCost(0),
+	upgradeCenterCost(0),
+
+	buildAreaRadius(10),
 
 	buildingToBuild(ENTITY_TYPE::UNKNOWN)
 
@@ -64,6 +71,9 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
 	turretCost = 120;
+	barricadeCost = 100;
+	upgradeCenterCost = 400;
+
 	return true;
 }
 
@@ -76,6 +86,7 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_INTERACTION, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SELECT_UNITS, this);
 	app->eventManager->EventRegister(EVENT_ENUM::STOP_SELECTING_UNITS, this);
+	app->eventManager->EventRegister(EVENT_ENUM::LVL_UP_ALL, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL1, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SKILL2, this);
@@ -84,8 +95,12 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES_SKILL, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GIVE_RESOURCES_BOOST, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::BARRICADE_CONSTRUCT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
@@ -93,6 +108,10 @@ bool ModulePlayer::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
+
+	resources = 0;
+	resourcesSkill = 0;
+	resourcesBoost = 0;
 
 	return true;
 }
@@ -112,8 +131,12 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_CHANGE_FOCUS, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES_SKILL, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GIVE_RESOURCES_BOOST, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::TURRET_CONSTRUCT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::BARRICADE_CONSTRUCT, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::EXIT_CONSTRUCTION_MODE, this);
 
@@ -121,6 +144,7 @@ bool ModulePlayer::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::LVL_UP_ALL, this);
 
 	constrAreaInfo = nullptr;
 	constrArea.clear();
@@ -140,12 +164,16 @@ bool ModulePlayer::PreUpdate(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
-		ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, nullptr);
+		ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, nullptr);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
 	{
 		DesactivateBuildMode();
+	}
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_STATE::KEY_DOWN) // For debug purposes
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL, EVENT_ENUM::NULL_EVENT);
 	}
 
 
@@ -178,11 +206,11 @@ bool ModulePlayer::PostUpdate(float dt)
 	{
 		if (constrAreaInfo != nullptr)
 		{
-			iMPoint center = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
+			iMPoint center = app->map->WorldToMap((baseDrawCenter.x), (baseDrawCenter.y));
 			fMPoint wBuildPos = app->input->GetMousePosWorld();
 			iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-			if (center.InsideCircle(mBuildPos, constrAreaInfo->radius) && app->pathfinding->IsWalkable(mBuildPos))
+			if (center.InsideCircle(mBuildPos, buildAreaRadius) && app->pathfinding->IsWalkable(mBuildPos))
 			{
 				buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
 			}
@@ -291,7 +319,7 @@ void ModulePlayer::LeftClick()
 	if (focusedEntity != nullptr)
 	{
 		type = focusedEntity->GetType();
-		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED)
+		if (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO)
 		{
 			heroesVector.clear();
 			heroesVector.push_back((Hero*)focusedEntity);
@@ -309,7 +337,7 @@ void ModulePlayer::RightClick()
 
 	Click();
 
-	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false);
+	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false, ENTITY_ALIGNEMENT::ENEMY);
 
 	int numHeroes = heroesVector.size();
 
@@ -529,6 +557,18 @@ bool ModulePlayer::BuildClick()
 
 				baseInBuild->AddTurret((Turret*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
 				break;
+
+
+			case ENTITY_TYPE::BLDG_BARRICADE:
+
+				baseInBuild->AddBarricade((Barricade*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+				break;
+
+
+			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+
+				baseInBuild->AddUpgradeCenter((UpgradeCenter*)app->entityManager->AddEntity(buildingToBuild, x, y, ENTITY_ALIGNEMENT::PLAYER));
+				break;
 			}
 			SubstractBuildResources();
 			DesactivateBuildMode();
@@ -660,10 +700,21 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		resources += 1000;
 		break;
 
+	case EVENT_ENUM::GIVE_RESOURCES_SKILL:
+		resourcesSkill += 1;
+		break;
+
+	case EVENT_ENUM::GIVE_RESOURCES_BOOST:
+		resourcesBoost += 300;
+		break;
+
+
 	case EVENT_ENUM::TURRET_CONSTRUCT:
-		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
+
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_UPGRADE_CENTER)
 		{
-			Base* base = (Base*)focusedEntity;
+			Building* building = (Building*)focusedEntity;
+			Base* base = building->myBase;
 
 			if (resources >= turretCost && base->TurretCapacityExceed())
 			{
@@ -671,6 +722,36 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			}
 		}
 		break;
+
+
+	case EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT:
+
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_BASE)
+		{
+			Base* base = (Base*)focusedEntity;
+
+			if (resources >= upgradeCenterCost && base->UpgradeCenterCapacityExceed())
+			{
+				ActivateBuildMode(ENTITY_TYPE::BLDG_UPGRADE_CENTER, base);
+			}
+		}
+		break;
+
+
+	case EVENT_ENUM::BARRICADE_CONSTRUCT:
+
+		if (focusedEntity->GetType() == ENTITY_TYPE::BLDG_UPGRADE_CENTER)
+		{
+			Building* building = (Building*)focusedEntity;
+			Base* base = building->myBase;
+
+			if (resources >= barricadeCost && base->BarricadeCapacityExceed())
+			{
+				ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, base);
+			}
+		}
+		break;
+
 
 	case EVENT_ENUM::TURRET_PURCHASE:
 		resources -= turretCost;
@@ -756,7 +837,21 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 		heroesVector.push_back(hero);
 		break;
-		
+
+
+	case EVENT_ENUM::LVL_UP_ALL:
+
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1);
+
+		for (int aux = 0; aux < heroesVector.size(); aux++) {
+
+			if (heroesVector[aux] != nullptr) {
+
+				heroesVector[aux]->LevelUp();
+			}
+
+		}
+		break;
 	}
 
 
@@ -782,6 +877,16 @@ void ModulePlayer::AddResources(int gain)
 	resources += gain;
 }
 
+void ModulePlayer::AddResourcesSkill(int gain)
+{
+	resourcesSkill += gain;
+}
+
+void ModulePlayer::AddResourcesBoost(int gain)
+{
+	resourcesBoost += gain;
+}
+
 
 bool ModulePlayer::UseResources(int cost)
 {
@@ -794,6 +899,27 @@ bool ModulePlayer::UseResources(int cost)
 	}
 }
 
+bool ModulePlayer::UseResourcesSkill(int cost)
+{
+	if (cost > resourcesSkill)
+		return false;
+	else
+	{
+		resourcesSkill -= cost;
+		return true;
+	}
+}
+
+bool ModulePlayer::UseResourcesBoost(int cost)
+{
+	if (cost > resourcesBoost)
+		return false;
+	else
+	{
+		resourcesBoost -= cost;
+		return true;
+	}
+}
 
 bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 {
@@ -816,7 +942,11 @@ bool ModulePlayer::ActivateBuildMode(ENTITY_TYPE building, Base* contrBase)
 			iMPoint origin = app->map->WorldToMap(round(baseDrawCenter.x), round(baseDrawCenter.y));
 			origin = app->map->MapToWorld(origin.x, origin.y);
 
-			constrAreaInfo = app->entityManager->RequestArea(SKILL_ID::BASE_AREA, &constrArea, origin);
+			constrAreaInfo = app->entityManager->RequestAreaInfo(buildAreaRadius);
+
+			if (constrAreaInfo != nullptr)
+				app->entityManager->CreateDynamicArea(&this->constrArea, buildAreaRadius, origin, constrAreaInfo);
+
 		}
 		return true;
 	}
@@ -919,6 +1049,16 @@ int ModulePlayer::GetResources() const
 	return resources;
 }
 
+int ModulePlayer::GetResourcesSkill() const
+{
+	return resourcesSkill;
+}
+
+int ModulePlayer::GetResourcesBoost() const
+{
+	return resourcesBoost;
+}
+
 bool ModulePlayer::IsBuilding() const
 {
 	return buildMode;
@@ -946,6 +1086,8 @@ bool ModulePlayer::Load(pugi::xml_node& data)
 	pugi::xml_node iterator = data.first_child();
 
 	resources = iterator.attribute("cristals").as_int();
+	resourcesSkill = iterator.attribute("skillCoin").as_int();
+	resourcesBoost = iterator.attribute("enemyCoin").as_int();
 
 	return true;
 }
@@ -956,6 +1098,8 @@ bool ModulePlayer::Save(pugi::xml_node& data) const
 	pugi::xml_node iterator = data.append_child("resources");
 
 	iterator.append_attribute("cristals") = resources;
+	iterator.append_attribute("skillCoin") = resourcesSkill;
+	iterator.append_attribute("enemyCoin") = resourcesBoost;
 
 	return true;
 }

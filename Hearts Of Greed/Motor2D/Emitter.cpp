@@ -2,13 +2,15 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Particle.h"
+#include "App.h"
 #include "math.h"
 
 Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVariationSpeed,
 	fMPoint& particleAcceleration, iMPoint& particleVariationAcceleration, float particleAngularSpeed,
 	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
 
-	position(position),
+	position(0, 0),
+	offSet(position),
 	particleSpeed(particleSpeed),
 	particleVariationSpeed(particleVariationSpeed),
 	particleAcceleration(particleAcceleration),
@@ -42,7 +44,7 @@ Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVar
 	timeSinceStopped(0)
 
 {
-	Start();
+	//Start();
 }
 
 
@@ -50,7 +52,8 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 	float particleAccelerationX, float particleAccelerationY, int particleVariationAccelerationX, int particleVariationAccelerationY, float particleAngularSpeed,
 	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
 
-	position{ positionX, positionY },
+	position(0, 0),
+	offSet{ positionX, positionY },
 	particleSpeed{ particleSpeedX, particleSpeedY },
 	particleVariationSpeed{ particleVariationSpeedX, particleVariationSpeedY },
 	particleAcceleration{ particleAccelerationX, particleAccelerationY },
@@ -84,7 +87,7 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 	timeSinceStopped(0)
 
 {
-	Start();
+	//Start();
 }
 
 
@@ -161,8 +164,6 @@ void Emitter::CreateParticle()
 
 Emitter::~Emitter()
 {
-	int numParticles = particleVector.size();
-
 	particleVector.clear();
 
 	areaOfSpawn = nullptr;
@@ -173,10 +174,11 @@ Emitter::~Emitter()
 void Emitter::Update(float dt)
 {
 
-	if (stopped == false && active == true)
+	if (stopped == false && active == true && app->gamePause == false)
 	{
 		ThrowParticles();
 	}
+
 	else if (stopped == true && active == true)
 	{
 		CheckTimeSinceStopped(dt);
@@ -271,12 +273,12 @@ float Emitter::GeneratePosX()
 {
 	if (randomizePosX == true)
 	{
-		float x = (rand() % areaOfSpawn->w) + position.x;
+		float x = (rand() % areaOfSpawn->w) + position.x + offSet.x;
 		return x;
 	}
 
 	else
-		return position.x;
+		return position.x + offSet.x;
 }
 
 
@@ -284,12 +286,12 @@ float Emitter::GeneratePosY()
 {
 	if (randomizePosY == true)
 	{
-		float y = (rand() % areaOfSpawn->h) + position.y;
+		float y = (rand() % areaOfSpawn->h) + position.y + offSet.y;
 		return y;
 	}
 
 	else
-		return position.y;
+		return position.y + offSet.y;
 }
 
 
@@ -373,7 +375,10 @@ void Emitter::SetPosition(int x, int y)
 }
 
 
-void Emitter::SetTexture(SDL_Texture* tex)
+void Emitter::SetTextureNStart(SDL_Texture* tex)
 {
 	particleTexture = tex;
+	Start();
+
+	active = true;
 }

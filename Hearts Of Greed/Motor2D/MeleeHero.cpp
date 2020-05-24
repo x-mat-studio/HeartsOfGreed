@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Map.h"
 #include "Render.h"
+#include "ParticleSystem.h"
 
 MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -10,26 +11,24 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
-	int level, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int maxEnergyPoints, int energyPoints, int recoveryEnergyRate,
-	int attackDamage, int attackSpeed, int attackRange, int movementSpeed, int vision, float skill1ExecutionTime,
-	float skill2ExecutionTime, float skill3ExecutionTime, float skill1RecoverTime, float skill2RecoverTime, float skill3RecoverTime,
-	int skill1Dmg, SKILL_ID skill1Id, SKILL_TYPE skill1Type, ENTITY_ALIGNEMENT skill1Target) :
+	HeroStats& stats,  Skill& skill1, Skill& passiveSkill) :
 	
 	Hero(position, ENTITY_TYPE::HERO_MELEE, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, level, maxHitPoints, currentHitPoints, recoveryHitPointsRate, maxEnergyPoints, energyPoints, recoveryEnergyRate,
-		attackDamage, attackSpeed, attackRange, movementSpeed, vision, skill1ExecutionTime, skill2ExecutionTime,
-		skill3ExecutionTime, skill1RecoverTime, skill2RecoverTime, skill3RecoverTime,
-		skill1Dmg, skill1Id, skill1Type, skill1Target)
+		tileOnWalk, stats,  skill1),
+
+	passiveSkill(passiveSkill)
 
 {}
 
 
 MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Hero(position, copy, alignement)
+	Hero(position, copy, alignement),
+
+	passiveSkill(copy->passiveSkill)
 {}
 
 
@@ -64,7 +63,11 @@ bool MeleeHero::PreProcessSkill1()
 	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
-		currAreaInfo = app->entityManager->RequestArea(skill1.id, &this->currAoE, this->origin);
+		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.rangeRadius);
+
+
+		if (currAreaInfo != nullptr)
+			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.rangeRadius, origin, currAreaInfo);
 	}
 
 	return true;
@@ -88,10 +91,9 @@ bool MeleeHero::ExecuteSkill1()
 	if (!skillExecutionDelay)
 	{
 		if (!godMode)
-			energyPoints -= skill1Cost;
+			stats.currEnergy -= skill1.energyCost;
 
 		skillExecutionDelay = true;
-		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
@@ -102,7 +104,8 @@ bool MeleeHero::ExecuteSkill1()
 	
 		int ret = 0;
 
-		ret =  app->entityManager->ExecuteSkill(skill1.dmg, this->origin, this->currAreaInfo, skill1.target, skill1.type);
+		ret =  app->entityManager->ExecuteSkill(skill1, this->origin);
+		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 		currAoE.clear();
 		suplAoE.clear();
@@ -130,22 +133,38 @@ bool MeleeHero::ExecuteSkill3()
 	return true;
 }
 
+
+void MeleeHero::UpdatePasiveSkill(float dt)
+{
+	if (gettingAttacked == false)
+	{
+		RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
+	}
+}
+
+
 void MeleeHero::LevelUp()
 {
+	//lvl up effect
+	if (myParticleSystem != nullptr)
+		myParticleSystem->Activate();
 
-	hitPointsMax += 15;
-	hitPointsCurrent = hitPointsMax;		
-	recoveryHitPointsRate += 1;
-	energyPoints += 5;
-	recoveryEnergyRate;
+	else 
+	{
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
+	}
 
-	attackDamage += 3;
-	attackSpeed;
-	attackRange;
 
-	unitSpeed += 5;
-	visionDistance;
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
+
+	stats.maxHP *= app->entityManager->meleeLifeUpgradeValue;
+	stats.maxEnergy *= (app->entityManager->meleeEnergyUpgradeValue);
+
+	stats.damage *= (app->entityManager->meleeDamageUpgradeValue);
+	stats.atkSpeed *= (app->entityManager->meleeAtkSpeedUpgradeValue);
+
+	heroSkillPoints++;
 }
 
 void MeleeHero::PlayGenericNoise(int probability)

@@ -8,16 +8,21 @@
       <type id="1"/>
     </collider>
 
-    <stats level="1" movementSpeed="110" vision="5">
-      <hitPoints max="100" current="100" recoveryRate="4"/>
-      <energyPoints max="80" current="80" recoveryRate="3"/>
-      <attack damage="15" speed="1.0" range="5"/>
+    <stats level="1" movementSpeed="110" vision="5" attackRange="5">
+
+      <lvl xpToLvlUp="100" hp="85" damage="20" energy="65" atkSpeed="1.35" liferecoveryRate="2" energyrecoveryRate="2"/>
+      <lvl xpToLvlUp="175" hp="105" damage="22" energy="90" atkSpeed="1.4" liferecoveryRate="2" energyrecoveryRate="2"/>
+      <lvl xpToLvlUp="300" hp="120" damage="25" energy="120" atkSpeed="1.5" liferecoveryRate="2" energyrecoveryRate="3"/>
+      <lvl xpToLvlUp="450" hp="135" damage="28" energy="160" atkSpeed="1.65" liferecoveryRate="4" energyrecoveryRate="4"/>
+      <lvl xpToLvlUp="600" hp="150" damage="32" energy="200" atkSpeed="1.8" liferecoveryRate="5" energyrecoveryRate="6"/>
+      
     </stats>
 
     <skills>
-      <skill1 executionTime="1.0" recoverTime="7.5" damage="30" id="4" type="1" targetAligment="1"/>
+      <skill1 id="2" />
       <skill2 executionTime="20.0" recoverTime="15.0"/>
       <skill3 executionTime="20.0" recoverTime="15.0"/>
+      <passive id="6"/>
     </skills>
   </sample>
 
@@ -287,6 +292,59 @@
       <frame rposX="1013" rposY="1468" rwidth="37" rheight="87"  time="0.15f" pivotX="37" pivotY="70"/>
     </skill_1_left_up>
 
+    <death_right_up name="death_right_up" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_right_up>
+
+    <death_right name="death_right" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_right>
+
+    <death_right_down name="death_right_down" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_right_down>
+
+    <death_left_down name="death_left_down" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_left_down>
+
+    <death_left name="death_left" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_left>
+
+    <death_left_up name="death_left_up" frames="6">
+      <frame rposX="877" rposY="12" rwidth="34" rheight="56"  time="0.15f" pivotX="16" pivotY="51"/>
+      <frame rposX="881" rposY="72" rwidth="46" rheight="63"  time="0.15f" pivotX="23" pivotY="61"/>
+      <frame rposX="875" rposY="152" rwidth="52" rheight="51"  time="0.15f" pivotX="23" pivotY="33"/>
+      <frame rposX="880" rposY="224" rwidth="50" rheight="47"  time="0.15f" pivotX="23" pivotY="31"/>
+      <frame rposX="879" rposY="296" rwidth="55" rheight="46"  time="0.15f" pivotX="26" pivotY="27"/>
+      <frame rposX="876" rposY="376" rwidth="57" rheight="34"  time="0.15f" pivotX="27" pivotY="12"/>
+    </death_left_up>
 
     </Animations>
 </rangedman>

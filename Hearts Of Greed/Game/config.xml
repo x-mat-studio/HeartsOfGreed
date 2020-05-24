@@ -44,11 +44,19 @@
 
   <minimap width="450" posX="-35" posY="520"/>
 
+  <dialogManager>
+    <load
+      docnameDialogues="dialogue.xml"
+	/>
+  </dialogManager>
+
   <entityManager>
 	<load 
     docnameSuitman="suitman.xml" 
     docnameWanamingo="wanamingo.xml" 
     docnameTurret="turret.xml" 
+    docnameBarricade="barricade.xml"
+    docnameUpgradeCenter="upgradeCenter.xml"
     docnameArmoredman="armoredman.xml" 
     docnameRangedman="rangedman.xml"
     docnameRobotto="robotto.xml"
@@ -59,8 +67,14 @@
     />
   </entityManager>
 
+  <QuestManager>
+    <load
+      docnameQuests="quests.xml"
+    />
+  </QuestManager>
+  
   <testScene 
-    fadeTime="1.0"
+    fadeTime="1.5"
     startingScale="2.0"
     camVel="700" 
     initialCamPosX="408" 

@@ -6,8 +6,9 @@
 #include "Animation.h"
 #include "Entity.h"
 #include <list>
-#include <unordered_map>
+#include <map>
 
+class DeadHero;
 class Hero;
 class GathererHero;
 class MeleeHero;
@@ -21,30 +22,24 @@ class RangedEnemy;
 class GigaEnemy;
 class NightEnemy;
 class Spawner;
+
 class Base;
 class Turret;
+class Barricade;
+class UpgradeCenter;
+
 class ParticleSystem;
 class Emitter;
 
 enum class BUILDING_DECOR;
 enum class TYPE_PARTICLE_SYSTEM;
 
-enum class AREA_TYPE
-{
-	NO_TYPE = -1,
-
-	CIRCLE,
-	QUAD,
-	CONE,
-
-};
-
+struct Skill;
 
 struct skillArea
 {
 	unsigned short* area = nullptr;
-	AREA_TYPE form = AREA_TYPE::NO_TYPE;
-	int radius = 0, width = 0, heigth = 0;
+	int users = 0;
 };
 
 enum class SPRITE_POSITION : int
@@ -58,6 +53,8 @@ enum class SPRITE_POSITION : int
 	NULL_MOVABLE_ENTITY,
 	BOTH_NULL
 };
+
+struct HeroStats;
 
 class ModuleEntityManager : public Module
 {
@@ -75,12 +72,12 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
-	
+
 	bool CleanUp();
 
-	
+
 	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
+	bool Save(pugi::xml_node&)const;
 
 
 	void OnCollision(Collider*, Collider*);
@@ -97,9 +94,19 @@ public:
 	void DeleteAllEntities();
 
 
-	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true);
-	void CheckHeroOnSelection(SDL_Rect &selection, std::vector<Hero*> *heroVector);
+	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::PLAYER);
+	void CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
+
+
+	bool CheckIfHeroIsDead(ENTITY_TYPE heroType)const;
+	DeadHero* AssignNewDeadHero(Hero& dyingHero);
+	DeadHero* AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill);
+	void DeleteDeadHero(ENTITY_TYPE heroType);
+	void DeleteAllDeadHeroes();
+
+	void SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)const;
+	void LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType);
 
 
 	void SearchHeroesAlive();
@@ -124,10 +131,10 @@ public:
 
 	void KillAllEnemies();
 
-	skillArea* RequestArea(SKILL_ID id, std::vector<iMPoint>* toFill, iMPoint center);
+	skillArea* GenerateNewArea(int radius);
 
 	//This & skill Struct need re-work to accept single target
-	int ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target, SKILL_TYPE type,bool hurtYourself = false,  Entity* objective = nullptr);
+	int ExecuteSkill(Skill& skillExecution, iMPoint pivot, Entity* objective = nullptr);
 
 	//function used for minimap
 	void DrawOnlyStaticBuildings();
@@ -135,6 +142,19 @@ public:
 	void ResetEntityManager();
 
 	Entity* SearchEntity(ENTITY_TYPE type);
+
+	void ResetUpgradeValues();
+
+	//Area----
+	skillArea* RequestAreaInfo(int radius);
+	void CreateDynamicArea(std::vector <iMPoint>* toFill, int area, iMPoint center, skillArea* skillArea = nullptr);
+
+	//Retuns false if it fails to load the skill
+	bool RequestSkill(Skill& skillToFill, SKILL_ID id, int lvl = 1);
+	bool RequestHeroStats(HeroStats& heroStats, ENTITY_TYPE id, int lvl = 1);
+
+	//Revive
+	bool ReviveHero(DeadHero heroToRevive);
 
 private:
 
@@ -148,22 +168,26 @@ private:
 	int EntityPartition(std::vector<Entity*>& vector, int low, int high);
 	SPRITE_POSITION CheckSpriteHeight(Entity* movEntity, Entity* building) const;
 
-	//Area Related
-	bool BuildArea(skillArea* areaToGenerate, int width, int heigth, int radius);
+	//Area----
 	unsigned short* BuildCircleArea(int radius);
-	unsigned short* BuildQuadArea(int width, int height);
 
-	void GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center);
 
 	bool LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& heroNode, pugi::xml_node& config);
 	bool LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE enemyType);
+
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
+	bool LoadSampleBarricade(pugi::xml_node& barricadeNode);
+	bool LoadSampleUpgradeCenter(pugi::xml_node& upgradeCenterNode);
+	
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
+
 	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
+	int CheckPlayerBases();
+	
 
 public:
 
@@ -177,14 +201,14 @@ public:
 
 	SDL_Texture* explosionTexture;
 
-	
+
 	//Sounds
 	int wanamingoRoar;
 	int wanamingoRoar2;
 	int wanamingoGetsHit;
 	int wanamingoDies;
-	int wanamingoDies2;	
-	
+	int wanamingoDies2;
+
 	int suitmanGetsHit;
 	int suitmanGetsHit2;
 	int suitmanGetsDeath;
@@ -199,6 +223,9 @@ public:
 	int turretShooting;
 
 	int suitman1Skill;
+
+	int ranged1Skill;
+	int ranged1Skil2;
 
 	int suitman1Skill2;
 	int armored1Skill2;
@@ -218,6 +245,8 @@ public:
 	int noise3Ranged;
 	int noise4Ranged;
 
+	int roboDying;
+
 	int lvlup;
 	int selectHero;
 	int moveHero;
@@ -228,6 +257,11 @@ public:
 	SDL_Texture* base2TextureEnemy;
 	SDL_Texture* base2TextureSelected;
 	SDL_Texture* base2TextureSelectedEnemy;
+
+	SDL_Texture* upgradeCenterPlayerTexture;
+	SDL_Texture* upgradeCenterPlayerSelectedTexture;
+	SDL_Texture* upgradeCenterEnemyTexture;
+	SDL_Texture* upgradeCenterEnemySelectedTexture;
 
 	// Upgrades multipliers
 	float gathererLifeUpgradeValue;
@@ -242,6 +276,11 @@ public:
 	float rangedDamageUpgradeValue;
 	float rangedEnergyUpgradeValue;
 	float rangedAtkSpeedUpgradeValue;
+	float robottoLifeUpgradeValue;
+	float robottoDamageUpgradeValue;
+	float robottoEnergyUpgradeValue;
+	float robottoAtkSpeedUpgradeValue;
+	const float upgradeValue;
 
 private:
 
@@ -260,15 +299,13 @@ private:
 	SDL_Texture* roboTexture;
 
 	SDL_Texture* buildingTexture;
-
 	
 	SDL_Texture* base1Texture;
-
-	
 
 	SDL_Texture* deco3Selected;
 
 	SDL_Texture* turretTexture;
+	SDL_Texture* barricadeTexture;
 
 	SDL_Texture* enemyTexture;
 	SDL_Texture* enemyNightTexture;
@@ -293,11 +330,28 @@ private:
 	Base* sampleBase;
 
 	Turret* sampleTurret;
+	Barricade* sampleBarricade;
+	UpgradeCenter* sampleUpgradeCenter;
 
 	ParticleSystem* sampleParticleSystem;
 	Emitter* sampleEmitter;
+	Emitter* sampleEmitter2;
+	Emitter* sampleEmitter3;
+	Emitter* sampleEmitter4;
+	SDL_Texture* snowball;
 
-	std::unordered_map <SKILL_ID, skillArea> skillAreas;
+	std::map <int, skillArea> skillAreas;
+
+	DeadHero* deadMelee;
+	DeadHero* deadGatherer;
+	DeadHero* deadRanged;
+	DeadHero* deadRobo;
+
+	P2SString skillFileName;
+	P2SString suitmanFileName;
+	P2SString armoredFileName;
+	P2SString rangedFileName;
+	P2SString roboFileName;
 };
 
 #endif //__ENTITYMANAGER_H__

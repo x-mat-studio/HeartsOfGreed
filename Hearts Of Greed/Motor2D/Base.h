@@ -34,10 +34,15 @@ public:
 	bool AddUpgradeCenter(UpgradeCenter* upgradeCenter);
 
 	bool TurretCapacityExceed();
+	bool BarricadeCapacityExceed();
+	bool UpgradeCenterCapacityExceed();
 
 	void RemoveTurret(Turret* turret);
 	void RemoveBarricade(Barricade* barricade);
 	void RemoveUpgradeCenter();
+
+	void LevelUpTurrets(int lvl);
+	void LevelUpBarricades(int lvl);
 
 	bool Update(float dt);
 	bool PostUpdate(float dt);

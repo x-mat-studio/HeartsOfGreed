@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
+#include "QuestManager.h"
 
 #include "DynamicEntity.h"
 #include "GathererHero.h"
@@ -32,6 +33,8 @@
 #include "Building.h"
 #include "Base.h"
 #include "Turret.h"
+#include "Barricade.h"
+#include "UpgradeCenter.h"
 
 #include "ParticleSystem.h"
 #include "Emitter.h"
@@ -51,8 +54,14 @@ ModuleEntityManager::ModuleEntityManager() :
 	combatFemaleTexture(nullptr),
 	buildingTexture(nullptr),
 	base1Texture(nullptr),
+	snowball(nullptr),
 	deco3Selected(nullptr),
 	turretTexture(nullptr),
+	barricadeTexture(nullptr),
+	upgradeCenterPlayerTexture(nullptr),
+	upgradeCenterPlayerSelectedTexture(nullptr),
+	upgradeCenterEnemyTexture(nullptr),
+	upgradeCenterEnemySelectedTexture(nullptr),
 	enemyTexture(nullptr),
 	explosionTexture(nullptr),
 	targetedTexture(nullptr),
@@ -67,6 +76,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleBuilding(nullptr),
 	sampleBase(nullptr),
 	sampleTurret(nullptr),
+	sampleBarricade(nullptr),
+	sampleUpgradeCenter(nullptr),
 	moveCommandTileRng(nullptr),
 	moveCommandTileGath(nullptr),
 	moveCommandTileMelee(nullptr),
@@ -75,6 +86,18 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEnemyGiga(nullptr),
 	sampleEnemyRanged(nullptr),
 	sampleEnemyNight(nullptr),
+	enemyNightTexture(nullptr),
+	enemyGigaTexture(nullptr),
+	enemyRangedTexture(nullptr),
+	sampleEmitter(nullptr),
+	sampleEmitter2(nullptr),
+	sampleEmitter3(nullptr),
+	sampleEmitter4(nullptr),
+	sampleParticleSystem(nullptr),
+	deadGatherer(nullptr),
+	deadMelee(nullptr),
+	deadRanged(nullptr),
+	deadRobo(nullptr),
 
 	wanamingoRoar2(-1),
 	wanamingoRoar(-1),
@@ -108,6 +131,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	buildingGetsHit(-1),
 	buildingGetsHit2(-1),
 	armored1Skill2(-1),
+	ranged1Skill(-1),
+	ranged1Skil2(-1),
 
 	gathererLifeUpgradeValue(1),
 	gathererDamageUpgradeValue(1),
@@ -120,7 +145,14 @@ ModuleEntityManager::ModuleEntityManager() :
 	rangedLifeUpgradeValue(1),
 	rangedDamageUpgradeValue(1),
 	rangedEnergyUpgradeValue(1),
-	rangedAtkSpeedUpgradeValue(1)
+	rangedAtkSpeedUpgradeValue(1),
+	robottoLifeUpgradeValue(1),
+	robottoDamageUpgradeValue(1),
+	robottoEnergyUpgradeValue(1),
+	robottoAtkSpeedUpgradeValue(1),
+
+	upgradeValue(1.1f),
+	skillFileName()
 
 {
 	name.create("entityManager");
@@ -139,11 +171,14 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	bool ret = true;
 
+	// Skills filename-----
+	skillFileName = config.child("load").attribute("docnameSkillAreas").as_string();
+
 	// Sample Hero Gatherer---------------------
 
-	P2SString filename = config.child("load").attribute("docnameSuitman").as_string();
+	suitmanFileName = config.child("load").attribute("docnameSuitman").as_string();
 	pugi::xml_document suitmandoc;
-	suitmandoc.load_file(filename.GetString());
+	suitmandoc.load_file(suitmanFileName.GetString());
 	pugi::xml_node suitman = suitmandoc.child("suitman");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_GATHERER, suitman, config);
@@ -151,9 +186,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	suitmandoc.reset();
 
 	// Sample Hero Melee---------------------
-	filename = config.child("load").attribute("docnameArmoredman").as_string();
+	armoredFileName = config.child("load").attribute("docnameArmoredman").as_string();
 	pugi::xml_document armoredmanDoc;
-	armoredmanDoc.load_file(filename.GetString());
+	armoredmanDoc.load_file(armoredFileName.GetString());
 	pugi::xml_node armoredman = armoredmanDoc.child("armoredman");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_MELEE, armoredman, config);
@@ -161,9 +196,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Ranged Hero---------------------
-	filename = config.child("load").attribute("docnameRangedman").as_string();
+	rangedFileName = config.child("load").attribute("docnameRangedman").as_string();
 	pugi::xml_document rangedmanDoc;
-	rangedmanDoc.load_file(filename.GetString());
+	rangedmanDoc.load_file(rangedFileName.GetString());
 	pugi::xml_node rangedman = rangedmanDoc.child("rangedman");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_RANGED, rangedman, config);
@@ -171,9 +206,9 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Robo Hero---------------------
-	filename = config.child("load").attribute("docnameRobotto").as_string();
+	roboFileName = config.child("load").attribute("docnameRobotto").as_string();
 	pugi::xml_document robottoDoc;
-	robottoDoc.load_file(filename.GetString());
+	robottoDoc.load_file(roboFileName.GetString());
 	pugi::xml_node robotto = robottoDoc.child("robotto");
 
 	LoadSampleHero(ENTITY_TYPE::HERO_ROBO, robotto, config);
@@ -181,7 +216,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 
 	// Sample Enemy---------------------
-	filename = config.child("load").attribute("docnameWanamingo").as_string();
+	P2SString filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
 	pugi::xml_node wanamingo = wanamingodoc.child("wanamingo").child("sample");
@@ -210,6 +245,27 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 
 	LoadSampleTurret(turret);
 	turretdoc.reset();
+
+
+	//Sample Barricade -------------------
+	filename = config.child("load").attribute("docnameBarricade").as_string();
+	pugi::xml_document barricadedoc;
+	barricadedoc.load_file(filename.GetString());
+	pugi::xml_node barricadeNode = barricadedoc.child("barricade");
+
+	LoadSampleBarricade(barricadeNode);
+	barricadedoc.reset();
+
+
+	//Sample Upgrade center --------------
+	filename = config.child("load").attribute("docnameUpgradeCenter").as_string();
+	pugi::xml_document upgradeCenterdoc;
+	upgradeCenterdoc.load_file(filename.GetString());
+	pugi::xml_node upgradeCenterNode = upgradeCenterdoc.child("upgradeCenter");
+
+	LoadSampleUpgradeCenter(upgradeCenterNode);
+	upgradeCenterdoc.reset();
+
 
 	//spawner
 	filename = config.child("load").attribute("docnameSpawner").as_string();
@@ -263,16 +319,21 @@ bool ModuleEntityManager::Start()
 	bool ret = true;
 
 	//Textures load-----
+
+
+	//HEROES------
 	suitManTexture = app->tex->Load("spritesheets/characters/suitmale.png");
 	armorMaleTexture = app->tex->Load("spritesheets/characters/armormale.png");
 	combatFemaleTexture = app->tex->Load("spritesheets/characters/combatfemale.png");
 	roboTexture = app->tex->Load("spritesheets/characters/robotto.png");
 
+	//ENEMIES--------
 	enemyTexture = app->tex->Load("spritesheets/Enemies/WanamingoAlien.png");
 	enemyRangedTexture = app->tex->Load("spritesheets/Enemies/Snipermingo.png");
 	enemyGigaTexture = app->tex->Load("spritesheets/Enemies/Gigamingo.png");
 	enemyNightTexture = app->tex->Load("spritesheets/Enemies/Speedomingo.png");
 
+	//BUILDINGS--------
 	buildingTexture = app->tex->Load("maps/base03.png");
 	base1Texture = app->tex->Load("maps/base01.png");
 	base2Texture = app->tex->Load("maps/base02.png");
@@ -280,26 +341,37 @@ bool ModuleEntityManager::Start()
 	base2TextureEnemy = app->tex->Load("maps/base02_enemy.png");
 	base2TextureSelectedEnemy = app->tex->Load("maps/base02_enemy_selected.png");
 
-	deco3Selected = app->tex->Load("maps/base03_selected.png");
+	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
+	barricadeTexture = app->tex->Load("spritesheets/Structures/barricade.png");
 
+	upgradeCenterPlayerTexture = app->tex->Load("maps/upgradeCenter.png");
+	upgradeCenterPlayerSelectedTexture = app->tex->Load("maps/upgradeCenter_selected.png");
+	upgradeCenterEnemyTexture = app->tex->Load("maps/upgradeCenter_enemy.png");
+	upgradeCenterEnemySelectedTexture = app->tex->Load("maps/upgradeCenter_enemy_selected.png");
+
+	sampleBuilding->SetTexture(base1Texture);
+	sampleBase->SetTexture(base2Texture);
+	sampleTurret->SetTexture(turretTexture);
+	sampleBarricade->SetTexture(barricadeTexture);
+	sampleUpgradeCenter->SetTexture(upgradeCenterPlayerTexture);
+
+
+	//SELECTIONS & FEEDBACK---------
+	deco3Selected = app->tex->Load("maps/base03_selected.png");
 	selectedTexture = app->tex->Load("spritesheets/VFX/selected.png");
 	targetedTexture = app->tex->Load("spritesheets/VFX/target.png");
-
 	explosionTexture = app->tex->Load("spritesheets/VFX/explosion.png");
-
 	moveCommandTileRng = app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
 	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
 	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
-
-
-	turretTexture = app->tex->Load("spritesheets/Structures/turretSpritesheet.png");
-
 	debugPathTexture = app->tex->Load("maps/path.png");
+
 
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ENTITY_DEAD, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
@@ -313,6 +385,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
@@ -333,12 +406,12 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 
 
-	sampleBuilding->SetTexture(base1Texture);
-	sampleBase->SetTexture(base2Texture);
-
-	sampleTurret->SetTexture(turretTexture);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -370,7 +443,6 @@ bool ModuleEntityManager::Start()
 	noise2Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise2.wav");
 	noise3Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise3.wav");
 	noise4Suitman = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/noise4.wav");
-
 	armored1Skill2 = app->audio->LoadFx("audio/sfx/Heroes/Armoredman/Skill1_2.wav");
 
 	//Ranged sfx--------
@@ -382,13 +454,27 @@ bool ModuleEntityManager::Start()
 	rangedGetsHit = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_getsHit.wav");
 	rangedDies = app->audio->LoadFx("audio/sfx/Heroes/Ranged/rng_dies.wav");
 
+	ranged1Skill = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_launch.wav");
+	ranged1Skil2 = app->audio->LoadFx("audio/sfx/Heroes/Ranged/skill1_cast.wav");
+
+	//Robotto sfx-----------
+	roboDying = app->audio->LoadFx("audio/sfx/Heroes/Robotto/provisionalDie.wav"); //Provisional SFX
 
 	//General hero sfx--------
 	lvlup = app->audio->LoadFx("audio/sfx/Heroes/lvlup.wav");
 	selectHero = app->audio->LoadFx("audio/sfx/Heroes/heroSelect.wav");
 	moveHero = app->audio->LoadFx("audio/sfx/Heroes/heroMove.wav");
 
-	//Load textures of the emmiters and push them to their particle systems
+
+	//Emitters and particles systems------------
+
+	snowball = app->tex->Load("spritesheets/Particles/snowball.png");
+
+	sampleEmitter->SetTextureNStart(snowball);  sampleParticleSystem->PushEmiter(*sampleEmitter);
+	sampleEmitter2->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter2);
+	sampleEmitter3->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter3);
+	sampleEmitter4->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter4);
+
 
 	return ret;
 }
@@ -509,13 +595,13 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_TURRET:
+
 				entityVector[i]->Start(turretTexture);
 
 				alignement = entityVector[i]->GetAlignment();
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
 				{
-
 					entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::TURRET, entityVector[i]->GetCenter());
 				}
 				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
@@ -524,12 +610,33 @@ void ModuleEntityManager::CheckIfStarted() {
 				}
 				break;
 
+
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+
+				UpgradeCenter* upCenter;
+				upCenter = (UpgradeCenter*)entityVector[i];
+
+				alignement = entityVector[i]->GetAlignment();
+
+				if (alignement == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					entityVector[i]->Start(upgradeCenterPlayerTexture);
+					upCenter->selectedTexture = upgradeCenterPlayerSelectedTexture;
+				}
+
+				else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+				{
+					entityVector[i]->Start(upgradeCenterEnemyTexture);
+					upCenter->selectedTexture = upgradeCenterEnemySelectedTexture;
+				}
 				break;
+
 
 			case ENTITY_TYPE::BLDG_BASE:
 
-				Base* auxBase; auxBase = (Base*)entityVector[i];
+				Base* auxBase;
+				auxBase = (Base*)entityVector[i];
+
 				alignement = entityVector[i]->GetAlignment();
 
 				if (alignement == ENTITY_ALIGNEMENT::PLAYER || alignement == ENTITY_ALIGNEMENT::NEUTRAL)
@@ -550,6 +657,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				break;
 
 			case ENTITY_TYPE::BLDG_BARRICADE:
+				entityVector[i]->Start(barricadeTexture);
 				break;
 
 			case ENTITY_TYPE::SPAWNER:
@@ -604,37 +712,88 @@ bool ModuleEntityManager::PostUpdate(float dt)
 bool ModuleEntityManager::CleanUp()
 {
 	LOG("Entity Manager Clean Up");
-	DeleteAllEntities();
 
+	DeleteAllEntities();
+	DeleteAllDeadHeroes();
+
+	for (std::map<int, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
+	{
+		delete it->second.area;
+		it->second.area = nullptr;
+
+	}
+	skillAreas.clear();
+	renderVector.clear();
+	movableEntityVector.clear();
+	buildingVector.clear();
+	selectedVector.clear();
+
+
+	//Heros-----
 	app->tex->UnLoad(suitManTexture);				suitManTexture = nullptr;
 	app->tex->UnLoad(armorMaleTexture);				armorMaleTexture = nullptr;
 	app->tex->UnLoad(combatFemaleTexture);			combatFemaleTexture = nullptr;
 	app->tex->UnLoad(roboTexture);					roboTexture = nullptr;
+
+	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
+	RELEASE(sampleMelee);							sampleMelee = nullptr;
+	RELEASE(sampleRanged);							sampleRanged = nullptr;
+	RELEASE(sampleRobo);							sampleRobo = nullptr;
+
+	//Enemies-------
 	app->tex->UnLoad(enemyTexture);					enemyTexture = nullptr;
+	app->tex->UnLoad(enemyNightTexture);			enemyNightTexture = nullptr;
+	app->tex->UnLoad(enemyGigaTexture);				enemyGigaTexture = nullptr;
+	app->tex->UnLoad(enemyRangedTexture);			enemyRangedTexture = nullptr;
 
-	app->tex->UnLoad(buildingTexture);				buildingTexture = nullptr;
-	app->tex->UnLoad(base1Texture);					base1Texture = nullptr;
-	app->tex->UnLoad(base2Texture);					base2Texture = nullptr;
-	app->tex->UnLoad(base2TextureEnemy);			base2TextureEnemy = nullptr;
-	app->tex->UnLoad(base2TextureSelected);			base2TextureSelected = nullptr;
-	app->tex->UnLoad(base2TextureSelectedEnemy);	base2TextureSelectedEnemy = nullptr;
+	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
+	RELEASE(sampleEnemyNight);						sampleEnemyNight = nullptr;
+	RELEASE(sampleEnemyGiga);						sampleEnemyGiga = nullptr;
+	RELEASE(sampleEnemyRanged);						sampleEnemyRanged = nullptr;
 
+	//Spawners----------
+	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
+
+	//Buildings----------
+	app->tex->UnLoad(buildingTexture);						buildingTexture = nullptr;
+	app->tex->UnLoad(base1Texture);							base1Texture = nullptr;
+	app->tex->UnLoad(base2Texture);							base2Texture = nullptr;
+	app->tex->UnLoad(base2TextureEnemy);					base2TextureEnemy = nullptr;
+	app->tex->UnLoad(base2TextureSelected);					base2TextureSelected = nullptr;
+	app->tex->UnLoad(base2TextureSelectedEnemy);			base2TextureSelectedEnemy = nullptr;
+	app->tex->UnLoad(turretTexture);						turretTexture = nullptr;
+	app->tex->UnLoad(barricadeTexture);						barricadeTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterPlayerTexture);			upgradeCenterPlayerTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterPlayerSelectedTexture);	upgradeCenterPlayerSelectedTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterEnemyTexture);			upgradeCenterEnemyTexture = nullptr;
+	app->tex->UnLoad(upgradeCenterEnemySelectedTexture);	upgradeCenterEnemySelectedTexture = nullptr;
+
+
+	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
+	RELEASE(sampleBase);							sampleBase = nullptr;
+	RELEASE(sampleTurret);							sampleTurret = nullptr;
+	RELEASE(sampleBarricade);						sampleBarricade = nullptr;
+	RELEASE(sampleUpgradeCenter);					sampleUpgradeCenter = nullptr;
+
+
+	//Feedback------------
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
-
-	app->tex->UnLoad(turretTexture);				turretTexture = nullptr;
-
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
-
 	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
 	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
 	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
-
 	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
 	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
 	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
 
-	RELEASE(sampleGatherer);						sampleGatherer = nullptr;
-	RELEASE(sampleMelee);							sampleMelee = nullptr;
+	//Particles---------
+	app->tex->UnLoad(snowball);						snowball = nullptr;
+
+	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
+	RELEASE(sampleEmitter2);						sampleEmitter2 = nullptr;
+	RELEASE(sampleEmitter3);						sampleEmitter3 = nullptr;
+	RELEASE(sampleEmitter4);						sampleEmitter4 = nullptr;
+	RELEASE(sampleParticleSystem);					sampleParticleSystem = nullptr;
 
 	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
 	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
@@ -643,24 +802,12 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
 
-
-	for (std::unordered_map<SKILL_ID, skillArea> ::iterator it = skillAreas.begin(); it != skillAreas.end(); it++)
-	{
-		delete it->second.area;
-		it->second.area = nullptr;
-
-	}
-	skillAreas.clear();
-
-	renderVector.clear();
-	movableEntityVector.clear();
-	buildingVector.clear();
-	selectedVector.clear();
-
+	//Events-----------
 	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENTITY_DEAD, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::ACTIVATE_GODMODE_HEROES, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DESACTIVATE_GODMODE_HEROES, this);
@@ -674,6 +821,7 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_RESURRECT, this);
@@ -694,7 +842,10 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_DAMAGE_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ENERGY_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE, this);
-
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_LIFE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
 	return true;
 }
 
@@ -750,10 +901,10 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		ret = new Turret({ (float)x,(float)y }, sampleTurret, alignement);
-
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+		ret = new UpgradeCenter({ (float)x,(float)y }, sampleUpgradeCenter, alignement);
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:
@@ -762,6 +913,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 		break;
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
+		ret = new Barricade({ (float)x,(float)y }, sampleBarricade, alignement);
 		break;
 
 	case ENTITY_TYPE::ENEMY:
@@ -832,10 +984,16 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 
 	switch (type)
 	{
-	
+	case TYPE_PARTICLE_SYSTEM::MAX:
+		ret = new ParticleSystem(x, y, sampleParticleSystem, true);
+		break;
+
+	case TYPE_PARTICLE_SYSTEM::NONE:
+		LOG(" Tried to add particle system, no type was found");
+		break;
 
 	default:
-		ret = new ParticleSystem();
+
 		break;
 	}
 
@@ -908,12 +1066,13 @@ Entity* ModuleEntityManager::GetSample(ENTITY_TYPE type)
 
 
 // Checks if there is an entity in the mouse Click position 
-Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
+Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus, ENTITY_ALIGNEMENT alignement)
 {
 	Entity* ret = nullptr;
 
 	Collider* col = nullptr;
 	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
 
 	int numEntities = entityVector.size();
 
@@ -921,6 +1080,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 	{
 		type = entityVector[i]->GetType();
 		col = entityVector[i]->GetCollider();
+		align = entityVector[i]->GetAlignment();
 
 		if (col == nullptr)
 			continue;
@@ -928,7 +1088,7 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus)
 		//dynamic entities get priority over static entities
 		if (mousePos.PointInRect(&col->rect))
 		{
-			if (col != nullptr && (type == ENTITY_TYPE::HERO_GATHERER || type == ENTITY_TYPE::HERO_MELEE || type == ENTITY_TYPE::HERO_RANGED || type == ENTITY_TYPE::HERO_ROBO))
+			if (col != nullptr && (align == alignement))
 			{
 				if (focus == true)
 				{
@@ -1017,6 +1177,266 @@ void ModuleEntityManager::CheckDynamicEntitysObjectives(Entity* entity)
 }
 
 
+//Note that a hero is dead only if it has been alive first, so this function doesn't include heroes not found yet
+bool ModuleEntityManager::CheckIfHeroIsDead(ENTITY_TYPE heroType) const
+{
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		if (deadMelee != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		if (deadRanged != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		if (deadGatherer != nullptr)
+		{
+			return true;
+		}
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		if (deadRobo != nullptr)
+		{
+			return true;
+		}
+		break;
+	}
+	return false;
+}
+
+
+//Note that this function erases what was inside the target variable (dead hero) before creating a new one to prevent 
+//memory leaks when Saving/Loading and creating more than 1 hero of type. To check if a certain hero is dead use the CheckIfHeroIsDead() function
+DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
+{
+	ENTITY_TYPE heroType = dyingHero.GetType();
+	DeadHero** refhero;
+
+	//assinging the correct dead hero variable to refhero to make it easy to work with
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+
+	default:
+		return nullptr;
+	}
+
+	//deletes information about any hero stored in that variable
+	if (*refhero != nullptr)
+	{
+		delete* refhero;
+		*refhero = nullptr;
+	}
+
+
+	*refhero = new DeadHero(dyingHero.GetHeroLevel(), dyingHero.GetType(), dyingHero.GetSkill1());
+
+	return *refhero;
+}
+
+DeadHero* ModuleEntityManager::AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill)
+{
+
+	DeadHero** refhero;
+
+	//assinging the correct dead hero variable to refhero to make it easy to work with
+	switch (type)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+
+	default:
+		return nullptr;
+	}
+
+	//deletes information about any hero stored in that variable
+	if (*refhero != nullptr)
+	{
+		delete* refhero;
+		*refhero = nullptr;
+	}
+
+
+	*refhero = new DeadHero(level, type, skill);
+
+	return *refhero;
+}
+
+
+void ModuleEntityManager::DeleteDeadHero(ENTITY_TYPE heroType)
+{
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		if (deadMelee != nullptr)
+		{
+			delete deadMelee;
+			deadMelee = nullptr;
+		}
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		if (deadRanged != nullptr)
+		{
+			delete deadRanged;
+			deadRanged = nullptr;
+		}
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		if (deadGatherer != nullptr)
+		{
+			delete deadGatherer;
+			deadGatherer = nullptr;
+		}
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		if (deadRobo != nullptr)
+		{
+			delete deadRobo;
+			deadRobo = nullptr;
+		}
+		break;
+	}
+
+}
+
+
+void ModuleEntityManager::DeleteAllDeadHeroes()
+{
+
+	if (deadMelee != nullptr)
+	{
+		delete deadMelee;
+		deadMelee = nullptr;
+	}
+
+	if (deadRanged != nullptr)
+	{
+		delete deadRanged;
+		deadRanged = nullptr;
+	}
+
+	if (deadGatherer != nullptr)
+	{
+		delete deadGatherer;
+		deadGatherer = nullptr;
+	}
+
+	if (deadRobo != nullptr)
+	{
+		delete deadRobo;
+		deadRobo = nullptr;
+	}
+
+}
+
+
+void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType) const
+{
+	DeadHero* refhero = nullptr;
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = deadRobo;
+		break;
+	}
+
+	if (refhero != nullptr)
+	{
+		pugi::xml_node statsnode = deadHeroesNode.append_child("stats");
+
+		statsnode.append_attribute("level") = refhero->GetLevel();
+		statsnode.append_attribute("type") = (int)heroType;
+		SKILL_ID skillId;
+		int skillLevel;
+		refhero->GetSkillInfo(skillId, skillLevel);
+		statsnode.append_attribute("skillId") = (int)skillId;
+		statsnode.append_attribute("skillLvl") = skillLevel;
+
+	}
+
+}
+
+void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TYPE heroType)
+{
+	DeadHero** refhero = nullptr;
+
+	switch (heroType)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		refhero = &deadMelee;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		refhero = &deadRanged;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		refhero = &deadGatherer;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		refhero = &deadRobo;
+		break;
+	}
+
+
+	pugi::xml_node statsnode = deadHeroesNode.child("stats");
+
+	int level = statsnode.attribute("level").as_int(-1);
+	ENTITY_TYPE type = (ENTITY_TYPE)statsnode.attribute("type").as_int(-1);
+	SKILL_ID skillId;
+	int skillLevel;
+
+
+	skillId = (SKILL_ID)statsnode.attribute("skillId").as_int(-1);
+	skillLevel = statsnode.attribute("skillLvl").as_int(-1);
+
+	Skill skill;
+	skill.id = skillId;
+	skill.lvl = skillLevel;
+
+	*refhero = AssignNewDeadHero(level, type, skill);
+
+
+	//Work in progress
+
+}
+
+
 Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT alig)
 {
 	ENTITY_ALIGNEMENT alignementToSearch = ENTITY_ALIGNEMENT::UNKNOWN;
@@ -1094,6 +1514,7 @@ void ModuleEntityManager::RemoveDeletedEntities()
 			CheckDynamicEntitysObjectives(entityVector[i]);
 			app->player->CheckFocusedEntity(entityVector[i]);
 			app->uiManager->CheckFocusEntity(entityVector[i]);
+			app->questManager->CheckEntityDead(entityVector[i]);
 
 
 			type = entityVector[i]->GetType();
@@ -1359,8 +1780,10 @@ void ModuleEntityManager::DrawOnlyStaticBuildings()
 	{
 		if (entityVector[i]->GetType() == ENTITY_TYPE::BUILDING)
 		{
-
-			entityVector[i]->MinimapDraw(scale, halfWidth);
+			if (entityVector[i]->visionEntity != nullptr && entityVector[i]->visionEntity->isVisible == true)
+			{
+				entityVector[i]->MinimapDraw(scale, halfWidth);
+			}
 		}
 
 	}
@@ -1415,6 +1838,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	{
 	case EVENT_ENUM::ENTITY_DEAD:
 		RemoveDeletedEntities();
+		break;
+
+	case EVENT_ENUM::PLAYER_CONQUERED_A_BASE:
+		if (CheckPlayerBases() == 2)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::FIRST_BASE_CONQUERED, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case EVENT_ENUM::DAY_START:
@@ -1496,23 +1926,34 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::GATHERER_RESURRECT:
-		// TODO REVIVE HEROES FUNCTION
-		break;
-
-	case EVENT_ENUM::RANGED_RESURRECT:
-
+		ReviveHero(*deadGatherer);
+		DeleteDeadHero(ENTITY_TYPE::HERO_GATHERER);
 		break;
 
 	case EVENT_ENUM::MELEE_RESURRECT:
-
+		ReviveHero(*deadMelee);
+		DeleteDeadHero(ENTITY_TYPE::HERO_MELEE);
 		break;
 
-	case EVENT_ENUM::GATHERER_LIFE_UPGRADE: 	
+	case EVENT_ENUM::RANGED_RESURRECT:
+		ReviveHero(*deadRanged);
+		DeleteDeadHero(ENTITY_TYPE::HERO_RANGED);
+		break;
+
+	case EVENT_ENUM::ROBOTTO_RESURRECT:
+		ReviveHero(*deadRobo);
+		DeleteDeadHero(ENTITY_TYPE::HERO_ROBO);
+		break;
+
+	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * gathererLifeUpgradeValue));
+				int previousHealth = entityVector[i]->GetMaxHP();
+				gathererLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
+				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}
@@ -1524,8 +1965,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
-				Hero* hero = (Hero*) entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage() * gathererDamageUpgradeValue);
+				gathererDamageUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
 		}
@@ -1538,7 +1980,10 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * gathererEnergyUpgradeValue);
+				int previousEnergy = hero->GetMaxEnergyPoints();
+				gathererEnergyUpgradeValue *= upgradeValue;
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
+				hero->AddEnergyPoints(hero->GetMaxEnergyPoints() - previousEnergy);
 				break;
 			}
 		}
@@ -1550,20 +1995,24 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
+				gathererAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed() * gathererAtkSpeedUpgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
 				break;
 			}
 		}
 
 		break;
-	
+
 	case EVENT_ENUM::RANGED_LIFE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * rangedLifeUpgradeValue));
+				int previousHealth = entityVector[i]->GetMaxHP();
+				rangedLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
+				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}
@@ -1573,10 +2022,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
+				rangedDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage() * rangedDamageUpgradeValue);
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
 		}
@@ -1586,10 +2036,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * rangedEnergyUpgradeValue);
+				int previousEnergy = hero->GetMaxEnergyPoints();
+				rangedEnergyUpgradeValue *= upgradeValue;
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
+				hero->AddEnergyPoints(hero->GetMaxEnergyPoints() - previousEnergy);
 				break;
 			}
 		}
@@ -1599,10 +2052,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
+				rangedAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed() * rangedAtkSpeedUpgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
 				break;
 			}
 		}
@@ -1614,7 +2068,10 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
-				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * meleeLifeUpgradeValue));
+				int previousHealth = entityVector[i]->GetMaxHP();
+				meleeLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
+				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}
@@ -1624,10 +2081,11 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_DAMAGE_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
+				meleeDamageUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackDamage(hero->GetAttackDamage()* meleeDamageUpgradeValue);
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
 				break;
 			}
 		}
@@ -1637,10 +2095,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ENERGY_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints()* meleeEnergyUpgradeValue);
+				int previousEnergy = hero->GetMaxEnergyPoints();
+				meleeEnergyUpgradeValue *= upgradeValue;
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
+				hero->AddEnergyPoints(hero->GetMaxEnergyPoints() - previousEnergy);
 				break;
 			}
 		}
@@ -1650,16 +2111,75 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE:
 		for (int i = 0; i < entityVector.size(); i++)
 		{
-			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
+				meleeAtkSpeedUpgradeValue *= upgradeValue;
 				Hero* hero = (Hero*)entityVector[i];
-				hero->SetAttackSpeed(hero->GetAttackSpeed()* meleeAtkSpeedUpgradeValue);
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
 				break;
 			}
 		}
 
 		break;
 
+	case EVENT_ENUM::ROBOTTO_LIFE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				int previousHealth = entityVector[i]->GetMaxHP();
+				robottoLifeUpgradeValue *= upgradeValue;
+				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
+				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoDamageUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackDamage(hero->GetAttackDamage() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				int previousEnergy = hero->GetMaxEnergyPoints();
+				robottoEnergyUpgradeValue *= upgradeValue;
+				hero->SetMaxEnergyPoints(hero->GetMaxEnergyPoints() * upgradeValue);
+				hero->AddEnergyPoints(hero->GetMaxEnergyPoints() - previousEnergy);
+				break;
+			}
+		}
+
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				robottoAtkSpeedUpgradeValue *= upgradeValue;
+				Hero* hero = (Hero*)entityVector[i];
+				hero->SetAttackSpeed(hero->GetAttackSpeed() * upgradeValue);
+				break;
+			}
+		}
+
+		break;
 
 	}
 
@@ -1691,7 +2211,6 @@ void ModuleEntityManager::GetEntityNeighbours(std::vector<DynamicEntity*>* close
 				if (distance < thisUnit->moveRange2)
 				{
 					colliding_entity_list->push_back(it);
-
 				}
 				if (distance < thisUnit->moveRange1)
 				{
@@ -1745,6 +2264,9 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+		sampleUpgradeCenter->ActivateTransparency();
+		sampleUpgradeCenter->SetPosition(x, y);
+		sampleUpgradeCenter->Draw(0.0000001);
 		break;
 
 
@@ -1757,6 +2279,14 @@ void ModuleEntityManager::PlayerBuildPreview(int x, int y, ENTITY_TYPE type)
 
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
+		sampleBarricade->ActivateTransparency();
+		sampleBarricade->SetPosition(x, y);
+		sampleBarricade->Draw(0);
+
+		if (app->input->GetKey(SDL_SCANCODE_R) == KEY_STATE::KEY_DOWN)
+		{
+			sampleBarricade->Flip();
+		}
 		break;
 
 
@@ -1904,31 +2434,6 @@ void ModuleEntityManager::KillAllEnemies()
 }
 
 
-bool ModuleEntityManager::BuildArea(skillArea* areaToGenerate, int width, int height, int radius)
-{
-	switch (areaToGenerate->form)
-	{
-	case AREA_TYPE::CIRCLE:
-	{
-		areaToGenerate->area = BuildCircleArea(radius);
-		areaToGenerate->radius = radius;
-		return true;
-	}
-	break;
-	case AREA_TYPE::QUAD:
-	{
-		areaToGenerate->area = BuildQuadArea(width, height);
-		areaToGenerate->width = width;
-		areaToGenerate->heigth = height;
-		return true;
-	}
-	break;
-	}
-
-	return false;
-}
-
-
 unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 {
 	unsigned short* circle = nullptr;
@@ -1956,83 +2461,233 @@ unsigned short* ModuleEntityManager::BuildCircleArea(int radius)
 }
 
 
-unsigned short* ModuleEntityManager::BuildQuadArea(int w, int h)
-{
-	unsigned short* quad = nullptr;
-
-	quad = new unsigned short[w * h];
-
-	for (int y = 0; y < h; y++)
-	{
-		for (int x = 0; x < w; x++)
-		{
-			quad[y + x] = 1;
-		}
-	}
-
-	return quad;
-}
-
-
-skillArea* ModuleEntityManager::RequestArea(SKILL_ID callback, std::vector <iMPoint>* toFill, iMPoint center)
+skillArea* ModuleEntityManager::GenerateNewArea(int radius)
 {
 	skillArea* ret = nullptr;
-	std::unordered_map<SKILL_ID, skillArea> ::iterator it;
+	std::map<int, skillArea> ::iterator it;
 
-	for (it = skillAreas.begin(); it != skillAreas.end(); it++)
+	if (skillAreas.count(radius) > 0)
 	{
-		if (it->first == callback)
-		{
-			ret = &it->second;
-			break;
-		}
+		skillAreas.at(radius).users++;
+	}
+	else
+	{
+		skillArea newArea;
+
+		newArea.area = BuildCircleArea(radius);
+		newArea.users = 1;
+
+		skillAreas.insert({ radius, newArea });
+
 	}
 
-	if (it == skillAreas.end())
-		return ret;
-
-	center = app->map->WorldToMap(round(center.x), round(center.y));
-	GenerateDynArea(toFill, ret, center);
-
-	return ret;
+	return &skillAreas.at(radius);
 }
 
-
-void ModuleEntityManager::GenerateDynArea(std::vector <iMPoint>* toFill, skillArea* area, iMPoint center)
+skillArea* ModuleEntityManager::RequestAreaInfo(int radius)
 {
-	switch (area->form)
+	if (skillAreas.count(radius) == 0)
 	{
-	case AREA_TYPE::CIRCLE:
-	{
-		int diameter = (area->radius * 2) + 1;
-		iMPoint posCheck = center - area->radius;
-		toFill->clear();
+		GenerateNewArea(radius);
+	}
+	return &skillAreas.at(radius);
 
+}
+
+void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int radius, iMPoint center, skillArea* skillArea)
+{
+
+	center = app->map->WorldToMap(round(center.x), round(center.y));
+	toFill->clear();
+
+	int diameter = (radius * 2) + 1;
+	iMPoint posCheck = center - radius;
+
+	if (skillArea == nullptr)
+	{
+		skillArea = RequestAreaInfo(radius);
+	}
+
+	if (skillArea != nullptr)
 		for (int y = 0; y < diameter; y++)
 		{
 			for (int x = 0; x < diameter; x++)
 			{
-				if (area->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
+				if (skillArea->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
 				{
 					toFill->push_back(posCheck + iMPoint{ x, y });
 				}
 			}
 		}
+
+}
+
+bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requestLvl)
+{
+	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
+
+	pugi::xml_document skillDoc;
+	skillDoc.load_file(skillFileName.GetString());
+	pugi::xml_node skills = skillDoc.child("skills");
+
+	bool toRet(false);
+	int currLvl = 1;
+
+	for (pugi::xml_node iterator = skills.first_child(); iterator; iterator = iterator.next_sibling())
+	{
+		if (iterator.attribute("id").as_int(-1) == (int)id)
+		{
+			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2; iterator2 = iterator.next_sibling())
+			{
+				if (currLvl == requestLvl)
+				{
+					skillToFill.attackRadius = iterator2.attribute("attackRadius").as_int(-1);
+					skillToFill.coolDown = iterator2.attribute("cooldown").as_float(-1.f);
+					skillToFill.dmg = iterator2.attribute("dmg").as_int(-1);
+					skillToFill.effect = (SKILL_EFFECT)iterator2.attribute("effect").as_int(-1);
+					skillToFill.executionTime = iterator2.attribute("executionTime").as_float(-1.f);
+					skillToFill.hurtYourself = iterator2.attribute("hurtYourself").as_bool(false);
+					skillToFill.lvl = currLvl;
+					skillToFill.rangeRadius = iterator2.attribute("rangeRadius").as_int(-1);
+					skillToFill.energyCost = iterator2.attribute("energyCost").as_int(-1);;
+
+
+					skillToFill.type = (SKILL_TYPE)iterator.attribute("type").as_int(-1);
+					skillToFill.target = (ENTITY_ALIGNEMENT)iterator.attribute("alignTarget").as_int(-1);
+					skillToFill.id = (SKILL_ID)iterator.attribute("id").as_int();
+
+
+					toRet = true;
+					break;
+				}
+
+				currLvl++;
+			}
+
+			break;
+		}
+
 	}
-	break;
-	case AREA_TYPE::QUAD:
-	{}
-	break;
+
+	skillDoc.reset();
+
+	return toRet;
+}
+
+bool ModuleEntityManager::RequestHeroStats(HeroStats& hero, ENTITY_TYPE id, int lvl)
+{
+	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
+
+	P2SString heroFileName;
+
+	switch (id)
+	{
+	case ENTITY_TYPE::HERO_MELEE:
+		heroFileName = armoredFileName;
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		heroFileName = rangedFileName;
+		break;
+	case ENTITY_TYPE::HERO_GATHERER:
+		heroFileName = suitmanFileName;
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		heroFileName = roboFileName;
+		break;
+	default:
+		break;
 	}
+
+	if (heroFileName.Length() == 0)
+		return false;
+
+	pugi::xml_document heroDoc;
+	heroDoc.load_file(heroFileName.GetString());
+	pugi::xml_node stats = heroDoc.first_child().child("sample").child("stats");
+
+	bool toRet(false);
+	int currLvl = 1;
+
+
+	for (pugi::xml_node iterator = stats.first_child(); iterator; iterator = iterator.next_sibling())
+	{
+		if (currLvl == lvl)
+		{
+			//hero.SetMaxHP(iterator.attribute("hp").as_int(-1));
+			//hero.SetAttackDamage(iterator.attribute("damage").as_int(-1));
+			//hero.SetMaxEnergyPoints(iterator.attribute("energy").as_int(-1));
+			//hero.SetAttackSpeed(iterator.attribute("atkSpeed").as_float(-1));
+			//hero.SetRecoveryHitPointsRate(iterator.attribute("liferecoveryRate").as_float(-1));
+			//hero.SetRecoveryEnergyRate(iterator.attribute("energyrecoveryRate").as_float(-1));
+			//hero.SetHeroLevel(lvl);
+
+			//hero.SetSpeed(stats.attribute("movementSpeed").as_int(-1));
+			//hero.SetVisionDistance(stats.attribute("vision").as_int(-1));
+			//hero.SetAttackRange(stats.attribute("attackRange").as_float(-1));
+
+			hero.maxHP = (iterator.attribute("hp").as_int(-1));
+			hero.currHP = hero.maxHP;
+			hero.damage = (iterator.attribute("damage").as_int(-1));
+			hero.maxEnergy = (iterator.attribute("energy").as_int(-1));
+			hero.currEnergy = hero.maxEnergy;
+			hero.atkSpeed = (iterator.attribute("atkSpeed").as_float(-1));
+			hero.recoveryHPRate = (iterator.attribute("liferecoveryRate").as_float(-1));
+			hero.recoveryEnergyRate = (iterator.attribute("energyrecoveryRate").as_float(-1));
+			hero.heroLevel = (lvl);
+			hero.xpToLvlUp = iterator.attribute("xpToLvlUp").as_int(-1);
+
+			hero.movSpeed = (stats.attribute("movementSpeed").as_int(-1));
+			hero.visionDistance = (stats.attribute("vision").as_int(-1));
+			hero.attackRange = (stats.attribute("attackRange").as_float(-1));
+
+			toRet = true;
+			break;
+		}
+
+		currLvl++;
+	}
+
+
+	heroDoc.reset();
+
+	return toRet;
 }
 
 
-int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, ENTITY_ALIGNEMENT target,
-	SKILL_TYPE type, bool hurtYourself, Entity* objective)
+
+bool ModuleEntityManager::ReviveHero(DeadHero heroToRevive)
+{
+	HeroStats newStats;
+	Skill newSkill;
+	SKILL_ID newSkillId;
+	int newSkillLvl;
+
+	//Requests the hero stats and skill to build a new hero
+	RequestHeroStats(newStats, heroToRevive.GetType(), heroToRevive.GetLevel());
+	heroToRevive.GetSkillInfo(newSkillId, newSkillLvl);
+	RequestSkill(newSkill, newSkillId, newSkillLvl);
+
+	Hero* newHero = nullptr;
+	fMPoint spawnpoint = app->player->focusedEntity->position;
+	newHero = (Hero*)AddEntity(heroToRevive.GetType(), spawnpoint.x, spawnpoint.y, ENTITY_ALIGNEMENT::PLAYER);
+
+	if (newHero != nullptr)
+	{
+		newHero->ReplaceSkill1(newSkill);
+		newHero->ReplaceHeroStats(newStats);
+
+		return true;
+	}
+
+	return false;
+}
+
+
+int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objective)
 {
 	int ret = -1;
 
-	switch (type)
+	switch (skill.type)
 	{
 	case SKILL_TYPE::SINGLE_TARGET:
 	{}
@@ -2044,13 +2699,13 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 		Collider* entColl = nullptr;
 		float halfH = app->map->data.tileHeight * 0.5;
 		float halfW = app->map->data.tileWidth * 0.5;
-		float newRad = sqrt(halfW * halfW + halfH * halfH) * area->radius + 0.5f * area->radius;
+		float newRad = sqrt(halfW * halfW + halfH * halfH) * skill.attackRadius + 0.5f * skill.attackRadius;
 
 		for (int i = 0; i < numEntities; i++)
 		{
-			if (entityVector[i]->GetAlignment() != target)
+			if (entityVector[i]->GetAlignment() != skill.target)
 			{
-				if (!hurtYourself || entityVector[i] != objective)
+				if (!skill.hurtYourself || entityVector[i] != objective)
 				{
 					continue;
 				}
@@ -2061,26 +2716,22 @@ int ModuleEntityManager::ExecuteSkill(int dmg, iMPoint pivot, skillArea* area, E
 			if (entColl == nullptr)
 				continue;
 
-			switch (area->form)
+
+			if (entColl->CheckCollisionCircle(pivot, newRad))
 			{
-			case AREA_TYPE::CIRCLE:
-			{
-				if (entColl->CheckCollisionCircle(pivot, newRad))
+				ret += entityVector[i]->RecieveDamage(skill.dmg);
+
+				if (skill.effect != SKILL_EFFECT::NO_EFFECT)
 				{
-					ret += entityVector[i]->RecieveDamage(dmg);
+
 				}
 			}
-			break;
-			case AREA_TYPE::QUAD:
-			{}
-			break;
 
-			}
 		}
 	}
-	break;
-	}
+
 	return ret;
+	}
 }
 
 
@@ -2120,30 +2771,17 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	pos.x = heroNode.child("sample").child("position").attribute("x").as_float(0);
 	pos.y = heroNode.child("sample").child("position").attribute("y").as_float(0);
 
-	int level = heroNode.child("sample").child("stats").attribute("level").as_int(0);
-	int movSpd = heroNode.child("sample").child("stats").attribute("movementSpeed").as_int(0);
-	int visTiles = heroNode.child("sample").child("stats").attribute("vision").as_int(0);
 
-
-	int maxHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("max").as_int(0);
-	int currentHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("current").as_int(0);
-	int recoveryHP = heroNode.child("sample").child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
-
-	int maxEnergy = heroNode.child("sample").child("stats").child("energyPoints").attribute("max").as_int(0);
-	int currentEnergy = heroNode.child("sample").child("stats").child("energyPoints").attribute("current").as_int(0);
-	int recoveryE = heroNode.child("sample").child("stats").child("energyPoints").attribute("recoveryRate").as_int(0);
-
-	int atkDmg = heroNode.child("sample").child("stats").child("attack").attribute("damage").as_int(0);
-	float atkSpd = heroNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
-	int atkRange = heroNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
 
 	//skill1
-	float skill1ExecTime = heroNode.child("sample").child("skills").child("skill1").attribute("executionTime").as_float(0);
-	float skill1RecovTime = heroNode.child("sample").child("skills").child("skill1").attribute("recoverTime").as_float(0);
-	int skill1Dmg = heroNode.child("sample").child("skills").child("skill1").attribute("damage").as_int(0);
+
 	SKILL_ID skill1ID = (SKILL_ID)heroNode.child("sample").child("skills").child("skill1").attribute("id").as_int(0);
-	SKILL_TYPE skill1Type = (SKILL_TYPE)heroNode.child("sample").child("skills").child("skill1").attribute("type").as_int(0);
-	ENTITY_ALIGNEMENT skill1Target = (ENTITY_ALIGNEMENT)heroNode.child("sample").child("skills").child("skill1").attribute("targetAligment").as_int(0);
+	Skill heroSkill;
+	RequestSkill(heroSkill, skill1ID, 1);
+
+	SKILL_ID passiveSkillID = (SKILL_ID)heroNode.child("sample").child("skills").child("passive").attribute("id").as_int(0);
+	Skill passiveSkill;
+	RequestSkill(passiveSkill, passiveSkillID, 1);
 
 	//skill2
 	float skill2ExecTime = heroNode.child("sample").child("skills").child("skill2").attribute("executionTime").as_float(0);
@@ -2197,6 +2835,10 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 
 	Animation tileOnWalk = tileOnWalk.PushAnimation(vfx, "onMyWay");
 
+	//Stats ---------------------------------
+	HeroStats sampleStats;
+
+	RequestHeroStats(sampleStats, heroType);
 
 	switch (heroType)
 	{
@@ -2207,9 +2849,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target);
+			sampleStats, heroSkill, passiveSkill);
 
 		ret = true;
 		break;
@@ -2222,9 +2862,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target);
+			sampleStats, heroSkill);
 
 		ret = true;
 		break;
@@ -2237,9 +2875,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			1, maxHP, maxHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target);
+			sampleStats, heroSkill);
 
 		ret = true;
 		break;
@@ -2256,9 +2892,7 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			level, maxHP, currentHP, recoveryHP, maxEnergy, maxEnergy, recoveryE, atkDmg, atkSpd, atkRange,
-			movSpd, visTiles, skill1ExecTime, skill2ExecTime, skill3ExecTime, skill1RecovTime, skill2RecovTime, skill3RecovTime,
-			skill1Dmg, skill1ID, skill1Type, skill1Target, vfxExplosion);
+			sampleStats, heroSkill, passiveSkill, vfxExplosion);
 
 		ret = true;
 		break;
@@ -2428,6 +3062,67 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 }
 
 
+bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
+{
+	barricadeNode = barricadeNode.first_child();
+
+	//Collider
+	int colW = barricadeNode.child("collider").child("rect").attribute("w").as_int();
+	int colH = barricadeNode.child("collider").child("rect").attribute("h").as_int();
+	COLLIDER_TYPE type = (COLLIDER_TYPE)barricadeNode.child("collider").child("type").attribute("id").as_int();
+
+	//Rects
+	SDL_Rect verticalRect{ barricadeNode.child("rect").child("verticalRect").attribute("x").as_int(), barricadeNode.child("rect").child("verticalRect").attribute("y").as_int(),
+	barricadeNode.child("rect").child("verticalRect").attribute("w").as_int() , barricadeNode.child("rect").child("verticalRect").attribute("h").as_int() };
+
+	SDL_Rect horizontalRect{ barricadeNode.child("rect").child("horizontalRect").attribute("x").as_int(), barricadeNode.child("rect").child("horizontalRect").attribute("y").as_int(),
+	barricadeNode.child("rect").child("horizontalRect").attribute("w").as_int() , barricadeNode.child("rect").child("horizontalRect").attribute("h").as_int() };
+
+	//Stats
+	int level = barricadeNode.child("stats").attribute("level").as_int(0);
+	int vision = barricadeNode.child("stats").attribute("vision").as_int(0);
+	int xp = barricadeNode.child("stats").attribute("xp").as_int(0);
+	int buildingCost = barricadeNode.child("stats").attribute("buildingCost").as_int(0);
+	int transparency = barricadeNode.child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = barricadeNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = barricadeNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = barricadeNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, type, this), verticalRect, horizontalRect);
+
+	return true;
+}
+
+
+bool ModuleEntityManager::LoadSampleUpgradeCenter(pugi::xml_node& upgradeCenterNode)
+{
+	upgradeCenterNode = upgradeCenterNode.first_child();
+
+	//Collider
+	int colW = upgradeCenterNode.child("collider").child("rect").attribute("w").as_int();
+	int colH = upgradeCenterNode.child("collider").child("rect").attribute("h").as_int();
+	COLLIDER_TYPE type = (COLLIDER_TYPE)upgradeCenterNode.child("collider").child("type").attribute("id").as_int();
+	SDL_Rect rect = { 0, 0, colW, colH };
+
+	//Stats
+	int xp = upgradeCenterNode.child("stats").attribute("xp").as_int(0);
+	int buildingCost = upgradeCenterNode.child("stats").attribute("buildingCost").as_int(0);
+	int transparency = upgradeCenterNode.child("stats").attribute("transparency").as_int(0);
+
+	int maxHP = upgradeCenterNode.child("stats").child("hitPoints").attribute("max").as_int(0);
+	int currentHP = upgradeCenterNode.child("stats").child("hitPoints").attribute("current").as_int(0);
+	int recoveryHP = upgradeCenterNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
+
+	int upgradeTurretCost = upgradeCenterNode.child("costs").attribute("upgradeTurret").as_int(0);
+	int upgradeBarricadeCost = upgradeCenterNode.child("costs").attribute("upgradeBarricade").as_int(0);
+
+	sampleUpgradeCenter = new UpgradeCenter(fMPoint(0, 0), upgradeTurretCost, upgradeBarricadeCost, maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(rect, type, this));
+
+	return true;
+}
+
+
 bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
 {
 	bool ret = true;
@@ -2537,8 +3232,43 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 {
 	bool ret = true;
 
+
+	//DATA--------------
+
+	Animation anim1;
+	anim1.PushBack(SDL_Rect{ 0, 0, 10, 10 }, 1, 0, 0);
+
+	Animation anim2;
+	anim2.PushBack(SDL_Rect{ 0, 12, 6, 6 }, 1, 0, 0);
+
+	Animation anim3;
+	anim3.PushBack(SDL_Rect{ 7, 11, 8, 8 }, 1, 0, 0);
+
+	float auxPosX = 0;							float auxPos3X = 0;
+	float auxPosY = 0;							float auxPos3Y = 0;
+	float auxSpeedX = 0;						float auxSpeed3X = 0;
+	float auxSpeedY = 4;						float auxSpeedY3 = 6;
+	int particleVariationSpeedX = 0;			int particleVariationSpeedX3 = 0;
+	int particleVariationSpeedY = 2;			int particleVariationSpeedY3 = 2;
+	float particleAccelerationX = 0.2;			float particleAccelerationX3 = 0.2;
+	float particleAccelerationY = -0.5;			float particleAccelerationY3 = -0.5;
+	int particleVariationAccelerationX = 1;		int particleVariationAccelerationX3 = 1;
+	int particleVariationAccelerationY = 0;		int particleVariationAccelerationY3 = 0;
+	float particleAngularSpeed = 0;				float particleAngularSpeed3 = 0;
+	int particleVariableAngularSpeed = 1;		int particleVariableAngularSpeed3 = 1;
+	float particlesRate = 8;					float particlesRate3 = 13;
+	float particlesLifeTime = 0.55;				float particlesLifeTime3 = 0.55;
+
+
+	//SAMPLES--------------
+
 	sampleParticleSystem = new ParticleSystem();
-	//Code to fill
+
+	sampleEmitter = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
+	sampleEmitter2 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
+
+	sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+	sampleEmitter4 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
 
 	return ret;
 }
@@ -2550,21 +3280,13 @@ bool ModuleEntityManager::LoadSkillAreas(pugi::xml_node& areasNode)
 	bool ret = true;
 
 	skillArea area;
-	SKILL_ID id;
-	int w;
-	int h;
 	int r;
 
 	for (pugi::xml_node currentArea = areasNode.child("area"); currentArea; currentArea = currentArea.next_sibling("area"))
 	{
-		area.form = (AREA_TYPE)currentArea.attribute("type").as_int(0);
-		w = currentArea.child("measures").attribute("w").as_int(0);
-		h = currentArea.child("measures").attribute("h").as_int(0);
 		r = currentArea.child("measures").attribute("r").as_int(0);
-		id = (SKILL_ID)currentArea.attribute("id").as_int(0);
 
-		BuildArea(&area, w, h, r);
-		skillAreas.insert({ id, area });
+		GenerateNewArea(r);
 	}
 
 	return ret;
@@ -2638,8 +3360,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -2658,6 +3380,12 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
+
+			meleeLifeUpgradeValue = iterator.attribute("hp").as_float();
+			meleeDamageUpgradeValue = iterator.attribute("damage").as_float();
+			meleeEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			meleeAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2669,8 +3397,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -2689,6 +3417,12 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
+
+			rangedLifeUpgradeValue = iterator.attribute("hp").as_float();
+			rangedDamageUpgradeValue = iterator.attribute("damage").as_float();
+			rangedEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			rangedAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2700,8 +3434,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -2720,6 +3454,12 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
+
+			gathererLifeUpgradeValue = iterator.attribute("hp").as_float();
+			gathererDamageUpgradeValue = iterator.attribute("damage").as_float();
+			gathererEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			gathererAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2731,8 +3471,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetExpToLevelUp(iterator.attribute("exp_to_level_up").as_int());
 			hero->SetHeroXP(iterator.attribute("hero_xp").as_int());
 
-			hero->hitPointsCurrent = iterator.attribute("hit_points").as_int();
-			hero->hitPointsMax = iterator.attribute("max_hit_points").as_int();
+			hero->SetCurrentHP(iterator.attribute("hit_points").as_int());
+			hero->SetMaxHP(iterator.attribute("max_hit_points").as_int());
 			hero->SetRecoveryHitPointsRate(iterator.attribute("recovery_hit_points_rate").as_int());
 
 			hero->SetEnergyPoints(iterator.attribute("energy_points").as_int());
@@ -2751,6 +3491,12 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetVisionInPx(iterator.attribute("vision_in_px").as_float());
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
+			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
+
+			robottoLifeUpgradeValue = iterator.attribute("hp").as_float();
+			robottoDamageUpgradeValue = iterator.attribute("damage").as_float();
+			robottoEnergyUpgradeValue = iterator.attribute("energy").as_float();
+			robottoAtkSpeedUpgradeValue = iterator.attribute("atkSpeed").as_float();
 		}
 
 
@@ -2759,21 +3505,24 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_RANGED, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
 			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 		else if (type == "enemy_night")
 		{
-		enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_NIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
-		enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 
 		else if (type == "enemy_giga")
 		{
-		enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
+			enemy = (Enemy*)AddEntity(ENTITY_TYPE::ENEMY_GIGA, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
-		enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetLongTermObjective(fMPoint(iterator.attribute("objective_x").as_int(), iterator.attribute("objective_y").as_int()));
+			enemy->SetCurrentHP(iterator.attribute("hit_points").as_int());
 		}
 
 
@@ -2803,6 +3552,8 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 			base = (Base*)AddEntity(ENTITY_TYPE::BLDG_BASE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
+			base->SetCurrentHP(iterator.attribute("hit_points").as_int());
+
 			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling(), i++)
 			{
 				P2SString name(iterator2.attribute("name").as_string());
@@ -2812,6 +3563,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 					turret = (Turret*)AddEntity(ENTITY_TYPE::BLDG_TURRET, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 					turret->SetLevel(iterator2.attribute("level").as_int());
+					turret->SetCurrentHP(iterator.attribute("hit_points").as_int());
 
 					base->AddTurret(turret);
 				}
@@ -2819,6 +3571,9 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 				if (name == "barricade")
 				{
 					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+
+					barricade->SetLevel(iterator2.attribute("level").as_int());
+					barricade->SetCurrentHP(iterator.attribute("hit_points").as_int());
 
 					base->AddBarricade(barricade);
 				}
@@ -2833,6 +3588,30 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 		}
 	}
+
+
+	//deathEntitesSaving
+	pugi::xml_node deadEntities = data.child("deadEntities");
+
+	DeleteAllDeadHeroes();
+
+	if (deadEntities.child("deadGatherer") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
+	}
+	if (deadEntities.child("deadRanged") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadRanged"), ENTITY_TYPE::HERO_RANGED);
+	}
+	if (deadEntities.child("deadMelee") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadMelee"), ENTITY_TYPE::HERO_MELEE);
+	}
+	if (deadEntities.child("deadRobo") != NULL)
+	{
+		LoadDeadHero(deadEntities.child("deadRobo"), ENTITY_TYPE::HERO_ROBO);
+	}
+
 	return true;
 }
 
@@ -2858,311 +3637,449 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 	{
 		pugi::xml_node iterator = data.append_child("entity");
 
-		switch (entityVector[i]->GetType())
+		if (entityVector[i]->missionEntity == false)
 		{
-		case ENTITY_TYPE::UNKNOWN:
-			break;
 
 
-		case ENTITY_TYPE::PARTICLE_SYSTEM:
-			break;
-
-
-		case ENTITY_TYPE::SPAWNER:
-
-			iterator.append_attribute("type") = "spawner";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			spawner = (Spawner*)entityVector[i];
-
-			iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
-			iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
-			iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
-			iterator.append_attribute("active") = spawner->GetActive();
-			break;
-
-
-		case ENTITY_TYPE::HERO_MELEE:
-
-			iterator.append_attribute("type") = "hero_melee";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			hero = (Hero*)entityVector[i];
-
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
-
-			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
-
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
-
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
-
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
-
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
-
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
-			break;
-
-
-		case ENTITY_TYPE::HERO_RANGED:
-
-			iterator.append_attribute("type") = "hero_ranged";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			hero = (Hero*)entityVector[i];
-
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
-
-			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
-
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
-
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
-
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
-
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
-
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
-			break;
-
-
-		case ENTITY_TYPE::HERO_GATHERER:
-			iterator.append_attribute("type") = "hero_gatherer";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			hero = (Hero*)entityVector[i];
-
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
-
-			iterator.append_attribute("hit_points") = hero->hitPointsCurrent;
-			iterator.append_attribute("max_hit_points") = hero->hitPointsMax;
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
-
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
-
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
-
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
-
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
-
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
-			break;
-
-
-		case ENTITY_TYPE::HERO_ROBO:
-
-			iterator.append_attribute("type") = "hero_robot";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			hero = (Hero*)entityVector[i];
-
-			iterator.append_attribute("level") = hero->GetHeroLevel();
-			iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
-			iterator.append_attribute("hero_exp") = hero->GetHeroXP();
-
-			iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
-			iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
-			iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
-			iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
-
-			iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
-			iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
-			iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
-
-			iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
-			iterator.append_attribute("attack_range") = hero->GetAttackRange();
-			iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
-
-			iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
-			iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
-
-			iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
-			break;
-
-
-		case ENTITY_TYPE::ENEMY:
-
-			iterator.append_attribute("type") = "enemy";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			enemy = (Enemy*)entityVector[i];
-
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
-
-			break;
-
-
-		case ENTITY_TYPE::ENEMY_RANGED:
-
-			iterator.append_attribute("type") = "enemy_ranged";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			enemy = (Enemy*)entityVector[i];
-
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
-
-			break;
-
-
-		case ENTITY_TYPE::ENEMY_NIGHT:
-
-			iterator.append_attribute("type") = "enemy_night";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			enemy = (Enemy*)entityVector[i];
-
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
-
-			break;
-
-
-		case ENTITY_TYPE::ENEMY_GIGA:
-
-			iterator.append_attribute("type") = "enemy_giga";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			enemy = (Enemy*)entityVector[i];
-
-			iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
-			iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
-
-			break;
-
-
-		case ENTITY_TYPE::BUILDING:
-
-			iterator.append_attribute("type") = "building";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			building = (Building*)entityVector[i];
-
-			iterator.append_attribute("decor") = (int)building->GetDecor();
-
-			break;
-
-
-		case ENTITY_TYPE::BLDG_BASE:
-
-			iterator.append_attribute("type") = "base";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
-
-			base = (Base*)entityVector[i];
-
-			turretVector = base->GetTurretVector();
-			barricadeVector = base->GetBarricadeVector();
-			upgradeCenter = base->GetUpgradeCenter();
-
-			for (int i = 0; i < turretVector->size(); i++)
+			switch (entityVector[i]->GetType())
 			{
-				iterator2 = iterator.append_child("turret");
-				iterator2.append_attribute("name") = "turret";
-				iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
-				iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
+			case ENTITY_TYPE::UNKNOWN:
+				break;
 
-				iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
+
+			case ENTITY_TYPE::PARTICLE_SYSTEM:
+				break;
+
+
+			case ENTITY_TYPE::SPAWNER:
+
+				iterator.append_attribute("type") = "spawner";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				spawner = (Spawner*)entityVector[i];
+
+				iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
+				iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
+				iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
+				iterator.append_attribute("active") = spawner->GetActive();
+				break;
+
+
+			case ENTITY_TYPE::HERO_MELEE:
+
+				iterator.append_attribute("type") = "hero_melee";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				hero = (Hero*)entityVector[i];
+
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
+
+				iterator.append_attribute("hp") = meleeLifeUpgradeValue;
+				iterator.append_attribute("damage") = meleeDamageUpgradeValue;
+				iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = meleeAtkSpeedUpgradeValue;
+
+				break;
+
+
+			case ENTITY_TYPE::HERO_RANGED:
+
+				iterator.append_attribute("type") = "hero_ranged";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				hero = (Hero*)entityVector[i];
+
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
+
+				iterator.append_attribute("hp") = rangedLifeUpgradeValue;
+				iterator.append_attribute("damage") = rangedDamageUpgradeValue;
+				iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = rangedAtkSpeedUpgradeValue;
+
+				break;
+
+
+			case ENTITY_TYPE::HERO_GATHERER:
+				iterator.append_attribute("type") = "hero_gatherer";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				hero = (Hero*)entityVector[i];
+
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
+
+				iterator.append_attribute("hp") = gathererLifeUpgradeValue;
+				iterator.append_attribute("damage") = gathererDamageUpgradeValue;
+				iterator.append_attribute("energy") = gathererEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = gathererAtkSpeedUpgradeValue;
+
+				break;
+
+
+			case ENTITY_TYPE::HERO_ROBO:
+
+				iterator.append_attribute("type") = "hero_robot";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				hero = (Hero*)entityVector[i];
+
+				iterator.append_attribute("level") = hero->GetHeroLevel();
+				iterator.append_attribute("exp_to_level_up") = hero->GetExpToLevelUp();
+				iterator.append_attribute("hero_exp") = hero->GetHeroXP();
+
+				iterator.append_attribute("hit_points") = hero->GetCurrentHP();
+				iterator.append_attribute("max_hit_points") = hero->GetMaxHP();
+				iterator.append_attribute("recovery_hit_points_rate") = hero->GetRecoveryHitPointsRate();
+
+				iterator.append_attribute("energy_points") = hero->GetEnergyPoints();
+				iterator.append_attribute("max_energy_points") = hero->GetMaxEnergyPoints();
+				iterator.append_attribute("recovery_energy_rate") = hero->GetRecoveryEnergyRate();
+
+				iterator.append_attribute("recovering_health") = hero->GetRecoveringHealth();
+				iterator.append_attribute("recovering_energy") = hero->GetRecoveringEnergy();
+				iterator.append_attribute("feeling_secure") = hero->GetFeelingSecure();
+
+				iterator.append_attribute("attack_damage") = hero->GetAttackDamage();
+				iterator.append_attribute("attack_range") = hero->GetAttackRange();
+				iterator.append_attribute("attack_speed") = hero->GetAttackSpeed();
+
+				iterator.append_attribute("vision_distance") = hero->GetVisionDistance();
+				iterator.append_attribute("vision_in_px") = hero->GetVisionInPx();
+
+				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
+				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
+
+				iterator.append_attribute("hp") = robottoLifeUpgradeValue;
+				iterator.append_attribute("damage") = robottoDamageUpgradeValue;
+				iterator.append_attribute("energy") = robottoEnergyUpgradeValue;
+				iterator.append_attribute("atkSpeed") = robottoAtkSpeedUpgradeValue;
+
+				break;
+
+
+			case ENTITY_TYPE::ENEMY:
+
+				iterator.append_attribute("type") = "enemy";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				enemy = (Enemy*)entityVector[i];
+
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
+				break;
+
+
+			case ENTITY_TYPE::ENEMY_RANGED:
+
+				iterator.append_attribute("type") = "enemy_ranged";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				enemy = (Enemy*)entityVector[i];
+
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
+				break;
+
+
+			case ENTITY_TYPE::ENEMY_NIGHT:
+
+				iterator.append_attribute("type") = "enemy_night";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				enemy = (Enemy*)entityVector[i];
+
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
+				break;
+
+
+			case ENTITY_TYPE::ENEMY_GIGA:
+
+				iterator.append_attribute("type") = "enemy_giga";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				enemy = (Enemy*)entityVector[i];
+
+				iterator.append_attribute("objective_x") = enemy->GetLongTermObjectiveX();
+				iterator.append_attribute("objective_y") = enemy->GetLongTermObjectiveY();
+
+				iterator.append_attribute("hit_points") = enemy->hitPointsCurrent;
+
+				break;
+
+
+			case ENTITY_TYPE::BUILDING:
+
+				iterator.append_attribute("type") = "building";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				building = (Building*)entityVector[i];
+
+				iterator.append_attribute("decor") = (int)building->GetDecor();
+
+				break;
+
+
+			case ENTITY_TYPE::BLDG_BASE:
+
+				iterator.append_attribute("type") = "base";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				iterator.append_attribute("aligment") = (int)entityVector[i]->GetAlignment();
+
+				base = (Base*)entityVector[i];
+
+				iterator.append_attribute("hit_points") = base->hitPointsCurrent;
+
+				turretVector = base->GetTurretVector();
+				barricadeVector = base->GetBarricadeVector();
+				upgradeCenter = base->GetUpgradeCenter();
+
+				for (int i = 0; i < turretVector->size(); i++)
+				{
+					iterator2 = iterator.append_child("turret");
+					iterator2.append_attribute("name") = "turret";
+					iterator2.append_attribute("x") = turretVector->operator[](i)->position.x;
+					iterator2.append_attribute("y") = turretVector->operator[](i)->position.y;
+
+					iterator.append_attribute("hit_points") = turretVector->operator[](i)->hitPointsCurrent;
+					iterator2.append_attribute("level") = turretVector->operator[](i)->GetLvl();
+				}
+
+				for (int i = 0; i < barricadeVector->size(); i++)
+				{
+					iterator2 = iterator.append_child("barricade");
+					iterator2.append_attribute("name") = "barricade";
+					iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
+					iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
+
+					iterator.append_attribute("hit_points") = barricadeVector->operator[](i)->hitPointsCurrent;
+					iterator2.append_attribute("level") = barricadeVector->operator[](i)->GetLevel();
+				}
+
+				if (upgradeCenter != nullptr)
+				{
+					iterator2 = iterator.append_child("upgrade_center");
+					iterator2.append_attribute("name") = "upgrade_center";
+					//iterator2.append_attribute("x") = upgradeCenter->position.x;
+					//iterator2.append_attribute("y") = upgradeCenter->position.y;
+				}
+
+				break;
+
+			case ENTITY_TYPE::QUEST:
+
+				iterator.append_attribute("type") = "quest";
+
+				iterator.append_attribute("x") = entityVector[i]->position.x;
+				iterator.append_attribute("y") = entityVector[i]->position.y;
+
+				quest = (Quest*)entityVector[i];
+
+				iterator.append_attribute("id") = quest->GetId();
+
+				break;
+
+			case ENTITY_TYPE::MAX_TYPE:
+				break;
+			default:
+				break;
 			}
-
-			for (int i = 0; i < barricadeVector->size(); i++)
-			{
-				//TODO
-				iterator2 = iterator.append_child("barricade");
-				iterator2.append_attribute("name") = "barricade";
-				//iterator2.append_attribute("x") = barricadeVector->operator[](i)->position.x;
-				//iterator2.append_attribute("y") = barricadeVector->operator[](i)->position.y;
-			}
-
-			if (upgradeCenter != nullptr)
-			{
-				iterator2 = iterator.append_child("upgrade_center");
-				iterator2.append_attribute("name") = "upgrade_center";
-				//iterator2.append_attribute("x") = upgradeCenter->position.x;
-				//iterator2.append_attribute("y") = upgradeCenter->position.y;
-			}
-
-			break;
-
-		case ENTITY_TYPE::QUEST:
-
-			iterator.append_attribute("type") = "quest";
-
-			iterator.append_attribute("x") = entityVector[i]->position.x;
-			iterator.append_attribute("y") = entityVector[i]->position.y;
-
-			quest = (Quest*)entityVector[i];
-
-			iterator.append_attribute("id") = quest->GetId();
-
-			break;
-
-		case ENTITY_TYPE::MAX_TYPE:
-			break;
-		default:
-			break;
 		}
 	}
 
 
+	//deathEntitesSaving
+	pugi::xml_node deadEntities = data.append_child("deadEntities");
+
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_GATHERER) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadGatherer"), ENTITY_TYPE::HERO_GATHERER);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_RANGED) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadRanged"), ENTITY_TYPE::HERO_RANGED);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_MELEE) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadMelee"), ENTITY_TYPE::HERO_MELEE);
+	}
+	if (CheckIfHeroIsDead(ENTITY_TYPE::HERO_ROBO) == true)
+	{
+		SaveDeadHero(deadEntities.append_child("deadRobo"), ENTITY_TYPE::HERO_ROBO);
+	}
+
 
 	return true;
 }
+
+
+void ModuleEntityManager::ResetUpgradeValues()
+{
+	gathererLifeUpgradeValue = 1;
+	gathererDamageUpgradeValue = 1;
+	gathererEnergyUpgradeValue = 1;
+	gathererAtkSpeedUpgradeValue = 1;
+	meleeLifeUpgradeValue = 1;
+	meleeDamageUpgradeValue = 1;
+	meleeEnergyUpgradeValue = 1;
+	meleeAtkSpeedUpgradeValue = 1;
+	rangedLifeUpgradeValue = 1;
+	rangedDamageUpgradeValue = 1;
+	rangedEnergyUpgradeValue = 1;
+	rangedAtkSpeedUpgradeValue = 1;
+	robottoLifeUpgradeValue = 1;
+	robottoDamageUpgradeValue = 1;
+	robottoEnergyUpgradeValue = 1;
+	robottoAtkSpeedUpgradeValue = 1;
+}
+
+HeroStats::HeroStats() : maxHP(-1), damage(-1), maxEnergy(-1), atkSpeed(-1), recoveryHPRate(-1), recoveryEnergyRate(-1),
+heroLevel(-1), movSpeed(-1), visionDistance(-1), attackRange(-1), xpToLvlUp(-1), currHP(-1), currEnergy(-1)
+{}
+
+HeroStats::HeroStats(HeroStats& newStats) : maxHP(newStats.maxHP), damage(newStats.damage), maxEnergy(newStats.maxEnergy), atkSpeed(newStats.atkSpeed), recoveryHPRate(newStats.recoveryHPRate),
+recoveryEnergyRate(newStats.recoveryEnergyRate), heroLevel(newStats.heroLevel), movSpeed(newStats.movSpeed), visionDistance(newStats.visionDistance), attackRange(newStats.attackRange), xpToLvlUp(newStats.xpToLvlUp),
+currHP(newStats.currHP), currEnergy(newStats.currEnergy)
+{}
+
+HeroStats HeroStats::operator=(HeroStats& newStats)
+{
+	this->atkSpeed = newStats.atkSpeed;
+	this->attackRange = newStats.attackRange;
+	this->currEnergy = newStats.currEnergy;
+	this->currHP = newStats.currHP;
+	this->damage = newStats.damage;
+	this->heroLevel = newStats.heroLevel;
+	this->maxEnergy = newStats.maxEnergy;
+	this->maxHP = newStats.maxHP;
+	this->movSpeed = newStats.movSpeed;
+	this->recoveryEnergyRate = newStats.recoveryEnergyRate;
+	this->recoveryHPRate = newStats.recoveryHPRate;
+	this->visionDistance = newStats.visionDistance;
+	this->xpToLvlUp = newStats.xpToLvlUp;
+
+
+	return (*this);
+}
+
+
+int ModuleEntityManager::CheckPlayerBases()
+{
+	int numEntities = entityVector.size();
+	int baseNumber = 0;
+
+	for(int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER && entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE)
+		{
+			baseNumber++;
+		}
+	}
+
+	return baseNumber;
+}
+
+

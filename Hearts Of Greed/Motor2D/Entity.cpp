@@ -15,6 +15,7 @@ Entity::Entity() : position(position),
 	toDelete(false),
 	flip(false),
 	selectedByPlayer(false),
+	missionEntity(false),
 	UIAssigned(false),
 
 	collider(nullptr),
@@ -44,6 +45,7 @@ Entity::Entity(fMPoint position, ENTITY_TYPE type, ENTITY_ALIGNEMENT alignement,
 	toDelete(false),
 	flip(false),
 	selectedByPlayer(false),
+	missionEntity(false),
 	UIAssigned(false),
 
 	collider(collider),
@@ -280,7 +282,7 @@ void Entity::SetCurrentHP(int newcurrHp)
 	hitPointsCurrent = newcurrHp;
 
 	if (hitPointsCurrent > hitPointsMax)
-		hitPointsCurrent = 0;
+		hitPointsCurrent = hitPointsMax;
 }
 
 
@@ -410,4 +412,9 @@ void Entity::DebugDraw()
 
 	app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
 
+}
+
+void Entity::ApplyEffect()
+{
+	return;
 }
