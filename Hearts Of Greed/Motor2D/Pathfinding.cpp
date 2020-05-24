@@ -238,6 +238,49 @@ HierNode* graphLevel::NodeExists(iMPoint pos, Cluster* c)
 	return nullptr;
 }
 
+void graphLevel::ReCreateIntraEdges(Cluster* c)
+{
+	for (int i = 0; i < c->clustNodes.size(); i++)
+	{
+		c->clustNodes[i]->edges.clear();
+		for (int j = 0; j < c->clustNodes[i]->edges.size(); j++)
+		{
+			if (c->clustNodes[i]->edges[j]->type == EDGE_TYPE::TP_INTRA)
+			{
+				delete c->clustNodes[i]->edges[j];
+				c->clustNodes[i]->edges.erase(c->clustNodes[i]->edges.begin() + j);
+			}
+
+		}
+	}
+
+	float distanceTo = -1.f;
+
+	for (int y = 0; y < c->clustNodes.size(); y++)
+	{
+		for (int k = y + 1; k < c->clustNodes.size(); k++)
+		{
+			if (app->pathfinding->LineRayCast(c->clustNodes[y]->pos, c->clustNodes[k]->pos))
+			{
+				distanceTo = app->pathfinding->GetLastLine()->size();
+			}
+			else
+				distanceTo = app->pathfinding->SimpleAPathfinding(c->clustNodes[y]->pos, c->clustNodes[k]->pos, CLUSTER_SIZE_LVL * 2);
+
+
+			if (distanceTo != -1.f)
+			{
+				c->clustNodes[y]->edges.push_back(new Edge(c->clustNodes[k], distanceTo, EDGE_TYPE::TP_INTRA));
+				c->clustNodes[k]->edges.push_back(new Edge(c->clustNodes[y], distanceTo, EDGE_TYPE::TP_INTRA));
+			}
+
+
+		}
+	}
+
+
+}
+
 void graphLevel::buildEntrances(int lvl)
 {
 	Cluster* c1;
@@ -507,14 +550,14 @@ Entrance::Entrance(iMPoint pos, int width, int height, ADJACENT_DIR dir, Cluster
 	: pos(pos), width(width), height(height), dir(dir), from(from), to(to)
 {}
 
-HierNode::HierNode(iMPoint pos) : PathNode(-1, -1, pos, nullptr, -1, -1, false)
+HierNode::HierNode(iMPoint pos) : PathNode(-1, -1, pos, nullptr, -1, -1, false), active(true)
 {}
 
-HierNode::HierNode(iMPoint pos, bool tmp) : PathNode(g, h, pos, nullptr, -1, -1, false)
+HierNode::HierNode(iMPoint pos, bool tmp) : PathNode(g, h, pos, nullptr, -1, -1, false), active(true)
 {}
 
 HierNode::HierNode(float g, const iMPoint& pos, PathNode* parent, int parentdir, int myDir, std::vector<Edge*> edges) :
-	PathNode(g, -1, pos, parent, parentdir, myDir, false), edges(edges)
+	PathNode(g, -1, pos, parent, parentdir, myDir, false), edges(edges), active(true)
 {}
 
 Cluster::Cluster() : pos{ -1,-1 }, width(-1), height(-1)
@@ -705,7 +748,9 @@ uint HierNode::FindWalkableAdjacents(std::vector<HierNode>& list_to_fill)
 	for (int i = 0; i < edgeNum; i++)
 	{
 		curr = edges[i]->dest;
-		list_to_fill.push_back(HierNode(edges[i]->moveCost + this->g, curr->pos, this, myDirection, curr->parentDir, curr->edges));
+
+		if (curr->active)
+			list_to_fill.push_back(HierNode(edges[i]->moveCost + this->g, curr->pos, this, myDirection, curr->parentDir, curr->edges));
 	}
 
 	return list_to_fill.size();
@@ -981,17 +1026,76 @@ float ModulePathfinding::SimpleAPathfinding(const iMPoint& origin, const iMPoint
 
 void ModulePathfinding::SetWalkabilityMap(bool state, iMPoint& position, int width, int height)
 {
+	BROFILER_CATEGORY("SetWalkabilityMap", Profiler::Color::HotPink);
+
+	Cluster* currCluster = nullptr;
+	std::unordered_set <Cluster*> clustersToChange;
+	HierNode* itNode = nullptr;
+
 	for (int i = 0; i < width; i++)
 	{
 		for (int j = 0; j < height; j++)
 		{
-			if (CheckBoundaries({ position.x + i, position.y + j }))
+			iMPoint postoCheck = { position.x + i, position.y + j };
+
+			if (CheckBoundaries(postoCheck))
 			{
-				walkabilityMap[((position.y + j) * this->width) + (position.x + i)] = state;
+				walkabilityMap[(postoCheck.y * this->width) + postoCheck.x] = state;
+
+				for (int lvl = 1; lvl <= MAX_LEVELS; lvl++)
+				{
+					currCluster = absGraph.determineCluster(postoCheck, lvl);
+
+					if (currCluster)
+					{
+						itNode = absGraph.NodeExists(postoCheck, currCluster);
+
+						if (itNode)
+						{
+							itNode->active = !state;
+						}
+
+						clustersToChange.insert(currCluster);
+
+					}
+
+				}
+			}
+		}
+	}
+
+	std::unordered_set<Cluster*>::iterator iterator = clustersToChange.begin();
+
+	int size = clustersToChange.size();
+
+	for (int i = 0; i < size; i++)
+	{
+		absGraph.ReCreateIntraEdges(*iterator);
+		iterator++;
+	}
+	clustersToChange.clear();
+
+}
+
+
+bool ModulePathfinding::IsAreaWalkable(iMPoint& position, int width, int height)
+{
+	bool ret = true;
+
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (!IsWalkable({ position.x + i, position.y + j }))
+			{
+				ret = false;
+				break;
 			}
 		}
 
 	}
+
+	return ret;
 }
 
 bool ModulePathfinding::RequestPath(Entity* request, std::vector <iMPoint>* path)
@@ -1231,4 +1335,9 @@ bool ModulePathfinding::DeletePath(Entity* request)
 	}
 
 	return false;
+}
+
+std::vector<iMPoint>* ModulePathfinding::GetLastLine()
+{
+	return &last_line;
 }

@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Fonts.h"
+#include "EasingFunctions.h"
 
 #include <list>
 
@@ -133,6 +134,13 @@ private:
 	int clickSound;
 
 	bool isMenuOn;
+
+	bool lastFramePauseEasingActive;
+	bool goingToPause;
+	Easing pauseAnimPosX;
+	Easing pauseAnimPosY;
+	Easing pauseAnimScale;
+	Easing pauseAnimAlpha;
 };
 
 #endif //__UIMANAGER_H__
