@@ -4,17 +4,20 @@
   
 	<tutorial> 
 		<start>
-			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should fortify this position first."/>
+			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should secure this position first."/>
+			<entry2 text="Left click: select unit. Right click: give order. E -> click: use / cancel skill." />
 		</start>
 
 		<finish>
 			<entry1 text="A base? Seems like there's no danger around... I guess I can advance the mission by myself." />
+			<entry2 text="Conquer all bases and defeat all enemies to complete the mission." />
 		</finish>
 	</tutorial>
     
 	<tutorial2> 
 		<start>
-			<entry1 text="I was lucky it was so few of them, but night has arrived. I should prepare for a bigger horde."/>
+			<entry1 text="Already night time? I'd better get ready for a bigger horde."/>
+			<entry2 text="At night, wanamingo hordes will attack your bases. Be careful not to lose all of them."/>
 		</start>
 
 		<finish>
@@ -66,7 +69,7 @@
     
 	<dialog4> 
 		<start>
-			<entry1 text="Good news everyone: I’ve picked up a signal from our mechanical combat unit. However, it seems to be right in the middle of a wanamingo nest. Yall up for some action?" />
+			<entry1 text="Good news everyone: I’ve picked up a signal from our mechanical combat unit. However, it seems to be right in the middle of a wanamingo nest. Y'all up for some action?" />
 			<entry2 text="I’d say it’s worth the risk… that machine is an absolute unit, it’d be an invaluable asset." />
 		</start>
 
