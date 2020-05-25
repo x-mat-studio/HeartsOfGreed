@@ -14,6 +14,7 @@
 
 #include "Base.h"
 #include "Turret.h"
+#include "Barricade.h"
 #include "Enemy.h"
 #include "Hero.h"
 
@@ -26,6 +27,7 @@
 
 UIFactory::UIFactory() :
 	portraitBackground{ 643, 145, 72, 56 },
+	portraitRoundBackground{ 400, 328, 69, 65 },
 	portraitLevelBackground{ 55, 210, 18, 18 },
 	portraitHealthbarBackground{ 34, 22, 52, 10 },
 	portraitHealthbarGreenImage{ 29, 79, 50, 8 },
@@ -44,9 +46,12 @@ UIFactory::UIFactory() :
 	robottoShopPicture{ 875, 512, 36, 27 },
 	robottoBigPicture{ 677, 512, 123, 96 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
+	upgradeCenterDataPagePicture{ 711, 306, 61, 47 },
 	turretDataPagePicture{ 580, 400, 61, 47 },
+	barricadeDataPagePicture{ 713, 256, 61, 47 },
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
-	turretShopPicture{ 696, 12, 34, 40 },
+	turretShopPicture{ 695, 14, 25, 37 },
+	barricadeShopPicture{ 705, 53, 24, 37 },
 	resourceIcon{ 18, 209, 11, 19 },
 	resourceIconSkill{ 111, 209, 20, 20 },
 	resourceIconBoost{ 83, 209, 17, 19 },
@@ -82,6 +87,11 @@ UIFactory::UIFactory() :
 	meleHeroIcon{ 17, 518, 43, 42 },
 	rangedHeroIcon{ 59, 518, 40, 41 },
 	robottoHeroIcon{ 136, 520, 40, 40 },
+	gathererHeroPortrait{ 842, 628, 45, 45 },
+	meleHeroPortrait{ 720, 626, 45, 45 },
+	rangedHeroPortrait{ 657, 626, 45, 45 },
+	robottoHeroPortrait{ 783, 628, 45, 45 },
+
 
 	reviveHoverBackground{ 222, 508, 150, 50 },
 	upgradeHoverBackground{ 222, 508, 180, 50 },
@@ -303,7 +313,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
 	CreatePortraitManager(640, 0, nullptr, group);
 
-	CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
+	//CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
@@ -367,7 +377,7 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 		break;
 	case BUTTON_TAG::REVIVE_ROBOTTO:
 		CreateText(5, 0, background, "Revive robot hero:", group);
-	break;
+		break;
 	default:
 		break;
 	}
@@ -842,7 +852,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoAttackSpeedUpgradeMenu()
 UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 {
 	char stats[40];
-	
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	Hero* hero = (Hero*)app->player->focusedEntity;
@@ -852,7 +862,7 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 	CreateText(5, 0, background, "Handy mastery:", group);
 
-//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
 
 	CreateText(5, 15, background, stats, group);
 
@@ -1429,7 +1439,7 @@ UI* UIFactory::CreateRobottoReviveButton(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateLifeUpgradeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, BUTTON_TAG tag)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, {0, 0, 15, 15}, false, app->uiManager->GetAtlasTexture(), tag, lifeUpgradeButton);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), tag, lifeUpgradeButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1585,7 +1595,7 @@ UI* UIFactory::CreateRobottoActive1Button(float x, float y, UI* parent, std::vec
 
 UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, {0, 0, 15, 15}, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_TURRET);
+	Button* button = new Button(fMPoint{ x, y }, parent, turretShopPicture, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_TURRET);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1594,7 +1604,7 @@ UI* UIFactory::CreateBuyTurretButton(float x, float y, UI* parent, std::vector<U
 
 UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_TURRET);
+	Button* button = new Button(fMPoint{ x, y }, parent, turretShopPicture, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_TURRET);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1612,7 +1622,7 @@ UI* UIFactory::CreateBuyUpgradeMenuButton(float x, float y, UI* parent, std::vec
 
 UI* UIFactory::CreateBuyBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_BARRICADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, barricadeShopPicture, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_BARRICADE);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1621,7 +1631,7 @@ UI* UIFactory::CreateBuyBarricadeButton(float x, float y, UI* parent, std::vecto
 
 UI* UIFactory::CreateUpgradeBarricadeButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_BARRICADE);
+	Button* button = new Button(fMPoint{ x, y }, parent, barricadeShopPicture, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::UPGRADE_BARRICADE);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1876,24 +1886,43 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 
 void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
-	CreateBuyTurretButton(68, 30, dataPage, dataPagesVector);
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, upgradeCenterDataPagePicture);
 
-	CreateNonGroupImage(68, 30, dataPage, dataPagesVector, plusIcon, false, false);
+	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateUpgradeTurretButton(108, 30, dataPage, dataPagesVector);
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
 
-	CreateNonGroupImage(108, 30, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
+	CreateBuyTurretButton(68, 23, dataPage, dataPagesVector);
 
-	CreateBuyBarricadeButton(68, 50, dataPage, dataPagesVector);
+	CreateNonGroupImage(68, 23, dataPage, dataPagesVector, plusIcon, false, false);
 
-	CreateUpgradeBarricadeButton(108, 50, dataPage, dataPagesVector);
+	CreateUpgradeTurretButton(98, 23, dataPage, dataPagesVector);
+
+	CreateNonGroupImage(98, 23, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
+
+	CreateBuyBarricadeButton(128, 23, dataPage, dataPagesVector);
+
+	CreateNonGroupImage(128, 23, dataPage, dataPagesVector, plusIcon, false, false);
+
+	CreateUpgradeBarricadeButton(158, 23, dataPage, dataPagesVector);
+
+	CreateNonGroupImage(158, 23, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
 }
 
 
 void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 {
+	char stats[40];
+	Barricade* focus = (Barricade*)app->player->GetFocusedEntity();
 
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, barricadeDataPagePicture);
 
+	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
+
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
+
+	sprintf_s(stats, 40, "LVL: %i", focus->GetLevel());
+	CreateNonGroupText(69, 13, dataPage, dataPagesVector, stats);
 }
 
 
@@ -1924,39 +1953,51 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	switch (hero->GetType())
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		BackGround = new Button(fMPoint{ (float)-deadHeroIcon.w, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(10, 5, BackGround, gathererHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(11, 6, BackGround, gathererHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
 
 
 	case ENTITY_TYPE::HERO_MELEE:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		BackGround = new Button(fMPoint{ (float)-deadHeroIcon.w, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(6, 5, BackGround, meleHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(11, 6, BackGround, meleHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
 
 
 	case ENTITY_TYPE::HERO_RANGED:
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		BackGround = new Button(fMPoint{ (float)-deadHeroIcon.w, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(7, 3, BackGround, rangedHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(11, 6, BackGround, rangedHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
 
-	case ENTITY_TYPE::HERO_ROBO: //TODO: add ui art
-		BackGround = new Button(fMPoint{ 0, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
+	case ENTITY_TYPE::HERO_ROBO:
+		BackGround = new Button(fMPoint{ (float)-deadHeroIcon.w, 0 }, portrait, deadHeroIcon, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(7, 3, BackGround, robottoHeroIcon, app->uiManager->GetAtlasTexture(), false, false);
+		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
+		portrait->AddElement(BackGround);
+
+		icon = new UI_Image(11, 6, BackGround, robottoHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -1968,16 +2009,16 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	}
 
 
-	healthBar = new UI_Image(1, 25, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
+	healthBar = new UI_Image(6, 25, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(0, 24, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	healthBarCont = new UI_Image(5, 24, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(1, 33, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
+	manaBar = new UI_Image(6, 33, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(0, 32, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	manaBarCont = new UI_Image(5, 32, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
 	return portrait;
@@ -2038,7 +2079,7 @@ bool UIFactory::CheckSkillResources()
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 
