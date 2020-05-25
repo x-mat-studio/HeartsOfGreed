@@ -17,7 +17,9 @@
 ModuleQuestManager::ModuleQuestManager() :
 	questMarker(nullptr),
 	questSfx(-1),
-	questFailed(-1)
+	questFailed(-1),
+	character1(ENTITY_TYPE::UNKNOWN),
+	character2(ENTITY_TYPE::UNKNOWN)
 {
 	name.create("QuestManager");
 }
@@ -166,31 +168,43 @@ void ModuleQuestManager::QuestStarted(int questId)
 	case 0:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END);
+		character1 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
 
 	case 1:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_1_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_1_END);
+		character1 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
 
 	case 2:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_2_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_2_END);
+		character1 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
 
 	case 3:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_3_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_3_END);
+		character1 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
 
 	case 4:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_4_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_4_END);
+		character1 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
 
 	case 5:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START2);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END2);
+		character1 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
 
 	default:
@@ -250,6 +264,9 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 
 	}
 
+	character1 = (ENTITY_TYPE)data.attribute("character1").as_int();
+	character2 = (ENTITY_TYPE)data.attribute("character2").as_int();
+
 	return true;
 }
 
@@ -264,6 +281,9 @@ bool ModuleQuestManager::Save(pugi::xml_node& data) const
 
 		questInfoVector[i].Save(iterator);
 	}
+
+	data.append_attribute("character1") = (int) character1;
+	data.append_attribute("character2") = (int) character2;
 
 	return true;
 }
@@ -453,3 +473,17 @@ void ModuleQuestManager::AddQuest(Quest* questo)
 {
 	questColliderVector.push_back(questo);
 }
+
+
+ENTITY_TYPE ModuleQuestManager::RequestCharacter1()
+{
+	return character1;
+}
+
+
+ENTITY_TYPE ModuleQuestManager::RequestCharacter2()
+{
+	return character2;
+}
+
+
