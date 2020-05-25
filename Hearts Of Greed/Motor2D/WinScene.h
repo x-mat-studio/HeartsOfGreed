@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 
+#include "EasingFunctions.h"
 
 class ModuleWinScene : public Module
 {
@@ -50,6 +51,9 @@ private:
 	float fadeTime;
 	//sounds
 	//int winMusic;
+
+	Easing iconPosY;
+
 };
 
 #endif // __WIN_SCENE__

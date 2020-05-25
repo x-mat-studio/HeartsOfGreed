@@ -9,6 +9,7 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
+#include "EasingFunctions.h"
 
 ModuleWinScene::ModuleWinScene(): fadeTime(0)
 {
@@ -43,6 +44,9 @@ bool ModuleWinScene::Start()
 
 	app->audio->PlayMusic("audio/music/youWon.ogg", 3*fadeTime, app->audio->musicVolume);
 
+	iconPosY.NewEasing(EASING_TYPE::EASE_OUT_BOUNCE, medalPos.y - 300, medalPos.y, 2.0);
+
+
 	return true;
 }
 
@@ -60,9 +64,10 @@ bool  ModuleWinScene::PreUpdate(float dt)
 bool  ModuleWinScene::Update(float dt)
 {
 	CheckListener(this);
+	iconPosY.UpdateEasingAddingTime(dt);
 
 	app->render->Blit(youWon,0,0, NULL, false, false);
-	app->render->Blit(medalWin, medalPos.x, medalPos.y, NULL, false, false);
+	app->render->Blit(medalWin, medalPos.x, iconPosY.GetLastRequestedPos(), NULL, false, false);
 
 	return true;
 }

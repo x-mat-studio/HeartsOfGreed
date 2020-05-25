@@ -10,6 +10,7 @@
 #include "Textures.h"
 #include "Window.h"
 #include "Audio.h"
+#include "EasingFunctions.h"
 
 ModuleLoseScene::ModuleLoseScene():fadeTime(0)
 {
@@ -37,10 +38,11 @@ bool ModuleLoseScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
 
-	/*youLost = app->tex->Load("intro_images/youLost.png");
-	medalLose = app->tex->Load("intro_images/medalLose.png");*/
+	youLost = app->tex->Load("intro_images/youLost.png");
+	medalLose = app->tex->Load("intro_images/medalLose.png");
 
 	app->audio->PlayMusic("audio/music/youLost.ogg", 3*fadeTime, app->audio->musicVolume);
+	iconPosY.NewEasing(EASING_TYPE::EASE_OUT_BOUNCE, medalPos.y - 300, medalPos.y, 2.0);
 
 	return true;
 }
@@ -59,9 +61,10 @@ bool  ModuleLoseScene::PreUpdate(float dt)
 bool  ModuleLoseScene::Update(float dt)
 {
 	CheckListener(this);
+	iconPosY.UpdateEasingAddingTime(dt);
 
 	app->render->Blit(youLost, -42, 0,NULL, false,false);
-	app->render->Blit(medalLose, medalPos.x, medalPos.y, NULL, false, false);
+	app->render->Blit(medalLose, medalPos.x, iconPosY.GetLastRequestedPos(), NULL, false, false);
 
 	return true;
 }

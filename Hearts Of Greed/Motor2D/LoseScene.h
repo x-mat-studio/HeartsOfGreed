@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
-
+#include "EasingFunctions.h"
 
 class ModuleLoseScene : public Module
 {
@@ -53,6 +53,7 @@ private:
 
 
 	float fadeTime;
+	Easing iconPosY;
 
 };
 

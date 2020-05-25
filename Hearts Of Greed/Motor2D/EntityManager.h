@@ -198,6 +198,7 @@ public:
 	SDL_Texture* moveCommandTileRng;
 	SDL_Texture* moveCommandTileGath;
 	SDL_Texture* moveCommandTileMelee;
+	SDL_Texture* moveCommandTileRobot;
 
 	SDL_Texture* explosionTexture;
 

@@ -35,6 +35,8 @@ public:
 
 	void PlayGenericNoise(int random);
 
+	void BlitCommandVfx(Frame& currframe, int alphaValue);
+
 };
 
 
