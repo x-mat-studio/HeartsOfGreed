@@ -49,10 +49,13 @@ private:
 	fMPoint medalPos;
 
 	float fadeTime;
+	
 	//sounds
-	//int winMusic;
+	int medalBounce;
 
 	Easing iconPosY;
+	float bufferPos;
+	bool medalRest;
 
 };
 
