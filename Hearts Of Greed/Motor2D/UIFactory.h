@@ -178,6 +178,7 @@ private:
 	// Image SDL_Rect
 
 	SDL_Rect portraitBackground;
+	SDL_Rect portraitRoundBackground;
 	SDL_Rect portraitLevelBackground;
 	SDL_Rect portraitHealthbarBackground;
 	SDL_Rect portraitHealthbarGreenImage;
@@ -201,9 +202,12 @@ private:
 	SDL_Rect robottoShopPicture;
 	SDL_Rect robottoBigPicture;
 	SDL_Rect baseDataPagePicture;
+	SDL_Rect upgradeCenterDataPagePicture;
 	SDL_Rect turretDataPagePicture;
+	SDL_Rect barricadeDataPagePicture;
 	SDL_Rect wanamingoDataPagePicture;
 	SDL_Rect turretShopPicture;
+	SDL_Rect barricadeShopPicture;
 
 	SDL_Rect resourceIcon;
 	SDL_Rect resourceIconSkill;
@@ -244,6 +248,10 @@ private:
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
 	SDL_Rect robottoHeroIcon;
+	SDL_Rect gathererHeroPortrait;
+	SDL_Rect meleHeroPortrait;
+	SDL_Rect rangedHeroPortrait;
+	SDL_Rect robottoHeroPortrait;
 
 	SDL_Rect ugradeSkillButton;
 
