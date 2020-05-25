@@ -215,7 +215,7 @@ void Turret::DrawSelected()
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w * 0.5f, this->collider->rect.y);
 }
 
-int Turret::RecieveDamage(int damage)
+int Turret::RecieveDamage(float damage)
 {
 	if (hitPointsCurrent > 0)
 	{

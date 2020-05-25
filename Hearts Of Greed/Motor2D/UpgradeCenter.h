@@ -21,7 +21,7 @@ public:
 
 	void ChangeTextures();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 
 private:
 	void Die();

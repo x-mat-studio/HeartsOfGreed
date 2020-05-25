@@ -66,7 +66,7 @@ public:
 
 	void DrawSelected();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 
 
 private:

@@ -30,7 +30,7 @@ public:
 	void Draw(float dt);
 	void DrawSelected();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 
 private:
 	void Die();

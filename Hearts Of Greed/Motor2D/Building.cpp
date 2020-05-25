@@ -17,8 +17,7 @@ Building::Building() :
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN),
 	myDecor(BUILDING_DECOR::NONE)
-{
-}
+{}
 
 Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
 	ENTITY_TYPE type, BUILDING_DECOR decor) :
