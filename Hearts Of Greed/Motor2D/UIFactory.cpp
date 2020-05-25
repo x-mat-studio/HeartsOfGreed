@@ -303,7 +303,7 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
 	CreatePortraitManager(640, 0, nullptr, group);
 
-	CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
+	//CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 

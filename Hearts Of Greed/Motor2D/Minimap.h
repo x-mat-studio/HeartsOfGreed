@@ -82,7 +82,11 @@ private:
 	int minimapHeight;
 
 	SDL_Texture* minimapTexture;
+	SDL_Texture* minimapFrame;
+	SDL_Rect miniFrame;
+	SDL_Rect positionFrame;
 	SDL_Rect camRect;
+	
 
 	bool minimapLoaded;
 	bool minimapFoWNeedsUpdate;
