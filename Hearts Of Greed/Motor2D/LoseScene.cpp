@@ -79,6 +79,7 @@ bool  ModuleLoseScene::PostUpdate(float dt)
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) {
 
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
+		iconPosY.NewEasing(EASING_TYPE::EASE_IN_SINE, medalPos.y, medalPos.y + 1000, 2.0);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
