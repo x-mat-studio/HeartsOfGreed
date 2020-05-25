@@ -30,7 +30,6 @@ public:
 	bool ExecuteSkill3();
 
 	void UpdatePasiveSkill(float dt);
-	void Attack();
 
 	void LevelUp();
 
@@ -39,6 +38,8 @@ public:
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	bool DrawVfx(float dt);
+
+	void Attack();
 
 private:
 
