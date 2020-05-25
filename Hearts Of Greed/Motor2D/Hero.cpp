@@ -180,6 +180,8 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	skillExecutionDelay(false),
 	currAreaInfo(nullptr),
 
+	myParticleSystem(nullptr),
+
 	state(HERO_STATES::IDLE),
 
 	objective(nullptr),
@@ -590,12 +592,6 @@ void Hero::Attack()
 	if (ret > 0)
 	{
 		GetExperience(ret);
-
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr)
-		{
-			app->player->AddResources(ret * 0.5f);
-		}
-		true;
 	}
 }
 
@@ -603,6 +599,25 @@ void Hero::Attack()
 void Hero::Die()
 {
 	toDelete = true;
+
+
+	// Death SFX
+	switch (this->type)
+	{
+	case ENTITY_TYPE::HERO_GATHERER:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_MELEE:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		ExecuteSFX(app->entityManager->roboDying);
+		break;
+	}
+
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
@@ -818,8 +833,7 @@ int Hero::RecieveDamage(int damage)
 
 void Hero::PlayOnHitSound()
 {
-	app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
-
+	ExecuteSFX(app->entityManager->suitmanGetsHit2);
 }
 
 

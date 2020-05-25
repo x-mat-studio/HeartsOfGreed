@@ -136,7 +136,7 @@ bool GathererHero::ExecuteSkill1()
 
 
 			skillExecutionDelay = true;
-			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ExecuteSFX(app->entityManager->suitman1Skill);
 			return skillExecutionDelay;
 		}
 		else
@@ -145,7 +145,7 @@ bool GathererHero::ExecuteSkill1()
 			currentVfx->ResetAnimation();
 			currentVfx->loop = false;
 
-			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ExecuteSFX(app->entityManager->suitman1Skill2);
 
 
 			int ret = 0;
@@ -243,16 +243,16 @@ void GathererHero::PlayGenericNoise(int probability)
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise1Suitman);
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise2Suitman);
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise3Suitman);
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise4Suitman);
 		break;
 
 	default:

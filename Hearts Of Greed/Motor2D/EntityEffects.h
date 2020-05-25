@@ -22,6 +22,8 @@ public:
 
 	void AddNewEffect(SKILL_EFFECT& effect, float time, float severity = 1.0f);
 
+	void SetCallBack(Entity*);
+
 private:
 
 	void StartEffect(SKILL_EFFECT effect);

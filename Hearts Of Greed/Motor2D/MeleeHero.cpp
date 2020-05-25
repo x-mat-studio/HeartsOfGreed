@@ -95,7 +95,7 @@ bool MeleeHero::ExecuteSkill1()
 
 		skillExecutionDelay = true;
 
-		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->suitman1Skill);
 
 		return skillExecutionDelay;
 	}
@@ -105,7 +105,8 @@ bool MeleeHero::ExecuteSkill1()
 		int ret = 0;
 
 		ret =  app->entityManager->ExecuteSkill(skill1, this->origin);
-		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+
+		ExecuteSFX(app->entityManager->armored1Skill2);
 
 		currAoE.clear();
 		suplAoE.clear();
@@ -174,16 +175,16 @@ void MeleeHero::PlayGenericNoise(int probability)
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise1Armored);
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise2Armored);
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise3Armored);
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise4Armored);
 		break;
 
 	default:

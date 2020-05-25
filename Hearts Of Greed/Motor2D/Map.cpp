@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "Building.h" //necessary to read buildings from tiled
 #include "Quest.h"    //idem
+#include "QuestManager.h"
 #include "Minimap.h"
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -601,31 +602,37 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				case 250 + 9:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(1);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 10:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(2);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 11:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(3);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 12:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(4);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 13:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(5);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 14:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(0);
+					app->questManager->AddQuest(qst);
 					break;
 
 				default:

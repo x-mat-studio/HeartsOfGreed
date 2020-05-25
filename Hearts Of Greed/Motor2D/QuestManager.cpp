@@ -101,6 +101,15 @@ bool ModuleQuestManager::CleanUp()
 	questMarker = nullptr;
 	//Quests are entities. We delete them at entity manager, not here.
 
+	int num = questColliderVector.size();
+
+	for (int i = 0; i < num; i++)
+	{
+		questColliderVector[i] = nullptr;
+	}
+
+	questColliderVector.clear();
+
 	return ret;
 }
 
@@ -234,6 +243,11 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 
 			questInfoVector[i].PushEntity(entity);
 		}
+
+		Quest* qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, iterator.attribute("questX").as_float(), iterator.attribute("questY").as_float());
+		qst->SetId(iterator.attribute("questID").as_int());
+		app->questManager->AddQuest(qst);
+
 	}
 
 	return true;
@@ -289,15 +303,15 @@ void QuestInfo::StartQuest()
 			break;
 
 		case ENTITY_TYPE::HERO_MELEE:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
 			break;
 
 		case ENTITY_TYPE::HERO_RANGED:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
 			break;
 
 		case ENTITY_TYPE::HERO_ROBO:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
 			break;
 		default:
 			break;
@@ -419,6 +433,23 @@ bool QuestInfo::Save(pugi::xml_node& node) const
 		iterator2.append_attribute("hp") = questEntitysVector[i]->GetCurrentHP();
 	}
 
+	numEntitys = app->questManager->questColliderVector.size();
+
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (app->questManager->questColliderVector[i]->GetId() == this->id)
+		{
+			node.append_attribute("questX") = app->questManager->questColliderVector[i]->GetCollider()->rect.x;
+			node.append_attribute("questY") = app->questManager->questColliderVector[i]->GetCollider()->rect.y;
+			node.append_attribute("questID") = app->questManager->questColliderVector[i]->GetId();
+		}
+	}
 
 	return true;
+}
+
+
+void ModuleQuestManager::AddQuest(Quest* questo)
+{
+	questColliderVector.push_back(questo);
 }

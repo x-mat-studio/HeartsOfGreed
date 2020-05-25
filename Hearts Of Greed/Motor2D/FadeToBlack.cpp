@@ -64,6 +64,7 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 		return true;
 
 	timeSpent += app->necessaryDt;
+
 	float normalized = MIN(1.0f, timeSpent / totalTime);
 
 	switch (currentStep)

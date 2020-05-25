@@ -75,10 +75,15 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
+	void AddQuest(Quest* questo);
+
 private:
 	void LoadQuests(pugi::xml_node&);
 
 	void ExecuteEvent(EVENT_ENUM eventId);
+
+public:
+	std::vector<Quest*> questColliderVector;
 
 private:
 
