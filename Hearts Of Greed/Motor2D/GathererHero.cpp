@@ -298,3 +298,15 @@ void GathererHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 
 	app->render->Blit(app->entityManager->moveCommandTileGath, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }
+
+
+Skill GathererHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void GathererHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
+}

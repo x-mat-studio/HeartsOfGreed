@@ -36,6 +36,9 @@ public:
 
 	void PlayGenericNoise(int random);
 
+	Skill GetPassiveSkill() const;
+	void ReplacePassiveSkill(Skill& skill);
+
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	void UpdatePasiveSkill(float dt);

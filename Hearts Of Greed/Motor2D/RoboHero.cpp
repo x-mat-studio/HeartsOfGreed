@@ -221,6 +221,23 @@ void RoboHero::PlayGenericNoise(int probability)
 }
 
 
+void RoboHero::BlitCommandVfx(Frame& currframe, int alphaValue)
+{
+	iMPoint postoPrint = movingTo;
+
+	if (objective != nullptr)
+	{
+		fMPoint enemyPos = objective->GetPosition();
+		enemyPos = app->map->WorldToMap(enemyPos.x, enemyPos.y);
+		enemyPos = app->map->MapToWorld(enemyPos.x, enemyPos.y);
+
+		postoPrint = { (int)enemyPos.x, (int)enemyPos.y };
+	}
+
+	app->render->Blit(app->entityManager->moveCommandTileRobot, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+}
+
+
 //Call this before upgrading the passive skill
 void RoboHero::ResetBuff()
 {
@@ -232,11 +249,23 @@ void RoboHero::ResetBuff()
 void RoboHero::ApplyBuff()
 {
 	currentDamage = GetAttackDamage();
-	float dmg = currentDamage * passiveSkill.dmg * 0.01 * acumulations;		//passiveSkill.dmg codifies the damage increment
+	float dmg = currentDamage * passiveSkill.dmg * 0.01 * acumulations;		  //passiveSkill.dmg codifies the damage increment
 
 	currentSpeed = GetSpeed();
 	float spd = currentSpeed * passiveSkill.rangeRadius * 0.01 * acumulations;//passiveSkill.rangeRadius codifies the speed increment
 
 	SetAttackDamage(currentDamage + dmg);
 	SetSpeed(currentSpeed + spd);
+}
+
+
+Skill RoboHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void RoboHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
 }

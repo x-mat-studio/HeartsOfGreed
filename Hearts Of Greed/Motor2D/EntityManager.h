@@ -101,7 +101,7 @@ public:
 
 	bool CheckIfHeroIsDead(ENTITY_TYPE heroType)const;
 	DeadHero* AssignNewDeadHero(Hero& dyingHero);
-	DeadHero* AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill);
+	DeadHero* AssignNewDeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill);
 	void DeleteDeadHero(ENTITY_TYPE heroType);
 	void DeleteAllDeadHeroes();
 

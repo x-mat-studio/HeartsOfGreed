@@ -261,7 +261,20 @@ void RangedHero::PlayGenericNoise(int probability)
 
 }
 
+
 void RangedHero::PlayOnHitSound()
 {
 	ExecuteSFX(app->entityManager->rangedGetsHit);
+}
+
+
+Skill RangedHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void RangedHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
 }

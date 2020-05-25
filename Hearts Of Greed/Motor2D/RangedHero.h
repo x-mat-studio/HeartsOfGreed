@@ -40,6 +40,9 @@ public:
 	void PlayGenericNoise(int random);
 	void PlayOnHitSound();
 
+	Skill GetPassiveSkill() const;
+	void ReplacePassiveSkill(Skill& skill);
+
 public:
 
 	fMPoint skill1PosLaunch;

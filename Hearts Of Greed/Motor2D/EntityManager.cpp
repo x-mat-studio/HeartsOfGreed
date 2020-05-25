@@ -1248,12 +1248,12 @@ DeadHero* ModuleEntityManager::AssignNewDeadHero(Hero& dyingHero)
 	}
 
 
-	*refhero = new DeadHero(dyingHero.GetHeroLevel(), dyingHero.GetType(), dyingHero.GetSkill1());
+	*refhero = new DeadHero(dyingHero.GetHeroLevel(), dyingHero.GetType(), dyingHero.GetSkill1(), dyingHero.GetPassiveSkill());
 
 	return *refhero;
 }
 
-DeadHero* ModuleEntityManager::AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill)
+DeadHero* ModuleEntityManager::AssignNewDeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill)
 {
 
 	DeadHero** refhero;
@@ -1286,7 +1286,7 @@ DeadHero* ModuleEntityManager::AssignNewDeadHero(int level, ENTITY_TYPE type, Sk
 	}
 
 
-	*refhero = new DeadHero(level, type, skill);
+	*refhero = new DeadHero(level, type, skill, passiveSkill);
 
 	return *refhero;
 }
@@ -1385,12 +1385,16 @@ void ModuleEntityManager::SaveDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 
 		statsnode.append_attribute("level") = refhero->GetLevel();
 		statsnode.append_attribute("type") = (int)heroType;
+
 		SKILL_ID skillId;
 		int skillLevel;
 		refhero->GetSkillInfo(skillId, skillLevel);
 		statsnode.append_attribute("skillId") = (int)skillId;
 		statsnode.append_attribute("skillLvl") = skillLevel;
 
+		refhero->GetPassiveSkillInfo(skillId, skillLevel);
+		statsnode.append_attribute("passiveSkillId") = (int)skillId;
+		statsnode.append_attribute("passiveSkillLvl") = skillLevel;
 	}
 
 }
@@ -1431,7 +1435,15 @@ void ModuleEntityManager::LoadDeadHero(pugi::xml_node& deadHeroesNode, ENTITY_TY
 	skill.id = skillId;
 	skill.lvl = skillLevel;
 
-	*refhero = AssignNewDeadHero(level, type, skill);
+
+	skillId = (SKILL_ID)statsnode.attribute("passiveSkillId").as_int(-1);
+	skillLevel = statsnode.attribute("passiveSkillLvl").as_int(-1);
+
+	Skill passiveSkill;
+	passiveSkill.id = skillId;
+	passiveSkill.lvl = skillLevel;
+
+	*refhero = AssignNewDeadHero(level, type, skill, passiveSkill);
 
 
 	//Work in progress
@@ -2660,14 +2672,22 @@ bool ModuleEntityManager::RequestHeroStats(HeroStats& hero, ENTITY_TYPE id, int 
 bool ModuleEntityManager::ReviveHero(DeadHero heroToRevive)
 {
 	HeroStats newStats;
+
 	Skill newSkill;
 	SKILL_ID newSkillId;
 	int newSkillLvl;
+
+	Skill newPassiveSkill;
+	SKILL_ID newPassiveSkillId;
+	int newPassiveSkillLvl;
 
 	//Requests the hero stats and skill to build a new hero
 	RequestHeroStats(newStats, heroToRevive.GetType(), heroToRevive.GetLevel());
 	heroToRevive.GetSkillInfo(newSkillId, newSkillLvl);
 	RequestSkill(newSkill, newSkillId, newSkillLvl);
+
+	heroToRevive.GetPassiveSkillInfo(newPassiveSkillId, newPassiveSkillLvl);
+	RequestSkill(newPassiveSkill, newPassiveSkillId, newPassiveSkillLvl);
 
 	Hero* newHero = nullptr;
 	fMPoint spawnpoint = app->player->focusedEntity->position;
@@ -2676,6 +2696,7 @@ bool ModuleEntityManager::ReviveHero(DeadHero heroToRevive)
 	if (newHero != nullptr)
 	{
 		newHero->ReplaceSkill1(newSkill);
+		newHero->ReplacePassiveSkill(newPassiveSkill);
 		newHero->ReplaceHeroStats(newStats);
 
 		return true;
@@ -3384,6 +3405,20 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
 			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
 
+			Skill skill1;
+			SKILL_ID skill1Id = (SKILL_ID)iterator.attribute("skill1Id").as_int();
+			int skill1Lvl = iterator.attribute("skill1Lvl").as_int();
+
+			RequestSkill(skill1, skill1Id, skill1Lvl);
+			hero->ReplaceSkill1(skill1);
+
+			Skill passiveSkill;
+			SKILL_ID passiveSkillId = (SKILL_ID)iterator.attribute("passiveSkillId").as_int();
+			int passiveSkillLvl = iterator.attribute("passiveSkillLvl").as_int();
+
+			RequestSkill(passiveSkill, passiveSkillId, passiveSkillLvl);
+			hero->ReplacePassiveSkill(passiveSkill);
+
 			meleeLifeUpgradeValue = iterator.attribute("hp").as_float();
 			meleeDamageUpgradeValue = iterator.attribute("damage").as_float();
 			meleeEnergyUpgradeValue = iterator.attribute("energy").as_float();
@@ -3420,6 +3455,20 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
 			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
+
+			Skill skill1;
+			SKILL_ID skill1Id = (SKILL_ID)iterator.attribute("skill1Id").as_int();
+			int skill1Lvl = iterator.attribute("skill1Lvl").as_int();
+
+			RequestSkill(skill1, skill1Id, skill1Lvl);
+			hero->ReplaceSkill1(skill1);
+
+			Skill passiveSkill;
+			SKILL_ID passiveSkillId = (SKILL_ID)iterator.attribute("passiveSkillId").as_int();
+			int passiveSkillLvl = iterator.attribute("passiveSkillLvl").as_int();
+
+			RequestSkill(passiveSkill, passiveSkillId, passiveSkillLvl);
+			hero->ReplacePassiveSkill(passiveSkill);
 
 			rangedLifeUpgradeValue = iterator.attribute("hp").as_float();
 			rangedDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3458,6 +3507,20 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
 			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
 
+			Skill skill1;
+			SKILL_ID skill1Id = (SKILL_ID)iterator.attribute("skill1Id").as_int();
+			int skill1Lvl = iterator.attribute("skill1Lvl").as_int();
+
+			RequestSkill(skill1, skill1Id, skill1Lvl);
+			hero->ReplaceSkill1(skill1);
+
+			Skill passiveSkill;
+			SKILL_ID passiveSkillId = (SKILL_ID)iterator.attribute("passiveSkillId").as_int();
+			int passiveSkillLvl = iterator.attribute("passiveSkillLvl").as_int();
+
+			RequestSkill(passiveSkill, passiveSkillId, passiveSkillLvl);
+			hero->ReplacePassiveSkill(passiveSkill);
+
 			gathererLifeUpgradeValue = iterator.attribute("hp").as_float();
 			gathererDamageUpgradeValue = iterator.attribute("damage").as_float();
 			gathererEnergyUpgradeValue = iterator.attribute("energy").as_float();
@@ -3494,6 +3557,22 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 			hero->SetSkill1Cost(iterator.attribute("skill1_cost").as_int());
 			hero->SetHeroSkillPoints(iterator.attribute("heroSkillPoints").as_int());
+
+			Skill skill1;
+			SKILL_ID skill1Id = (SKILL_ID)iterator.attribute("skill1Id").as_int();
+			int skill1Lvl = iterator.attribute("skill1Lvl").as_int();
+	
+			RequestSkill(skill1, skill1Id, skill1Lvl);
+			hero->ReplaceSkill1(skill1);
+
+			Skill passiveSkill;
+			SKILL_ID passiveSkillId = (SKILL_ID)iterator.attribute("passiveSkillId").as_int();
+			int passiveSkillLvl = iterator.attribute("passiveSkillLvl").as_int();
+
+			RequestSkill(passiveSkill, passiveSkillId, passiveSkillLvl);
+			hero->ReplacePassiveSkill(passiveSkill);
+
+			
 
 			robottoLifeUpgradeValue = iterator.attribute("hp").as_float();
 			robottoDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3704,6 +3783,12 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
 
+				iterator.append_attribute("skill1Id") = (int)hero->GetSkill1().id;
+				iterator.append_attribute("skill1Lvl") = hero->GetSkill1().lvl;
+
+				iterator.append_attribute("passiveSkillId") = (int)hero->GetPassiveSkill().id;
+				iterator.append_attribute("passiveSkillLvl") = hero->GetPassiveSkill().lvl;
+
 				iterator.append_attribute("hp") = meleeLifeUpgradeValue;
 				iterator.append_attribute("damage") = meleeDamageUpgradeValue;
 				iterator.append_attribute("energy") = meleeEnergyUpgradeValue;
@@ -3747,6 +3832,12 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
 
+				iterator.append_attribute("skill1Id") = (int)hero->GetSkill1().id;
+				iterator.append_attribute("skill1Lvl") = hero->GetSkill1().lvl;
+
+				iterator.append_attribute("passiveSkillId") = (int)hero->GetPassiveSkill().id;
+				iterator.append_attribute("passiveSkillLvl") = hero->GetPassiveSkill().lvl;
+
 				iterator.append_attribute("hp") = rangedLifeUpgradeValue;
 				iterator.append_attribute("damage") = rangedDamageUpgradeValue;
 				iterator.append_attribute("energy") = rangedEnergyUpgradeValue;
@@ -3788,6 +3879,12 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
+
+				iterator.append_attribute("skill1Id") = (int)hero->GetSkill1().id;
+				iterator.append_attribute("skill1Lvl") = hero->GetSkill1().lvl;
+
+				iterator.append_attribute("passiveSkillId") = (int)hero->GetPassiveSkill().id;
+				iterator.append_attribute("passiveSkillLvl") = hero->GetPassiveSkill().lvl;
 
 				iterator.append_attribute("hp") = gathererLifeUpgradeValue;
 				iterator.append_attribute("damage") = gathererDamageUpgradeValue;
@@ -3831,6 +3928,12 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				iterator.append_attribute("skill1_cost") = hero->GetSkill1Cost();
 				iterator.append_attribute("heroSkillPoints") = hero->GetHeroSkillPoints();
+
+				iterator.append_attribute("skill1Id") = (int)hero->GetSkill1().id;
+				iterator.append_attribute("skill1Lvl") = hero->GetSkill1().lvl;
+
+				iterator.append_attribute("passiveSkillId") = (int)hero->GetPassiveSkill().id;
+				iterator.append_attribute("passiveSkillLvl") = hero->GetPassiveSkill().lvl;
 
 				iterator.append_attribute("hp") = robottoLifeUpgradeValue;
 				iterator.append_attribute("damage") = robottoDamageUpgradeValue;

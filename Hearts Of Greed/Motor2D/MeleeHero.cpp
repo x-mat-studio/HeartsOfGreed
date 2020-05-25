@@ -208,3 +208,15 @@ void MeleeHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 
 	app->render->Blit(app->entityManager->moveCommandTileMelee, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }
+
+
+Skill MeleeHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void MeleeHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
+}
