@@ -182,6 +182,7 @@ bool ModuleUIManager::Update(float dt)
 		pauseAnimPosY.UpdateEasingAddingTime(dt);
 		pauseAnimScale.UpdateEasingAddingTime(dt);
 		pauseAnimAlpha.UpdateEasingAddingTime(dt);
+		pauseAnimRectAlpha.UpdateEasingAddingTime(dt);
 	}
 
 
@@ -206,6 +207,8 @@ bool ModuleUIManager::PostUpdate(float dt)
 	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
 	{
 		SDL_Rect r = { 1107, 392, 388,462 };
+		app->render->DrawQuad(SDL_Rect{ 0, 0, (int)app->win->width, (int)app->win->height }, 0, 0, 0, pauseAnimRectAlpha.GetLastRequestedPos(), true, false);
+
 		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, pauseAnimAlpha.GetLastRequestedPos(), 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
 
 		//SDL_RenderCopy(app->render->renderer, atlas, &r, &blitR);
@@ -401,6 +404,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
 			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 1, 255, 0.7);
+			pauseAnimRectAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 1, 200, 0.7);
 			goingToPause = true;
 		}
 		break;
@@ -413,6 +417,7 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 64, 6, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.5, 0.01, 0.7);
 			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 255, 1, 0.7);
+			pauseAnimRectAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 200, 1, 0.7);
 			goingToPause = false;
 		}
 		break;
