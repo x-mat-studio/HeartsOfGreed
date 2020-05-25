@@ -105,7 +105,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	comeFromAttack(true)
 
 {
-	currentAnimation = &walkLeft; 
+	currentAnimation = &walkLeft;
 }
 
 
@@ -405,14 +405,14 @@ bool Hero::PostUpdate(float dt)
 
 	CommandVfx(dt);
 
-	
+
 
 	return true;
 }
 
 void Hero::CommandVfx(float dt)
 {
-	if (path.size() > 0)
+	if (path.size() > 0 || objective != nullptr)
 	{
 		Frame currFrame = tileOnWalk.GetCurrentFrame(dt);
 
@@ -451,14 +451,13 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
 
-		tileOnWalk.ResetAnimation();
+		if (haveObjective == false)
+			tileOnWalk.ResetAnimation();
 
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 
 	}
-
-
 
 	return false;
 }
@@ -567,7 +566,7 @@ bool Hero::CheckAttackRange()
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size()-1 < stats.attackRange + objective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size() - 1 < stats.attackRange + objective->GetRadiusSize())
 	{
 		return true;
 
@@ -592,7 +591,7 @@ void Hero::Attack()
 	{
 		GetExperience(ret);
 
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr)
 		{
 			app->player->AddResources(ret * 0.5f);
 		}
@@ -624,7 +623,7 @@ void Hero::Die()
 	{
 		myParticleSystem->Die();
 	}
-	
+
 }
 
 void Hero::ExecuteSFX(int sfx)
@@ -1200,7 +1199,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCEL: 
+			case HERO_INPUTS::IN_SKILL_CANCEL:
 			{
 
 				if (skillFromAttacking == true)
@@ -1415,11 +1414,11 @@ void Hero::SetAnimation(HERO_STATES currState)
 void Hero::HandleMyParticleSystem(float dt)
 {
 	if (myParticleSystem != nullptr) {
-	
+
 		myParticleSystem->Move(position.x, position.y);
-	
+
 		if (myParticleSystem->IsActive()) {
-		
+
 			TimeMyParticleSystem(dt);
 		}
 	}
@@ -1438,7 +1437,8 @@ void Hero::ResetAttackAnimation()
 void Hero::TimeMyParticleSystem(float dt)
 {
 	//implied that your system is not nullptr
-	if (myParticleSystem->IsActive()) {
+	if (myParticleSystem->IsActive())
+	{
 		lvlUpSfxTimer += dt;
 
 		if (lvlUpSfxTimer > 3) {

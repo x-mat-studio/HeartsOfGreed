@@ -211,7 +211,18 @@ bool RangedHero::DrawVfx(float dt)
 
 void RangedHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
-	app->render->Blit(app->entityManager->moveCommandTileRng, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+	iMPoint postoPrint = movingTo;
+
+	if (objective != nullptr)
+	{
+		fMPoint enemyPos = objective->GetPosition();
+		enemyPos = app->map->WorldToMap(enemyPos.x, enemyPos.y);
+		enemyPos = app->map->MapToWorld(enemyPos.x, enemyPos.y);
+
+		postoPrint = { (int)enemyPos.x, (int)enemyPos.y };
+	}
+
+	app->render->Blit(app->entityManager->moveCommandTileRng, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }
 
 void RangedHero::PlayGenericNoise(int probability)

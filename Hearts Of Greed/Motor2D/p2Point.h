@@ -42,6 +42,12 @@ public:
 		return(*this);
 	}
 
+	operator MAT_Point<float>() const
+	{
+		return { (float)x, (float)y };
+	}
+
+
 	// Math ------------------------------------------------
 	MAT_Point operator -(const MAT_Point& v) const
 	{
@@ -164,6 +170,8 @@ public:
 
 		return(*this);
 	}
+
+
 
 	// Utils ------------------------------------------------
 	bool IsZero() const

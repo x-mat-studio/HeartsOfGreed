@@ -134,7 +134,8 @@ void RoboHero::LevelUp()
 	//lvl up effect
 	if (myParticleSystem != nullptr)
 	myParticleSystem->Activate();
-	else {
+	else 
+	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
 	
@@ -152,6 +153,20 @@ void RoboHero::LevelUp()
 }
 
 void RoboHero::PlayGenericNoise(int probability)
-{
+{}
 
+void RoboHero::BlitCommandVfx(Frame& currframe, int alphaValue)
+{
+	iMPoint postoPrint = movingTo;
+
+	if (objective != nullptr)
+	{
+		fMPoint enemyPos = objective->GetPosition();
+		enemyPos = app->map->WorldToMap(enemyPos.x, enemyPos.y);
+		enemyPos = app->map->MapToWorld(enemyPos.x, enemyPos.y);
+
+		postoPrint = { (int)enemyPos.x, (int)enemyPos.y };
+	}
+
+	app->render->Blit(app->entityManager->moveCommandTileRobot, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }
