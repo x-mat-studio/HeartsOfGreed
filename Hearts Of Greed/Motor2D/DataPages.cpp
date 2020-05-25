@@ -3,7 +3,9 @@
 #include "UIManager.h"
 #include "UIFactory.h"
 #include "Base.h"
+#include "Barricade.h"
 #include "Turret.h"
+#include "UpgradeCenter.h"
 #include "Enemy.h"
 #include "Hero.h"
 
@@ -138,6 +140,10 @@ bool DataPages::PreUpdate(float dt)
 
 		case DATA_PAGE_ENUM::FOCUSED_BASE:
 			CheckBaseValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_BARRICADE:
+			CheckBarricadeValues();
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_GATHERER:
@@ -306,7 +312,13 @@ void DataPages::CheckWanamingoValues()
 
 
 void DataPages::CheckBarricadeValues()
-{}
+{
+	Barricade* focus = (Barricade*)focusEntity;
+
+	AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+
+	focus = nullptr;
+}
 
 
 void DataPages::CheckBaseValues()
@@ -370,7 +382,27 @@ void DataPages::CheckTurretValues()
 
 
 void DataPages::CheckUpgradeCenterValues()
-{}
+{
+	bool check = false;
+
+	UpgradeCenter* focus = (UpgradeCenter*)focusEntity;
+
+	if (CheckData((int)alignment, (int)focus->GetAlignment()))
+	{
+		if (CheckData(lifeMax, focus->GetMaxHP()))
+		{
+			AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+			check = true;
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
 
 void DataPages::GetHeroValue()
 {
@@ -432,12 +464,21 @@ void DataPages::GetTurretValue()
 
 void DataPages::GetUpgradeCenterValue()
 {
+	UpgradeCenter* focus = (UpgradeCenter*)app->player->GetFocusedEntity();
+
+	alignment = focus->GetAlignment();
+	lifeMax = focus->GetMaxHP();
+
 	GetHealthBarValues();
 }
 
 
 void DataPages::GetBarricadeValue()
 {
+	Barricade* focus = (Barricade*)app->player->GetFocusedEntity();
+
+	lifeMax = focus->GetMaxHP();
+	
 	GetHealthBarValues();
 }
 
@@ -570,7 +611,7 @@ void DataPages::GetHealthBarValues()
 {
 	SDL_Rect rect = factory->GetGreenHealthBar();
 	SDL_Rect rect2 = factory->GetBlueHealthBar();
-	
+
 	int numElem = dataPageVector.size();
 
 	for (int i = 0; i < numElem; i++)
