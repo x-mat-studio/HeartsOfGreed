@@ -160,7 +160,7 @@ public:
 
 	virtual void LevelUp();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 
 	bool GetExperience(int xp);
 	bool GetLevel();
@@ -283,6 +283,8 @@ public:
 	int GetHeroSkillPoints();
 	void SetHeroSkillPoints(int n);
 	void AddHeroSkillPoints(int n);
+
+	bool IsDying();
 
 protected:
 	void SetAnimation(HERO_STATES currState);

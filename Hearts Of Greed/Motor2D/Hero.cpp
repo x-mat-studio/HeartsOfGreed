@@ -386,6 +386,12 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::DEAD:
+		if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
+		{
+
+			toDelete = true;
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	}
@@ -598,8 +604,6 @@ void Hero::Attack()
 
 void Hero::Die()
 {
-	toDelete = true;
-
 
 	// Death SFX
 	switch (this->type)
@@ -618,8 +622,9 @@ void Hero::Die()
 		break;
 	}
 
+	inputs.push_back(HERO_INPUTS::IN_DEAD);
 
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
 
 	if (minimapIcon != nullptr)
 	{
@@ -638,6 +643,8 @@ void Hero::Die()
 	{
 		myParticleSystem->Die();
 	}
+
+	app->player->RemoveHeroFromVector(this);
 
 }
 
@@ -800,7 +807,7 @@ void Hero::LevelUp()
 }
 
 
-int Hero::RecieveDamage(int damage)
+int Hero::RecieveDamage(float damage)
 {
 	int ret = -1;
 	gettingAttacked = true;
@@ -1180,7 +1187,12 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
-			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			case HERO_INPUTS::IN_DEAD:
+				state = HERO_STATES::DEAD;
+				currAoE.clear();
+				suplAoE.clear();
+				currAreaInfo = nullptr;
+				break;
 			}
 
 		}	break;
@@ -1190,8 +1202,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCEL: {
-
+			case HERO_INPUTS::IN_SKILL_CANCEL:
+			{
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
@@ -1228,7 +1240,11 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
-			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;
+				currAoE.clear();
+				suplAoE.clear();
+				currAreaInfo = nullptr;
+				break;
 			}
 		}	break;
 
@@ -1415,6 +1431,41 @@ void Hero::SetAnimation(HERO_STATES currState)
 
 		case FACE_DIR::WEST:
 			currentAnimation = &skill1Left;
+			break;
+		}
+		break;
+
+		currentAnimation->loop = false;
+
+	}
+
+	case HERO_STATES::DEAD:
+	{
+
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &deathRightUp;
+			break;
+
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &deathLeftUp;
+			break;
+
+		case FACE_DIR::EAST:
+			currentAnimation = &deathRight;
+			break;
+
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &deathRightDown;
+			break;
+
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &deathLeftDown;
+			break;
+
+		case FACE_DIR::WEST:
+			currentAnimation = &deathLeft;
 			break;
 		}
 		break;
@@ -1878,4 +1929,12 @@ void Hero::SetHeroSkillPoints(int n)
 void Hero::AddHeroSkillPoints(int n)
 {
 	heroSkillPoints += n;
+}
+
+bool Hero::IsDying()
+{
+	if (state == HERO_STATES::DEAD)
+		return true;
+
+	return false;
 }

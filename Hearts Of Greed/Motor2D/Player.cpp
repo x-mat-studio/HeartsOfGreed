@@ -979,6 +979,7 @@ void ModulePlayer::RemoveHeroFromVector(Hero* hero)
 	{
 		if (heroesVector[i] == hero)
 		{
+			CheckFocusedEntity(hero);
 			heroesVector.erase(heroesVector.begin() + i);
 			return;
 		}
@@ -1018,7 +1019,7 @@ bool ModulePlayer::CheckFocusedHero()
 	}
 
 	else
-		if (heroesVector[focusedHero] == nullptr)
+		if (heroesVector[focusedHero] == nullptr || heroesVector[focusedHero]->IsDying())
 		{
 			prepareSkill = false;
 			skill1 = false;
