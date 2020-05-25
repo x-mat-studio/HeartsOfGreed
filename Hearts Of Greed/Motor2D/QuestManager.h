@@ -76,6 +76,8 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void AddQuest(Quest* questo);
+	ENTITY_TYPE RequestCharacter1();
+	ENTITY_TYPE RequestCharacter2();
 
 private:
 	void LoadQuests(pugi::xml_node&);
@@ -90,6 +92,8 @@ private:
 	int questSfx;
 	int questFailed;
 	SDL_Texture* questMarker;
+	ENTITY_TYPE character1;
+	ENTITY_TYPE character2;
 	
 	std::vector<QuestInfo> questInfoVector;
 };

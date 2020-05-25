@@ -68,7 +68,7 @@ void Barricade::DrawSelected()
 }
 
 
-int Barricade::RecieveDamage(int damage)
+int Barricade::RecieveDamage(float damage)
 {
 	if (hitPointsCurrent > 0)
 	{

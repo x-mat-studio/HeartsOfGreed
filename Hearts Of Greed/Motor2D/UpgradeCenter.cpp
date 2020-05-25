@@ -55,7 +55,7 @@ void UpgradeCenter::UpgradeBarricades()
 }
 
 
-int UpgradeCenter::RecieveDamage(int damage)
+int UpgradeCenter::RecieveDamage(float damage)
 {
 	if (hitPointsCurrent > 0)
 	{

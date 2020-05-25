@@ -374,7 +374,7 @@ void Base::GainResources(float dt)
 }
 
 
-int Base::RecieveDamage(int damage)
+int Base::RecieveDamage(float damage)
 {
 
 	if (hitPointsCurrent > 0)

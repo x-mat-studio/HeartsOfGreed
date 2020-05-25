@@ -98,6 +98,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	deadMelee(nullptr),
 	deadRanged(nullptr),
 	deadRobo(nullptr),
+	moveCommandTileRobot(nullptr),
 
 	wanamingoRoar2(-1),
 	wanamingoRoar(-1),
@@ -364,6 +365,7 @@ bool ModuleEntityManager::Start()
 	moveCommandTileRng = app->tex->Load("spritesheets/VFX/OnMyWayRanged.png");
 	moveCommandTileGath = app->tex->Load("spritesheets/VFX/OnMyWaySuit.png");
 	moveCommandTileMelee = app->tex->Load("spritesheets/VFX/OnMyWayMelee.png");
+	moveCommandTileRobot = app->tex->Load("spritesheets/VFX/OnMyWatRobotto.png");
 	debugPathTexture = app->tex->Load("maps/path.png");
 
 

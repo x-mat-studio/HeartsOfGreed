@@ -198,9 +198,8 @@ void Enemy::StateMachine(float dt)
 				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
-					fMPoint offSet = shortTermObjective->GetOffset();
 
-					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+					MoveTo(pos.x, pos.y );
 				}
 			}
 		}
@@ -245,7 +244,13 @@ void Enemy::StateMachine(float dt)
 		break;
 
 	case ENEMY_STATES::DEAD:
-		Die();
+		toDelete = false;
+
+		if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
+		{
+			toDelete = true;
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 	}
 
@@ -366,8 +371,7 @@ bool Enemy::Attack()
 
 void Enemy::Die()
 {
-	toDelete = true;
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
 	collider->thisEntity = nullptr;
 
 	int randomCounter = rand() % 2;
@@ -392,6 +396,8 @@ void Enemy::Die()
 		visionEntity->deleteEntity = true;
 		visionEntity = nullptr;
 	}
+
+	inputs.push_back(ENEMY_INPUTS::IN_DEAD);
 }
 
 
@@ -715,6 +721,36 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 			currentAnimation = &punchLeft;
 			break;
 		}
+		break;
+	}
+
+	case ENEMY_STATES::DEAD:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &deathRight;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &deathLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &deathRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &deathRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &deathLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &deathLeft;
+			break;
+
+		}
+
+		currentAnimation->loop = false;
+
 		break;
 	}
 

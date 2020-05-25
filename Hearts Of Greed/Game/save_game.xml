@@ -9,7 +9,7 @@
 	<map name="finalMap.tmx" />
 	<menuScene />
 	<testScene>
-		<time_info days_passed="0" is_night="false" timer="2.25900221" />
+		<time_info days_passed="0" is_night="false" timer="5.48899889" />
 	</testScene>
 	<winScene />
 	<loseScene />
@@ -26,14 +26,14 @@
 		<entity type="quest" x="0" y="0" id="1" />
 		<entity type="building" x="640" y="3872" decor="2" />
 		<entity type="base" x="192" y="3680" aligment="1" hit_points="500" />
-		<entity type="quest" x="0" y="0" id="0" />
 		<entity type="base" x="672" y="4336" aligment="0" hit_points="500" />
-		<entity type="hero_gatherer" x="281.309998" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="100" max_hit_points="100" recovery_hit_points_rate="2" energy_points="40" max_energy_points="40" recovery_energy_rate="4" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="8" attack_range="1" attack_speed="0.75" vision_distance="7" vision_in_px="253.939621" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
-		<entity type="hero_melee" x="240.100006" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="170" max_hit_points="170" recovery_hit_points_rate="4" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="1" attack_speed="1" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
-		<entity type="hero_ranged" x="150" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="85" max_hit_points="85" recovery_hit_points_rate="2" energy_points="65" max_energy_points="65" recovery_energy_rate="2" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="20" attack_range="5" attack_speed="1.35000002" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
+		<entity type="hero_gatherer" x="365.415863" y="4133.93701" level="1" exp_to_level_up="100" hero_exp="0" hit_points="100" max_hit_points="100" recovery_hit_points_rate="2" energy_points="40" max_energy_points="40" recovery_energy_rate="4" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="8" attack_range="1" attack_speed="0.75" vision_distance="7" vision_in_px="253.939621" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
+		<entity type="hero_melee" x="339.632172" y="4149.93115" level="1" exp_to_level_up="100" hero_exp="0" hit_points="170" max_hit_points="170" recovery_hit_points_rate="4" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="1" attack_speed="1" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
+		<entity type="hero_ranged" x="331.562347" y="4135.94189" level="1" exp_to_level_up="100" hero_exp="0" hit_points="85" max_hit_points="85" recovery_hit_points_rate="2" energy_points="65" max_energy_points="65" recovery_energy_rate="2" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="20" attack_range="5" attack_speed="1.35000002" vision_distance="5" vision_in_px="181.385437" skill1_cost="10" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
 		<entity type="hero_robot" x="50" y="4100" level="1" exp_to_level_up="100" hero_exp="0" hit_points="210" max_hit_points="210" recovery_hit_points_rate="0" energy_points="80" max_energy_points="80" recovery_energy_rate="3" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="15" attack_range="1" attack_speed="1.14999998" vision_distance="5" vision_in_px="181.385437" skill1_cost="0" heroSkillPoints="0" hp="1" damage="1" energy="1" atkSpeed="1" />
 		<entity type="spawner" x="-1370" y="800" entitys_to_spawn="0" spawn_rate="0" entities_per_wave="1" active="true" />
 		<entity type="spawner" x="410" y="1025" entitys_to_spawn="0" spawn_rate="0" entities_per_wave="1" active="true" />
+		<entity />
 		<deadEntities />
 	</entityManager>
 	<FOWManager>
@@ -17867,7 +17867,7 @@
 		<fow_tile visited="511" />
 		<fow_tile visited="95" />
 		<fow_tile visited="7" />
-		<fow_tile visited="11" />
+		<fow_tile visited="3" />
 		<fow_tile visited="0" />
 		<fow_tile visited="0" />
 		<fow_tile visited="0" />
@@ -19544,12 +19544,14 @@
 	</UIManager>
 	<pathfinding />
 	<player>
-		<resources cristals="0" skillCoin="0" enemyCoin="0" />
+		<resources cristals="5" skillCoin="0" enemyCoin="0" />
 	</player>
 	<AI />
-	<QuestManager>
-		<quest active="false" id="0" dialogInput="-1" reward="100" questX="320" questY="4096" questID="0">
-			<questEntitys />
+	<QuestManager character1="4" character2="-1">
+		<quest active="true" id="0" dialogInput="3" reward="100">
+			<questEntitys>
+				<entity entityType="6" posX="38.3702087" posY="4061.80103" hp="25" />
+			</questEntitys>
 		</quest>
 		<quest active="false" id="1" dialogInput="-1" reward="200" questX="-480" questY="3152" questID="1">
 			<questEntitys />
@@ -19571,6 +19573,6 @@
 	<video />
 	<:anonymous />
 	<renderer>
-		<camera x="-408" y="-7934" />
+		<camera x="487" y="-3808" />
 	</renderer>
 </game_state>

@@ -143,6 +143,7 @@ private:
 	Easing pauseAnimPosY;
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
+	Easing pauseAnimRectAlpha;
 };
 
 #endif //__UIMANAGER_H__
