@@ -29,6 +29,8 @@ bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 	medalPos.y = config.attribute("medalPosY").as_int(0);
 	fadeTime = config.attribute("fadeTime").as_float(0);
 
+	bufferPos = 0.0;
+	medalRest = false;
 	return true;
 }
 
@@ -42,6 +44,8 @@ bool ModuleLoseScene::Start()
 	medalLose = app->tex->Load("intro_images/medalLose.png");
 
 	app->audio->PlayMusic("audio/music/youLost.ogg", 3*fadeTime, app->audio->musicVolume);
+	medalBounce = app->audio->LoadFx("audio/sfx/WinLose/MedalSound.wav");
+
 	iconPosY.NewEasing(EASING_TYPE::EASE_OUT_BOUNCE, medalPos.y - 300, medalPos.y, 2.0);
 
 	return true;
@@ -60,11 +64,22 @@ bool  ModuleLoseScene::PreUpdate(float dt)
 // Called each loop iteration
 bool  ModuleLoseScene::Update(float dt)
 {
+	bufferPos = iconPosY.GetLastRequestedPos();
+	
 	CheckListener(this);
 	iconPosY.UpdateEasingAddingTime(dt);
 
 	app->render->Blit(youLost, -42, 0,NULL, false,false);
 	app->render->Blit(medalLose, medalPos.x, iconPosY.GetLastRequestedPos(), NULL, false, false);
+
+	if (iconPosY.GetLastRequestedPos() < bufferPos) {
+		app->audio->PlayFx(medalBounce,0,-1,LOUDNESS::NORMAL);
+	}
+	else if (iconPosY.GetLastRequestedPos() == bufferPos && medalRest == false) {
+	
+		medalRest = true;
+		app->audio->PlayFx(medalBounce, 0, -1, LOUDNESS::NORMAL);
+	}
 
 	return true;
 }
@@ -98,6 +113,7 @@ bool  ModuleLoseScene::CleanUp()
 	youLost = nullptr;
 	app->tex->UnLoad(medalLose);
 	medalLose = nullptr;
+	medalRest = false;
 	return true;
 }
 
