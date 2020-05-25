@@ -99,13 +99,12 @@ bool  ModuleMainMenuScene::Update(float dt)
 	app->render->Blit(gameIcon, gameIconPosX, 70, false, false, NULL, alpha);
 	app->render->Blit(gameTitle, 20, 20, false, false, NULL, alpha);
 
-	if (soundDelay > 210) {
-
-		if (canon == false) {
-
+	if (soundDelay > 210) 
+	{
+		if (canon == false) 
+		{
 			canon = true;
 			app->audio->PlayFx(titleSound, 0, 2, LOUDNESS::QUIET, DIRECTION::RIGHT);
-
 		}
 	}
 
