@@ -17,6 +17,7 @@
 #include "MainMenuScene.h"
 #include "TestScene.h"
 #include "EventManager.h"
+#include "QuestManager.h"
 #include "Textures.h"
 #include "FadeToBlack.h"
 #include "DialogManager.h"
@@ -286,7 +287,8 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 	UI_Group* group = nullptr;
 
-
+	ENTITY_TYPE hero1;
+	ENTITY_TYPE hero2;
 
 	switch (eventId)
 	{
@@ -382,7 +384,9 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::CREATE_DIALOG_WINDOW:
-		group = factory->CreateDialogMenu(ENTITY_TYPE::HERO_GATHERER, ENTITY_TYPE::HERO_GATHERER);
+		hero1 = app->questManager->RequestCharacter1();
+		hero2 = app->questManager->RequestCharacter2();
+		group = factory->CreateDialogMenu(hero1, hero2);
 		AddUIGroup(group);
 		app->gamePause = true;
 		break;
