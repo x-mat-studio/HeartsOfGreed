@@ -105,7 +105,7 @@ bool Building::PostUpdate(float dt)
 
 void Building::OnCollision(Collider* collider)
 {
-	if (collider->type == COLLIDER_HERO)
+	if (collider->type == COLLIDER_HERO || collider->type == COLLIDER_ENEMY)
 	{
 		transparent = true;
 	}
