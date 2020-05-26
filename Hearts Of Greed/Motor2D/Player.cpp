@@ -176,6 +176,24 @@ bool ModulePlayer::PreUpdate(float dt)
 		app->eventManager->GenerateEvent(EVENT_ENUM::LVL_UP_ALL, EVENT_ENUM::NULL_EVENT);
 	}
 
+	// FOCUS HEROES WITH KEYS
+	if (app->input->GetKey(SDL_SCANCODE_U) == KEY_STATE::KEY_DOWN) 
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_I) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_O) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO , EVENT_ENUM::NULL_EVENT);
+	}
+
 
 	CheckListener(this);
 
@@ -779,9 +797,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 
 		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_GATHERER);
-		hero->selectedByPlayer = true;
 
-		heroesVector.push_back(hero);
+		if (hero != nullptr)
+		{
+			hero->selectedByPlayer = true;
+			heroesVector.push_back(hero);
+		}
+
 		break;
 
 
@@ -797,9 +819,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		heroesVector.clear();
 
 		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_MELEE);
-		hero->selectedByPlayer = true;
 
-		heroesVector.push_back(hero);
+		if (hero != nullptr)
+		{
+			hero->selectedByPlayer = true;
+			heroesVector.push_back(hero);
+		}
+
 		break;
 
 
@@ -815,9 +841,13 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		heroesVector.clear();
 
 		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_RANGED);
-		hero->selectedByPlayer = true;
 
-		heroesVector.push_back(hero);
+		if (hero != nullptr)
+		{
+			hero->selectedByPlayer = true;
+			heroesVector.push_back(hero);
+		}
+
 		break;
 
 
@@ -831,11 +861,15 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		}
 
 		heroesVector.clear();
-
 		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_ROBO);
-		hero->selectedByPlayer = true;
 
-		heroesVector.push_back(hero);
+		if (hero != nullptr) 
+		{	
+			hero->selectedByPlayer = true;
+
+			heroesVector.push_back(hero);
+		}
+		
 		break;
 
 
