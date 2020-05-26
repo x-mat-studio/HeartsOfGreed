@@ -15,8 +15,11 @@ enum class DIALOG_INPUT : int
 	TUTORIAL_START,
 	TUTORIAL_END,
 
-	TUTORIAL_START2,
-	TUTORIAL_END2,
+	TUTORIAL2_START,
+	TUTORIAL2_END,
+
+	TUTORIAL3_START,
+	TUTORIAL3_END,
 
 	MISSION_1_START,
 	MISSION_1_END,
@@ -40,9 +43,22 @@ enum class DIALOG_STATE : int
 
 	//TUTORIAL-------------
 	TUTORIAL_ST,
+	TUTORIAL_ST_A2,
+	TUTORIAL_ST_B2,
+	TUTORIAL_ST_LAST,
 	TUTORIAL_END,
-	TUTORIAL_ST2,
-	TUTORIAL_END2,
+	TUTORIAL_END_B1,
+	TUTORIAL_END_LAST,
+	TUTORIAL2_ST,
+	TUTORIAL2_ST_LAST,
+	TUTORIAL2_END,
+	TUTORIAL2_END_B1,
+	TUTORIAL2_END_LAST,
+	TUTORIAL3_ST_B1,
+	TUTORIAL3_ST_A2,
+	TUTORIAL3_ST_LAST,
+	TUTORIAL3_END_B1,
+	TUTORIAL3_END_LAST,
 
 	//Quest 1 ------------
 	MISSION1_ST_B1,
@@ -106,29 +122,27 @@ private:
 
 	//TUTORIAL-------------
 	//Tutorial 1 ---------
-	P2SString dialogTutorial1Start;
-	P2SString dialogTutorial1Start_B;
+	P2SString dialogTutorial1_ST_A1;
+	P2SString dialogTutorial1_ST_B1;
+	P2SString dialogTutorial1_ST_A2;
+	P2SString dialogTutorial1_ST_B2;
 
-	P2SString dialogTutorial1Start2;
-	P2SString dialogTutorial1Start2_B;
-
-	P2SString dialogTutorial1End;
-	P2SString dialogTutorial1End_B;
+	P2SString dialogTutorial1_END_A1;
+	P2SString dialogTutorial1_END_B1;
 
 	//Tutorial 2 ---------
-	P2SString dialogTutorial2Start2;
-	P2SString dialogTutorial2Start2_B;
-	P2SString dialogTutorial2End2;
-	P2SString dialogTutorial2End2_B;
+	P2SString dialogTutorial2_ST_A1;
+	P2SString dialogTutorial2_ST_B1;
+	P2SString dialogTutorial2_END_A1;
+	P2SString dialogTutorial2_END_B1;
 
 	//Tutorial 3 ---------
-	P2SString dialogTutorial3Start;
-	P2SString dialogTutorial3Start_B;
+	P2SString dialogTutorial3_ST_A1;
+	P2SString dialogTutorial3_ST_B1;
+	P2SString dialogTutorial3_ST_A2;
 
-	P2SString dialogTutorial3Start2_B;
-
-	P2SString dialogTutorial3End;
-	P2SString dialogTutorial3End_B;
+	P2SString dialogTutorial3_END_A1;
+	P2SString dialogTutorial3_END_B1;
 
 	//Quest 1 ------------
 	P2SString dialogMission1_ST_B1;

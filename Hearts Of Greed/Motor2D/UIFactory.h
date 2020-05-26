@@ -308,6 +308,8 @@ public:
 	float robottoAtkSpeedUpgradeCost;
 
 	int reviveCost;
+	int turretUpgradeCost;
+	int barricadeUpgradeCost;
 };
 
 #endif __UIFACTORY_H__

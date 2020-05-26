@@ -1123,6 +1123,123 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus, EN
 	return ret;
 }
 
+Entity* ModuleEntityManager::CheckEntityOnClickbyPriority(iMPoint mousePos)
+{
+	Entity* ret = nullptr;
+
+	Collider* col = nullptr;
+	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
+
+	int numEntities = entityVector.size();
+
+	for (int j = 0; j < numEntities; j++)
+	{
+		entityVector[j]->selectedByPlayer = false;
+	}
+
+	for (int k = (int)ENTITY_TYPE::UNKNOWN + 1; k != (int)ENTITY_TYPE::MAX_TYPE; k++)
+	{
+		for (int i = 0; i < numEntities; i++)
+		{
+
+
+
+			type = entityVector[i]->GetType();
+			col = entityVector[i]->GetCollider();
+			align = entityVector[i]->GetAlignment();
+
+			if (col == nullptr || k != (int)type)
+				continue;
+
+			//dynamic entities get priority over static entities
+			if (mousePos.PointInRect(&col->rect))
+			{
+				if (col != nullptr)
+				{
+
+					entityVector[i]->selectedByPlayer = true;
+
+
+					return entityVector[i];
+				}
+
+				ret = entityVector[i];
+			}
+			else
+			{
+				entityVector[i]->selectedByPlayer = false;
+			}
+		}
+	}
+
+	if (ret != nullptr)
+	{
+		ret->selectedByPlayer = true;
+	}
+
+	return ret;
+}
+
+Entity* ModuleEntityManager::CheckEntityOnClickbyPriorityandAlignment(iMPoint mousePos, bool focus, ENTITY_ALIGNEMENT alignement)
+{
+
+	Entity* ret = nullptr;
+
+	Collider* col = nullptr;
+	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
+
+	int numEntities = entityVector.size();
+
+	for (int k = (int)ENTITY_TYPE::UNKNOWN + 1; k != (int)ENTITY_TYPE::MAX_TYPE; k++)
+	{
+		for (int i = 0; i < numEntities; i++)
+		{
+			type = entityVector[i]->GetType();
+			col = entityVector[i]->GetCollider();
+			align = entityVector[i]->GetAlignment();
+
+			if (col == nullptr || k != (int)type)
+				continue;
+
+			//dynamic entities get priority over static entities
+			if (mousePos.PointInRect(&col->rect))
+			{
+				if (col != nullptr && (align == alignement))
+				{
+					if (focus == true)
+					{
+						for (int j = i + 1; j < numEntities; j++)
+						{
+							entityVector[j]->selectedByPlayer = false;
+						}
+
+						entityVector[i]->selectedByPlayer = true;
+					}
+
+					return entityVector[i];
+				}
+
+				ret = entityVector[i];
+			}
+
+			else
+			{
+				if (focus == true)
+					entityVector[i]->selectedByPlayer = false;
+			}
+		}
+	}
+
+	if (ret != nullptr && focus == true)
+	{
+		ret->selectedByPlayer = true;
+	}
+
+	return ret;
+}
+
 
 void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroPlayerVector)
 {
@@ -2529,7 +2646,7 @@ void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int r
 			{
 				if (skillArea->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
 				{
-					if (app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x+1, y }) && app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x, y+1 }))
+					if (app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x + 1, y }) && app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x, y + 1 }))
 						toFill->push_back(posCheck + iMPoint{ x + 1, y });
 				}
 			}
@@ -2541,7 +2658,7 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 {
 	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
 
-		pugi::xml_document skillDoc;
+	pugi::xml_document skillDoc;
 	skillDoc.load_file(skillFileName.GetString());
 	pugi::xml_node skills = skillDoc.child("skills");
 
@@ -3160,15 +3277,21 @@ bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
 
 	Collider* spawnerCollider = new Collider(r, cType, app->ai);
 
-	fMPoint pos;
-	pos.x = spawnerNode.child("sample").child("position").attribute("x").as_float(0);
-	pos.y = spawnerNode.child("sample").child("position").attribute("y").as_float(0);
+	int wannamingosPerWave = spawnerNode.child("sample").child("stats").attribute("wannamingosPerWave").as_int(0);
+	float wannamingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("wannamingosSpawnRate").as_float(0);
 
-	int enemiesPerWave = spawnerNode.child("sample").child("stats").attribute("enemiesPerWave").as_int(0);
-	float spawnRate = spawnerNode.child("sample").child("stats").attribute("spawnRate").as_float(0);
-	ENTITY_TYPE spawnsType = (ENTITY_TYPE)spawnerNode.child("sample").child("stats").attribute("spawnsType").as_int(0);
+	int gigamingosPerWave = spawnerNode.child("sample").child("stats").attribute("gigamingosPerWave").as_int(0);
+	float gigamingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("gigamingosSpawnRate").as_float(0);
 
-	sampleSpawner = new Spawner(pos, spawnsType, spawnerCollider, enemiesPerWave, spawnRate);
+	int speedamingosPerWave = spawnerNode.child("sample").child("stats").attribute("speedamingosPerWave").as_int(0);
+	float speedamingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("speedamingosSpawnRate").as_float(0);
+
+	int snipermingosPerWave = spawnerNode.child("sample").child("stats").attribute("snipermingosPerWave").as_int(0);
+	float snipermingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("snipermingosSpawnRate").as_float(0);
+
+
+	sampleSpawner = new Spawner(fMPoint(0, 0), spawnerCollider, wannamingosPerWave, wannamingosSpawnRate, gigamingosPerWave, gigamingosSpawnRate, 
+								speedamingosPerWave, speedamingosSpawnRate, snipermingosPerWave, snipermingosSpawnRate);
 
 	return ret;
 
@@ -3356,9 +3479,21 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 		{
 			spawner = (Spawner*)AddEntity(ENTITY_TYPE::SPAWNER, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
-			spawner->SetNumberToSpawn(iterator.attribute("entitys_to_spawn").as_int());
-			spawner->SetSpawnRate(iterator.attribute("spawn_rate").as_float());
-			spawner->SetEnemiesPerWave(iterator.attribute("entities_per_wave").as_int());
+			spawner->SetWannamingosToSpawn(iterator.attribute("wannamingos_to_spawn").as_int());
+			spawner->SetWannamingoSpawnRate(iterator.attribute("wannamingos_spawn_rate").as_float());
+			spawner->SetWannamingosPerWave(iterator.attribute("wannamingos_per_wave").as_int());
+
+			spawner->SetGigamingosToSpawn(iterator.attribute("gigamingos_to_spawn").as_int());
+			spawner->SetGigamingoSpawnRate(iterator.attribute("gigamingos_spawn_rate").as_float());
+			spawner->SetGigamingosPerWave(iterator.attribute("gigamingos_per_wave").as_int());
+
+			spawner->SetSpeedamingosToSpawn(iterator.attribute("speedamingos_to_spawn").as_int());
+			spawner->SetSpeedamingoSpawnRate(iterator.attribute("speedamingos_spawn_rate").as_float());
+			spawner->SetSpeedamingosPerWave(iterator.attribute("speedamingos_per_wave").as_int());
+
+			spawner->SetSnipermingosToSpawn(iterator.attribute("snipermingos_to_spawn").as_int());
+			spawner->SetSnipermingosSpawnRate(iterator.attribute("snipermingos_spawn_rate").as_float());
+			spawner->SetSnipermingosPerWave(iterator.attribute("snipermingos_per_wave").as_int());
 
 			if (iterator.attribute("active").as_bool() == true)
 				spawner->Activate();
@@ -3562,7 +3697,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			Skill skill1;
 			SKILL_ID skill1Id = (SKILL_ID)iterator.attribute("skill1Id").as_int();
 			int skill1Lvl = iterator.attribute("skill1Lvl").as_int();
-	
+
 			RequestSkill(skill1, skill1Id, skill1Lvl);
 			hero->ReplaceSkill1(skill1);
 
@@ -3573,7 +3708,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			RequestSkill(passiveSkill, passiveSkillId, passiveSkillLvl);
 			hero->ReplacePassiveSkill(passiveSkill);
 
-			
+
 
 			robottoLifeUpgradeValue = iterator.attribute("hp").as_float();
 			robottoDamageUpgradeValue = iterator.attribute("damage").as_float();
@@ -3742,9 +3877,23 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				spawner = (Spawner*)entityVector[i];
 
-				iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
-				iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
-				iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
+				iterator.append_attribute("wannamingos_to_spawn") = spawner->GetWannamingosToSpawn();
+				iterator.append_attribute("wannamingos_spawn_rate") = spawner->GetWannamingosSpawnRate();
+				iterator.append_attribute("wannamingos_per_wave") = spawner->GetWannamingosPerWave();
+
+				iterator.append_attribute("gigamingos_to_spawn") = spawner->GetGigamingosToSpawn();
+				iterator.append_attribute("gigamingos_spawn_rate") = spawner->GetGigamingosSpawnRate();
+				iterator.append_attribute("gigamingos_per_wave") = spawner->GetGigamingosPerWave();
+
+				iterator.append_attribute("speedamingos_to_spawn") = spawner->GetSpeedamingosToSpawn();
+				iterator.append_attribute("speedamingos_spawn_rate") = spawner->GetSpeedamingosSpawnRate();
+				iterator.append_attribute("speedamingos_per_wave") = spawner->GetSpeedamingosPerWave();
+
+				iterator.append_attribute("snipermingos_to_spawn") = spawner->GetWannamingosToSpawn();
+				iterator.append_attribute("snipermingos_spawn_rate") = spawner->GetWannamingosSpawnRate();
+				iterator.append_attribute("snipermingos_per_wave") = spawner->GetWannamingosPerWave();
+
+
 				iterator.append_attribute("active") = spawner->GetActive();
 				break;
 
