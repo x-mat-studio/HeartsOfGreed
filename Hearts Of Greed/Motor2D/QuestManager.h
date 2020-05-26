@@ -15,7 +15,7 @@ struct QuestInfo
 {
 public:
 
-	QuestInfo(int resourcesReward, int id, bool active = false);
+	QuestInfo(int resourcesReward, int id, bool noCombat = false, bool active = false);
 	~QuestInfo();
 
 	void StartQuest();
@@ -37,6 +37,7 @@ private:
 
 public:
 	bool active;
+	bool noCombat;
 
 
 private:
