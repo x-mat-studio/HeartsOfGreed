@@ -416,12 +416,10 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
+				state = DIALOG_STATE::TUTORIAL_END_B1;
 
-				currentDialog1 = nullptr;
-				currentDialog2 = nullptr;
+				currentDialog1 = &dialogTutorial1_END_A1;
 
-				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 

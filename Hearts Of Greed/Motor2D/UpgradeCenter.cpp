@@ -119,3 +119,27 @@ void UpgradeCenter::ChangeTextures()
 
 	}
 }
+
+
+int UpgradeCenter::GetTurretLevel() const
+{
+	return turretLvl;
+}
+
+
+int UpgradeCenter::GetBarricadeLevel() const
+{
+	return barricadeLvl;
+}
+
+
+void UpgradeCenter::SetTurretLevel(int level)
+{
+	turretLvl = level;
+}
+
+
+void UpgradeCenter::SetBarricadeLevel(int level)
+{
+	barricadeLvl = level;
+}
