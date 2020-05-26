@@ -69,7 +69,6 @@ bool ModuleQuestManager::Start()
 
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FINISH_QUEST, this);
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FAIL_QUEST, this);
-	ret = app->eventManager->EventRegister(EVENT_ENUM::FIRST_BASE_CONQUERED, this);
 
 	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
 	questFailed = app->audio->LoadFx("audio/sfx/Interface/MissionFailed.wav");
@@ -96,7 +95,6 @@ bool ModuleQuestManager::CleanUp()
 
 	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FINISH_QUEST, this);
 	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FAIL_QUEST, this);
-	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FIRST_BASE_CONQUERED, this);
 
 	app->tex->UnLoad(questMarker);
 
@@ -140,11 +138,6 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 		app->audio->PlayFx(questFailed, 0, -1);
 		break;
 
-	case EVENT_ENUM::FIRST_BASE_CONQUERED:
-
-		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-		QuestStarted(5);
-		break;
 	}
 }
 
@@ -167,9 +160,8 @@ void ModuleQuestManager::QuestStarted(int questId)
 	{
 	case 0:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START);
-		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END);
-		character1 = ENTITY_TYPE::HERO_GATHERER;
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character1 = ENTITY_TYPE::HQ_COMANDER;
+		character2 = ENTITY_TYPE::HERO_GATHERER;
 		break;
 
 	case 1:
