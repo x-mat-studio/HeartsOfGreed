@@ -526,12 +526,14 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 			}
 		}
 	}*/
-	if (layer->name == P2SString("BuildingGeneration")) {
+	if (layer->name == P2SString("BuildingGeneration")) 
+	{
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
 
-			if (layer->gid[i] > 0) {
+			if (layer->gid[i] > 0) 
+			{
 
 				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(layer->gid[i]));
 
@@ -632,6 +634,12 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				case 250 + 14:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(0);
+					app->questManager->AddQuest(qst);
+					break;
+
+				case 250 + 15:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(6);
 					app->questManager->AddQuest(qst);
 					break;
 

@@ -53,7 +53,7 @@ void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 
 	for (pugi::xml_node iterator = node.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
 	{
-		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int()));
+		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int(), iterator.attribute("noCombat").as_bool(false)));
 
 		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
 		{
@@ -201,10 +201,17 @@ void ModuleQuestManager::QuestStarted(int questId)
 		break;
 
 	case 5:
-		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START2);
-		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END2);
-		character1 = ENTITY_TYPE::HERO_GATHERER;
-		character2 = ENTITY_TYPE::UNKNOWN;
+		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL2_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL2_END);
+		character1 = ENTITY_TYPE::HQ_COMANDER;
+		character2 = ENTITY_TYPE::HERO_GATHERER;
+		break;
+
+	case 6:
+		//app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START3);
+		//questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END3);
+		character1 = ENTITY_TYPE::HQ_COMANDER;
+		character2 = ENTITY_TYPE::HERO_GATHERER;
 		break;
 
 	default:
@@ -226,7 +233,7 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 			if (questInfoVector[i].CheckQuestStatus(entity))
 			{
 				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
-				
+
 				if (i == 5)	// Tutorial 2 ID
 				{
 					app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
@@ -247,7 +254,7 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 
 	for (pugi::xml_node iterator = data.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
 	{
-		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int(), iterator.attribute("active").as_bool()));
+		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int(), iterator.attribute("noCombat").as_bool(), iterator.attribute("active").as_bool()));
 		questInfoVector[i].SetDialogInput(iterator.attribute("dialogInput").as_int());
 
 		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
@@ -261,7 +268,6 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 		Quest* qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, iterator.attribute("questX").as_float(), iterator.attribute("questY").as_float());
 		qst->SetId(iterator.attribute("questID").as_int());
 		app->questManager->AddQuest(qst);
-
 	}
 
 	character1 = (ENTITY_TYPE)data.attribute("character1").as_int();
@@ -282,8 +288,8 @@ bool ModuleQuestManager::Save(pugi::xml_node& data) const
 		questInfoVector[i].Save(iterator);
 	}
 
-	data.append_attribute("character1") = (int) character1;
-	data.append_attribute("character2") = (int) character2;
+	data.append_attribute("character1") = (int)character1;
+	data.append_attribute("character2") = (int)character2;
 
 	return true;
 }
@@ -291,13 +297,14 @@ bool ModuleQuestManager::Save(pugi::xml_node& data) const
 
 //Struct QuestInfo
 
-QuestInfo::QuestInfo(int resourcesReward, int id, bool active) :
+QuestInfo::QuestInfo(int resourcesReward, int id, bool noCombat, bool active) :
 
 	resourcesReward(resourcesReward),
 	id(id),
 	dialogInput(-1),
 
-	active(active)
+	active(active),
+	noCombat(noCombat)
 {}
 
 
@@ -348,6 +355,11 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 {
 	int numberEntitys = questEntitysVector.size();
 
+	if (questEntitysVector.empty() && this->noCombat == true)
+	{
+		WinQuest();
+	}
+
 	for (int i = 0; i < numberEntitys; i++)
 	{
 		if (questEntitysVector[i] == entity)
@@ -360,13 +372,13 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 				return false;
 			}
 
-			else if ((questEntitysVector.size() == 1 && questEntitysVector[0]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)|| questEntitysVector.size() == 0) //Only remains the hero or all enemies are dead
+			else if ((questEntitysVector.size() == 1 && questEntitysVector[0]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) || questEntitysVector.size() == 0) //Only remains the hero or all enemies are dead
 			{
 				questEntitysVector[0]->missionEntity = false;
 				WinQuest();
 				return true;
 			}
-			
+
 		}
 	}
 
@@ -396,7 +408,9 @@ void QuestInfo::WinQuest()
 	GiveReward();
 	app->dialogManager->PushInput((DIALOG_INPUT)dialogInput);
 
-	app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+	if (noCombat == false)
+		app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
+
 	app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 }
 
@@ -433,6 +447,7 @@ void QuestInfo::SetDialogInput(int input)
 bool QuestInfo::Save(pugi::xml_node& node) const
 {
 	node.append_attribute("active") = active;
+	node.append_attribute("noCombat") = noCombat;
 	node.append_attribute("id") = id;
 
 	node.append_attribute("dialogInput") = dialogInput;
@@ -485,5 +500,3 @@ ENTITY_TYPE ModuleQuestManager::RequestCharacter2()
 {
 	return character2;
 }
-
-

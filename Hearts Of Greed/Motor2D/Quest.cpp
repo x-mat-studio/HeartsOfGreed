@@ -41,7 +41,8 @@ Quest::~Quest()
 void Quest::Draw(float dt)
 {
 
-	if (this->myState == QUEST_STATE::INACTIVE) {
+	if (this->myState == QUEST_STATE::INACTIVE) 
+	{
 		app->render->Blit(texture, position.x, position.y, 0, false, true, 0, 255, 255, 255, 1.0f);
 	}
 	// blit my particle effect here
@@ -53,6 +54,8 @@ void Quest::OnCollision(Collider* collider)
 	this->myState = QUEST_STATE::ACTIVE;
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
+
 	
 	app->questManager->QuestStarted(id);
 
