@@ -1123,6 +1123,123 @@ Entity* ModuleEntityManager::CheckEntityOnClick(iMPoint mousePos, bool focus, EN
 	return ret;
 }
 
+Entity* ModuleEntityManager::CheckEntityOnClickbyPriority(iMPoint mousePos)
+{
+	Entity* ret = nullptr;
+
+	Collider* col = nullptr;
+	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
+
+	int numEntities = entityVector.size();
+
+	for (int j = 0; j < numEntities; j++)
+	{
+		entityVector[j]->selectedByPlayer = false;
+	}
+
+	for (int k = (int)ENTITY_TYPE::UNKNOWN + 1; k != (int)ENTITY_TYPE::MAX_TYPE; k++)
+	{
+		for (int i = 0; i < numEntities; i++)
+		{
+
+
+
+			type = entityVector[i]->GetType();
+			col = entityVector[i]->GetCollider();
+			align = entityVector[i]->GetAlignment();
+
+			if (col == nullptr || k != (int)type)
+				continue;
+
+			//dynamic entities get priority over static entities
+			if (mousePos.PointInRect(&col->rect))
+			{
+				if (col != nullptr)
+				{
+
+					entityVector[i]->selectedByPlayer = true;
+
+
+					return entityVector[i];
+				}
+
+				ret = entityVector[i];
+			}
+			else
+			{
+				entityVector[i]->selectedByPlayer = false;
+			}
+		}
+	}
+
+	if (ret != nullptr)
+	{
+		ret->selectedByPlayer = true;
+	}
+
+	return ret;
+}
+
+Entity* ModuleEntityManager::CheckEntityOnClickbyPriorityandAlignment(iMPoint mousePos, bool focus, ENTITY_ALIGNEMENT alignement)
+{
+
+	Entity* ret = nullptr;
+
+	Collider* col = nullptr;
+	ENTITY_TYPE type;
+	ENTITY_ALIGNEMENT align;
+
+	int numEntities = entityVector.size();
+
+	for (int k = (int)ENTITY_TYPE::UNKNOWN + 1; k != (int)ENTITY_TYPE::MAX_TYPE; k++)
+	{
+		for (int i = 0; i < numEntities; i++)
+		{
+			type = entityVector[i]->GetType();
+			col = entityVector[i]->GetCollider();
+			align = entityVector[i]->GetAlignment();
+
+			if (col == nullptr || k != (int)type)
+				continue;
+
+			//dynamic entities get priority over static entities
+			if (mousePos.PointInRect(&col->rect))
+			{
+				if (col != nullptr && (align == alignement))
+				{
+					if (focus == true)
+					{
+						for (int j = i + 1; j < numEntities; j++)
+						{
+							entityVector[j]->selectedByPlayer = false;
+						}
+
+						entityVector[i]->selectedByPlayer = true;
+					}
+
+					return entityVector[i];
+				}
+
+				ret = entityVector[i];
+			}
+
+			else
+			{
+				if (focus == true)
+					entityVector[i]->selectedByPlayer = false;
+			}
+		}
+	}
+
+	if (ret != nullptr && focus == true)
+	{
+		ret->selectedByPlayer = true;
+	}
+
+	return ret;
+}
+
 
 void ModuleEntityManager::CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroPlayerVector)
 {
@@ -2529,7 +2646,7 @@ void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int r
 			{
 				if (skillArea->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
 				{
-					if (app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x+1, y }) && app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x, y+1 }))
+					if (app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x + 1, y }) && app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x, y + 1 }))
 						toFill->push_back(posCheck + iMPoint{ x + 1, y });
 				}
 			}
@@ -2541,7 +2658,7 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 {
 	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
 
-		pugi::xml_document skillDoc;
+	pugi::xml_document skillDoc;
 	skillDoc.load_file(skillFileName.GetString());
 	pugi::xml_node skills = skillDoc.child("skills");
 
@@ -3562,7 +3679,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			Skill skill1;
 			SKILL_ID skill1Id = (SKILL_ID)iterator.attribute("skill1Id").as_int();
 			int skill1Lvl = iterator.attribute("skill1Lvl").as_int();
-	
+
 			RequestSkill(skill1, skill1Id, skill1Lvl);
 			hero->ReplaceSkill1(skill1);
 
@@ -3573,7 +3690,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			RequestSkill(passiveSkill, passiveSkillId, passiveSkillLvl);
 			hero->ReplacePassiveSkill(passiveSkill);
 
-			
+
 
 			robottoLifeUpgradeValue = iterator.attribute("hp").as_float();
 			robottoDamageUpgradeValue = iterator.attribute("damage").as_float();

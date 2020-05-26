@@ -314,7 +314,7 @@ void ModulePlayer::LeftClick()
 
 	heroesVector.clear();
 
-	focusedEntity = app->entityManager->CheckEntityOnClick(clickPosition);
+	focusedEntity = app->entityManager->CheckEntityOnClickbyPriority(clickPosition);
 
 	if (focusedEntity != nullptr)
 	{
@@ -337,7 +337,7 @@ void ModulePlayer::RightClick()
 
 	Click();
 
-	Entity* obj = app->entityManager->CheckEntityOnClick(clickPosition, false, ENTITY_ALIGNEMENT::ENEMY);
+	Entity* obj = app->entityManager->CheckEntityOnClickbyPriorityandAlignment(clickPosition, false, ENTITY_ALIGNEMENT::ENEMY);
 
 	int numHeroes = heroesVector.size();
 
