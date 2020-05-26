@@ -30,15 +30,19 @@ public:
 	bool ExecuteSkill3();
 
 	void UpdatePasiveSkill(float dt);
-	void Attack();
 
 	void LevelUp();
 
 	void PlayGenericNoise(int random);
 
+	Skill GetPassiveSkill() const;
+	void ReplacePassiveSkill(Skill& skill);
+
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	bool DrawVfx(float dt);
+
+	void Attack();
 
 private:
 

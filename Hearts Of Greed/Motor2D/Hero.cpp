@@ -1759,15 +1759,29 @@ void Hero::SetSkill1Cost(int skillCost)
 	skill1.energyCost = skillCost;
 }
 
+
 Skill Hero::GetSkill1() const
 {
 	return skill1;
 }
 
-void Hero::ReplaceSkill1(Skill newSkill)
+
+Skill Hero::GetPassiveSkill() const
+{
+	return Skill();
+}
+
+
+void Hero::ReplaceSkill1(Skill& newSkill)
 {
 	skill1 = newSkill;
 }
+
+
+void Hero::ReplacePassiveSkill(Skill& newSkill)
+{
+}
+
 
 void Hero::ReplaceHeroStats(HeroStats newStats)
 {
@@ -1885,10 +1899,17 @@ void Hero::SetVisionInPx(float visPx)
 }
 
 
-DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill) : level(level), heroType(type)
+DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill) :
+
+	level(level),
+	heroType(type),
+
+	skillLevel(skill.lvl),
+	skillId(skill.id),
+
+	passiveSkillLevel(passiveSkill.lvl),
+	passiveSkillId(passiveSkill.id)
 {
-	skillLevel = skill.lvl;
-	skillId = skill.id;
 }
 
 
@@ -1907,10 +1928,18 @@ int DeadHero::GetLevel() const
 	return level;
 }
 
+
 void DeadHero::GetSkillInfo(SKILL_ID& id, int& newskillLevel) const
 {
 	id = skillId;
 	newskillLevel = skillLevel;
+}
+
+
+void DeadHero::GetPassiveSkillInfo(SKILL_ID& id, int& newskillLevel) const
+{
+	id = passiveSkillId;
+	newskillLevel = passiveSkillLevel;
 }
 
 

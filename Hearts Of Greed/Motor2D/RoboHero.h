@@ -12,7 +12,7 @@ public:
 		Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 		Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-		Animation& tileOnWalk, HeroStats& stats, Skill& skill1);
+		Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Skill& passiveSkill);
 
 	RoboHero(fMPoint position, RoboHero* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -35,8 +35,29 @@ public:
 
 	void PlayGenericNoise(int random);
 
+	Skill GetPassiveSkill() const;
+	void ReplacePassiveSkill(Skill& skill);
+
+private:
+
+	void Attack();
+	void UpdatePasiveSkill(float dt);
+
+	void ResetBuff();
+	void ApplyBuff();
+
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 
+
+private:
+
+	Skill passiveSkill;
+	
+	int acumulations;
+	float timer;
+
+	float currentDamage;
+	float currentSpeed;
 };
 
 

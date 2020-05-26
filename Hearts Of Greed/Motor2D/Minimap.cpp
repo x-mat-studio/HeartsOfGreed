@@ -7,7 +7,9 @@
 #include "Window.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "UI_Group.h"
 #include "UIManager.h"
+#include "UIFactory.h"
 #include "UI.h"
 #include "Player.h"
 #include "FoWManager.h"
@@ -20,7 +22,7 @@ MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet)
 	type(type), 
 	offSet(offSet), 
 	minimapPos(worldPos)
-
+	
 {}
 
 
@@ -40,7 +42,7 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 }
 
 
-Minimap::Minimap() :minimapLoaded(false),minimapFoWNeedsUpdate(false)
+Minimap::Minimap() :minimapLoaded(false),minimapFoWNeedsUpdate(false), miniFrame{ 509, 706, 238, 125 }
 {
 	name = "minimap";
 }
@@ -153,7 +155,12 @@ bool Minimap::PostUpdate(float dt)
 		}
 		//app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 		//FoW Draw
+
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
+	
+		positionFrame = { -14, 496, 465, 240 };
+		SDL_RenderCopy(app->render->renderer, app->uiManager->GetAtlasTexture(), &miniFrame, &positionFrame);
+
 
 		//Draw icons
 		SDL_Rect iconRect = { 0,0,0,0 };

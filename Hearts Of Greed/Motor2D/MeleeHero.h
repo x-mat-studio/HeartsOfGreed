@@ -32,14 +32,16 @@ public:
 	bool ExecuteSkill2();
 	bool ExecuteSkill3();
 
-	void UpdatePasiveSkill(float dt);
-
 	void LevelUp();
 
 	void PlayGenericNoise(int random);
 
+	Skill GetPassiveSkill() const;
+	void ReplacePassiveSkill(Skill& skill);
+
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
+	void UpdatePasiveSkill(float dt);
 
 private:
 	Skill passiveSkill;

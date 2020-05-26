@@ -59,12 +59,13 @@
     <lvl  dmg="20" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
   </skill>
 
-  <skill id="6" type="1"  alignTarget="1">
-    <lvl  dmg="150" cooldown="10.0" rangeRadius="4"  attackRadius="1"  hurtYourself="false"  executionTime="1.75"  effect = "" energyCost="0"/>
-    <lvl  dmg="180" cooldown="9.0" rangeRadius="5"  attackRadius="1"  hurtYourself="false"  executionTime="1.75"  effect = "" energyCost="0"/>
-    <lvl  dmg="210" cooldown="9.0" rangeRadius="5"  attackRadius="1"  hurtYourself="false"  executionTime="1.75"  effect = "" energyCost="0"/>
-    <lvl  dmg="230" cooldown="8.0" rangeRadius="6"  attackRadius="1"  hurtYourself="false"  executionTime="1.75"  effect = "" energyCost="0"/>
-    <lvl  dmg="250" cooldown="6.5" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="1.75"  effect = "" energyCost="0"/>
+  <!-- Passive skills robo -->
+  <skill id="7" type="1"  alignTarget="1">
+    <lvl  dmg="10" cooldown="10.0" rangeRadius="10"  attackRadius="5"  hurtYourself="false"  executionTime="-1"  effect = "-1" energyCost="0"/>
+    <lvl  dmg="12" cooldown="10.0" rangeRadius="12"  attackRadius="5"  hurtYourself="false"  executionTime="-1"  effect = "-1" energyCost="0"/>
+    <lvl  dmg="14" cooldown="10.0" rangeRadius="14"  attackRadius="5"  hurtYourself="false"  executionTime="-1"  effect = "-1" energyCost="0"/>
+    <lvl  dmg="16" cooldown="10.0" rangeRadius="16"  attackRadius="5"  hurtYourself="false"  executionTime="-1"  effect = "-1" energyCost="0"/>
+    <lvl  dmg="20" cooldown="10.0" rangeRadius="20"  attackRadius="6"  hurtYourself="false"  executionTime="-1"  effect = "-1" energyCost="0"/>
   </skill>
   
 </skills>

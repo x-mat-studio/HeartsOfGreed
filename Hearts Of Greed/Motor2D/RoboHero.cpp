@@ -12,20 +12,34 @@ RoboHero::RoboHero(fMPoint position, Collider* col, Animation& walkLeft, Animati
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, 
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-	Animation& tileOnWalk, HeroStats& stats, Skill& skill1) :
+	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Skill& passiveSkill) :
 
 	Hero(position, ENTITY_TYPE::HERO_ROBO, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
-		tileOnWalk, stats, skill1)
+		tileOnWalk, stats, skill1),
 
-{}
+	passiveSkill(passiveSkill),
+	acumulations(0),
+	timer(0),
+
+	currentDamage(GetAttackDamage()),
+	currentSpeed(GetSpeed())
+{
+}
 
 
 RoboHero::RoboHero(fMPoint position, RoboHero* copy, ENTITY_ALIGNEMENT alignement) :
 
-	Hero(position, copy, alignement)
+	Hero(position, copy, alignement),
+
+	passiveSkill(copy->passiveSkill),
+	acumulations(0),
+	timer(0),
+
+	currentDamage(GetAttackDamage()),
+	currentSpeed(GetSpeed())
 {}
 
 
@@ -42,17 +56,20 @@ bool RoboHero::ActivateSkill1(fMPoint clickPosition)
 	return true;
 }
 
+
 bool RoboHero::ActivateSkill2()
 {
 
 	return true;
 }
 
+
 bool RoboHero::ActivateSkill3()
 {
 
 	return true;
 }
+
 
 bool RoboHero::PreProcessSkill1()
 {
@@ -71,11 +88,13 @@ bool RoboHero::PreProcessSkill1()
 	return true;
 }
 
+
 bool RoboHero::PreProcessSkill2()
 {
 
 	return true;
 }
+
 
 bool RoboHero::PreProcessSkill3()
 {
@@ -83,9 +102,9 @@ bool RoboHero::PreProcessSkill3()
 	return true;
 }
 
+
 bool RoboHero::ExecuteSkill1()
 {
-
 	if (!skillExecutionDelay)
 	{
 		if (!godMode)
@@ -97,9 +116,9 @@ bool RoboHero::ExecuteSkill1()
 
 		return skillExecutionDelay;
 	}
+
 	else
 	{
-
 		int ret = 0;
 
 		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
@@ -116,11 +135,13 @@ bool RoboHero::ExecuteSkill1()
 	return true;
 }
 
+
 bool RoboHero::ExecuteSkill2()
 {
 
 	return true;
 }
+
 
 bool RoboHero::ExecuteSkill3()
 {
@@ -128,11 +149,51 @@ bool RoboHero::ExecuteSkill3()
 	return true;
 }
 
+
+void RoboHero::UpdatePasiveSkill(float dt)
+{
+	if (timer > 0)
+		timer -= dt;
+
+	else if (timer <= 0 && acumulations > 0)
+	{
+		ResetBuff();
+		acumulations = 0;
+	}
+}
+
+
+void RoboHero::Attack()
+{
+	int ret = -1;
+
+	if (objective)
+		ret = objective->RecieveDamage(stats.damage);
+
+	if (ret > 0)
+	{
+		GetExperience(ret);
+
+		if (acumulations < passiveSkill.attackRadius)
+		{
+			ResetBuff();
+			acumulations++;
+			ApplyBuff();
+		}
+		
+		timer = passiveSkill.coolDown;
+	}
+}
+
+
 void RoboHero::LevelUp()
 {
+	ResetBuff();
+
 	//lvl up effect
 	if (myParticleSystem != nullptr)
-	myParticleSystem->Activate();
+		myParticleSystem->Activate();
+	
 	else 
 	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
@@ -149,10 +210,16 @@ void RoboHero::LevelUp()
 	stats.atkSpeed *= (app->entityManager->robottoAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
+
+	ApplyBuff();
 }
 
+
 void RoboHero::PlayGenericNoise(int probability)
-{}
+{
+
+}
+
 
 void RoboHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
@@ -168,4 +235,37 @@ void RoboHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 	}
 
 	app->render->Blit(app->entityManager->moveCommandTileRobot, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+}
+
+
+//Call this before upgrading the passive skill
+void RoboHero::ResetBuff()
+{
+	SetAttackDamage(currentDamage);
+	SetSpeed(currentSpeed);
+}
+
+
+void RoboHero::ApplyBuff()
+{
+	currentDamage = GetAttackDamage();
+	float dmg = currentDamage * passiveSkill.dmg * 0.01 * acumulations;		  //passiveSkill.dmg codifies the damage increment
+
+	currentSpeed = GetSpeed();
+	float spd = currentSpeed * passiveSkill.rangeRadius * 0.01 * acumulations;//passiveSkill.rangeRadius codifies the speed increment
+
+	SetAttackDamage(currentDamage + dmg);
+	SetSpeed(currentSpeed + spd);
+}
+
+
+Skill RoboHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void RoboHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
 }

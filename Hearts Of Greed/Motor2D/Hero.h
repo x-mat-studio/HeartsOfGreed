@@ -95,7 +95,7 @@ struct HeroStats
 	HeroStats();
 	HeroStats(HeroStats& newStats);
 	HeroStats operator=(HeroStats& newStats);
-	
+
 
 	int maxHP;
 	int damage;
@@ -116,18 +116,23 @@ struct HeroStats
 class DeadHero
 {
 public:
-	DeadHero(int level, ENTITY_TYPE type, Skill skill);
+	DeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill);
 	~DeadHero();
 
 	ENTITY_TYPE GetType()const;
 	int GetLevel()const;
-	void GetSkillInfo(SKILL_ID& id, int& skillLevel)const;
+	
+	void GetSkillInfo(SKILL_ID& id, int& skillLevel) const;
+	void GetPassiveSkillInfo(SKILL_ID& id, int& skillLevel) const;
 
 private:
 	ENTITY_TYPE heroType;
 	int level;
 	SKILL_ID skillId;
 	int skillLevel;
+
+	SKILL_ID passiveSkillId;
+	int passiveSkillLevel;
 
 
 };
@@ -169,7 +174,7 @@ public:
 	void Draw(float dt);
 	void DrawArea();
 
-	
+
 	virtual void UpdatePasiveSkill(float dt);
 
 	//Skill Related-----------------
@@ -276,7 +281,10 @@ public:
 	void SetVisionInPx(float visPx);
 
 	Skill GetSkill1() const;
-	void ReplaceSkill1(Skill newSkill);
+	virtual Skill GetPassiveSkill() const;
+
+	void ReplaceSkill1(Skill& newSkill);
+	virtual void ReplacePassiveSkill(Skill& skill);
 
 	void ReplaceHeroStats(HeroStats newStats);
 
@@ -422,7 +430,7 @@ protected:
 
 	ParticleSystem* myParticleSystem;
 	float lvlUpSfxTimer;
-	
+
 	bool comeFromAttack;
 };
 
