@@ -8,6 +8,8 @@
 #include "Pathfinding.h"
 #include "Map.h"
 
+
+
 ModuleAI::ModuleAI() : Module()
 {
 	name.create("AI");
@@ -18,6 +20,75 @@ ModuleAI::~ModuleAI()
 {}
 
 
+
+bool ModuleAI::Awake(pugi::xml_node& data)
+{
+	//Load required doc
+
+	P2SString filename = data.child("load").attribute("docnameNightSpawners").as_string();
+	pugi::xml_document spwnDoc;
+	spwnDoc.load_file(filename.GetString());
+	pugi::xml_node spawnNight = spwnDoc.child("nightSpawn");
+
+	//The nights
+	std::vector<int> NightAux;
+	
+		//Loading nights
+
+	//Remember, these numer codify for nº of each type of enemy: In order wanamingo - gigamingo - snipermingo - speedomingo
+
+	//Night 1
+	NightAux.push_back(		(int)spawnNight.child("night1").child("wana").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("giga").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("sniper").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("speed").attribute("number").as_int());
+	nightEnemyInfo.push_back(NightAux);
+	NightAux.clear();
+
+
+	//Night 2
+	NightAux.push_back(		(int)spawnNight.child("night2").child("wana").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night2").child("giga").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night2").child("sniper").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night2").child("speed").attribute("number").as_int());
+	nightEnemyInfo.push_back(NightAux);
+	NightAux.clear();
+	
+	//Night 3
+	NightAux.push_back(		(int)spawnNight.child("night3").child("wana").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night3").child("giga").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night3").child("sniper").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night3").child("speed").attribute("number").as_int());
+	nightEnemyInfo.push_back(NightAux);
+	NightAux.clear();
+	
+	//Night 4
+	NightAux.push_back(		(int)spawnNight.child("night4").child("wana").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night4").child("giga").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night4").child("sniper").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night4").child("speed").attribute("number").as_int());
+	nightEnemyInfo.push_back(NightAux);
+	NightAux.clear();
+	
+	//Night 5
+	NightAux.push_back(		(int)spawnNight.child("night5").child("wana").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night5").child("giga").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night5").child("sniper").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night5").child("speed").attribute("number").as_int());
+	nightEnemyInfo.push_back(NightAux);
+	NightAux.clear();
+	
+	//Night 6
+	NightAux.push_back(		(int)spawnNight.child("night6").child("wana").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night6").child("giga").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night6").child("sniper").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night6").child("speed").attribute("number").as_int());
+	nightEnemyInfo.push_back(NightAux);
+	NightAux.clear();
+
+	spwnDoc.reset();
+	return true;
+}
 
 bool ModuleAI::Start()
 {
@@ -45,6 +116,7 @@ bool ModuleAI::CleanUp()
 
 	baseVector.clear();
 	spawnerVector.clear();
+	nightEnemyInfo.clear();
 
 	return true;
 }

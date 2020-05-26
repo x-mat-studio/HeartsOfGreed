@@ -608,11 +608,27 @@ void ModulePlayer::SubstractBuildResources()
 {
 	switch (buildingToBuild)
 	{
+
 	case ENTITY_TYPE::BLDG_TURRET:
 	{
 		resources -= turretCost;
+		break;
 	}
-	break;
+
+	case ENTITY_TYPE::BLDG_BARRICADE:
+	{
+		resources -= barricadeCost;
+		break;
+	}
+
+	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
+	{
+		resources -= upgradeCenterCost;
+		break;
+	}
+
+	default:
+		break;
 	}
 
 }
@@ -734,7 +750,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			Building* building = (Building*)focusedEntity;
 			Base* base = building->myBase;
 
-			if (resources >= turretCost && base->TurretCapacityExceed())
+			if (base->TurretCapacityExceed())
 			{
 				ActivateBuildMode(ENTITY_TYPE::BLDG_TURRET, base);
 			}
@@ -748,7 +764,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			Base* base = (Base*)focusedEntity;
 
-			if (resources >= upgradeCenterCost && base->UpgradeCenterCapacityExceed())
+			if (base->UpgradeCenterCapacityExceed())
 			{
 				ActivateBuildMode(ENTITY_TYPE::BLDG_UPGRADE_CENTER, base);
 			}
@@ -763,16 +779,11 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			Building* building = (Building*)focusedEntity;
 			Base* base = building->myBase;
 
-			if (resources >= barricadeCost && base->BarricadeCapacityExceed())
+			if (base->BarricadeCapacityExceed())
 			{
 				ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, base);
 			}
 		}
-		break;
-
-
-	case EVENT_ENUM::TURRET_PURCHASE:
-		resources -= turretCost;
 		break;
 
 
@@ -1103,6 +1114,18 @@ bool ModulePlayer::IsBuilding() const
 int ModulePlayer::GetTurretCost() const
 {
 	return turretCost;
+}
+
+
+int ModulePlayer::GetUpgradeCenterCost() const
+{
+	return upgradeCenterCost;
+}
+
+
+int ModulePlayer::GetBarricadeCost() const
+{
+	return barricadeCost;
 }
 
 bool ModulePlayer::SetMenuState(bool menuState)

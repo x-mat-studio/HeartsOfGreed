@@ -137,7 +137,10 @@ UIFactory::UIFactory() :
 	robottoEnergyUpgradeCost(100),
 	robottoAtkSpeedUpgradeCost(100),
 
-	reviveCost(500)
+	reviveCost(500),
+	turretUpgradeCost(200),
+	barricadeUpgradeCost(150)
+
 {}
 
 
@@ -396,6 +399,7 @@ UI_Group* UIFactory::CreateOnHoverReviveMenu(Button* button)
 
 UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 {
+	char stats[40];
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
@@ -406,7 +410,8 @@ UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 20, background, "-120", group);
+	sprintf_s(stats, 40, "- %i", app->player->GetTurretCost());
+	CreateText(25, 20, background, stats, group);
 
 	return group;
 }
@@ -414,6 +419,7 @@ UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 
 UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 {
+	char stats[40];
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
@@ -424,7 +430,8 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 20, background, "-200", group);
+	sprintf_s(stats, 40, "- %i", turretUpgradeCost);
+	CreateText(25, 20, background, stats, group);
 
 	return group;
 }
@@ -432,6 +439,7 @@ UI_Group* UIFactory::CreateOnHoverUpgradeTurretMenu()
 
 UI_Group* UIFactory::CreateOnHoverBuyUpgradeCenterMenu()
 {
+	char stats[40];
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
@@ -442,7 +450,8 @@ UI_Group* UIFactory::CreateOnHoverBuyUpgradeCenterMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 20, background, "-500", group);
+	sprintf_s(stats, 40, "- %i", app->player->GetUpgradeCenterCost());
+	CreateText(25, 20, background, stats, group);
 
 	return group;
 }
@@ -450,6 +459,7 @@ UI_Group* UIFactory::CreateOnHoverBuyUpgradeCenterMenu()
 
 UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 {
+	char stats[40];
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
@@ -460,7 +470,8 @@ UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 20, background, "-100", group);
+	sprintf_s(stats, 40, "- %i", app->player->GetBarricadeCost());
+	CreateText(25, 20, background, stats, group);
 
 	return group;
 }
@@ -468,6 +479,7 @@ UI_Group* UIFactory::CreateOnHoverBuyBarricadeMenu()
 
 UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu()
 {
+	char stats[40];
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
@@ -478,7 +490,8 @@ UI_Group* UIFactory::CreateOnHoverUpgradeBarricadeMenu()
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
-	CreateText(25, 20, background, "-150", group);
+	sprintf_s(stats, 40, "- %i", barricadeUpgradeCost);
+	CreateText(25, 20, background, stats, group);
 
 	return group;
 }

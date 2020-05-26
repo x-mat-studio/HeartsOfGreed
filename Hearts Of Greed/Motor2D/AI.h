@@ -5,6 +5,7 @@
 
 #define ENEMIES_PER_NIGHT 5
 #define SPAWNERS_TO_ACTIVATE 2
+#define NUMER_OF_DIFFERENT_ENEMIES 4
 
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
@@ -22,6 +23,7 @@ public:
 	ModuleAI();
 	~ModuleAI();
 
+	bool Awake(pugi::xml_node&);
 	bool Start();
 
 	bool PostUpdate(float dt);
@@ -52,6 +54,7 @@ private:
 	std::vector<Base*> baseVector;
 	std::vector<Spawner*> spawnerVector;
 
+	std::vector<std::vector<int>> nightEnemyInfo;
 };
 
 

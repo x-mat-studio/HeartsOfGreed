@@ -718,23 +718,40 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:
-		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= app->player->GetTurretCost())
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::UPGRADE_TURRET:
-		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->turretUpgradeCost)
+		{
+			app->player->AddResources(-factory->turretUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::BUY_UPGRADE_CENTER:
-		app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= app->player->GetUpgradeCenterCost())
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= app->player->GetBarricadeCost())
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::UPGRADE_BARRICADE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= factory->barricadeUpgradeCost)
+		{
+			app->player->AddResources(-factory->barricadeUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:
