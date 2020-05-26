@@ -3799,6 +3799,9 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 				{
 					upgradeCenter = (UpgradeCenter*)AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
 
+					upgradeCenter->SetTurretLevel(iterator2.attribute("turretLvl").as_int());
+					upgradeCenter->SetBarricadeLevel(iterator2.attribute("barricadeLvl").as_int());
+
 					base->AddUpgradeCenter(upgradeCenter);
 				}
 			}
@@ -4218,8 +4221,12 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				{
 					iterator2 = iterator.append_child("upgrade_center");
 					iterator2.append_attribute("name") = "upgrade_center";
-					//iterator2.append_attribute("x") = upgradeCenter->position.x;
-					//iterator2.append_attribute("y") = upgradeCenter->position.y;
+
+					iterator2.append_attribute("x") = upgradeCenter->position.x;
+					iterator2.append_attribute("y") = upgradeCenter->position.y;
+
+					iterator2.append_attribute("turretLvl") = upgradeCenter->GetTurretLevel();
+					iterator2.append_attribute("barricadeLvl") = upgradeCenter->GetBarricadeLevel();
 				}
 
 				break;

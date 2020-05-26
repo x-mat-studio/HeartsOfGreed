@@ -280,66 +280,66 @@ bool Spawner::GetActive()
 }
 
 
-int Spawner::GetWannamingosToSpawn()
+int Spawner::GetWannamingosToSpawn() const
 {
 	return wannamingosToSpawn;
 }
 
-int Spawner::GetGigamingosToSpawn()
+int Spawner::GetGigamingosToSpawn() const
 {
 	return gigamingosToSpawn;
 }
 
-int Spawner::GetSpeedamingosToSpawn()
+int Spawner::GetSpeedamingosToSpawn() const
 {
 	return speedamingosToSpawn;
 }
 
-int Spawner::GetSnipermingosToSpawn()
+int Spawner::GetSnipermingosToSpawn() const
 {
 	return snipermingosToSpawn;
 }
 
 
 
-float Spawner::GetWannamingosSpawnRate()
+float Spawner::GetWannamingosSpawnRate() const
 {
 	return wannamingosSpawnRate;
 }
 
-float Spawner::GetGigamingosSpawnRate()
+float Spawner::GetGigamingosSpawnRate() const
 {
 	return gigamingosSpawnRate;
 }
 
-float Spawner::GetSpeedamingosSpawnRate()
+float Spawner::GetSpeedamingosSpawnRate() const
 {
 	return speedamingosSpawnRate;
 }
 
-float Spawner::GetSnipermingosSpawnRate()
+float Spawner::GetSnipermingosSpawnRate() const
 {
 	return snipermingosSpawnRate;
 }
 
 
 
-int Spawner::GetWannamingosPerWave()
+int Spawner::GetWannamingosPerWave() const
 {
 	return wannamingosPerWave;
 }
 
-int Spawner::GetGigamingosPerWave()
+int Spawner::GetGigamingosPerWave() const
 {
 	return gigamingosPerWave;
 }
 
-int Spawner::GetSpeedamingosPerWave()
+int Spawner::GetSpeedamingosPerWave() const
 {
 	return speedamingosPerWave;
 }
 
-int Spawner::GetSnipermingosPerWave()
+int Spawner::GetSnipermingosPerWave() const
 {
 	return snipermingosPerWave;
 }

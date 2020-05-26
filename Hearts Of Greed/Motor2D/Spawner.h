@@ -18,10 +18,19 @@ public:
 
 	~Spawner();
 
+	bool PostUpdate(float dt);
+
+	void Activate();
+	void Desactivate();
+
+	bool GetActive();
+
 	void SetWannamingosToSpawn(int number);
 	void SetGigamingosToSpawn(int number);
 	void SetSpeedamingosToSpawn(int number);
 	void SetSnipermingosToSpawn(int number);
+
+	//Getters and setters
 
 	void SetWannamingoSpawnRate(float ratio);
 	void SetGigamingoSpawnRate(float ratio);
@@ -33,27 +42,21 @@ public:
 	void SetSpeedamingosPerWave(int entities);
 	void SetSnipermingosPerWave(int entities);
 
-	bool PostUpdate(float dt);
 
-	void Activate();
-	void Desactivate();
+	int GetWannamingosToSpawn() const;
+	int GetGigamingosToSpawn() const;
+	int GetSpeedamingosToSpawn() const;
+	int GetSnipermingosToSpawn() const;
 
-	bool GetActive();
+	float GetWannamingosSpawnRate() const;
+	float GetGigamingosSpawnRate() const;
+	float GetSpeedamingosSpawnRate() const;
+	float GetSnipermingosSpawnRate() const;
 
-	int GetWannamingosToSpawn();
-	int GetGigamingosToSpawn();
-	int GetSpeedamingosToSpawn();
-	int GetSnipermingosToSpawn();
-
-	float GetWannamingosSpawnRate();
-	float GetGigamingosSpawnRate();
-	float GetSpeedamingosSpawnRate();
-	float GetSnipermingosSpawnRate();
-
-	int GetWannamingosPerWave();
-	int GetGigamingosPerWave();
-	int GetSpeedamingosPerWave();
-	int GetSnipermingosPerWave();
+	int GetWannamingosPerWave() const;
+	int GetGigamingosPerWave() const;
+	int GetSpeedamingosPerWave() const;
+	int GetSnipermingosPerWave() const;
 
 
 private:
