@@ -29,7 +29,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevmousePosY(0),
 	timer(0),
 	dayNumber(0),
-	
+
 	dayTimer(INT_MAX),
 	nightTimer(INT_MAX),
 	camVel(0.f),
@@ -65,7 +65,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
 	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
 
-	
+
 	dayTimer = config.attribute("dayTimerSec").as_int(1);
 	nightTimer = config.attribute("nightTimerSec").as_int(1);
 
@@ -78,7 +78,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 
 	mapBordersBottomRightCorner.x = config.attribute("mapBordersBottomRightCornerX").as_int(0);
 	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
-	
+
 	fadeTime = config.attribute("fadeTime").as_float(0);
 	startingScale = config.attribute("startingScale").as_float(.0f);
 
@@ -156,7 +156,7 @@ bool ModuleTestScene::Start()
 			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
 				*/
 
-			//Spawners------------------
+				//Spawners------------------
 			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
 			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
 
@@ -167,7 +167,7 @@ bool ModuleTestScene::Start()
 
 			//Quests-------------
 		}
-		
+
 	}
 
 	if (startFromLoad == true)
@@ -224,10 +224,11 @@ bool  ModuleTestScene::PreUpdate(float dt)
 	}
 
 	CheckListener(this);
-	
+
 
 	//VERTICAL SLICE
 	CalculateTimers(dt);
+
 
 	return true;
 }
@@ -359,19 +360,27 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	//}
 
 	//DEBUG WALKABILITY
-	//for (int i = 0; i < app->map->data.width; i++)
-	//{
-	//	for (int j = 0; j < app->map->data.height; j++)
-	//	{
-	//		if (app->pathfinding->IsWalkable({ i,j }))
-	//		{
-	//			iMPoint p = app->map->MapToWorld(i, j);
 
-	//			app->render->Blit(app->entityManager->debugPathTexture, p.x, p.y);
-	//		}
+	if (app->debugMode)
+	{
+		SDL_SetTextureAlphaMod(app->entityManager->debugPathTexture, 255 * 0.5f);
+		for (int i = 0; i < app->map->data.width; i++)
+		{
+			for (int j = 0; j < app->map->data.height; j++)
+			{
+				if (app->pathfinding->IsWalkable({ i + 1,j }))
+				{
+					iMPoint p = app->map->MapToWorld(i, j);
 
-	//	}
-	//}
+					app->render->Blit(app->entityManager->debugPathTexture, p.x, p.y);
+				}
+
+			}
+		}
+		SDL_SetTextureAlphaMod(app->entityManager->debugPathTexture, 255);
+
+	}
+
 
 	return ret;
 }

@@ -2529,7 +2529,8 @@ void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int r
 			{
 				if (skillArea->area[(y * diameter) + x] == 1 && app->pathfinding->IsWalkable(posCheck + iMPoint{ x, y }))
 				{
-					toFill->push_back(posCheck + iMPoint{ x, y });
+					if (app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x+1, y }) && app->pathfinding->CheckBoundaries(posCheck + iMPoint{ x, y+1 }))
+						toFill->push_back(posCheck + iMPoint{ x + 1, y });
 				}
 			}
 		}
@@ -2540,7 +2541,7 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 {
 	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
 
-	pugi::xml_document skillDoc;
+		pugi::xml_document skillDoc;
 	skillDoc.load_file(skillFileName.GetString());
 	pugi::xml_node skills = skillDoc.child("skills");
 
@@ -4176,7 +4177,7 @@ int ModuleEntityManager::CheckPlayerBases()
 	int numEntities = entityVector.size();
 	int baseNumber = 0;
 
-	for(int i = 0; i < numEntities; i++)
+	for (int i = 0; i < numEntities; i++)
 	{
 		if (entityVector[i]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER && entityVector[i]->GetType() == ENTITY_TYPE::BLDG_BASE)
 		{
