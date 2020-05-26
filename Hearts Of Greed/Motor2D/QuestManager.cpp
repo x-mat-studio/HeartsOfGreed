@@ -167,7 +167,6 @@ void ModuleQuestManager::QuestStarted(int questId)
 	{
 	case 0:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START);
-		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END);
 		character1 = ENTITY_TYPE::HERO_GATHERER;
 		character2 = ENTITY_TYPE::UNKNOWN;
 		break;
