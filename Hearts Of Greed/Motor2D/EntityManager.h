@@ -95,6 +95,9 @@ public:
 
 
 	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::PLAYER);
+	Entity* CheckEntityOnClickbyPriority(iMPoint mousePos);
+	Entity* CheckEntityOnClickbyPriorityandAlignment(iMPoint mousePos, bool focus = true, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::PLAYER);
+
 	void CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
 

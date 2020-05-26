@@ -2,6 +2,8 @@
 
 #include "EventManager.h"
 #include "EntityManager.h"
+#include "Pathfinding.h"
+#include "Map.h"
 
 #include "Base.h"
 
@@ -28,6 +30,8 @@ UpgradeCenter::UpgradeCenter(fMPoint position, UpgradeCenter * copy, ENTITY_ALIG
 	upgradeTurretCost(copy->upgradeTurretCost),
 	upgradeBarricadeCost(copy->upgradeBarricadeCost)
 {
+
+	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x , position.y - 1), 5, 5);
 }
 
 
