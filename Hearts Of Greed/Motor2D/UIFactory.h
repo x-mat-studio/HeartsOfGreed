@@ -157,6 +157,9 @@ public:
 	void CreateRobottoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateSpeedomingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateSnipermingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateGigamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
@@ -206,6 +209,9 @@ private:
 	SDL_Rect turretDataPagePicture;
 	SDL_Rect barricadeDataPagePicture;
 	SDL_Rect wanamingoDataPagePicture;
+	SDL_Rect speedomingoDataPagePicture;
+	SDL_Rect snipermingoDataPagePicture;
+	SDL_Rect gigamingoDataPagePicture;
 	SDL_Rect turretShopPicture;
 	SDL_Rect barricadeShopPicture;
 
@@ -302,6 +308,8 @@ public:
 	float robottoAtkSpeedUpgradeCost;
 
 	int reviveCost;
+	int turretUpgradeCost;
+	int barricadeUpgradeCost;
 };
 
 #endif __UIFACTORY_H__

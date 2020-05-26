@@ -7,6 +7,9 @@
 #include "Turret.h"
 #include "UpgradeCenter.h"
 #include "Enemy.h"
+#include "NightEnemy.h"
+#include "RangedEnemy.h"
+#include "GigaEnemy.h"
 #include "Hero.h"
 
 DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
@@ -97,10 +100,32 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
 				break;
 
+			case ENTITY_TYPE::ENEMY_NIGHT:
+
+				factory->CreateSpeedomingoPage(&dataPageVector, this);
+				GetSpeedomingoValue();
+				state = DATA_PAGE_ENUM::FOCUSED_SPEEDOMINGO;
+				break;
+
+			case ENTITY_TYPE::ENEMY_RANGED:
+
+				factory->CreateSnipermingoPage(&dataPageVector, this);
+				GetSnipermingoValue();
+				state = DATA_PAGE_ENUM::FOCUSED_SNIPERMINGO;
+				break;
+
+			case ENTITY_TYPE::ENEMY_GIGA:
+
+				factory->CreateGigamingoPage(&dataPageVector, this);
+				GetGigamingoValue();
+				state = DATA_PAGE_ENUM::FOCUSED_GIGAMINGO;
+				break;
+
 			case ENTITY_TYPE::BLDG_TURRET:
 
 				factory->CreateTurretPage(&dataPageVector, this);
 				GetTurretValue();
+				state = DATA_PAGE_ENUM::FOCUSED_TURRET;
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -164,7 +189,6 @@ bool DataPages::PreUpdate(float dt)
 
 		case DATA_PAGE_ENUM::FOCUSED_TURRET:
 			CheckTurretValues();
-			state = DATA_PAGE_ENUM::FOCUSED_TURRET;
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER:
@@ -173,6 +197,18 @@ bool DataPages::PreUpdate(float dt)
 
 		case DATA_PAGE_ENUM::FOCUSED_WANAMINGO:
 			CheckWanamingoValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_SPEEDOMINGO:
+			CheckSpeedomingoValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_SNIPERMINGO:
+			CheckSnipermingoValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_GIGAMINGO:
+			CheckGigamingoValues();
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_UNKNOWN:
@@ -283,6 +319,105 @@ void DataPages::CheckWanamingoValues()
 	bool check = false;
 
 	Enemy* focus = (Enemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
+
+
+void DataPages::CheckSpeedomingoValues()
+{
+	bool check = false;
+
+	NightEnemy* focus = (NightEnemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
+
+
+void DataPages::CheckSnipermingoValues()
+{
+	bool check = false;
+
+	RangedEnemy* focus = (RangedEnemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
+
+
+void DataPages::CheckGigamingoValues()
+{
+	bool check = false;
+
+	GigaEnemy* focus = (GigaEnemy*)focusEntity;
 
 	if (CheckData(attackDamage, focus->GetAD()))
 	{
@@ -425,6 +560,48 @@ void DataPages::GetHeroValue()
 void DataPages::GetWanamingoValue()
 {
 	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
+
+	GetHealthBarValues();
+}
+
+
+void DataPages::GetSpeedomingoValue()
+{
+	NightEnemy* focus = (NightEnemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
+
+	GetHealthBarValues();
+}
+
+
+void DataPages::GetSnipermingoValue()
+{
+	RangedEnemy* focus = (RangedEnemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
+
+	GetHealthBarValues();
+}
+
+
+void DataPages::GetGigamingoValue()
+{
+	GigaEnemy* focus = (GigaEnemy*)app->player->GetFocusedEntity();
 
 	attackDamage = focus->GetAD();
 	attackSpeed = focus->GetAS();
