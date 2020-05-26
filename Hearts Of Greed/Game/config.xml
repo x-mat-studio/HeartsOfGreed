@@ -49,7 +49,11 @@
       docnameDialogues="dialogue.xml"
 	/>
   </dialogManager>
-
+  <AI>
+    <load
+      docnameNightSpawners ="NightSpawners.xml"
+     />
+  </AI>
   <entityManager>
 	<load 
     docnameSuitman="suitman.xml" 

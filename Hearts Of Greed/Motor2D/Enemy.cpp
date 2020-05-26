@@ -768,7 +768,7 @@ int Enemy::GetAD()
 	return attackDamage;
 }
 
-int Enemy::GetAS()
+float Enemy::GetAS()
 {
 	return attackSpeed;
 }

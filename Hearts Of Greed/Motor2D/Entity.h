@@ -9,38 +9,44 @@
 #include "FoWEntity.h"
 #include "Minimap.h"
 
-#define MAX_ENTITY_TYPES 13
+#define MAX_ENTITY_TYPES 17
 
 struct Collider;
 struct SDL_Texture;
 
-
+//The elements of this enum are ordered by selection priority being the first one more important than the last one
 enum class ENTITY_TYPE : int
 
 {
 	UNKNOWN = -1,
 
-	PARTICLE_SYSTEM,
-
-	SPAWNER,
-
+	
 	HERO_MELEE,
 	HERO_RANGED,
 	HERO_GATHERER,
 	HERO_ROBO,
-
+	
 	ENEMY,
 	ENEMY_RANGED,
 	ENEMY_NIGHT,
 	ENEMY_GIGA,
 
-	BUILDING,
 	BLDG_TURRET,
 	BLDG_UPGRADE_CENTER,
 	BLDG_BASE,
 	BLDG_BARRICADE,
 
+	
+
+	PARTICLE_SYSTEM,
+
+	SPAWNER,
+
+
 	QUEST,
+	HQ_COMANDER,
+
+	BUILDING,
 
 	MAX_TYPE
 };

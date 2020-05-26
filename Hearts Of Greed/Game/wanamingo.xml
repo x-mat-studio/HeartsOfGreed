@@ -55,7 +55,7 @@
     </collider>
 
     <stats movementSpeed="35" vision="200" xp="100" scale =" 1.75" >
-      <hitPoints max="325" current="150" recoveryRate="5"/>
+      <hitPoints max="325" current="325" recoveryRate="5"/>
       <attack damage="35" speed="0.75" range="2"/>
     </stats>
 

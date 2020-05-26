@@ -121,7 +121,7 @@ public:
 	void MapToWorldCoords(int posX, int posY, MapData& dat, float& outX, float& outY);
 	void WorldToMapCoords(int x, int y, MapData& dat, int& outX, int& outY) const;
 	iMPoint MapToWorld(int x, int y) const;
-	iMPoint WorldToMap(int x, int y) const;
+	iMPoint WorldToMap(float x, float y) const;
 	bool InsideCamera(float& posX, float& posY) const;
 	bool EntityInsideCamera(float& posX, float& posY, float& w, float& h) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
