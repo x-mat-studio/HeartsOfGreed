@@ -1,13 +1,15 @@
 <spawner>
   <sample>
-    <position x="150" y="250"/>
 
     <collider>
       <rect x="0" y="0" w="5" h="5"/>
       <type id="6"/>
     </collider>
 
-    <stats enemiesPerWave="1" spawnRate="0.0" spawnsType="7" />
+    <stats wannamingosPerWave="1"   wannamingosSpawnRate="0.0"
+           gigamingosPerWave="1"    gigamingosSpawnRate="0.0"
+           speedamingosPerWave="1"  speedamingosSpawnRate="0.0"
+           snipermingosPerWave="1"  snipermingosSpawnRate="0.0"/>
     
   </sample>
   

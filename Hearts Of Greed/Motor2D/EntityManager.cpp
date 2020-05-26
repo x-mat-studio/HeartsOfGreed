@@ -1972,10 +1972,6 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::PLAYER_CONQUERED_A_BASE:
-		if (CheckPlayerBases() == 2)
-		{
-			app->eventManager->GenerateEvent(EVENT_ENUM::FIRST_BASE_CONQUERED, EVENT_ENUM::NULL_EVENT);
-		}
 		break;
 
 	case EVENT_ENUM::DAY_START:
@@ -3277,15 +3273,21 @@ bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
 
 	Collider* spawnerCollider = new Collider(r, cType, app->ai);
 
-	fMPoint pos;
-	pos.x = spawnerNode.child("sample").child("position").attribute("x").as_float(0);
-	pos.y = spawnerNode.child("sample").child("position").attribute("y").as_float(0);
+	int wannamingosPerWave = spawnerNode.child("sample").child("stats").attribute("wannamingosPerWave").as_int(0);
+	float wannamingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("wannamingosSpawnRate").as_float(0);
 
-	int enemiesPerWave = spawnerNode.child("sample").child("stats").attribute("enemiesPerWave").as_int(0);
-	float spawnRate = spawnerNode.child("sample").child("stats").attribute("spawnRate").as_float(0);
-	ENTITY_TYPE spawnsType = (ENTITY_TYPE)spawnerNode.child("sample").child("stats").attribute("spawnsType").as_int(0);
+	int gigamingosPerWave = spawnerNode.child("sample").child("stats").attribute("gigamingosPerWave").as_int(0);
+	float gigamingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("gigamingosSpawnRate").as_float(0);
 
-	sampleSpawner = new Spawner(pos, spawnsType, spawnerCollider, enemiesPerWave, spawnRate);
+	int speedamingosPerWave = spawnerNode.child("sample").child("stats").attribute("speedamingosPerWave").as_int(0);
+	float speedamingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("speedamingosSpawnRate").as_float(0);
+
+	int snipermingosPerWave = spawnerNode.child("sample").child("stats").attribute("snipermingosPerWave").as_int(0);
+	float snipermingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("snipermingosSpawnRate").as_float(0);
+
+
+	sampleSpawner = new Spawner(fMPoint(0, 0), spawnerCollider, wannamingosPerWave, wannamingosSpawnRate, gigamingosPerWave, gigamingosSpawnRate, 
+								speedamingosPerWave, speedamingosSpawnRate, snipermingosPerWave, snipermingosSpawnRate);
 
 	return ret;
 
@@ -3473,9 +3475,21 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 		{
 			spawner = (Spawner*)AddEntity(ENTITY_TYPE::SPAWNER, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
-			spawner->SetNumberToSpawn(iterator.attribute("entitys_to_spawn").as_int());
-			spawner->SetSpawnRate(iterator.attribute("spawn_rate").as_float());
-			spawner->SetEnemiesPerWave(iterator.attribute("entities_per_wave").as_int());
+			spawner->SetWannamingosToSpawn(iterator.attribute("wannamingos_to_spawn").as_int());
+			spawner->SetWannamingoSpawnRate(iterator.attribute("wannamingos_spawn_rate").as_float());
+			spawner->SetWannamingosPerWave(iterator.attribute("wannamingos_per_wave").as_int());
+
+			spawner->SetGigamingosToSpawn(iterator.attribute("gigamingos_to_spawn").as_int());
+			spawner->SetGigamingoSpawnRate(iterator.attribute("gigamingos_spawn_rate").as_float());
+			spawner->SetGigamingosPerWave(iterator.attribute("gigamingos_per_wave").as_int());
+
+			spawner->SetSpeedamingosToSpawn(iterator.attribute("speedamingos_to_spawn").as_int());
+			spawner->SetSpeedamingoSpawnRate(iterator.attribute("speedamingos_spawn_rate").as_float());
+			spawner->SetSpeedamingosPerWave(iterator.attribute("speedamingos_per_wave").as_int());
+
+			spawner->SetSnipermingosToSpawn(iterator.attribute("snipermingos_to_spawn").as_int());
+			spawner->SetSnipermingosSpawnRate(iterator.attribute("snipermingos_spawn_rate").as_float());
+			spawner->SetSnipermingosPerWave(iterator.attribute("snipermingos_per_wave").as_int());
 
 			if (iterator.attribute("active").as_bool() == true)
 				spawner->Activate();
@@ -3781,6 +3795,9 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 				{
 					upgradeCenter = (UpgradeCenter*)AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
 
+					upgradeCenter->SetTurretLevel(iterator2.attribute("turretLvl").as_int());
+					upgradeCenter->SetBarricadeLevel(iterator2.attribute("barricadeLvl").as_int());
+
 					base->AddUpgradeCenter(upgradeCenter);
 				}
 			}
@@ -3859,9 +3876,23 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 
 				spawner = (Spawner*)entityVector[i];
 
-				iterator.append_attribute("entitys_to_spawn") = spawner->GetNumberToSpawn();
-				iterator.append_attribute("spawn_rate") = spawner->GetSpawnRate();
-				iterator.append_attribute("entities_per_wave") = spawner->GetEnemiesPerWave();
+				iterator.append_attribute("wannamingos_to_spawn") = spawner->GetWannamingosToSpawn();
+				iterator.append_attribute("wannamingos_spawn_rate") = spawner->GetWannamingosSpawnRate();
+				iterator.append_attribute("wannamingos_per_wave") = spawner->GetWannamingosPerWave();
+
+				iterator.append_attribute("gigamingos_to_spawn") = spawner->GetGigamingosToSpawn();
+				iterator.append_attribute("gigamingos_spawn_rate") = spawner->GetGigamingosSpawnRate();
+				iterator.append_attribute("gigamingos_per_wave") = spawner->GetGigamingosPerWave();
+
+				iterator.append_attribute("speedamingos_to_spawn") = spawner->GetSpeedamingosToSpawn();
+				iterator.append_attribute("speedamingos_spawn_rate") = spawner->GetSpeedamingosSpawnRate();
+				iterator.append_attribute("speedamingos_per_wave") = spawner->GetSpeedamingosPerWave();
+
+				iterator.append_attribute("snipermingos_to_spawn") = spawner->GetWannamingosToSpawn();
+				iterator.append_attribute("snipermingos_spawn_rate") = spawner->GetWannamingosSpawnRate();
+				iterator.append_attribute("snipermingos_per_wave") = spawner->GetWannamingosPerWave();
+
+
 				iterator.append_attribute("active") = spawner->GetActive();
 				break;
 
@@ -4186,8 +4217,12 @@ bool ModuleEntityManager::Save(pugi::xml_node& data) const
 				{
 					iterator2 = iterator.append_child("upgrade_center");
 					iterator2.append_attribute("name") = "upgrade_center";
-					//iterator2.append_attribute("x") = upgradeCenter->position.x;
-					//iterator2.append_attribute("y") = upgradeCenter->position.y;
+
+					iterator2.append_attribute("x") = upgradeCenter->position.x;
+					iterator2.append_attribute("y") = upgradeCenter->position.y;
+
+					iterator2.append_attribute("turretLvl") = upgradeCenter->GetTurretLevel();
+					iterator2.append_attribute("barricadeLvl") = upgradeCenter->GetBarricadeLevel();
 				}
 
 				break;

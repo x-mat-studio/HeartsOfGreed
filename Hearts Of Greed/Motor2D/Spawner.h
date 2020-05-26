@@ -12,14 +12,11 @@ class Spawner : public Entity
 {
 public:
 
-	Spawner(fMPoint position, ENTITY_TYPE spawnerType, Collider* col, int enemiesPerWave = 1, float spawnRate = 0);
+	Spawner(fMPoint position, Collider* col, int wannamingosPerWave = 1, float wannamingosSpawnRate = 0, int gigamingosPerWave = 1, float gigamingosSpawnRate = 0, 
+			int speedamingosPerWave = 1, float speedamingosSpawnRate = 0, int sniperPerWave = 1, float sniperSpawnRate = 0);
 	Spawner(fMPoint position, Spawner* copy);
 
 	~Spawner();
-
-	void SetNumberToSpawn(int number);
-	void SetSpawnRate(float ratio);
-	void SetEnemiesPerWave(int entities);
 
 	bool PostUpdate(float dt);
 
@@ -28,24 +25,76 @@ public:
 
 	bool GetActive();
 
-	int GetNumberToSpawn();
-	float GetSpawnRate();
-	int GetEnemiesPerWave();
+	void SetWannamingosToSpawn(int number);
+	void SetGigamingosToSpawn(int number);
+	void SetSpeedamingosToSpawn(int number);
+	void SetSnipermingosToSpawn(int number);
+
+	//Getters and setters
+
+	void SetWannamingoSpawnRate(float ratio);
+	void SetGigamingoSpawnRate(float ratio);
+	void SetSpeedamingoSpawnRate(float ratio);
+	void SetSnipermingosSpawnRate(float ratio);
+
+	void SetWannamingosPerWave(int entities);
+	void SetGigamingosPerWave(int entities);
+	void SetSpeedamingosPerWave(int entities);
+	void SetSnipermingosPerWave(int entities);
+
+
+	int GetWannamingosToSpawn() const;
+	int GetGigamingosToSpawn() const;
+	int GetSpeedamingosToSpawn() const;
+	int GetSnipermingosToSpawn() const;
+
+	float GetWannamingosSpawnRate() const;
+	float GetGigamingosSpawnRate() const;
+	float GetSpeedamingosSpawnRate() const;
+	float GetSnipermingosSpawnRate() const;
+
+	int GetWannamingosPerWave() const;
+	int GetGigamingosPerWave() const;
+	int GetSpeedamingosPerWave() const;
+	int GetSnipermingosPerWave() const;
 
 
 private:
-	void Spawn(float dt);
+	void SpawnWanamingo(float dt);
+	void SpawnGigamingo(float dt);
+	void SpawnSpeedamingo(float dt);
+	void SpawnSnipermingo(float dt);
 
 private:
 
-	ENTITY_TYPE spawnerType;
-	int entitysToSpawn;
+	//Wannamingo
+	int wannamingosToSpawn;
+	int wannamingosPerWave;
 
-	int entitiesPerWave;
-	float spawnRate;
+	float wannamingosSpawnRate;
+	float wannamingoTimer;
 
+	//Gigamingo
+	int gigamingosToSpawn;
+	int gigamingosPerWave;
 
-	float timer;
+	float gigamingosSpawnRate;
+	float gigamingoTimer;
+
+	//Speedamingo
+	int speedamingosToSpawn;
+	int speedamingosPerWave;
+
+	float speedamingosSpawnRate;
+	float speedamingoTimer;
+
+	//Snipermingo
+	int snipermingosToSpawn;
+	int snipermingosPerWave;
+
+	float snipermingosSpawnRate;
+	float snipermingoTimer;
+	
 
 	bool active;
 };
