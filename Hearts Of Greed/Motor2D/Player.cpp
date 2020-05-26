@@ -210,7 +210,7 @@ bool ModulePlayer::PostUpdate(float dt)
 			fMPoint wBuildPos = app->input->GetMousePosWorld();
 			iMPoint mBuildPos = app->map->WorldToMap(wBuildPos.x, wBuildPos.y);
 
-			if (center.InsideCircle(mBuildPos, buildAreaRadius) && app->pathfinding->IsWalkable(mBuildPos))
+			if (center.InsideCircle(mBuildPos, buildAreaRadius) && app->pathfinding->IsWalkable(mBuildPos) && app->pathfinding->CheckBoundaries(iMPoint{ mBuildPos.x + 1, mBuildPos.y }) && app->pathfinding->CheckBoundaries(iMPoint{ mBuildPos.x, mBuildPos.y + 1 }))
 			{
 				buildingPrevPosition = app->map->MapToWorld(mBuildPos.x, mBuildPos.y);
 			}

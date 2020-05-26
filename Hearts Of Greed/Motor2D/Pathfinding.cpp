@@ -667,7 +667,7 @@ bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const
 
 bool ModulePathfinding::IsWalkable(const iMPoint& pos) const
 {
-	uchar t = GetTileAt(pos);
+	uchar t = GetTileAt({pos.x - 1, pos.y});
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
@@ -793,6 +793,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	HierNode* n1 = nullptr, * n2 = nullptr;
 	bool toDeleteN1 = false;
 	bool toDeleteN2 = false;
+
 
 	if (IsWalkable(destination) == false)
 	{

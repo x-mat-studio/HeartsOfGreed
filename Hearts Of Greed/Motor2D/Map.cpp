@@ -743,17 +743,21 @@ iMPoint ModuleMap::MapToWorld(int x, int y) const
 }
 
 //Returns x,y coordinates in the Map
-iMPoint ModuleMap::WorldToMap(int x, int y) const
+iMPoint ModuleMap::WorldToMap(float x, float y) const
 {
-	iMPoint ret(0, 0);
+	fMPoint ret(0, 0);
 
 	float halWidth = data.tileWidth * 0.5f;
 	float halfHeight = data.tileHeight * 0.5f;
 
-	ret.x = round((x / halWidth + y / halfHeight) * 0.5f);
-	ret.y = round((y / halfHeight - (x / halWidth)) * 0.5f);
+	float x2 = (x), y2 = (y);
 
-	return ret;
+	ret.x = ((x2 / halWidth + y2 / halfHeight) * 0.5f);
+	ret.y = ((y2 / halfHeight - (x2 / halWidth)) * 0.5f);
+
+	iMPoint ret2 = {(int)ret.x, (int)ret.y};
+
+	return ret2;
 }
 
 
