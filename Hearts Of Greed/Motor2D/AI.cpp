@@ -170,7 +170,7 @@ void ModuleAI::CommandSpawners()
 
 	for (int i = 0; i < spawnersToActivate && i < spawnersAbaliable; i++)
 	{
-		iterator->second->SetNumberToSpawn(enemiesToSpawn);
+		//iterator->second->SetNumberToSpawn(enemiesToSpawn);
 		iterator++;
 	}
 
