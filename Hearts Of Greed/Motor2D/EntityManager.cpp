@@ -1972,10 +1972,6 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::PLAYER_CONQUERED_A_BASE:
-		if (CheckPlayerBases() == 2)
-		{
-			app->eventManager->GenerateEvent(EVENT_ENUM::FIRST_BASE_CONQUERED, EVENT_ENUM::NULL_EVENT);
-		}
 		break;
 
 	case EVENT_ENUM::DAY_START:

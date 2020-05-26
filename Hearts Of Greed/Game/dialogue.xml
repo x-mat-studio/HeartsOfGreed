@@ -4,26 +4,26 @@
 
   <tutorial1>
     <start>
-      <entry1 text="HQ reporting. Solider, do you copy us?"/>
+      <entry1 text="HQ reporting. Soldier, do you copy us?"/>
       <entry2 text="Ugh... I think I do, what happened?" />
-      <entry3 text="The enemy saw our attack coming from a mile ago, they are smarter than we originally thought."/>
+      <entry3 text="The enemy saw our attack coming from a mile ago; they are smarter than we originally thought."/>
       <entry4 text="Dang it... What are my orders sir?" />
     </start>
 
     <finish>
-      <entry1 text="Your objective remains the same: capture all enemy bases and take them down. But, first of all let's do some recon."/>
-      <entry2 text="Roger that. (Select units with Left Click + Drag and then Right Click to move them)." />
+      <entry1 text="Your objective remains the same: capture all enemy bases and take the enemy down. But first of all, let's do some recon."/>
+      <entry2 text="Roger that. (Select units with Dragging Left Click and then Right Click to move them)." />
     </finish>
   </tutorial1>
 
   <tutorial2>
     <start>
       <entry1 text="Looks like you found an enemy base, those bastards spread like wildfire. Secure the position and take down all hostile contacts in the area."/>
-      <entry2 text="Roger that sir. (Right click on enemies to command units to attack them. Press E to execute your skills!)"/>
+      <entry2 text="As you say. (Right click on enemies to command units to attack them. Press E to execute your skills!)"/>
     </start>
 
     <finish>
-      <entry1 text="Excellent work solider"/>
+      <entry1 text="Excellent work soldier."/>
       <entry2 text="I just do as I am told."/>
     </finish>
   </tutorial2>
