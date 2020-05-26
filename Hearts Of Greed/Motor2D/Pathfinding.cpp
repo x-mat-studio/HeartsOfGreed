@@ -797,7 +797,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	if (IsWalkable(destination) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(origin, destination);
+		iMPoint newDest = CheckNearbyTiles(origin, {destination.x +1, destination.y});
 
 		if (newDest == destination || newDest == origin)
 			return ret;

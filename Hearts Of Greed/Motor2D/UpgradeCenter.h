@@ -23,6 +23,12 @@ public:
 
 	int RecieveDamage(float damage);
 
+	int GetTurretLevel() const;
+	int GetBarricadeLevel() const;
+
+	void SetTurretLevel(int level);
+	void SetBarricadeLevel(int level);
+
 private:
 	void Die();
 
