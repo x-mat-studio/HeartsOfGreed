@@ -50,6 +50,9 @@ UIFactory::UIFactory() :
 	turretDataPagePicture{ 580, 400, 61, 47 },
 	barricadeDataPagePicture{ 713, 256, 61, 47 },
 	wanamingoDataPagePicture{ 885, 150, 59, 45 },
+	speedomingoDataPagePicture{ 949, 159, 23, 31 },
+	snipermingoDataPagePicture{ 987, 157, 31, 36 },
+	gigamingoDataPagePicture{ 1029, 145, 38, 50 },
 	turretShopPicture{ 695, 14, 25, 37 },
 	barricadeShopPicture{ 705, 53, 24, 37 },
 	resourceIcon{ 18, 209, 11, 19 },
@@ -1800,6 +1803,84 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
 
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, wanamingoDataPagePicture);
+
+	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+
+	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+
+	//stats
+	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
+	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
+	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
+	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
+	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+}
+
+
+void UIFactory::CreateSpeedomingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
+{
+	char stats[40];
+	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
+
+	CreateNonGroupImage(13, 10, dataPage, dataPagesVector, speedomingoDataPagePicture);
+
+	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+
+	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+
+	//stats
+	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
+	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
+	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
+	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
+	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+}
+
+
+void UIFactory::CreateSnipermingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
+{
+	char stats[40];
+	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
+
+	CreateNonGroupImage(13, 10, dataPage, dataPagesVector, snipermingoDataPagePicture);
+
+	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+
+	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+
+	//stats
+	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
+	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
+	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
+	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
+	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+}
+
+
+void UIFactory::CreateGigamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
+{
+	char stats[40];
+	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
+
+	CreateNonGroupImage(18, 3, dataPage, dataPagesVector, gigamingoDataPagePicture);
 
 	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
 
