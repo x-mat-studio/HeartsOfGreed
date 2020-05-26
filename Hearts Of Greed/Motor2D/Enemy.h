@@ -72,7 +72,7 @@ public:
 
 	int GetHP();
 	int GetAD();
-	int GetAS();
+	float GetAS();
 	int GetVision();
 	int GetRecov();
 
