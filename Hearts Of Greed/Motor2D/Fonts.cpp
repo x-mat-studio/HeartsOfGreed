@@ -99,7 +99,9 @@ SDL_Texture* ModuleFonts::Print(const char* text, SDL_Color color, TTF_Font* fon
 	{
 
 		ret = app->tex->LoadSurface(surface);
-		SDL_FreeSurface(surface);
+
+		if(surface != NULL)
+			SDL_FreeSurface(surface);
 
 	}
 
