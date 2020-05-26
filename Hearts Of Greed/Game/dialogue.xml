@@ -2,28 +2,50 @@
 
 <dialogues>
   
-	<tutorial> 
+	<tutorial1> 
 		<start>
-			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should secure this position first."/>
-			<entry2 text="Left click: select unit. Right click: give order. E -> click: use / cancel skill." />
+			<entry1 text="HQ reporting. Solider, do you copy us?"/>
+			<entry2 text="Ugh... I think I do, what happened?" />
 		</start>
 
-		<finish>
-			<entry1 text="A base? Seems like there's no danger around... I guess I can advance the mission by myself." />
-			<entry2 text="Conquer all bases and defeat all enemies to complete the mission." />
+    <start2>
+      <entry1 text="The enemy saw our attack coming from a mile ago, they are smarter than we originally thought."/>
+      <entry2 text="Dang it... What are my orders sir?" />
+    </start2>
+
+    <finish>
+      <entry1 text="The situation has changed, altough you objective remains the same: capture all enemy bases and take them down. You have one of your own right there,
+              but we need all of them to win the war.But, first of all let's  do some recon."/>
+      <entry2 text="Roger that. (Select units with Left Click + Drag and then Right Click to move them)." />
 		</finish>
-	</tutorial>
-    
-	<tutorial2> 
+	</tutorial1>
+
+  <tutorial2>
+    <start>
+      <entry1 text="Looks like you found an enemy base, those bastards spread like wildfire. Secure the position and take down all hostile contacts in the area."/>
+      <entry2 text="Roger that sir. (Right click on enemies to command units to attack them. Press E to execute your skills!)"/>
+    </start>
+
+    <finish>
+      <entry1 text="Excellent work solider"/>
+      <entry2 text="I just do as I am told."/>
+    </finish>
+  </tutorial2>
+
+  <tutorial3> 
 		<start>
-			<entry1 text="Already night time? I'd better get ready for a bigger horde."/>
-			<entry2 text="At night, wanamingo hordes will attack your bases. Be careful not to lose all of them."/>
+			<entry1 text="Already night time? Sigh. Be careful solider, these monsters are more active during the night and you are not. Prepare yourself for an attack,"/>
+			<entry2 text="Roger that sir. (You can level up your skills and stats by spending resources; check the Hero's stats in the right down corner for more Info.)"/>
 		</start>
 
+    <start>
+      <entry2 text="Also, check the Base's stats to build buildings and defenses to fortify them. They generate resources and, if you lose all of them, you will lose the game."/>
+    </start>
+
 		<finish>
-			<entry1 text="This might be enough to stop those vermin for a while. Time to find my comrades." />
-		</finish>
-	</tutorial2>
+      <entry1 text="Excellent work soldier. Now it's time to take back what is ours: destroy all enemy bases and, if you want, find your commarads along the way. Looks like we spotted a signal."/>
+      <entry2 text="Roger that sir."/>		</finish>
+	</tutorial3>
 
 	<dialog1> 
 		<start>
