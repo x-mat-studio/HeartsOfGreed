@@ -282,25 +282,25 @@ int ModuleAI::CalculateWanamingoToSpawn()
 		//no enemies on first day
 		break;
 	case 1:
-		ret = nightEnemyInfo[0].at[0];
+		//ret = nightEnemyInfo[0].at[0];
 		break;
 	case 2:
-		ret = nightEnemyInfo[1].at[0];
+		//ret = nightEnemyInfo[1].at[0];
 		break;
 	case 3:
-		ret = nightEnemyInfo[2].at[0];
+		//ret = nightEnemyInfo[2].at[0];
 		break;
 	case 4:
-		ret = nightEnemyInfo[3].at[0];
+		//ret = nightEnemyInfo[3].at[0];
 		break;
 	case 5:
-		ret = nightEnemyInfo[4].at[0];
+	//	ret = nightEnemyInfo[4].at[0];
 		break;
 	case 6:
-		ret = nightEnemyInfo[5].at[0];
+	//	ret = nightEnemyInfo[5].at[0];
 		break;
 	default:
-		ret = app->testScene->GetDayNumber();
+	//	ret = app->testScene->GetDayNumber();
 		break;
 	}
 
@@ -317,22 +317,22 @@ int ModuleAI::CalculateGigamingoToSpawn()
 		//no enemies on first day
 		break;
 	case 1:
-		ret = nightEnemyInfo[0].at[1];
+	//	ret = nightEnemyInfo[0].at[1];
 		break;
 	case 2:
-		ret = nightEnemyInfo[1].at[1];
+	//	ret = nightEnemyInfo[1].at[1];
 		break;
 	case 3:
-		ret = nightEnemyInfo[2].at[1];
+	//	ret = nightEnemyInfo[2].at[1];
 		break;
 	case 4:
-		ret = nightEnemyInfo[3].at[1];
+	//	ret = nightEnemyInfo[3].at[1];
 		break;
 	case 5:
-		ret = nightEnemyInfo[4].at[1];
+	//	ret = nightEnemyInfo[4].at[1];
 		break;
 	case 6:
-		ret = nightEnemyInfo[5].at[1];
+	//	ret = nightEnemyInfo[5].at[1];
 		break;
 	default:
 		ret = app->testScene->GetDayNumber();
@@ -353,22 +353,22 @@ int ModuleAI::CalculateSnipermingoToSpawn()
 		//no enemies on first day
 		break;
 	case 1:
-		ret = nightEnemyInfo[0].at[2];
+	//	ret = nightEnemyInfo[0].at[2];
 		break;
 	case 2:
-		ret = nightEnemyInfo[1].at[2];
+	//	ret = nightEnemyInfo[1].at[2];
 		break;
 	case 3:
-		ret = nightEnemyInfo[2].at[2];
+	//	ret = nightEnemyInfo[2].at[2];
 		break;
 	case 4:
-		ret = nightEnemyInfo[3].at[2];
+	//	ret = nightEnemyInfo[3].at[2];
 		break;
 	case 5:
-		ret = nightEnemyInfo[4].at[2];
+	//	ret = nightEnemyInfo[4].at[2];
 		break;
 	case 6:
-		ret = nightEnemyInfo[5].at[2];
+	//	ret = nightEnemyInfo[5].at[2];
 		break;
 	default:
 		ret = app->testScene->GetDayNumber();
@@ -388,22 +388,22 @@ int ModuleAI::CalculateSpeedomingoToSpawn()
 		//no enemies on first day
 		break;
 	case 1:
-		ret = nightEnemyInfo[0].at[3];
+	//	ret = nightEnemyInfo[0].at[3];
 		break;
 	case 2:
-		ret = nightEnemyInfo[1].at[3];
+	//	ret = nightEnemyInfo[1].at[3];
 		break;
 	case 3:
-		ret = nightEnemyInfo[2].at[3];
+	//	ret = nightEnemyInfo[2].at[3];
 		break;
 	case 4:
-		ret = nightEnemyInfo[3].at[3];
+	//	ret = nightEnemyInfo[3].at[3];
 		break;
 	case 5:
-		ret = nightEnemyInfo[4].at[3];
+	//	ret = nightEnemyInfo[4].at[3];
 		break;
 	case 6:
-		ret = nightEnemyInfo[5].at[3];
+	//	ret = nightEnemyInfo[5].at[3];
 		break;
 	default:
 		ret = app->testScene->GetDayNumber();
@@ -423,22 +423,22 @@ int ModuleAI::CalculateSpawnersToActivate()
 		//no enemies on first day
 		break;
 	case 1:
-		ret = nightEnemyInfo[0].at[Nº_TYPE_OF_ENEMIES + 1];
+	//	ret = nightEnemyInfo[0].at[Nº_TYPE_OF_ENEMIES + 1];
 		break;
 	case 2:
-		ret = nightEnemyInfo[1].at[Nº_TYPE_OF_ENEMIES + 1];
+	//	ret = nightEnemyInfo[1].at[Nº_TYPE_OF_ENEMIES + 1];
 		break;
 	case 3:
-		ret = nightEnemyInfo[2].at[Nº_TYPE_OF_ENEMIES + 1];
+		//ret = nightEnemyInfo[2].at[Nº_TYPE_OF_ENEMIES + 1];
 		break;
 	case 4:
-		ret = nightEnemyInfo[3].at[Nº_TYPE_OF_ENEMIES + 1];
+	//	ret = nightEnemyInfo[3].at[Nº_TYPE_OF_ENEMIES + 1];
 		break;
 	case 5:
-		ret = nightEnemyInfo[4].at[Nº_TYPE_OF_ENEMIES + 1];
+	//	ret = nightEnemyInfo[4].at[Nº_TYPE_OF_ENEMIES + 1];
 		break;
 	case 6:
-		ret = nightEnemyInfo[5].at[Nº_TYPE_OF_ENEMIES + 1];
+	//	ret = nightEnemyInfo[5].at[Nº_TYPE_OF_ENEMIES + 1];
 		break;
 	default:
 		int x = app->testScene->GetDayNumber() * 2;
