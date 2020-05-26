@@ -51,6 +51,8 @@ public:
 	int GetResourcesBoost() const;
 
 	int GetTurretCost() const;
+	int GetBarricadeCost() const;
+	int GetUpgradeCenterCost() const;
 
 	bool IsBuilding() const;
 
