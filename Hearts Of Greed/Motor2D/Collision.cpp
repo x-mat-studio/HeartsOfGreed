@@ -34,8 +34,9 @@ ModuleCollision::ModuleCollision() : colliders{}
 	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_ENEMY][COLLIDER_RECLUIT_IA] = true;
-	matrix[COLLIDER_ENEMY][COLLIDER_VISIBILITY] = false;
+	matrix[COLLIDER_ENEMY][COLLIDER_VISIBILITY] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_QUEST] = false;
+
 
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_WALL] = false;
 	matrix[COLLIDER_BASE_ALERT][COLLIDER_HERO] = true;
@@ -55,7 +56,7 @@ ModuleCollision::ModuleCollision() : colliders{}
 
 	matrix[COLLIDER_VISIBILITY][COLLIDER_WALL] = false;
 	matrix[COLLIDER_VISIBILITY][COLLIDER_HERO] = true;
-	matrix[COLLIDER_VISIBILITY][COLLIDER_ENEMY] = false;
+	matrix[COLLIDER_VISIBILITY][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_VISIBILITY][COLLIDER_BASE_ALERT] = false;
 	matrix[COLLIDER_VISIBILITY][COLLIDER_RECLUIT_IA] = false;
 	matrix[COLLIDER_VISIBILITY][COLLIDER_VISIBILITY] = false;

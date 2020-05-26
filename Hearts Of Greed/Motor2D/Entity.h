@@ -9,7 +9,7 @@
 #include "FoWEntity.h"
 #include "Minimap.h"
 
-#define MAX_ENTITY_TYPES 13
+#define MAX_ENTITY_TYPES 17
 
 struct Collider;
 struct SDL_Texture;
@@ -41,6 +41,7 @@ enum class ENTITY_TYPE : int
 	BLDG_BARRICADE,
 
 	QUEST,
+	HQ_COMANDER,
 
 	MAX_TYPE
 };

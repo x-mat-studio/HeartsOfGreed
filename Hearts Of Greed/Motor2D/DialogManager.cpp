@@ -10,8 +10,8 @@ ModuleDialogManager::ModuleDialogManager() :
 	currentDialog2(nullptr),
 
 	//TUTORIAL-------------
-	dialogTutorialStart(),
-	dialogTutorialEnd(),
+	dialogTutorial1Start(),
+	dialogTutorial1End(),
 
 	//Quest 1 ------------
 	dialogMission1_ST_B1(),
@@ -59,8 +59,31 @@ ModuleDialogManager::~ModuleDialogManager()
 	currentDialog2 = nullptr;
 
 	//TUTORIAL-------------
-	 dialogTutorialStart.Clear();
-	 dialogTutorialEnd.Clear();
+	 //Tutorial 1 ---------
+
+	 dialogTutorial1Start.Clear();
+	 dialogTutorial1Start_B.Clear();
+
+	 dialogTutorial1Start2.Clear();
+	 dialogTutorial1Start2_B.Clear();
+
+	 dialogTutorial1End.Clear();
+	 dialogTutorial1End_B.Clear();
+
+	 //Tutorial 2 ---------
+	 dialogTutorial2Start2.Clear();
+	 dialogTutorial2Start2_B.Clear();
+	 dialogTutorial2End2.Clear();
+	 dialogTutorial2End2_B.Clear();
+
+	 //Tutorial 3 ---------
+	 dialogTutorial3Start.Clear();
+	 dialogTutorial3Start_B.Clear();
+
+	 dialogTutorial3Start2_B.Clear();
+
+	 dialogTutorial3End.Clear();
+	 dialogTutorial3End_B.Clear();
 
 	//Quest 1 ------------
 	 dialogMission1_ST_B1.Clear();
@@ -107,16 +130,32 @@ bool ModuleDialogManager::Awake(pugi::xml_node& data)
 	//Assign dialogues to strings
 
 	//TUTORIAL-------------
-	 dialogTutorialStart		= (P2SString)dialogue.child("tutorial").child("start").child("entry1").attribute("text").as_string();
-	 dialogTutorialStart_B		= (P2SString)dialogue.child("tutorial").child("start").child("entry2").attribute("text").as_string();
+		//Tutorial 1 --------
+	 dialogTutorial1Start		= (P2SString)dialogue.child("tutorial1").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorial1Start_B		= (P2SString)dialogue.child("tutorial1").child("start").child("entry2").attribute("text").as_string();
 
-	 dialogTutorialEnd			= (P2SString)dialogue.child("tutorial").child("finish").child("entry1").attribute("text").as_string();
-	 dialogTutorialEnd_B		= (P2SString)dialogue.child("tutorial").child("finish").child("entry2").attribute("text").as_string();
+	 dialogTutorial1Start2		= (P2SString)dialogue.child("tutorial1").child("start2").child("entry1").attribute("text").as_string();
+	 dialogTutorial1Start2_B	= (P2SString)dialogue.child("tutorial1").child("start2").child("entry2").attribute("text").as_string();
 
-	 dialogTutorialStart2		= (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
-	 dialogTutorialStart2_B		= (P2SString)dialogue.child("tutorial2").child("start").child("entry2").attribute("text").as_string();
+	 dialogTutorial1End			= (P2SString)dialogue.child("tutorial1").child("finish").child("entry1").attribute("text").as_string();
+	 dialogTutorial1End_B		= (P2SString)dialogue.child("tutorial1").child("finish").child("entry2").attribute("text").as_string();
 
-	 dialogTutorialEnd2			= (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
+		 //Tutorial 2 --------
+	 dialogTutorial2Start2		= (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorial2Start2_B	= (P2SString)dialogue.child("tutorial2").child("start").child("entry2").attribute("text").as_string();
+
+	 dialogTutorial2End2		= (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
+	 dialogTutorial2End2_B		= (P2SString)dialogue.child("tutorial2").child("finish").child("entry2").attribute("text").as_string();
+
+
+		//Tutorial 3 --------
+	 dialogTutorial3Start		= (P2SString)dialogue.child("tutorial3").child("start").child("entry1").attribute("text").as_string();
+	 dialogTutorial3Start_B		= (P2SString)dialogue.child("tutorial3").child("start").child("entry2").attribute("text").as_string();
+
+	 dialogTutorial3Start2_B	= (P2SString)dialogue.child("tutorial3").child("start2").child("entry2").attribute("text").as_string();
+
+	 dialogTutorial3End			= (P2SString)dialogue.child("tutorial3").child("finish").child("entry1").attribute("text").as_string();
+	 dialogTutorial3End_B		= (P2SString)dialogue.child("tutorial3").child("finish").child("entry2").attribute("text").as_string();
 
 	//Quest 1 ------------
 	 dialogMission1_ST_B1		= dialogue.child("dialog1").child("start").child("entry1").attribute("text").as_string();
@@ -198,31 +237,31 @@ void ModuleDialogManager::ProcessFsm()
 			case DIALOG_INPUT::TUTORIAL_START:
 				state = DIALOG_STATE::TUTORIAL_ST;
 
-				currentDialog1 = &dialogTutorialStart;
-				currentDialog2 = &dialogTutorialStart_B;
+				currentDialog1 = &dialogTutorial1Start;
+				currentDialog2 = &dialogTutorial1Start_B;
 				break;
 
 
 			case DIALOG_INPUT::TUTORIAL_END:
 				state = DIALOG_STATE::TUTORIAL_END;
 
-				currentDialog1 = &dialogTutorialEnd;
-				currentDialog2 = &dialogTutorialEnd_B;
+				currentDialog1 = &dialogTutorial1End;
+				currentDialog2 = &dialogTutorial1End_B;
 				break;
 
 
 			case DIALOG_INPUT::TUTORIAL_START2:
 				state = DIALOG_STATE::TUTORIAL_ST2;
 
-				currentDialog1 = &dialogTutorialStart2;
-				currentDialog2 = &dialogTutorialStart2_B;
+				currentDialog1 = &dialogTutorial2Start2;
+				currentDialog2 = &dialogTutorial2Start2_B;
 				break;
 
 
 			case DIALOG_INPUT::TUTORIAL_END2:
 				state = DIALOG_STATE::TUTORIAL_END2;
 
-				currentDialog1 = &dialogTutorialEnd2;
+				currentDialog1 = &dialogTutorial2End2;
 				currentDialog2 = nullptr;
 				break;
 

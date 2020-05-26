@@ -1,82 +1,105 @@
 <?xml version="1.0"?>
 
 <dialogues>
-  
-	<tutorial> 
-		<start>
-			<entry1 text="Damn, they managed to split us. I'll go find my companions, but I should secure this position first."/>
-			<entry2 text="Left click: select unit. Right click: give order. E -> click: use / cancel skill." />
-		</start>
 
-		<finish>
-			<entry1 text="A base? Seems like there's no danger around... I guess I can advance the mission by myself." />
-			<entry2 text="Conquer all bases and defeat all enemies to complete the mission." />
-		</finish>
-	</tutorial>
-    
-	<tutorial2> 
-		<start>
-			<entry1 text="Already night time? I'd better get ready for a bigger horde."/>
-			<entry2 text="At night, wanamingo hordes will attack your bases. Be careful not to lose all of them."/>
-		</start>
+  <tutorial1>
+    <start>
+      <entry1 text="HQ reporting. Solider, do you copy us?"/>
+      <entry2 text="Ugh... I think I do, what happened?" />
+    </start>
 
-		<finish>
-			<entry1 text="This might be enough to stop those vermin for a while. Time to find my comrades." />
-		</finish>
-	</tutorial2>
+    <start2>
+      <entry1 text="The enemy saw our attack coming from a mile ago, they are smarter than we originally thought."/>
+      <entry2 text="Dang it... What are my orders sir?" />
+    </start2>
 
-	<dialog1> 
-		<start>
-			<entry1 text="Does anyone copy me? I need reinforcements!  They have overrun my position, I need backup ASAP. I repeat, I need backup ASAP!" />
-			<entry2 text="Copy! It’s me, where are you?" />
-			<entry3 text="Thank God! I’m close to your position, head towards the X (East, South, anyway), and you shall find me. Hurry up!" />
-		</start>
+    <finish>
+      <entry1 text="The situation has changed, altough you objective remains the same: capture all enemy bases and take them down. You have one of your own right there,
+              but we need all of them to win the war.But, first of all let's  do some recon."/>
+      <entry2 text="Roger that. (Select units with Left Click + Drag and then Right Click to move them)." />
+    </finish>
+  </tutorial1>
 
-		<finish>
-			<entry1 text="I began to think that was the end of me… Thanks, really. I couldn’t have done it without you" />
-			<entry2 text="No sweat, but don’t think we’re in the clear, not just yet. We have to find the others." />
-		</finish>
-	</dialog1>    
-    
-	<dialog2> 
-		<start>
-			<entry1 text="They . . .****** killed the captain. . . ****** way too many . . . ****** need help" />
-			<entry2 text="It looks like they really could use a hand over there. Ready your weapons, we better get going." />
-		</start>
+  <tutorial2>
+    <start>
+      <entry1 text="Looks like you found an enemy base, those bastards spread like wildfire. Secure the position and take down all hostile contacts in the area."/>
+      <entry2 text="Roger that sir. (Right click on enemies to command units to attack them. Press E to execute your skills!)"/>
+    </start>
 
-		<finish>
-			<entry1 text="Damn that was close! I was about to run out of ammo the second you showed up." />
-			<entry2 text= "Don’t mention it, you would’ve done the same. Here, I have some ammo to spare… you’re gonna need it." />
-		</finish>
-	</dialog2>
+    <finish>
+      <entry1 text="Excellent work solider"/>
+      <entry2 text="I just do as I am told."/>
+    </finish>
+  </tutorial2>
+
+  <tutorial3>
+    <start>
+      <entry1 text="Already night time? Sigh. Be careful solider, these monsters are more active during the night and you are not. Prepare yourself for an attack,"/>
+      <entry2 text="Roger that sir. (You can level up your skills and stats by spending resources; check the Hero's stats in the right down corner for more Info.)"/>
+    </start>
+
+    <start2>
+      <entry2 text="Also, check the Base's stats to build buildings and defenses to fortify them. They generate resources and, if you lose all of them, you will lose the game."/>
+    </start2>
+
+    <finish>
+      <entry1 text="Excellent work soldier. Now it's time to take back what is ours: destroy all enemy bases and, if you want, find your commarads along the way. Looks like we spotted a signal."/>
+      <entry2 text="Roger that sir."/>
+    </finish>
+  </tutorial3>
+
+  <dialog1>
+    <start>
+      <entry1 text="Does anyone copy me? I need reinforcements!  They have overrun my position, I need backup ASAP. I repeat, I need backup ASAP!" />
+      <entry2 text="Copy! It’s me, where are you?" />
+      <entry3 text="Thank God! I’m close to your position, head towards the X (East, South, anyway), and you shall find me. Hurry up!" />
+    </start>
+
+    <finish>
+      <entry1 text="I began to think that was the end of me… Thanks, really. I couldn’t have done it without you" />
+      <entry2 text="No sweat, but don’t think we’re in the clear, not just yet. We have to find the others." />
+    </finish>
+  </dialog1>
+
+  <dialog2>
+    <start>
+      <entry1 text="They . . .****** killed the captain. . . ****** way too many . . . ****** need help" />
+      <entry2 text="It looks like they really could use a hand over there. Ready your weapons, we better get going." />
+    </start>
+
+    <finish>
+      <entry1 text="Damn that was close! I was about to run out of ammo the second you showed up." />
+      <entry2 text= "Don’t mention it, you would’ve done the same. Here, I have some ammo to spare… you’re gonna need it." />
+    </finish>
+  </dialog2>
 
 
-    
-	<dialog3> 
-		<start>
-			<entry1 text="It seems those damn monsters got to him before we could make it… Wait, what’s that? A coordinates sheet? What’s even there?" />
-		</start>
 
-		<finish>
-			<entry1 text="That was too close for comfort, but we managed to take out one of their hives. I’d call that a win." />
-			<entry2 text="Absolutely, just… don’t get used to it, we could have lost way too much in that assault" />
-			<entry3 text="Copy that." />
-		</finish>
-	</dialog3>
+  <dialog3>
+    <start>
+      <entry1 text="It seems those damn monsters got to him before we could make it… Wait, what’s that? A coordinates sheet? What’s even there?" />
+    </start>
+
+    <finish>
+      <entry1 text="That was too close for comfort, but we managed to take out one of their hives. I’d call that a win." />
+      <entry2 text="Absolutely, just… don’t get used to it, we could have lost way too much in that assault" />
+      <entry3 text="Copy that." />
+    </finish>
+  </dialog3>
 
 
 
-    
-	<dialog4> 
-		<start>
-			<entry1 text="Good news everyone: I’ve picked up a signal from our mechanical combat unit. However, it seems to be right in the middle of a wanamingo nest. Y'all up for some action?" />
-			<entry2 text="I’d say it’s worth the risk… that machine is an absolute unit, it’d be an invaluable asset." />
-		</start>
 
-		<finish>
-			<entry1 text="COMMAND::REBOOT --- … ---...--- RESULT::SUCCESS --- STATUS::ONLINE --- UNIT GOLIATH, WAITING FOR ORDERS" />
-			<entry2 text="Hello beauty… we’re gonna have some fun together." />
-		</finish>
-	</dialog4>
+  <dialog4>
+    <start>
+      <entry1 text="Good news everyone: I’ve picked up a signal from our mechanical combat unit. However, it seems to be right in the middle of a wanamingo nest. Y'all up for some action?" />
+      <entry2 text="I’d say it’s worth the risk… that machine is an absolute unit, it’d be an invaluable asset." />
+    </start>
+
+    <finish>
+      <entry1 text="COMMAND::REBOOT --- … ---...--- RESULT::SUCCESS --- STATUS::ONLINE --- UNIT GOLIATH, WAITING FOR ORDERS" />
+      <entry2 text="Hello beauty… we’re gonna have some fun together." />
+    </finish>
+  </dialog4>
 
 </dialogues>

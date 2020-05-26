@@ -105,14 +105,30 @@ private:
 	DIALOG_STATE state;
 
 	//TUTORIAL-------------
-	P2SString dialogTutorialStart;
-	P2SString dialogTutorialStart_B;
-	P2SString dialogTutorialEnd;
-	P2SString dialogTutorialEnd_B;
+	//Tutorial 1 ---------
+	P2SString dialogTutorial1Start;
+	P2SString dialogTutorial1Start_B;
 
-	P2SString dialogTutorialStart2;
-	P2SString dialogTutorialStart2_B;
-	P2SString dialogTutorialEnd2;
+	P2SString dialogTutorial1Start2;
+	P2SString dialogTutorial1Start2_B;
+
+	P2SString dialogTutorial1End;
+	P2SString dialogTutorial1End_B;
+
+	//Tutorial 2 ---------
+	P2SString dialogTutorial2Start2;
+	P2SString dialogTutorial2Start2_B;
+	P2SString dialogTutorial2End2;
+	P2SString dialogTutorial2End2_B;
+
+	//Tutorial 3 ---------
+	P2SString dialogTutorial3Start;
+	P2SString dialogTutorial3Start_B;
+
+	P2SString dialogTutorial3Start2_B;
+
+	P2SString dialogTutorial3End;
+	P2SString dialogTutorial3End_B;
 
 	//Quest 1 ------------
 	P2SString dialogMission1_ST_B1;
