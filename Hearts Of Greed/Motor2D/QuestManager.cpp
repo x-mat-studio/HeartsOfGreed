@@ -8,6 +8,8 @@
 #include "Collision.h"
 #include "Audio.h"
 #include "Textures.h"
+#include "UIManager.h"
+#include "UI_Group.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Player.h"
 #include "DialogManager.h"
@@ -53,11 +55,17 @@ void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 
 	for (pugi::xml_node iterator = node.first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
 	{
+
 		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int(), iterator.attribute("noCombat").as_bool(false)));
 
 		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
 		{
 			questInfoVector[i].PushEntityToSpawn((ENTITY_TYPE)iterator2.attribute("type").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
+
+			if (i == 5)
+			{
+				questInfoVector[i].PushEntityToSpawn(ENTITY_TYPE::HQ_COMANDER, -100, -100);
+			}
 		}
 	}
 }
@@ -68,7 +76,9 @@ bool ModuleQuestManager::Start()
 	bool ret = true;
 
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FINISH_QUEST, this);
+	ret = app->eventManager->EventRegister(EVENT_ENUM::FIRST_BASE_CONQUERED, this);
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FAIL_QUEST, this);
+	ret = app->eventManager->EventRegister(EVENT_ENUM::TUTORIAL3_START, this);
 
 	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
 	questFailed = app->audio->LoadFx("audio/sfx/Interface/MissionFailed.wav");
@@ -95,6 +105,8 @@ bool ModuleQuestManager::CleanUp()
 
 	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FINISH_QUEST, this);
 	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FAIL_QUEST, this);
+	ret = app->eventManager->EventUnRegister(EVENT_ENUM::FIRST_BASE_CONQUERED, this);
+	ret = app->eventManager->EventUnRegister(EVENT_ENUM::TUTORIAL3_START, this);
 
 	app->tex->UnLoad(questMarker);
 
@@ -138,6 +150,22 @@ void ModuleQuestManager::ExecuteEvent(EVENT_ENUM eventId)
 		app->audio->PlayFx(questFailed, 0, -1);
 		break;
 
+	case EVENT_ENUM::FIRST_BASE_CONQUERED:
+
+		CheckEntityDead(nullptr);
+		
+		break;
+
+	case EVENT_ENUM::TUTORIAL3_START:
+	{
+		Quest* tutorial3 = app->entityManager->SearchQuestByID(6);
+
+		if (tutorial3 != nullptr)
+		{
+			tutorial3->ActiveCollider();
+		}
+	}
+		break;
 	}
 }
 
@@ -154,6 +182,10 @@ void ModuleQuestManager::QuestStarted(int questId)
 	{
 		assert("Quest id not initialized");
 	}
+
+	if (app->uiManager->CheckGroupTag(GROUP_TAG::DIALOG) == true)
+		return;
+
 	questInfoVector[questId].StartQuest();
 
 	switch (questId)
@@ -200,8 +232,8 @@ void ModuleQuestManager::QuestStarted(int questId)
 		break;
 
 	case 6:
-		//app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START3);
-		//questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL_END3);
+		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL3_START);
+		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL3_END);
 		character1 = ENTITY_TYPE::HQ_COMANDER;
 		character2 = ENTITY_TYPE::HERO_GATHERER;
 		break;
@@ -224,11 +256,17 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 		{
 			if (questInfoVector[i].CheckQuestStatus(entity))
 			{
+				if(i != 0 &&  i != 5)
 				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
 
 				if (i == 5)	// Tutorial 2 ID
 				{
-					app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
+					app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
+				}
+
+				if (i == 6)	// Tutorial 3 ID
+				{
+					app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_DAY, EVENT_ENUM::NULL_EVENT);
 				}
 			}
 
@@ -313,27 +351,32 @@ void QuestInfo::StartQuest()
 	for (int i = 0; i < numberToSpawn; i++)
 	{
 		entity = app->entityManager->AddEntity(entitysToSpawnVector[i], positionsToSpawnVector[i].x, positionsToSpawnVector[i].y);
-		entity->missionEntity = true;
 
-		switch (entity->GetType())
+		if (entity != nullptr)
 		{
-		case ENTITY_TYPE::HERO_GATHERER:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
-			break;
 
-		case ENTITY_TYPE::HERO_MELEE:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
-			break;
+			entity->missionEntity = true;
 
-		case ENTITY_TYPE::HERO_RANGED:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
-			break;
+			switch (entity->GetType())
+			{
+			case ENTITY_TYPE::HERO_GATHERER:
+				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
+				break;
 
-		case ENTITY_TYPE::HERO_ROBO:
-			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
-			break;
-		default:
-			break;
+			case ENTITY_TYPE::HERO_MELEE:
+				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
+				break;
+
+			case ENTITY_TYPE::HERO_RANGED:
+				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
+				break;
+
+			case ENTITY_TYPE::HERO_ROBO:
+				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
+				break;
+			default:
+				break;
+			}
 		}
 
 		questEntitysVector.push_back(entity);
@@ -347,9 +390,11 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 {
 	int numberEntitys = questEntitysVector.size();
 
-	if (questEntitysVector.empty() && this->noCombat == true)
+	//Tutorial Conditions-----
+	if (questEntitysVector.empty() && this->noCombat == true || entity == nullptr)
 	{
 		WinQuest();
+		return true;
 	}
 
 	for (int i = 0; i < numberEntitys; i++)
@@ -400,8 +445,6 @@ void QuestInfo::WinQuest()
 	GiveReward();
 	app->dialogManager->PushInput((DIALOG_INPUT)dialogInput);
 
-	if (noCombat == false)
-		app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::CREATE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 }

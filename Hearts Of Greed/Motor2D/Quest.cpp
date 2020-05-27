@@ -78,5 +78,19 @@ int Quest::GetId() const
 void Quest::SetId(int i)
 {
 	id = i;
+
+
+	switch (id)
+	{
+	case 5:
+		collider->rect = { collider->rect.x, collider->rect.y, 450,450 };
+		break;
+
+	case 6:
+		collider->rect = { collider->rect.x, collider->rect.y, 450,450 };
+		collider->Activate();
+		break;
+
+	}
 }
 
