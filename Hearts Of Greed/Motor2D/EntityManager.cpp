@@ -4323,6 +4323,22 @@ void ModuleEntityManager::ResetUpgradeValues()
 	robottoAtkSpeedUpgradeValue = 1;
 }
 
+ENTITY_TYPE ModuleEntityManager::GetFirstHeroType()
+{
+	int entityNumber = entityVector.size();
+
+	for (int i = 0; i < entityNumber; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || 
+			entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+		{
+			return entityVector[i]->GetType();
+		}
+	}
+
+	return ENTITY_TYPE::HQ_COMANDER;
+}
+
 HeroStats::HeroStats() : maxHP(-1), damage(-1), maxEnergy(-1), atkSpeed(-1), recoveryHPRate(-1), recoveryEnergyRate(-1),
 heroLevel(-1), movSpeed(-1), visionDistance(-1), attackRange(-1), xpToLvlUp(-1), currHP(-1), currEnergy(-1)
 {}
