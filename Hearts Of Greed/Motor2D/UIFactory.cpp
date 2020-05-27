@@ -45,6 +45,7 @@ UIFactory::UIFactory() :
 	robottoPicture{ 807, 515, 61, 47 },
 	robottoShopPicture{ 875, 512, 36, 27 },
 	robottoBigPicture{ 677, 512, 123, 96 },
+	hqCommanderPortrait{ 951, 540, 61, 47 },
 	baseDataPagePicture{ 634, 90, 59, 45 },
 	upgradeCenterDataPagePicture{ 711, 306, 61, 47 },
 	turretDataPagePicture{ 580, 400, 61, 47 },
@@ -270,7 +271,10 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 		CreateImage(76, 49, button, gathererPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
-		//TODO
+		CreateImage(76, 49, button, robottoHeroPortrait, group, false, false);
+		break;
+	case ENTITY_TYPE::HQ_COMANDER:
+		CreateImage(76, 49, button, hqCommanderPortrait, group, false, false);
 		break;
 
 	default:
@@ -290,7 +294,10 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 		CreateImage(338, 153, button, gathererPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
-		//TODO
+		CreateImage(338, 153, button, robottoHeroPortrait, group, false, false);
+		break;
+	case ENTITY_TYPE::HQ_COMANDER:
+		CreateImage(338, 153, button, hqCommanderPortrait, group, false, false);
 		break;
 
 	default:

@@ -7,6 +7,9 @@
 #include "EventManager.h"
 #include "Collision.h"
 
+#include "Pathfinding.h"
+#include "Map.h"
+
 Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect) :
 
 	Building(position, maxHitPoints, currenthitPoints, recoveryHitPointsRate, xpOnDeadth, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_BARRICADE),
@@ -33,11 +36,19 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 
 	currentRect(nullptr)
 {
-	if (direction == DIRECTION_BARRICADE::VERTICAL)
+	if (direction == DIRECTION_BARRICADE::VERTICAL) 
+	{
+		app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
 		currentRect = &verticalRect;
-	
-	else if(direction == DIRECTION_BARRICADE::HORIZONTAL)
+	}
+	else if (direction == DIRECTION_BARRICADE::HORIZONTAL) 
+	{
+		app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 10, position.y), 1, 3);	
 		currentRect = &horizontalRect;
+	}
+	
+
+	
 }
 
 
@@ -96,6 +107,12 @@ void Barricade::Die()
 {
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+
+
+	if (direction == DIRECTION_BARRICADE::VERTICAL)
+		app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
+	else if (direction == DIRECTION_BARRICADE::HORIZONTAL)
+		app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 10, position.y), 1, 3);
 
 	if (minimapIcon != nullptr)
 	{

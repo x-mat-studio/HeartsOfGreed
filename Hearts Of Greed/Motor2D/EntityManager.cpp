@@ -2109,7 +2109,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 				int previousHealth = entityVector[i]->GetMaxHP();
 				gathererLifeUpgradeValue *= upgradeValue;
 				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
-				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
+				entityVector[i]->SetCurrentHP(entityVector[i]->GetCurrentHP() + entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}
@@ -2168,7 +2168,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 				int previousHealth = entityVector[i]->GetMaxHP();
 				rangedLifeUpgradeValue *= upgradeValue;
 				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
-				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
+				entityVector[i]->SetCurrentHP(entityVector[i]->GetCurrentHP() + entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}
@@ -2227,7 +2227,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 				int previousHealth = entityVector[i]->GetMaxHP();
 				meleeLifeUpgradeValue *= upgradeValue;
 				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
-				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
+				entityVector[i]->SetCurrentHP(entityVector[i]->GetCurrentHP() + entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}
@@ -2286,7 +2286,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 				int previousHealth = entityVector[i]->GetMaxHP();
 				robottoLifeUpgradeValue *= upgradeValue;
 				entityVector[i]->SetMaxHP(round(entityVector[i]->GetMaxHP() * upgradeValue));
-				entityVector[i]->hitPointsCurrent += (entityVector[i]->GetMaxHP() - previousHealth);
+				entityVector[i]->SetCurrentHP(entityVector[i]->GetCurrentHP() + entityVector[i]->GetMaxHP() - previousHealth);
 				break;
 			}
 		}

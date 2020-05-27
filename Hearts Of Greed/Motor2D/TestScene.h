@@ -2,6 +2,7 @@
 #define __TEST_SCENE_H__
 
 #include "Module.h"
+#include "EasingFunctions.h"
 
 class ModuleTestScene : public Module
 {
@@ -44,6 +45,17 @@ public:
 	void DeactivateCamMovement();
 	bool GetCamMovementActivated() const;
 	void ConstrainCameraToBorders();
+	void NewCamEasing(fMPoint initialPos, fMPoint finalPos, float duration,EASING_TYPE easingType);
+	bool IsCamDoingEasing()const;
+	void UpdateCamEasing(float dt);
+	void SetCamEasingState(bool active);
+	void MoveCamTo(fMPoint worldPos, float duration, EASING_TYPE easing);
+
+	//Returns the position of the center of the camera frame in world coordinates
+	fMPoint CamToWorld();
+
+	//Returns the postion of the cam if the given point were to be the center of the frame
+	fMPoint WorldToCam(fMPoint worldPos);
 
 	int GetDayNumber() const;
 	bool IsNight() const;
@@ -92,6 +104,9 @@ private:
 	bool camToReset;
 	float startingScale;
 	bool mapLoaded;
+
+	Easing camEasingX;
+	Easing camEasingY;
 
 };
 

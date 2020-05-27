@@ -13,6 +13,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "Player.h"
 #include "DialogManager.h"
+#include "TestScene.h"
 
 
 
@@ -344,6 +345,7 @@ QuestInfo::~QuestInfo()
 
 void QuestInfo::StartQuest()
 {
+	bool isHero = false;
 	Entity* entity = nullptr;
 
 	int numberToSpawn = entitysToSpawnVector.size();
@@ -357,29 +359,37 @@ void QuestInfo::StartQuest()
 
 			entity->missionEntity = true;
 
-			switch (entity->GetType())
-			{
-			case ENTITY_TYPE::HERO_GATHERER:
-				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
-				break;
+		switch (entity->GetType())
+		{
+		case ENTITY_TYPE::HERO_GATHERER:
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
+			isHero = true;
+			break;
 
-			case ENTITY_TYPE::HERO_MELEE:
-				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
-				break;
+		case ENTITY_TYPE::HERO_MELEE:
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
+			isHero = true;
+			break;
 
-			case ENTITY_TYPE::HERO_RANGED:
-				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
-				break;
+		case ENTITY_TYPE::HERO_RANGED:
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
+			isHero = true;
+			break;
 
-			case ENTITY_TYPE::HERO_ROBO:
-				app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
-				break;
-			default:
-				break;
-			}
+		case ENTITY_TYPE::HERO_ROBO:
+			app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
+			isHero = true;
+			break;
+		default:
+			break;
 		}
 
 		questEntitysVector.push_back(entity);
+
+		if (isHero == true)
+		{
+			app->testScene->MoveCamTo(positionsToSpawnVector[i], 2.0, EASING_TYPE::EASE_IN_OUT_SINE);
+		}
 	}
 
 	active = true;

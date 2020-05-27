@@ -258,6 +258,7 @@ private:
 	SDL_Rect meleHeroPortrait;
 	SDL_Rect rangedHeroPortrait;
 	SDL_Rect robottoHeroPortrait;
+	SDL_Rect hqCommanderPortrait;
 
 	SDL_Rect ugradeSkillButton;
 

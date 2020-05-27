@@ -52,6 +52,7 @@ public:
 	const int GetCameraX();
 	const int GetCameraY();
 
+
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
@@ -69,6 +70,7 @@ private:
 	SDL_Rect camera;
 
 	bool gameExit;
+
 
 };
 
