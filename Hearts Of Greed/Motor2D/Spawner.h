@@ -3,7 +3,7 @@
 #ifndef __SPAWNER_H__
 #define __SPAWNER_H_
 
-#define MAX_Nº_SPAWNERS 20
+#define MAX_Nº_SPAWNERS 4
 
 #include "Entity.h"
 
@@ -26,9 +26,13 @@ public:
 	bool GetActive();
 
 	void SetWannamingosToSpawn(int number);
+	void AddAWanamingo();
 	void SetGigamingosToSpawn(int number);
+	void AddAGigamingo();
 	void SetSpeedamingosToSpawn(int number);
+	void AddASpeedamingo();
 	void SetSnipermingosToSpawn(int number);
+	void AddASnipermingo();
 
 	//Getters and setters
 
@@ -65,31 +69,36 @@ private:
 	void SpawnSpeedamingo(float dt);
 	void SpawnSnipermingo(float dt);
 
+public:
+	int wannamingosToSpawn;
+	int gigamingosToSpawn;
+	int speedamingosToSpawn;
+	int snipermingosToSpawn;
 private:
 
 	//Wannamingo
-	int wannamingosToSpawn;
+	
 	int wannamingosPerWave;
 
 	float wannamingosSpawnRate;
 	float wannamingoTimer;
 
 	//Gigamingo
-	int gigamingosToSpawn;
+	
 	int gigamingosPerWave;
 
 	float gigamingosSpawnRate;
 	float gigamingoTimer;
 
 	//Speedamingo
-	int speedamingosToSpawn;
+	
 	int speedamingosPerWave;
 
 	float speedamingosSpawnRate;
 	float speedamingoTimer;
 
 	//Snipermingo
-	int snipermingosToSpawn;
+	
 	int snipermingosPerWave;
 
 	float snipermingosSpawnRate;
@@ -97,6 +106,8 @@ private:
 	
 
 	bool active;
+
+
 };
 
 

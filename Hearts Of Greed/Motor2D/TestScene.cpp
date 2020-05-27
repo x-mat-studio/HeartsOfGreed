@@ -90,6 +90,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 bool ModuleTestScene::Start()
 {
 	mapLoaded = false;
+	
 	app->player->Enable();
 	app->minimap->Enable();
 
@@ -157,8 +158,10 @@ bool ModuleTestScene::Start()
 				*/
 
 				//Spawners------------------
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 680, pos.y-10);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 670, pos.y-15);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 660, pos.y-20);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 650, pos.y-25);
 
 			//Debug
 			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
@@ -175,6 +178,9 @@ bool ModuleTestScene::Start()
 		app->entityManager->DeleteAllEntities();
 		app->LoadGame();
 		startFromLoad = false;
+	}
+	else {
+		dayNumber = 0;
 	}
 
 
@@ -201,6 +207,8 @@ bool ModuleTestScene::Start()
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
 	app->gamePause = false;
+
+	
 
 	return true;
 }

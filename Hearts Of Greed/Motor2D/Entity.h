@@ -107,6 +107,8 @@ public:
 	virtual void OnCollision(Collider* collider);
 	virtual void CollisionPosUpdate();
 	virtual Collider* GetCollider() const;
+	void SetColliderRect(SDL_Rect newRect);
+	void ActiveCollider();
 
 	virtual int RecieveDamage(float damage);
 	virtual void CheckObjective(Entity* deleted);

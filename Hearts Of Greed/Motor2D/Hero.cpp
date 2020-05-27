@@ -82,27 +82,30 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	recoveringHealth(0),
 	recoveringEnergy(0),
 
+	bonusArmor(0),
+	bonusAttack(0),
+
+	heroSkillPoints(0),
+
+	visionInPx(0.f),
+	movingTo{ -1,-1 },
+	lvlUpSfxTimer(0),
+
 	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
 	godMode(false),
-	currAreaInfo(nullptr),
+	comeFromAttack(true),
 	skillExecutionDelay(false),
-	visionInPx(0.f),
-	movingTo{ -1,-1 },
 	drawingVfx(false),
-	lvlUpSfxTimer(0),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1),
+	currAreaInfo(nullptr),
 	objective(nullptr),
-	myParticleSystem(nullptr),
-
-
-	heroSkillPoints(0),
-	comeFromAttack(true)
+	myParticleSystem(nullptr)
 
 {
 	currentAnimation = &walkLeft;
@@ -170,6 +173,9 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	heroXP(0),
 	recoveringHealth(0),
 	recoveringEnergy(0),
+
+	bonusArmor(0),
+	bonusAttack(0),
 
 	gettingAttacked(false),
 	skill1Charged(true),
@@ -267,6 +273,7 @@ bool Hero::Update(float dt)
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
+	ResetBonusStats();
 	UpdatePasiveSkill(dt);
 
 	GroupMovement(dt);
@@ -593,7 +600,7 @@ void Hero::Attack()
 	int ret = -1;
 
 	if (objective)
-		ret = objective->RecieveDamage(stats.damage);
+		ret = objective->RecieveDamage(stats.damage + bonusAttack);
 
 	if (ret > 0)
 	{
@@ -812,6 +819,11 @@ int Hero::RecieveDamage(float damage)
 	int ret = -1;
 	gettingAttacked = true;
 	feelingSecure = 0;
+
+	if (bonusArmor > 0)
+	{
+		damage -= damage * bonusArmor * 0.01f;
+	}
 
 	if (stats.currHP > 0 && godMode == false)
 	{
@@ -1226,7 +1238,6 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 			switch (lastInput)
 			{
 			case HERO_INPUTS::IN_SKILL_CANCEL:
-			{
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -1236,7 +1247,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 				skillFromAttacking = false;
 				break;
-			}
+			
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
@@ -1974,4 +1985,11 @@ bool Hero::IsDying()
 		return true;
 
 	return false;
+}
+
+
+void Hero::ResetBonusStats()
+{
+	bonusArmor = 0;
+	bonusAttack = 0;
 }

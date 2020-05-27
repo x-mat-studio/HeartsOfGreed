@@ -886,6 +886,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	{
 	case ENTITY_TYPE::QUEST:
 		ret = new Quest(x, y);
+		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::QUEST, fMPoint{0.f,0.f}); //TODO change the last value accordingly to the quest rectangle
 
 		break;
 	case ENTITY_TYPE::SPAWNER:
@@ -1021,6 +1022,28 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 	}
 
 	return ret;
+}
+
+Quest* ModuleEntityManager::SearchQuestByID(int id)
+{
+	int numEntities = entityVector.size();
+
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::QUEST)
+		{
+			Quest* foundQuest = (Quest*)entityVector[i];
+			if (id == foundQuest->GetId())
+			{
+				return foundQuest;
+			}
+
+		}
+	}
+
+
+	return nullptr;
 }
 
 
@@ -1988,6 +2011,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::PLAYER_CONQUERED_A_BASE:
+	{
+		if (CheckPlayerBases() == 2)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::FIRST_BASE_CONQUERED, EVENT_ENUM::NULL_EVENT);
+		}
+
+	}
 		break;
 
 	case EVENT_ENUM::DAY_START:
@@ -4400,6 +4430,22 @@ void ModuleEntityManager::ResetUpgradeValues()
 	robottoDamageUpgradeValue = 1;
 	robottoEnergyUpgradeValue = 1;
 	robottoAtkSpeedUpgradeValue = 1;
+}
+
+ENTITY_TYPE ModuleEntityManager::GetFirstHeroType()
+{
+	int entityNumber = entityVector.size();
+
+	for (int i = 0; i < entityNumber; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || 
+			entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+		{
+			return entityVector[i]->GetType();
+		}
+	}
+
+	return ENTITY_TYPE::HQ_COMANDER;
 }
 
 HeroStats::HeroStats() : maxHP(-1), damage(-1), maxEnergy(-1), atkSpeed(-1), recoveryHPRate(-1), recoveryEnergyRate(-1),
