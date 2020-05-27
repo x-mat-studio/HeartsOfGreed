@@ -189,12 +189,14 @@ void RangedHero::LevelUp()
 	else {
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
+
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-
 	stats.maxHP *= app->entityManager->rangedLifeUpgradeValue;
+	stats.currHP = stats.maxHP;
 
 	stats.maxEnergy *= (app->entityManager->rangedEnergyUpgradeValue);
+	stats.currEnergy = stats.maxEnergy;
 
 	stats.damage *= (app->entityManager->rangedDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->rangedAtkSpeedUpgradeValue);

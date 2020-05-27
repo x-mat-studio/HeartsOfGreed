@@ -83,7 +83,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
 
-	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x, position.y));
+	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 60, position.y - 10));
 }
 
 
@@ -312,7 +312,7 @@ void Turret::Die()
 		myBase->RemoveTurret(this);
 	}
 
-	app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x, position.y));
+	app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 60, position.y - 10));
 
 }
 

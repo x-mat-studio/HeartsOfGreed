@@ -266,8 +266,10 @@ void GathererHero::LevelUp()
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
 	stats.maxHP *= app->entityManager->gathererLifeUpgradeValue;
+	stats.currHP = stats.maxHP;
 
 	stats.maxEnergy *= (app->entityManager->gathererEnergyUpgradeValue);
+	stats.currEnergy = stats.maxEnergy;
 
 	stats.damage *= (app->entityManager->gathererDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->gathererAtkSpeedUpgradeValue);

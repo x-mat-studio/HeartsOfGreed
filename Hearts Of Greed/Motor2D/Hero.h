@@ -98,7 +98,7 @@ struct HeroStats
 
 
 	int maxHP;
-	int damage;
+	float damage;
 	int maxEnergy;
 	float atkSpeed;
 	float recoveryHPRate;
