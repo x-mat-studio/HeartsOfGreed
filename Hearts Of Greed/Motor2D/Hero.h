@@ -64,7 +64,8 @@ enum HERO_INPUTS
 struct Skill
 {
 	Skill();
-	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
+	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, 
+		  ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT, float effectTime = 0, float effectSeverity = 0);
 	Skill(const Skill& skill1);
 
 	Skill operator= (Skill& newSkill);
@@ -86,6 +87,8 @@ struct Skill
 	SKILL_ID id;
 
 	SKILL_EFFECT effect;
+	float effectTime;
+	float effectSeverity;
 };
 
 struct skillArea;

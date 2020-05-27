@@ -2790,6 +2790,7 @@ void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int r
 
 bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requestLvl)
 {
+	//Even thought i use it, i feel so dirty doing it
 	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
 
 	pugi::xml_document skillDoc;
@@ -2811,6 +2812,8 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 					skillToFill.coolDown = iterator2.attribute("cooldown").as_float(-1.f);
 					skillToFill.dmg = iterator2.attribute("dmg").as_int(-1);
 					skillToFill.effect = (SKILL_EFFECT)iterator2.attribute("effect").as_int(-1);
+					skillToFill.effectTime = iterator2.attribute("effectTime").as_float(-1.f);
+					skillToFill.effectSeverity = iterator2.attribute("effectSeverity").as_float(-1.f);
 					skillToFill.executionTime = iterator2.attribute("executionTime").as_float(-1.f);
 					skillToFill.hurtYourself = iterator2.attribute("hurtYourself").as_bool(false);
 					skillToFill.lvl = currLvl;
@@ -2972,6 +2975,7 @@ int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objec
 		ret = 0;
 		int numEntities = entityVector.size();
 		Collider* entColl = nullptr;
+		ENTITY_TYPE type;
 		float halfH = app->map->data.tileHeight * 0.5;
 		float halfW = app->map->data.tileWidth * 0.5;
 		float newRad = sqrt(halfW * halfW + halfH * halfH) * skill.attackRadius + 0.5f * skill.attackRadius;
@@ -2991,14 +2995,20 @@ int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objec
 			if (entColl == nullptr)
 				continue;
 
-
+			
 			if (entColl->CheckCollisionCircle(pivot, newRad))
 			{
 				ret += entityVector[i]->RecieveDamage(skill.dmg);
 
-				if (skill.effect != SKILL_EFFECT::NO_EFFECT)
+				if (skill.effect == SKILL_EFFECT::SLOWDOWN)
 				{
+					type = entityVector[i]->GetType();
 
+					if (type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::ENEMY_GIGA || type == ENTITY_TYPE::ENEMY_NIGHT || type == ENTITY_TYPE::ENEMY_RANGED)
+					{
+						Enemy* enemy = (Enemy*)entityVector[i];
+						enemy->debuffs.AddNewEffect(SKILL_EFFECT::SLOWDOWN, skill.effectTime, skill.effectSeverity);
+					}
 				}
 			}
 

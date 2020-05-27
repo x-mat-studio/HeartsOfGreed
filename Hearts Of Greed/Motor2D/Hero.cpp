@@ -1574,15 +1574,59 @@ bool Hero::DrawVfx(float dt)
 }
 
 
-Skill::Skill() : id(SKILL_ID::NO_TYPE), dmg(-1), coolDown(-1.f), rangeRadius(-1), attackRadius(-1), hurtYourself(false), type(SKILL_TYPE::NO_TYPE), target(ENTITY_ALIGNEMENT::UNKNOWN), effect(SKILL_EFFECT::NO_EFFECT), executionTime(-1.f), lvl(-1), energyCost(-1)
+Skill::Skill() : 
+	id(SKILL_ID::NO_TYPE), 
+	dmg(-1), 
+	coolDown(-1.f), 
+	rangeRadius(-1), 
+	attackRadius(-1), 
+	hurtYourself(false), 
+	type(SKILL_TYPE::NO_TYPE), 
+	target(ENTITY_ALIGNEMENT::UNKNOWN), 
+	effect(SKILL_EFFECT::NO_EFFECT), 
+	effectTime(0),
+	effectSeverity(1),
+	executionTime(-1.f), 
+	lvl(-1), 
+	energyCost(-1)
 {
 }
 
-Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect) :
-	id(id), dmg(dmg), coolDown(cooldown), rangeRadius(rangeRadius), attackRadius(attackRadius), hurtYourself(hurtYourself), type(type), target(target), effect(effect), executionTime(executionTime), lvl(lvl), energyCost(energyCost)
+Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, 
+			 ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect, float effectTime, float effectSeverity) :
+
+	id(id), 
+	dmg(dmg), 
+	coolDown(cooldown), 
+	rangeRadius(rangeRadius), 
+	attackRadius(attackRadius), 
+	hurtYourself(hurtYourself), 
+	type(type), 
+	target(target), 
+	effect(effect), 
+	effectTime(effectTime),
+	effectSeverity(effectSeverity),
+	executionTime(executionTime), 
+	lvl(lvl), 
+	energyCost(energyCost)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime), lvl(skill1.lvl), energyCost(skill1.energyCost)
+Skill::Skill(const Skill& skill1) : 
+	
+	dmg(skill1.dmg), 
+	type(skill1.type), 
+	target(skill1.target), 
+	id(skill1.id), 
+	effect(skill1.effect), 
+	effectTime(skill1.effectTime),
+	effectSeverity(skill1.effectSeverity),
+	coolDown(skill1.coolDown), 
+	attackRadius(skill1.attackRadius), 
+	rangeRadius(skill1.rangeRadius), 
+	hurtYourself(skill1.hurtYourself), 
+	executionTime(skill1.executionTime), 
+	lvl(skill1.lvl), 
+	energyCost(skill1.energyCost)
 {}
 
 Skill Skill::operator=(Skill& newSkill)
@@ -1591,6 +1635,8 @@ Skill Skill::operator=(Skill& newSkill)
 	this->coolDown = newSkill.coolDown;
 	this->dmg = newSkill.dmg;
 	this->effect = newSkill.effect;
+	this->effectTime = newSkill.effectTime;
+	this->effectSeverity = newSkill.effectSeverity;
 	this->executionTime = newSkill.executionTime;
 	this->hurtYourself = newSkill.hurtYourself;
 	this->id = newSkill.id;
@@ -1610,6 +1656,7 @@ Skill Skill::operator=(Skill& newSkill)
 // PD: Now I have to enter this nightmare as well. The quest for an efficient code has started
 // PD2: Ferran stop with this comments, we don't understand anything you say
 // PD3: But, you see, if I did stop, what would be the point of programming? It's like taking away the bandana of a man, or those memories of eating ants when you were young. Without those, life becomes meaningless
+// PD4: When i see this code i get anxious about killing people, guys why?
 
 int Hero::GetHeroLevel() const
 {
