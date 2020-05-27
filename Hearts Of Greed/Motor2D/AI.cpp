@@ -255,7 +255,7 @@ void ModuleAI::CommandSpawners()
 		//iterator->second->SetNumber	Giga	ToSpawn(gigamingosToSpawn);
 		//iterator->second->SetNumber	Sniper	ToSpawn(snipermingosToSpawn);
 		//iterator->second->SetNumber	Speedo	ToSpawn(speedomingosToSpawn);
-
+		
 		iterator++;
 	}
 

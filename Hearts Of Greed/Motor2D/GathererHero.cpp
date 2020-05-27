@@ -7,6 +7,7 @@
 #include "Textures.h"
 #include "ParticleSystem.h"
 #include "Player.h"
+#include "Collision.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -23,6 +24,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 
 	granadeArea(nullptr),
 	currentVfx(nullptr),
+	passiveSkillCollider(nullptr),
 
 	vfxExplosion(vfxExplosion),
 	passiveSkill(passiveSkill),
@@ -37,6 +39,7 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 
 	granadeArea(nullptr),
 	currentVfx(nullptr),
+	passiveSkillCollider(nullptr),
 
 	vfxExplosion(copy->vfxExplosion),
 	passiveSkill(copy->passiveSkill),
@@ -52,6 +55,43 @@ GathererHero::~GathererHero()
 
 	granadeArea = nullptr;
 	currentVfx = nullptr;
+
+	if(passiveSkillCollider != nullptr)
+	{
+		passiveSkillCollider->to_delete = true;
+		passiveSkillCollider->thisEntity = nullptr;
+		passiveSkillCollider = nullptr;
+	}
+}
+
+
+bool GathererHero::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+
+	passiveSkillCollider = new Collider(SDL_Rect{ 0, 0, passiveSkill.rangeRadius, passiveSkill.rangeRadius }, COLLIDER_PASSIVE_GATHERER, app->entityManager, this);
+	app->coll->AddColliderEntity(passiveSkillCollider);
+
+	started = true;
+
+	return true;
 }
 
 
@@ -187,7 +227,7 @@ bool GathererHero::ExecuteSkill3()
 
 void GathererHero::UpdatePasiveSkill(float dt)
 {
-
+	passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
 }
 
 
@@ -233,6 +273,29 @@ void GathererHero::LevelUp()
 	stats.atkSpeed *= (app->entityManager->gathererAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
+}
+
+
+void GathererHero::OnCollision(Collider* collider)
+{
+	if (collider->type == COLLIDER_HERO)
+	{
+		if (collider->thisEntity->GetType() == ENTITY_TYPE::HERO_ROBO)
+		{
+			Hero* hero = (Hero*)collider->thisEntity;
+
+			hero->bonusArmor = passiveSkill.executionTime; //Execution time codifies as the bonuses the robotic units receibe
+			hero->bonusAttack = passiveSkill.executionTime;
+		}
+	}
+
+	else if (collider->type == COLLIDER_VISIBILITY)
+	{
+		if (collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
+		{
+			Turret* turret = (Turret*)collider->thisEntity;
+		}
+	}
 }
 
 
@@ -310,3 +373,5 @@ void GathererHero::ReplacePassiveSkill(Skill& skill)
 {
 	passiveSkill = skill;
 }
+
+
