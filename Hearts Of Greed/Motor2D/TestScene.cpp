@@ -254,6 +254,12 @@ bool  ModuleTestScene::Update(float dt)
 		ToggleCamMovement();
 	}
 
+	////Cam Easing Testing code
+	//if (app->input->GetKey(SDL_SCANCODE_Y) == KEY_STATE::KEY_DOWN)
+	//{
+
+	//	MoveCamTo(fMPoint{ 525,3119 }, 2.0, EASING_TYPE::EASE_IN_OUT_SINE);
+	//}
 
 	if (allowCamMovement)
 	{
@@ -295,10 +301,12 @@ bool  ModuleTestScene::Update(float dt)
 			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
 			{
 				StartDragging(mousePos);
+				SetCamEasingState(false);
 			}
 			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
 			{
 				Drag(mousePos, scale);
+				SetCamEasingState(false);
 			}
 			else if (scrollWheel.y != 0)
 			{
@@ -311,10 +319,25 @@ bool  ModuleTestScene::Update(float dt)
 			}
 			else
 			{
-				MouseCameraDisplacement(camVel, dt);
+				if (MouseCameraDisplacement(camVel, dt) == false)
+				{
+					if (IsCamDoingEasing() == true)
+					{
+						UpdateCamEasing(dt);
+					}
+				}
+				else
+				{
+					SetCamEasingState(false);
+				}
 			}
 
 		}
+		else
+		{
+			SetCamEasingState(false);
+		}
+
 		ConstrainCameraToBorders();
 	}
 
@@ -695,4 +718,83 @@ void ModuleTestScene::ConstrainCameraToBorders()
 bool ModuleTestScene::IsNight() const
 {
 	return isNightTime;
+}
+
+void ModuleTestScene::NewCamEasing(fMPoint initialPos, fMPoint finalPos, float duration, EASING_TYPE easingType)
+{
+	camEasingX.NewEasing(easingType, initialPos.x, finalPos.x, duration);
+	camEasingY.NewEasing(easingType, initialPos.y, finalPos.y, duration);
+
+}
+
+bool ModuleTestScene::IsCamDoingEasing() const
+{
+	return camEasingX.IsActive();
+}
+
+void ModuleTestScene::UpdateCamEasing(float dt)
+{
+
+
+	if (IsCamDoingEasing() == true)
+	{
+		fMPoint ret;
+		fMPoint cam;
+
+		ret.x = camEasingX.UpdateEasingAddingTime(dt);
+		ret.y = camEasingY.UpdateEasingAddingTime(dt);
+
+		cam = WorldToCam(ret);
+		app->render->currentCamX = cam.x;
+		app->render->currentCamY = cam.y;
+
+	}
+
+
+
+}
+
+void ModuleTestScene::SetCamEasingState(bool active)
+{
+	camEasingX.ChangeActiveState(active);
+	camEasingY.ChangeActiveState(active);
+}
+
+void ModuleTestScene::MoveCamTo(fMPoint worldPos, float duration, EASING_TYPE easing)
+{
+	fMPoint initialPos = CamToWorld();
+
+	NewCamEasing(initialPos, worldPos, duration, easing);
+}
+
+
+fMPoint ModuleTestScene::CamToWorld()
+{
+	fMPoint ret;
+	float invScale = (1 / app->win->GetScale());
+	int w;
+	int h;
+
+	app->render->GetCameraMeasures(w, h);
+
+	ret.x = (-app->render->currentCamX + w * 0.5) * invScale;
+	ret.y = (-app->render->currentCamY + h * 0.5) * invScale;
+
+	return ret;
+}
+
+
+fMPoint ModuleTestScene::WorldToCam(fMPoint worldPos)
+{
+	fMPoint ret;
+	float scale = app->win->GetScale();
+	int w;
+	int h;
+
+	app->render->GetCameraMeasures(w, h);
+
+	ret.x = -(worldPos.x * scale) + (w * 0.5);
+	ret.y = -(worldPos.y * scale) + (h * 0.5);
+
+	return ret;
 }
