@@ -35,13 +35,14 @@ bool ModuleAI::Awake(pugi::xml_node& data)
 	
 		//Loading nights
 
-	//Remember, these numer codify for nº of each type of enemy: In order wanamingo - gigamingo - snipermingo - speedomingo
+	//Remember, these numer codify for: (In order)	 wanamingo - gigamingo - snipermingo - speedomingo - nº of spawners activated that night
 
 	//Night 1
 	NightAux.push_back(		(int)spawnNight.child("night1").child("wana").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night1").child("giga").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night1").child("sniper").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night1").child("speed").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("spawners").attribute("number").as_int());
 	nightEnemyInfo.push_back(NightAux);
 	NightAux.clear();
 
@@ -51,6 +52,7 @@ bool ModuleAI::Awake(pugi::xml_node& data)
 	NightAux.push_back(		(int)spawnNight.child("night2").child("giga").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night2").child("sniper").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night2").child("speed").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("spawners").attribute("number").as_int());
 	nightEnemyInfo.push_back(NightAux);
 	NightAux.clear();
 	
@@ -59,6 +61,7 @@ bool ModuleAI::Awake(pugi::xml_node& data)
 	NightAux.push_back(		(int)spawnNight.child("night3").child("giga").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night3").child("sniper").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night3").child("speed").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("spawners").attribute("number").as_int());
 	nightEnemyInfo.push_back(NightAux);
 	NightAux.clear();
 	
@@ -67,6 +70,7 @@ bool ModuleAI::Awake(pugi::xml_node& data)
 	NightAux.push_back(		(int)spawnNight.child("night4").child("giga").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night4").child("sniper").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night4").child("speed").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("spawners").attribute("number").as_int());
 	nightEnemyInfo.push_back(NightAux);
 	NightAux.clear();
 	
@@ -75,6 +79,7 @@ bool ModuleAI::Awake(pugi::xml_node& data)
 	NightAux.push_back(		(int)spawnNight.child("night5").child("giga").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night5").child("sniper").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night5").child("speed").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("spawners").attribute("number").as_int());
 	nightEnemyInfo.push_back(NightAux);
 	NightAux.clear();
 	
@@ -83,6 +88,7 @@ bool ModuleAI::Awake(pugi::xml_node& data)
 	NightAux.push_back(		(int)spawnNight.child("night6").child("giga").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night6").child("sniper").attribute("number").as_int());
 	NightAux.push_back(		(int)spawnNight.child("night6").child("speed").attribute("number").as_int());
+	NightAux.push_back(		(int)spawnNight.child("night1").child("spawners").attribute("number").as_int());
 	nightEnemyInfo.push_back(NightAux);
 	NightAux.clear();
 
@@ -236,13 +242,20 @@ void ModuleAI::CommandSpawners()
 	int spawnersAbaliable = spawners.size();
 
 	int spawnersToActivate = CalculateSpawnersToActivate();
-	int enemiesToSpawn = CalculateEnemiesToSpawn(spawnersToActivate);
+	int wanamingosToSpawn = CalculateWanamingoToSpawn();
+	int gigamingosToSpawn = CalculateGigamingoToSpawn();
+	int snipermingosToSpawn = CalculateSnipermingoToSpawn();
+	int speedomingosToSpawn = CalculateSpeedomingoToSpawn();
 
 	std::multimap<int, Spawner*>::iterator iterator = spawners.begin();
 
 	for (int i = 0; i < spawnersToActivate && i < spawnersAbaliable; i++)
 	{
-		iterator->second->SetNumberToSpawn(enemiesToSpawn);
+		//iterator->second->SetNumber	Wana	ToSpawn(wanamingosToSpawn);
+		//iterator->second->SetNumber	Giga	ToSpawn(gigamingosToSpawn);
+		//iterator->second->SetNumber	Sniper	ToSpawn(snipermingosToSpawn);
+		//iterator->second->SetNumber	Speedo	ToSpawn(speedomingosToSpawn);
+
 		iterator++;
 	}
 
@@ -263,19 +276,182 @@ void ModuleAI::FindNearestSpawners(std::multimap<int, Spawner*>* spawners)
 	}
 }
 
-
-int ModuleAI::CalculateEnemiesToSpawn(int numberOfSpawners)
+int ModuleAI::CalculateWanamingoToSpawn()
 {
-	int days = app->testScene->GetDayNumber();
+	int ret = 0;
 
-	int ret = days * ENEMIES_PER_NIGHT / numberOfSpawners;
+	switch (app->testScene->GetDayNumber())
+	{
+	case 0:
+		//no enemies on first day
+		break;
+	case 1:
+		ret = nightEnemyInfo[0].at(0);
+		break;
+	case 2:
+		ret = nightEnemyInfo[1].at(0);
+		break;
+	case 3:
+		ret = nightEnemyInfo[2].at(0);
+		break;
+	case 4:
+		ret = nightEnemyInfo[3].at(0);
+		break;
+	case 5:
+		ret = nightEnemyInfo[4].at(0);
+		break;
+	case 6:
+		ret = nightEnemyInfo[5].at(0);
+		break;
+	default:
+		ret = app->testScene->GetDayNumber();
+		break;
+	}
+
+	return ret;
+}
+
+int ModuleAI::CalculateGigamingoToSpawn()
+{
+	int ret = 0;
+
+	switch (app->testScene->GetDayNumber())
+	{
+	case 0:
+		//no enemies on first day
+		break;
+	case 1:
+		ret = nightEnemyInfo[0].at(1);
+		break;
+	case 2:
+		ret = nightEnemyInfo[1].at(1);
+		break;
+	case 3:
+		ret = nightEnemyInfo[2].at(1);
+		break;
+	case 4:
+		ret = nightEnemyInfo[3].at(1);
+		break;
+	case 5:
+		ret = nightEnemyInfo[4].at(1);
+		break;
+	case 6:
+		ret = nightEnemyInfo[5].at(1);
+		break;
+	default:
+		ret = app->testScene->GetDayNumber();
+		break;
+	}
+
 	return ret;
 }
 
 
+int ModuleAI::CalculateSnipermingoToSpawn()
+{
+	int ret = 0;
+
+	switch (app->testScene->GetDayNumber())
+	{
+	case 0:
+		//no enemies on first day
+		break;
+	case 1:
+		ret = nightEnemyInfo[0].at(2);
+		break;
+	case 2:
+		ret = nightEnemyInfo[1].at(2);
+		break;
+	case 3:
+		ret = nightEnemyInfo[2].at(2);
+		break;
+	case 4:
+		ret = nightEnemyInfo[3].at(2);
+		break;
+	case 5:
+		ret = nightEnemyInfo[4].at(2);
+		break;
+	case 6:
+		ret = nightEnemyInfo[5].at(2);
+		break;
+	default:
+		ret = app->testScene->GetDayNumber();
+		break;
+	}
+
+	return ret;
+}
+
+int ModuleAI::CalculateSpeedomingoToSpawn()
+{
+	int ret = 0;
+
+	switch (app->testScene->GetDayNumber())
+	{
+	case 0:
+		//no enemies on first day
+		break;
+	case 1:
+		ret = nightEnemyInfo[0].at(3);
+		break;
+	case 2:
+		ret = nightEnemyInfo[1].at(3);
+		break;
+	case 3:
+		ret = nightEnemyInfo[2].at(3);
+		break;
+	case 4:
+		ret = nightEnemyInfo[3].at(3);
+		break;
+	case 5:
+		ret = nightEnemyInfo[4].at(3);
+		break;
+	case 6:
+		ret = nightEnemyInfo[5].at(3);
+		break;
+	default:
+		ret = app->testScene->GetDayNumber();
+		break;
+	}
+
+	return ret;
+}
+
 int ModuleAI::CalculateSpawnersToActivate()
 {
-	return SPAWNERS_TO_ACTIVATE;
+	int ret = 0;
+
+	switch (app->testScene->GetDayNumber())
+	{
+	case 0:
+		//no enemies on first day
+		break;
+	case 1:
+		ret = nightEnemyInfo[0].at(Nº_TYPE_OF_ENEMIES + 1);
+		break;
+	case 2:
+		ret = nightEnemyInfo[1].at(Nº_TYPE_OF_ENEMIES + 1);
+		break;
+	case 3:
+		ret = nightEnemyInfo[2].at(Nº_TYPE_OF_ENEMIES + 1);
+		break;
+	case 4:
+		ret = nightEnemyInfo[3].at(Nº_TYPE_OF_ENEMIES + 1);
+		break;
+	case 5:
+		ret = nightEnemyInfo[4].at(Nº_TYPE_OF_ENEMIES + 1);
+		break;
+	case 6:
+		ret = nightEnemyInfo[5].at(Nº_TYPE_OF_ENEMIES + 1);
+		break;
+	default:
+		int x = app->testScene->GetDayNumber() * 2;
+		ret = (x < MAX_Nº_SPAWNERS) ? x : MAX_Nº_SPAWNERS;
+		break;
+	}
+
+
+	return ret;
 }
 
 

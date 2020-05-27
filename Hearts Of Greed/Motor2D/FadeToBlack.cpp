@@ -77,6 +77,8 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 			toEnable->Enable();
 			timeSpent = 0.0f;
 			currentStep = FADE_STEP::FADE_FROM_BLACK;
+
+			app->gamePause = false;
 		}
 	} break;
 
@@ -88,8 +90,6 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 			currentStep = FADE_STEP::NONE;
 			timeSpent = 0.0f;
 			totalTime = 0.0f;
-
-			app->gamePause = false;
 		}
 	} break;
 	}

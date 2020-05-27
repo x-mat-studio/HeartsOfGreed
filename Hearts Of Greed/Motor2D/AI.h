@@ -3,9 +3,13 @@
 #ifndef __AI_H__
 #define __AI_H__
 
+
+//PLACEHOLDER SHIT
 #define ENEMIES_PER_NIGHT 5
 #define SPAWNERS_TO_ACTIVATE 2
-#define NUMER_OF_DIFFERENT_ENEMIES 4
+
+
+#define Nº_TYPE_OF_ENEMIES 4
 
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
@@ -46,7 +50,12 @@ private:
 
 	void CommandSpawners();
 	void FindNearestSpawners(std::multimap<int, Spawner*>* spawners);
-	int CalculateEnemiesToSpawn(int numberOfSpawners);
+
+	int CalculateWanamingoToSpawn();
+	int CalculateGigamingoToSpawn();
+	int CalculateSnipermingoToSpawn();
+	int CalculateSpeedomingoToSpawn();
+
 	int CalculateSpawnersToActivate();
 	
 private:
