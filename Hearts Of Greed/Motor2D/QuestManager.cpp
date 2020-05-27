@@ -209,21 +209,21 @@ void ModuleQuestManager::QuestStarted(int questId)
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_2_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_2_END);
 		character1 = app->entityManager->GetFirstHeroType();
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character2 = ENTITY_TYPE::HERO_MELEE;
 		break;
 
 	case 3:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_3_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_3_END);
 		character1 = app->entityManager->GetFirstHeroType();
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character2 = ENTITY_TYPE::HERO_RANGED;
 		break;
 
 	case 4:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_4_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_4_END);
 		character1 = app->entityManager->GetFirstHeroType();
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character2 = ENTITY_TYPE::HERO_ROBO;
 		break;
 
 	case 5:
