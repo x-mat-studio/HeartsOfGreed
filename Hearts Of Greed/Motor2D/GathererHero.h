@@ -17,6 +17,8 @@ public:
 	GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement);
 	~GathererHero();
 
+	bool Start(SDL_Texture* texture);
+
 	bool ActivateSkill1(fMPoint mouseClick);
 	bool ActivateSkill2();
 	bool ActivateSkill3();
@@ -29,9 +31,8 @@ public:
 	bool ExecuteSkill2();
 	bool ExecuteSkill3();
 
-	void UpdatePasiveSkill(float dt);
-
 	void LevelUp();
+	void OnCollision(Collider* collider);
 
 	void PlayGenericNoise(int random);
 
@@ -42,6 +43,7 @@ private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	bool DrawVfx(float dt);
 
+	void UpdatePasiveSkill(float dt);
 	void Attack();
 
 private:
@@ -56,6 +58,7 @@ private:
 	Animation* currentVfx;
 
 	Skill passiveSkill;
+	Collider* passiveSkillCollider;
 
 	
 };

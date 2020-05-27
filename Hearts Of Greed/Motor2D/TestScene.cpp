@@ -157,8 +157,10 @@ bool ModuleTestScene::Start()
 				*/
 
 				//Spawners------------------
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 680, pos.y-10);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 670, pos.y-15);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 660, pos.y-20);
+			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 650, pos.y-25);
 
 			//Debug
 			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);

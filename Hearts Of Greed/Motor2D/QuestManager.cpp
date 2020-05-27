@@ -66,6 +66,7 @@ void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 			if (i == 5)
 			{
 				questInfoVector[i].PushEntityToSpawn(ENTITY_TYPE::HQ_COMANDER, -100, -100);
+
 			}
 		}
 	}
@@ -345,13 +346,14 @@ QuestInfo::~QuestInfo()
 
 void QuestInfo::StartQuest()
 {
-	bool isHero = false;
 	Entity* entity = nullptr;
 
 	int numberToSpawn = entitysToSpawnVector.size();
 
 	for (int i = 0; i < numberToSpawn; i++)
-	{
+	{	
+		bool isHero = false;
+
 		entity = app->entityManager->AddEntity(entitysToSpawnVector[i], positionsToSpawnVector[i].x, positionsToSpawnVector[i].y);
 
 		if (entity != nullptr)
@@ -388,7 +390,7 @@ void QuestInfo::StartQuest()
 
 			if (isHero == true)
 			{
-				app->testScene->MoveCamTo(positionsToSpawnVector[i], 2.0, EASING_TYPE::EASE_IN_OUT_SINE);
+				app->testScene->MoveCamTo(positionsToSpawnVector[i], 1.0, EASING_TYPE::EASE_IN_OUT_SINE);
 			}
 		}
 
