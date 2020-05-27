@@ -31,7 +31,7 @@ UpgradeCenter::UpgradeCenter(fMPoint position, UpgradeCenter * copy, ENTITY_ALIG
 	upgradeBarricadeCost(copy->upgradeBarricadeCost)
 {
 
-	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x , position.y - 1), 5, 5);
+	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 45, position.y + 20), 3, 3);
 }
 
 
@@ -79,6 +79,8 @@ void UpgradeCenter::Die()
 {
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+
+	app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 45, position.y + 20), 3, 3);
 
 	if (minimapIcon != nullptr)
 	{
