@@ -88,6 +88,13 @@ private:
 
 	void StateMachine();
 
+	void ResetBonusStats();
+
+public:
+	float bonusDamage;
+	float bonusArmor;
+
+
 private:
 	int turretLvl;
 	int attackDmg;

@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "FoWManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
+#include "TestScene.h"
 
 
 MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet) :
@@ -129,10 +130,9 @@ bool Minimap::Update(float dt)
 			{
 				//camera TP
 				iMPoint newCamPos = ScreenToMinimapToWorld(mousePos.x, mousePos.y);
-
 				app->render->currentCamX = -((newCamPos.x * scale) - (w * 0.5f));
 				app->render->currentCamY = -((newCamPos.y * scale) - (h * 0.5f));
-
+				app->testScene->SetCamEasingState(false);//TODO make this be an event to be able to erase the testscene.h include
 			}
 		}
 	}

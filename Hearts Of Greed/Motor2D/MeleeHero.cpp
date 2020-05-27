@@ -155,12 +155,13 @@ void MeleeHero::LevelUp()
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
 
-
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-
 	stats.maxHP *= app->entityManager->meleeLifeUpgradeValue;
+	stats.currHP = stats.maxHP;
+	
 	stats.maxEnergy *= (app->entityManager->meleeEnergyUpgradeValue);
+	stats.currEnergy = stats.maxEnergy;
 
 	stats.damage *= (app->entityManager->meleeDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->meleeAtkSpeedUpgradeValue);

@@ -98,7 +98,7 @@ struct HeroStats
 
 
 	int maxHP;
-	int damage;
+	float damage;
 	int maxEnergy;
 	float atkSpeed;
 	float recoveryHPRate;
@@ -300,12 +300,13 @@ protected:
 	void TimeMyParticleSystem(float dt);
 	void ResetAttackAnimation();
 
-	void Die();
+	virtual void Die();
 	void ExecuteSFX(int sfx);
 
 	void RecoverHealth(float dt);
 
 private:
+	void ResetBonusStats();
 
 	bool CheckAttackRange();
 	Frame GetAnimationCurrentFrame(float dt);
@@ -334,7 +335,11 @@ public:
 	bool skill2Charged;
 	bool skill3Charged;
 
+	float bonusArmor;
+	float bonusAttack;
+
 	bool godMode;
+
 protected:
 
 	HeroStats stats;
@@ -344,7 +349,6 @@ protected:
 	float feelingSecure;
 
 	int heroXP;
-
 
 	bool gettingAttacked;
 

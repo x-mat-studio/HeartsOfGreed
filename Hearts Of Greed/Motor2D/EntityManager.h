@@ -31,6 +31,8 @@ class UpgradeCenter;
 class ParticleSystem;
 class Emitter;
 
+class Quest;
+
 enum class BUILDING_DECOR;
 enum class TYPE_PARTICLE_SYSTEM;
 
@@ -86,6 +88,7 @@ public:
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
 	Entity* AddDecorativeBuilding(BUILDING_DECOR decor, int x, int y);
 	Entity* AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y);
+	Quest* SearchQuestByID(int id);
 
 	Entity* GetSample(ENTITY_TYPE);
 

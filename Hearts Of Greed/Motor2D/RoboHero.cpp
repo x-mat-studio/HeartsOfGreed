@@ -198,16 +198,17 @@ void RoboHero::LevelUp()
 	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
-	
-	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
-
 
 	stats.maxHP *= app->entityManager->robottoLifeUpgradeValue;
+	stats.currHP = stats.maxHP;
 
 	stats.maxEnergy *= (app->entityManager->robottoEnergyUpgradeValue);
+	stats.currEnergy = stats.maxEnergy;
 
 	stats.damage *= (app->entityManager->robottoDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->robottoAtkSpeedUpgradeValue);
+
+	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
 	heroSkillPoints++;
 

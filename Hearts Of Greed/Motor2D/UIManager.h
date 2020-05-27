@@ -85,11 +85,11 @@ public:
 	void LowerVolumeOnPause();
 	void RaiseVolumeOnUnpause();
 
+	bool CheckGroupTag(GROUP_TAG tag);
+
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);
-
-	bool CheckGroupTag(GROUP_TAG tag);
 
 	void CheckFocusedUI();
 
