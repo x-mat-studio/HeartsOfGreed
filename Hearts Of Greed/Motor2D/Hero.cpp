@@ -1597,6 +1597,7 @@ Skill Skill::operator=(Skill& newSkill)
 	this->rangeRadius = newSkill.rangeRadius;
 	this->target = newSkill.target;
 	this->type = newSkill.type;
+	this->energyCost = newSkill.energyCost;
 
 	this->lvl = newSkill.lvl;
 
@@ -1608,6 +1609,7 @@ Skill Skill::operator=(Skill& newSkill)
 //Getters and setters hellish nightmare
 // PD: Now I have to enter this nightmare as well. The quest for an efficient code has started
 // PD2: Ferran stop with this comments, we don't understand anything you say
+// PD3: But, you see, if I did stop, what would be the point of programming? It's like taking away the bandana of a man, or those memories of eating ants when you were young. Without those, life becomes meaningless
 
 int Hero::GetHeroLevel() const
 {
@@ -1774,6 +1776,12 @@ void Hero::SetSkill1Cost(int skillCost)
 Skill Hero::GetSkill1() const
 {
 	return skill1;
+}
+
+
+void Hero::SetSkill(Skill skill)
+{
+	skill1 = skill;
 }
 
 

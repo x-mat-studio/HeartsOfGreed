@@ -195,49 +195,49 @@ void ModuleQuestManager::QuestStarted(int questId)
 	case 0:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL_START);
 		character1 = ENTITY_TYPE::HQ_COMANDER;
-		character2 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = app->entityManager->GetFirstHeroType();
 		break;
 
 	case 1:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_1_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_1_END);
-		character1 = ENTITY_TYPE::HERO_GATHERER;
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character1 = app->entityManager->GetFirstHeroType();
+		character2 = ENTITY_TYPE::HERO_GATHERER;
 		break;
 
 	case 2:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_2_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_2_END);
-		character1 = ENTITY_TYPE::HERO_GATHERER;
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character1 = app->entityManager->GetFirstHeroType();
+		character2 = ENTITY_TYPE::HERO_MELEE;
 		break;
 
 	case 3:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_3_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_3_END);
-		character1 = ENTITY_TYPE::HERO_GATHERER;
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character1 = app->entityManager->GetFirstHeroType();
+		character2 = ENTITY_TYPE::HERO_RANGED;
 		break;
 
 	case 4:
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_4_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_4_END);
-		character1 = ENTITY_TYPE::HERO_GATHERER;
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character1 = app->entityManager->GetFirstHeroType();
+		character2 = ENTITY_TYPE::HERO_ROBO;
 		break;
 
 	case 5:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL2_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL2_END);
 		character1 = ENTITY_TYPE::HQ_COMANDER;
-		character2 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = app->entityManager->GetFirstHeroType();
 		break;
 
 	case 6:
 		app->dialogManager->PushInput(DIALOG_INPUT::TUTORIAL3_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::TUTORIAL3_END);
 		character1 = ENTITY_TYPE::HQ_COMANDER;
-		character2 = ENTITY_TYPE::HERO_GATHERER;
+		character2 = app->entityManager->GetFirstHeroType();
 		break;
 
 	default:
