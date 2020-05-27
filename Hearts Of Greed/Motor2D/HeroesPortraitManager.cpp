@@ -46,7 +46,7 @@ bool HeroesPortraitManager::Update(float dt)
 
 	for (int i = 0; i < heroPortraitsNumber; i++)
 	{
-		heroPortraitsVector[i]->SetLocalPosition(fMPoint(-35, 41 * i + 40));
+		heroPortraitsVector[i]->SetLocalPosition(fMPoint(-35, 48 * i + 30));
 		heroPortraitsVector[i]->Update(dt);
 	}
 
