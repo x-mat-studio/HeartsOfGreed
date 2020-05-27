@@ -19,6 +19,7 @@ public:
 
 	~MeleeHero();
 
+	bool Start(SDL_Texture* texture);
 
 	bool ActivateSkill1(fMPoint clickPosition);
 	bool ActivateSkill2();
@@ -39,13 +40,16 @@ public:
 	Skill GetPassiveSkill() const;
 	void ReplacePassiveSkill(Skill& skill);
 
+	void OnCollision(Collider* collider);
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	void UpdatePasiveSkill(float dt);
 
 private:
 	Skill passiveSkill;
+	Collider* passiveSkillCollider;
 
+	int armorGained;
 
 };
 

@@ -34,11 +34,11 @@
 
   <!-- Passive skills melee -->
   <skill id="4" type="1"  alignTarget="1">
-    <lvl  dmg="0" cooldown="4.0" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="30.0"  effect ="-1" energyCost="0"/>
-    <lvl  dmg="0" cooldown="5.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="33.0"  effect ="-1" energyCost="0"/>
-    <lvl  dmg="0" cooldown="5.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="35.0"  effect ="-1" energyCost="0"/>
-    <lvl  dmg="0" cooldown="6.0" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="37.0"  effect ="-1" energyCost="0"/>
-    <lvl  dmg="0" cooldown="7.0" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="40.0"  effect ="-1" energyCost="0"/>
+    <lvl  dmg="2" cooldown="4.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="40"/>
+    <lvl  dmg="2" cooldown="5.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="40"/>
+    <lvl  dmg="3" cooldown="5.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="50"/>
+    <lvl  dmg="3" cooldown="6.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="50"/>
+    <lvl  dmg="4" cooldown="7.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="60"/>
   </skill>
 
   <!-- Passive skills gatherer -->

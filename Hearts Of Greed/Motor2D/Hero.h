@@ -300,7 +300,7 @@ protected:
 	void TimeMyParticleSystem(float dt);
 	void ResetAttackAnimation();
 
-	virtual void Die();
+	void Die();
 	void ExecuteSFX(int sfx);
 
 	void RecoverHealth(float dt);
