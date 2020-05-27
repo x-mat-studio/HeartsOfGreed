@@ -66,6 +66,7 @@ void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 			if (i == 5)
 			{
 				questInfoVector[i].PushEntityToSpawn(ENTITY_TYPE::HQ_COMANDER, -100, -100);
+
 			}
 		}
 	}
