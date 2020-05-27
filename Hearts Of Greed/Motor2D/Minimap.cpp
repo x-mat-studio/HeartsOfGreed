@@ -186,6 +186,9 @@ bool Minimap::PostUpdate(float dt)
 			case MINIMAP_ICONS::ENEMY_BASE:
 				iconRect = { 4, 504, 4, 4 };
 				break;
+			case MINIMAP_ICONS::QUEST:
+				iconRect = { 24, 504, 4, 4 };//TODO change this
+				break;
 			case MINIMAP_ICONS::NONE:
 				iconRect = { 0, 0, 0, 0 };
 				break;

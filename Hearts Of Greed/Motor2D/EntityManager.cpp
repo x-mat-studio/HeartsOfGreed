@@ -870,6 +870,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	{
 	case ENTITY_TYPE::QUEST:
 		ret = new Quest(x, y);
+		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::QUEST, fMPoint{0.f,0.f}); //TODO change the last value accordingly to the quest rectangle
 
 		break;
 	case ENTITY_TYPE::SPAWNER:
