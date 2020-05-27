@@ -412,8 +412,14 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
-
-
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, this);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -848,6 +854,16 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, this);
+
 	return true;
 }
 
@@ -2308,6 +2324,98 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		break;
 
+	case EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::MELEE_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::RANGED_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
+	case EVENT_ENUM::MELEE_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
+	case EVENT_ENUM::RANGED_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
 	}
 
 }
@@ -2665,7 +2773,7 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 	{
 		if (iterator.attribute("id").as_int(-1) == (int)id)
 		{
-			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2; iterator2 = iterator.next_sibling())
+			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2; iterator2 = iterator2.next_sibling())
 			{
 				if (currLvl == requestLvl)
 				{

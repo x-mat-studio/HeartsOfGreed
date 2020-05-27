@@ -98,7 +98,7 @@ UIFactory::UIFactory() :
 
 
 	reviveHoverBackground{ 222, 508, 150, 50 },
-	upgradeHoverBackground{ 222, 508, 180, 50 },
+	upgradeHoverBackground{ 222, 508, 180, 70 },
 	lifeUpgradeButton{ 430, 581, 88, 87 },
 	damageUpgradeButton{ 34, 581, 88, 87 },
 	energyUpgradeButton{ 532, 581, 88, 87 },
@@ -906,9 +906,11 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	CreateText(5, 0, background, "Detonation:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Causes +%i dmg on", hero->GetSkill1().dmg);
 
 	CreateText(5, 15, background, stats, group);
+
+	CreateText(5, 25, background, "the chosen area.", group);
 
 	return group;
 }
@@ -948,7 +950,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 	CreateText(5, 0, background, "Hammer slam:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Causes +%i dmg around him.", hero->GetSkill1().dmg);
 
 	CreateText(5, 15, background, stats, group);
 
@@ -990,9 +992,15 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 
 	CreateText(5, 0, background, ":", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Slows enemies by %i per cent", hero->GetSkill1().dmg);
 
 	CreateText(5, 15, background, stats, group);
+
+	CreateText(5, 25, background, "of their movement during", group);
+
+	sprintf_s(stats, 40, "%i seconds.", hero->GetSkill1().energyCost);
+
+	CreateText(5, 35, background, stats, group);
 
 	return group;
 }
@@ -1032,9 +1040,11 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 
 	CreateText(5, 0, background, "Immolation:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Causes +%i dmg by", hero->GetSkill1().dmg);
 
 	CreateText(5, 15, background, stats, group);
+
+	CreateText(5, 25, background, "destroying himself.", group);
 
 	return group;
 }

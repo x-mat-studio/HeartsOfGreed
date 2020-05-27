@@ -281,6 +281,7 @@ public:
 	void SetVisionInPx(float visPx);
 
 	Skill GetSkill1() const;
+	void SetSkill(Skill skill);
 	virtual Skill GetPassiveSkill() const;
 
 	void ReplaceSkill1(Skill& newSkill);
