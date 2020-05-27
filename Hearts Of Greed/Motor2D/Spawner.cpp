@@ -129,6 +129,7 @@ void Spawner::SetWannamingosToSpawn(int number)
 void Spawner::AddAWanamingo()
 {
 	wannamingosToSpawn++;
+	wannamingoTimer = wannamingosSpawnRate;
 }
 
 void Spawner::SetGigamingosToSpawn(int number)
@@ -140,6 +141,7 @@ void Spawner::SetGigamingosToSpawn(int number)
 void Spawner::AddAGigamingo()
 {
 	gigamingosToSpawn++;
+	gigamingoTimer = gigamingosSpawnRate;
 }
 
 void Spawner::SetSpeedamingosToSpawn(int number)
@@ -150,7 +152,8 @@ void Spawner::SetSpeedamingosToSpawn(int number)
 
 void Spawner::AddASpeedamingo()
 {
-	speedamingosToSpawn;
+	speedamingosToSpawn++;
+	speedamingoTimer = speedamingosSpawnRate;
 }
 
 void Spawner::SetSnipermingosToSpawn(int number)
@@ -162,7 +165,9 @@ void Spawner::SetSnipermingosToSpawn(int number)
 void Spawner::AddASnipermingo()
 {
 	snipermingosToSpawn++;
+	snipermingoTimer = snipermingosSpawnRate;
 }
+
 
 
 
