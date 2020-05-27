@@ -90,6 +90,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 bool ModuleTestScene::Start()
 {
 	mapLoaded = false;
+	
 	app->player->Enable();
 	app->minimap->Enable();
 
@@ -178,6 +179,9 @@ bool ModuleTestScene::Start()
 		app->LoadGame();
 		startFromLoad = false;
 	}
+	else {
+		dayNumber = 0;
+	}
 
 
 
@@ -203,6 +207,8 @@ bool ModuleTestScene::Start()
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
 	app->gamePause = false;
+
+	
 
 	return true;
 }
