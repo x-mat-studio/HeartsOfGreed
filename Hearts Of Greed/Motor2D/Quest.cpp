@@ -7,7 +7,7 @@
 
 Quest::Quest(int x, int y) :
 
-	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
+	Entity(fMPoint{(float)x,(float)y}, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
 	myState(QUEST_STATE::INACTIVE),
 
 	id(-1)
@@ -15,7 +15,7 @@ Quest::Quest(int x, int y) :
 	SDL_Rect auxQ{ x, y,128,128 };
 	collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST, app->questManager, this);
 
-	texture = app->questManager->GetTexture();
+	//texture = app->questManager->GetTexture(); //placeholder texture is now null due to alex request
 }
 
 
@@ -34,6 +34,7 @@ Quest::~Quest()
 {
 	id = -1;
 	myState = QUEST_STATE::ST_UNKNOWN;
+	minimapIcon->toDelete = true;
 }
 
 
