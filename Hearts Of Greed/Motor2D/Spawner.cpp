@@ -126,10 +126,20 @@ void Spawner::SetWannamingosToSpawn(int number)
 	wannamingoTimer = wannamingosSpawnRate; //This is because when we give the order to spawn, the spawner spawns the first wave instantly
 }
 
+void Spawner::AddAWanamingo()
+{
+	wannamingosToSpawn++;
+}
+
 void Spawner::SetGigamingosToSpawn(int number)
 {
 	gigamingosToSpawn = number;
 	gigamingoTimer = gigamingosSpawnRate;
+}
+
+void Spawner::AddAGigamingo()
+{
+	gigamingosToSpawn++;
 }
 
 void Spawner::SetSpeedamingosToSpawn(int number)
@@ -138,10 +148,20 @@ void Spawner::SetSpeedamingosToSpawn(int number)
 	speedamingoTimer = speedamingosSpawnRate;
 }
 
+void Spawner::AddASpeedamingo()
+{
+	speedamingosToSpawn;
+}
+
 void Spawner::SetSnipermingosToSpawn(int number)
 {
 	snipermingosToSpawn = number;
 	snipermingoTimer = snipermingosSpawnRate;
+}
+
+void Spawner::AddASnipermingo()
+{
+	snipermingosToSpawn++;
 }
 
 

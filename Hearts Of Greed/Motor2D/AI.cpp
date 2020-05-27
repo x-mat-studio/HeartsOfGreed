@@ -249,15 +249,11 @@ void ModuleAI::CommandSpawners()
 
 	std::multimap<int, Spawner*>::iterator iterator = spawners.begin();
 
-	for (int i = 0; i < spawnersToActivate && i < spawnersAbaliable; i++)
-	{
-		//iterator->second->SetNumber	Wana	ToSpawn(wanamingosToSpawn);
-		//iterator->second->SetNumber	Giga	ToSpawn(gigamingosToSpawn);
-		//iterator->second->SetNumber	Sniper	ToSpawn(snipermingosToSpawn);
-		//iterator->second->SetNumber	Speedo	ToSpawn(speedomingosToSpawn);
+	AssignWana(spawners, iterator, wanamingosToSpawn, spawnersToActivate);
+	AssignGiga(spawners, iterator, gigamingosToSpawn, spawnersToActivate);
+	AssignSpeed(spawners, iterator, speedomingosToSpawn, spawnersToActivate);
+	AssignSniper(spawners, iterator, snipermingosToSpawn, spawnersToActivate);
 
-		iterator++;
-	}
 
 	spawners.clear();
 }
@@ -304,7 +300,7 @@ int ModuleAI::CalculateWanamingoToSpawn()
 		ret = nightEnemyInfo[5].at(0);
 		break;
 	default:
-		ret = app->testScene->GetDayNumber();
+		ret = app->testScene->GetDayNumber()*2;
 		break;
 	}
 
@@ -410,11 +406,83 @@ int ModuleAI::CalculateSpeedomingoToSpawn()
 		ret = nightEnemyInfo[5].at(3);
 		break;
 	default:
-		ret = app->testScene->GetDayNumber();
+		ret = app->testScene->GetDayNumber()*3;
 		break;
 	}
 
 	return ret;
+}
+
+void ModuleAI::AssignWana(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int wanamingosToSpawn, int spawnersToActivate)
+{
+	while (wanamingosToSpawn > 0) {
+
+		int aux = rand() % spawnersToActivate;
+
+		iterator = spawners.begin();
+
+		for (int i = 0; i < aux; i++) {
+
+			iterator++; //This does not please the nut
+		}
+
+		iterator->second->AddAWanamingo();
+		wanamingosToSpawn--;
+	}
+}
+
+void ModuleAI::AssignGiga(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int gigamingosToSpawn, int spawnersToActivate)
+{
+	while (gigamingosToSpawn > 0) {
+
+		int aux = rand() % spawnersToActivate;
+
+		iterator = spawners.begin();
+
+		for (int i = 0; i < aux; i++) {
+
+			iterator++; //This does not please the nut
+		}
+
+		iterator->second->AddAGigamingo();
+		gigamingosToSpawn--;
+	}
+}
+
+void ModuleAI::AssignSpeed(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int speedomingosToSpawn, int spawnersToActivate)
+{
+	while (speedomingosToSpawn > 0) {
+
+		int aux = rand() % spawnersToActivate;
+
+		iterator = spawners.begin();
+
+		for (int i = 0; i < aux; i++) {
+
+			iterator++; //This does not please the nut
+		}
+
+		iterator->second->AddASpeedamingo();
+		speedomingosToSpawn--;
+	}
+}
+
+void ModuleAI::AssignSniper(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int snipermingosToSpawn, int spawnersToActivate)
+{
+	while (snipermingosToSpawn > 0) {
+
+		int aux = rand() % spawnersToActivate;
+
+		iterator = spawners.begin();
+
+		for (int i = 0; i < aux; i++) {
+
+			iterator++; //This does not please the nut
+		}
+
+		iterator->second->AddASnipermingo();
+		snipermingosToSpawn--;
+	}
 }
 
 int ModuleAI::CalculateSpawnersToActivate()
@@ -427,22 +495,22 @@ int ModuleAI::CalculateSpawnersToActivate()
 		//no enemies on first day
 		break;
 	case 1:
-		ret = nightEnemyInfo[0].at(Nº_TYPE_OF_ENEMIES + 1);
+		ret = nightEnemyInfo[0].at(Nº_TYPE_OF_ENEMIES);
 		break;
 	case 2:
-		ret = nightEnemyInfo[1].at(Nº_TYPE_OF_ENEMIES + 1);
+		ret = nightEnemyInfo[1].at(Nº_TYPE_OF_ENEMIES);
 		break;
 	case 3:
-		ret = nightEnemyInfo[2].at(Nº_TYPE_OF_ENEMIES + 1);
+		ret = nightEnemyInfo[2].at(Nº_TYPE_OF_ENEMIES);
 		break;
 	case 4:
-		ret = nightEnemyInfo[3].at(Nº_TYPE_OF_ENEMIES + 1);
+		ret = nightEnemyInfo[3].at(Nº_TYPE_OF_ENEMIES);
 		break;
 	case 5:
-		ret = nightEnemyInfo[4].at(Nº_TYPE_OF_ENEMIES + 1);
+		ret = nightEnemyInfo[4].at(Nº_TYPE_OF_ENEMIES);
 		break;
 	case 6:
-		ret = nightEnemyInfo[5].at(Nº_TYPE_OF_ENEMIES + 1);
+		ret = nightEnemyInfo[5].at(Nº_TYPE_OF_ENEMIES);
 		break;
 	default:
 		int x = app->testScene->GetDayNumber() * 2;

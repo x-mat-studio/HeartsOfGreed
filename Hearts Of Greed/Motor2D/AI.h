@@ -56,6 +56,11 @@ private:
 	int CalculateSnipermingoToSpawn();
 	int CalculateSpeedomingoToSpawn();
 
+	void AssignWana(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int tospawn, int spawnersaviable);
+	void AssignGiga(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int tospawn, int spawnersaviable);
+	void AssignSpeed(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int tospawn, int spawnersaviable);
+	void AssignSniper(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int tospawn, int spawnersaviable);
+
 	int CalculateSpawnersToActivate();
 	
 private:
