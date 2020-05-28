@@ -22,7 +22,6 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Awake(pugi::xml_node& config)
 {
-	LOG("Create SDL rendering context");
 	bool ret = true;
 	// load flags
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
@@ -32,7 +31,6 @@ bool ModuleRender::Awake(pugi::xml_node& config)
 	if (config.child("vsync").attribute("value").as_bool(true) == true)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
-		LOG("Using vsync");
 		app->vSyncActivated = true;
 	}
 
@@ -62,7 +60,6 @@ bool ModuleRender::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleRender::Start()
 {
-	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
 	currentCamX = camera.x;
@@ -111,7 +108,6 @@ bool ModuleRender::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 	return true;
 }

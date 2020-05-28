@@ -240,8 +240,6 @@ void ModuleCollision::DebugDraw()
 // Called before quitting
 bool ModuleCollision::CleanUp()
 {
-	LOG("Freeing all colliders");
-
 
 	for (uint i = 0; i < MAX_COLLIDERS; i++)
 	{

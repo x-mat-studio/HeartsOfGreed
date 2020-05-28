@@ -112,6 +112,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	suitmanGetsDeath2(-1),
 	rangedGetsHit(-1),
 	rangedDies(-1),
+	roboDying(-1),
 	noise1Armored(-1),
 	noise2Armored(-1),
 	noise3Armored(-1),
@@ -727,7 +728,6 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 bool ModuleEntityManager::CleanUp()
 {
-	LOG("Entity Manager Clean Up");
 
 	DeleteAllEntities();
 	DeleteAllDeadHeroes();
@@ -1016,7 +1016,6 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 		break;
 
 	case TYPE_PARTICLE_SYSTEM::NONE:
-		LOG(" Tried to add particle system, no type was found");
 		break;
 
 	default:

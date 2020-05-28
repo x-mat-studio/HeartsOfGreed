@@ -30,7 +30,6 @@ ModuleFadeToBlack::~ModuleFadeToBlack()
 // Load assets
 bool ModuleFadeToBlack::Start()
 {
-	LOG("Preparing Fade Screen");
 	int w;
 	int h;
 

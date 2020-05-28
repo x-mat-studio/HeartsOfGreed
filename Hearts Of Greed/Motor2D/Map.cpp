@@ -31,7 +31,6 @@ ModuleMap::~ModuleMap()
 // Called before render is available
 bool ModuleMap::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Map Parser");
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
@@ -178,8 +177,6 @@ TileSet* ModuleMap::GetTilesetFromTileId(int id) const
 // Called before quitting
 bool ModuleMap::CleanUp()
 {
-	LOG("Unloading map");
-
 	// Remove all tilesets
 	int numTilesets = data.tilesets.size();
 
@@ -550,10 +547,6 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				Enemy* enemy = nullptr;
 				Spawner* spawner = nullptr;
 
-				LOG(" gid was %i", layer->gid[i]);
-
-
-
 				switch (layer->gid[i])
 				{
 					//250 = id of the first tile of the tileset that codifies for building generation
@@ -793,7 +786,6 @@ bool ModuleMap::ReloadMap(P2SString newmap)
 {
 	CleanUp();//clears the map
 
-	LOG("Loading Map Parser");
 	bool ret = true;
 
 	LoadNew(newmap.GetString());
@@ -931,3 +923,29 @@ bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 
 	return ret;
 }
+
+
+Properties::Properties() : name(nullptr), value(-1)
+{}
+
+
+MapLayer::MapLayer() : name(nullptr), width(0u), height(0u), gid(nullptr)
+{}
+
+
+Object::Object() : boundingBox({ NULL, NULL, NULL, NULL }), type (-1), id(-1)
+{}
+
+
+ObjectGroup::ObjectGroup() : id(-1), name(nullptr)
+{}
+
+
+TileSet::TileSet() : name(nullptr), texture(nullptr), firstGid(-1), margin(-1), spacing(-1), tileWidth(-1), tileHeight(-1), texWidth(-1), texHeight(-1), numTilesWidth(-1), 
+	numTilesHeight(-1), offsetX(-1), offsetY(-1), columns(-1)
+{}
+
+
+MapData::MapData() : width(-1), height(-1), tileWidth(-1), tileHeight(-1), backgroundColor({0, 0, 0, 0}), type(MAP_TYPES::MAP_TYPE_UNKNOWN), name(-1), path(-1), musicPath(-1)
+{}
+

@@ -12,22 +12,27 @@ struct Properties
 {
 	P2SString name;
 	int value;
+
+	Properties();
 };
 struct MapLayer
 {
 	P2SString name;
-	uint width = 0u;
-	uint height = 0u;
-	uint* gid = nullptr;
+	uint width;
+	uint height;
+	uint* gid;
 	std::vector<Properties*> layerPropVector;
+	MapLayer();
 	~MapLayer();
 };
 
 struct Object
 {
 	SDL_Rect boundingBox;
-	int type = -1;
+	int type;
 	uint id;
+
+	Object();
 };
 
 
@@ -38,6 +43,8 @@ struct ObjectGroup
 	P2SString name;
 	std::vector<Object*> objectVector;
 	std::vector<Properties*> propVector;
+
+	ObjectGroup();
 };
 
 // ----------------------------------------------------
@@ -46,7 +53,7 @@ struct TileSet
 
 	P2SString			name;
 
-	SDL_Texture* texture;
+	SDL_Texture*		texture;
 
 	int					firstGid;
 	int					margin;
@@ -61,6 +68,7 @@ struct TileSet
 	int					offsetY;
 	int					columns;
 
+	TileSet();
 	~TileSet();
 };
 
@@ -87,6 +95,7 @@ struct MapData
 	P2SString           path;
 	P2SString			musicPath;
 
+	MapData();
 };
 
 // ----------------------------------------------------

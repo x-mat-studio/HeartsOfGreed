@@ -12,7 +12,7 @@
 #include "Audio.h"
 #include "EasingFunctions.h"
 
-ModuleLoseScene::ModuleLoseScene():fadeTime(0)
+ModuleLoseScene::ModuleLoseScene() : fadeTime(0), youLost(nullptr), medalLose(nullptr), medalRest(nullptr), medalBounce(-1), bufferPos(-1.f), backToMain(false)
 {
 	name.create("loseScene");
 }
@@ -47,7 +47,7 @@ bool ModuleLoseScene::Start()
 	app->audio->PlayMusic("audio/music/youLost.ogg", 3*fadeTime, app->audio->musicVolume);
 	medalBounce = app->audio->LoadFx("audio/sfx/WinLose/MedalSound.wav");
 
-	iconPosY.NewEasing(EASING_TYPE::EASE_OUT_BOUNCE, medalPos.y - 300, medalPos.y, 2.0);
+	iconPosY.NewEasing(EASING_TYPE::EASE_OUT_BOUNCE, medalPos.y - 300.0, medalPos.y, 2.0);
 
 	return true;
 }
@@ -96,7 +96,7 @@ bool  ModuleLoseScene::PostUpdate(float dt)
 
 		backToMain = true;
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
-		iconPosY.NewEasing(EASING_TYPE::EASE_IN_SINE, medalPos.y, medalPos.y + 1000, 2.0);
+		iconPosY.NewEasing(EASING_TYPE::EASE_IN_SINE, medalPos.y, medalPos.y + 1000.0, 2.0);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {

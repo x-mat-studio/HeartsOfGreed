@@ -64,7 +64,6 @@ std::vector<iMPoint> ModulePathfinding::CreateLine(const iMPoint& p0, const iMPo
 
 bool ModulePathfinding::CleanUp()
 {
-	LOG("Freeing pathfinding library");
 
 	//A*-----------------------------------------
 	last_path.clear();

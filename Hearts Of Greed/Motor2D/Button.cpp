@@ -9,7 +9,8 @@ Button::Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, 
 
 	buttonTag(buttonTag),
 	clicked(false),
-	focusedFirstFrame(true)
+	focusedFirstFrame(true),
+	scaledRect({0, 0, 0, 0})
 {
 	if (scaled.w != 0)
 	{

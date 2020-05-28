@@ -22,7 +22,6 @@ ModuleTextures::~ModuleTextures()
 // Called before render is available
 bool ModuleTextures::Awake(pugi::xml_node& config)
 {
-	LOG("Init Image library");
 	bool ret = true;
 	// load support for the PNG image format
 	int flags = IMG_INIT_PNG;
@@ -42,7 +41,6 @@ bool ModuleTextures::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleTextures::Start()
 {
-	LOG("start textures");
 	bool ret = true;
 	return ret;
 }
@@ -51,7 +49,6 @@ bool ModuleTextures::Start()
 // Called before quitting
 bool ModuleTextures::CleanUp()
 {
-	LOG("Freeing textures and Image library");
 	int numTextures = textures.size();
 
 	for (int i = 0; i < numTextures; i++)
