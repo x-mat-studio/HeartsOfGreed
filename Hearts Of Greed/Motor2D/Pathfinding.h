@@ -127,6 +127,17 @@ struct generatedPath
 	int lvl;
 };
 
+struct pendentPath
+{
+	pendentPath(iMPoint origin, iMPoint destination, int lvl, PATH_TYPE type = PATH_TYPE::ABSTRACT);
+
+
+	PATH_TYPE type;
+	int lvl;
+
+	iMPoint origin, destination;
+};
+
 
 class PathNode
 {
@@ -176,10 +187,12 @@ public:
 
 	bool CleanUp();
 
+	bool PreUpdate(float dt);
 
 	void SetMap(uint width, uint height, uchar* data);
 
-	PATH_TYPE CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
+	PATH_TYPE GeneratePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
+
 
 	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination);
 
@@ -205,6 +218,7 @@ public:
 
 private:
 
+	PATH_TYPE CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
 
 	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl);
 
@@ -220,6 +234,8 @@ private:
 	bool RefineAndSmoothPath(std::vector<iMPoint>* absPath, int lvl, std::vector<iMPoint>* refinedPath);
 	bool IsStraightPath(iMPoint from, iMPoint to);
 
+	bool PathAlreadyExists(iMPoint destination, Entity* requester);
+
 public:
 	uint width;
 	uint height;
@@ -233,6 +249,8 @@ private:
 	std::vector<iMPoint> last_line;
 
 	std::unordered_map <Entity*, generatedPath> generatedPaths;
+
+	std::unordered_map <Entity*, pendentPath> pendentPaths;
 };
 
 #endif // __j1PATHFINDING_H__
