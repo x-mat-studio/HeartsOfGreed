@@ -227,7 +227,10 @@ bool GathererHero::ExecuteSkill3()
 
 void GathererHero::UpdatePasiveSkill(float dt)
 {
-	passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
+	if (started == true)
+	{
+		passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
+	}
 }
 
 
