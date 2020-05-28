@@ -8,7 +8,7 @@
       <type id="1"/>
     </collider>
 
-    <stats level="1" movementSpeed="60" vision="7" attackRange="1">
+    <stats level="1" movementSpeed="85" vision="8" attackRange="1">
 
       <lvl xpToLvlUp="100" hp="100" damage="8" energy="40" atkSpeed="0.75" liferecoveryRate="2" energyrecoveryRate="4"/>
       <lvl xpToLvlUp="175" hp="135" damage="10" energy="80" atkSpeed="0.8" liferecoveryRate="3" energyrecoveryRate="5"/>

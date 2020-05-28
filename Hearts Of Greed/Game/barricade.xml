@@ -10,7 +10,7 @@
     </collider>
 
     <stats level="1" xp="35" buildingCost="95" transparency="160">
-      <hitPoints max="210" current="210" recoveryRate="0"/>
+      <hitPoints max="1000" current="1000" recoveryRate="0"/>
     </stats>
 
     <rect>
