@@ -53,9 +53,7 @@ ModuleTestScene::ModuleTestScene() :
 
 
 ModuleTestScene::~ModuleTestScene()
-{
-
-}
+{}
 
 
 bool  ModuleTestScene::Awake(pugi::xml_node& config)
@@ -119,9 +117,9 @@ bool ModuleTestScene::Start()
 		{
 
 			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
 			/*
 			//mid

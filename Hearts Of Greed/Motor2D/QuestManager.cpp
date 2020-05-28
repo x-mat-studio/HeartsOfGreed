@@ -66,7 +66,6 @@ void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 			if (i == 5)
 			{
 				questInfoVector[i].PushEntityToSpawn(ENTITY_TYPE::HQ_COMANDER, -100, -100);
-
 			}
 		}
 	}
@@ -280,6 +279,7 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 bool ModuleQuestManager::Load(pugi::xml_node& data)
 {
 	questInfoVector.clear(); //Just in case :D
+	questColliderVector.clear();
 
 	Entity* entity = nullptr;
 	int i = 0;
@@ -404,7 +404,7 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 	int numberEntitys = questEntitysVector.size();
 
 	//Tutorial Conditions-----
-	if (questEntitysVector.empty() && this->noCombat == true || entity == nullptr)
+	if  ((questEntitysVector.empty() && this->noCombat == true && id == 0) || (entity == nullptr && id == 5))
 	{
 		WinQuest();
 		return true;

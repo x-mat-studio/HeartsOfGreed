@@ -681,10 +681,10 @@ void Hero::SearchForNewObjective()
 {
 	SDL_Rect rect;
 
-	rect.x = position.x - visionInPx;
-	rect.y = position.y - visionInPx;
-	rect.w = visionInPx * 2;
-	rect.h = visionInPx * 2;
+	rect.x = position.x - visionInPx * 0.8f;
+	rect.y = position.y - visionInPx * 0.8f;
+	rect.w = visionInPx * 1.6f;
+	rect.h = visionInPx * 1.6f;
 
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 }

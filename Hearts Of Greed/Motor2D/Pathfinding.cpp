@@ -179,6 +179,7 @@ PATH_TYPE ModulePathfinding::GeneratePath(iMPoint& origin, iMPoint& destination,
 	pendentPaths.erase(pathRequest);
 	pendentPaths.insert({ pathRequest, pendentPath(origin, destination, maxLvl) });
 
+	generatedPaths.erase(pathRequest);
 
 	return ret;
 }
