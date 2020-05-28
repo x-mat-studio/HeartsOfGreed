@@ -885,9 +885,15 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 	CreateText(5, 0, background, "Handy mastery:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Grants +%i gems by killing", hero->GetPassiveSkill().dmg);
 
 	CreateText(5, 15, background, stats, group);
+
+	CreateText(5, 25, background, "enemies, boosts robotic", group);
+
+	sprintf_s(stats, 40, "allies' damage by %.0f.", hero->GetPassiveSkill().executionTime);
+
+	CreateText(5, 35, background, stats, group);
 
 	return group;
 }
@@ -929,9 +935,15 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 
 	CreateText(5, 0, background, "Born to fight:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Grants +%i healing outside", hero->GetPassiveSkill().coolDown);
 
 	CreateText(5, 15, background, stats, group);
+
+	sprintf_s(stats, 40, "battle and -%i damage taken", hero->GetPassiveSkill().dmg);
+
+	CreateText(5, 25, background, stats, group);
+
+	CreateText(5, 35, background, " on combat.", group);
 
 	return group;
 }
@@ -971,9 +983,13 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 
 	CreateText(5, 0, background, "Bloodhsed:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Gives health / %i points of", hero->GetPassiveSkill().dmg);
 
 	CreateText(5, 15, background, stats, group);
+
+	CreateText(5, 25, background, "bleeding to enemies that", group);
+
+	CreateText(5, 35, background, "have been attacked by her.", group);
 
 	return group;
 }
@@ -992,13 +1008,13 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 
 	CreateText(5, 0, background, ":", group);
 
-	sprintf_s(stats, 40, "Slows enemies by %i per cent", hero->GetSkill1().dmg);
+	sprintf_s(stats, 40, "Slows enemies by %i per cent", hero->GetSkill1().effectSeverity);
 
 	CreateText(5, 15, background, stats, group);
 
 	CreateText(5, 25, background, "of their movement during", group);
 
-	sprintf_s(stats, 40, "%i seconds.", hero->GetSkill1().energyCost);
+	sprintf_s(stats, 40, "%i seconds.", hero->GetSkill1().effectTime);
 
 	CreateText(5, 35, background, stats, group);
 
@@ -1019,9 +1035,15 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1Menu()
 
 	CreateText(5, 0, background, "Kill streak:", group);
 
-	//	sprintf_s(stats, 40, "Grants +%i by killing enemies", hero->PassiveSkill1());
+	sprintf_s(stats, 40, "Gains a boost of +%i damage", hero->GetPassiveSkill().dmg);
 
 	CreateText(5, 15, background, stats, group);
+
+	sprintf_s(stats, 40, "and +%i speed by killing", hero->GetPassiveSkill().rangeRadius);
+
+	CreateText(5, 25, background, stats, group);
+
+	CreateText(5, 35, background, "enemies (max 5 boosts).", group);
 
 	return group;
 }
@@ -1508,10 +1530,11 @@ UI* UIFactory::CreateAttackSpeedUpgradeButton(float x, float y, UI* parent, std:
 
 UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1, gathererPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetPassiveSkill().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1523,10 +1546,11 @@ UI* UIFactory::CreateGathererPassive1Button(float x, float y, UI* parent, std::v
 
 UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1, gathererActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetSkill1().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1538,10 +1562,11 @@ UI* UIFactory::CreateGathererActive1Button(float x, float y, UI* parent, std::ve
 
 UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1, meleePassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetPassiveSkill().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1553,10 +1578,11 @@ UI* UIFactory::CreateMeleePassive1Button(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1, meleeActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetSkill1().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1568,10 +1594,11 @@ UI* UIFactory::CreateMeleeActive1Button(float x, float y, UI* parent, std::vecto
 
 UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1, rangedPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetPassiveSkill().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1583,10 +1610,11 @@ UI* UIFactory::CreateRangedPassive1Button(float x, float y, UI* parent, std::vec
 
 UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1, rangedActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetSkill1().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1598,10 +1626,11 @@ UI* UIFactory::CreateRangedActive1Button(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateRobottoPassive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1, robottoPassive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetPassiveSkill().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_PASSIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
@@ -1613,10 +1642,11 @@ UI* UIFactory::CreateRobottoPassive1Button(float x, float y, UI* parent, std::ve
 
 UI* UIFactory::CreateRobottoActive1Button(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
+	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 15, 15 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1, robottoActive1Button);
 	dataPagesVector->push_back(button);
 
-	if (CheckSkillResources() == true)
+	if (CheckSkillResources() == true && focus->GetSkill1().lvl < 5)
 	{
 		Button* button = new Button(fMPoint{ x, y - 13 }, parent, ugradeSkillButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBOTTO_ACTIVE1_UPGRADE);
 		dataPagesVector->push_back(button);
