@@ -74,6 +74,8 @@ protected:
 private:
 	fMPoint toMove;
 
+	bool waitingForPath;
+
 };
 
 #endif//__DYNAMICENTITY_H__

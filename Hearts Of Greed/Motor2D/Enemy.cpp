@@ -389,6 +389,7 @@ void Enemy::Die()
 	{
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
+		minimapIcon->parent = nullptr;
 		minimapIcon = nullptr;
 	}
 

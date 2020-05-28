@@ -100,6 +100,31 @@ bool ModulePathfinding::CleanUp()
 	return true;
 }
 
+bool ModulePathfinding::PreUpdate(float dt)
+{
+	int timeSpend = 0;
+	int startedAt = SDL_GetTicks();
+	std::unordered_map<Entity*, pendentPath>::iterator it;
+
+	if ((!pendentPaths.empty() && pendentPaths.size() > 0))
+	{
+		it = pendentPaths.begin();
+
+		while (timeSpend <= 2 && it != pendentPaths.end())
+		{
+			CreatePath(it->second.origin, it->second.destination, it->second.lvl, it->first);
+
+			pendentPaths.erase(it->first);
+
+			timeSpend = SDL_GetTicks() - startedAt;
+
+			it++;
+		}
+	}
+
+	return true;
+}
+
 
 void ModulePathfinding::SetMap(uint width, uint height, uchar* data)
 {
@@ -114,6 +139,48 @@ void ModulePathfinding::SetMap(uint width, uint height, uchar* data)
 	//HPA*--------------------------------------------
 	preProcessing(MAX_LEVELS);
 
+}
+
+PATH_TYPE ModulePathfinding::GeneratePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest)
+{
+	PATH_TYPE ret = PATH_TYPE::NO_TYPE;
+
+	if (IsWalkable(destination) == false)
+	{
+		iMPoint newDest = CheckNearbyTiles(origin, { destination.x + 1, destination.y });
+
+		if (newDest == destination || newDest == origin)
+			return ret;
+		else
+			destination = newDest;
+
+	}
+
+	if (IsWalkable(origin) == false)
+	{
+		iMPoint newDest = CheckNearbyTiles(destination, origin);
+
+		if (newDest == origin || newDest == destination)
+			return ret;
+		else
+			origin = newDest;
+	}
+
+
+	if (maxLvl > 0)
+	{
+		ret = PATH_TYPE::ABSTRACT;
+	}
+	else
+	{
+		ret = PATH_TYPE::SIMPLE;
+	}
+
+	pendentPaths.erase(pathRequest);
+	pendentPaths.insert({ pathRequest, pendentPath(origin, destination, maxLvl) });
+
+
+	return ret;
 }
 
 void ModulePathfinding::preProcessing(int maxLevel)
@@ -795,28 +862,6 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	bool toDeleteN2 = false;
 
 
-	if (IsWalkable(destination) == false)
-	{
-		iMPoint newDest = CheckNearbyTiles(origin, {destination.x +1, destination.y});
-
-		if (newDest == destination || newDest == origin)
-			return ret;
-		else
-			destination = newDest;
-
-	}
-
-	if (IsWalkable(origin) == false)
-	{
-		iMPoint newDest = CheckNearbyTiles(destination, origin);
-
-		if (newDest == origin || newDest == destination)
-			return ret;
-		else
-			origin = newDest;
-	}
-
-
 	if (LineRayCast(origin, destination))
 	{
 		last_path = last_line;
@@ -824,7 +869,6 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	}
 	else
 	{
-
 		if (maxLvl > 0)
 		{
 
@@ -867,7 +911,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 }
 
 
-int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl)
+int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration)
 {
 	BROFILER_CATEGORY("HPA Algorithm", Profiler::Color::Black);
 
@@ -896,7 +940,7 @@ int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& des
 		open.erase(lowest);
 
 		iterations++;
-		if (iterations > 400)
+		if (iterations > maxIteration)
 			return 0;
 
 
@@ -1247,6 +1291,31 @@ bool ModulePathfinding::IsStraightPath(iMPoint from, iMPoint to)
 	return false;
 }
 
+bool ModulePathfinding::PathAlreadyExists(iMPoint destination, Entity* requester)
+{
+
+	for (std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin(); it != generatedPaths.end(); it++)
+	{
+		if (it->first == requester && destination == *it->second.path.end())
+		{
+			return true;
+		}
+
+
+	}
+
+	for (std::unordered_map<Entity*, pendentPath>::iterator it2 = pendentPaths.begin(); it2 != pendentPaths.end(); it2++)
+	{
+		if (it2->first == requester && destination == it2->second.destination)
+		{
+			return true;
+		}
+	}
+
+
+	return false;
+}
+
 std::multimap<float, PathNode>::iterator ModulePathfinding::Find(iMPoint point, std::multimap<float, PathNode>* map)
 {
 	std::multimap<float, PathNode>::iterator iterator = map->begin();
@@ -1341,4 +1410,9 @@ bool ModulePathfinding::DeletePath(Entity* request)
 std::vector<iMPoint>* ModulePathfinding::GetLastLine()
 {
 	return &last_line;
+}
+
+pendentPath::pendentPath(iMPoint origin, iMPoint destination, int lvl, PATH_TYPE type) : origin(origin), destination(destination), lvl(lvl), type(type)
+{
+
 }

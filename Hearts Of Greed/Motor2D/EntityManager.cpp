@@ -552,25 +552,25 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_NIGHT:
 				entityVector[i]->Start(enemyNightTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_RANGED:
 				entityVector[i]->Start(enemyRangedTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_GIGA:
 				entityVector[i]->Start(enemyGigaTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::BUILDING:

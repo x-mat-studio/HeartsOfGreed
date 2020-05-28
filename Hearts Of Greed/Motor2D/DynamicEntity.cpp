@@ -54,10 +54,23 @@ bool DynamicEntity::Move(float dt)
 	fMPoint pathSpeed = { 0,0 };
 	fMPoint nextPoint = { 0,0 };
 
-	if (framesSinceRequest >= framesToRquest || path.size() < 2)
+	if (waitingForPath)
 	{
 		app->pathfinding->RequestPath(this, &path);
+
+		if (!path.empty())
+		{
+			path.erase(path.begin());
+			waitingForPath = false;
+		}
+	}
+
+	else if (framesSinceRequest >= framesToRquest || path.size() < 2)
+	{
+		app->pathfinding->RequestPath(this, &path);
+
 		framesSinceRequest = 0;
+
 	}
 
 	if (path.size() > 0)
@@ -66,7 +79,6 @@ bool DynamicEntity::Move(float dt)
 
 		pathSpeed.create((nextPoint.x - position.x), (nextPoint.y - position.y)).Normalize();
 		framesSinceRequest++;
-
 	}
 
 	dir = DetermineDirection(pathSpeed);
@@ -86,7 +98,7 @@ bool DynamicEntity::Move(float dt)
 		path.erase(path.begin());
 	}
 
-	if (!pathSpeed.IsZero())
+	if (!pathSpeed.IsZero() || waitingForPath)
 	{
 		return true;
 	}
@@ -341,13 +353,11 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	goal = app->map->WorldToMap(x, y);
 
 	if (app->pathfinding->GetDestination(this) != goal || (!this->path.empty() && this->path.back() == goal))
-		if (app->pathfinding->CreatePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
+		if (app->pathfinding->GeneratePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
 		{
-			path.clear();
-			app->pathfinding->RequestPath(this, &path);
+			waitingForPath = true;
 
-			if (!path.empty())
-				path.erase(path.begin());
+			path.clear();
 
 			return true;
 		}
