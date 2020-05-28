@@ -870,10 +870,10 @@ bool Hero::GetExperience(int xp)
 
 bool Hero::GetLevel()
 {
-	if ((stats.xpToLvlUp * stats.heroLevel) <= heroXP)
+	if (stats.xpToLvlUp <= heroXP)
 	{
+		heroXP = heroXP - stats.xpToLvlUp;
 		LevelUp();
-		heroXP = 0;
 		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
 		return true;
 	}

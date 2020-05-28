@@ -99,6 +99,7 @@ private:
 	float range;
 	float vision;
 	float hpRecovery;
+	float currentXp;
 	float xpToNextLevel;
 	int heroSkillPoints;
 	int skillResource;
