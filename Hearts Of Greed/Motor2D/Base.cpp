@@ -156,7 +156,7 @@ bool Base::TurretCapacityExceed()
 
 bool Base::BarricadeCapacityExceed()
 {
-	if (barricadesVector.size() >= maxBarricades)
+	if (barricadesVector.size() == maxBarricades)
 	{
 		return false;
 	}
