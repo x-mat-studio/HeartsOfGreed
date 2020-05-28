@@ -74,7 +74,11 @@ UIFactory::UIFactory() :
 	fullscreenOffButton{ 763, 27, 23, 23 },
 	okButton{ 763, 53, 23, 23 },
 	shopButton{ 480, 62, 33, 33 },
-	reviveButton{ 653, 54, 46, 14 },
+	upgradeCenterPurchaseButton{ 980, 706, 88, 87 },
+	reviveGathererButton{ 783, 706, 88, 87 },
+	reviveMeleeButton{ 883, 706, 88, 87 },
+	reviveRangedButton{ 785, 804, 88, 87 },
+	reviveRobottoButton{ 884, 804, 88, 87 },
 
 	upgradeArrowIcon{ 740, 57, 14, 11 },
 	plusIcon{ 740, 71, 14, 14 },
@@ -1457,7 +1461,7 @@ UI* UIFactory::CreateSaveOKButton(float x, float y, UI* parent, UI_Group* group)
 
 UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_GATHERER);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 30, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_GATHERER, reviveGathererButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1467,7 +1471,7 @@ UI* UIFactory::CreateGathererReviveButton(float x, float y, UI* parent, std::vec
 
 UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_MELEE);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 30, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_MELEE, reviveMeleeButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1476,7 +1480,7 @@ UI* UIFactory::CreateMeleeReviveButton(float x, float y, UI* parent, std::vector
 
 UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_RANGED);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 30, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_RANGED, reviveRangedButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1485,7 +1489,7 @@ UI* UIFactory::CreateRangedReviveButton(float x, float y, UI* parent, std::vecto
 
 UI* UIFactory::CreateRobottoReviveButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_ROBOTTO);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 30, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::REVIVE_ROBOTTO, reviveRobottoButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1676,7 +1680,7 @@ UI* UIFactory::CreateUpgradeTurretButton(float x, float y, UI* parent, std::vect
 
 UI* UIFactory::CreateBuyUpgradeMenuButton(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector)
 {
-	Button* button = new Button(fMPoint{ x, y }, parent, reviveButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_UPGRADE_CENTER);
+	Button* button = new Button(fMPoint{ x, y }, parent, { 0, 0, 30, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::BUY_UPGRADE_CENTER, upgradeCenterPurchaseButton);
 	dataPagesVector->push_back(button);
 
 	return button;
@@ -1968,23 +1972,23 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, baseDataPagePicture);
 
-	CreateNonGroupImage(68, 18, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 3, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 20, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 5, dataPage, dataPagesVector, healthbarGreenImage);
 
-	CreateGathererReviveButton(140, 20, dataPage, dataPagesVector);
+	CreateGathererReviveButton(158, 5, dataPage, dataPagesVector);
 
-	CreateMeleeReviveButton(140, 30, dataPage, dataPagesVector);
+	CreateMeleeReviveButton(158, 35, dataPage, dataPagesVector);
 
-	CreateRangedReviveButton(140, 40, dataPage, dataPagesVector);
+	CreateRangedReviveButton(128, 35, dataPage, dataPagesVector);
 
-	CreateRobottoReviveButton(140, 50, dataPage, dataPagesVector);
+	CreateRobottoReviveButton(98, 35, dataPage, dataPagesVector);
 
-	CreateBuyUpgradeMenuButton(68, 40, dataPage, dataPagesVector);
+	CreateBuyUpgradeMenuButton(68, 35, dataPage, dataPagesVector);
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
-	CreateNonGroupText(68, 20, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 5, dataPage, dataPagesVector, stats);
 
 }
 
