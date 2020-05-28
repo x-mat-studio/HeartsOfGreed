@@ -9,7 +9,7 @@
       <type id="4"/>
     </collider>
 
-    <stats level="1" vision="5" xp="35" buildingCost="95" transparency="160">
+    <stats level="1" vision="5" xp="35" buildingCost="70" transparency="160">
       <hitPoints max="110" current="110" recoveryRate="0"/>
       <attack damage="5" speed="2.25" range="175"/>
     </stats>
