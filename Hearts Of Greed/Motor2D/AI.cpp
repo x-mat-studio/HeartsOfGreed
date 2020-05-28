@@ -209,16 +209,28 @@ int ModuleAI::CheckBaseAligmentAttack()
 {
 	int numBases = baseVector.size();
 
+	std::vector<int> basesToRandom;
+	int counter = 0;
 
 	for (int i = numBases - 1; i >= 0; i--)
 	{
 		if (ENTITY_ALIGNEMENT::PLAYER == baseVector[i]->GetAlignment())
 		{
-			return i;
+			basesToRandom.push_back(i);
+			counter++;
 		}
 	}
+	
+	if (counter == 0)
+	{
+		return -1;
+	}
 
-	return -1;
+	else
+	{
+		return basesToRandom[rand() % counter];
+	}
+	
 }
 
 
