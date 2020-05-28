@@ -9,46 +9,52 @@
 
   <gathererQuest id="1" reward="200">
     <entitysToSpawn>
-      <entity type="2" posX="172" posY="3300"/>      
+      <entity type="2" posX="172" posY="3300"/>
       <entity type="4" posX="172" posY="3500"/>
       <entity type="4" posX="172" posY="3500"/>
       <entity type="4" posX="172" posY="3500"/>
-      <entity type="4" posX="172" posY="3500"/>   
-      
+      <entity type="4" posX="172" posY="3500"/>
+
     </entitysToSpawn>
   </gathererQuest>
 
-  
+
   <meleeQuest id="2" reward="300">
-    <entity type="0" posX="172" posY="3300"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
+    <entitysToSpawn>
+      <entity type="0" posX="172" posY="3300"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+    </entitysToSpawn>
   </meleeQuest>
 
 
   <rangedQuest id ="3" reward="400">
-    <entity type="1" posX="172" posY="3300"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="4" posX="172" posY="3500"/>
-    <entity type="5" posX="172" posY="3500"/>
-    <entity type="5" posX="172" posY="3500"/>
-    <entity type="5" posX="172" posY="3500"/>
+    <entitysToSpawn>
+      <entity type="1" posX="172" posY="3300"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="4" posX="172" posY="3500"/>
+      <entity type="5" posX="172" posY="3500"/>
+      <entity type="5" posX="172" posY="3500"/>
+      <entity type="5" posX="172" posY="3500"/>
+    </entitysToSpawn>
   </rangedQuest>
 
 
   <roboQuest id="4" reward="500">
-    <entity type="3" posX="172" posY="3300"/>
-    <entity type="6" posX="172" posY="3500"/>
-    <entity type="6" posX="172" posY="3500"/>
-    <entity type="6" posX="172" posY="3500"/>
-    <entity type="7" posX="172" posY="3500"/>
-    <entity type="7" posX="172" posY="3500"/>
+    <entitysToSpawn>
+      <entity type="3" posX="172" posY="3300"/>
+      <entity type="6" posX="172" posY="3500"/>
+      <entity type="6" posX="172" posY="3500"/>
+      <entity type="6" posX="172" posY="3500"/>
+      <entity type="7" posX="172" posY="3500"/>
+      <entity type="7" posX="172" posY="3500"/>
+    </entitysToSpawn>
   </roboQuest>
 
   <tutorial2 id="5" reward="100" noCombat ="true">
@@ -67,6 +73,6 @@
   </tutorial3>
 
 
-  
+
 
 </quests>
