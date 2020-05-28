@@ -13,6 +13,8 @@
       <hitPoints max="1000" current="1000" recoveryRate="0"/>
     </stats>
 
+    <levelUp hpIncrease="350"></levelUp>
+
     <rect>
       <verticalRect x="728" y="24" w="121" h="179"></verticalRect>
       <horizontalRect x="885" y="24" w="121" h="179"></horizontalRect>
