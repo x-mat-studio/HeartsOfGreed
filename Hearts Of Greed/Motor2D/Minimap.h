@@ -16,12 +16,12 @@ enum class MINIMAP_ICONS
 	NONE
 };
 
-
+class Entity;
 
 class MinimapIcon
 {
 public:
-	MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offSet);
+	MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offSet, Entity* parent = nullptr);
 	~MinimapIcon();
 	void Draw(SDL_Rect sourceRect);
 public:
@@ -30,6 +30,7 @@ public:
 	fMPoint  offSet;
 	MINIMAP_ICONS type;
 
+	Entity* parent;
 	bool toDelete;
 };
 
@@ -66,7 +67,7 @@ public:
 	iMPoint WorldToMinimap(int x, int y);
 	iMPoint ScreenToMinimapToWorld(int x, int y);
 
-	MinimapIcon* CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offset);
+	MinimapIcon* CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offset, Entity* parent = nullptr);
 
 
 public:
