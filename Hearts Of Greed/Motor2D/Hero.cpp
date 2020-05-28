@@ -59,12 +59,12 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 
 	stats(stats),
 
-	skill1ExecutionTime(skill1ExecutionTime),
-	skill2ExecutionTime(skill2ExecutionTime),
-	skill3ExecutionTime(skill3ExecutionTime),
-	skill1RecoverTime(skill1RecoverTime),
-	skill2RecoverTime(skill2RecoverTime),
-	skill3RecoverTime(skill3RecoverTime),
+	skill1ExecutionTime(-1.f),
+	skill2ExecutionTime(-1.f),
+	skill3ExecutionTime(-1.f),
+	skill1RecoverTime(-1.f),
+	skill2RecoverTime(-1.f),
+	skill3RecoverTime(-1.f),
 
 	attackCooldown(0),
 	cooldownHability1(0),
@@ -185,6 +185,8 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	godMode(false),
 	skillExecutionDelay(false),
 	currAreaInfo(nullptr),
+	comeFromAttack(false),
+	lvlUpSfxTimer(-1.f),
 
 	myParticleSystem(nullptr),
 
@@ -825,13 +827,14 @@ int Hero::RecieveDamage(float damage)
 		damage -= damage * bonusArmor * 0.01f;
 	}
 
-	if (stats.currHP > 0 && godMode == false)
+	if (hitPointsCurrent > 0 && godMode == false)
 	{
-		stats.currHP -= damage;
+		hitPointsCurrent -= damage;
+		stats.currHP = hitPointsCurrent;
 
 		damageTakenTimer = 0.3f;
 
-		if (stats.currHP <= 0)
+		if (hitPointsCurrent <= 0)
 		{
 			Die();
 			ret = 1;
