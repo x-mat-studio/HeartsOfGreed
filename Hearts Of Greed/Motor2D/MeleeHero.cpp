@@ -179,14 +179,18 @@ bool MeleeHero::ExecuteSkill3()
 
 void MeleeHero::UpdatePasiveSkill(float dt)
 {
-	if (gettingAttacked == false)
+	if (started == true)
 	{
-		RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
-	}
+		if (gettingAttacked == false)
+		{
+			RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
+		}
 
-	bonusArmor = armorGained;
-	armorGained = 0;
-	passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
+		bonusArmor = armorGained;
+		armorGained = 0;
+		passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
+	}
+	
 }
 
 
