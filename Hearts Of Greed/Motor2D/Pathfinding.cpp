@@ -869,7 +869,6 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	}
 	else
 	{
-
 		if (maxLvl > 0)
 		{
 
@@ -912,7 +911,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 }
 
 
-int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl)
+int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration)
 {
 	BROFILER_CATEGORY("HPA Algorithm", Profiler::Color::Black);
 
@@ -941,7 +940,7 @@ int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& des
 		open.erase(lowest);
 
 		iterations++;
-		if (iterations > 400)
+		if (iterations > maxIteration)
 			return 0;
 
 

@@ -422,7 +422,7 @@ bool QuestInfo::CheckQuestStatus(Entity* entity)
 				return false;
 			}
 
-			else if ((questEntitysVector.size() == 1 && questEntitysVector[0]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) || questEntitysVector.size() == 0) //Only remains the hero or all enemies are dead
+			else if (((questEntitysVector.size() == 1 && questEntitysVector[0]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER) || questEntitysVector.size() == 0 ) && !noCombat) //Only remains the hero or all enemies are dead
 			{
 				questEntitysVector[0]->missionEntity = false;
 				WinQuest();
