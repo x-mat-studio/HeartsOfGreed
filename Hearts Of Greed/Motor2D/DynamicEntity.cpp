@@ -22,6 +22,7 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	toMove{ 0,0 },
 	framesSinceRequest(0),
 	framesToRquest(FRAMES_PER_PATH_REQUEST),
+	waitingForPath(false),
 
 	dir(FACE_DIR::SOUTH_EAST)
 {
