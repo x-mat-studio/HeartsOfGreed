@@ -11,6 +11,7 @@
 #include "HeroesPortraitManager.h"
 #include "HeroPortrait.h"
 #include "DialogText.h"
+#include "TimerClock.h"
 
 #include "Base.h"
 #include "Turret.h"
@@ -257,7 +258,7 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::DIALOG);
 
-	Button* button = new Button(fMPoint(20, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
+	Button* button = new Button(fMPoint(60, 0), nullptr, dialogWindow, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NEXT_DIALOG);
 	group->AddUiElement(button);
 
 	DialogText* text = new DialogText(0, 0, fMPoint(160, 41), fMPoint(85, 130), button, false);
@@ -331,6 +332,11 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	CreatePortraitManager(640, 0, nullptr, group);
 
 	//CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
+	UI* img = CreateImage(10, 5, nullptr, { 40, 291, 45, 20 }, group);
+
+	TimerClock* clock = new TimerClock(5, -5, img);
+	group->AddUiElement(clock);
+	
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 

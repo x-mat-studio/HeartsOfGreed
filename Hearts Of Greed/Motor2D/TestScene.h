@@ -60,6 +60,8 @@ public:
 	int GetDayNumber() const;
 	bool IsNight() const;
 
+	void GetTimer(int& min, int& sec);
+
 private:
 	void CalculateTimers(float dt);
 	void ExecuteEvent(EVENT_ENUM eventId);

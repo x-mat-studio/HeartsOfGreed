@@ -37,7 +37,7 @@ public:
 	UI_Group* CreateCreditsMenu();
 
 	UI_Group* CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE character2);
-
+	
 	// Image creation functions
 
 	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false, bool interactable = true);

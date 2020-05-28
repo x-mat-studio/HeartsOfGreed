@@ -135,6 +135,7 @@
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="p2Log.cpp" />
+    <ClCompile Include="TimerClock.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="UIFactory.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="Module.h" />
+    <ClInclude Include="TimerClock.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIFactory.h" />

@@ -804,3 +804,24 @@ fMPoint ModuleTestScene::WorldToCam(fMPoint worldPos)
 
 	return ret;
 }
+
+
+void ModuleTestScene::GetTimer(int& min, int& sec)
+{
+	int totalTime = 0;
+
+	if (isNightTime == true)
+	{
+		totalTime = nightTimer;
+	}
+
+	else
+	{
+		totalTime = dayTimer;
+	}
+
+	int aux = totalTime - timer;
+
+	min = aux / 60;
+	sec = aux - min * 60;
+}
