@@ -1006,15 +1006,15 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, ":", group);
+	CreateText(5, 0, background, "Slowing grenade:", group);
 
-	sprintf_s(stats, 40, "Slows enemies by %i per cent", hero->GetSkill1().effectSeverity);
+	sprintf_s(stats, 40, "Slows enemies by %0.1f per", hero->GetSkill1().effectSeverity);
 
 	CreateText(5, 15, background, stats, group);
 
-	CreateText(5, 25, background, "of their movement during", group);
+	CreateText(5, 25, background, "cent of their movement", group);
 
-	sprintf_s(stats, 40, "%i seconds.", hero->GetSkill1().effectTime);
+	sprintf_s(stats, 40, "during %0.1f seconds.", hero->GetSkill1().effectTime);
 
 	CreateText(5, 35, background, stats, group);
 

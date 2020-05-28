@@ -51,7 +51,7 @@
     <entity type="7" posX="172" posY="3500"/>
   </roboQuest>
 
-  <tutorial2 id="5" reward="100">
+  <tutorial2 id="5" reward="100" noCombat ="true">
     <entitysToSpawn>
       <entity type="4" posX="180" posY="4000"/>
       <entity type="4" posX="180" posY="4000"/>

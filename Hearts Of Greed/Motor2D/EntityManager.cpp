@@ -2368,6 +2368,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2378,6 +2381,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2388,6 +2394,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2398,6 +2407,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2827,7 +2839,8 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 					skillToFill.lvl = currLvl;
 					skillToFill.rangeRadius = iterator2.attribute("rangeRadius").as_int(-1);
 					skillToFill.energyCost = iterator2.attribute("energyCost").as_int(-1);;
-
+					skillToFill.effectSeverity = iterator2.attribute("effectSeverity").as_float(-1);
+					skillToFill.effectTime = iterator2.attribute("effectTime").as_float(-1);;
 
 					skillToFill.type = (SKILL_TYPE)iterator.attribute("type").as_int(-1);
 					skillToFill.target = (ENTITY_ALIGNEMENT)iterator.attribute("alignTarget").as_int(-1);

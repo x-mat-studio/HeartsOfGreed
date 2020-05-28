@@ -110,7 +110,7 @@ bool ModulePathfinding::PreUpdate(float dt)
 	{
 		it = pendentPaths.begin();
 
-		while (timeSpend <= 2 && it != pendentPaths.end())
+		while (timeSpend <= 2 && it != pendentPaths.end() && pendentPaths.size() > 0)
 		{
 			CreatePath(it->second.origin, it->second.destination, it->second.lvl, it->first);
 
@@ -734,7 +734,7 @@ bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const
 
 bool ModulePathfinding::IsWalkable(const iMPoint& pos) const
 {
-	uchar t = GetTileAt({pos.x - 1, pos.y});
+	uchar t = GetTileAt({ pos.x - 1, pos.y });
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
@@ -869,7 +869,6 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	}
 	else
 	{
-
 		if (maxLvl > 0)
 		{
 
@@ -912,7 +911,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 }
 
 
-int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl)
+int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration)
 {
 	BROFILER_CATEGORY("HPA Algorithm", Profiler::Color::Black);
 
@@ -941,7 +940,7 @@ int ModulePathfinding::HPAPathfinding(const HierNode& origin, const iMPoint& des
 		open.erase(lowest);
 
 		iterations++;
-		if (iterations > 400)
+		if (iterations > maxIteration)
 			return 0;
 
 
@@ -1184,20 +1183,35 @@ iMPoint ModulePathfinding::GetDestination(Entity* request)
 {
 	BROFILER_CATEGORY("RequestPath", Profiler::Color::Khaki);
 
-	if (generatedPaths.size() < 1)
-		return { INT_MIN,INT_MIN };
-
-	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
-
-	int maxSize = generatedPaths.size();
-	for (int i = 0; i < maxSize; i++)
+	if (generatedPaths.size() > 0)
 	{
-		if (it->first == request)
+		std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
+
+		int maxSize = generatedPaths.size();
+		for (int i = 0; i < maxSize; i++)
 		{
-			if (it->second.path.size() > 0)
-				return it->second.path.back();
+			if (it->first == request)
+			{
+				if (it->second.path.size() > 0)
+					return it->second.path.back();
+			}
+			it++;
 		}
-		it++;
+	}
+
+
+	if (pendentPaths.size() > 0)
+	{
+		std::unordered_map<Entity*, pendentPath>::iterator it2 = pendentPaths.begin();
+		int maxSize2 = pendentPaths.size();
+		for (int i = 0; i < maxSize2; i++)
+		{
+			if (it2->first == request)
+			{
+				return it2->second.destination;
+			}
+			it2++;
+		}
 	}
 
 	return { INT_MIN,INT_MIN };

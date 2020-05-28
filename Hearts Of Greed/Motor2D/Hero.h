@@ -286,6 +286,7 @@ public:
 	Skill GetSkill1() const;
 	void SetSkill(Skill skill);
 	virtual Skill GetPassiveSkill() const;
+	virtual void SetPassiveSkill(Skill skill);
 
 	void ReplaceSkill1(Skill& newSkill);
 	virtual void ReplacePassiveSkill(Skill& skill);
