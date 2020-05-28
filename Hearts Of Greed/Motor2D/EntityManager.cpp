@@ -704,6 +704,12 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Post Update", Profiler::Color::Blue);
 
+	if (app->testScene->IsNight() == true)
+	{
+		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
+		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
+	}
+
 	int numEntities = entityVector.size();
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -712,6 +718,8 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 	SpriteOrdering(dt);
 
+	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
 
 	return true;
 }
@@ -2021,13 +2029,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DAY_START:
-		SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
-		SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+		//SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+		//SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
 		break;
 
 	case EVENT_ENUM::NIGHT_START:
-		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
-		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
+		//SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
+		//SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
 		break;
 
 	case EVENT_ENUM::KILL_ALL_ENEMIES:

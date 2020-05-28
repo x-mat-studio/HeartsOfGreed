@@ -156,8 +156,17 @@ bool Minimap::PostUpdate(float dt)
 		//app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 		//FoW Draw
 
+
+		//Chenges the texture tint if is nighttime
+		if (app->testScene->IsNight() == true)
+		{
+			SDL_SetTextureColorMod(minimapTexture, 96, 63, 148);
+		}
+
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
-	
+
+		SDL_SetTextureColorMod(minimapTexture, 255, 255, 255);
+
 		positionFrame = { -14, 496, 465, 240 };
 		SDL_RenderCopy(app->render->renderer, app->uiManager->GetAtlasTexture(), &miniFrame, &positionFrame);
 
