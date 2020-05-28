@@ -925,11 +925,11 @@ bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 }
 
 
-Properties::Properties() : name(nullptr), value(-1)
+Properties::Properties() : name(), value(-1)
 {}
 
 
-MapLayer::MapLayer() : name(nullptr), width(0u), height(0u), gid(nullptr)
+MapLayer::MapLayer() : name(), width(0u), height(0u), gid(nullptr)
 {}
 
 
@@ -937,15 +937,15 @@ Object::Object() : boundingBox({ NULL, NULL, NULL, NULL }), type (-1), id(-1)
 {}
 
 
-ObjectGroup::ObjectGroup() : id(-1), name(nullptr)
+ObjectGroup::ObjectGroup() : id(-1), name()
 {}
 
 
-TileSet::TileSet() : name(nullptr), texture(nullptr), firstGid(-1), margin(-1), spacing(-1), tileWidth(-1), tileHeight(-1), texWidth(-1), texHeight(-1), numTilesWidth(-1), 
+TileSet::TileSet() : name(), texture(nullptr), firstGid(-1), margin(-1), spacing(-1), tileWidth(-1), tileHeight(-1), texWidth(-1), texHeight(-1), numTilesWidth(-1), 
 	numTilesHeight(-1), offsetX(-1), offsetY(-1), columns(-1)
 {}
 
 
-MapData::MapData() : width(-1), height(-1), tileWidth(-1), tileHeight(-1), backgroundColor({0, 0, 0, 0}), type(MAP_TYPES::MAP_TYPE_UNKNOWN), name(-1), path(-1), musicPath(-1)
+MapData::MapData() : width(-1), height(-1), tileWidth(-1), tileHeight(-1), backgroundColor({0, 0, 0, 0}), type(MAP_TYPES::MAP_TYPE_UNKNOWN), name(), path(), musicPath()
 {}
 
