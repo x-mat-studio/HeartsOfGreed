@@ -239,7 +239,11 @@ private:
 	//	SDL_Rect hideLeftButton;
 	//	SDL_Rect hideRightButton;
 	SDL_Rect shopButton;
-	SDL_Rect reviveButton;
+	SDL_Rect upgradeCenterPurchaseButton;
+	SDL_Rect reviveGathererButton;
+	SDL_Rect reviveMeleeButton;
+	SDL_Rect reviveRangedButton;
+	SDL_Rect reviveRobottoButton;
 
 	SDL_Rect okButton;
 
