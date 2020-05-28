@@ -110,7 +110,7 @@ bool ModulePathfinding::PreUpdate(float dt)
 	{
 		it = pendentPaths.begin();
 
-		while (timeSpend <= 2 && it != pendentPaths.end())
+		while (timeSpend <= 2 && it != pendentPaths.end() && pendentPaths.size() > 0)
 		{
 			CreatePath(it->second.origin, it->second.destination, it->second.lvl, it->first);
 
@@ -734,7 +734,7 @@ bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const
 
 bool ModulePathfinding::IsWalkable(const iMPoint& pos) const
 {
-	uchar t = GetTileAt({pos.x - 1, pos.y});
+	uchar t = GetTileAt({ pos.x - 1, pos.y });
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
@@ -1197,6 +1197,19 @@ iMPoint ModulePathfinding::GetDestination(Entity* request)
 				return it->second.path.back();
 		}
 		it++;
+	}
+
+
+	std::unordered_map<Entity*, pendentPath>::iterator it2 = pendentPaths.begin();
+
+	int maxSize2 = pendentPaths.size();
+	for (int i = 0; i < maxSize2; i++)
+	{
+		if (it2->first == request)
+		{
+			return it2->second.destination;
+		}
+		it2++;
 	}
 
 	return { INT_MIN,INT_MIN };
