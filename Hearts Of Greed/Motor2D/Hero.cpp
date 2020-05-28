@@ -1839,6 +1839,10 @@ Skill Hero::GetPassiveSkill() const
 }
 
 
+void Hero::SetPassiveSkill(Skill skill)
+{}
+
+
 void Hero::ReplaceSkill1(Skill& newSkill)
 {
 	skill1 = newSkill;
