@@ -1183,33 +1183,35 @@ iMPoint ModulePathfinding::GetDestination(Entity* request)
 {
 	BROFILER_CATEGORY("RequestPath", Profiler::Color::Khaki);
 
-	if (generatedPaths.size() < 1)
-		return { INT_MIN,INT_MIN };
-
-	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
-
-	int maxSize = generatedPaths.size();
-	for (int i = 0; i < maxSize; i++)
+	if (generatedPaths.size() > 0)
 	{
-		if (it->first == request)
+		std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
+
+		int maxSize = generatedPaths.size();
+		for (int i = 0; i < maxSize; i++)
 		{
-			if (it->second.path.size() > 0)
-				return it->second.path.back();
+			if (it->first == request)
+			{
+				if (it->second.path.size() > 0)
+					return it->second.path.back();
+			}
+			it++;
 		}
-		it++;
 	}
 
 
-	std::unordered_map<Entity*, pendentPath>::iterator it2 = pendentPaths.begin();
-
-	int maxSize2 = pendentPaths.size();
-	for (int i = 0; i < maxSize2; i++)
+	if (pendentPaths.size() > 0)
 	{
-		if (it2->first == request)
+		std::unordered_map<Entity*, pendentPath>::iterator it2 = pendentPaths.begin();
+		int maxSize2 = pendentPaths.size();
+		for (int i = 0; i < maxSize2; i++)
 		{
-			return it2->second.destination;
+			if (it2->first == request)
+			{
+				return it2->second.destination;
+			}
+			it2++;
 		}
-		it2++;
 	}
 
 	return { INT_MIN,INT_MIN };
