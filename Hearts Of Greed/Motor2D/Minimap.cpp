@@ -15,14 +15,14 @@
 #include "FoWManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "TestScene.h"
+#include "Entity.h"
 
-
-MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet) :
-	
+MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet,Entity* nparent):
 	toDelete(false),
 	type(type), 
 	offSet(offSet), 
-	minimapPos(worldPos)
+	minimapPos(worldPos),
+	parent(nparent)
 	
 {}
 
@@ -30,6 +30,7 @@ MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet)
 MinimapIcon::~MinimapIcon()
 {
 	minimapPos = nullptr;
+	parent = nullptr;
 }
 
 void MinimapIcon::Draw(SDL_Rect sourceRect)
@@ -156,8 +157,17 @@ bool Minimap::PostUpdate(float dt)
 		//app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 		//FoW Draw
 
+
+		//Chenges the texture tint if is nighttime
+		if (app->testScene->IsNight() == true)
+		{
+			SDL_SetTextureColorMod(minimapTexture, 96, 63, 148);
+		}
+
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
-	
+
+		SDL_SetTextureColorMod(minimapTexture, 255, 255, 255);
+
 		positionFrame = { -14, 496, 465, 240 };
 		SDL_RenderCopy(app->render->renderer, app->uiManager->GetAtlasTexture(), &miniFrame, &positionFrame);
 
@@ -166,36 +176,48 @@ bool Minimap::PostUpdate(float dt)
 		SDL_Rect iconRect = { 0,0,0,0 };
 		for (int i = 0; i < minimapIcons.size(); i++)
 		{
-			switch (minimapIcons[i]->type)
+
+			bool visible = true;
+			if (minimapIcons[i]->parent != nullptr&&minimapIcons[i]->parent->visionEntity!=nullptr)
 			{
-			case MINIMAP_ICONS::BASE:
-				iconRect = { 12, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::TURRET:
-				iconRect = { 20, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::ENEMY_TURRET:
-				iconRect = { 16, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::HERO:
-				iconRect = { 8, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::ENEMY:
-				iconRect = { 0, 504, 4, 4};
-				break;
-			case MINIMAP_ICONS::ENEMY_BASE:
-				iconRect = { 4, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::QUEST:
-				iconRect = { 24, 504, 4, 4 };//TODO change this
-				break;
-			case MINIMAP_ICONS::NONE:
-				iconRect = { 0, 0, 0, 0 };
-				break;
+				if (minimapIcons[i]->parent->visionEntity->isVisible == false)
+				{
+					visible = false;
+				}
 			}
 
-			minimapIcons[i]->Draw(iconRect);
+			if (visible == true)
+			{
+				switch (minimapIcons[i]->type)
+				{
+				case MINIMAP_ICONS::BASE:
+					iconRect = { 12, 504, 4, 4 };
+					break;
+				case MINIMAP_ICONS::TURRET:
+					iconRect = { 20, 504, 4, 4 };
+					break;
+				case MINIMAP_ICONS::ENEMY_TURRET:
+					iconRect = { 16, 504, 4, 4 };
+					break;
+				case MINIMAP_ICONS::HERO:
+					iconRect = { 8, 504, 4, 4 };
+					break;
+				case MINIMAP_ICONS::ENEMY:
+					iconRect = { 0, 504, 4, 4 };
+					break;
+				case MINIMAP_ICONS::ENEMY_BASE:
+					iconRect = { 4, 504, 4, 4 };
+					break;
+				case MINIMAP_ICONS::QUEST:
+					iconRect = { 24, 504, 4, 4 };//TODO change this
+					break;
+				case MINIMAP_ICONS::NONE:
+					iconRect = { 0, 0, 0, 0 };
+					break;
+				}
 
+				minimapIcons[i]->Draw(iconRect);
+			}
 		}
 
 
@@ -391,11 +413,11 @@ iMPoint Minimap::ScreenToMinimapToWorld(int x, int y) {
 	return minimap_position;
 }
 
-MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offset)
+MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offset, Entity* parent)
 {
 	MinimapIcon* icon = nullptr;
 
-	icon = new MinimapIcon(worldPos, type, offset);
+	icon = new MinimapIcon(worldPos, type, offset,parent);
 
 	if (icon != nullptr)
 	{

@@ -1143,13 +1143,13 @@ void ModuleUIManager::PlayClickSound()
 
 void ModuleUIManager::LowerVolumeOnPause()
 {
-	app->audio->musicVolume *= 0.2;
+	app->audio->musicVolume *= 0.5;
 	app->audio->SetVolume(app->audio->musicVolume);
 }
 
 void ModuleUIManager::RaiseVolumeOnUnpause()
 {
-	app->audio->musicVolume *= 5;
+	app->audio->musicVolume *= 2;
 	if (app->audio->musicVolume > 128) {
 		app->audio->musicVolume = 128;
 	}

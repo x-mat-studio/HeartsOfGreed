@@ -552,25 +552,25 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_NIGHT:
 				entityVector[i]->Start(enemyNightTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_RANGED:
 				entityVector[i]->Start(enemyRangedTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_GIGA:
 				entityVector[i]->Start(enemyGigaTexture);
 
-				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter());
+				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::BUILDING:
@@ -704,6 +704,12 @@ bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Post Update", Profiler::Color::Blue);
 
+	if (app->testScene->IsNight() == true)
+	{
+		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
+		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
+	}
+
 	int numEntities = entityVector.size();
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -712,6 +718,8 @@ bool ModuleEntityManager::PostUpdate(float dt)
 
 	SpriteOrdering(dt);
 
+	SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+	SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
 
 	return true;
 }
@@ -2021,13 +2029,13 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::DAY_START:
-		SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
-		SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
+		//SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
+		//SDL_SetTextureColorMod(base1Texture, 255, 255, 255);
 		break;
 
 	case EVENT_ENUM::NIGHT_START:
-		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
-		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
+		//SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
+		//SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
 		break;
 
 	case EVENT_ENUM::KILL_ALL_ENEMIES:
@@ -2360,6 +2368,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2370,6 +2381,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2380,6 +2394,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2390,6 +2407,9 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
 			{
 				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetPassiveSkill();
+				RequestSkill(skill, hero->GetPassiveSkill().id, hero->GetPassiveSkill().lvl + 1);
+				hero->ReplacePassiveSkill(skill);
 			}
 		}
 		break;
@@ -2819,7 +2839,8 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 					skillToFill.lvl = currLvl;
 					skillToFill.rangeRadius = iterator2.attribute("rangeRadius").as_int(-1);
 					skillToFill.energyCost = iterator2.attribute("energyCost").as_int(-1);;
-
+					skillToFill.effectSeverity = iterator2.attribute("effectSeverity").as_float(-1);
+					skillToFill.effectTime = iterator2.attribute("effectTime").as_float(-1);;
 
 					skillToFill.type = (SKILL_TYPE)iterator.attribute("type").as_int(-1);
 					skillToFill.target = (ENTITY_ALIGNEMENT)iterator.attribute("alignTarget").as_int(-1);

@@ -293,7 +293,7 @@ void GathererHero::OnCollision(Collider* collider)
 
 	else if (collider->type == COLLIDER_VISIBILITY)
 	{
-		if (collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
+		if (collider->thisEntity != nullptr && collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
 		{
 			Turret* turret = (Turret*)collider->thisEntity;
 		}

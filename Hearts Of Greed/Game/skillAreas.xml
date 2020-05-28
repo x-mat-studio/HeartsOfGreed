@@ -53,9 +53,9 @@
 
   <!-- Passive skills ranged IMPORTANT: reducing the damage will result in dealing more damage, ask Jose-->
   <skill id="6" type="1"  alignTarget="1">
+    <lvl  dmg="10" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
+    <lvl  dmg="9" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
     <lvl  dmg="8" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
-    <lvl  dmg="8" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
-    <lvl  dmg="7" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
     <lvl  dmg="7" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
     <lvl  dmg="6" cooldown="0" rangeRadius="5"  attackRadius="0"  hurtYourself="false"  executionTime="1.0"  effect ="1" energyCost="0"/>
   </skill>
