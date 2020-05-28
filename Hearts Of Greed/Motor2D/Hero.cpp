@@ -827,13 +827,14 @@ int Hero::RecieveDamage(float damage)
 		damage -= damage * bonusArmor * 0.01f;
 	}
 
-	if (stats.currHP > 0 && godMode == false)
+	if (hitPointsCurrent > 0 && godMode == false)
 	{
-		stats.currHP -= damage;
+		hitPointsCurrent -= damage;
+		stats.currHP = hitPointsCurrent;
 
 		damageTakenTimer = 0.3f;
 
-		if (stats.currHP <= 0)
+		if (hitPointsCurrent <= 0)
 		{
 			Die();
 			ret = 1;
@@ -862,7 +863,7 @@ void Hero::PlayOnHitSound()
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
-	app->player->AddResourcesBoost(1);
+	app->player->AddResourcesBoost(20);
 	return GetLevel();
 }
 

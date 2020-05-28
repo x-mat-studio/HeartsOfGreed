@@ -8,9 +8,9 @@
 #include "Pathfinding.h"
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+Turret::Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
-	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, int damageIncrease, int rangeIncrease, float speedIncrease, float hpIncrease) :
 
 	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 
@@ -32,6 +32,11 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vis
 	attackSpeed(attackSpeed),
 	range(range),
 	vision(vision),
+
+	damageIncrease(damageIncrease),
+	rangeIncrease(rangeIncrease),
+	speedIncrease(speedIncrease),
+	hpIncrease(hpIncrease),
 
 	attackCD(0),
 	bonusDamage(0),
@@ -69,6 +74,11 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	attackSpeed(copy->attackSpeed),
 	range(copy->range),
 	vision(copy->vision),
+
+	damageIncrease(copy->damageIncrease),
+	rangeIncrease(copy->rangeIncrease),
+	speedIncrease(copy->speedIncrease),
+	hpIncrease(copy->hpIncrease),
 
 	attackCD(0),
 	bonusDamage(0),
@@ -188,10 +198,10 @@ void Turret::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y , &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue, 255, 255, 255, 1.0f, -offset.x, -offset.y);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue, 255, 255, 255, 1.0f, -offset.x, -offset.y);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, 0,255,255,255, 1.0f, -offset.x, -offset.y);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, 0, 255, 255, 255, 1.0f, -offset.x, -offset.y);
 }
 
 int Turret::GetLvl()
@@ -572,6 +582,20 @@ void Turret::SetLevel(int lvl)
 {
 	for (int i = 1; i < lvl; i++)
 	{
-		//LevelUp() TODO
+		LevelUp();
 	}
+}
+
+
+void Turret::LevelUp()
+{
+	attackDmg += damageIncrease;
+	range += rangeIncrease;
+
+	attackSpeed -= speedIncrease;
+
+	hitPointsMax += hpIncrease;
+	hitPointsCurrent = hitPointsMax;
+
+	turretLvl++;
 }

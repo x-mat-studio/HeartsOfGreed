@@ -100,6 +100,11 @@ void Button::Draw(float dt)
 	   app->render->Blit(texture, position.x, position.y, &scaledRect, false, false, alpha, r, g, b, 0.15f);
    }
 
+   else if (rect.h == 30)
+   {
+	   app->render->Blit(texture, position.x, position.y, &scaledRect, false, false, alpha, r, g, b, 0.30f);
+   }
+
    else
    {
 	   app->render->Blit(texture, position.x, position.y, &rect, false, false, alpha, r, g, b);

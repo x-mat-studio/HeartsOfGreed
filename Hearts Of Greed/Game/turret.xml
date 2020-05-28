@@ -14,6 +14,8 @@
       <attack damage="3" speed="2.25" range="175"/>
     </stats>
 
+    <levelUp damageIncrease="5" rangeIncrease="25" speedIncrease="0.10" hpIncrease="50"></levelUp>
+
   </sample>
   
 	<Animations>

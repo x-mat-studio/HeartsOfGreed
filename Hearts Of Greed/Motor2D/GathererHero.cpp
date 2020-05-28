@@ -56,7 +56,7 @@ GathererHero::~GathererHero()
 	granadeArea = nullptr;
 	currentVfx = nullptr;
 
-	if(passiveSkillCollider != nullptr)
+	if (passiveSkillCollider != nullptr)
 	{
 		passiveSkillCollider->to_delete = true;
 		passiveSkillCollider->thisEntity = nullptr;
@@ -243,7 +243,7 @@ void GathererHero::Attack()
 		GetExperience(ret);
 
 		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
-			
+
 			app->player->AddResources(ret * 0.5f);
 			app->player->AddResources(passiveSkill.dmg); //dmg codifies the extra resources gained when killing an alien
 		}
@@ -258,7 +258,7 @@ void GathererHero::LevelUp()
 	//lvl up effect
 	if (myParticleSystem != nullptr)
 		myParticleSystem->Activate();
-	else 
+	else
 	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
@@ -282,20 +282,26 @@ void GathererHero::OnCollision(Collider* collider)
 {
 	if (collider->type == COLLIDER_HERO)
 	{
-		if (collider->thisEntity->GetType() == ENTITY_TYPE::HERO_ROBO)
+		if (collider->thisEntity != nullptr)
 		{
-			Hero* hero = (Hero*)collider->thisEntity;
+			if (collider->thisEntity->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)collider->thisEntity;
 
-			hero->bonusArmor = passiveSkill.executionTime; //Execution time codifies as the bonuses the robotic units receibe
-			hero->bonusAttack = passiveSkill.executionTime;
+				hero->bonusArmor = passiveSkill.executionTime; //Execution time codifies as the bonuses the robotic units receibe
+				hero->bonusAttack = passiveSkill.executionTime;
+			}
 		}
 	}
 
 	else if (collider->type == COLLIDER_VISIBILITY)
 	{
-		if (collider->thisEntity != nullptr && collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
+		if (collider->thisEntity != nullptr)
 		{
-			Turret* turret = (Turret*)collider->thisEntity;
+			if (collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
+			{
+				Turret* turret = (Turret*)collider->thisEntity;
+			}
 		}
 	}
 }
@@ -358,7 +364,7 @@ void GathererHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 		enemyPos = app->map->WorldToMap(enemyPos.x, enemyPos.y);
 		enemyPos = app->map->MapToWorld(enemyPos.x, enemyPos.y);
 
-		postoPrint = {(int)enemyPos.x, (int)enemyPos.y};
+		postoPrint = { (int)enemyPos.x, (int)enemyPos.y };
 	}
 
 	app->render->Blit(app->entityManager->moveCommandTileGath, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
