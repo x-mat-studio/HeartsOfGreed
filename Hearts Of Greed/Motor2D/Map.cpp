@@ -547,11 +547,12 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
 				Quest* qst = nullptr;
+				Enemy* enemy = nullptr;
+				Spawner* spawner = nullptr;
 
 				LOG(" gid was %i", layer->gid[i]);
 
 
-				// 6* because we need to undo offset and isometric conversion. 2*3 = 6.
 
 				switch (layer->gid[i])
 				{
@@ -643,10 +644,29 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 					app->questManager->AddQuest(qst);
 					break;
 
+				case 250 + 16:
+					spawner = (Spawner*)app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 17:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 18:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY_GIGA, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 19:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY_NIGHT, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 20:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY_RANGED, colliderRectAux.x, colliderRectAux.y);
+					break;
+
 				default:
 					break;
 				}
-
 			}
 		}
 	}

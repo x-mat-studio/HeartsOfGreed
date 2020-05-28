@@ -34,7 +34,7 @@
       </baseAlarmCollider>
       
       <stats maxTurrets="2" maxBarricades="5" vision="0" transparency="100">
-        <hitPoints max="500" current="500" recoveryRate="20"/>
+        <hitPoints max="300" current="300" recoveryRate="5"/>
         <resources produced="5" rate="5"/>
       </stats>
       

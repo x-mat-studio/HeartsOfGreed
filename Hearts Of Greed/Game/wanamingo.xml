@@ -9,9 +9,9 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="100" vision="200" xp="15"  scale =" 1" >  
+    <stats movementSpeed="90" vision="200" xp="15"  scale =" 1" >  
       <hitPoints max="25" current="25" recoveryRate="1"/>
-      <attack damage="2" speed="1.75" range="1"/>
+      <attack damage="1" speed="1.75" range="1"/>
     </stats>
     
   </sample>
@@ -24,9 +24,9 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="135" vision="225" xp="20"  scale =" 1" >
-      <hitPoints max="15" current="15" recoveryRate="3"/>
-      <attack damage="4" speed="1.25" range="5" scale =" 1.f"/>
+    <stats movementSpeed="115" vision="240" xp="20"  scale =" 1" >
+      <hitPoints max="35" current="35" recoveryRate="3"/>
+      <attack damage="6" speed="1.25" range="6" scale =" 1.f"/>
     </stats>
 
   </sampleRanged>
@@ -40,8 +40,8 @@
     </collider>
 
     <stats movementSpeed="200" vision="100" xp="7" scale =" 0.65">
-      <hitPoints max="20" current="20" recoveryRate="3"/>
-      <attack damage="1" speed="3.25" range="1"/>
+      <hitPoints max="17" current="17" recoveryRate="5"/>
+      <attack damage="2" speed="3.25" range="1"/>
     </stats>
 
   </sampleSpeed>
@@ -55,8 +55,8 @@
     </collider>
 
     <stats movementSpeed="35" vision="200" xp="100" scale =" 1.75" >
-      <hitPoints max="325" current="325" recoveryRate="5"/>
-      <attack damage="35" speed="0.75" range="2"/>
+      <hitPoints max="525" current="525" recoveryRate="15"/>
+      <attack damage="30" speed="0.75" range="2"/>
     </stats>
 
   </sampleGiga>
