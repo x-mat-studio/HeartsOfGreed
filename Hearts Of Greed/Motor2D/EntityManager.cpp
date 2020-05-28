@@ -412,8 +412,14 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
-
-
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, this);
 
 	//Wanamingo Sfx----
 	wanamingoRoar = app->audio->LoadFx("audio/sfx/Wanamingo/Roar.wav");
@@ -848,6 +854,16 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_DAMAGE_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ENERGY_UPGRADE, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::MELEE_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_ACTIVE1_UPGRADE, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE, this);
+
 	return true;
 }
 
@@ -2338,6 +2354,98 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		break;
 
+	case EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::MELEE_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::RANGED_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+			}
+		}
+		break;
+
+	case EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
+	case EVENT_ENUM::MELEE_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
+	case EVENT_ENUM::RANGED_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
+	case EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE:
+		for (int i = 0; i < entityVector.size(); i++)
+		{
+			if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)entityVector[i];
+				Skill skill = hero->GetSkill1();
+				RequestSkill(skill, hero->GetSkill1().id, hero->GetSkill1().lvl + 1);
+				hero->SetSkill(skill);
+			}
+		}
+		break;
+
 	}
 
 }
@@ -2682,6 +2790,7 @@ void ModuleEntityManager::CreateDynamicArea(std::vector <iMPoint>* toFill, int r
 
 bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requestLvl)
 {
+	//Even thought i use it, i feel so dirty doing it
 	BROFILER_CATEGORY("Open Skill", Profiler::Color::Cornsilk);
 
 	pugi::xml_document skillDoc;
@@ -2695,7 +2804,7 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 	{
 		if (iterator.attribute("id").as_int(-1) == (int)id)
 		{
-			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2; iterator2 = iterator.next_sibling())
+			for (pugi::xml_node iterator2 = iterator.first_child(); iterator2; iterator2 = iterator2.next_sibling())
 			{
 				if (currLvl == requestLvl)
 				{
@@ -2703,6 +2812,8 @@ bool ModuleEntityManager::RequestSkill(Skill& skillToFill, SKILL_ID id, int requ
 					skillToFill.coolDown = iterator2.attribute("cooldown").as_float(-1.f);
 					skillToFill.dmg = iterator2.attribute("dmg").as_int(-1);
 					skillToFill.effect = (SKILL_EFFECT)iterator2.attribute("effect").as_int(-1);
+					skillToFill.effectTime = iterator2.attribute("effectTime").as_float(-1.f);
+					skillToFill.effectSeverity = iterator2.attribute("effectSeverity").as_float(-1.f);
 					skillToFill.executionTime = iterator2.attribute("executionTime").as_float(-1.f);
 					skillToFill.hurtYourself = iterator2.attribute("hurtYourself").as_bool(false);
 					skillToFill.lvl = currLvl;
@@ -2864,6 +2975,7 @@ int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objec
 		ret = 0;
 		int numEntities = entityVector.size();
 		Collider* entColl = nullptr;
+		ENTITY_TYPE type;
 		float halfH = app->map->data.tileHeight * 0.5;
 		float halfW = app->map->data.tileWidth * 0.5;
 		float newRad = sqrt(halfW * halfW + halfH * halfH) * skill.attackRadius + 0.5f * skill.attackRadius;
@@ -2883,14 +2995,20 @@ int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objec
 			if (entColl == nullptr)
 				continue;
 
-
+			
 			if (entColl->CheckCollisionCircle(pivot, newRad))
 			{
 				ret += entityVector[i]->RecieveDamage(skill.dmg);
 
-				if (skill.effect != SKILL_EFFECT::NO_EFFECT)
+				if (skill.effect == SKILL_EFFECT::SLOWDOWN)
 				{
+					type = entityVector[i]->GetType();
 
+					if (type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::ENEMY_GIGA || type == ENTITY_TYPE::ENEMY_NIGHT || type == ENTITY_TYPE::ENEMY_RANGED)
+					{
+						Enemy* enemy = (Enemy*)entityVector[i];
+						enemy->debuffs.AddNewEffect(SKILL_EFFECT::SLOWDOWN, skill.effectTime, skill.effectSeverity);
+					}
 				}
 			}
 
@@ -4322,6 +4440,22 @@ void ModuleEntityManager::ResetUpgradeValues()
 	robottoDamageUpgradeValue = 1;
 	robottoEnergyUpgradeValue = 1;
 	robottoAtkSpeedUpgradeValue = 1;
+}
+
+ENTITY_TYPE ModuleEntityManager::GetFirstHeroType()
+{
+	int entityNumber = entityVector.size();
+
+	for (int i = 0; i < entityNumber; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || 
+			entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
+		{
+			return entityVector[i]->GetType();
+		}
+	}
+
+	return ENTITY_TYPE::HQ_COMANDER;
 }
 
 HeroStats::HeroStats() : maxHP(-1), damage(-1), maxEnergy(-1), atkSpeed(-1), recoveryHPRate(-1), recoveryEnergyRate(-1),

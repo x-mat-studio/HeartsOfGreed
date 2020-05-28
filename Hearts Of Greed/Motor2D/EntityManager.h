@@ -151,6 +151,8 @@ public:
 
 	void ResetUpgradeValues();
 
+	ENTITY_TYPE GetFirstHeroType();
+
 	//Area----
 	skillArea* RequestAreaInfo(int radius);
 	void CreateDynamicArea(std::vector <iMPoint>* toFill, int area, iMPoint center, skillArea* skillArea = nullptr);
@@ -161,6 +163,8 @@ public:
 
 	//Revive
 	bool ReviveHero(DeadHero heroToRevive);
+
+
 
 private:
 

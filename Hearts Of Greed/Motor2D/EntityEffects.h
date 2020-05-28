@@ -7,6 +7,8 @@ struct SkillEffect
 	float time;
 	float severity;
 	float statTaken;
+
+	bool active;
 };
 
 struct EntityEffects
@@ -20,13 +22,15 @@ public:
 	void DeleteEffect(SKILL_EFFECT& effect);
 	void DeleteAllEffects();
 
-	void AddNewEffect(SKILL_EFFECT& effect, float time, float severity = 1.0f);
+	void AddNewEffect(SKILL_EFFECT effect, float time, float severity = 1.0f);
 
 	void SetCallBack(Entity*);
 
 private:
 
 	void StartEffect(SKILL_EFFECT effect);
+	void EndEffect(SKILL_EFFECT effect);
+
 	void UpdateEffect(SKILL_EFFECT effect);
 
 private:

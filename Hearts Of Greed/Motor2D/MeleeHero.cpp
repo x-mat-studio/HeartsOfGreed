@@ -19,7 +19,10 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
 		tileOnWalk, stats,  skill1),
 
-	passiveSkill(passiveSkill)
+	passiveSkill(passiveSkill),
+	passiveSkillCollider(nullptr),
+
+	armorGained(0)
 
 {}
 
@@ -28,12 +31,51 @@ MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT aligne
 
 	Hero(position, copy, alignement),
 
-	passiveSkill(copy->passiveSkill)
+	passiveSkill(copy->passiveSkill),
+	passiveSkillCollider(nullptr),
+
+	armorGained(0)
 {}
 
 
 MeleeHero::~MeleeHero()
 {
+	if (passiveSkillCollider != nullptr)
+	{
+		passiveSkillCollider->to_delete = true;
+		passiveSkillCollider->thisEntity = nullptr;
+		passiveSkillCollider = nullptr;
+	}
+}
+
+
+bool MeleeHero::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+
+	passiveSkillCollider = new Collider(SDL_Rect{ 0, 0, passiveSkill.rangeRadius, passiveSkill.rangeRadius }, COLLIDER_PASSIVE_MELEE, app->entityManager, this);
+	app->coll->AddColliderEntity(passiveSkillCollider);
+
+	started = true;
+
+	return true;
 }
 
 
@@ -141,6 +183,10 @@ void MeleeHero::UpdatePasiveSkill(float dt)
 	{
 		RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
 	}
+
+	bonusArmor = armorGained;
+	armorGained = 0;
+	passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
 }
 
 
@@ -168,6 +214,20 @@ void MeleeHero::LevelUp()
 
 	heroSkillPoints++;
 }
+
+
+void MeleeHero::OnCollision(Collider* collider)
+{
+	if (collider->type == COLLIDER_ENEMY)
+	{
+		if (armorGained < passiveSkill.energyCost) //max accumulable armor
+		{
+			armorGained += passiveSkill.dmg; //armor per enemy near
+		}
+		
+	}
+}
+
 
 void MeleeHero::PlayGenericNoise(int probability)
 {

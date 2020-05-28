@@ -169,8 +169,6 @@ void Spawner::AddASnipermingo()
 }
 
 
-
-
 void Spawner::SetWannamingoSpawnRate(float ratio)
 {
 	wannamingosSpawnRate = ratio;
