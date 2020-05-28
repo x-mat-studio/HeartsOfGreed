@@ -603,6 +603,8 @@ void ModuleUIManager::UnregisterEvents()
 
 void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 {
+	UpgradeCenter* building = nullptr;
+
 	switch (tag)
 	{
 	case BUTTON_TAG::NULL_TAG:
@@ -726,11 +728,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::UPGRADE_TURRET:
-		if (app->player->GetResources() >= factory->turretUpgradeCost)
+
+		building = (UpgradeCenter*)app->player->focusedEntity;
+
+		if (app->player->GetResources() >= factory->turretUpgradeCost && building->GetTurretLevel() < MAX_TURRET_LEVEL)
 		{
 			app->player->AddResources(-factory->turretUpgradeCost);
-			
-			UpgradeCenter* building = (UpgradeCenter*)app->player->focusedEntity;
 			
 			building->UpgradeTurrets();
 		}
@@ -751,11 +754,14 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::UPGRADE_BARRICADE:
-		if (app->player->GetResources() >= factory->barricadeUpgradeCost)
+
+		building = (UpgradeCenter*)app->player->focusedEntity;
+
+		if (app->player->GetResources() >= factory->barricadeUpgradeCost && building->GetBarricadeLevel() < MAX_BARRICADE_LEVEL)
 		{
 			app->player->AddResources(-factory->barricadeUpgradeCost);
 			
-			UpgradeCenter* building = (UpgradeCenter*)app->player->focusedEntity;
+			
 
 			building->UpgradeBarricades();
 		}

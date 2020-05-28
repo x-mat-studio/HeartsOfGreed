@@ -1,6 +1,9 @@
 #ifndef __UIMANAGER_H__
 #define __UIMANAGER_H__
 
+#define MAX_TURRET_LEVEL 5
+#define MAX_BARRICADE_LEVEL 5
+
 #include "Module.h"
 #include "Fonts.h"
 #include "EasingFunctions.h"
