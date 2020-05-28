@@ -34,7 +34,7 @@ Quest::~Quest()
 {
 	id = -1;
 	myState = QUEST_STATE::ST_UNKNOWN;
-	minimapIcon->toDelete = true;
+	
 }
 
 
@@ -56,7 +56,10 @@ void Quest::OnCollision(Collider* collider)
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 
-
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+	}
 	
 	app->questManager->QuestStarted(id);
 
