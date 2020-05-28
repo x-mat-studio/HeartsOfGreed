@@ -1657,6 +1657,7 @@ Skill Skill::operator=(Skill& newSkill)
 // PD2: Ferran stop with this comments, we don't understand anything you say
 // PD3: But, you see, if I did stop, what would be the point of programming? It's like taking away the bandana of a man, or those memories of eating ants when you were young. Without those, life becomes meaningless
 // PD4: When i see this code i get anxious about killing people, guys why?
+// PD5: Just remember that there are far worst codes out there, some of which where done by past selves of ourselves. Also, usually tend to confuse the necessity of stabbing people on the throat with hunger. Take a cookie. That'll help
 
 int Hero::GetHeroLevel() const
 {
@@ -1836,6 +1837,10 @@ Skill Hero::GetPassiveSkill() const
 {
 	return Skill();
 }
+
+
+void Hero::SetPassiveSkill(Skill skill)
+{}
 
 
 void Hero::ReplaceSkill1(Skill& newSkill)
