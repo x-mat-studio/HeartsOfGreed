@@ -34,6 +34,7 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	range(0),
 	resources(0),
 	vision(0),
+	currentXp(0),
 	xpToNextLevel(0),
 	heroSkillPoints(0),
 	skillResource(0)
@@ -282,19 +283,22 @@ void DataPages::CheckHeroesValues()
 			{
 				if (CheckData(hpRecovery, focus->GetRecoveryHitPointsRate()))
 				{
-					if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
+					if (CheckData(currentXp, focus->GetHeroXP()))
 					{
-						if (CheckData(lifeMax, focus->GetMaxHP()))
+						if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
 						{
-							if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
+							if (CheckData(lifeMax, focus->GetMaxHP()))
 							{
-								if (CheckData(heroSkillPoints, focus->GetHeroSkillPoints()))
+								if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
 								{
-									if (CheckData(skillResource, app->player->GetResourcesSkill()))
+									if (CheckData(heroSkillPoints, focus->GetHeroSkillPoints()))
 									{
-										AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
-										AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
-										check = true;
+										if (CheckData(skillResource, app->player->GetResourcesSkill()))
+										{
+											AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+											AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
+											check = true;
+										}
 									}
 								}
 							}
@@ -547,6 +551,7 @@ void DataPages::GetHeroValue()
 	attackSpeed = focus->GetAttackSpeed();
 	range = focus->GetAttackRange();
 	hpRecovery = focus->GetRecoveryHitPointsRate();
+	currentXp = focus->GetHeroXP();
 	xpToNextLevel = focus->GetExpToLevelUp();
 	lifeMax = focus->GetMaxHP();
 	energyMax = focus->GetMaxEnergyPoints();
@@ -655,7 +660,7 @@ void DataPages::GetBarricadeValue()
 	Barricade* focus = (Barricade*)app->player->GetFocusedEntity();
 
 	lifeMax = focus->GetMaxHP();
-	
+
 	GetHealthBarValues();
 }
 
@@ -686,6 +691,7 @@ void DataPages::DeleteCurrentData()
 	vision = -1;
 	hpRecovery = -1;
 	xpToNextLevel = -1;
+	currentXp = -1;
 	heroSkillPoints = -1;
 	skillResource = -1;
 	alignment = ENTITY_ALIGNEMENT::UNKNOWN;
