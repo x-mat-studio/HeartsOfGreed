@@ -55,15 +55,11 @@
     <entitysToSpawn>
       <entity type="4" posX="180" posY="4000"/>
       <entity type="4" posX="180" posY="4000"/>
-      <entity type="4" posX="180" posY="4000"/>
     </entitysToSpawn>
   </tutorial2>
 
   <tutorial3 id="6" reward="150">
     <entitysToSpawn>
-      <entity type="4" posX="180" posY="4000"/>
-      <entity type="4" posX="180" posY="4000"/>
-      <entity type="4" posX="180" posY="4000"/>
       <entity type="4" posX="180" posY="4000"/>
       <entity type="4" posX="180" posY="4000"/>
       <entity type="4" posX="180" posY="4000"/>
