@@ -31,6 +31,7 @@ bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 
 	bufferPos = 0.0;
 	medalRest = false;
+	backToMain = false;
 	return true;
 }
 
@@ -91,8 +92,9 @@ bool  ModuleLoseScene::PostUpdate(float dt)
 	bool ret = true;
 
 	
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN) {
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && backToMain == false) {
 
+		backToMain = true;
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
 		iconPosY.NewEasing(EASING_TYPE::EASE_IN_SINE, medalPos.y, medalPos.y + 1000, 2.0);
 	}
@@ -114,6 +116,7 @@ bool  ModuleLoseScene::CleanUp()
 	app->tex->UnLoad(medalLose);
 	medalLose = nullptr;
 	medalRest = false;
+	backToMain = false;
 	return true;
 }
 

@@ -56,6 +56,7 @@ private:
 	Easing iconPosY;
 	float bufferPos;
 	bool medalRest;
+	bool backToMain;
 
 };
 

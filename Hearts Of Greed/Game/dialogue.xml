@@ -32,7 +32,7 @@
     <start>
       <entry1 text="Already night time? Be careful solider, these monsters are more active during the night. Prepare yourself for an attack."/>
       <entry2 text="Roger that sir. (You can level up your skills and stats by spending resources; check the Hero's stats in the right down corner for more Info.)"/>
-      <entry3 text="Also, check the Base's stats to build buildings and defenses to fortify them. They generate resources and if you lose all of them, you will fail the mission."/>
+      <entry3 text="Check the base's to build buildings and defenses to fortify them. They generate resources and you will fail the mission if all are conquered."/>
     </start>
 
     <finish>
