@@ -118,8 +118,8 @@ bool ModuleTestScene::Start()
 		if (startFromLoad == false)
 		{
 
-			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
 			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
 			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
@@ -158,10 +158,10 @@ bool ModuleTestScene::Start()
 				*/
 
 				//Spawners------------------
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 680, pos.y-10);
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 670, pos.y-15);
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 660, pos.y-20);
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 650, pos.y-25);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 680, pos.y-10);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 670, pos.y-15);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 660, pos.y-20);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 650, pos.y-25);
 
 			//Debug
 			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
