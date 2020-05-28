@@ -947,7 +947,7 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1Menu()
 
 	CreateText(5, 25, background, stats, group);
 
-	CreateText(5, 35, background, " on combat.", group);
+	CreateText(5, 35, background, "per enemy on combat.", group);
 
 	return group;
 }
