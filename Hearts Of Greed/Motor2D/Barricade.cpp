@@ -10,7 +10,8 @@
 #include "Pathfinding.h"
 #include "Map.h"
 
-Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect) :
+Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, 
+					 Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect, float hpIncrease) :
 
 	Building(position, maxHitPoints, currenthitPoints, recoveryHitPointsRate, xpOnDeadth, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_BARRICADE),
 	
@@ -19,6 +20,8 @@ Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, i
 
 	verticalRect(verticalRect),
 	horizontalRect(horizontalRect),
+
+	hpIncrease(hpIncrease),
 	
 	currentRect(&this->verticalRect)
 {}
@@ -33,6 +36,8 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 
 	verticalRect(copy->verticalRect),
 	horizontalRect(copy->horizontalRect),
+
+	hpIncrease(copy->hpIncrease),
 
 	currentRect(nullptr)
 {
@@ -164,6 +169,15 @@ void Barricade::SetLevel(int lvl)
 {
 	for (int i = 1; i < lvl; i++)
 	{
-		//LevelUp() TODO
+		LevelUp();
 	}
+}
+
+
+void Barricade::LevelUp()
+{
+	hitPointsMax += hpIncrease;
+	hitPointsCurrent = hitPointsMax;
+
+	barricadeLvl++;
 }

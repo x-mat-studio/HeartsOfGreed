@@ -248,7 +248,12 @@ void Base::LevelUpTurrets(int lvl)
 	{
 		if (turretsVector[i]->GetLvl() < lvl)
 		{
-			//turretsVector[i]->LevelUp()
+			turretsVector[i]->LevelUp();
+		}
+
+		if (baseUpgradeCenter != nullptr)
+		{
+
 		}
 	}
 }
@@ -260,9 +265,9 @@ void Base::LevelUpBarricades(int lvl)
 
 	for (int i = 0; i < numberBarricades; i++)
 	{
-		//if (barricadesVector[i]->GetLvl() < lvl)
+		if (barricadesVector[i]->GetLevel() < lvl)
 		{
-			//barricadesVector[i]->LevelUp()
+			barricadesVector[i]->LevelUp();
 		}
 	}
 }

@@ -3320,6 +3320,10 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 	float atkSpd = turretNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
 	int atkRange = turretNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
 
+	int damageIncrease = turretNode.child("sample").child("levelUp").attribute("damageIncrease").as_int(0);
+	int rangeIncrease = turretNode.child("sample").child("levelUp").attribute("rangeIncrease").as_int(0);
+	float speedIncrease = turretNode.child("sample").child("levelUp").attribute("speedIncrease").as_float(0);
+	float hpIncrease = turretNode.child("sample").child("levelUp").attribute("hpIncrease").as_float(0);
 
 
 	//Animations
@@ -3341,7 +3345,7 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 	//sample
 	sampleTurret = new Turret(level, atkDmg, atkSpd, atkRange, vision, pos, turretCollider, turretIdleRight, turretIdleRightUp, turretIdleRightDown, turretIdleLeft, turretIdleLeftUp, turretIdleLeftDown,
 		turretShootingRight, turretShootingRightUp, turretShootingRightDown, turretShootingLeft, turretShootingLeftUp, turretShootingLeftDown,
-		maxHP, currentHP, recoveryHP, xp, buildingCost, transparency);
+		maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, damageIncrease, rangeIncrease, speedIncrease, hpIncrease);
 
 	return ret;
 }
@@ -3374,7 +3378,9 @@ bool ModuleEntityManager::LoadSampleBarricade(pugi::xml_node& barricadeNode)
 	int currentHP = barricadeNode.child("stats").child("hitPoints").attribute("current").as_int(0);
 	int recoveryHP = barricadeNode.child("stats").child("hitPoints").attribute("recoveryRate").as_int(0);
 
-	sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, type, this), verticalRect, horizontalRect);
+	float increaseHp = barricadeNode.child("levelUp").attribute("hpIncrease").as_float();
+
+	sampleBarricade = new Barricade(fMPoint(0, 0), maxHP, currentHP, recoveryHP, xp, buildingCost, transparency, new Collider(horizontalRect, type, this), verticalRect, horizontalRect, increaseHp);
 
 	return true;
 }

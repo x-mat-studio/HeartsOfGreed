@@ -29,6 +29,7 @@
 #include "EasingFunctions.h"
 
 #include "Base.h"
+#include "UpgradeCenter.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() :
@@ -728,7 +729,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		if (app->player->GetResources() >= factory->turretUpgradeCost)
 		{
 			app->player->AddResources(-factory->turretUpgradeCost);
-			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
+			
+			UpgradeCenter* building = (UpgradeCenter*)app->player->focusedEntity;
+			
+			building->UpgradeTurrets();
 		}
 		break;
 
@@ -750,7 +754,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		if (app->player->GetResources() >= factory->barricadeUpgradeCost)
 		{
 			app->player->AddResources(-factory->barricadeUpgradeCost);
-			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
+			
+			UpgradeCenter* building = (UpgradeCenter*)app->player->focusedEntity;
+
+			building->UpgradeBarricades();
 		}
 		break;
 
