@@ -165,7 +165,7 @@ bool ModuleDialogManager::Awake(pugi::xml_node& data)
 	//Tutorial 3 --------
 	dialogTutorial3_ST_A1 = (P2SString)dialogue.child("tutorial3").child("start").child("entry1").attribute("text").as_string();
 	dialogTutorial3_ST_B1 = (P2SString)dialogue.child("tutorial3").child("start").child("entry2").attribute("text").as_string();
-	dialogTutorial3_ST_A2 = (P2SString)dialogue.child("tutorial3").child("start2").child("entry3").attribute("text").as_string();
+	dialogTutorial3_ST_A2 = (P2SString)dialogue.child("tutorial3").child("start").child("entry3").attribute("text").as_string();
 
 	dialogTutorial3_END_A1 = (P2SString)dialogue.child("tutorial3").child("finish").child("entry1").attribute("text").as_string();
 	dialogTutorial3_END_B1 = (P2SString)dialogue.child("tutorial3").child("finish").child("entry2").attribute("text").as_string();
