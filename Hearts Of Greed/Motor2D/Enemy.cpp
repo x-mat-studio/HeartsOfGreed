@@ -800,6 +800,10 @@ int Enemy::GetLongTermObjectiveY()
 //This is only used when we load a game, do not use it anywhere else
 void Enemy::SetLongTermObjective(fMPoint point)
 {
-	haveOrders = true;
-	longTermObjective = point;
+
+	if (point.x != 0 && point.y != 0)
+	{
+		haveOrders = true;
+		longTermObjective = point;
+	}
 }

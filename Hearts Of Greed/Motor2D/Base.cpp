@@ -137,6 +137,9 @@ bool Base::AddTurret(Turret* turret)
 
 	else
 	{
+		if (baseUpgradeCenter != nullptr)
+			turret->SetLevel(baseUpgradeCenter->GetTurretLevel());
+
 		turretsVector.push_back(turret);
 		turret->myBase = this;
 		return true;
@@ -181,6 +184,9 @@ bool Base::AddBarricade(Barricade* barricade)
 
 	else
 	{
+		if (baseUpgradeCenter != nullptr)
+			barricade->SetLevel(baseUpgradeCenter->GetBarricadeLevel());
+
 		barricadesVector.push_back(barricade);
 		barricade->myBase = this;
 		return true;
@@ -280,7 +286,7 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
-
+		app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
 		{
@@ -298,7 +304,7 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
-
+		app->eventManager->GenerateEvent(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
 		{
@@ -410,8 +416,6 @@ void Base::Die()
 	ChangeTexturesOnDeath();
 
 	ChangeAligment();
-
-	app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 }
 
 void Base::ChangeTexturesOnDeath()
