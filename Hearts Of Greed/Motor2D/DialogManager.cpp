@@ -314,16 +314,16 @@ void ModuleDialogManager::ProcessFsm()
 			case DIALOG_INPUT::MISSION_2_START:
 				state = DIALOG_STATE::MISSION2_ST_B1;
 
-				currentDialog1 = nullptr;
 				currentDialog2 = &dialogMission2_ST_B1;
+				currentDialog1 = nullptr;
 				break;
 
 
 			case DIALOG_INPUT::MISSION_2_END:
 				state = DIALOG_STATE::MISSION2_END_A2;
 
-				currentDialog1 = &dialogMission2_END_A2;
-				currentDialog2 = nullptr;
+				currentDialog1 = nullptr;
+				currentDialog2 = &dialogMission2_END_A2;
 				break;
 
 
@@ -739,7 +739,7 @@ void ModuleDialogManager::ProcessFsm()
 			case DIALOG_INPUT::NEXT_DIALOG:
 				state = DIALOG_STATE::MISSION2_END_B2;
 
-				currentDialog2 = &dialogMission2_END_B2;
+				currentDialog1 = &dialogMission2_END_B2;
 				break;
 			}
 
