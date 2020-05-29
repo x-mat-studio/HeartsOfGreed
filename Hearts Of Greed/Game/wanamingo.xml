@@ -9,9 +9,9 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="90" vision="240" xp="15"  scale =" 1" >  
-      <hitPoints max="25" current="20" recoveryRate="1"/>
-      <attack damage="1" speed="1.75" range="1"/>
+    <stats movementSpeed="90" vision="240" xp="15"  scale =" 1" >
+      <hitPoints max="20" current="20" recoveryRate="1"/>
+      <attack damage="2" speed="1.75" range="1"/>
     </stats>
     
   </sample>
