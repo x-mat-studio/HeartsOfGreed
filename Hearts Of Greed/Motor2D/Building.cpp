@@ -73,14 +73,7 @@ Building::~Building()
 	myBase = nullptr;
 	selectedTexture = nullptr;
 
-	if (type == ENTITY_TYPE::BUILDING)
-	{
-		if (visionEntity != nullptr)
-		{
-			visionEntity->deleteEntity = true;
-			visionEntity = nullptr;
-		}
-	}
+	visionEntity = nullptr;
 }
 
 
