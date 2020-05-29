@@ -79,6 +79,9 @@ public:
 
 	void SetAllIconsActiveState(bool areActive);
 
+private:
+	void ExecuteEvent(EVENT_ENUM eventId);
+
 
 public:
 	float minimapScaleRelation;
@@ -86,7 +89,6 @@ public:
 	int height;
 	iMPoint position;
 private:
-	void ExecuteEvent(EVENT_ENUM eventId);
 	int width;
 
 	std::vector<MinimapIcon*> minimapIcons;
