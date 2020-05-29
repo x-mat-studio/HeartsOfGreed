@@ -45,6 +45,8 @@ Twitter:	https://twitter.com/ii_rts
 
 * Tab: Change focus between the selected heroes.
 
+* R: When building barricades, rotate them.
+
 ### Debug Options (only in-game):
 
 * F1: Debug texture for Fog of war (only visible when on Fog of War mode).
@@ -58,6 +60,9 @@ Twitter:	https://twitter.com/ii_rts
 * F10: Activate heroes God mode.
 * F11: Deactivate heroes God mode.
 * 0: Give resources to player.
+* 1: Spawn gigamingo.
+* 2: Spawn fast wannamingo.
+* 3: Spawn ranged wannamingo.
 * 4: Toggle debug build mode for player.
 * 9: Activate/Deactivate camera movement by mouse.
 * KP 1: Spawn base.
@@ -66,7 +71,7 @@ Twitter:	https://twitter.com/ii_rts
 * KP 4: Spawn gatherer hero (Suit Man).
 * KP 5: Spawn melee hero (Armored Man).
 * KP 7: Spawn turret.
-* L: Level up all heroes by 1.
+* L: Level up all heroes.
 * N: Win if in-game.
 * M: Lose if in-game.
 
@@ -109,19 +114,26 @@ Twitter:	https://twitter.com/ii_rts
 * Multiple debug keys (listed above).
 * InGame Support for windowed mode and fullscreen.
 * Automatic Continuous Integration and Deployment .
-* Logo Scene, with custom art and disctintive audio.
-* Title Scene, with custom title spatial sound and options.
+* Logo Scene video, with custom art and disctintive audio.
+* Title Scene, with custom title spatial sound and options, and easy ins.
 * First implementation of a map showing our core game loop.
-* **Single resource** which is used for building turrets.
-* Two different hero units, each one with one disctintive skill:
-	- **Armored Man**: A melee attack with an AoE effect.
-	- **Suit Man**: Throws a grenade in ranged which explodes on contact. This hero gets resources on killing enemies.
+* Three resources implemented:
+	- **Blue resource**: Which is used for building turrets, barricades, upgrade center, and revive dead heroes.
+	- **Red resource**: Which is used to upgrade a hero certain stats.
+	- **Purple resource**: Which is used to level up hero skills (active and passive).
+* Four different hero units, each one with one disctintive skill:
+	- **Armored Man**: A melee attack with an AoE effect, hight health regeneration and receioves less damage the more enemies surround him.
+	- **Suit Man**: Throws a grenade in ranged which explodes on contact. This hero gets resources for killing enemies and empowers near robotic allies.
+	- **Ranged**: Hit and run specialist, makes enemies bleed after hitting them, and is equipped with a grenade that slows enemies.
+	- **Robot**: Can´t regenerate health, gains speed and attack when killing enemies in succession, his skill is self destruction.
 * **Group selection and movement** for ally units.
 * Multiple buildings implemented:
-	- **Ally base**: Center of operations, you can build and upgrade here.
+	- **Ally base**: Center of operations, you can build and revive heroes here.
 	- **Enemy base**: Your opponents stronghold wich they will defend if your heroes get near, deplete it's health to make it your own.
 	- **Turrets**: Building which attacks entities of it's contrary alligment.
 	- **Decorative Buildings**: Flesh out our map and create chokepoints in the map.
+	- **Barricades**: Defensive structures with high hp.
+	- **Upgrade center**: Lets you buy and level up turrets and barricades. 
 * Win condition: triggered by killing all enemies during night.
 * Win scene: custom made "you win message" and track  .
 * Lose condition: triggered by losing all units or losing all bases.
