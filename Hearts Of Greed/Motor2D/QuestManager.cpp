@@ -63,10 +63,6 @@ void ModuleQuestManager::LoadQuests(pugi::xml_node& node)
 		{
 			questInfoVector[i].PushEntityToSpawn((ENTITY_TYPE)iterator2.attribute("type").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
 
-			if (i == 5)
-			{
-				questInfoVector[i].PushEntityToSpawn(ENTITY_TYPE::HQ_COMANDER, -100, -100);
-			}
 		}
 	}
 }
@@ -297,9 +293,18 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 			questInfoVector[i].PushEntity(entity);
 		}
 
-		Quest* qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, iterator.attribute("questX").as_float(), iterator.attribute("questY").as_float());
-		qst->SetId(iterator.attribute("questID").as_int());
-		app->questManager->AddQuest(qst);
+
+		for (pugi::xml_node iterator2 = iterator.child("spawnedQuestEntities").first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
+		{
+			questInfoVector[i].PushEntityToSpawn((ENTITY_TYPE)iterator2.attribute("entityType").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
+		}
+
+		if (iterator.attribute("questX").as_int(INT_MIN) != INT_MIN && iterator.attribute("questY").as_int(INT_MIN) != INT_MIN)
+		{
+			Quest* qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, iterator.attribute("questX").as_float(), iterator.attribute("questY").as_float());
+			qst->SetId(iterator.attribute("questID").as_int());
+			app->questManager->AddQuest(qst);
+		}
 	}
 
 	character1 = (ENTITY_TYPE)data.attribute("character1").as_int();
@@ -317,7 +322,10 @@ bool ModuleQuestManager::Save(pugi::xml_node& data) const
 	{
 		pugi::xml_node iterator = data.append_child("quest");
 
+		app->entityManager->SaveQuest(iterator, questInfoVector[i].GetId());
+
 		questInfoVector[i].Save(iterator);
+
 	}
 
 	data.append_attribute("character1") = (int)character1;
@@ -502,7 +510,6 @@ bool QuestInfo::Save(pugi::xml_node& node) const
 	node.append_attribute("reward") = resourcesReward;
 
 	pugi::xml_node iterator1 = node.append_child("questEntitys");
-
 	int numEntitys = questEntitysVector.size();
 
 	for (int i = 0; i < numEntitys; i++)
@@ -516,19 +523,38 @@ bool QuestInfo::Save(pugi::xml_node& node) const
 		iterator2.append_attribute("hp") = questEntitysVector[i]->GetCurrentHP();
 	}
 
-	numEntitys = app->questManager->questColliderVector.size();
+
+	iterator1 = node.append_child("spawnedQuestEntities");
+	numEntitys = entitysToSpawnVector.size();
 
 	for (int i = 0; i < numEntitys; i++)
 	{
-		if (app->questManager->questColliderVector[i]->GetId() == this->id)
-		{
-			node.append_attribute("questX") = app->questManager->questColliderVector[i]->GetCollider()->rect.x;
-			node.append_attribute("questY") = app->questManager->questColliderVector[i]->GetCollider()->rect.y;
-			node.append_attribute("questID") = app->questManager->questColliderVector[i]->GetId();
-		}
+		pugi::xml_node iterator2 = iterator1.append_child("spawnEntity");
+
+		iterator2.append_attribute("entityType") = (int)entitysToSpawnVector[i];
+		iterator2.append_attribute("posX") = positionsToSpawnVector[i].x;
+		iterator2.append_attribute("posY") = positionsToSpawnVector[i].y;
 	}
 
+	//numEntitys = app->questManager->questColliderVector.size();
+
+	//for (int i = 0; i < numEntitys; i++)
+	//{
+	//	if (app->questManager->questColliderVector[i]->GetId() == this->id)
+	//	{
+	//		node.append_attribute("questX") = app->questManager->questColliderVector[i]->GetCollider()->rect.x;
+	//		node.append_attribute("questY") = app->questManager->questColliderVector[i]->GetCollider()->rect.y;
+	//		node.append_attribute("questID") = app->questManager->questColliderVector[i]->GetId();
+	//	}
+	//}
+
+
 	return true;
+}
+
+int QuestInfo::GetId() const
+{
+	return id;
 }
 
 

@@ -7,7 +7,7 @@
   <tutorial id="0" reward="0" noCombat="true">
   </tutorial>
 
-  <!--<gathererQuest id="1" reward="200">
+  <gathererQuest id="1" reward="200">
     <entitysToSpawn>
       <entity type="2" posX="172" posY="3300"/>
       <entity type="4" posX="172" posY="3500"/>
@@ -16,7 +16,7 @@
       <entity type="4" posX="172" posY="3500"/>
 
     </entitysToSpawn>
-  </gathererQuest>-->
+  </gathererQuest>
 
 
   <meleeQuest id="2" reward="300">

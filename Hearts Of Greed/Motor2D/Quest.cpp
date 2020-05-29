@@ -35,6 +35,11 @@ Quest::~Quest()
 	id = -1;
 	myState = QUEST_STATE::ST_UNKNOWN;
 	
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->SetActiveState(false);
+	}
+
 }
 
 

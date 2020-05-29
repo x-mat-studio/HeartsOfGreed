@@ -164,7 +164,7 @@ public:
 	//Revive
 	bool ReviveHero(DeadHero heroToRevive);
 
-
+	bool SaveQuest(pugi::xml_node& node, int id);
 
 private:
 

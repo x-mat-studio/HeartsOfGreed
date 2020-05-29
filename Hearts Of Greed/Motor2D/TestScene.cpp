@@ -178,7 +178,8 @@ bool ModuleTestScene::Start()
 		app->LoadGame();
 		startFromLoad = false;
 	}
-	else {
+	else 
+	{
 		dayNumber = 0;
 	}
 

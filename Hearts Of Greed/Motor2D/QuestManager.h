@@ -28,6 +28,7 @@ public:
 
 	bool Save(pugi::xml_node&) const;
 
+	int GetId() const;
 
 private:
 	void WinQuest();

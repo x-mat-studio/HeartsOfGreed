@@ -894,7 +894,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 	{
 	case ENTITY_TYPE::QUEST:
 		ret = new Quest(x, y);
-		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::QUEST, fMPoint{0.f,0.f}); //TODO change the last value accordingly to the quest rectangle
+		ret->minimapIcon = app->minimap->CreateIcon(&ret->position, MINIMAP_ICONS::QUEST, fMPoint{ 0.f,0.f }); //TODO change the last value accordingly to the quest rectangle
 
 		break;
 	case ENTITY_TYPE::SPAWNER:
@@ -2021,7 +2021,7 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 
 	}
-		break;
+	break;
 
 	case EVENT_ENUM::DAY_START:
 		//SDL_SetTextureColorMod(buildingTexture, 255, 255, 255);
@@ -3011,7 +3011,7 @@ int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objec
 			if (entColl == nullptr)
 				continue;
 
-			
+
 			if (entColl->CheckCollisionCircle(pivot, newRad))
 			{
 				ret += entityVector[i]->RecieveDamage(skill.dmg);
@@ -3456,8 +3456,8 @@ bool ModuleEntityManager::LoadSampleSpawner(pugi::xml_node& spawnerNode)
 	float snipermingosSpawnRate = spawnerNode.child("sample").child("stats").attribute("snipermingosSpawnRate").as_float(0);
 
 
-	sampleSpawner = new Spawner(fMPoint(0, 0), spawnerCollider, wannamingosPerWave, wannamingosSpawnRate, gigamingosPerWave, gigamingosSpawnRate, 
-								speedamingosPerWave, speedamingosSpawnRate, snipermingosPerWave, snipermingosSpawnRate);
+	sampleSpawner = new Spawner(fMPoint(0, 0), spawnerCollider, wannamingosPerWave, wannamingosSpawnRate, gigamingosPerWave, gigamingosSpawnRate,
+		speedamingosPerWave, speedamingosSpawnRate, snipermingosPerWave, snipermingosSpawnRate);
 
 	return ret;
 
@@ -3669,15 +3669,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 		}
 
 
-		if (type == "quest")
-		{
-			quest = (Quest*)AddEntity(ENTITY_TYPE::QUEST, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
-
-			quest->SetId(iterator.attribute("id").as_int());
-		}
-
-
-		else if (type == "hero_melee")
+		if (type == "hero_melee")
 		{
 			hero = (Hero*)AddEntity(ENTITY_TYPE::HERO_MELEE, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 
@@ -4470,7 +4462,7 @@ ENTITY_TYPE ModuleEntityManager::GetFirstHeroType()
 
 	for (int i = 0; i < entityNumber; i++)
 	{
-		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE || 
+		if (entityVector[i]->GetType() == ENTITY_TYPE::HERO_GATHERER || entityVector[i]->GetType() == ENTITY_TYPE::HERO_MELEE ||
 			entityVector[i]->GetType() == ENTITY_TYPE::HERO_RANGED || entityVector[i]->GetType() == ENTITY_TYPE::HERO_ROBO)
 		{
 			return entityVector[i]->GetType();
@@ -4526,4 +4518,24 @@ int ModuleEntityManager::CheckPlayerBases()
 	return baseNumber;
 }
 
+bool ModuleEntityManager::SaveQuest(pugi::xml_node& node, int id)
+{
+	int numEntitys = entityVector.size();
 
+	for (int i = 0; i < numEntitys; i++)
+	{
+		if (entityVector[i]->GetType() == ENTITY_TYPE::QUEST)
+		{
+			Quest* currQuest = (Quest*)entityVector[i];
+			if (currQuest->GetId() == id)
+			{
+				node.append_attribute("questX") = currQuest->GetCollider()->rect.x;
+				node.append_attribute("questY") = currQuest->GetCollider()->rect.y;
+				node.append_attribute("questID") = currQuest->GetId();
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

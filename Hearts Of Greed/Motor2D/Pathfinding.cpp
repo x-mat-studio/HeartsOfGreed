@@ -118,7 +118,8 @@ bool ModulePathfinding::PreUpdate(float dt)
 
 			timeSpend = SDL_GetTicks() - startedAt;
 
-			it++;
+			if (it != pendentPaths.end())
+				it++;
 		}
 	}
 
@@ -862,6 +863,15 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 	bool toDeleteN1 = false;
 	bool toDeleteN2 = false;
 
+	if (IsWalkable(destination) == false)
+	{
+			return ret;
+	}
+
+	if (IsWalkable(origin) == false)
+	{
+			return ret;
+	}
 
 	if (LineRayCast(origin, destination))
 	{
