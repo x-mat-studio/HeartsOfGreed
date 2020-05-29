@@ -191,7 +191,7 @@ public:
 
 	void SetMap(uint width, uint height, uchar* data);
 
-	PATH_TYPE GeneratePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
+	PATH_TYPE GeneratePath(iMPoint origin, iMPoint destination, int maxLvl, Entity* pathRequest);
 
 
 	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination);

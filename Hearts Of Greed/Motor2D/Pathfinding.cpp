@@ -96,6 +96,7 @@ bool ModulePathfinding::CleanUp()
 	absGraph.lvlClusters.clear();
 
 	generatedPaths.clear();
+	pendentPaths.clear();
 	return true;
 }
 
@@ -140,7 +141,7 @@ void ModulePathfinding::SetMap(uint width, uint height, uchar* data)
 
 }
 
-PATH_TYPE ModulePathfinding::GeneratePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest)
+PATH_TYPE ModulePathfinding::GeneratePath(iMPoint origin, iMPoint destination, int maxLvl, Entity* pathRequest)
 {
 	PATH_TYPE ret = PATH_TYPE::NO_TYPE;
 

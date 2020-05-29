@@ -128,11 +128,16 @@ Twitter:	https://twitter.com/ii_rts
 
 * Fade in/out between scenes.
 * Multiple debug keys (listed above).
+* Save / Load functionallity.
 * InGame Support for windowed mode and fullscreen.
 * Automatic Continuous Integration and Deployment .
 * Logo Scene video, with custom art and disctintive audio.
-* Title Scene, with custom title spatial sound and options, and easy ins.
+* Title Scene, with custom title spatial sound and options and easy in.
 * Implementation of the final map.
+* Progression system for hero units: lvl, stat boosters, skill upgrades...
+* Quest system implemented to unlock different heroes.
+* Paused game on ingame menu .
+* Particle system used in lvl up scenario.
 * Three resources implemented:
 	- **Blue resource**: Used for building turrets, barricades, upgrade center, and revive dead heroes.
 	- **Red resource**: Used to upgrade hero related stats.
@@ -155,6 +160,7 @@ Twitter:	https://twitter.com/ii_rts
 * Lose condition: triggered by losing all units or losing all bases.
 * Lose scene: custom made "you lose message" and track  .
 * HUD implementation showing resources, heroes, cycle state...
+* Full fade-in / fade-out audio
 * **Real Time minimap** implemented: 
 	- Showing icons for heroes, enemies and important structures.
  	- Showing rendered images of terrain and decorative buildings.
@@ -164,7 +170,7 @@ Twitter:	https://twitter.com/ii_rts
 * **Spatial audio**: units on screen or out of it (but still close to the center) will make sounds of different volume and origin.
 * Zoom in/out of map (mouse wheel).
 * IA driven enemies, with priority settings and objectives.
-* Spawner system which generates increasingly more dangerous enemies
+* Spawner system which generates increasingly more dangerous enemies.
 * Dialogue system, with crafted portraits and UI; all tied up ingame via quests.
 * Different easings implemented in numerous points: audio, night cycle, win/lose animations...
 
@@ -285,6 +291,52 @@ ________________________________________________________________________________
 - Polished armored hero skill
 - Fixed animations
 
+. . .
+
+### Release 0.3.32
+
+#### General Updates
+- Balanced Stats for all Entities
+- Enemies now spawn in the map
+- Introduced a turorial Level
+- Gatherer now gains resources when killing enemies (half of the XP gained)
+
+#### Bug Fixes
+- Fixed UI fullscreen button not changing text
+- Fixed some sound effects volume & channels
+- Fixed mem leaks in Skill areas
+- Fixed some animations
+- Camera now resets with the game loop
+- Pathfinding now finds a way to get out of a walkable tile
+. . .
+
+### Release 0.5.0.
+
+#### General Updates
+- App Veyor is now more accurate at generating automatic builds
+- Vertical Slice status
+- Core game experience implemented
+
+#### Bug Fixes
+- Solved a memory segmentation crash (Fonts format related)
+- UI remake 100%
+
+. . .
+
+### Release 0.5.56.
+
+#### General Updates
+- Pathfinding is improved
+- New types of enemies implemented (Giga / speed / ranged)
+- New 4th herot: Robo Hero.
+- Heroes now have passive abilities
+- Final map implemented
+- Quest system added
+
+#### Bug Fixes
+- Minimap did show icons out of FoW
+- Multiple entities related bugs
+- Multiple animation bugs
 . . .
 
 
