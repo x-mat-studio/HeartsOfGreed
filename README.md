@@ -1,5 +1,7 @@
 ﻿# HEARTS OF GREED
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dab77e736d8a4dcea73e56d0cc04baa5)](https://app.codacy.com/gh/x-mat-studio/HeartsOfGreed?utm_source=github.com&utm_medium=referral&utm_content=x-mat-studio/HeartsOfGreed&utm_campaign=Badge_Grade_Dashboard)
+
 Hearts of Greed is a commando-like RTS game in which you'll have to resist the attack of a hostile alien force. Use your select few hero units, your bases, turrets and upgrades to stand your ground and conquer enemy territory. 
 During the day, press on, be agressive and try to defeat the enemy. However, once night comes... go back to your base and defend from the incoming attacks. It's not your time to shine.
 
