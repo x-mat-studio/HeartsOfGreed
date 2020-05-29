@@ -77,10 +77,10 @@ bool ModuleQuestManager::Start()
 	ret = app->eventManager->EventRegister(EVENT_ENUM::FAIL_QUEST, this);
 	ret = app->eventManager->EventRegister(EVENT_ENUM::TUTORIAL3_START, this);
 
-	questSfx = app->audio->LoadFx("audio/sfx/Interface/questDone.wav");
-	questFailed = app->audio->LoadFx("audio/sfx/Interface/MissionFailed.wav");
+	questSfx = app->audio->LoadFx("Assets/audio/sfx/Interface/questDone.wav");
+	questFailed = app->audio->LoadFx("Assets/audio/sfx/Interface/MissionFailed.wav");
 
-	questMarker = app->tex->Load("spritesheets/VFX/questMarker.png");
+	questMarker = app->tex->Load("Assets/spritesheets/VFX/questMarker.png");
 
 	for (int i = 0; i < questInfoVector.size(); i++)
 	{

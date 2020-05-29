@@ -23,7 +23,7 @@
   </window>
 
   <audio>
-    <folder>audio/fx/</folder>
+    <folder>Assets/audio/fx/</folder>
     <fx 	jump="jump_sound.wav"
       bomb="bomb.wav"
           button_1="b1.wav"
@@ -39,7 +39,7 @@
   </file_system>
 
   <map>
-    <folder>maps/</folder>
+    <folder>Assets/maps/</folder>
   </map>
 
   <minimap width="450" posX="-35" posY="516"/>

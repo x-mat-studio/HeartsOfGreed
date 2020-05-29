@@ -8,7 +8,7 @@
 
 #pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
 
-#define DEFAULT_FONT "fonts/jh_fallout.ttf"
+#define DEFAULT_FONT "Assets/fonts/jh_fallout.ttf"
 #define DEFAULT_FONT_SIZE 8
 
 struct SDL_Texture;

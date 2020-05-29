@@ -93,13 +93,13 @@ bool ModuleIntroScene::Start()
 
 
 	////images
-	//logoXMat = app->tex->Load("intro_images/logoXMat.png");
-	//logoBG = app->tex->Load("intro_images/logoBG.png");
+	//logoXMat = app->tex->Load("Assets/intro_images/logoXMat.png");
+	//logoBG = app->tex->Load("Assets/intro_images/logoBG.png");
 
 	////sounds
-	//logoSound = app->audio->LoadFx("audio/sfx/IntroScene/Logo_sfx.wav");
+	//logoSound = app->audio->LoadFx("Assets/audio/sfx/IntroScene/Logo_sfx.wav");
 
-	app->video->Initialize("video/introAVI.avi");
+	app->video->Initialize("Assets/video/introAVI.avi");
 
 	//app->audio->PlayFx(logoSound);
 	return true;
