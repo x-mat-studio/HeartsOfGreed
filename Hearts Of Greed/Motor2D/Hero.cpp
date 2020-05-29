@@ -721,6 +721,8 @@ void Hero::RecoverHealth(float dt)
 		if (recoveringHealth >= 2)
 		{
 			stats.currHP += stats.recoveryHPRate;
+			hitPointsCurrent = stats.currHP;
+
 			recoveringHealth = 0;
 		}
 	}
