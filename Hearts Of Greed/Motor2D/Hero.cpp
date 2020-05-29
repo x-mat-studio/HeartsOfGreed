@@ -59,12 +59,12 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 
 	stats(stats),
 
-	skill1ExecutionTime(skill1ExecutionTime),
-	skill2ExecutionTime(skill2ExecutionTime),
-	skill3ExecutionTime(skill3ExecutionTime),
-	skill1RecoverTime(skill1RecoverTime),
-	skill2RecoverTime(skill2RecoverTime),
-	skill3RecoverTime(skill3RecoverTime),
+	skill1ExecutionTime(-1.f),
+	skill2ExecutionTime(-1.f),
+	skill3ExecutionTime(-1.f),
+	skill1RecoverTime(-1.f),
+	skill2RecoverTime(-1.f),
+	skill3RecoverTime(-1.f),
 
 	attackCooldown(0),
 	cooldownHability1(0),
@@ -82,30 +82,33 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	recoveringHealth(0),
 	recoveringEnergy(0),
 
+	bonusArmor(0),
+	bonusAttack(0),
+
+	heroSkillPoints(0),
+
+	visionInPx(0.f),
+	movingTo{ -1,-1 },
+	lvlUpSfxTimer(0),
+
 	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
 	skill3Charged(true),
 	skillFromAttacking(false),
 	godMode(false),
-	currAreaInfo(nullptr),
+	comeFromAttack(true),
 	skillExecutionDelay(false),
-	visionInPx(0.f),
-	movingTo{ -1,-1 },
 	drawingVfx(false),
-	lvlUpSfxTimer(0),
 
 	state(HERO_STATES::IDLE),
 	skill1(skill1),
+	currAreaInfo(nullptr),
 	objective(nullptr),
-	myParticleSystem(nullptr),
-
-
-	heroSkillPoints(0),
-	comeFromAttack(true)
+	myParticleSystem(nullptr)
 
 {
-	currentAnimation = &walkLeft; 
+	currentAnimation = &walkLeft;
 }
 
 
@@ -171,6 +174,9 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	recoveringHealth(0),
 	recoveringEnergy(0),
 
+	bonusArmor(0),
+	bonusAttack(0),
+
 	gettingAttacked(false),
 	skill1Charged(true),
 	skill2Charged(true),
@@ -179,6 +185,10 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	godMode(false),
 	skillExecutionDelay(false),
 	currAreaInfo(nullptr),
+	comeFromAttack(false),
+	lvlUpSfxTimer(-1.f),
+
+	myParticleSystem(nullptr),
 
 	state(HERO_STATES::IDLE),
 
@@ -265,6 +275,7 @@ bool Hero::Update(float dt)
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
+	ResetBonusStats();
 	UpdatePasiveSkill(dt);
 
 	GroupMovement(dt);
@@ -384,6 +395,12 @@ void Hero::StateMachine(float dt)
 		break;
 
 	case HERO_STATES::DEAD:
+		if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
+		{
+
+			toDelete = true;
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	}
@@ -405,14 +422,14 @@ bool Hero::PostUpdate(float dt)
 
 	CommandVfx(dt);
 
-	
+	GetAnimationCurrentFrame(dt);
 
 	return true;
 }
 
 void Hero::CommandVfx(float dt)
 {
-	if (path.size() > 0)
+	if (path.size() > 0 || objective != nullptr)
 	{
 		Frame currFrame = tileOnWalk.GetCurrentFrame(dt);
 
@@ -423,13 +440,6 @@ void Hero::CommandVfx(float dt)
 
 		BlitCommandVfx(currFrame, drawAlpha);
 	}
-	else
-	{
-		movingTo = { -1, -1 };
-		//tileOnWalk.ResetAnimation();
-	}
-
-
 }
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
@@ -451,14 +461,13 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 
 		movingTo = app->map->MapToWorld(movingTo.x, movingTo.y);
 
-		tileOnWalk.ResetAnimation();
+		if (haveObjective == false)
+			tileOnWalk.ResetAnimation();
 
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 		return true;
 
 	}
-
-
 
 	return false;
 }
@@ -488,7 +497,7 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	Frame currFrame = GetAnimationCurrentFrame(dt);
+	Frame currFrame = currentAnimation->GetCurrentFrame();
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, 0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
@@ -499,6 +508,7 @@ void Hero::Draw(float dt)
 	if (drawingVfx)
 		DrawVfx(dt);
 }
+
 
 Frame Hero::GetAnimationCurrentFrame(float dt)
 {
@@ -567,7 +577,7 @@ bool Hero::CheckAttackRange()
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size()-1 < stats.attackRange + objective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size() - 1 < stats.attackRange + objective->GetRadiusSize())
 	{
 		return true;
 
@@ -586,26 +596,38 @@ void Hero::Attack()
 	int ret = -1;
 
 	if (objective)
-		ret = objective->RecieveDamage(stats.damage);
+		ret = objective->RecieveDamage(stats.damage + bonusAttack);
 
 	if (ret > 0)
 	{
 		GetExperience(ret);
-
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
-		{
-			app->player->AddResources(ret * 0.5f);
-		}
-		true;
 	}
 }
 
 
 void Hero::Die()
 {
-	toDelete = true;
 
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+	// Death SFX
+	switch (this->type)
+	{
+	case ENTITY_TYPE::HERO_GATHERER:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_MELEE:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_RANGED:
+		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		break;
+	case ENTITY_TYPE::HERO_ROBO:
+		ExecuteSFX(app->entityManager->roboDying);
+		break;
+	}
+
+	inputs.push_back(HERO_INPUTS::IN_DEAD);
+
+
 
 	if (minimapIcon != nullptr)
 	{
@@ -624,7 +646,9 @@ void Hero::Die()
 	{
 		myParticleSystem->Die();
 	}
-	
+
+	app->player->RemoveHeroFromVector(this);
+
 }
 
 void Hero::ExecuteSFX(int sfx)
@@ -651,10 +675,10 @@ void Hero::SearchForNewObjective()
 {
 	SDL_Rect rect;
 
-	rect.x = position.x - visionInPx;
-	rect.y = position.y - visionInPx;
-	rect.w = visionInPx * 2;
-	rect.h = visionInPx * 2;
+	rect.x = position.x - visionInPx * 0.8f;
+	rect.y = position.y - visionInPx * 0.8f;
+	rect.w = visionInPx * 1.6f;
+	rect.h = visionInPx * 1.6f;
 
 	objective = app->entityManager->SearchEntityRect(&rect, align);
 }
@@ -786,19 +810,25 @@ void Hero::LevelUp()
 }
 
 
-int Hero::RecieveDamage(int damage)
+int Hero::RecieveDamage(float damage)
 {
 	int ret = -1;
 	gettingAttacked = true;
 	feelingSecure = 0;
 
-	if (stats.currHP > 0 && godMode == false)
+	if (bonusArmor > 0)
 	{
-		stats.currHP -= damage;
+		damage -= damage * bonusArmor * 0.01f;
+	}
+
+	if (hitPointsCurrent > 0 && godMode == false)
+	{
+		hitPointsCurrent -= damage;
+		stats.currHP = hitPointsCurrent;
 
 		damageTakenTimer = 0.3f;
 
-		if (stats.currHP <= 0)
+		if (hitPointsCurrent <= 0)
 		{
 			Die();
 			ret = 1;
@@ -819,8 +849,7 @@ int Hero::RecieveDamage(int damage)
 
 void Hero::PlayOnHitSound()
 {
-	app->audio->PlayFx(app->entityManager->suitmanGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
-
+	ExecuteSFX(app->entityManager->suitmanGetsHit2);
 }
 
 
@@ -828,18 +857,18 @@ void Hero::PlayOnHitSound()
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
-	app->player->AddResourcesBoost(1);
+	app->player->AddResourcesBoost(20);
 	return GetLevel();
 }
 
 
 bool Hero::GetLevel()
 {
-	if ((stats.xpToLvlUp * stats.heroLevel) <= heroXP)
+	if (stats.xpToLvlUp <= heroXP)
 	{
+		heroXP = heroXP - stats.xpToLvlUp;
 		LevelUp();
-		heroXP = 0;
-		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::LOUD, DIRECTION::FRONT);
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::QUIET, DIRECTION::FRONT);
 		return true;
 	}
 
@@ -1167,7 +1196,12 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
-			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			case HERO_INPUTS::IN_DEAD:
+				state = HERO_STATES::DEAD;
+				currAoE.clear();
+				suplAoE.clear();
+				currAreaInfo = nullptr;
+				break;
 			}
 
 		}	break;
@@ -1177,8 +1211,8 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCEL: {
-
+			case HERO_INPUTS::IN_SKILL_CANCEL:
+			{
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
 
@@ -1200,8 +1234,7 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 		{
 			switch (lastInput)
 			{
-			case HERO_INPUTS::IN_SKILL_CANCEL: 
-			{
+			case HERO_INPUTS::IN_SKILL_CANCEL:
 
 				if (skillFromAttacking == true)
 					state = HERO_STATES::ATTACK;
@@ -1211,11 +1244,15 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 
 				skillFromAttacking = false;
 				break;
-			}
+			
 
 			case HERO_INPUTS::IN_OBJECTIVE_DONE: skillFromAttacking = false; state = HERO_STATES::IDLE;	break;
 
-			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;			break;
+			case HERO_INPUTS::IN_DEAD: state = HERO_STATES::DEAD;
+				currAoE.clear();
+				suplAoE.clear();
+				currAreaInfo = nullptr;
+				break;
 			}
 		}	break;
 
@@ -1409,17 +1446,52 @@ void Hero::SetAnimation(HERO_STATES currState)
 		currentAnimation->loop = false;
 
 	}
+
+	case HERO_STATES::DEAD:
+	{
+
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &deathRightUp;
+			break;
+
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &deathLeftUp;
+			break;
+
+		case FACE_DIR::EAST:
+			currentAnimation = &deathRight;
+			break;
+
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &deathRightDown;
+			break;
+
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &deathLeftDown;
+			break;
+
+		case FACE_DIR::WEST:
+			currentAnimation = &deathLeft;
+			break;
+		}
+		break;
+
+		currentAnimation->loop = false;
+
+	}
 	}
 }
 
 void Hero::HandleMyParticleSystem(float dt)
 {
 	if (myParticleSystem != nullptr) {
-	
+
 		myParticleSystem->Move(position.x, position.y);
-	
+
 		if (myParticleSystem->IsActive()) {
-		
+
 			TimeMyParticleSystem(dt);
 		}
 	}
@@ -1438,7 +1510,8 @@ void Hero::ResetAttackAnimation()
 void Hero::TimeMyParticleSystem(float dt)
 {
 	//implied that your system is not nullptr
-	if (myParticleSystem->IsActive()) {
+	if (myParticleSystem->IsActive())
+	{
 		lvlUpSfxTimer += dt;
 
 		if (lvlUpSfxTimer > 3) {
@@ -1498,15 +1571,59 @@ bool Hero::DrawVfx(float dt)
 }
 
 
-Skill::Skill() : id(SKILL_ID::NO_TYPE), dmg(-1), coolDown(-1.f), rangeRadius(-1), attackRadius(-1), hurtYourself(false), type(SKILL_TYPE::NO_TYPE), target(ENTITY_ALIGNEMENT::UNKNOWN), effect(SKILL_EFFECT::NO_EFFECT), executionTime(-1.f), lvl(-1), energyCost(-1)
+Skill::Skill() : 
+	id(SKILL_ID::NO_TYPE), 
+	dmg(-1), 
+	coolDown(-1.f), 
+	rangeRadius(-1), 
+	attackRadius(-1), 
+	hurtYourself(false), 
+	type(SKILL_TYPE::NO_TYPE), 
+	target(ENTITY_ALIGNEMENT::UNKNOWN), 
+	effect(SKILL_EFFECT::NO_EFFECT), 
+	effectTime(0),
+	effectSeverity(1),
+	executionTime(-1.f), 
+	lvl(-1), 
+	energyCost(-1)
 {
 }
 
-Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect) :
-	id(id), dmg(dmg), coolDown(cooldown), rangeRadius(rangeRadius), attackRadius(attackRadius), hurtYourself(hurtYourself), type(type), target(target), effect(effect), executionTime(executionTime), lvl(lvl), energyCost(energyCost)
+Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, 
+			 ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect, float effectTime, float effectSeverity) :
+
+	id(id), 
+	dmg(dmg), 
+	coolDown(cooldown), 
+	rangeRadius(rangeRadius), 
+	attackRadius(attackRadius), 
+	hurtYourself(hurtYourself), 
+	type(type), 
+	target(target), 
+	effect(effect), 
+	effectTime(effectTime),
+	effectSeverity(effectSeverity),
+	executionTime(executionTime), 
+	lvl(lvl), 
+	energyCost(energyCost)
 {}
 
-Skill::Skill(const Skill& skill1) : dmg(skill1.dmg), type(skill1.type), target(skill1.target), id(skill1.id), effect(skill1.effect), coolDown(skill1.coolDown), attackRadius(skill1.attackRadius), rangeRadius(skill1.rangeRadius), hurtYourself(skill1.hurtYourself), executionTime(skill1.executionTime), lvl(skill1.lvl), energyCost(skill1.energyCost)
+Skill::Skill(const Skill& skill1) : 
+	
+	dmg(skill1.dmg), 
+	type(skill1.type), 
+	target(skill1.target), 
+	id(skill1.id), 
+	effect(skill1.effect), 
+	effectTime(skill1.effectTime),
+	effectSeverity(skill1.effectSeverity),
+	coolDown(skill1.coolDown), 
+	attackRadius(skill1.attackRadius), 
+	rangeRadius(skill1.rangeRadius), 
+	hurtYourself(skill1.hurtYourself), 
+	executionTime(skill1.executionTime), 
+	lvl(skill1.lvl), 
+	energyCost(skill1.energyCost)
 {}
 
 Skill Skill::operator=(Skill& newSkill)
@@ -1515,12 +1632,15 @@ Skill Skill::operator=(Skill& newSkill)
 	this->coolDown = newSkill.coolDown;
 	this->dmg = newSkill.dmg;
 	this->effect = newSkill.effect;
+	this->effectTime = newSkill.effectTime;
+	this->effectSeverity = newSkill.effectSeverity;
 	this->executionTime = newSkill.executionTime;
 	this->hurtYourself = newSkill.hurtYourself;
 	this->id = newSkill.id;
 	this->rangeRadius = newSkill.rangeRadius;
 	this->target = newSkill.target;
 	this->type = newSkill.type;
+	this->energyCost = newSkill.energyCost;
 
 	this->lvl = newSkill.lvl;
 
@@ -1532,6 +1652,9 @@ Skill Skill::operator=(Skill& newSkill)
 //Getters and setters hellish nightmare
 // PD: Now I have to enter this nightmare as well. The quest for an efficient code has started
 // PD2: Ferran stop with this comments, we don't understand anything you say
+// PD3: But, you see, if I did stop, what would be the point of programming? It's like taking away the bandana of a man, or those memories of eating ants when you were young. Without those, life becomes meaningless
+// PD4: When i see this code i get anxious about killing people, guys why?
+// PD5: Just remember that there are far worst codes out there, some of which where done by past selves of ourselves. Also, usually tend to confuse the necessity of stabbing people on the throat with hunger. Take a cookie. That'll help
 
 int Hero::GetHeroLevel() const
 {
@@ -1694,15 +1817,39 @@ void Hero::SetSkill1Cost(int skillCost)
 	skill1.energyCost = skillCost;
 }
 
+
 Skill Hero::GetSkill1() const
 {
 	return skill1;
 }
 
-void Hero::ReplaceSkill1(Skill newSkill)
+
+void Hero::SetSkill(Skill skill)
+{
+	skill1 = skill;
+}
+
+
+Skill Hero::GetPassiveSkill() const
+{
+	return Skill();
+}
+
+
+void Hero::SetPassiveSkill(Skill skill)
+{}
+
+
+void Hero::ReplaceSkill1(Skill& newSkill)
 {
 	skill1 = newSkill;
 }
+
+
+void Hero::ReplacePassiveSkill(Skill& newSkill)
+{
+}
+
 
 void Hero::ReplaceHeroStats(HeroStats newStats)
 {
@@ -1820,10 +1967,17 @@ void Hero::SetVisionInPx(float visPx)
 }
 
 
-DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill skill) : level(level), heroType(type)
+DeadHero::DeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill) :
+
+	level(level),
+	heroType(type),
+
+	skillLevel(skill.lvl),
+	skillId(skill.id),
+
+	passiveSkillLevel(passiveSkill.lvl),
+	passiveSkillId(passiveSkill.id)
 {
-	skillLevel = skill.lvl;
-	skillId = skill.id;
 }
 
 
@@ -1842,10 +1996,18 @@ int DeadHero::GetLevel() const
 	return level;
 }
 
+
 void DeadHero::GetSkillInfo(SKILL_ID& id, int& newskillLevel) const
 {
 	id = skillId;
 	newskillLevel = skillLevel;
+}
+
+
+void DeadHero::GetPassiveSkillInfo(SKILL_ID& id, int& newskillLevel) const
+{
+	id = passiveSkillId;
+	newskillLevel = passiveSkillLevel;
 }
 
 
@@ -1864,4 +2026,19 @@ void Hero::SetHeroSkillPoints(int n)
 void Hero::AddHeroSkillPoints(int n)
 {
 	heroSkillPoints += n;
+}
+
+bool Hero::IsDying()
+{
+	if (state == HERO_STATES::DEAD)
+		return true;
+
+	return false;
+}
+
+
+void Hero::ResetBonusStats()
+{
+	bonusArmor = 0;
+	bonusAttack = 0;
 }

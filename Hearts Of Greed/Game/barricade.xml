@@ -9,9 +9,11 @@
       <type id="4"/>
     </collider>
 
-    <stats level="1" xp="35" buildingCost="95" transparency="160">
-      <hitPoints max="210" current="210" recoveryRate="0"/>
+    <stats level="1" xp="35" buildingCost="60" transparency="160">
+      <hitPoints max="600" current="600" recoveryRate="0"/>
     </stats>
+
+    <levelUp hpIncrease="400"></levelUp>
 
     <rect>
       <verticalRect x="728" y="24" w="121" h="179"></verticalRect>

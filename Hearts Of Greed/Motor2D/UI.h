@@ -25,6 +25,8 @@ enum class UI_TYPE : int
 	HERO_PORTRAIT_MANAGER,
 	RESOURCES_COUNTER,
 
+	TIMER_CLOCK,
+
 	MAX
 };
 

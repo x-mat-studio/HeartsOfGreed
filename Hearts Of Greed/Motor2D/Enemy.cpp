@@ -120,6 +120,8 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
 	int randomCounter = rand() % 20;
 	framesPerPathfinding += randomCounter;
+
+	debuffs.SetCallBack(this);
 }
 
 
@@ -151,19 +153,14 @@ Enemy::~Enemy()
 }
 
 
-bool Enemy::PreUpdate(float dt)
-{
-
-
-	return true;
-}
-
-
 bool Enemy::Update(float dt)
 {
 	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Blue);
 
 	//check inputs to traverse state matrix
+
+	debuffs.UpdateEffects(dt);
+
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
@@ -201,9 +198,8 @@ void Enemy::StateMachine(float dt)
 				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
-					fMPoint offSet = shortTermObjective->GetOffset();
 
-					MoveTo(pos.x + offSet.x, pos.y + offSet.y);
+					MoveTo(pos.x, pos.y );
 				}
 			}
 		}
@@ -234,7 +230,7 @@ void Enemy::StateMachine(float dt)
 			}
 			else 
 			{
-				inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
+				inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
 			}
 
 		}
@@ -248,12 +244,19 @@ void Enemy::StateMachine(float dt)
 		break;
 
 	case ENEMY_STATES::DEAD:
-		Die();
+		toDelete = false;
+
+		if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
+		{
+			toDelete = true;
+			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 	}
 
 
 	SetAnimation(state);
+	GetAnimationCurrentFrame(dt);
 }
 
 void Enemy::Roar()
@@ -305,7 +308,7 @@ void Enemy::OnCollision(Collider* collider)
 {
 	if (collider->type == COLLIDER_RECLUIT_IA)
 	{
-		longTermObjective = *app->ai->GetObjective();
+		longTermObjective = *app->ai->GetObjective(position);
 		haveOrders = true;
 	}
 }
@@ -313,9 +316,7 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-
-	Frame currFrame = GetAnimationCurrentFrame(dt);
-
+	Frame currFrame = currentAnimation->GetCurrentFrame();
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, scale, currFrame.pivotPositionX, currFrame.pivotPositionY/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
@@ -369,8 +370,7 @@ bool Enemy::Attack()
 
 void Enemy::Die()
 {
-	toDelete = true;
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
 	collider->thisEntity = nullptr;
 
 	int randomCounter = rand() % 2;
@@ -388,6 +388,8 @@ void Enemy::Die()
 	{
 		minimapIcon->toDelete = true;
 		minimapIcon->minimapPos = nullptr;
+		minimapIcon->parent = nullptr;
+		minimapIcon = nullptr;
 	}
 
 	if (visionEntity != nullptr)
@@ -395,6 +397,8 @@ void Enemy::Die()
 		visionEntity->deleteEntity = true;
 		visionEntity = nullptr;
 	}
+
+	inputs.push_back(ENEMY_INPUTS::IN_DEAD);
 }
 
 
@@ -617,7 +621,7 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 
 }
 
-int Enemy::RecieveDamage(int damage)
+int Enemy::RecieveDamage(float damage)
 {
 	int ret = -1;
 
@@ -721,6 +725,36 @@ void Enemy::SetAnimation(ENEMY_STATES state)
 		break;
 	}
 
+	case ENEMY_STATES::DEAD:
+	{
+		switch (dir)
+		{
+		case FACE_DIR::NORTH_EAST:
+			currentAnimation = &deathRight;
+			break;
+		case FACE_DIR::NORTH_WEST:
+			currentAnimation = &deathLeftUp;
+			break;
+		case FACE_DIR::EAST:
+			currentAnimation = &deathRight;
+			break;
+		case FACE_DIR::SOUTH_EAST:
+			currentAnimation = &deathRightDown;
+			break;
+		case FACE_DIR::SOUTH_WEST:
+			currentAnimation = &deathLeftDown;
+			break;
+		case FACE_DIR::WEST:
+			currentAnimation = &deathLeft;
+			break;
+
+		}
+
+		currentAnimation->loop = false;
+
+		break;
+	}
+
 	}
 }
 
@@ -735,7 +769,7 @@ int Enemy::GetAD()
 	return attackDamage;
 }
 
-int Enemy::GetAS()
+float Enemy::GetAS()
 {
 	return attackSpeed;
 }
@@ -766,6 +800,9 @@ int Enemy::GetLongTermObjectiveY()
 //This is only used when we load a game, do not use it anywhere else
 void Enemy::SetLongTermObjective(fMPoint point)
 {
-	haveOrders = true;
-	longTermObjective = point;
+	if (point.x != 0 && point.y != 0)
+	{
+		haveOrders = true;
+		longTermObjective = point;
+	}
 }

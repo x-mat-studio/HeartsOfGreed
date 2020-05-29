@@ -31,6 +31,8 @@ class UpgradeCenter;
 class ParticleSystem;
 class Emitter;
 
+class Quest;
+
 enum class BUILDING_DECOR;
 enum class TYPE_PARTICLE_SYSTEM;
 
@@ -86,6 +88,7 @@ public:
 	Entity* AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::NEUTRAL);
 	Entity* AddDecorativeBuilding(BUILDING_DECOR decor, int x, int y);
 	Entity* AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x, int y);
+	Quest* SearchQuestByID(int id);
 
 	Entity* GetSample(ENTITY_TYPE);
 
@@ -95,13 +98,16 @@ public:
 
 
 	Entity* CheckEntityOnClick(iMPoint mousePos, bool focus = true, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::PLAYER);
+	Entity* CheckEntityOnClickbyPriority(iMPoint mousePos);
+	Entity* CheckEntityOnClickbyPriorityandAlignment(iMPoint mousePos, bool focus = true, ENTITY_ALIGNEMENT alignement = ENTITY_ALIGNEMENT::PLAYER);
+
 	void CheckHeroOnSelection(SDL_Rect& selection, std::vector<Hero*>* heroVector);
 	void CheckDynamicEntitysObjectives(Entity* entity);
 
 
 	bool CheckIfHeroIsDead(ENTITY_TYPE heroType)const;
 	DeadHero* AssignNewDeadHero(Hero& dyingHero);
-	DeadHero* AssignNewDeadHero(int level, ENTITY_TYPE type, Skill skill);
+	DeadHero* AssignNewDeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill);
 	void DeleteDeadHero(ENTITY_TYPE heroType);
 	void DeleteAllDeadHeroes();
 
@@ -145,6 +151,8 @@ public:
 
 	void ResetUpgradeValues();
 
+	ENTITY_TYPE GetFirstHeroType();
+
 	//Area----
 	skillArea* RequestAreaInfo(int radius);
 	void CreateDynamicArea(std::vector <iMPoint>* toFill, int area, iMPoint center, skillArea* skillArea = nullptr);
@@ -155,6 +163,8 @@ public:
 
 	//Revive
 	bool ReviveHero(DeadHero heroToRevive);
+
+	bool SaveQuest(pugi::xml_node& node, int id);
 
 private:
 
@@ -198,6 +208,7 @@ public:
 	SDL_Texture* moveCommandTileRng;
 	SDL_Texture* moveCommandTileGath;
 	SDL_Texture* moveCommandTileMelee;
+	SDL_Texture* moveCommandTileRobot;
 
 	SDL_Texture* explosionTexture;
 

@@ -42,14 +42,18 @@
     <folder>maps/</folder>
   </map>
 
-  <minimap width="450" posX="-35" posY="520"/>
+  <minimap width="450" posX="-35" posY="516"/>
 
   <dialogManager>
     <load
       docnameDialogues="dialogue.xml"
 	/>
   </dialogManager>
-
+  <AI>
+    <load
+      docnameNightSpawners ="NightSpawners.xml"
+     />
+  </AI>
   <entityManager>
 	<load 
     docnameSuitman="suitman.xml" 
@@ -80,7 +84,7 @@
     initialCamPosX="408" 
     initialCamPosY="7934"
     dayTimerSec="300"
-    nightTimerSec="250" 
+    nightTimerSec="100" 
     freeCamMarginDetectionPixelsX="20"
     freeCamMarginDetectionPixelsY="15"
     

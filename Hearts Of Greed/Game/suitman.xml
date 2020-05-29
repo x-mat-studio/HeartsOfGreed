@@ -8,13 +8,13 @@
       <type id="1"/>
     </collider>
 
-    <stats level="1" movementSpeed="60" vision="7" attackRange="1">
+    <stats level="1" movementSpeed="95" vision="9" attackRange="1">
 
-      <lvl xpToLvlUp="100" hp="100" damage="8" energy="40" atkSpeed="0.75" liferecoveryRate="2" energyrecoveryRate="4"/>
-      <lvl xpToLvlUp="175" hp="135" damage="10" energy="80" atkSpeed="0.8" liferecoveryRate="3" energyrecoveryRate="5"/>
-      <lvl xpToLvlUp="300" hp="180" damage="12" energy="110" atkSpeed="0.95" liferecoveryRate="4" energyrecoveryRate="7"/>
-      <lvl xpToLvlUp="450" hp="220" damage="15" energy="150" atkSpeed="1.05" liferecoveryRate="6" energyrecoveryRate="9"/>
-      <lvl xpToLvlUp="600" hp="270" damage="18" energy="200" atkSpeed="1.2" liferecoveryRate="8" energyrecoveryRate="12"/>
+      <lvl xpToLvlUp="100" hp="210" damage="18" energy="25" atkSpeed="0.8" liferecoveryRate="4" energyrecoveryRate="2"/>
+      <lvl xpToLvlUp="175" hp="245" damage="19" energy="35" atkSpeed="0.9" liferecoveryRate="4" energyrecoveryRate="4"/>
+      <lvl xpToLvlUp="300" hp="290" damage="20" energy="45" atkSpeed="1.0" liferecoveryRate="5" energyrecoveryRate="5"/>
+      <lvl xpToLvlUp="450" hp="330" damage="21" energy="55" atkSpeed="1.1" liferecoveryRate="6" energyrecoveryRate="7"/>
+      <lvl xpToLvlUp="600" hp="380" damage="22" energy="65" atkSpeed="1.2" liferecoveryRate="8" energyrecoveryRate="10"/>
 
     </stats>
     
@@ -66,7 +66,7 @@
       <frame rposX="707" rposY="930" rwidth="17" rheight="70"  time="0.15f" pivotX="5" pivotY="67"/>
     </idle_right>
 
-    <idle_right_down name="idle_right_down" frames="16">
+    <idle_right_down name="idle_right_down" frames="15">
       <frame rposX="7" rposY="144" rwidth="34" rheight="69"  time="0.15f" pivotX="8" pivotY="65"/>
       <frame rposX="10" rposY="1002" rwidth="38" rheight="69"  time="0.15f" pivotX="9" pivotY="65"/>
       <frame rposX="58" rposY="1002" rwidth="41" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
@@ -74,14 +74,14 @@
       <frame rposX="155" rposY="1002" rwidth="43" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
       <frame rposX="203" rposY="1002" rwidth="44" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
       <frame rposX="253" rposY="1002" rwidth="43" rheight="69"  time="0.15f" pivotX="9" pivotY="65"/>
-      <frame rposX="303" rposY="1002" rwidth="41" rheight="69"  time="0.15f" pivotX="8" pivotY="65"/>
-      <frame rposX="352" rposY="1002" rwidth="40" rheight="69"  time="0.15f" pivotX="6" pivotY="65"/>
-      <frame rposX="404" rposY="1002" rwidth="35" rheight="69"  time="0.15f" pivotX="5" pivotY="65"/>
-      <frame rposX="451" rposY="1002" rwidth="49" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
-      <frame rposX="502" rposY="1002" rwidth="35" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
-      <frame rposX="551" rposY="1002" rwidth="34" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
-      <frame rposX="648" rposY="1002" rwidth="36" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
-      <frame rposX="698" rposY="1002" rwidth="34" rheight="69"  time="0.15f" pivotX="10" pivotY="65"/>
+      <frame rposX="303" rposY="1002" rwidth="41" rheight="69"  time="0.15f" pivotX="8  " pivotY="65"/>
+      <frame rposX="352" rposY="1002" rwidth="40" rheight="69"  time="0.15f" pivotX="7" pivotY="65"/>
+      <frame rposX="404" rposY="1002" rwidth="35" rheight="69"  time="0.15f" pivotX="4" pivotY="65"/>
+      <frame rposX="451" rposY="1002" rwidth="49" rheight="69"  time="0.15f" pivotX="7" pivotY="65"/>
+      <frame rposX="502" rposY="1002" rwidth="35" rheight="69"  time="0.15f" pivotX="4" pivotY="65"/>
+      <frame rposX="551" rposY="1002" rwidth="34" rheight="69"  time="0.15f" pivotX="5" pivotY="65"/>
+      <frame rposX="648" rposY="1002" rwidth="36" rheight="69"  time="0.15f" pivotX="7" pivotY="65"/>
+      <frame rposX="7" rposY="144" rwidth="34" rheight="69"  time="0.15f" pivotX="8" pivotY="65"/>
     </idle_right_down>
 
     <idle_left_down name="idle_left_down" frames="16">

@@ -579,17 +579,17 @@ void ModuleInput::HandleDebugKeys()
 	}
 
 
-	if (GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN)
+	if (GetKey(SDL_SCANCODE_U) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY_GIGA, EVENT_ENUM::NULL_EVENT);
 	}
 
-	if (GetKey(SDL_SCANCODE_2) == KEY_STATE::KEY_DOWN)
+	if (GetKey(SDL_SCANCODE_I) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY_NIGHT, EVENT_ENUM::NULL_EVENT);
 	}
 
-	if (GetKey(SDL_SCANCODE_3) == KEY_STATE::KEY_DOWN)
+	if (GetKey(SDL_SCANCODE_O) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ENEMY_RANGED, EVENT_ENUM::NULL_EVENT);
 	}

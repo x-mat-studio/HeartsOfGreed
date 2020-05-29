@@ -17,8 +17,7 @@ Building::Building() :
 	selected(false),
 	currentState(BUILDING_STATE::ST_UNKNOWN),
 	myDecor(BUILDING_DECOR::NONE)
-{
-}
+{}
 
 Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, Collider* collider,
 	ENTITY_TYPE type, BUILDING_DECOR decor) :
@@ -74,14 +73,7 @@ Building::~Building()
 	myBase = nullptr;
 	selectedTexture = nullptr;
 
-	if (type == ENTITY_TYPE::BUILDING)
-	{
-		if (visionEntity != nullptr)
-		{
-			visionEntity->deleteEntity = true;
-			visionEntity = nullptr;
-		}
-	}
+	visionEntity = nullptr;
 }
 
 
@@ -106,7 +98,7 @@ bool Building::PostUpdate(float dt)
 
 void Building::OnCollision(Collider* collider)
 {
-	if (collider->type == COLLIDER_HERO)
+	if (collider->type == COLLIDER_HERO || collider->type == COLLIDER_ENEMY)
 	{
 		transparent = true;
 	}

@@ -64,7 +64,7 @@ SDL_RWops* ModuleAssetManager::Load(const char* path) const
 
 uint ModuleAssetManager::Load(const char* path, char** buffer) const
 {
-	uint ret;
+	uint ret = 0;
 
 
 	// The reading offset is set to the first byte of the file.

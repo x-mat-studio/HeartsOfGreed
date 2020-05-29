@@ -29,7 +29,7 @@ ModuleTestScene::ModuleTestScene() :
 	prevmousePosY(0),
 	timer(0),
 	dayNumber(0),
-	
+
 	dayTimer(INT_MAX),
 	nightTimer(INT_MAX),
 	camVel(0.f),
@@ -46,16 +46,15 @@ ModuleTestScene::ModuleTestScene() :
 	menuScene(false),
 	isNightTime(false),
 	mapLoaded(false),
-	startFromLoad(false)
+	startFromLoad(false),
+	haveJustBeenLoaded(false)
 {
 	name.create("testScene");
 }
 
 
 ModuleTestScene::~ModuleTestScene()
-{
-
-}
+{}
 
 
 bool  ModuleTestScene::Awake(pugi::xml_node& config)
@@ -65,7 +64,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	initialCamPos.x = -config.attribute("initialCamPosX").as_float(0);
 	initialCamPos.y = -config.attribute("initialCamPosY").as_float(0);
 
-	
+
 	dayTimer = config.attribute("dayTimerSec").as_int(1);
 	nightTimer = config.attribute("nightTimerSec").as_int(1);
 
@@ -78,7 +77,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 
 	mapBordersBottomRightCorner.x = config.attribute("mapBordersBottomRightCornerX").as_int(0);
 	mapBordersBottomRightCorner.y = config.attribute("mapBordersBottomRightCornerY").as_int(0);
-	
+
 	fadeTime = config.attribute("fadeTime").as_float(0);
 	startingScale = config.attribute("startingScale").as_float(.0f);
 
@@ -90,6 +89,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 bool ModuleTestScene::Start()
 {
 	mapLoaded = false;
+	
 	app->player->Enable();
 	app->minimap->Enable();
 
@@ -118,9 +118,9 @@ bool ModuleTestScene::Start()
 		{
 
 			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
 
 			/*
 			//mid
@@ -156,9 +156,11 @@ bool ModuleTestScene::Start()
 			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
 				*/
 
-			//Spawners------------------
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, -1370, 800);
-			app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 410, 1025);
+				//Spawners------------------
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 680, pos.y-10);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 670, pos.y-15);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 660, pos.y-20);
+			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 650, pos.y-25);
 
 			//Debug
 			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
@@ -167,7 +169,7 @@ bool ModuleTestScene::Start()
 
 			//Quests-------------
 		}
-		
+
 	}
 
 	if (startFromLoad == true)
@@ -175,6 +177,10 @@ bool ModuleTestScene::Start()
 		app->entityManager->DeleteAllEntities();
 		app->LoadGame();
 		startFromLoad = false;
+	}
+	else 
+	{
+		dayNumber = 0;
 	}
 
 
@@ -202,6 +208,8 @@ bool ModuleTestScene::Start()
 
 	app->gamePause = false;
 
+	
+
 	return true;
 }
 
@@ -217,17 +225,25 @@ bool  ModuleTestScene::PreUpdate(float dt)
 
 	if (camToReset == true)
 	{
-		app->win->SetScale(startingScale);
-		app->render->currentCamX = initialCamPos.x;
-		app->render->currentCamY = initialCamPos.y;
+		if (haveJustBeenLoaded == false)
+		{
+			app->win->SetScale(startingScale);
+			app->render->currentCamX = initialCamPos.x;
+			app->render->currentCamY = initialCamPos.y;
+		}
+		else
+		{
+			haveJustBeenLoaded = false;
+		}
 		camToReset = false;
 	}
 
 	CheckListener(this);
-	
+
 
 	//VERTICAL SLICE
 	CalculateTimers(dt);
+
 
 	return true;
 }
@@ -253,6 +269,12 @@ bool  ModuleTestScene::Update(float dt)
 		ToggleCamMovement();
 	}
 
+	////Cam Easing Testing code
+	//if (app->input->GetKey(SDL_SCANCODE_Y) == KEY_STATE::KEY_DOWN)
+	//{
+
+	//	MoveCamTo(fMPoint{ 525,3119 }, 2.0, EASING_TYPE::EASE_IN_OUT_SINE);
+	//}
 
 	if (allowCamMovement)
 	{
@@ -294,10 +316,12 @@ bool  ModuleTestScene::Update(float dt)
 			if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_DOWN) //TODO THIS WILL BE A START DRAGGING EVENT
 			{
 				StartDragging(mousePos);
+				SetCamEasingState(false);
 			}
 			else if (app->input->GetMouseButtonDown(2) == KEY_STATE::KEY_REPEAT) //TODO THIS WILL BE ACTIVE WHILE STOP DRAGGING EVENT ISN'T SENT
 			{
 				Drag(mousePos, scale);
+				SetCamEasingState(false);
 			}
 			else if (scrollWheel.y != 0)
 			{
@@ -310,10 +334,25 @@ bool  ModuleTestScene::Update(float dt)
 			}
 			else
 			{
-				MouseCameraDisplacement(camVel, dt);
+				if (MouseCameraDisplacement(camVel, dt) == false)
+				{
+					if (IsCamDoingEasing() == true)
+					{
+						UpdateCamEasing(dt);
+					}
+				}
+				else
+				{
+					SetCamEasingState(false);
+				}
 			}
 
 		}
+		else
+		{
+			SetCamEasingState(false);
+		}
+
 		ConstrainCameraToBorders();
 	}
 
@@ -359,19 +398,27 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	//}
 
 	//DEBUG WALKABILITY
-	//for (int i = 0; i < app->map->data.width; i++)
-	//{
-	//	for (int j = 0; j < app->map->data.height; j++)
-	//	{
-	//		if (app->pathfinding->IsWalkable({ i,j }))
-	//		{
-	//			iMPoint p = app->map->MapToWorld(i, j);
 
-	//			app->render->Blit(app->entityManager->debugPathTexture, p.x, p.y);
-	//		}
+	if (app->debugMode)
+	{
+		SDL_SetTextureAlphaMod(app->entityManager->debugPathTexture, 255 * 0.5f);
+		for (int i = 0; i < app->map->data.width; i++)
+		{
+			for (int j = 0; j < app->map->data.height; j++)
+			{
+				if (app->pathfinding->IsWalkable({ i + 1,j }))
+				{
+					iMPoint p = app->map->MapToWorld(i, j);
 
-	//	}
-	//}
+					app->render->Blit(app->entityManager->debugPathTexture, p.x, p.y);
+				}
+
+			}
+		}
+		SDL_SetTextureAlphaMod(app->entityManager->debugPathTexture, 255);
+
+	}
+
 
 	return ret;
 }
@@ -408,6 +455,8 @@ bool  ModuleTestScene::Load(pugi::xml_node& data)
 
 	timer = iterator.attribute("timer").as_float();
 
+
+	haveJustBeenLoaded = true;
 	return true;
 }
 
@@ -686,4 +735,104 @@ void ModuleTestScene::ConstrainCameraToBorders()
 bool ModuleTestScene::IsNight() const
 {
 	return isNightTime;
+}
+
+void ModuleTestScene::NewCamEasing(fMPoint initialPos, fMPoint finalPos, float duration, EASING_TYPE easingType)
+{
+	camEasingX.NewEasing(easingType, initialPos.x, finalPos.x, duration);
+	camEasingY.NewEasing(easingType, initialPos.y, finalPos.y, duration);
+
+}
+
+bool ModuleTestScene::IsCamDoingEasing() const
+{
+	return camEasingX.IsActive();
+}
+
+void ModuleTestScene::UpdateCamEasing(float dt)
+{
+
+
+	if (IsCamDoingEasing() == true)
+	{
+		fMPoint ret;
+		fMPoint cam;
+
+		ret.x = camEasingX.UpdateEasingAddingTime(dt);
+		ret.y = camEasingY.UpdateEasingAddingTime(dt);
+
+		cam = WorldToCam(ret);
+		app->render->currentCamX = cam.x;
+		app->render->currentCamY = cam.y;
+
+	}
+
+
+
+}
+
+void ModuleTestScene::SetCamEasingState(bool active)
+{
+	camEasingX.ChangeActiveState(active);
+	camEasingY.ChangeActiveState(active);
+}
+
+void ModuleTestScene::MoveCamTo(fMPoint worldPos, float duration, EASING_TYPE easing)
+{
+	fMPoint initialPos = CamToWorld();
+
+	NewCamEasing(initialPos, worldPos, duration, easing);
+}
+
+
+fMPoint ModuleTestScene::CamToWorld()
+{
+	fMPoint ret;
+	float invScale = (1 / app->win->GetScale());
+	int w;
+	int h;
+
+	app->render->GetCameraMeasures(w, h);
+
+	ret.x = (-app->render->currentCamX + w * 0.5) * invScale;
+	ret.y = (-app->render->currentCamY + h * 0.5) * invScale;
+
+	return ret;
+}
+
+
+fMPoint ModuleTestScene::WorldToCam(fMPoint worldPos)
+{
+	fMPoint ret;
+	float scale = app->win->GetScale();
+	int w;
+	int h;
+
+	app->render->GetCameraMeasures(w, h);
+
+	ret.x = -(worldPos.x * scale) + (w * 0.5);
+	ret.y = -(worldPos.y * scale) + (h * 0.5);
+
+	return ret;
+}
+
+
+void ModuleTestScene::GetTimer(int& min, int& sec)
+{
+	int totalTime = 0;
+
+	if (isNightTime == true)
+	{
+		totalTime = nightTimer;
+	}
+
+	else
+	{
+		totalTime = dayTimer;
+	}
+
+	int aux = totalTime - timer;
+
+	min = aux / 60;
+	sec = aux - min * 60;
 }

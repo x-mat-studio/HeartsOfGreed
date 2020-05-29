@@ -21,6 +21,9 @@ Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVar
 	particlesRate(particlesRate),
 	particlesLifeTime(particlesLifeTime),
 
+	particlesEmited(0),
+	particlesPerFrame(0),
+
 	areaOfSpawn(areaOfSpawn),
 	particleTexture(texture),
 	particleAnimation(particleAnimation),
@@ -64,6 +67,9 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 	particlesRate(particlesRate),
 	particlesLifeTime(particlesLifeTime),
 
+	particlesEmited(0),
+	particlesPerFrame(0),
+
 	areaOfSpawn(areaOfSpawn),
 	particleTexture(texture),
 	particleAnimation(particleAnimation),
@@ -93,8 +99,6 @@ Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float p
 
 void Emitter::Start()
 {
-	//TODO 3: Just calculate the max number of particles you will have in screen
-	//particles rate * particles life time
 	int maxParticles = particlesRate * particlesLifeTime + 1;
 
 	//We assume that the game will allways go at 60 FPS

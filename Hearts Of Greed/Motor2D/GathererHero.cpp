@@ -7,6 +7,7 @@
 #include "Textures.h"
 #include "ParticleSystem.h"
 #include "Player.h"
+#include "Collision.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -23,6 +24,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 
 	granadeArea(nullptr),
 	currentVfx(nullptr),
+	passiveSkillCollider(nullptr),
 
 	vfxExplosion(vfxExplosion),
 	passiveSkill(passiveSkill),
@@ -37,6 +39,7 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 
 	granadeArea(nullptr),
 	currentVfx(nullptr),
+	passiveSkillCollider(nullptr),
 
 	vfxExplosion(copy->vfxExplosion),
 	passiveSkill(copy->passiveSkill),
@@ -52,6 +55,43 @@ GathererHero::~GathererHero()
 
 	granadeArea = nullptr;
 	currentVfx = nullptr;
+
+	if (passiveSkillCollider != nullptr)
+	{
+		passiveSkillCollider->to_delete = true;
+		passiveSkillCollider->thisEntity = nullptr;
+		passiveSkillCollider = nullptr;
+	}
+}
+
+
+bool GathererHero::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+
+	passiveSkillCollider = new Collider(SDL_Rect{ 0, 0, passiveSkill.rangeRadius, passiveSkill.rangeRadius }, COLLIDER_PASSIVE_GATHERER, app->entityManager, this);
+	app->coll->AddColliderEntity(passiveSkillCollider);
+
+	started = true;
+
+	return true;
 }
 
 
@@ -136,7 +176,7 @@ bool GathererHero::ExecuteSkill1()
 
 
 			skillExecutionDelay = true;
-			app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ExecuteSFX(app->entityManager->suitman1Skill);
 			return skillExecutionDelay;
 		}
 		else
@@ -145,7 +185,7 @@ bool GathererHero::ExecuteSkill1()
 			currentVfx->ResetAnimation();
 			currentVfx->loop = false;
 
-			app->audio->PlayFx(app->entityManager->suitman1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+			ExecuteSFX(app->entityManager->suitman1Skill2);
 
 
 			int ret = 0;
@@ -187,7 +227,10 @@ bool GathererHero::ExecuteSkill3()
 
 void GathererHero::UpdatePasiveSkill(float dt)
 {
-
+	if (started == true)
+	{
+		passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
+	}
 }
 
 
@@ -203,7 +246,7 @@ void GathererHero::Attack()
 		GetExperience(ret);
 
 		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
-			
+
 			app->player->AddResources(ret * 0.5f);
 			app->player->AddResources(passiveSkill.dmg); //dmg codifies the extra resources gained when killing an alien
 		}
@@ -218,7 +261,7 @@ void GathererHero::LevelUp()
 	//lvl up effect
 	if (myParticleSystem != nullptr)
 		myParticleSystem->Activate();
-	else 
+	else
 	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
@@ -226,13 +269,44 @@ void GathererHero::LevelUp()
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
 	stats.maxHP *= app->entityManager->gathererLifeUpgradeValue;
+	stats.currHP = stats.maxHP;
 
 	stats.maxEnergy *= (app->entityManager->gathererEnergyUpgradeValue);
+	stats.currEnergy = stats.maxEnergy;
 
 	stats.damage *= (app->entityManager->gathererDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->gathererAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
+}
+
+
+void GathererHero::OnCollision(Collider* collider)
+{
+	if (collider->type == COLLIDER_HERO)
+	{
+		if (collider->thisEntity != nullptr)
+		{
+			if (collider->thisEntity->GetType() == ENTITY_TYPE::HERO_ROBO)
+			{
+				Hero* hero = (Hero*)collider->thisEntity;
+
+				hero->bonusArmor = passiveSkill.executionTime; //Execution time codifies as the bonuses the robotic units receibe
+				hero->bonusAttack = passiveSkill.executionTime;
+			}
+		}
+	}
+
+	else if (collider->type == COLLIDER_VISIBILITY)
+	{
+		if (collider->thisEntity != nullptr)
+		{
+			if (collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
+			{
+				Turret* turret = (Turret*)collider->thisEntity;
+			}
+		}
+	}
 }
 
 
@@ -243,16 +317,16 @@ void GathererHero::PlayGenericNoise(int probability)
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise1Suitman);
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise2Suitman);
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise3Suitman);
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Suitman, 0, 4, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise4Suitman);
 		break;
 
 	default:
@@ -285,5 +359,30 @@ bool GathererHero::DrawVfx(float dt)
 
 void GathererHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
-	app->render->Blit(app->entityManager->moveCommandTileGath, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+	iMPoint postoPrint = movingTo;
+
+	if (objective != nullptr)
+	{
+		fMPoint enemyPos = objective->GetPosition();
+		enemyPos = app->map->WorldToMap(enemyPos.x, enemyPos.y);
+		enemyPos = app->map->MapToWorld(enemyPos.x, enemyPos.y);
+
+		postoPrint = { (int)enemyPos.x, (int)enemyPos.y };
+	}
+
+	app->render->Blit(app->entityManager->moveCommandTileGath, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
 }
+
+
+Skill GathererHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void GathererHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
+}
+
+

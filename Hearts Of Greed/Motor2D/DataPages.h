@@ -22,6 +22,9 @@ enum class DATA_PAGE_ENUM
 	FOCUSED_ROBOTTO,
 
 	FOCUSED_WANAMINGO,
+	FOCUSED_SPEEDOMINGO,
+	FOCUSED_SNIPERMINGO,
+	FOCUSED_GIGAMINGO,
 
 	FOCUSED_UNKNOWN,
 };
@@ -50,6 +53,9 @@ private:
 	// Check Data Page Values
 	void CheckHeroesValues();
 	void CheckWanamingoValues();
+	void CheckSpeedomingoValues();
+	void CheckSnipermingoValues();
+	void CheckGigamingoValues();
 	void CheckBaseValues();
 	void CheckTurretValues();
 	void CheckUpgradeCenterValues();
@@ -59,6 +65,9 @@ private:
 
 	void GetHeroValue();
 	void GetWanamingoValue();
+	void GetSpeedomingoValue();
+	void GetSnipermingoValue();
+	void GetGigamingoValue();
 	void GetBaseValue();
 	void GetTurretValue();
 	void GetUpgradeCenterValue();
@@ -90,6 +99,7 @@ private:
 	float range;
 	float vision;
 	float hpRecovery;
+	float currentXp;
 	float xpToNextLevel;
 	int heroSkillPoints;
 	int skillResource;

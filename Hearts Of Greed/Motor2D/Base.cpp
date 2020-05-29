@@ -137,6 +137,9 @@ bool Base::AddTurret(Turret* turret)
 
 	else
 	{
+		if (baseUpgradeCenter != nullptr)
+			turret->SetLevel(baseUpgradeCenter->GetTurretLevel());
+
 		turretsVector.push_back(turret);
 		turret->myBase = this;
 		return true;
@@ -156,7 +159,7 @@ bool Base::TurretCapacityExceed()
 
 bool Base::BarricadeCapacityExceed()
 {
-	if (barricadesVector.size() >= maxBarricades)
+	if (barricadesVector.size() == maxBarricades)
 	{
 		return false;
 	}
@@ -181,6 +184,9 @@ bool Base::AddBarricade(Barricade* barricade)
 
 	else
 	{
+		if (baseUpgradeCenter != nullptr)
+			barricade->SetLevel(baseUpgradeCenter->GetBarricadeLevel());
+
 		barricadesVector.push_back(barricade);
 		barricade->myBase = this;
 		return true;
@@ -248,7 +254,12 @@ void Base::LevelUpTurrets(int lvl)
 	{
 		if (turretsVector[i]->GetLvl() < lvl)
 		{
-			//turretsVector[i]->LevelUp()
+			turretsVector[i]->LevelUp();
+		}
+
+		if (baseUpgradeCenter != nullptr)
+		{
+
 		}
 	}
 }
@@ -260,9 +271,9 @@ void Base::LevelUpBarricades(int lvl)
 
 	for (int i = 0; i < numberBarricades; i++)
 	{
-		//if (barricadesVector[i]->GetLvl() < lvl)
+		if (barricadesVector[i]->GetLevel() < lvl)
 		{
-			//barricadesVector[i]->LevelUp()
+			barricadesVector[i]->LevelUp();
 		}
 	}
 }
@@ -275,7 +286,7 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
-
+		app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
 		{
@@ -293,7 +304,7 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
-
+		app->eventManager->GenerateEvent(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
 		{
@@ -374,7 +385,7 @@ void Base::GainResources(float dt)
 }
 
 
-int Base::RecieveDamage(int damage)
+int Base::RecieveDamage(float damage)
 {
 
 	if (hitPointsCurrent > 0)
@@ -405,8 +416,6 @@ void Base::Die()
 	ChangeTexturesOnDeath();
 
 	ChangeAligment();
-
-	app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 }
 
 void Base::ChangeTexturesOnDeath()

@@ -3,8 +3,13 @@
 #include "UIManager.h"
 #include "UIFactory.h"
 #include "Base.h"
+#include "Barricade.h"
 #include "Turret.h"
+#include "UpgradeCenter.h"
 #include "Enemy.h"
+#include "NightEnemy.h"
+#include "RangedEnemy.h"
+#include "GigaEnemy.h"
 #include "Hero.h"
 
 DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
@@ -29,6 +34,7 @@ DataPages::DataPages(float x, float y, UI* parent, Entity* entity) :
 	range(0),
 	resources(0),
 	vision(0),
+	currentXp(0),
 	xpToNextLevel(0),
 	heroSkillPoints(0),
 	skillResource(0)
@@ -95,10 +101,32 @@ bool DataPages::PreUpdate(float dt)
 				state = DATA_PAGE_ENUM::FOCUSED_WANAMINGO;
 				break;
 
+			case ENTITY_TYPE::ENEMY_NIGHT:
+
+				factory->CreateSpeedomingoPage(&dataPageVector, this);
+				GetSpeedomingoValue();
+				state = DATA_PAGE_ENUM::FOCUSED_SPEEDOMINGO;
+				break;
+
+			case ENTITY_TYPE::ENEMY_RANGED:
+
+				factory->CreateSnipermingoPage(&dataPageVector, this);
+				GetSnipermingoValue();
+				state = DATA_PAGE_ENUM::FOCUSED_SNIPERMINGO;
+				break;
+
+			case ENTITY_TYPE::ENEMY_GIGA:
+
+				factory->CreateGigamingoPage(&dataPageVector, this);
+				GetGigamingoValue();
+				state = DATA_PAGE_ENUM::FOCUSED_GIGAMINGO;
+				break;
+
 			case ENTITY_TYPE::BLDG_TURRET:
 
 				factory->CreateTurretPage(&dataPageVector, this);
 				GetTurretValue();
+				state = DATA_PAGE_ENUM::FOCUSED_TURRET;
 				break;
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
@@ -140,6 +168,10 @@ bool DataPages::PreUpdate(float dt)
 			CheckBaseValues();
 			break;
 
+		case DATA_PAGE_ENUM::FOCUSED_BARRICADE:
+			CheckBarricadeValues();
+			break;
+
 		case DATA_PAGE_ENUM::FOCUSED_GATHERER:
 			CheckHeroesValues();
 			break;
@@ -158,7 +190,6 @@ bool DataPages::PreUpdate(float dt)
 
 		case DATA_PAGE_ENUM::FOCUSED_TURRET:
 			CheckTurretValues();
-			state = DATA_PAGE_ENUM::FOCUSED_TURRET;
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER:
@@ -167,6 +198,18 @@ bool DataPages::PreUpdate(float dt)
 
 		case DATA_PAGE_ENUM::FOCUSED_WANAMINGO:
 			CheckWanamingoValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_SPEEDOMINGO:
+			CheckSpeedomingoValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_SNIPERMINGO:
+			CheckSnipermingoValues();
+			break;
+
+		case DATA_PAGE_ENUM::FOCUSED_GIGAMINGO:
+			CheckGigamingoValues();
 			break;
 
 		case DATA_PAGE_ENUM::FOCUSED_UNKNOWN:
@@ -240,19 +283,22 @@ void DataPages::CheckHeroesValues()
 			{
 				if (CheckData(hpRecovery, focus->GetRecoveryHitPointsRate()))
 				{
-					if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
+					if (CheckData(currentXp, focus->GetHeroXP()))
 					{
-						if (CheckData(lifeMax, focus->GetMaxHP()))
+						if (CheckData(xpToNextLevel, focus->GetExpToLevelUp()))
 						{
-							if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
+							if (CheckData(lifeMax, focus->GetMaxHP()))
 							{
-								if (CheckData(heroSkillPoints, focus->GetHeroSkillPoints()))
+								if (CheckData(energyMax, focus->GetMaxEnergyPoints()))
 								{
-									if (CheckData(skillResource, app->player->GetResourcesSkill()))
+									if (CheckData(heroSkillPoints, focus->GetHeroSkillPoints()))
 									{
-										AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
-										AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
-										check = true;
+										if (CheckData(skillResource, app->player->GetResourcesSkill()))
+										{
+											AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+											AdjustManaBars(focus->GetEnergyPoints(), focus->GetMaxEnergyPoints());
+											check = true;
+										}
 									}
 								}
 							}
@@ -305,8 +351,113 @@ void DataPages::CheckWanamingoValues()
 }
 
 
+void DataPages::CheckSpeedomingoValues()
+{
+	bool check = false;
+
+	NightEnemy* focus = (NightEnemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
+
+
+void DataPages::CheckSnipermingoValues()
+{
+	bool check = false;
+
+	RangedEnemy* focus = (RangedEnemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
+
+
+void DataPages::CheckGigamingoValues()
+{
+	bool check = false;
+
+	GigaEnemy* focus = (GigaEnemy*)focusEntity;
+
+	if (CheckData(attackDamage, focus->GetAD()))
+	{
+		if (CheckData(attackSpeed, focus->GetAS()))
+		{
+			if (CheckData(hpRecovery, focus->GetRecov()))
+			{
+				if (CheckData(vision, focus->GetVision()))
+				{
+					if (CheckData(lifeMax, focus->GetMaxHP()))
+					{
+						AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+						check = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
+
+
 void DataPages::CheckBarricadeValues()
-{}
+{
+	Barricade* focus = (Barricade*)focusEntity;
+
+	AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+
+	focus = nullptr;
+}
 
 
 void DataPages::CheckBaseValues()
@@ -370,7 +521,27 @@ void DataPages::CheckTurretValues()
 
 
 void DataPages::CheckUpgradeCenterValues()
-{}
+{
+	bool check = false;
+
+	UpgradeCenter* focus = (UpgradeCenter*)focusEntity;
+
+	if (CheckData((int)alignment, (int)focus->GetAlignment()))
+	{
+		if (CheckData(lifeMax, focus->GetMaxHP()))
+		{
+			AdjustHealthBars(focus->GetCurrentHP(), focus->GetMaxHP());
+			check = true;
+		}
+	}
+
+	if (check == false)
+	{
+		DeleteCurrentData();
+	}
+
+	focus = nullptr;
+}
 
 void DataPages::GetHeroValue()
 {
@@ -380,6 +551,7 @@ void DataPages::GetHeroValue()
 	attackSpeed = focus->GetAttackSpeed();
 	range = focus->GetAttackRange();
 	hpRecovery = focus->GetRecoveryHitPointsRate();
+	currentXp = focus->GetHeroXP();
 	xpToNextLevel = focus->GetExpToLevelUp();
 	lifeMax = focus->GetMaxHP();
 	energyMax = focus->GetMaxEnergyPoints();
@@ -393,6 +565,48 @@ void DataPages::GetHeroValue()
 void DataPages::GetWanamingoValue()
 {
 	Enemy* focus = (Enemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
+
+	GetHealthBarValues();
+}
+
+
+void DataPages::GetSpeedomingoValue()
+{
+	NightEnemy* focus = (NightEnemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
+
+	GetHealthBarValues();
+}
+
+
+void DataPages::GetSnipermingoValue()
+{
+	RangedEnemy* focus = (RangedEnemy*)app->player->GetFocusedEntity();
+
+	attackDamage = focus->GetAD();
+	attackSpeed = focus->GetAS();
+	vision = focus->GetVision();
+	hpRecovery = focus->GetRecov();
+	lifeMax = focus->GetMaxHP();
+
+	GetHealthBarValues();
+}
+
+
+void DataPages::GetGigamingoValue()
+{
+	GigaEnemy* focus = (GigaEnemy*)app->player->GetFocusedEntity();
 
 	attackDamage = focus->GetAD();
 	attackSpeed = focus->GetAS();
@@ -432,12 +646,21 @@ void DataPages::GetTurretValue()
 
 void DataPages::GetUpgradeCenterValue()
 {
+	UpgradeCenter* focus = (UpgradeCenter*)app->player->GetFocusedEntity();
+
+	alignment = focus->GetAlignment();
+	lifeMax = focus->GetMaxHP();
+
 	GetHealthBarValues();
 }
 
 
 void DataPages::GetBarricadeValue()
 {
+	Barricade* focus = (Barricade*)app->player->GetFocusedEntity();
+
+	lifeMax = focus->GetMaxHP();
+
 	GetHealthBarValues();
 }
 
@@ -468,6 +691,7 @@ void DataPages::DeleteCurrentData()
 	vision = -1;
 	hpRecovery = -1;
 	xpToNextLevel = -1;
+	currentXp = -1;
 	heroSkillPoints = -1;
 	skillResource = -1;
 	alignment = ENTITY_ALIGNEMENT::UNKNOWN;
@@ -570,7 +794,7 @@ void DataPages::GetHealthBarValues()
 {
 	SDL_Rect rect = factory->GetGreenHealthBar();
 	SDL_Rect rect2 = factory->GetBlueHealthBar();
-	
+
 	int numElem = dataPageVector.size();
 
 	for (int i = 0; i < numElem; i++)

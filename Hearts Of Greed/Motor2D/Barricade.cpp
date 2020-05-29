@@ -7,7 +7,11 @@
 #include "EventManager.h"
 #include "Collision.h"
 
-Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect) :
+#include "Pathfinding.h"
+#include "Map.h"
+
+Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost, int transparency, 
+					 Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect, float hpIncrease) :
 
 	Building(position, maxHitPoints, currenthitPoints, recoveryHitPointsRate, xpOnDeadth, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_BARRICADE),
 	
@@ -16,6 +20,8 @@ Barricade::Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, i
 
 	verticalRect(verticalRect),
 	horizontalRect(horizontalRect),
+
+	hpIncrease(hpIncrease),
 	
 	currentRect(&this->verticalRect)
 {}
@@ -31,13 +37,23 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 	verticalRect(copy->verticalRect),
 	horizontalRect(copy->horizontalRect),
 
+	hpIncrease(copy->hpIncrease),
+
 	currentRect(nullptr)
 {
-	if (direction == DIRECTION_BARRICADE::VERTICAL)
+	if (direction == DIRECTION_BARRICADE::VERTICAL) 
+	{
+		//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
 		currentRect = &verticalRect;
-	
-	else if(direction == DIRECTION_BARRICADE::HORIZONTAL)
+	}
+	else if (direction == DIRECTION_BARRICADE::HORIZONTAL) 
+	{
+		//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 10, position.y), 1, 3);	
 		currentRect = &horizontalRect;
+	}
+	
+
+	
 }
 
 
@@ -68,7 +84,7 @@ void Barricade::DrawSelected()
 }
 
 
-int Barricade::RecieveDamage(int damage)
+int Barricade::RecieveDamage(float damage)
 {
 	if (hitPointsCurrent > 0)
 	{
@@ -96,6 +112,12 @@ void Barricade::Die()
 {
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+
+
+	//if (direction == DIRECTION_BARRICADE::VERTICAL)
+		//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
+	//else if (direction == DIRECTION_BARRICADE::HORIZONTAL)
+		//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 10, position.y), 1, 3);
 
 	if (minimapIcon != nullptr)
 	{
@@ -147,6 +169,15 @@ void Barricade::SetLevel(int lvl)
 {
 	for (int i = 1; i < lvl; i++)
 	{
-		//LevelUp() TODO
+		LevelUp();
 	}
+}
+
+
+void Barricade::LevelUp()
+{
+	hitPointsMax += hpIncrease;
+	hitPointsCurrent = hitPointsMax;
+
+	barricadeLvl++;
 }

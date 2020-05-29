@@ -42,9 +42,10 @@ class Turret : public Building
 
 public:
 
-	Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+	Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 		Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
-		Animation& shootingLeftDown, int maxHitPoints = 100, int currentHitPoints = 100, int recoveryHitPointsRate=5, int xpOnDeath=100, int buildingCost=50, int transparency = 0);
+		Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, int damageIncrease, int rangeIncrease, 
+		float speedIncrease, float hpIncrease);
 
 	Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement);
 
@@ -66,8 +67,9 @@ public:
 
 	void DrawSelected();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 
+	void LevelUp();
 
 private:
 
@@ -88,13 +90,25 @@ private:
 
 	void StateMachine();
 
+	void ResetBonusStats();
+
+public:
+	float bonusDamage;
+	float bonusArmor;
+
+
 private:
 	int turretLvl;
 	int attackDmg;
-	int attackSpeed;
+	float attackSpeed;
 	float attackCD;
 	int range;
 	int vision;
+
+	int damageIncrease;
+	int rangeIncrease;
+	float speedIncrease;
+	float hpIncrease;
 
 	Animation idleRight;
 	Animation idleRightUp;

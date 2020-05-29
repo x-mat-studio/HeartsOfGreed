@@ -9,7 +9,8 @@ Button::Button(fMPoint positionValue, UI* father, SDL_Rect rect, bool dragable, 
 
 	buttonTag(buttonTag),
 	clicked(false),
-	focusedFirstFrame(true)
+	focusedFirstFrame(true),
+	scaledRect({0, 0, 0, 0})
 {
 	if (scaled.w != 0)
 	{
@@ -98,6 +99,11 @@ void Button::Draw(float dt)
    if (rect.h == 15)
    {
 	   app->render->Blit(texture, position.x, position.y, &scaledRect, false, false, alpha, r, g, b, 0.15f);
+   }
+
+   else if (rect.h == 30)
+   {
+	   app->render->Blit(texture, position.x, position.y, &scaledRect, false, false, alpha, r, g, b, 0.30f);
    }
 
    else

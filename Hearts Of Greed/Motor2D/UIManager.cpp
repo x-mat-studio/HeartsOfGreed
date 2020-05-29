@@ -17,6 +17,7 @@
 #include "MainMenuScene.h"
 #include "TestScene.h"
 #include "EventManager.h"
+#include "QuestManager.h"
 #include "Textures.h"
 #include "FadeToBlack.h"
 #include "DialogManager.h"
@@ -28,6 +29,7 @@
 #include "EasingFunctions.h"
 
 #include "Base.h"
+#include "UpgradeCenter.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModuleUIManager::ModuleUIManager() :
@@ -44,6 +46,8 @@ ModuleUIManager::ModuleUIManager() :
 	factory(nullptr),
 	clickSound(-1),
 	hoverSound(-1),
+	easyIn(-1),
+	easyOut(-1),
 	lastFramePauseEasingActive(false),
 	goingToPause(false)
 {
@@ -119,6 +123,8 @@ bool ModuleUIManager::Start()
 
 	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
 	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
+	easyIn = app->audio->LoadFx("audio/sfx/Interface/Easy_in.wav");
+	easyOut = app->audio->LoadFx("audio/sfx/Interface/Easy_out.wav");
 
 	return ret;
 }
@@ -178,6 +184,7 @@ bool ModuleUIManager::Update(float dt)
 		pauseAnimPosY.UpdateEasingAddingTime(dt);
 		pauseAnimScale.UpdateEasingAddingTime(dt);
 		pauseAnimAlpha.UpdateEasingAddingTime(dt);
+		pauseAnimRectAlpha.UpdateEasingAddingTime(dt);
 	}
 
 
@@ -202,6 +209,8 @@ bool ModuleUIManager::PostUpdate(float dt)
 	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
 	{
 		SDL_Rect r = { 1107, 392, 388,462 };
+		app->render->DrawQuad(SDL_Rect{ 0, 0, (int)app->win->width, (int)app->win->height }, 0, 0, 0, pauseAnimRectAlpha.GetLastRequestedPos(), true, false);
+
 		app->render->Blit(atlas, pauseAnimPosX.GetLastRequestedPos(), pauseAnimPosY.GetLastRequestedPos(), &r, false, false, pauseAnimAlpha.GetLastRequestedPos(), 255, 255, 255, pauseAnimScale.GetLastRequestedPos());
 
 		//SDL_RenderCopy(app->render->renderer, atlas, &r, &blitR);
@@ -282,7 +291,8 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 	UI_Group* group = nullptr;
 
-
+	ENTITY_TYPE hero1;
+	ENTITY_TYPE hero2;
 
 	switch (eventId)
 	{
@@ -337,14 +347,14 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
 		{
-
+			
 			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 			break;
 		}
 
 		else if (app->testScene->IsEnabled() == true)
 		{
-
+			
 			app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
@@ -378,7 +388,9 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::CREATE_DIALOG_WINDOW:
-		group = factory->CreateDialogMenu(ENTITY_TYPE::HERO_GATHERER, ENTITY_TYPE::HERO_GATHERER);
+		hero1 = app->questManager->RequestCharacter1();
+		hero2 = app->questManager->RequestCharacter2();
+		group = factory->CreateDialogMenu(hero1, hero2);
 		AddUIGroup(group);
 		app->gamePause = true;
 		break;
@@ -389,12 +401,15 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::START_PAUSE_ANIM:
+		
 		if (app->gamePause == false&&pauseAnimPosX.IsActive()==false)
 		{
+			app->audio->PlayFx(easyIn, 0, -1);
 			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 6, 64, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.01, 0.5, 0.7);
 			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 1, 255, 0.7);
+			pauseAnimRectAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 1, 200, 0.7);
 			goingToPause = true;
 		}
 		break;
@@ -402,10 +417,12 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::START_PAUSE_ANIM_BACKWARDS:
 		if (app->gamePause == false && pauseAnimPosX.IsActive() == false)
 		{
+			app->audio->PlayFx(easyOut, 0, -1);
 			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 223, 610, 0.7);
 			pauseAnimPosY.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 64, 6, 0.7);
 			pauseAnimScale.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 0.5, 0.01, 0.7);
 			pauseAnimAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 255, 1, 0.7);
+			pauseAnimRectAlpha.NewEasing(EASING_TYPE::EASE_OUT_QUINT, 200, 1, 0.7);
 			goingToPause = false;
 		}
 		break;
@@ -586,6 +603,8 @@ void ModuleUIManager::UnregisterEvents()
 
 void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 {
+	UpgradeCenter* building = nullptr;
+
 	switch (tag)
 	{
 	case BUTTON_TAG::NULL_TAG:
@@ -702,23 +721,50 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:
-		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= app->player->GetTurretCost() && app->player->IsBuilding() == false)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::UPGRADE_TURRET:
-		app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
+
+		building = (UpgradeCenter*)app->player->focusedEntity;
+
+		if (app->player->GetResources() >= factory->turretUpgradeCost && building->GetTurretLevel() < MAX_TURRET_LEVEL)
+		{
+			app->player->AddResources(-factory->turretUpgradeCost);
+			
+			building->UpgradeTurrets();
+		}
 		break;
 
 	case BUTTON_TAG::BUY_UPGRADE_CENTER:
-		app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= app->player->GetUpgradeCenterCost() && app->player->IsBuilding() == false)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		if (app->player->GetResources() >= app->player->GetBarricadeCost() && app->player->IsBuilding() == false)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
+		}
 		break;
 
 	case BUTTON_TAG::UPGRADE_BARRICADE:
-		app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
+
+		building = (UpgradeCenter*)app->player->focusedEntity;
+
+		if (app->player->GetResources() >= factory->barricadeUpgradeCost && building->GetBarricadeLevel() < MAX_BARRICADE_LEVEL)
+		{
+			app->player->AddResources(-factory->barricadeUpgradeCost);
+			
+			
+
+			building->UpgradeBarricades();
+		}
 		break;
 
 	case BUTTON_TAG::GATHERER_LIFE_UPGRADE:

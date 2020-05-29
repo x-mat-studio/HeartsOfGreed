@@ -7,7 +7,7 @@
 
 Quest::Quest(int x, int y) :
 
-	Entity(position, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
+	Entity(fMPoint{(float)x,(float)y}, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
 	myState(QUEST_STATE::INACTIVE),
 
 	id(-1)
@@ -15,7 +15,7 @@ Quest::Quest(int x, int y) :
 	SDL_Rect auxQ{ x, y,128,128 };
 	collider = app->coll->AddCollider(auxQ, COLLIDER_QUEST, app->questManager, this);
 
-	texture = app->questManager->GetTexture();
+	//texture = app->questManager->GetTexture(); //placeholder texture is now null due to alex request
 }
 
 
@@ -34,6 +34,12 @@ Quest::~Quest()
 {
 	id = -1;
 	myState = QUEST_STATE::ST_UNKNOWN;
+	
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->SetActiveState(false);
+	}
+
 }
 
 
@@ -41,7 +47,8 @@ Quest::~Quest()
 void Quest::Draw(float dt)
 {
 
-	if (this->myState == QUEST_STATE::INACTIVE) {
+	if (this->myState == QUEST_STATE::INACTIVE) 
+	{
 		app->render->Blit(texture, position.x, position.y, 0, false, true, 0, 255, 255, 255, 1.0f);
 	}
 	// blit my particle effect here
@@ -53,6 +60,11 @@ void Quest::OnCollision(Collider* collider)
 	this->myState = QUEST_STATE::ACTIVE;
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+	}
 	
 	app->questManager->QuestStarted(id);
 
@@ -75,5 +87,24 @@ int Quest::GetId() const
 void Quest::SetId(int i)
 {
 	id = i;
+
+
+	switch (id)
+	{
+	case 2:
+		collider->rect = { collider->rect.x, collider->rect.y, 150,750 };
+		break;
+
+
+	case 5:
+		collider->rect = { collider->rect.x, collider->rect.y, 450,450 };
+		break;
+
+	case 6:
+		collider->rect = { collider->rect.x, collider->rect.y, 450,450 };
+		collider->Activate();
+		break;
+
+	}
 }
 

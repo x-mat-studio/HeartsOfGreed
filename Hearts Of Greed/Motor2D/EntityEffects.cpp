@@ -11,10 +11,12 @@ EntityEffects::~EntityEffects()
 }
 
 
-void EntityEffects::AddNewEffect(SKILL_EFFECT& effect, float time, float severity)
+void EntityEffects::AddNewEffect(SKILL_EFFECT effect, float time, float severity)
 {
 	effects[effect].time = time;
 	effects[effect].severity = severity;
+
+	effects[effect].active = true;
 
 	StartEffect(effect);
 }
@@ -32,6 +34,8 @@ void EntityEffects::UpdateEffects(float dt)
 			UpdateEffect(SKILL_EFFECT(i));
 			effects[i].time -= dt;
 		}
+		else if (effects[i].active == true)
+			EndEffect(SKILL_EFFECT(i));
 	}
 
 }
@@ -62,17 +66,55 @@ void EntityEffects::StartEffect(SKILL_EFFECT effect)
 	{
 	case SKILL_EFFECT::SLOWDOWN:
 
+		if (callback->dynamic == true)
+		{
+			DynamicEntity* dynamic = (DynamicEntity*)callback;
+
+			int unitSpeed = effects[effect].statTaken = dynamic->GetSpeed();
+
+			int subtractSpeed = effects[effect].severity * unitSpeed;
+
+			dynamic->SetSpeed(unitSpeed - subtractSpeed);
+		}
+
 		break;
 
 
 	case SKILL_EFFECT::BLOOD_LOSS:
 
-		float currHp = callback->GetCurrentHP();
+		float maxHp = callback->GetMaxHP();
 
-		effects[effect].statTaken = currHp / effects[effect].severity / effects[effect].time / 60;
+		effects[effect].statTaken = maxHp / effects[effect].severity / effects[effect].time / 60;
 
 		break;
 	}
+}
+
+
+void EntityEffects::EndEffect(SKILL_EFFECT effect)
+{
+	DynamicEntity* dynamic = nullptr;
+
+	switch (effect)
+	{
+	case SKILL_EFFECT::SLOWDOWN:
+
+		dynamic = (DynamicEntity*)callback;
+		dynamic->SetSpeed(effects[effect].statTaken);
+
+		break;
+
+
+	case SKILL_EFFECT::BLOOD_LOSS:
+
+		float maxHp = callback->GetMaxHP();
+
+		effects[effect].statTaken = maxHp / effects[effect].severity / effects[effect].time / 60;
+
+		break;
+	}
+
+	effects[effect].active = false;
 }
 
 
@@ -82,16 +124,7 @@ void EntityEffects::UpdateEffect(SKILL_EFFECT effect)
 	{
 	case SKILL_EFFECT::SLOWDOWN:
 	
-		if (callback->dynamic == true)
-		{
-			DynamicEntity* dynamic = (DynamicEntity*)callback;
-
-			int unitSpeed = dynamic->GetSpeed();
-
-			int subtractSpeed = effects[effect].severity * unitSpeed;
-
-			dynamic->SetSpeed(unitSpeed - subtractSpeed);
-		}
+		
 		break;
 
 
@@ -102,10 +135,16 @@ void EntityEffects::UpdateEffect(SKILL_EFFECT effect)
 		break;
 
 	}
-
-
 }
 
 
-SkillEffect::SkillEffect() : time(0.f), severity(0.f), statTaken(0)
+void EntityEffects::SetCallBack(Entity* entity)
+{
+	callback = entity;
+}
+
+
+SkillEffect::SkillEffect() : time(0.f), severity(0.f), statTaken(0), active(false)
 {}
+
+

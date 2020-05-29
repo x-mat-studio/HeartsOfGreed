@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
-
+#include "EasingFunctions.h"
 
 class ModuleLoseScene : public Module
 {
@@ -38,7 +38,7 @@ public:
 
 private:
 
-	void ExecuteEvent(EVENT_ENUM eventId) const;
+	void ExecuteEvent(EVENT_ENUM eventId) const; 
 
 private:
 	//images
@@ -49,10 +49,14 @@ private:
 	fMPoint medalPos;
 
 	//sounds
-	//int winMusic;
+	int medalBounce;
 
 
 	float fadeTime;
+	Easing iconPosY;
+	float bufferPos;
+	bool medalRest;
+	bool backToMain;
 
 };
 

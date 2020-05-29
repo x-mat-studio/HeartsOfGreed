@@ -7,26 +7,30 @@
 #include "Window.h"
 #include "EntityManager.h"
 #include "EventManager.h"
+#include "UI_Group.h"
 #include "UIManager.h"
+#include "UIFactory.h"
 #include "UI.h"
 #include "Player.h"
 #include "FoWManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
+#include "TestScene.h"
+#include "Entity.h"
 
-
-MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet) :
-	
+MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet, Entity* nparent) :
 	toDelete(false),
-	type(type), 
-	offSet(offSet), 
-	minimapPos(worldPos)
-
+	type(type),
+	offSet(offSet),
+	minimapPos(worldPos),
+	parent(nparent),
+	active(true)
 {}
 
 
 MinimapIcon::~MinimapIcon()
 {
 	minimapPos = nullptr;
+	parent = nullptr;
 }
 
 void MinimapIcon::Draw(SDL_Rect sourceRect)
@@ -39,8 +43,31 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 	}
 }
 
+void MinimapIcon::SetActiveState(bool isActive)
+{
+	active = isActive;
+}
 
-Minimap::Minimap() :minimapLoaded(false),minimapFoWNeedsUpdate(false)
+bool MinimapIcon::IsActive() const
+{
+	return active;
+}
+
+
+Minimap::Minimap() :
+	minimapLoaded(false),
+	minimapFoWNeedsUpdate(false),
+	miniFrame({ 509, 706, 238, 125 }),
+	positionFrame({ 0,0,0,0 }),
+	camRect({ 0,0,0,0 }),
+	minimapTexture(nullptr),
+	minimapFrame(nullptr),
+	minimapHeight(0),
+	width(0),
+	position({ 0,0 }),
+	height(0),
+	minimapWidth(0),
+	minimapScaleRelation(0)
 {
 	name = "minimap";
 }
@@ -112,25 +139,24 @@ bool Minimap::Update(float dt)
 
 	CheckListener(this);
 
-	if (minimapLoaded==true)
+	if (minimapLoaded == true)
 	{
 		iMPoint mousePos = app->input->GetMousePosScreen();
 		int w;
 		int h;
-		
+
 		app->render->GetCameraMeasures(w, h);
 
 		float scale = app->win->GetScale();
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			if (ClickingOnMinimap(mousePos.x, mousePos.y) == true && app->player->doingAction==false)
+			if (ClickingOnMinimap(mousePos.x, mousePos.y) == true && app->player->doingAction == false)
 			{
 				//camera TP
 				iMPoint newCamPos = ScreenToMinimapToWorld(mousePos.x, mousePos.y);
-
 				app->render->currentCamX = -((newCamPos.x * scale) - (w * 0.5f));
 				app->render->currentCamY = -((newCamPos.y * scale) - (h * 0.5f));
-
+				app->testScene->SetCamEasingState(false);//TODO make this be an event to be able to erase the testscene.h include
 			}
 		}
 	}
@@ -144,7 +170,7 @@ bool Minimap::PostUpdate(float dt)
 	bool ret = true;
 	BROFILER_CATEGORY("Minimap PostUpdate", Profiler::Color::DarkSlateBlue);
 
-	if (minimapLoaded==true)
+	if (minimapLoaded == true)
 	{
 		if (minimapFoWNeedsUpdate == true)
 		{
@@ -153,39 +179,70 @@ bool Minimap::PostUpdate(float dt)
 		}
 		//app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 		//FoW Draw
+
+
+		//Chenges the texture tint if is nighttime
+		if (app->testScene->IsNight() == true)
+		{
+			SDL_SetTextureColorMod(minimapTexture, 96, 63, 148);
+		}
+
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
+
+		SDL_SetTextureColorMod(minimapTexture, 255, 255, 255);
+
+		positionFrame = { -14, 496, 465, 240 };
+		SDL_RenderCopy(app->render->renderer, app->uiManager->GetAtlasTexture(), &miniFrame, &positionFrame);
+
 
 		//Draw icons
 		SDL_Rect iconRect = { 0,0,0,0 };
 		for (int i = 0; i < minimapIcons.size(); i++)
 		{
-			switch (minimapIcons[i]->type)
+			if (minimapIcons[i]->IsActive() == true)
 			{
-			case MINIMAP_ICONS::BASE:
-				iconRect = { 12, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::TURRET:
-				iconRect = { 20, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::ENEMY_TURRET:
-				iconRect = { 16, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::HERO:
-				iconRect = { 8, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::ENEMY:
-				iconRect = { 0, 504, 4, 4};
-				break;
-			case MINIMAP_ICONS::ENEMY_BASE:
-				iconRect = { 4, 504, 4, 4 };
-				break;
-			case MINIMAP_ICONS::NONE:
-				iconRect = { 0, 0, 0, 0 };
-				break;
+				bool visible = true; //todo kind of redundant visible code, take a look at that for the gold
+				if (minimapIcons[i]->parent != nullptr && minimapIcons[i]->parent->visionEntity != nullptr)
+				{
+					if (minimapIcons[i]->parent->visionEntity->isVisible == false)
+					{
+						visible = false;
+					}
+				}
+
+				if (visible == true)
+				{
+					switch (minimapIcons[i]->type)
+					{
+					case MINIMAP_ICONS::BASE:
+						iconRect = { 12, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::TURRET:
+						iconRect = { 20, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::ENEMY_TURRET:
+						iconRect = { 16, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::HERO:
+						iconRect = { 8, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::ENEMY:
+						iconRect = { 0, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::ENEMY_BASE:
+						iconRect = { 4, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::QUEST:
+						iconRect = { 24, 504, 4, 4 };//TODO change this
+						break;
+					case MINIMAP_ICONS::NONE:
+						iconRect = { 0, 0, 0, 0 };
+						break;
+					}
+
+					minimapIcons[i]->Draw(iconRect);
+				}
 			}
-
-			minimapIcons[i]->Draw(iconRect);
-
 		}
 
 
@@ -323,7 +380,7 @@ void Minimap::LoadMinimap()
 	CreateMinimapText();
 	SDL_SetRenderTarget(app->render->renderer, NULL);
 	minimapFoWNeedsUpdate = true;
-	
+
 }
 
 void Minimap::UpdateMinimapFoW()
@@ -381,11 +438,11 @@ iMPoint Minimap::ScreenToMinimapToWorld(int x, int y) {
 	return minimap_position;
 }
 
-MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offset)
+MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offset, Entity* parent)
 {
 	MinimapIcon* icon = nullptr;
 
-	icon = new MinimapIcon(worldPos, type, offset);
+	icon = new MinimapIcon(worldPos, type, offset, parent);
 
 	if (icon != nullptr)
 	{
@@ -393,4 +450,12 @@ MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint 
 	}
 
 	return icon;
+}
+
+void Minimap::SetAllIconsActiveState(bool areActive)
+{
+	for (int i = 0; i < minimapIcons.size(); i++)
+	{
+		minimapIcons[i]->SetActiveState(areActive);
+	}
 }

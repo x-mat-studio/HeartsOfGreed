@@ -37,7 +37,7 @@ public:
 	UI_Group* CreateCreditsMenu();
 
 	UI_Group* CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE character2);
-
+	
 	// Image creation functions
 
 	UI* CreateImage(float x, float y, UI* parent, SDL_Rect rect, UI_Group* group, bool dragable = false, bool interactable = true);
@@ -157,6 +157,9 @@ public:
 	void CreateRobottoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateSpeedomingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateSnipermingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateGigamingoPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
@@ -178,6 +181,7 @@ private:
 	// Image SDL_Rect
 
 	SDL_Rect portraitBackground;
+	SDL_Rect portraitRoundBackground;
 	SDL_Rect portraitLevelBackground;
 	SDL_Rect portraitHealthbarBackground;
 	SDL_Rect portraitHealthbarGreenImage;
@@ -201,9 +205,15 @@ private:
 	SDL_Rect robottoShopPicture;
 	SDL_Rect robottoBigPicture;
 	SDL_Rect baseDataPagePicture;
+	SDL_Rect upgradeCenterDataPagePicture;
 	SDL_Rect turretDataPagePicture;
+	SDL_Rect barricadeDataPagePicture;
 	SDL_Rect wanamingoDataPagePicture;
+	SDL_Rect speedomingoDataPagePicture;
+	SDL_Rect snipermingoDataPagePicture;
+	SDL_Rect gigamingoDataPagePicture;
 	SDL_Rect turretShopPicture;
+	SDL_Rect barricadeShopPicture;
 
 	SDL_Rect resourceIcon;
 	SDL_Rect resourceIconSkill;
@@ -229,7 +239,11 @@ private:
 	//	SDL_Rect hideLeftButton;
 	//	SDL_Rect hideRightButton;
 	SDL_Rect shopButton;
-	SDL_Rect reviveButton;
+	SDL_Rect upgradeCenterPurchaseButton;
+	SDL_Rect reviveGathererButton;
+	SDL_Rect reviveMeleeButton;
+	SDL_Rect reviveRangedButton;
+	SDL_Rect reviveRobottoButton;
 
 	SDL_Rect okButton;
 
@@ -244,6 +258,11 @@ private:
 	SDL_Rect meleHeroIcon;
 	SDL_Rect rangedHeroIcon;
 	SDL_Rect robottoHeroIcon;
+	SDL_Rect gathererHeroPortrait;
+	SDL_Rect meleHeroPortrait;
+	SDL_Rect rangedHeroPortrait;
+	SDL_Rect robottoHeroPortrait;
+	SDL_Rect hqCommanderPortrait;
 
 	SDL_Rect ugradeSkillButton;
 
@@ -260,6 +279,8 @@ private:
 	SDL_Rect meleeActive1Button;
 	SDL_Rect rangedActive1Button;
 	SDL_Rect robottoActive1Button;
+
+	SDL_Rect dayNightIcon;
 
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;
@@ -294,6 +315,8 @@ public:
 	float robottoAtkSpeedUpgradeCost;
 
 	int reviveCost;
+	int turretUpgradeCost;
+	int barricadeUpgradeCost;
 };
 
 #endif __UIFACTORY_H__

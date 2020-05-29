@@ -10,8 +10,27 @@ ModuleDialogManager::ModuleDialogManager() :
 	currentDialog2(nullptr),
 
 	//TUTORIAL-------------
-	dialogTutorialStart(),
-	dialogTutorialEnd(),
+	dialogTutorial1_ST_A1(),
+	dialogTutorial1_ST_B1(),
+	dialogTutorial1_ST_A2(),
+	dialogTutorial1_ST_B2(),
+
+	dialogTutorial1_END_A1(),
+	dialogTutorial1_END_B1(),
+
+	//Tutorial 2 ---------
+	dialogTutorial2_ST_A1(),
+	dialogTutorial2_ST_B1(),
+	dialogTutorial2_END_A1(),
+	dialogTutorial2_END_B1(),
+
+	//Tutorial 3 ---------
+	dialogTutorial3_ST_A1(),
+	dialogTutorial3_ST_B1(),
+	dialogTutorial3_ST_A2(),
+
+	dialogTutorial3_END_A1(),
+	dialogTutorial3_END_B1(),
 
 	//Quest 1 ------------
 	dialogMission1_ST_B1(),
@@ -51,7 +70,7 @@ ModuleDialogManager::ModuleDialogManager() :
 
 ModuleDialogManager::~ModuleDialogManager()
 {
-	
+
 	input = DIALOG_INPUT::INPUT_ERROR;
 	state = DIALOG_STATE::ERROR_DIALOG;
 
@@ -59,37 +78,56 @@ ModuleDialogManager::~ModuleDialogManager()
 	currentDialog2 = nullptr;
 
 	//TUTORIAL-------------
-	 dialogTutorialStart.Clear();
-	 dialogTutorialEnd.Clear();
+	dialogTutorial1_ST_A1.Clear();
+	dialogTutorial1_ST_B1.Clear();
+	dialogTutorial1_ST_A2.Clear();
+	dialogTutorial1_ST_B2.Clear();
+
+	dialogTutorial1_END_A1.Clear();
+	dialogTutorial1_END_B1.Clear();
+
+	//Tutorial 2 ---------
+	dialogTutorial2_ST_A1.Clear();
+	dialogTutorial2_ST_B1.Clear();
+	dialogTutorial2_END_A1.Clear();
+	dialogTutorial2_END_B1.Clear();
+
+	//Tutorial 3 ---------
+	dialogTutorial3_ST_A1.Clear();
+	dialogTutorial3_ST_B1.Clear();
+	dialogTutorial3_ST_A2.Clear();
+
+	dialogTutorial3_END_A1.Clear();
+	dialogTutorial3_END_B1.Clear();
 
 	//Quest 1 ------------
-	 dialogMission1_ST_B1.Clear();
-	 dialogMission1_ST_A1.Clear();
-	 dialogMission1_ST_B2.Clear();
+	dialogMission1_ST_B1.Clear();
+	dialogMission1_ST_A1.Clear();
+	dialogMission1_ST_B2.Clear();
 
-	 dialogMission1_END_A2.Clear();
-	 dialogMission1_END_B3.Clear();
+	dialogMission1_END_A2.Clear();
+	dialogMission1_END_B3.Clear();
 
 	//Quest 2 ------------
-	 dialogMission2_ST_B1.Clear();
-	 dialogMission2_ST_A1.Clear();
+	dialogMission2_ST_B1.Clear();
+	dialogMission2_ST_A1.Clear();
 
-	 dialogMission2_END_A2.Clear();
-	 dialogMission2_END_B2.Clear();
+	dialogMission2_END_A2.Clear();
+	dialogMission2_END_B2.Clear();
 
 	//Quest 3 ------------
-	 dialogMission3_ST_A1.Clear();
+	dialogMission3_ST_A1.Clear();
 
-	 dialogMission3_END_B1.Clear();
-	 dialogMission3_END_A2.Clear();
-	 dialogMission3_END_B2.Clear();
+	dialogMission3_END_B1.Clear();
+	dialogMission3_END_A2.Clear();
+	dialogMission3_END_B2.Clear();
 
 	//Quest 4 ------------
-	 dialogMission4_ST_A1.Clear();
-	 dialogMission4_ST_A2.Clear();
+	dialogMission4_ST_A1.Clear();
+	dialogMission4_ST_A2.Clear();
 
-	 dialogMission4_END_B1.Clear();
-	 dialogMission4_END_A3.Clear();
+	dialogMission4_END_B1.Clear();
+	dialogMission4_END_A3.Clear();
 }
 
 
@@ -107,45 +145,59 @@ bool ModuleDialogManager::Awake(pugi::xml_node& data)
 	//Assign dialogues to strings
 
 	//TUTORIAL-------------
-	 dialogTutorialStart		= (P2SString)dialogue.child("tutorial").child("start").child("entry1").attribute("text").as_string();
-	 dialogTutorialStart_B		= (P2SString)dialogue.child("tutorial").child("start").child("entry2").attribute("text").as_string();
+		//Tutorial 1 --------
+	dialogTutorial1_ST_A1 = (P2SString)dialogue.child("tutorial1").child("start").child("entry1").attribute("text").as_string();
+	dialogTutorial1_ST_B1 = (P2SString)dialogue.child("tutorial1").child("start").child("entry2").attribute("text").as_string();
+	dialogTutorial1_ST_A2 = (P2SString)dialogue.child("tutorial1").child("start").child("entry3").attribute("text").as_string();
+	dialogTutorial1_ST_B2 = (P2SString)dialogue.child("tutorial1").child("start").child("entry4").attribute("text").as_string();
 
-	 dialogTutorialEnd			= (P2SString)dialogue.child("tutorial").child("finish").child("entry1").attribute("text").as_string();
-	 dialogTutorialEnd_B		= (P2SString)dialogue.child("tutorial").child("finish").child("entry2").attribute("text").as_string();
+	dialogTutorial1_END_A1 = (P2SString)dialogue.child("tutorial1").child("finish").child("entry1").attribute("text").as_string();
+	dialogTutorial1_END_B1 = (P2SString)dialogue.child("tutorial1").child("finish").child("entry2").attribute("text").as_string();
 
-	 dialogTutorialStart2		= (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
-	 dialogTutorialStart2_B		= (P2SString)dialogue.child("tutorial2").child("start").child("entry2").attribute("text").as_string();
+	//Tutorial 2 --------
+	dialogTutorial2_ST_A1 = (P2SString)dialogue.child("tutorial2").child("start").child("entry1").attribute("text").as_string();
+	dialogTutorial2_ST_B1 = (P2SString)dialogue.child("tutorial2").child("start").child("entry2").attribute("text").as_string();
 
-	 dialogTutorialEnd2			= (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
+	dialogTutorial2_END_A1 = (P2SString)dialogue.child("tutorial2").child("finish").child("entry1").attribute("text").as_string();
+	dialogTutorial2_END_B1 = (P2SString)dialogue.child("tutorial2").child("finish").child("entry2").attribute("text").as_string();
+
+
+	//Tutorial 3 --------
+	dialogTutorial3_ST_A1 = (P2SString)dialogue.child("tutorial3").child("start").child("entry1").attribute("text").as_string();
+	dialogTutorial3_ST_B1 = (P2SString)dialogue.child("tutorial3").child("start").child("entry2").attribute("text").as_string();
+	dialogTutorial3_ST_A2 = (P2SString)dialogue.child("tutorial3").child("start").child("entry3").attribute("text").as_string();
+
+	dialogTutorial3_END_A1 = (P2SString)dialogue.child("tutorial3").child("finish").child("entry1").attribute("text").as_string();
+	dialogTutorial3_END_B1 = (P2SString)dialogue.child("tutorial3").child("finish").child("entry2").attribute("text").as_string();
 
 	//Quest 1 ------------
-	 dialogMission1_ST_B1		= dialogue.child("dialog1").child("start").child("entry1").attribute("text").as_string();
-	 dialogMission1_ST_A1		= dialogue.child("dialog1").child("start").child("entry2").attribute("text").as_string();
-	 dialogMission1_ST_B2		= dialogue.child("dialog1").child("start").child("entry3").attribute("text").as_string();
+	dialogMission1_ST_B1 = dialogue.child("dialog1").child("start").child("entry1").attribute("text").as_string();
+	dialogMission1_ST_A1 = dialogue.child("dialog1").child("start").child("entry2").attribute("text").as_string();
+	dialogMission1_ST_B2 = dialogue.child("dialog1").child("start").child("entry3").attribute("text").as_string();
 
-	 dialogMission1_END_A2		= dialogue.child("dialog1").child("finish").child("entry1").attribute("text").as_string();
-	 dialogMission1_END_B3		= dialogue.child("dialog1").child("finish").child("entry2").attribute("text").as_string();
+	dialogMission1_END_A2 = dialogue.child("dialog1").child("finish").child("entry1").attribute("text").as_string();
+	dialogMission1_END_B3 = dialogue.child("dialog1").child("finish").child("entry2").attribute("text").as_string();
 
 	//Quest 2 ------------
-	 dialogMission2_ST_B1		= dialogue.child("dialog2").child("start").child("entry1").attribute("text").as_string();
-	 dialogMission2_ST_A1		= dialogue.child("dialog2").child("start").child("entry2").attribute("text").as_string();
+	dialogMission2_ST_B1 = dialogue.child("dialog2").child("start").child("entry1").attribute("text").as_string();
+	dialogMission2_ST_A1 = dialogue.child("dialog2").child("start").child("entry2").attribute("text").as_string();
 
-	 dialogMission2_END_A2		= dialogue.child("dialog2").child("finish").child("entry1").attribute("text").as_string();
-	 dialogMission2_END_B2		= dialogue.child("dialog2").child("finish").child("entry2").attribute("text").as_string();
+	dialogMission2_END_A2 = dialogue.child("dialog2").child("finish").child("entry1").attribute("text").as_string();
+	dialogMission2_END_B2 = dialogue.child("dialog2").child("finish").child("entry2").attribute("text").as_string();
 
 	//Quest 3 ------------
-	 dialogMission3_ST_A1		= dialogue.child("dialog3").child("start").child("entry1").attribute("text").as_string();
+	dialogMission3_ST_A1 = dialogue.child("dialog3").child("start").child("entry1").attribute("text").as_string();
 
-	 dialogMission3_END_B1		= dialogue.child("dialog3").child("finish").child("entry1").attribute("text").as_string();
-	 dialogMission3_END_A2		= dialogue.child("dialog3").child("finish").child("entry2").attribute("text").as_string();
-	 dialogMission3_END_B2		= dialogue.child("dialog3").child("finish").child("entry3").attribute("text").as_string();
+	dialogMission3_END_B1 = dialogue.child("dialog3").child("finish").child("entry1").attribute("text").as_string();
+	dialogMission3_END_A2 = dialogue.child("dialog3").child("finish").child("entry2").attribute("text").as_string();
+	dialogMission3_END_B2 = dialogue.child("dialog3").child("finish").child("entry3").attribute("text").as_string();
 
 	//Quest 4 ------------
-	 dialogMission4_ST_A1		= dialogue.child("dialog4").child("start").child("entry1").attribute("text").as_string();
-	 dialogMission4_ST_A2		= dialogue.child("dialog4").child("start").child("entry2").attribute("text").as_string();
+	dialogMission4_ST_A1 = dialogue.child("dialog4").child("start").child("entry1").attribute("text").as_string();
+	dialogMission4_ST_A2 = dialogue.child("dialog4").child("start").child("entry2").attribute("text").as_string();
 
-	 dialogMission4_END_B1		= dialogue.child("dialog4").child("finish").child("entry1").attribute("text").as_string();
-	 dialogMission4_END_A3		= dialogue.child("dialog4").child("finish").child("entry2").attribute("text").as_string();
+	dialogMission4_END_B1 = dialogue.child("dialog4").child("finish").child("entry1").attribute("text").as_string();
+	dialogMission4_END_A3 = dialogue.child("dialog4").child("finish").child("entry2").attribute("text").as_string();
 
 
 	diagDoc.reset();
@@ -188,7 +240,7 @@ void ModuleDialogManager::ProcessFsm()
 			case DIALOG_INPUT::INPUT_ERROR:
 				assert("Input Error");
 				break;
-			
+
 
 			case DIALOG_INPUT::NEXT_DIALOG:
 				assert("Impossible to go to next dialog");
@@ -198,31 +250,47 @@ void ModuleDialogManager::ProcessFsm()
 			case DIALOG_INPUT::TUTORIAL_START:
 				state = DIALOG_STATE::TUTORIAL_ST;
 
-				currentDialog1 = &dialogTutorialStart;
-				currentDialog2 = &dialogTutorialStart_B;
+				currentDialog1 = &dialogTutorial1_ST_A1;
+				currentDialog2 = nullptr;
 				break;
 
 
 			case DIALOG_INPUT::TUTORIAL_END:
-				state = DIALOG_STATE::TUTORIAL_END;
+				state = DIALOG_STATE::TUTORIAL_END_B1;
 
-				currentDialog1 = &dialogTutorialEnd;
-				currentDialog2 = &dialogTutorialEnd_B;
+				currentDialog1 = &dialogTutorial1_END_A1;
+				currentDialog2 = nullptr;
 				break;
 
 
-			case DIALOG_INPUT::TUTORIAL_START2:
-				state = DIALOG_STATE::TUTORIAL_ST2;
+			case DIALOG_INPUT::TUTORIAL2_START:
+				state = DIALOG_STATE::TUTORIAL2_ST;
 
-				currentDialog1 = &dialogTutorialStart2;
-				currentDialog2 = &dialogTutorialStart2_B;
+				currentDialog1 = &dialogTutorial2_ST_A1;
+				currentDialog2 = nullptr;
 				break;
 
 
-			case DIALOG_INPUT::TUTORIAL_END2:
-				state = DIALOG_STATE::TUTORIAL_END2;
+			case DIALOG_INPUT::TUTORIAL2_END:
+				state = DIALOG_STATE::TUTORIAL2_END_B1;
 
-				currentDialog1 = &dialogTutorialEnd2;
+				currentDialog1 = &dialogTutorial2_END_A1;
+				currentDialog2 = nullptr;
+				break;
+
+
+			case DIALOG_INPUT::TUTORIAL3_START:
+				state = DIALOG_STATE::TUTORIAL3_ST_B1;
+
+				currentDialog1 = &dialogTutorial3_ST_A1;
+				currentDialog2 = nullptr;
+				break;
+
+
+			case DIALOG_INPUT::TUTORIAL3_END:
+				state = DIALOG_STATE::TUTORIAL3_END_B1;
+
+				currentDialog1 = &dialogTutorial3_END_A1;
 				currentDialog2 = nullptr;
 				break;
 
@@ -296,7 +364,87 @@ void ModuleDialogManager::ProcessFsm()
 
 
 		case DIALOG_STATE::TUTORIAL_ST:
-			
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL_ST_A2;
+
+				currentDialog2 = &dialogTutorial1_ST_B1;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_ST_A2:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL_ST_B2;
+
+				currentDialog1 = &dialogTutorial1_ST_A2;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_ST_B2:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL_ST_LAST;
+
+				currentDialog2 = &dialogTutorial1_ST_B2;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_ST_LAST:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL_END_B1;
+
+				currentDialog1 = &dialogTutorial1_END_A1;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_END_B1:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL_END_LAST;
+
+				currentDialog2 = &dialogTutorial1_END_B1;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL_END_LAST:
+
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
@@ -313,7 +461,112 @@ void ModuleDialogManager::ProcessFsm()
 			break;
 
 
-		case DIALOG_STATE::TUTORIAL_END:
+		case DIALOG_STATE::TUTORIAL2_ST:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL2_ST_LAST;
+
+				currentDialog2 = &dialogTutorial2_ST_B1;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL2_ST_LAST:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::IDLE_DIALOG;
+
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL2_END_B1:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL2_END_LAST;
+
+				currentDialog2 = &dialogTutorial2_END_B1;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL2_END_LAST:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::IDLE_DIALOG;
+
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::TUTORIAL3_START, EVENT_ENUM::NULL_EVENT);
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL3_ST_B1:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL3_ST_A2;
+
+				currentDialog2 = &dialogTutorial3_ST_B1;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL3_ST_A2:
+
+			switch (input)
+			{
+			case DIALOG_INPUT::NEXT_DIALOG:
+				state = DIALOG_STATE::TUTORIAL3_ST_LAST;
+
+				currentDialog1 = &dialogTutorial3_ST_A2;
+
+				break;
+			}
+
+			input = DIALOG_INPUT::NULL_INPUT;
+			break;
+
+
+		case DIALOG_STATE::TUTORIAL3_ST_LAST:
 
 			switch (input)
 			{
@@ -331,17 +584,15 @@ void ModuleDialogManager::ProcessFsm()
 			break;
 
 
-		case DIALOG_STATE::TUTORIAL_ST2:
-			
+		case DIALOG_STATE::TUTORIAL3_END_B1:
+
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
+				state = DIALOG_STATE::TUTORIAL3_END_LAST;
 
-				currentDialog1 = nullptr;
-				currentDialog2 = nullptr;
+				currentDialog2 = &dialogTutorial3_END_B1;
 
-				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -349,7 +600,7 @@ void ModuleDialogManager::ProcessFsm()
 			break;
 
 
-		case DIALOG_STATE::TUTORIAL_END2:
+		case DIALOG_STATE::TUTORIAL3_END_LAST:
 
 			switch (input)
 			{
@@ -515,7 +766,7 @@ void ModuleDialogManager::ProcessFsm()
 
 
 		case DIALOG_STATE::MISSION3_ST_A1:
-			
+
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
@@ -533,7 +784,7 @@ void ModuleDialogManager::ProcessFsm()
 
 
 		case DIALOG_STATE::MISSION3_END_B1:
-			
+
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
@@ -646,7 +897,7 @@ void ModuleDialogManager::ProcessFsm()
 			break;
 		}
 	}
-	
+
 }
 
 
@@ -659,7 +910,7 @@ bool ModuleDialogManager::PushInput(DIALOG_INPUT inp)
 
 	else
 		input = inp;
-		
+
 	return true;
 }
 

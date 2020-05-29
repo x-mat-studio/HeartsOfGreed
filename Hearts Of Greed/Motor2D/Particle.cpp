@@ -3,7 +3,20 @@
 #include "Render.h"
 #include "Map.h"
 
-Particle::Particle()
+Particle::Particle() :
+
+	position{ NULL, NULL },
+	speed{ NULL, NULL },
+	acceleration{ NULL, NULL },
+	angle(0),
+	angularSpeed(0),
+
+	life(0),
+	originalLife(0),
+	texture(nullptr),
+	fade(false),
+	active(false)
+
 {}
 
 
@@ -104,7 +117,7 @@ float Particle::GetAngularSpeed() const
 }
 
 
-float Particle::GetLife() const 
+float Particle::GetLife() const
 {
 	return life;
 }
@@ -116,7 +129,7 @@ SDL_Texture* Particle::GetTexture() const
 }
 
 
-void Particle::SetPosition(fMPoint& pos) 
+void Particle::SetPosition(fMPoint& pos)
 {
 	position = pos;
 }
@@ -128,19 +141,19 @@ void Particle::SetSpeed(fMPoint& spd)
 }
 
 
-void Particle::SetAcceleration(fMPoint& acc) 
+void Particle::SetAcceleration(fMPoint& acc)
 {
 	acceleration = acc;
 }
 
 
-void Particle::SetAngle(float ang) 
+void Particle::SetAngle(float ang)
 {
 	angle = ang;
 }
 
 
-void Particle::SetAngularSpeed(float aspd) 
+void Particle::SetAngularSpeed(float aspd)
 {
 	angularSpeed = aspd;
 }
@@ -186,9 +199,9 @@ void Particle::Draw(float dt)
 void Particle::Move(float dt)
 {
 	speed += acceleration * dt * TIME_CONST;
-	
+
 	position += speed * dt * TIME_CONST;
-	
+
 	angle += angularSpeed * dt * TIME_CONST;
 }
 

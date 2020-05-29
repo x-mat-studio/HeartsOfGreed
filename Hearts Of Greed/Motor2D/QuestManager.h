@@ -15,7 +15,7 @@ struct QuestInfo
 {
 public:
 
-	QuestInfo(int resourcesReward, int id, bool active = false);
+	QuestInfo(int resourcesReward, int id, bool noCombat = false, bool active = false);
 	~QuestInfo();
 
 	void StartQuest();
@@ -28,6 +28,9 @@ public:
 
 	bool Save(pugi::xml_node&) const;
 
+	int GetId() const;
+
+	void ClearQuestEntities();
 
 private:
 	void WinQuest();
@@ -37,6 +40,7 @@ private:
 
 public:
 	bool active;
+	bool noCombat;
 
 
 private:
@@ -75,16 +79,25 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
+	void AddQuest(Quest* questo);
+	ENTITY_TYPE RequestCharacter1();
+	ENTITY_TYPE RequestCharacter2();
+
 private:
 	void LoadQuests(pugi::xml_node&);
 
 	void ExecuteEvent(EVENT_ENUM eventId);
+
+public:
+	std::vector<Quest*> questColliderVector;
 
 private:
 
 	int questSfx;
 	int questFailed;
 	SDL_Texture* questMarker;
+	ENTITY_TYPE character1;
+	ENTITY_TYPE character2;
 	
 	std::vector<QuestInfo> questInfoVector;
 };

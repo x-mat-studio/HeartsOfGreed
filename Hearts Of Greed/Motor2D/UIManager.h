@@ -1,6 +1,9 @@
 #ifndef __UIMANAGER_H__
 #define __UIMANAGER_H__
 
+#define MAX_TURRET_LEVEL 5
+#define MAX_BARRICADE_LEVEL 5
+
 #include "Module.h"
 #include "Fonts.h"
 #include "EasingFunctions.h"
@@ -85,11 +88,11 @@ public:
 	void LowerVolumeOnPause();
 	void RaiseVolumeOnUnpause();
 
+	bool CheckGroupTag(GROUP_TAG tag);
+
 private:
 
 	void ExecuteEvent(EVENT_ENUM eventId);
-
-	bool CheckGroupTag(GROUP_TAG tag);
 
 	void CheckFocusedUI();
 
@@ -132,6 +135,8 @@ private:
 
 	int hoverSound;
 	int clickSound;
+	int easyIn;
+	int easyOut;
 
 	bool isMenuOn;
 
@@ -141,6 +146,7 @@ private:
 	Easing pauseAnimPosY;
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
+	Easing pauseAnimRectAlpha;
 };
 
 #endif //__UIMANAGER_H__

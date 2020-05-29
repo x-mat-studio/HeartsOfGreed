@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "Building.h" //necessary to read buildings from tiled
 #include "Quest.h"    //idem
+#include "QuestManager.h"
 #include "Minimap.h"
 #include <math.h>
 #include "Brofiler/Brofiler/Brofiler.h"
@@ -30,7 +31,6 @@ ModuleMap::~ModuleMap()
 // Called before render is available
 bool ModuleMap::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Map Parser");
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
@@ -177,8 +177,6 @@ TileSet* ModuleMap::GetTilesetFromTileId(int id) const
 // Called before quitting
 bool ModuleMap::CleanUp()
 {
-	LOG("Unloading map");
-
 	// Remove all tilesets
 	int numTilesets = data.tilesets.size();
 
@@ -525,12 +523,14 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 			}
 		}
 	}*/
-	if (layer->name == P2SString("BuildingGeneration")) {
+	if (layer->name == P2SString("BuildingGeneration")) 
+	{
 
 		for (int i = 0; i < layer->width * layer->height; i++)
 		{
 
-			if (layer->gid[i] > 0) {
+			if (layer->gid[i] > 0) 
+			{
 
 				SDL_Rect colliderRectAux = RectFromTileId(layer->gid[i], GetTilesetFromTileId(layer->gid[i]));
 
@@ -544,11 +544,8 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 
 				Building* bld = nullptr; Entity* bldgToBe = nullptr; //we cant do it inside the switch case
 				Quest* qst = nullptr;
-
-				LOG(" gid was %i", layer->gid[i]);
-
-
-				// 6* because we need to undo offset and isometric conversion. 2*3 = 6.
+				Enemy* enemy = nullptr;
+				Spawner* spawner = nullptr;
 
 				switch (layer->gid[i])
 				{
@@ -601,37 +598,68 @@ bool ModuleMap::LoadLayer(pugi::xml_node& layer_node, MapLayer* layer)
 				case 250 + 9:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(1);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 10:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(2);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 11:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(3);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 12:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(4);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 13:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(5);
+					app->questManager->AddQuest(qst);
 					break;
 
 				case 250 + 14:
 					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
 					qst->SetId(0);
+					app->questManager->AddQuest(qst);
+					break;
+
+				case 250 + 15:
+					qst = (Quest*)app->entityManager->AddEntity(ENTITY_TYPE::QUEST, colliderRectAux.x, colliderRectAux.y);
+					qst->SetId(6);
+					app->questManager->AddQuest(qst);
+					break;
+
+				case 250 + 16:
+					spawner = (Spawner*)app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 17:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 18:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY_GIGA, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 19:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY_NIGHT, colliderRectAux.x, colliderRectAux.y);
+					break;
+
+				case 250 + 20:
+					enemy = (Enemy*)app->entityManager->AddEntity(ENTITY_TYPE::ENEMY_RANGED, colliderRectAux.x, colliderRectAux.y);
 					break;
 
 				default:
 					break;
 				}
-
 			}
 		}
 	}
@@ -736,17 +764,21 @@ iMPoint ModuleMap::MapToWorld(int x, int y) const
 }
 
 //Returns x,y coordinates in the Map
-iMPoint ModuleMap::WorldToMap(int x, int y) const
+iMPoint ModuleMap::WorldToMap(float x, float y) const
 {
-	iMPoint ret(0, 0);
+	fMPoint ret(0, 0);
 
 	float halWidth = data.tileWidth * 0.5f;
 	float halfHeight = data.tileHeight * 0.5f;
 
-	ret.x = round((x / halWidth + y / halfHeight) * 0.5f);
-	ret.y = round((y / halfHeight - (x / halWidth)) * 0.5f);
+	float x2 = (x), y2 = (y);
 
-	return ret;
+	ret.x = ((x2 / halWidth + y2 / halfHeight) * 0.5f);
+	ret.y = ((y2 / halfHeight - (x2 / halWidth)) * 0.5f);
+
+	iMPoint ret2 = {(int)ret.x, (int)ret.y};
+
+	return ret2;
 }
 
 
@@ -754,7 +786,6 @@ bool ModuleMap::ReloadMap(P2SString newmap)
 {
 	CleanUp();//clears the map
 
-	LOG("Loading Map Parser");
 	bool ret = true;
 
 	LoadNew(newmap.GetString());
@@ -892,3 +923,29 @@ bool ModuleMap::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
 
 	return ret;
 }
+
+
+Properties::Properties() : name(), value(-1)
+{}
+
+
+MapLayer::MapLayer() : name(), width(0u), height(0u), gid(nullptr)
+{}
+
+
+Object::Object() : boundingBox({ NULL, NULL, NULL, NULL }), type (-1), id(-1)
+{}
+
+
+ObjectGroup::ObjectGroup() : id(-1), name()
+{}
+
+
+TileSet::TileSet() : name(), texture(nullptr), firstGid(-1), margin(-1), spacing(-1), tileWidth(-1), tileHeight(-1), texWidth(-1), texHeight(-1), numTilesWidth(-1), 
+	numTilesHeight(-1), offsetX(-1), offsetY(-1), columns(-1)
+{}
+
+
+MapData::MapData() : width(-1), height(-1), tileWidth(-1), tileHeight(-1), backgroundColor({0, 0, 0, 0}), type(MAP_TYPES::MAP_TYPE_UNKNOWN), name(), path(), musicPath()
+{}
+

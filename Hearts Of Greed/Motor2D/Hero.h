@@ -64,7 +64,8 @@ enum HERO_INPUTS
 struct Skill
 {
 	Skill();
-	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT);
+	Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, 
+		  ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect = SKILL_EFFECT::NO_EFFECT, float effectTime = 0, float effectSeverity = 0);
 	Skill(const Skill& skill1);
 
 	Skill operator= (Skill& newSkill);
@@ -86,6 +87,8 @@ struct Skill
 	SKILL_ID id;
 
 	SKILL_EFFECT effect;
+	float effectTime;
+	float effectSeverity;
 };
 
 struct skillArea;
@@ -95,10 +98,10 @@ struct HeroStats
 	HeroStats();
 	HeroStats(HeroStats& newStats);
 	HeroStats operator=(HeroStats& newStats);
-	
+
 
 	int maxHP;
-	int damage;
+	float damage;
 	int maxEnergy;
 	float atkSpeed;
 	float recoveryHPRate;
@@ -116,18 +119,23 @@ struct HeroStats
 class DeadHero
 {
 public:
-	DeadHero(int level, ENTITY_TYPE type, Skill skill);
+	DeadHero(int level, ENTITY_TYPE type, Skill& skill, Skill& passiveSkill);
 	~DeadHero();
 
 	ENTITY_TYPE GetType()const;
 	int GetLevel()const;
-	void GetSkillInfo(SKILL_ID& id, int& skillLevel)const;
+	
+	void GetSkillInfo(SKILL_ID& id, int& skillLevel) const;
+	void GetPassiveSkillInfo(SKILL_ID& id, int& skillLevel) const;
 
 private:
 	ENTITY_TYPE heroType;
 	int level;
 	SKILL_ID skillId;
 	int skillLevel;
+
+	SKILL_ID passiveSkillId;
+	int passiveSkillLevel;
 
 
 };
@@ -160,7 +168,7 @@ public:
 
 	virtual void LevelUp();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
 
 	bool GetExperience(int xp);
 	bool GetLevel();
@@ -169,7 +177,7 @@ public:
 	void Draw(float dt);
 	void DrawArea();
 
-	
+
 	virtual void UpdatePasiveSkill(float dt);
 
 	//Skill Related-----------------
@@ -276,13 +284,20 @@ public:
 	void SetVisionInPx(float visPx);
 
 	Skill GetSkill1() const;
-	void ReplaceSkill1(Skill newSkill);
+	void SetSkill(Skill skill);
+	virtual Skill GetPassiveSkill() const;
+	virtual void SetPassiveSkill(Skill skill);
+
+	void ReplaceSkill1(Skill& newSkill);
+	virtual void ReplacePassiveSkill(Skill& skill);
 
 	void ReplaceHeroStats(HeroStats newStats);
 
 	int GetHeroSkillPoints();
 	void SetHeroSkillPoints(int n);
 	void AddHeroSkillPoints(int n);
+
+	bool IsDying();
 
 protected:
 	void SetAnimation(HERO_STATES currState);
@@ -296,6 +311,7 @@ protected:
 	void RecoverHealth(float dt);
 
 private:
+	void ResetBonusStats();
 
 	bool CheckAttackRange();
 	Frame GetAnimationCurrentFrame(float dt);
@@ -324,7 +340,11 @@ public:
 	bool skill2Charged;
 	bool skill3Charged;
 
+	float bonusArmor;
+	float bonusAttack;
+
 	bool godMode;
+
 protected:
 
 	HeroStats stats;
@@ -334,7 +354,6 @@ protected:
 	float feelingSecure;
 
 	int heroXP;
-
 
 	bool gettingAttacked;
 
@@ -420,7 +439,7 @@ protected:
 
 	ParticleSystem* myParticleSystem;
 	float lvlUpSfxTimer;
-	
+
 	bool comeFromAttack;
 };
 

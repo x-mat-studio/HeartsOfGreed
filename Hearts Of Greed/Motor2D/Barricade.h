@@ -18,7 +18,7 @@ class Barricade : public Building
 public:
 
 	Barricade(fMPoint position, int maxHitPoints, int currenthitPoints, int recoveryHitPointsRate, int xpOnDeadth, int buildingCost,
-			  int transparency, Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect);
+			  int transparency, Collider* collider, SDL_Rect& verticalRect, SDL_Rect& horizontalRect, float hpIncrease);
 	Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align);
 	~Barricade();
 
@@ -30,7 +30,9 @@ public:
 	void Draw(float dt);
 	void DrawSelected();
 
-	int RecieveDamage(int damage);
+	int RecieveDamage(float damage);
+
+	void LevelUp();
 
 private:
 	void Die();
@@ -41,6 +43,8 @@ private:
 	SDL_Rect horizontalRect;
 
 	SDL_Rect* currentRect;
+
+	float hpIncrease;
 
 	int barricadeLvl;
 

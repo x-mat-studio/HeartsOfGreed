@@ -152,6 +152,16 @@ Collider* Entity::GetCollider() const
 	return collider;
 }
 
+void Entity::SetColliderRect(SDL_Rect newRect)
+{
+	this->collider->rect = newRect;
+}
+
+void Entity::ActiveCollider()
+{
+	this->collider->Activate();
+}
+
 
 void Entity::Draw(float dt)
 {}
@@ -386,7 +396,7 @@ void Entity::SetToDelete(bool toDel)
 }
 
 
-int Entity::RecieveDamage(int damage)
+int Entity::RecieveDamage(float damage)
 {
 	return -1;
 }

@@ -8,9 +8,9 @@
 #include "Pathfinding.h"
 
 
-Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
+Turret::Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
-	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency) :
+	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, int damageIncrease, int rangeIncrease, float speedIncrease, float hpIncrease) :
 
 	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 
@@ -33,7 +33,14 @@ Turret::Turret(int turretLvl, int attackDmg, int attackSpeed, int range, int vis
 	range(range),
 	vision(vision),
 
+	damageIncrease(damageIncrease),
+	rangeIncrease(rangeIncrease),
+	speedIncrease(speedIncrease),
+	hpIncrease(hpIncrease),
+
 	attackCD(0),
+	bonusDamage(0),
+	bonusArmor(0),
 
 	shortTermObjective(nullptr),
 
@@ -67,8 +74,15 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	attackSpeed(copy->attackSpeed),
 	range(copy->range),
 	vision(copy->vision),
-	attackCD(0),
 
+	damageIncrease(copy->damageIncrease),
+	rangeIncrease(copy->rangeIncrease),
+	speedIncrease(copy->speedIncrease),
+	hpIncrease(copy->hpIncrease),
+
+	attackCD(0),
+	bonusDamage(0),
+	bonusArmor(0),
 
 	shortTermObjective(nullptr),
 
@@ -79,7 +93,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 
 	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
 
-	app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x, position.y));
+	//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 60, position.y - 10));
 }
 
 
@@ -121,6 +135,7 @@ bool Turret::Update(float dt)
 
 
 	StateMachine();
+	ResetBonusStats();
 
 	return true;
 }
@@ -183,10 +198,10 @@ void Turret::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y , &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue, 255, 255, 255, 1.0f, -offset.x, -offset.y);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue, 255, 255, 255, 1.0f, -offset.x, -offset.y);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, 0,255,255,255, 1.0f, -offset.x, -offset.y);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, 0, 255, 255, 255, 1.0f, -offset.x, -offset.y);
 }
 
 int Turret::GetLvl()
@@ -215,8 +230,13 @@ void Turret::DrawSelected()
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w * 0.5f, this->collider->rect.y);
 }
 
-int Turret::RecieveDamage(int damage)
+int Turret::RecieveDamage(float damage)
 {
+	if (bonusArmor > 0)
+	{
+		damage -= damage * bonusArmor * 0.01f;
+	}
+
 	if (hitPointsCurrent > 0)
 	{
 		hitPointsCurrent -= damage;
@@ -276,7 +296,7 @@ bool Turret::CheckAttackRange()
 void Turret::Attack()
 {
 	if (shortTermObjective)
-		shortTermObjective->RecieveDamage(attackDmg);
+		shortTermObjective->RecieveDamage(attackDmg + bonusDamage);
 }
 
 
@@ -302,7 +322,7 @@ void Turret::Die()
 		myBase->RemoveTurret(this);
 	}
 
-	app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x, position.y));
+	//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 60, position.y - 10));
 
 }
 
@@ -551,10 +571,31 @@ void Turret::SetAnimation(TURRET_STATES state)
 }
 
 
+void Turret::ResetBonusStats()
+{
+	bonusDamage = 0.f;
+	bonusArmor = 0.f;
+}
+
+
 void Turret::SetLevel(int lvl)
 {
 	for (int i = 1; i < lvl; i++)
 	{
-		//LevelUp() TODO
+		LevelUp();
 	}
+}
+
+
+void Turret::LevelUp()
+{
+	attackDmg += damageIncrease;
+	range += rangeIncrease;
+
+	attackSpeed -= speedIncrease;
+
+	hitPointsMax += hpIncrease;
+	hitPointsCurrent = hitPointsMax;
+
+	turretLvl++;
 }

@@ -2,6 +2,8 @@
 
 #include "EventManager.h"
 #include "EntityManager.h"
+#include "Pathfinding.h"
+#include "Map.h"
 
 #include "Base.h"
 
@@ -28,6 +30,7 @@ UpgradeCenter::UpgradeCenter(fMPoint position, UpgradeCenter * copy, ENTITY_ALIG
 	upgradeTurretCost(copy->upgradeTurretCost),
 	upgradeBarricadeCost(copy->upgradeBarricadeCost)
 {
+	//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 45, position.y + 20), 3, 3);
 }
 
 
@@ -55,7 +58,7 @@ void UpgradeCenter::UpgradeBarricades()
 }
 
 
-int UpgradeCenter::RecieveDamage(int damage)
+int UpgradeCenter::RecieveDamage(float damage)
 {
 	if (hitPointsCurrent > 0)
 	{
@@ -75,6 +78,8 @@ void UpgradeCenter::Die()
 {
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 	toDelete = true;
+
+	//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 45, position.y + 20), 3, 3);
 
 	if (minimapIcon != nullptr)
 	{
@@ -114,4 +119,28 @@ void UpgradeCenter::ChangeTextures()
 		break;
 
 	}
+}
+
+
+int UpgradeCenter::GetTurretLevel() const
+{
+	return turretLvl;
+}
+
+
+int UpgradeCenter::GetBarricadeLevel() const
+{
+	return barricadeLvl;
+}
+
+
+void UpgradeCenter::SetTurretLevel(int level)
+{
+	turretLvl = level;
+}
+
+
+void UpgradeCenter::SetBarricadeLevel(int level)
+{
+	barricadeLvl = level;
 }

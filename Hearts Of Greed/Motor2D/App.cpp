@@ -237,14 +237,14 @@ void App::PrepareUpdate()
 	lastSecFrameCount++;
 
 	// Calculate the dt
-
 	dt = frameTime.ReadSec();
-	necessaryDt = dt;
 
 
 	//just to when we debug, the player doesnt trespass the floor
 	if (dt > MAX_DT)
 		dt = MAX_DT;
+
+	necessaryDt = dt;
 
 	if (gamePause)
 		dt = 0;
@@ -278,20 +278,20 @@ void App::FinishUpdate()
 	}
 
 
-	float avgFps = float(frameCount) / startupTime.ReadSec();
-	float secondsSinceStartup = startupTime.ReadSec();
-	uint32 lastFrameMs = frameTime.ReadSec();
-	uint32 framesOnLastUpdate = prevLastSecFrameCount;
+	//float avgFps = float(frameCount) / startupTime.ReadSec();
+	//float secondsSinceStartup = startupTime.ReadSec();
+	//uint32 lastFrameMs = frameTime.ReadSec();
+	//uint32 framesOnLastUpdate = prevLastSecFrameCount;
 
-	fMPoint mouse = input->GetMousePosScaled();
-	static char title[256];
-	sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  || Mouse X:%f  Y:%f",
+	//fMPoint mouse = input->GetMousePosScaled();
+	//static char title[256];
+	/*sprintf_s(title, 256, " Hearts of Greed || Camera X: %i || Camera Y: %i  || Mouse X:%f  Y:%f",
 		app->render->GetCameraX(), app->render->GetCameraY(),
 		(-app->render->currentCamX + mouse.x) / app->win->GetScale(),
 		(-app->render->currentCamY + mouse.y) / app->win->GetScale()
-	);
+	);*/
 
-	app->win->SetTitle(title);
+	//app->win->SetTitle(title);
 
 	if (capFrames == false)
 	{
@@ -333,12 +333,12 @@ void App::FinishUpdate()
 		capFrames = !capFrames;
 	}*/
 
-	int delay;
-	int averageFrame = ((1.0f / frameRate) * 1000);
-	delay = averageFrame - lastFrameMs;
+	//int delay;
+	//int averageFrame = ((1.0f / frameRate) * 1000);
+	//delay = averageFrame - lastFrameMs;
 
 
-	if (delay > 0 && capFrames == true)
+	//if (delay > 0 && capFrames == true)
 	{
 		//SDL_Delay(delay);
 

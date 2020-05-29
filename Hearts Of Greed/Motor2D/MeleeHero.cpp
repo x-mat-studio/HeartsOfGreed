@@ -19,7 +19,10 @@ MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Anima
 		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
 		tileOnWalk, stats,  skill1),
 
-	passiveSkill(passiveSkill)
+	passiveSkill(passiveSkill),
+	passiveSkillCollider(nullptr),
+
+	armorGained(0)
 
 {}
 
@@ -28,12 +31,51 @@ MeleeHero::MeleeHero(fMPoint position, MeleeHero* copy, ENTITY_ALIGNEMENT aligne
 
 	Hero(position, copy, alignement),
 
-	passiveSkill(copy->passiveSkill)
+	passiveSkill(copy->passiveSkill),
+	passiveSkillCollider(nullptr),
+
+	armorGained(0)
 {}
 
 
 MeleeHero::~MeleeHero()
 {
+	if (passiveSkillCollider != nullptr)
+	{
+		passiveSkillCollider->to_delete = true;
+		passiveSkillCollider->thisEntity = nullptr;
+		passiveSkillCollider = nullptr;
+	}
+}
+
+
+bool MeleeHero::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+
+	passiveSkillCollider = new Collider(SDL_Rect{ 0, 0, passiveSkill.rangeRadius, passiveSkill.rangeRadius }, COLLIDER_PASSIVE_MELEE, app->entityManager, this);
+	app->coll->AddColliderEntity(passiveSkillCollider);
+
+	started = true;
+
+	return true;
 }
 
 
@@ -95,7 +137,7 @@ bool MeleeHero::ExecuteSkill1()
 
 		skillExecutionDelay = true;
 
-		app->audio->PlayFx(app->entityManager->suitman1Skill, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->suitman1Skill);
 
 		return skillExecutionDelay;
 	}
@@ -105,7 +147,8 @@ bool MeleeHero::ExecuteSkill1()
 		int ret = 0;
 
 		ret =  app->entityManager->ExecuteSkill(skill1, this->origin);
-		app->audio->PlayFx(app->entityManager->armored1Skill2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+
+		ExecuteSFX(app->entityManager->armored1Skill2);
 
 		currAoE.clear();
 		suplAoE.clear();
@@ -136,10 +179,18 @@ bool MeleeHero::ExecuteSkill3()
 
 void MeleeHero::UpdatePasiveSkill(float dt)
 {
-	if (gettingAttacked == false)
+	if (started == true)
 	{
-		RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
+		if (gettingAttacked == false)
+		{
+			RecoverHealth(dt * passiveSkill.coolDown); //Cooldown refers to extra passive regeneration
+		}
+
+		bonusArmor = armorGained;
+		armorGained = 0;
+		passiveSkillCollider->SetPos(position.x - passiveSkill.rangeRadius * 0.5, position.y - passiveSkill.rangeRadius * 0.5);
 	}
+	
 }
 
 
@@ -154,18 +205,33 @@ void MeleeHero::LevelUp()
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
 
-
 	app->entityManager->RequestHeroStats(stats, this->type, stats.heroLevel + 1);
 
-
 	stats.maxHP *= app->entityManager->meleeLifeUpgradeValue;
+	stats.currHP = stats.maxHP;
+	
 	stats.maxEnergy *= (app->entityManager->meleeEnergyUpgradeValue);
+	stats.currEnergy = stats.maxEnergy;
 
 	stats.damage *= (app->entityManager->meleeDamageUpgradeValue);
 	stats.atkSpeed *= (app->entityManager->meleeAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
 }
+
+
+void MeleeHero::OnCollision(Collider* collider)
+{
+	if (collider->type == COLLIDER_ENEMY)
+	{
+		if (armorGained < passiveSkill.energyCost) //max accumulable armor
+		{
+			armorGained += passiveSkill.dmg; //armor per enemy near
+		}
+		
+	}
+}
+
 
 void MeleeHero::PlayGenericNoise(int probability)
 {
@@ -174,16 +240,16 @@ void MeleeHero::PlayGenericNoise(int probability)
 	switch (random)
 	{
 	case 1:
-		app->audio->PlayFx(app->entityManager->noise1Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise1Armored);
 		break;
 	case 2:
-		app->audio->PlayFx(app->entityManager->noise2Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise2Armored);
 		break;
 	case 3:
-		app->audio->PlayFx(app->entityManager->noise3Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise3Armored);
 		break;
 	case 4:
-		app->audio->PlayFx(app->entityManager->noise4Armored, 0, 5, this->GetMyLoudness(), this->GetMyDirection());
+		ExecuteSFX(app->entityManager->noise4Armored);
 		break;
 
 	default:
@@ -194,5 +260,28 @@ void MeleeHero::PlayGenericNoise(int probability)
 
 void MeleeHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
-	app->render->Blit(app->entityManager->moveCommandTileMelee, movingTo.x, movingTo.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+	iMPoint postoPrint = movingTo;
+
+	if (objective != nullptr)
+	{
+		fMPoint enemyPos = objective->GetPosition();
+		enemyPos = app->map->WorldToMap(enemyPos.x, enemyPos.y);
+		enemyPos = app->map->MapToWorld(enemyPos.x, enemyPos.y);
+
+		postoPrint = { (int)enemyPos.x, (int)enemyPos.y };
+	}
+
+	app->render->Blit(app->entityManager->moveCommandTileMelee, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+}
+
+
+Skill MeleeHero::GetPassiveSkill() const
+{
+	return passiveSkill;
+}
+
+
+void MeleeHero::ReplacePassiveSkill(Skill& skill)
+{
+	passiveSkill = skill;
 }
