@@ -209,6 +209,7 @@ void MeleeHero::LevelUp()
 
 	stats.maxHP *= app->entityManager->meleeLifeUpgradeValue;
 	stats.currHP = stats.maxHP;
+	hitPointsCurrent = stats.maxHP;
 	
 	stats.maxEnergy *= (app->entityManager->meleeEnergyUpgradeValue);
 	stats.currEnergy = stats.maxEnergy;

@@ -201,6 +201,7 @@ void RoboHero::LevelUp()
 
 	stats.maxHP *= app->entityManager->robottoLifeUpgradeValue;
 	stats.currHP = stats.maxHP;
+	hitPointsCurrent = stats.maxHP;
 
 	stats.maxEnergy *= (app->entityManager->robottoEnergyUpgradeValue);
 	stats.currEnergy = stats.maxEnergy;

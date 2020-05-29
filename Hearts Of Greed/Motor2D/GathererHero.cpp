@@ -270,6 +270,7 @@ void GathererHero::LevelUp()
 
 	stats.maxHP *= app->entityManager->gathererLifeUpgradeValue;
 	stats.currHP = stats.maxHP;
+	hitPointsCurrent = stats.maxHP;
 
 	stats.maxEnergy *= (app->entityManager->gathererEnergyUpgradeValue);
 	stats.currEnergy = stats.maxEnergy;

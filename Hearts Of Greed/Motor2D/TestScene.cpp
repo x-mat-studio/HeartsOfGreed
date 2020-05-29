@@ -95,7 +95,7 @@ bool ModuleTestScene::Start()
 
 	camToReset = true;
 	//Play Music
-	app->audio->PlayMusic("audio/music/Map.ogg", fadeTime, app->audio->musicVolume);
+	app->audio->PlayMusic("Assets/audio/music/Map.ogg", fadeTime, app->audio->musicVolume);
 
 	//Load sfx used in this scene
 	if (app->map->LoadNew("finalMap.tmx") == true)

@@ -33,7 +33,7 @@ bool  ModuleMainMenuScene::Awake(pugi::xml_node& config)
 	app->eventManager->EventRegister(EVENT_ENUM::CREATE_CREDIT_MENU, this);
 
 	//sounds
-	titleSound = app->audio->LoadFx("audio/sfx/IntroScene/title.wav");
+	titleSound = app->audio->LoadFx("Assets/audio/sfx/IntroScene/title.wav");
 	fadeTime = config.attribute("fadeTime").as_float(0);
 
 	return true;
@@ -45,11 +45,11 @@ bool ModuleMainMenuScene::Start()
 {
 
 	//images
-	gameIcon = app->tex->Load("intro_images/gameIcon.png");
-	gameTitle = app->tex->Load("intro_images/gameTitle.png");
-	BG = app->tex->Load("intro_images/MainMenuBG.png");
+	gameIcon = app->tex->Load("Assets/intro_images/gameIcon.png");
+	gameTitle = app->tex->Load("Assets/intro_images/gameTitle.png");
+	BG = app->tex->Load("Assets/intro_images/MainMenuBG.png");
 
-	app->audio->PlayMusic("audio/music/IntroMenu.ogg", fadeTime, app->audio->musicVolume);
+	app->audio->PlayMusic("Assets/audio/music/IntroMenu.ogg", fadeTime, app->audio->musicVolume);
 
 	alphaCounter.NewEasing(EASING_TYPE::EASE_OUT_CUBIC, 1.0, 255.0, 4.0);
 	gameIconPosXfunction.NewEasing(EASING_TYPE::EASE_OUT_QUINT, -140, 140, 3.0);

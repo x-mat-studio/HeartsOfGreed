@@ -23,6 +23,8 @@ public:
 
 	~Quest();
 
+	void Die();
+
 	void Draw(float dt);
 
 	void OnCollision(Collider* collider);
