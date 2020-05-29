@@ -82,6 +82,11 @@ bool ModuleQuestManager::Start()
 
 	questMarker = app->tex->Load("spritesheets/VFX/questMarker.png");
 
+	for (int i = 0; i < questInfoVector.size(); i++)
+	{
+		questInfoVector[i].ClearQuestEntities();
+	}
+
 	return ret;
 }
 
@@ -285,6 +290,8 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 		questInfoVector.push_back(QuestInfo(iterator.attribute("reward").as_int(), iterator.attribute("id").as_int(), iterator.attribute("noCombat").as_bool(), iterator.attribute("active").as_bool()));
 		questInfoVector[i].SetDialogInput(iterator.attribute("dialogInput").as_int());
 
+		questInfoVector[i].ClearQuestEntities();
+
 		for (pugi::xml_node iterator2 = iterator.first_child().first_child(); iterator2 != NULL; iterator2 = iterator2.next_sibling())
 		{
 			entity = app->entityManager->AddEntity((ENTITY_TYPE)iterator2.attribute("entityType").as_int(), iterator2.attribute("posX").as_float(), iterator2.attribute("posY").as_float());
@@ -357,6 +364,7 @@ void QuestInfo::StartQuest()
 	Entity* entity = nullptr;
 
 	int numberToSpawn = entitysToSpawnVector.size();
+	questEntitysVector.clear();
 
 	for (int i = 0; i < numberToSpawn; i++)
 	{	
@@ -555,6 +563,11 @@ bool QuestInfo::Save(pugi::xml_node& node) const
 int QuestInfo::GetId() const
 {
 	return id;
+}
+
+void QuestInfo::ClearQuestEntities()
+{
+	questEntitysVector.clear();
 }
 
 

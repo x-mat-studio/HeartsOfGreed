@@ -30,6 +30,8 @@ public:
 
 	int GetId() const;
 
+	void ClearQuestEntities();
+
 private:
 	void WinQuest();
 	void LoseQuest();
