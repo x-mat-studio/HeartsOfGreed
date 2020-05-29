@@ -70,9 +70,9 @@ bool ModulePlayer::Awake(pugi::xml_node& config)
 {
 	BROFILER_CATEGORY("Player Awake", Profiler::Color::DarkCyan);
 
-	turretCost = 120;
-	barricadeCost = 75;
-	upgradeCenterCost = 150;
+	turretCost = 150;
+	barricadeCost = 50;
+	upgradeCenterCost = 250;
 
 	return true;
 }
