@@ -256,6 +256,7 @@ void Enemy::StateMachine(float dt)
 
 
 	SetAnimation(state);
+	GetAnimationCurrentFrame(dt);
 }
 
 void Enemy::Roar()
@@ -316,7 +317,7 @@ void Enemy::OnCollision(Collider* collider)
 void Enemy::Draw(float dt)
 {
 
-	Frame currFrame = GetAnimationCurrentFrame(dt);
+	Frame currFrame = GetAnimationCurrentFrame(0);
 
 
 	if (damageTakenTimer > 0.f)
