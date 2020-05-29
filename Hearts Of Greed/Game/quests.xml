@@ -25,10 +25,6 @@
       <entity type="4" posX="172" posY="3500"/>
       <entity type="4" posX="172" posY="3500"/>
       <entity type="4" posX="172" posY="3500"/>
-      <entity type="4" posX="172" posY="3500"/>
-      <entity type="4" posX="172" posY="3500"/>
-      <entity type="4" posX="172" posY="3500"/>
-      <entity type="4" posX="172" posY="3500"/>
     </entitysToSpawn>
   </meleeQuest>
 
@@ -38,9 +34,6 @@
       <entity type="1" posX="172" posY="3300"/>
       <entity type="4" posX="172" posY="3500"/>
       <entity type="4" posX="172" posY="3500"/>
-      <entity type="4" posX="172" posY="3500"/>
-      <entity type="5" posX="172" posY="3500"/>
-      <entity type="5" posX="172" posY="3500"/>
       <entity type="5" posX="172" posY="3500"/>
     </entitysToSpawn>
   </rangedQuest>
@@ -51,9 +44,6 @@
       <entity type="3" posX="172" posY="3300"/>
       <entity type="6" posX="172" posY="3500"/>
       <entity type="6" posX="172" posY="3500"/>
-      <entity type="6" posX="172" posY="3500"/>
-      <entity type="7" posX="172" posY="3500"/>
-      <entity type="7" posX="172" posY="3500"/>
     </entitysToSpawn>
   </roboQuest>
 

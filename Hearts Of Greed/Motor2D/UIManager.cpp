@@ -721,7 +721,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::BUY_TURRET:
-		if (app->player->GetResources() >= app->player->GetTurretCost())
+		if (app->player->GetResources() >= app->player->GetTurretCost() && app->player->IsBuilding() == false)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		}
@@ -740,14 +740,14 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::BUY_UPGRADE_CENTER:
-		if (app->player->GetResources() >= app->player->GetUpgradeCenterCost())
+		if (app->player->GetResources() >= app->player->GetUpgradeCenterCost() && app->player->IsBuilding() == false)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
 
 	case BUTTON_TAG::BUY_BARRICADE:
-		if (app->player->GetResources() >= app->player->GetBarricadeCost())
+		if (app->player->GetResources() >= app->player->GetBarricadeCost() && app->player->IsBuilding() == false)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_CONSTRUCT, EVENT_ENUM::NULL_EVENT);
 		}
