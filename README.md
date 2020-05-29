@@ -11,7 +11,9 @@ This project is made as a 2nd year assigment in Bachelor’s Degree in Video Gam
 
 
 ## What to do
-To play this vertical slice, you need to micromanage your two hero units to conquer the enemy base. Once that happens, go back to your first base and defend it (maybe build a turret to help you). Once all enemies are dead, you've won.
+Start the game by playing the tutorial. Next, use your heroes skillfully to conquer all enemy bases and win the game!
+You can unlock extra heroes by completing their rescue mission (keep an eye on the minimap!)
+
 If all your heroes die, you will lose the game.
 
 
@@ -24,28 +26,42 @@ Twitter:	https://twitter.com/ii_rts
 
 ### Control:
 
-* WASD:			      	
+* WASD
 	- Control camera
+
 * Cursor next to screen margin: 
 	- Control camera
+
 * Click on minimap:		
-	- Teleport to that position
+	- Teleport camera to that position
+
 * Mouse wheel:			
 	- Zoom in/out
+
 * Click & drag:			
 	- Select Unit group
+
 * Click on anything:		
 	- Select
 
 * E: 				
 	- Prepare focused hero skill.
-*(when preparing skill)
+
+* (when preparing skill)
 	- Left click : 	Use skill.
 	- Right click : Cancel skill.
 
 * Tab: Change focus between the selected heroes.
 
 * R: When building barricades, rotate them.
+
+* U: Focus Gatherer Hero
+
+* I: Focus Ranged Hero
+
+* O: Focus Melee Hero
+
+* P: Focus Robot Hero
 
 ### Debug Options (only in-game):
 
@@ -116,17 +132,17 @@ Twitter:	https://twitter.com/ii_rts
 * Automatic Continuous Integration and Deployment .
 * Logo Scene video, with custom art and disctintive audio.
 * Title Scene, with custom title spatial sound and options, and easy ins.
-* First implementation of a map showing our core game loop.
+* Implementation of the final map.
 * Three resources implemented:
-	- **Blue resource**: Which is used for building turrets, barricades, upgrade center, and revive dead heroes.
-	- **Red resource**: Which is used to upgrade a hero certain stats.
-	- **Purple resource**: Which is used to level up hero skills (active and passive).
-* Four different hero units, each one with one disctintive skill:
+	- **Blue resource**: Used for building turrets, barricades, upgrade center, and revive dead heroes.
+	- **Red resource**: Used to upgrade hero related stats.
+	- **Purple resource**: Used to level up hero skills (active and passive, from 1 to 4).
+* Four different hero units, each one with two disctintive skills:
 	- **Armored Man**: A melee attack with an AoE effect, hight health regeneration and receioves less damage the more enemies surround him.
-	- **Suit Man**: Throws a grenade in ranged which explodes on contact. This hero gets resources for killing enemies and empowers near robotic allies.
-	- **Ranged**: Hit and run specialist, makes enemies bleed after hitting them, and is equipped with a grenade that slows enemies.
-	- **Robot**: Can´t regenerate health, gains speed and attack when killing enemies in succession, his skill is self destruction.
-* **Group selection and movement** for ally units.
+	- **Suit Man**: Throws a ranged grenade which explodes on contact. This hero gets extra resources for killing enemies and overcharges near robotic allies.
+	- **Ranged**: Hit and run specialist, makes enemies bleed after hitting them, and is equipped with a grenade that heavily slows enemies.
+	- **Robot**: Can´t regenerate health, however, gains speed and attack when killing enemies in succession, his skill is self destruction (massive AoE).
+* Group selection and movement for ally units, group movement for enemy units.
 * Multiple buildings implemented:
 	- **Ally base**: Center of operations, you can build and revive heroes here.
 	- **Enemy base**: Your opponents stronghold wich they will defend if your heroes get near, deplete it's health to make it your own.
@@ -134,7 +150,7 @@ Twitter:	https://twitter.com/ii_rts
 	- **Decorative Buildings**: Flesh out our map and create chokepoints in the map.
 	- **Barricades**: Defensive structures with high hp.
 	- **Upgrade center**: Lets you buy and level up turrets and barricades. 
-* Win condition: triggered by killing all enemies during night.
+* Win condition: Conquer all bases.
 * Win scene: custom made "you win message" and track  .
 * Lose condition: triggered by losing all units or losing all bases.
 * Lose scene: custom made "you lose message" and track  .
@@ -147,6 +163,10 @@ Twitter:	https://twitter.com/ii_rts
 * All units and buildings display a Portrait in the bottom right corner showing their Healthbar and specific characteristics.
 * **Spatial audio**: units on screen or out of it (but still close to the center) will make sounds of different volume and origin.
 * Zoom in/out of map (mouse wheel).
+* IA driven enemies, with priority settings and objectives.
+* Spawner system which generates increasingly more dangerous enemies
+* Dialogue system, with crafted portraits and UI; all tied up ingame via quests.
+* Different easings implemented in numerous points: audio, night cycle, win/lose animations...
 
 _________________________________________________________________________________________________________________________________
 
