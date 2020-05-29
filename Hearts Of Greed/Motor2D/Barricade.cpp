@@ -43,12 +43,12 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 {
 	if (direction == DIRECTION_BARRICADE::VERTICAL) 
 	{
-		app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
+		//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
 		currentRect = &verticalRect;
 	}
 	else if (direction == DIRECTION_BARRICADE::HORIZONTAL) 
 	{
-		app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 10, position.y), 1, 3);	
+		//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 10, position.y), 1, 3);	
 		currentRect = &horizontalRect;
 	}
 	
@@ -114,10 +114,10 @@ void Barricade::Die()
 	toDelete = true;
 
 
-	if (direction == DIRECTION_BARRICADE::VERTICAL)
-		app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
-	else if (direction == DIRECTION_BARRICADE::HORIZONTAL)
-		app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 10, position.y), 1, 3);
+	//if (direction == DIRECTION_BARRICADE::VERTICAL)
+		//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 90, position.y), 3, 1);
+	//else if (direction == DIRECTION_BARRICADE::HORIZONTAL)
+		//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 10, position.y), 1, 3);
 
 	if (minimapIcon != nullptr)
 	{
