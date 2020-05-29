@@ -720,7 +720,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			if (numHeroes - 1 > focusedHero)
 			{
 				focusedHero++;
-				heroesVector[focusedHero]->PlayGenericNoise(5);
+				//heroesVector[focusedHero]->PlayGenericNoise(5);
 			}
 			else
 			{
@@ -887,7 +887,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::LVL_UP_ALL:
 
-		app->audio->PlayFx(app->entityManager->lvlup, 0, -1);
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::QUIET);
 
 		for (int aux = 0; aux < heroesVector.size(); aux++) {
 
