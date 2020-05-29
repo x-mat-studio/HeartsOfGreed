@@ -38,7 +38,7 @@ public:
 
 	void OnCollision(Collider*, Collider*);
 
-	fMPoint* GetObjective();
+	fMPoint* GetObjective(fMPoint& pos);
 	
 	void PushBase(Base* building);
 	void PushSpawner(Spawner* spawner);
@@ -69,6 +69,8 @@ private:
 	
 private:
 	fMPoint objectivePos;
+	std::vector<fMPoint> alarmObjectivePos;
+
 	std::vector<Base*> baseVector;
 	std::vector<Spawner*> spawnerVector;
 

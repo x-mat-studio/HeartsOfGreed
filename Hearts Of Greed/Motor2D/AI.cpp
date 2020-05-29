@@ -109,6 +109,7 @@ bool ModuleAI::Start()
 
 bool ModuleAI::PostUpdate(float dt)
 {
+	alarmObjectivePos.clear();
 	CheckListener(this);
 
 	return true;
@@ -145,8 +146,8 @@ void ModuleAI::OnCollision(Collider* c1, Collider* c2)
 
 		if (c2->thisEntity)
 		{
+			alarmObjectivePos.push_back(c2->thisEntity->GetPosition());
 			CreateSelectionCollider(c1);
-			objectivePos = c2->thisEntity->GetPosition();
 		}
 	}
 
@@ -161,14 +162,37 @@ void ModuleAI::CreateSelectionCollider(Collider* collider)
 }
 
 
-fMPoint* ModuleAI::GetObjective()
+fMPoint* ModuleAI::GetObjective(fMPoint& pos)
 {
-	if (objectivePos != fMPoint{ INT_MIN, INT_MIN })
+	fMPoint* ret = nullptr;
+
+	if (alarmObjectivePos.empty() == false)
 	{
-		return &objectivePos;
+		ret = &alarmObjectivePos[0];
+
+		for (int i = 1; i < alarmObjectivePos.size(); i++)
+		{
+			if (pos.DistanceNoSqrt(*ret) > pos.DistanceNoSqrt(alarmObjectivePos[i]))
+			{
+				ret = &alarmObjectivePos[i];
+			}
+		}
 	}
 
-	return nullptr;
+	if (objectivePos != fMPoint{ INT_MIN, INT_MIN })
+	{
+		if (ret != nullptr)
+		{
+			if (pos.DistanceNoSqrt(*ret) > pos.DistanceNoSqrt(objectivePos))
+			{
+				ret = &objectivePos;
+			}
+		}
+		else
+			return &objectivePos;
+	}
+
+	return ret;
 }
 
 
@@ -194,7 +218,7 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 
 
 	case EVENT_ENUM::DAY_START:
-		objectivePos = { NULL, NULL };
+		objectivePos = { INT_MIN, INT_MIN };
 
 		break;
 
