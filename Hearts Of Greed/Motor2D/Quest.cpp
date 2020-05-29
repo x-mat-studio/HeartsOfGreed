@@ -91,6 +91,11 @@ void Quest::SetId(int i)
 
 	switch (id)
 	{
+	case 2:
+		collider->rect = { collider->rect.x, collider->rect.y, 150,750 };
+		break;
+
+
 	case 5:
 		collider->rect = { collider->rect.x, collider->rect.y, 450,450 };
 		break;
