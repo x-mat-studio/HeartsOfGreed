@@ -55,13 +55,13 @@ Twitter:	https://twitter.com/ii_rts
 
 * R: When building barricades, rotate them.
 
-* U: Focus Gatherer Hero
+* 1: Focus Gatherer Hero
 
-* I: Focus Ranged Hero
+* 2: Focus Ranged Hero
 
-* O: Focus Melee Hero
+* 3: Focus Melee Hero
 
-* P: Focus Robot Hero
+* 4: Focus Robot Hero
 
 ### Debug Options (only in-game):
 
@@ -76,10 +76,10 @@ Twitter:	https://twitter.com/ii_rts
 * F10: Activate heroes God mode.
 * F11: Deactivate heroes God mode.
 * 0: Give resources to player.
-* 1: Spawn gigamingo.
-* 2: Spawn fast wannamingo.
-* 3: Spawn ranged wannamingo.
-* 4: Toggle debug build mode for player.
+* U: Spawn gigamingo.
+* I: Spawn fast wannamingo.
+* O: Spawn ranged wannamingo.
+* P: Toggle debug build mode for player.
 * 9: Activate/Deactivate camera movement by mouse.
 * KP 1: Spawn base.
 * KP 2: Spawn decorative building.
