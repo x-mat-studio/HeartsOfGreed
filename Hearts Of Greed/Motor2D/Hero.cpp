@@ -422,7 +422,7 @@ bool Hero::PostUpdate(float dt)
 
 	CommandVfx(dt);
 
-
+	GetAnimationCurrentFrame(dt);
 
 	return true;
 }
@@ -504,7 +504,7 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	Frame currFrame = GetAnimationCurrentFrame(dt);
+	Frame currFrame = GetAnimationCurrentFrame(0);
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, 0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
