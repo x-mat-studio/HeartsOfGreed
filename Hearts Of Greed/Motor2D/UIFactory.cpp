@@ -122,6 +122,7 @@ UIFactory::UIFactory() :
 	robottoActive1Button{ 348, 707, 93, 91 },
 
 	dialogWindow{ 1096, 41, 859, 615 },
+	dayNightIcon{522, 851, 35, 35},
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -333,10 +334,13 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 
 	//CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
 	UI* img = CreateImage(10, 5, nullptr, { 40, 291, 45, 20 }, group);
+	CreateImage(40, 5, nullptr, { 40, 291, 45, 20 }, group);
 
 	TimerClock* clock = new TimerClock(5, -5, img);
 	group->AddUiElement(clock);
-	
+
+	CreateImage(55, -1, nullptr, dayNightIcon, group);
+
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
 
