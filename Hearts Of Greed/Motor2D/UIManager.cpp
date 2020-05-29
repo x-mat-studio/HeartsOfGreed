@@ -121,10 +121,10 @@ bool ModuleUIManager::Start()
 
 	LoadAtlas();
 
-	hoverSound = app->audio->LoadFx("audio/sfx/Interface/BotonSimple.wav");
-	clickSound = app->audio->LoadFx("audio/sfx/Interface/BotonClick.wav");
-	easyIn = app->audio->LoadFx("audio/sfx/Interface/Easy_in.wav");
-	easyOut = app->audio->LoadFx("audio/sfx/Interface/Easy_out.wav");
+	hoverSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonSimple.wav");
+	clickSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonClick.wav");
+	easyIn = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_in.wav");
+	easyOut = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_out.wav");
 
 	return ret;
 }
@@ -444,7 +444,7 @@ void ModuleUIManager::LoadAtlas()
 {
 	if (atlas == nullptr)
 	{
-		atlas = app->tex->Load("spritesheets/atlas.png");
+		atlas = app->tex->Load("Assets/spritesheets/atlas.png");
 	}
 }
 

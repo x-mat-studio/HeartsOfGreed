@@ -39,8 +39,8 @@ bool ModuleFoWManager::Start()
 {
 	bool ret = true;
 
-	smoothFoWtexture = app->tex->Load("spritesheets/VFX/fogTiles.png");
-	debugFoWtexture = app->tex->Load("spritesheets/VFX/fogTilesDebug.png");
+	smoothFoWtexture = app->tex->Load("Assets/spritesheets/VFX/fogTiles.png");
+	debugFoWtexture = app->tex->Load("Assets/spritesheets/VFX/fogTilesDebug.png");
 
 	if (smoothFoWtexture == nullptr || debugFoWtexture == nullptr)
 		ret = false;

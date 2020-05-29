@@ -42,11 +42,11 @@ bool ModuleWinScene::Start()
 {
 	SDL_Rect rect = { 0, 0, 0, 0 };
 
-	youWon = app->tex->Load("intro_images/youWon.png");
-	medalWin = app->tex->Load("intro_images/medalWin.png");
+	youWon = app->tex->Load("Assets/intro_images/youWon.png");
+	medalWin = app->tex->Load("Assets/intro_images/medalWin.png");
 
-	app->audio->PlayMusic("audio/music/youWon.ogg", 3*fadeTime, app->audio->musicVolume);
-	medalBounce = app->audio->LoadFx("audio/sfx/WinLose/MedalSound.wav");
+	app->audio->PlayMusic("Assets/audio/music/youWon.ogg", 3*fadeTime, app->audio->musicVolume);
+	medalBounce = app->audio->LoadFx("Assets/audio/sfx/WinLose/MedalSound.wav");
 
 	iconPosY.NewEasing(EASING_TYPE::EASE_OUT_BOUNCE, medalPos.y - 300.0, medalPos.y, 2.0);
 
