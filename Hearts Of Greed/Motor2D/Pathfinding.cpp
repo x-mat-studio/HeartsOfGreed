@@ -309,7 +309,7 @@ void graphLevel::ReCreateIntraEdges(Cluster* c)
 {
 	for (int i = 0; i < c->clustNodes.size(); i++)
 	{
-		c->clustNodes[i]->edges.clear();
+		//c->clustNodes[i]->edges.clear();
 		for (int j = 0; j < c->clustNodes[i]->edges.size(); j++)
 		{
 			if (c->clustNodes[i]->edges[j]->type == EDGE_TYPE::TP_INTRA)
@@ -1097,7 +1097,7 @@ void ModulePathfinding::SetWalkabilityMap(bool state, iMPoint& position, int wid
 
 						if (itNode)
 						{
-							itNode->active = !state;
+							itNode->active = state;
 						}
 
 						clustersToChange.insert(currCluster);
@@ -1403,8 +1403,10 @@ bool ModulePathfinding::DeletePath(Entity* request)
 {
 	BROFILER_CATEGORY("Destroy Path", Profiler::Color::Khaki);
 
-	if (generatedPaths.size() < 1)
-		return false;
+	bool ret = false;
+
+	if (generatedPaths.size() < 1 && pendentPaths.size() < 1)
+		return ret;
 
 	std::unordered_map<Entity*, generatedPath>::iterator it = generatedPaths.begin();
 
@@ -1414,12 +1416,30 @@ bool ModulePathfinding::DeletePath(Entity* request)
 		if (it->first == request)
 		{
 			generatedPaths.erase(request);
-			return true;
+			ret = true;
+			break;
 		}
 		it++;
 	}
 
-	return false;
+
+	if (pendentPaths.size() > 0)
+	{
+		std::unordered_map<Entity*, pendentPath>::iterator it2 = pendentPaths.begin();
+		int maxSize2 = pendentPaths.size();
+
+		for (int i = 0; i < maxSize2; i++)
+		{
+			if (it2->first == request)
+			{
+				generatedPaths.erase(request);
+				ret = true;
+				break;
+			}
+			it2++;
+		}
+	}
+	return ret;
 }
 
 std::vector<iMPoint>* ModulePathfinding::GetLastLine()
