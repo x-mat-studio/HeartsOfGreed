@@ -162,12 +162,12 @@ bool ModulePlayer::PreUpdate(float dt)
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Blue);
 
-	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
+	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN && buildMode == false) // For debug purposes
 	{
 		ActivateBuildMode(ENTITY_TYPE::BLDG_BARRICADE, nullptr);
 	}
 
-	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
+	else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN && buildMode == true) // For debug purposes
 	{
 		DesactivateBuildMode();
 	}
@@ -177,19 +177,19 @@ bool ModulePlayer::PreUpdate(float dt)
 	}
 
 	// FOCUS HEROES WITH KEYS
-	if (app->input->GetKey(SDL_SCANCODE_U) == KEY_STATE::KEY_DOWN) 
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN) 
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
 	}
-	else if (app->input->GetKey(SDL_SCANCODE_I) == KEY_STATE::KEY_DOWN)
+	else if (app->input->GetKey(SDL_SCANCODE_2) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_RANGED, EVENT_ENUM::NULL_EVENT);
 	}
-	else if (app->input->GetKey(SDL_SCANCODE_O) == KEY_STATE::KEY_DOWN)
+	else if (app->input->GetKey(SDL_SCANCODE_3) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_MELEE, EVENT_ENUM::NULL_EVENT);
 	}
-	else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_STATE::KEY_DOWN)
+	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO , EVENT_ENUM::NULL_EVENT);
 	}
