@@ -137,6 +137,9 @@ bool Base::AddTurret(Turret* turret)
 
 	else
 	{
+		if (baseUpgradeCenter != nullptr)
+			turret->SetLevel(baseUpgradeCenter->GetTurretLevel());
+
 		turretsVector.push_back(turret);
 		turret->myBase = this;
 		return true;
@@ -181,6 +184,9 @@ bool Base::AddBarricade(Barricade* barricade)
 
 	else
 	{
+		if (baseUpgradeCenter != nullptr)
+			barricade->SetLevel(baseUpgradeCenter->GetBarricadeLevel());
+
 		barricadesVector.push_back(barricade);
 		barricade->myBase = this;
 		return true;
