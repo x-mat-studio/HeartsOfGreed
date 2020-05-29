@@ -293,6 +293,52 @@ ________________________________________________________________________________
 
 . . .
 
+### Release 0.3.32
+
+#### General Updates
+- Balanced Stats for all Entities
+- Enemies now spawn in the map
+- Introduced a turorial Level
+- Gatherer now gains resources when killing enemies (half of the XP gained)
+
+#### Bug Fixes
+- Fixed UI fullscreen button not changing text
+- Fixed some sound effects volume & channels
+- Fixed mem leaks in Skill areas
+- Fixed some animations
+- Camera now resets with the game loop
+- Pathfinding now finds a way to get out of a walkable tile
+. . .
+
+### Release 0.5.0.
+
+#### General Updates
+- App Veyor is now more accurate at generating automatic builds
+- Vertical Slice status
+- Core game experience implemented
+
+#### Bug Fixes
+- Solved a memory segmentation crash (Fonts format related)
+- UI remake 100%
+
+. . .
+
+### Release 0.5.56.
+
+#### General Updates
+- Pathfinding is improved
+- New types of enemies implemented (Giga / speed / ranged)
+- New 4th herot: Robo Hero.
+- Heroes now have passive abilities
+- Final map implemented
+- Quest system added
+
+#### Bug Fixes
+- Minimap did show icons out of FoW
+- Multiple entities related bugs
+- Multiple animation bugs
+. . .
+
 
 ## Credits
 
