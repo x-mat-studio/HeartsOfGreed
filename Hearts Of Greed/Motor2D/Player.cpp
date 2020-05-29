@@ -656,7 +656,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		doingAction = false;
 		focusedHero = 0;
 
-		if (heroesVector.size() > 0)
+		if (heroesVector.size() > 0 && app->uiManager->mouseOverUI == false)
 		{
 			int random = rand() % heroesVector.size();
 
@@ -720,6 +720,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			if (numHeroes - 1 > focusedHero)
 			{
 				focusedHero++;
+				heroesVector[focusedHero]->PlayGenericNoise(5);
 			}
 			else
 			{
