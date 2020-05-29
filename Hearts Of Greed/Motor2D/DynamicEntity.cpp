@@ -39,6 +39,7 @@ DynamicEntity::~DynamicEntity()
 	path.clear();
 	closeEntityVector.clear();
 	collidingEntityVector.clear();
+	app->pathfinding->DeletePath(this);
 
 }
 

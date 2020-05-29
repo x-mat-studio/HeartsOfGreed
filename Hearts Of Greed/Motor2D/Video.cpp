@@ -16,7 +16,8 @@ Video::Video() :
 	width(NULL),
 	height(NULL),
 	pdata(NULL),
-	mpf(NULL)
+	mpf(NULL),
+	psi()
 {
 	name.create("video");
 }
