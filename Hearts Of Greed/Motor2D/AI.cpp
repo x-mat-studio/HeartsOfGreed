@@ -101,6 +101,7 @@ bool ModuleAI::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::NIGHT_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventRegister(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	return true;
 }
@@ -119,6 +120,7 @@ bool ModuleAI::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::NIGHT_START, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::DAY_START, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	baseVector.clear();
 	spawnerVector.clear();
@@ -198,7 +200,11 @@ void ModuleAI::ExecuteEvent(EVENT_ENUM eventId)
 
 
 	case EVENT_ENUM::ENEMY_CONQUERED_A_BASE:
-		objectivePos = { NULL, NULL };
+		CheckEndGame(ENTITY_ALIGNEMENT::ENEMY);
+		break;
+
+	case EVENT_ENUM::PLAYER_CONQUERED_A_BASE:
+		CheckEndGame(ENTITY_ALIGNEMENT::PLAYER);
 		break;
 	}
 
@@ -540,4 +546,28 @@ void ModuleAI::ResetAI()
 {
 	baseVector.clear();
 	spawnerVector.clear();
+}
+
+
+void ModuleAI::CheckEndGame(ENTITY_ALIGNEMENT align)
+{
+	int numBases = baseVector.size();
+
+	for (int i = 0; i < numBases; i++)
+	{
+		if (baseVector[i]->GetAlignment() != align)
+		{
+			return;
+		}
+	}
+
+	if (align == ENTITY_ALIGNEMENT::PLAYER)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
+	}
+
+	else if(align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_LOSE, EVENT_ENUM::NULL_EVENT);
+	}
 }

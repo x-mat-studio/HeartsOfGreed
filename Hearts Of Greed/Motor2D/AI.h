@@ -20,6 +20,8 @@
 class Base;
 class Spawner;
 
+enum class ENTITY_ALIGNEMENT;
+
 class ModuleAI : public Module
 {
 public:
@@ -62,6 +64,8 @@ private:
 	void AssignSniper(std::multimap<int, Spawner*> spawners, std::multimap<int, Spawner*>::iterator iterator, int tospawn, int spawnersaviable);
 
 	int CalculateSpawnersToActivate();
+
+	void CheckEndGame(ENTITY_ALIGNEMENT align);
 	
 private:
 	fMPoint objectivePos;

@@ -286,7 +286,7 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		aligment = ENTITY_ALIGNEMENT::PLAYER;
-
+		app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
 		{
@@ -304,7 +304,7 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
-
+		app->eventManager->GenerateEvent(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
 		{
@@ -416,8 +416,6 @@ void Base::Die()
 	ChangeTexturesOnDeath();
 
 	ChangeAligment();
-
-	app->eventManager->GenerateEvent(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 }
 
 void Base::ChangeTexturesOnDeath()

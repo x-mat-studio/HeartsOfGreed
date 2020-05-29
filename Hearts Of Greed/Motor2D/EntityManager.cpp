@@ -1749,13 +1749,6 @@ void ModuleEntityManager::SearchEnemiesAlive()
 		if (type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::ENEMY_GIGA || type == ENTITY_TYPE::ENEMY_RANGED || type == ENTITY_TYPE::ENEMY_NIGHT)
 			return;
 	}
-
-	if (app->testScene->IsNight() == true)
-	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_WIN, EVENT_ENUM::NULL_EVENT);
-	}
-
-
 }
 
 
