@@ -316,9 +316,7 @@ void Enemy::OnCollision(Collider* collider)
 
 void Enemy::Draw(float dt)
 {
-
-	Frame currFrame = GetAnimationCurrentFrame(0);
-
+	Frame currFrame = currentAnimation->GetCurrentFrame();
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, scale, currFrame.pivotPositionX, currFrame.pivotPositionY/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);

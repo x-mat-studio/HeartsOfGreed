@@ -22,8 +22,8 @@ MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet,
 	type(type), 
 	offSet(offSet), 
 	minimapPos(worldPos),
-	parent(nparent)
-	
+	parent(nparent),
+	active(true)	
 {}
 
 
@@ -41,6 +41,16 @@ void MinimapIcon::Draw(SDL_Rect sourceRect)
 		float uiscale = app->win->GetUIScale();
 		app->render->Blit(app->uiManager->GetAtlasTexture(), (newpos.x - (sourceRect.w * 0.5f)) / uiscale, (newpos.y - (sourceRect.h * 0.5f)) / uiscale, &sourceRect, false, false);
 	}
+}
+
+void MinimapIcon::SetActiveState(bool isActive)
+{
+	active = isActive;
+}
+
+bool MinimapIcon::IsActive() const
+{
+	return active;
 }
 
 
@@ -176,47 +186,49 @@ bool Minimap::PostUpdate(float dt)
 		SDL_Rect iconRect = { 0,0,0,0 };
 		for (int i = 0; i < minimapIcons.size(); i++)
 		{
-
-			bool visible = true;
-			if (minimapIcons[i]->parent != nullptr&&minimapIcons[i]->parent->visionEntity!=nullptr)
+			if (minimapIcons[i]->IsActive() == true)
 			{
-				if (minimapIcons[i]->parent->visionEntity->isVisible == false)
+				bool visible = true; //todo kind of redundant visible code, take a look at that for the gold
+				if (minimapIcons[i]->parent != nullptr && minimapIcons[i]->parent->visionEntity != nullptr)
 				{
-					visible = false;
-				}
-			}
-
-			if (visible == true)
-			{
-				switch (minimapIcons[i]->type)
-				{
-				case MINIMAP_ICONS::BASE:
-					iconRect = { 12, 504, 4, 4 };
-					break;
-				case MINIMAP_ICONS::TURRET:
-					iconRect = { 20, 504, 4, 4 };
-					break;
-				case MINIMAP_ICONS::ENEMY_TURRET:
-					iconRect = { 16, 504, 4, 4 };
-					break;
-				case MINIMAP_ICONS::HERO:
-					iconRect = { 8, 504, 4, 4 };
-					break;
-				case MINIMAP_ICONS::ENEMY:
-					iconRect = { 0, 504, 4, 4 };
-					break;
-				case MINIMAP_ICONS::ENEMY_BASE:
-					iconRect = { 4, 504, 4, 4 };
-					break;
-				case MINIMAP_ICONS::QUEST:
-					iconRect = { 24, 504, 4, 4 };//TODO change this
-					break;
-				case MINIMAP_ICONS::NONE:
-					iconRect = { 0, 0, 0, 0 };
-					break;
+					if (minimapIcons[i]->parent->visionEntity->isVisible == false)
+					{
+						visible = false;
+					}
 				}
 
-				minimapIcons[i]->Draw(iconRect);
+				if (visible == true)
+				{
+					switch (minimapIcons[i]->type)
+					{
+					case MINIMAP_ICONS::BASE:
+						iconRect = { 12, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::TURRET:
+						iconRect = { 20, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::ENEMY_TURRET:
+						iconRect = { 16, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::HERO:
+						iconRect = { 8, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::ENEMY:
+						iconRect = { 0, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::ENEMY_BASE:
+						iconRect = { 4, 504, 4, 4 };
+						break;
+					case MINIMAP_ICONS::QUEST:
+						iconRect = { 24, 504, 4, 4 };//TODO change this
+						break;
+					case MINIMAP_ICONS::NONE:
+						iconRect = { 0, 0, 0, 0 };
+						break;
+					}
+
+					minimapIcons[i]->Draw(iconRect);
+				}
 			}
 		}
 
@@ -425,4 +437,12 @@ MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint 
 	}
 
 	return icon;
+}
+
+void Minimap::SetAllIconsActiveState(bool areActive)
+{
+	for (int i = 0; i < minimapIcons.size(); i++)
+	{
+		minimapIcons[i]->SetActiveState(areActive);
+	}
 }

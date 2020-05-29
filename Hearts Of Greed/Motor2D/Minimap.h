@@ -24,6 +24,9 @@ public:
 	MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offSet, Entity* parent = nullptr);
 	~MinimapIcon();
 	void Draw(SDL_Rect sourceRect);
+	void SetActiveState(bool isActive);
+	bool IsActive()const;
+
 public:
 
 	fMPoint* minimapPos;
@@ -31,7 +34,12 @@ public:
 	MINIMAP_ICONS type;
 
 	Entity* parent;
+	
 	bool toDelete;
+
+private:
+
+	bool active;
 };
 
 
@@ -68,6 +76,8 @@ public:
 	iMPoint ScreenToMinimapToWorld(int x, int y);
 
 	MinimapIcon* CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offset, Entity* parent = nullptr);
+
+	void SetAllIconsActiveState(bool areActive);
 
 
 public:
