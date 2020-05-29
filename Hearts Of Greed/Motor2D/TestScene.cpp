@@ -46,7 +46,8 @@ ModuleTestScene::ModuleTestScene() :
 	menuScene(false),
 	isNightTime(false),
 	mapLoaded(false),
-	startFromLoad(false)
+	startFromLoad(false),
+	haveJustBeenLoaded(false)
 {
 	name.create("testScene");
 }
@@ -223,9 +224,16 @@ bool  ModuleTestScene::PreUpdate(float dt)
 
 	if (camToReset == true)
 	{
-		app->win->SetScale(startingScale);
-		app->render->currentCamX = initialCamPos.x;
-		app->render->currentCamY = initialCamPos.y;
+		if (haveJustBeenLoaded == false)
+		{
+			app->win->SetScale(startingScale);
+			app->render->currentCamX = initialCamPos.x;
+			app->render->currentCamY = initialCamPos.y;
+		}
+		else
+		{
+			haveJustBeenLoaded = false;
+		}
 		camToReset = false;
 	}
 
@@ -446,6 +454,8 @@ bool  ModuleTestScene::Load(pugi::xml_node& data)
 
 	timer = iterator.attribute("timer").as_float();
 
+
+	haveJustBeenLoaded = true;
 	return true;
 }
 

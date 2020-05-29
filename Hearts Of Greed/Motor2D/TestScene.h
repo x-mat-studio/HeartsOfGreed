@@ -69,6 +69,7 @@ private:
 
 public:
 	bool startFromLoad;
+	bool haveJustBeenLoaded;
 
 private:
 	int prevMousePosX;

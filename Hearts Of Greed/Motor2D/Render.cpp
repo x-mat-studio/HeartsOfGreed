@@ -116,8 +116,8 @@ bool ModuleRender::CleanUp()
 // Load Game State
 bool ModuleRender::Load(pugi::xml_node& data)
 {
-	currentCamX = data.child("camera").attribute("x").as_int(0);
-	currentCamY = data.child("camera").attribute("y").as_int(0);
+	camera.x=currentCamX = data.child("camera").attribute("x").as_int(0);
+	camera.y=currentCamY = data.child("camera").attribute("y").as_int(0);
 
 	return true;
 }
