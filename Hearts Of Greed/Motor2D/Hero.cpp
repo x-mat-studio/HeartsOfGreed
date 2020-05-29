@@ -440,13 +440,6 @@ void Hero::CommandVfx(float dt)
 
 		BlitCommandVfx(currFrame, drawAlpha);
 	}
-	else
-	{
-		movingTo = { -1, -1 };
-		//tileOnWalk.ResetAnimation();
-	}
-
-
 }
 
 bool Hero::MoveTo(int x, int y, bool haveObjective)
@@ -504,7 +497,7 @@ void Hero::OnCollision(Collider* collider)
 
 void Hero::Draw(float dt)
 {
-	Frame currFrame = GetAnimationCurrentFrame(0);
+	Frame currFrame = currentAnimation->GetCurrentFrame();
 
 	if (damageTakenTimer > 0.f)
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 0, 0, 0.75f, currFrame.pivotPositionX, currFrame.pivotPositionY);
@@ -515,6 +508,7 @@ void Hero::Draw(float dt)
 	if (drawingVfx)
 		DrawVfx(dt);
 }
+
 
 Frame Hero::GetAnimationCurrentFrame(float dt)
 {
