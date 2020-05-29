@@ -96,6 +96,7 @@ bool ModulePathfinding::CleanUp()
 	absGraph.lvlClusters.clear();
 
 	generatedPaths.clear();
+	pendentPaths.clear();
 	return true;
 }
 
