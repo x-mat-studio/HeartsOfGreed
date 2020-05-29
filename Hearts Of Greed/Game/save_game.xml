@@ -9,7 +9,7 @@
 	<map name="finalMap.tmx" />
 	<menuScene />
 	<testScene>
-		<time_info days_passed="0" is_night="false" timer="7.43000031" />
+		<time_info days_passed="0" is_night="false" timer="3.63099766" />
 	</testScene>
 	<winScene />
 	<loseScene />
@@ -19836,11 +19836,11 @@
 	</UIManager>
 	<pathfinding />
 	<player>
-		<resources cristals="5" skillCoin="0" enemyCoin="0" />
+		<resources cristals="0" skillCoin="0" enemyCoin="0" />
 	</player>
 	<AI />
 	<QuestManager character1="15" character2="2">
-		<quest active="false" noCombat="true" id="0" dialogInput="-1" reward="0">
+		<quest active="false" noCombat="true" id="0" dialogInput="-1" reward="0" questX="7022348" questY="0" questID="0">
 			<questEntitys />
 		</quest>
 		<quest active="false" noCombat="false" id="2" dialogInput="-1" reward="300" questX="-1984" questY="2656" questID="2">
@@ -19863,6 +19863,6 @@
 	<video />
 	<:anonymous />
 	<renderer>
-		<camera x="1450" y="-7934" />
+		<camera x="513" y="-7934" />
 	</renderer>
 </game_state>
