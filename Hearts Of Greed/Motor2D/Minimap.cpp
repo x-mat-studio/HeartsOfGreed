@@ -17,13 +17,13 @@
 #include "TestScene.h"
 #include "Entity.h"
 
-MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet,Entity* nparent):
+MinimapIcon::MinimapIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offSet, Entity* nparent) :
 	toDelete(false),
-	type(type), 
-	offSet(offSet), 
+	type(type),
+	offSet(offSet),
 	minimapPos(worldPos),
 	parent(nparent),
-	active(true)	
+	active(true)
 {}
 
 
@@ -54,7 +54,20 @@ bool MinimapIcon::IsActive() const
 }
 
 
-Minimap::Minimap() :minimapLoaded(false),minimapFoWNeedsUpdate(false), miniFrame{ 509, 706, 238, 125 }
+Minimap::Minimap() :
+	minimapLoaded(false),
+	minimapFoWNeedsUpdate(false),
+	miniFrame({ 509, 706, 238, 125 }),
+	positionFrame({ 0,0,0,0 }),
+	camRect({ 0,0,0,0 }),
+	minimapTexture(nullptr),
+	minimapFrame(nullptr),
+	minimapHeight(0),
+	width(0),
+	position({ 0,0 }),
+	height(0),
+	minimapWidth(0),
+	minimapScaleRelation(0)
 {
 	name = "minimap";
 }
@@ -126,18 +139,18 @@ bool Minimap::Update(float dt)
 
 	CheckListener(this);
 
-	if (minimapLoaded==true)
+	if (minimapLoaded == true)
 	{
 		iMPoint mousePos = app->input->GetMousePosScreen();
 		int w;
 		int h;
-		
+
 		app->render->GetCameraMeasures(w, h);
 
 		float scale = app->win->GetScale();
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			if (ClickingOnMinimap(mousePos.x, mousePos.y) == true && app->player->doingAction==false)
+			if (ClickingOnMinimap(mousePos.x, mousePos.y) == true && app->player->doingAction == false)
 			{
 				//camera TP
 				iMPoint newCamPos = ScreenToMinimapToWorld(mousePos.x, mousePos.y);
@@ -157,7 +170,7 @@ bool Minimap::PostUpdate(float dt)
 	bool ret = true;
 	BROFILER_CATEGORY("Minimap PostUpdate", Profiler::Color::DarkSlateBlue);
 
-	if (minimapLoaded==true)
+	if (minimapLoaded == true)
 	{
 		if (minimapFoWNeedsUpdate == true)
 		{
@@ -367,7 +380,7 @@ void Minimap::LoadMinimap()
 	CreateMinimapText();
 	SDL_SetRenderTarget(app->render->renderer, NULL);
 	minimapFoWNeedsUpdate = true;
-	
+
 }
 
 void Minimap::UpdateMinimapFoW()
@@ -425,11 +438,11 @@ iMPoint Minimap::ScreenToMinimapToWorld(int x, int y) {
 	return minimap_position;
 }
 
-MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint &offset, Entity* parent)
+MinimapIcon* Minimap::CreateIcon(fMPoint* worldPos, MINIMAP_ICONS type, fMPoint& offset, Entity* parent)
 {
 	MinimapIcon* icon = nullptr;
 
-	icon = new MinimapIcon(worldPos, type, offset,parent);
+	icon = new MinimapIcon(worldPos, type, offset, parent);
 
 	if (icon != nullptr)
 	{
