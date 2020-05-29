@@ -34,12 +34,6 @@ Quest::~Quest()
 {
 	id = -1;
 	myState = QUEST_STATE::ST_UNKNOWN;
-	
-	if (minimapIcon != nullptr)
-	{
-		minimapIcon->SetActiveState(false);
-	}
-
 }
 
 
@@ -59,16 +53,9 @@ void Quest::OnCollision(Collider* collider)
 {
 	this->myState = QUEST_STATE::ACTIVE;
 
-	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
-
-	if (minimapIcon != nullptr)
-	{
-		minimapIcon->toDelete = true;
-	}
-	
 	app->questManager->QuestStarted(id);
 
-	toDelete = true;
+	Die();
 }
 
 
@@ -108,3 +95,15 @@ void Quest::SetId(int i)
 	}
 }
 
+
+void Quest::Die()
+{
+	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
+	if (minimapIcon != nullptr)
+	{
+		minimapIcon->toDelete = true;
+	}
+
+	toDelete = true;
+}
