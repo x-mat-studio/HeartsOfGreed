@@ -56,6 +56,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	base1Texture(nullptr),
 	snowball(nullptr),
 	deco3Selected(nullptr),
+	streetLightTexture(nullptr),
 	turretTexture(nullptr),
 	barricadeTexture(nullptr),
 	upgradeCenterPlayerTexture(nullptr),
@@ -74,6 +75,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEnemy(nullptr),
 	sampleSpawner(nullptr),
 	sampleBuilding(nullptr),
+	sampleStreetLight(nullptr),
 	sampleBase(nullptr),
 	sampleTurret(nullptr),
 	sampleBarricade(nullptr),
@@ -285,9 +287,11 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	pugi::xml_node buildings = buildingsdoc.child("buildings");
 
 	pugi::xml_node building = buildings.child("building");
+	pugi::xml_node streetLight = buildings.child("streetLight");
 	pugi::xml_node base = buildings.child("base");
-
+	
 	LoadSampleBuilding(building);
+	LoadSampleStreetLight(streetLight);
 	LoadSampleBase(base);
 
 	buildingsdoc.reset();
@@ -342,6 +346,8 @@ bool ModuleEntityManager::Start()
 	base2TextureSelected = app->tex->Load("Assets/maps/base02_selected.png");
 	base2TextureEnemy = app->tex->Load("Assets/maps/base02_enemy.png");
 	base2TextureSelectedEnemy = app->tex->Load("Assets/maps/base02_enemy_selected.png");
+
+	streetLightTexture = app->tex->Load("Assets/maps/streetLight.png");
 
 	turretTexture = app->tex->Load("Assets/spritesheets/Structures/turretSpritesheet.png");
 	barricadeTexture = app->tex->Load("Assets/spritesheets/Structures/barricade.png");
@@ -587,13 +593,20 @@ void ModuleEntityManager::CheckIfStarted() {
 				case BUILDING_DECOR::ST_01:
 					DecorTex = base1Texture;
 					break;
+
 				case BUILDING_DECOR::ST_02:
 					DecorTex = base2Texture;
 					break;
+
 				case BUILDING_DECOR::ST_03:
 					DecorTex = buildingTexture;
 					bld->selectedTexture = deco3Selected;
 					break;
+
+				case BUILDING_DECOR::STREETLIGHT:
+					DecorTex = streetLightTexture;
+					break;
+
 				default:
 					DecorTex = base1Texture;
 					break;
@@ -783,9 +796,10 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(upgradeCenterPlayerSelectedTexture);	upgradeCenterPlayerSelectedTexture = nullptr;
 	app->tex->UnLoad(upgradeCenterEnemyTexture);			upgradeCenterEnemyTexture = nullptr;
 	app->tex->UnLoad(upgradeCenterEnemySelectedTexture);	upgradeCenterEnemySelectedTexture = nullptr;
-
+	app->tex->UnLoad(streetLightTexture);					streetLightTexture = nullptr;
 
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
+	RELEASE(sampleStreetLight);						sampleStreetLight = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
 	RELEASE(sampleBarricade);						sampleBarricade = nullptr;
@@ -978,17 +992,22 @@ Entity* ModuleEntityManager::AddDecorativeBuilding(BUILDING_DECOR decor, int x, 
 	switch (decor)
 	{
 	case BUILDING_DECOR::ST_01:
-		ret = building = new Building({ (float)x,(float)y }, sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		ret = building = new Building(fMPoint(x, y), sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
 		building->myDecor = decor;
 		break;
 
 	case BUILDING_DECOR::ST_02:
-		ret = building = new Building({ (float)x,(float)y }, sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		ret = building = new Building(fMPoint(x, y), sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
 		building->myDecor = decor;
 		break;
 
 	case BUILDING_DECOR::ST_03:
-		ret = building = new Building({ (float)x,(float)y }, sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		ret = building = new Building(fMPoint(x, y), sampleBuilding, ENTITY_ALIGNEMENT::NEUTRAL);
+		building->myDecor = decor;
+		break;
+
+	case BUILDING_DECOR::STREETLIGHT:
+		ret = building = new Building(fMPoint(x, y), sampleStreetLight, ENTITY_ALIGNEMENT::NEUTRAL);
 		building->myDecor = decor;
 		break;
 
@@ -3497,6 +3516,24 @@ bool ModuleEntityManager::LoadSampleBuilding(pugi::xml_node& buildingNode)
 }
 
 
+bool ModuleEntityManager::LoadSampleStreetLight(pugi::xml_node& streetLightNode)
+{
+	int width = streetLightNode.first_child().child("collider").child("rect").attribute("w").as_int(0);
+	int height = streetLightNode.first_child().child("collider").child("rect").attribute("w").as_int(0);
+	COLLIDER_TYPE collType = (COLLIDER_TYPE)streetLightNode.first_child().child("collider").child("type").attribute("id").as_int(0);
+
+	Collider* col = new Collider(SDL_Rect{ 0, 0, width, height }, collType, this);
+
+	int transparency = streetLightNode.first_child().child("stats").attribute("transparency").as_int(0);
+
+
+	//sample
+	sampleStreetLight = new Building(fMPoint(0, 0), 1, 1, 0, 0, 0, transparency, col);
+
+	return true;
+}
+
+
 bool ModuleEntityManager::LoadSampleBase(pugi::xml_node& baseNode)
 {
 	bool ret = true;
@@ -3918,6 +3955,9 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 			case 2:
 				AddDecorativeBuilding(BUILDING_DECOR::ST_03, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 				break;
+
+			case 3:
+				AddDecorativeBuilding(BUILDING_DECOR::STREETLIGHT, iterator.attribute("x").as_int(), iterator.attribute("y").as_int());
 			}
 		}
 

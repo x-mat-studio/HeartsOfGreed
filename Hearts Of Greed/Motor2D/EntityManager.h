@@ -79,7 +79,7 @@ public:
 
 
 	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&)const;
+	bool Save(pugi::xml_node&) const;
 
 
 	void OnCollision(Collider*, Collider*);
@@ -188,16 +188,17 @@ private:
 	bool LoadSampleTurret(pugi::xml_node& turretNode);
 	bool LoadSampleBarricade(pugi::xml_node& barricadeNode);
 	bool LoadSampleUpgradeCenter(pugi::xml_node& upgradeCenterNode);
-	
+
 	bool LoadSampleSpawner(pugi::xml_node& spawnerNode);
 	bool LoadSampleBuilding(pugi::xml_node& buildingNode);
+	bool LoadSampleStreetLight(pugi::xml_node& streetLightNode);
 	bool LoadSampleBase(pugi::xml_node& baseNode);
 
 	bool LoadSampleParticleSystemsAndEmitters(pugi::xml_node& particleSystemsNode);
 	bool LoadSkillAreas(pugi::xml_node& areasNode);
 
 	int CheckPlayerBases();
-	
+
 
 public:
 
@@ -310,10 +311,11 @@ private:
 	SDL_Texture* roboTexture;
 
 	SDL_Texture* buildingTexture;
-	
+
 	SDL_Texture* base1Texture;
 
 	SDL_Texture* deco3Selected;
+	SDL_Texture* streetLightTexture;
 
 	SDL_Texture* turretTexture;
 	SDL_Texture* barricadeTexture;
@@ -338,6 +340,7 @@ private:
 	Spawner* sampleSpawner;
 
 	Building* sampleBuilding;
+	Building* sampleStreetLight;
 	Base* sampleBase;
 
 	Turret* sampleTurret;

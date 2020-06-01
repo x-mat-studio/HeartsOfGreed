@@ -17,6 +17,20 @@
     </sample>
   </building>
 
+
+  <streetLight>
+    <sample>
+
+      <collider>
+        <rect w="20" h="87"/>
+        <type id="4"/>
+      </collider>
+
+      <stats transparency="170"/>
+      
+    </sample>
+  </streetLight>
+
   
   <base>
     <sample>

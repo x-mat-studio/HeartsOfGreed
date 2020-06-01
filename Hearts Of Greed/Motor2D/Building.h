@@ -30,6 +30,9 @@ enum class BUILDING_DECOR : int
 	ST_01,
 	ST_02,
 	ST_03,
+
+	STREETLIGHT,
+
 	NONE,
 
 	ST_ALL,
