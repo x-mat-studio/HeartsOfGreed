@@ -392,10 +392,10 @@
     </death_left_down>
 
     <death_left name="death_left" frames="4">
-      <frame rposX="549" rposY="719" rwidth="51" rheight="54"  time="0.15f" pivotX="46" pivotY="47"/>
-      <frame rposX="613" rposY="719" rwidth="68" rheight="54"  time="0.15f" pivotX="65" pivotY="45"/>
-      <frame rposX="685" rposY="719" rwidth="71" rheight="54"  time="0.15f" pivotX="69" pivotY="44"/>
-      <frame rposX="757" rposY="719" rwidth="72" rheight="54"  time="0.15f" pivotX="70" pivotY="44"/>
+      <frame rposX="549" rposY="719" rwidth="51" rheight="54"  time="0.15f" pivotX="46" pivotY="51"/>
+      <frame rposX="613" rposY="719" rwidth="68" rheight="54"  time="0.15f" pivotX="65" pivotY="47"/>
+      <frame rposX="685" rposY="719" rwidth="71" rheight="54"  time="0.15f" pivotX="69" pivotY="40"/>
+      <frame rposX="757" rposY="719" rwidth="72" rheight="54"  time="0.15f" pivotX="70" pivotY="43"/>
     </death_left>
 
     <death_left_up name="death_left_up" frames="4">
