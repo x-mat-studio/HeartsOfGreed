@@ -37,6 +37,8 @@ enum class EVENT_ENUM
 	FOCUS_HERO_RANGED,
 	FOCUS_HERO_ROBO,
 
+	CAMERA_FOCUS_HERO,
+
 	ENTITY_DEAD,
 
 	// Debug events
