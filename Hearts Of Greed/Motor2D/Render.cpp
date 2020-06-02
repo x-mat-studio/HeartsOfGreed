@@ -8,6 +8,7 @@
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "UIManager.h"
 #include "Input.h"
+#include "TestScene.h"
 
 
 ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr), viewport{ 0,0,0,0 }, currentCamX(0), currentCamY(0), camera{0,0,0,0}
@@ -97,9 +98,14 @@ bool ModuleRender::PostUpdate(float dt)
 	SDL_Rect inputRect = { 801,27,18,25 };//default mouse
 
 	if(app->input->GetMouseButtonDown(SDL_BUTTON_LEFT)== KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
-		inputRect= { 849,27,15,21 };
-
-
+		inputRect = { 849,27,15,21 };
+	else if(app->testScene->IsEnabled() == true)
+	{
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_MIDDLE) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_MIDDLE) == KEY_STATE::KEY_REPEAT)
+			inputRect = {870,24,30,30 };
+		else if (app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_REPEAT)
+			inputRect = { 849,53,15,21 };
+	}
 
 	int x, y;
 	SDL_GetMouseState(&x,&y);
