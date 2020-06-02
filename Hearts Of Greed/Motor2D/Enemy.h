@@ -124,8 +124,6 @@ private:
 
 	float attackCooldown;
 
-	int framesPerPathfinding;
-	int framePathfindingCount;
 
 	bool haveOrders;
 	Entity* shortTermObjective;

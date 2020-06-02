@@ -106,11 +106,6 @@ void EntityEffects::EndEffect(SKILL_EFFECT effect)
 
 
 	case SKILL_EFFECT::BLOOD_LOSS:
-
-		float maxHp = callback->GetMaxHP();
-
-		effects[effect].statTaken = maxHp / effects[effect].severity / effects[effect].time / 60;
-
 		break;
 	}
 

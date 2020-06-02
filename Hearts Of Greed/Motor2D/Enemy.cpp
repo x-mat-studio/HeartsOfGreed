@@ -51,8 +51,6 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	attackRange(attackRange),
 	attackCooldown(0),
 
-	framePathfindingCount(0),
-	framesPerPathfinding(FRAMES_PER_PATHFINDING),
 
 	xpOnDeath(xpOnDeath),
 	longTermObjective{ NULL, NULL },
@@ -101,9 +99,6 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	attackRange(copy->attackRange),
 	attackCooldown(0),
 
-	framePathfindingCount(0),
-	framesPerPathfinding(FRAMES_PER_PATHFINDING),
-
 	xpOnDeath(copy->xpOnDeath),
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
@@ -118,8 +113,6 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	visionEntity = app->fowManager->CreateFoWEntity(position, false); //TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
 
-	int randomCounter = rand() % 20;
-	framesPerPathfinding += randomCounter;
 
 	debuffs.SetCallBack(this);
 }
@@ -195,11 +188,11 @@ void Enemy::StateMachine(float dt)
 			}
 			else
 			{
-				if (framePathfindingCount == framesPerPathfinding && shortTermObjective != nullptr)
+				if (shortTermObjective != nullptr)
 				{
 					fMPoint pos = shortTermObjective->GetPosition();
 
-					MoveTo(pos.x, pos.y );
+					MoveTo(pos.x, pos.y);
 				}
 			}
 		}
@@ -228,7 +221,7 @@ void Enemy::StateMachine(float dt)
 						attackCooldown += 0.01f;
 					}
 			}
-			else 
+			else
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
 			}
@@ -291,8 +284,6 @@ bool Enemy::PostUpdate(float dt)
 
 bool Enemy::MoveTo(float x, float y)
 {
-
-	framePathfindingCount = 0;
 
 	if (GeneratePath(x, y, 1))
 	{
@@ -470,7 +461,7 @@ bool Enemy::CheckAttackRange()
 	fMPoint objPosW = shortTermObjective->GetPosition();
 	iMPoint objPosM = app->map->WorldToMap(objPosW.x, objPosW.y);
 
-	if (app->pathfinding->CreateLine(myPos, objPosM).size()-1  < attackRange + shortTermObjective->GetRadiusSize())
+	if (app->pathfinding->CreateLine(myPos, objPosM).size() - 1 < attackRange + shortTermObjective->GetRadiusSize())
 	{
 		return true;
 
@@ -497,11 +488,6 @@ void Enemy::InternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 	}
 
-	if (framePathfindingCount < framesPerPathfinding)
-	{
-		framePathfindingCount++;
-	}
-
 	if (damageTakenTimer > 0.f)
 	{
 		damageTakenTimer -= dt;
@@ -521,18 +507,17 @@ bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 
 	else
 	{
-		if (framePathfindingCount == framesPerPathfinding)
-		{
-			if (SearchObjective() == true)
-			{
-				MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
-			}
 
-			else if (haveOrders)
-			{
-				MoveTo(longTermObjective.x, longTermObjective.y);
-			}
+		if (SearchObjective() == true)
+		{
+			MoveTo(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y);
 		}
+
+		else if (haveOrders)
+		{
+			MoveTo(longTermObjective.x, longTermObjective.y);
+		}
+
 	}
 
 	return true;
