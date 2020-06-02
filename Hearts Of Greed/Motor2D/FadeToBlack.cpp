@@ -12,6 +12,8 @@ ModuleFadeToBlack::ModuleFadeToBlack() :
 	timeSpent(0.0f),
 	screen({ 0,0,0,0 }),
 
+	animStarted(false),
+
 	toEnable(nullptr),
 	toDisable(nullptr),
 
@@ -80,8 +82,8 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 
 			if (currentAnim == FADE_ANIMATION::CURTAIN)
 			{
-				leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5, totalTime);
-				rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, totalTime);
+				leftCurtainEasing.Deactivate();
+				rightCurtainEasing.Deactivate();
 			}
 
 			app->gamePause = false;
@@ -91,11 +93,23 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 	case FADE_STEP::FADE_FROM_BLACK:
 	{
 		normalized = 1.0f - normalized;
+
+
+		if (currentAnim == FADE_ANIMATION::CURTAIN && timeSpent >= CURTAIN_DELAY && animStarted == false)
+		{
+			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5, totalTime - timeSpent);
+			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, totalTime - timeSpent);
+
+			animStarted = true;
+		}
+
 		if (timeSpent >= totalTime)
 		{
 			currentStep = FADE_STEP::NONE;
 			timeSpent = 0.0f;
 			totalTime = 0.0f;
+
+			animStarted = false;
 		}
 	} break;
 	}
@@ -119,8 +133,8 @@ bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float
 
 		if (currentAnim == FADE_ANIMATION::CURTAIN)
 		{
-			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0 - screen.w * 0.5, 0, time);
-			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w, screen.w * 0.5, time);
+			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0 - screen.w * 0.5, 0, time - CURTAIN_DELAY);
+			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w, screen.w * 0.5, time - CURTAIN_DELAY);
 		}
 
 		timeSpent = 0.0f;
@@ -170,14 +184,18 @@ void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
 
 	case FADE_ANIMATION::CURTAIN:
 		
+		if (leftCurtainEasing.IsActive() == true)
+		{
+			leftCurtainEasing.UpdateEasingAddingTime(dt);
+			rightCurtainEasing.UpdateEasingAddingTime(dt);
+		}
 
-		leftCurtain.x = leftCurtainEasing.UpdateEasingAddingTime(dt);
-		rightCurtain.x = rightCurtainEasing.UpdateEasingAddingTime(dt);
+		leftCurtain.x = leftCurtainEasing.GetLastRequestedPos();
+		rightCurtain.x = rightCurtainEasing.GetLastRequestedPos();
 
 		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(255.0f));
 		SDL_RenderFillRect(app->render->renderer, &leftCurtain);
 		SDL_RenderFillRect(app->render->renderer, &rightCurtain);
-
 		break;
 
 	default:
