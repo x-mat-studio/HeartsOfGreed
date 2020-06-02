@@ -6,6 +6,8 @@
 #include "EventManager.h"
 #include "Collision.h"
 #include "Brofiler/Brofiler/Brofiler.h"
+#include "UIManager.h"
+#include "Input.h"
 
 
 ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr), viewport{ 0,0,0,0 }, currentCamX(0), currentCamY(0), camera{0,0,0,0}
@@ -64,7 +66,7 @@ bool ModuleRender::Start()
 	SDL_RenderGetViewport(renderer, &viewport);
 	currentCamX = camera.x;
 	currentCamY = camera.y;
-
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 	//these 2 lines are here to test the 1st map TODO delete
 	/*app->render->currentCamX = 1027;
 	app->render->currentCamY = -2500;*/
@@ -92,6 +94,18 @@ bool ModuleRender::PostUpdate(float dt)
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 
+	SDL_Rect inputRect = { 801,27,18,25 };//default mouse
+
+	if(app->input->GetMouseButtonDown(SDL_BUTTON_LEFT)== KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+		inputRect= { 849,27,15,21 };
+
+
+
+	int x, y;
+	SDL_GetMouseState(&x,&y);
+	SDL_Rect outputRect = { x,y,inputRect.w,inputRect.h };
+	SDL_RenderCopy(renderer, app->uiManager->GetAtlasTexture(), &inputRect, &outputRect);
+
 	SDL_RenderPresent(renderer);
 
 	CheckListener(this);
@@ -109,6 +123,8 @@ bool ModuleRender::PostUpdate(float dt)
 bool ModuleRender::CleanUp()
 {
 	SDL_DestroyRenderer(renderer);
+	SDL_SetRelativeMouseMode(SDL_FALSE);
+
 	return true;
 }
 

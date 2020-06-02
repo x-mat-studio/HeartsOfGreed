@@ -130,7 +130,7 @@ bool ModuleWindow::AssignSurface(SDL_Window * window)
 bool ModuleWindow::ChangeWindow(RESOLUTION_MODE stateResolution)
 {
 	SDL_Window* newWindow = ResizeWindow(stateResolution);
-
+	SDL_SetWindowBordered(newWindow, SDL_FALSE);
 	bool changeRet = AssignSurface(newWindow);
 
 	return changeRet;
