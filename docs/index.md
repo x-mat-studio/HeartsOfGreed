@@ -29,7 +29,7 @@ src="https://www.youtube.com/embed/P8MXNEiODTw" frameborder="0" allowfullscreen>
 
 <center>
 
-<font size="6"><a href="https://github.com/AaronGCProg/SamuraiShodown-XMatStudio/releases/tag/1.00">Download our game Build</a></font>
+<font size="6"><a href="https://github.com/x-mat-studio/HeartsOfGreed/releases/tag/v0.8">Download our game Build</a></font>
 
 </center>
 
@@ -57,22 +57,22 @@ src="https://www.youtube.com/embed/P8MXNEiODTw" frameborder="0" allowfullscreen>
   </tr>
     <tr>
     <td><a href="https://github.com/oscarpm5">Oscar Pérez</a></td>
-    <td>Code and UI</td> 
+    <td>QA</td> 
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/oscarPortrait.png" alt="Oscar" class="inline"></td>
   </tr>
     <tr>
-    <td><a href="https://github.com/oscarpm5">Jose Luís Redondo</a></td>
-    <td>Code and UI</td> 
+    <td><a href="https://github.com/jose-tello">Jose Luís Redondo</a></td>
+    <td>Code & UI</td> 
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/josePortrait.png" alt="Jose" class="inline"></td>
   </tr>
     <tr>
-    <td><a href="https://github.com/oscarpm5">Adrià Serrano</a></td>
-    <td>Code and UI</td> 
+    <td><a href="https://github.com/adriaserrano97">Adrià Serrano</a></td>
+    <td>Audio & Art</td> 
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/adriaPortrait.png" alt="Adrià" class="inline"></td>
   </tr>
     <tr>
-    <td><a href="https://github.com/oscarpm5">Ferran-Roger Basart</a></td>
-    <td>Code and UI</td> 
+    <td><a href="https://github.com/ferba93">Ferran-Roger Basart</a></td>
+    <td>Management & UI</td> 
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/ferranPortrait.png" alt="Ferran" class="inline"></td>
   </tr>
 </table>
