@@ -354,7 +354,10 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	origin = app->map->WorldToMap(round(position.x), round(position.y));
 	goal = app->map->WorldToMap(x, y);
 
-	if (app->pathfinding->GetDestination(this) != goal || (!this->path.empty() && this->path.back() == goal))
+	iMPoint destination = app->pathfinding->GetDestination(this);
+
+	if (( destination != goal && destination != iMPoint{ INT_MIN, INT_MIN }) || (this->path.empty() && !waitingForPath)  || (this->path.empty() == false && this->path.back() != goal))
+	{
 		if (app->pathfinding->GeneratePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
 		{
 			waitingForPath = true;
@@ -363,6 +366,7 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 			return true;
 		}
+	}
 
 	return false;
 }

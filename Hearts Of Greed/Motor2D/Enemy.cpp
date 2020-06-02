@@ -186,15 +186,7 @@ void Enemy::StateMachine(float dt)
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 			}
-			else
-			{
-				if (shortTermObjective != nullptr)
-				{
-					fMPoint pos = shortTermObjective->GetPosition();
 
-					MoveTo(pos.x, pos.y);
-				}
-			}
 		}
 		else
 			inputs.push_back(ENEMY_INPUTS::IN_IDLE);
@@ -220,10 +212,11 @@ void Enemy::StateMachine(float dt)
 
 						attackCooldown += 0.01f;
 					}
+
 			}
 			else
 			{
-				inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
+				inputs.push_back(ENEMY_INPUTS::IN_OBJECTIVE_DONE);
 			}
 
 		}
