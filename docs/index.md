@@ -13,6 +13,7 @@
 
 Sample sample sample sample sample sample sample sample sample.</p>
 
+<p align="center"><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/General%20Analysis/heartsOfGreed_gameIcon.png" alt="gameIcon" class="center"></p>
 
 <a href="https://github.com/x-mat-studio/HeartsOfGreed/wiki/General-Analysis">Click here</a> if you want to know more about this game.
 
