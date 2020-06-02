@@ -814,6 +814,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
+			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
+
 		}
 
 		break;
@@ -836,6 +838,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
+			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
 		}
 
 		break;
@@ -858,6 +861,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		{
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
+			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
+
 		}
 
 		break;
@@ -880,6 +885,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			hero->selectedByPlayer = true;
 
 			heroesVector.push_back(hero);
+			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
+
 		}
 		
 		break;

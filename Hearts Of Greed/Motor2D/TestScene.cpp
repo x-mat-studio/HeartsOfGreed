@@ -203,6 +203,7 @@ bool ModuleTestScene::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
+	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_FOCUS_HERO, this);
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
@@ -545,6 +546,20 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 		isNightTime = true;
 		//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
 		timer = 0;
+		break;
+
+	case EVENT_ENUM::CAMERA_FOCUS_HERO:
+		Entity* hero = app->player->GetFocusedEntity();
+		switch (hero->GetType())
+		{
+		case ENTITY_TYPE::HERO_GATHERER:
+		case ENTITY_TYPE::HERO_MELEE:
+		case ENTITY_TYPE::HERO_RANGED:
+		case ENTITY_TYPE::HERO_ROBO:
+			MoveCamTo(hero->position, 1, EASING_TYPE::EASE_IN_OUT_SINE);
+		default:
+			break;
+		}
 		break;
 
 	}
