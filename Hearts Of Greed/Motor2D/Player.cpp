@@ -306,6 +306,14 @@ bool ModulePlayer::HandleInput()
 			doingAction = false;
 			BuildClick();
 		}
+
+		else if (entityComand)
+		{
+			entityComand = false;
+			doingAction = false;
+
+			DesactivateBuildMode();
+		}
 	}
 
 	return true;

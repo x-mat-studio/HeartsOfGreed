@@ -122,6 +122,8 @@ UIFactory::UIFactory() :
 	robottoActive1Button{ 348, 707, 93, 91 },
 
 	dialogWindow{ 1096, 41, 859, 615 },
+	skipButton{54 ,21, 35, 18},
+
 	dayNightIcon{522, 851, 35, 35},
 
 	gathererLifeUpgradeCost(100),
@@ -264,6 +266,12 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 
 	DialogText* text = new DialogText(0, 0, fMPoint(160, 41), fMPoint(85, 130), button, false);
 	group->AddUiElement(text);
+
+	Button* skip = new Button(fMPoint(420, 20), button, skipButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::SKIP_DIALOG);
+	group->AddUiElement(skip);
+
+	CreateText(3, -5, skip, "Skip", group);
+	
 
 	switch (character1)
 	{

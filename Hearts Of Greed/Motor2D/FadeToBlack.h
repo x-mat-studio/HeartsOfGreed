@@ -1,7 +1,7 @@
 #ifndef __FADE_TO_BLACK_H__
 #define __FADE_TO_BLACK_H__
 
-#define CURTAIN_DELAY 0.2
+#define CURTAIN_DELAY 0.4
 
 #include "Module.h"
 #include "EasingFunctions.h"

@@ -291,6 +291,7 @@ private:
 
 	//Dialog things
 	SDL_Rect dialogWindow;
+	SDL_Rect skipButton;
 
 public:
 
