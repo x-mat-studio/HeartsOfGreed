@@ -121,7 +121,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_STATE::KEY_DOWN || changeScene == true)
 	{
 
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2))
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2, FADE_ANIMATION::CURTAIN))
 		{
 			changeScene = false;
 		}
@@ -129,7 +129,7 @@ bool  ModuleMainMenuScene::PostUpdate(float dt)
 
 	if (changeSceneContinue == 0)
 	{
-		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2) == true)
+		if (app->fadeToBlack->FadeToBlack(this, app->testScene, fadeTime * 2, FADE_ANIMATION::CURTAIN) == true)
 		{
 			changeSceneContinue = 1;
 		}

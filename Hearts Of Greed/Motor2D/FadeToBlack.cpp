@@ -14,8 +14,9 @@ ModuleFadeToBlack::ModuleFadeToBlack() :
 
 	toEnable(nullptr),
 	toDisable(nullptr),
-	
-	currentStep(FADE_STEP::NONE)
+
+	currentStep(FADE_STEP::NONE),
+	currentAnim(FADE_ANIMATION::NONE)
 {
 }
 
@@ -77,6 +78,12 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 			timeSpent = 0.0f;
 			currentStep = FADE_STEP::FADE_FROM_BLACK;
 
+			if (currentAnim == FADE_ANIMATION::CURTAIN)
+			{
+				leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5, totalTime);
+				rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, totalTime);
+			}
+
 			app->gamePause = false;
 		}
 	} break;
@@ -94,21 +101,28 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 	}
 
 	// Finally render the black square with alpha on the screen
-	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0f));
-	SDL_RenderFillRect(app->render->renderer, &screen);
+	DrawAnim(normalized, app->necessaryDt);
 
 	return true;
 }
 
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float time)
+bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float time, FADE_ANIMATION anim)
 {
 	bool ret = false;
 
 	if (currentStep == FADE_STEP::NONE)
 	{
 		currentStep = FADE_STEP::FADE_TO_BLACK;
+		currentAnim = anim;
+
+		if (currentAnim == FADE_ANIMATION::CURTAIN)
+		{
+			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0 - screen.w * 0.5, 0, time);
+			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w, screen.w * 0.5, time);
+		}
+
 		timeSpent = 0.0f;
 		totalTime = time;
 		toEnable = module_on;
@@ -136,4 +150,37 @@ void ModuleFadeToBlack::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 	}
 
+}
+
+
+void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
+{
+	SDL_Rect rightCurtain = { 0, 0, screen.w * 0.5, screen.h };
+	SDL_Rect leftCurtain = { 0, 0, screen.w * 0.5, screen.h };
+
+	switch (currentAnim)
+	{
+	case FADE_ANIMATION::NONE:
+		break;
+
+	case FADE_ANIMATION::FADE:
+		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0f));
+		SDL_RenderFillRect(app->render->renderer, &screen);
+		break;
+
+	case FADE_ANIMATION::CURTAIN:
+		
+
+		leftCurtain.x = leftCurtainEasing.UpdateEasingAddingTime(dt);
+		rightCurtain.x = rightCurtainEasing.UpdateEasingAddingTime(dt);
+
+		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(255.0f));
+		SDL_RenderFillRect(app->render->renderer, &leftCurtain);
+		SDL_RenderFillRect(app->render->renderer, &rightCurtain);
+
+		break;
+
+	default:
+		break;
+	}
 }
