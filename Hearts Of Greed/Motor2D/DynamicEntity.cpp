@@ -375,19 +375,6 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 		}
 	}
 
-	//if ((destination != dest && destination != iMPoint{ INT_MIN, INT_MIN }) || (this->path.empty() && !waitingForPath) || (this->path.empty() == false && this->path.back() != dest))
-	//{
-	//	if (app->pathfinding->GeneratePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
-	//	{
-	//		waitingForPath = true;
-	//		dest = app->pathfinding->GetDestination(this);
-
-
-	//		path.clear();
-
-	//		return true;
-	//	}
-	//}
 
 	return false;
 }

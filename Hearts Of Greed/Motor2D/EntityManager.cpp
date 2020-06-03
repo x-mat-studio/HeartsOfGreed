@@ -289,7 +289,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	pugi::xml_node building = buildings.child("building");
 	pugi::xml_node streetLight = buildings.child("streetLight");
 	pugi::xml_node base = buildings.child("base");
-	
+
 	LoadSampleBuilding(building);
 	LoadSampleStreetLight(streetLight);
 	LoadSampleBase(base);
@@ -1673,7 +1673,10 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 
 		if (col != nullptr)
 		{
-			if (col->CheckCollision(*rect))
+			iMPoint entityPosM = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
+			iMPoint myPosM = app->map->WorldToMap(x, y);
+
+			if (col->CheckCollision(*rect) && app->pathfinding->LineRayCast(entityPosM, myPosM))
 			{
 				if (ret == nullptr)
 				{
