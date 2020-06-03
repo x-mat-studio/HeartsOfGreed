@@ -206,23 +206,6 @@ void RangedHero::LevelUp()
 }
 
 
-bool RangedHero::DrawVfx(float dt)
-{
-	if (currentVfx == nullptr)
-		return false;
-	else
-	{
-		Frame currFrame = currentVfx->GetCurrentFrame(dt);
-		if (currentVfx->GetCurrentFrameNum() == currFrame.maxFrames)
-			currentVfx = false;
-
-		app->render->Blit(app->entityManager->explosionTexture, skill1PosLaunch.x, skill1PosLaunch.y, &currFrame.frame, false, true, 0, 255, 255 ,255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
-	}
-
-
-	return false;
-}
-
 void RangedHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {
 	iMPoint postoPrint = movingTo;

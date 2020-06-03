@@ -9,7 +9,7 @@
 	<map name="finalMap.tmx" />
 	<menuScene />
 	<testScene>
-		<time_info days_passed="0" is_night="false" timer="30.2453346" />
+		<time_info days_passed="0" is_night="false" timer="37.747879" />
 	</testScene>
 	<winScene />
 	<loseScene />
@@ -19878,6 +19878,6 @@
 	<video />
 	<:anonymous />
 	<renderer>
-		<camera x="-408" y="-7934" />
+		<camera x="-209" y="-7817" />
 	</renderer>
 </game_state>
