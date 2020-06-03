@@ -37,7 +37,7 @@ class ModuleLoseScene;
 class Minimap;
 class Video;
 class ModuleDialogManager;
-
+class ModuleCameraShake;
 
 
 class App
@@ -126,6 +126,7 @@ public:
 	Video*					video;
 	ModuleQuestManager*		questManager;
 	ModuleDialogManager*	dialogManager;
+	ModuleCameraShake*		cameraShake;
 
 	uint32_t			frames;
 	
