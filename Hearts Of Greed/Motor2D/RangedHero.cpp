@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "ParticleSystem.h"
 #include "Player.h"
+#include "CameraShake.h"
 
 #include "Enemy.h"
 
@@ -113,9 +114,11 @@ bool RangedHero::ExecuteSkill1()
 			if (!godMode)
 				stats.currEnergy -= skill1.energyCost;
 
-
 			skillExecutionDelay = true;
 			ExecuteSFX(app->entityManager->suitman1Skill);
+
+			
+
 			return skillExecutionDelay;
 		}
 		else
@@ -125,6 +128,7 @@ bool RangedHero::ExecuteSkill1()
 
 			ExecuteSFX(app->entityManager->ranged1Skill);
 			ret = app->entityManager->ExecuteSkill(skill1, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y });
+			app->cameraShake->StartCameraShake(1, 4);
 
 			currAoE.clear();
 			suplAoE.clear();

@@ -66,7 +66,7 @@ public:
 	float currentCamX;//buffer for the camera movement(otherwise when converting to int behaves wrong)
 	float currentCamY;//buffer for the camera movement(otherwise when converting to int behaves wrong)
 private:
-
+	fMPoint cameraOffset;
 	SDL_Rect camera;
 
 	bool gameExit;

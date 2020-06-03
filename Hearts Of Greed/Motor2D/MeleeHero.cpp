@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Render.h"
 #include "ParticleSystem.h"
+#include "CameraShake.h"
 
 MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -149,6 +150,7 @@ bool MeleeHero::ExecuteSkill1()
 		ret =  app->entityManager->ExecuteSkill(skill1, this->origin);
 
 		ExecuteSFX(app->entityManager->armored1Skill2);
+		app->cameraShake->StartCameraShake(0.8, 8);
 
 		currAoE.clear();
 		suplAoE.clear();

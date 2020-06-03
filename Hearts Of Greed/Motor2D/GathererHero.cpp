@@ -8,6 +8,7 @@
 #include "ParticleSystem.h"
 #include "Player.h"
 #include "Collision.h"
+#include "CameraShake.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -177,6 +178,7 @@ bool GathererHero::ExecuteSkill1()
 
 			skillExecutionDelay = true;
 			ExecuteSFX(app->entityManager->suitman1Skill);
+
 			return skillExecutionDelay;
 		}
 		else
@@ -192,6 +194,7 @@ bool GathererHero::ExecuteSkill1()
 
 			ret = app->entityManager->ExecuteSkill(skill1, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, (Entity*)this);
 			UnleashParticlesSkill1((int)granadePosLaunch.x, (int)granadePosLaunch.y);
+			app->cameraShake->StartCameraShake(1.2, 7);
 
 			currAoE.clear();
 			suplAoE.clear();
