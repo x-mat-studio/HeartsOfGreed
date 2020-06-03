@@ -212,6 +212,7 @@ public:
 	SDL_Texture* moveCommandTileRobot;
 
 	SDL_Texture* explosionTexture;
+	
 
 
 	//Sounds
@@ -347,12 +348,25 @@ private:
 	Barricade* sampleBarricade;
 	UpgradeCenter* sampleUpgradeCenter;
 
+
+	//Particle System Samples
+
 	ParticleSystem* sampleParticleSystem;
-	Emitter* sampleEmitter;
-	Emitter* sampleEmitter2;
-	Emitter* sampleEmitter3;
-	Emitter* sampleEmitter4;
+	ParticleSystem* sampleGathererSkill;
+	ParticleSystem* sampleRangedSkill;
+	ParticleSystem* sampleMeleeSkill;
+	ParticleSystem* sampleRobotSkill;
+
+	Emitter* sampleEmitter; Emitter* sampleEmitter2; 	Emitter* sampleEmitter3; 	Emitter* sampleEmitter4;
+	Emitter* sampleEmitterSkillGatherer1; Emitter* sampleEmitterSkillGatherer2; Emitter* sampleEmitterSkillGatherer3; 
+	Emitter* sampleEmitterSkillGatherer4; Emitter* sampleEmitterSkillGatherer5; Emitter* sampleEmitterSkillGatherer6;
+
+
+
+
+
 	SDL_Texture* snowball;
+	SDL_Texture* explosionTexture2;
 
 	std::map <int, skillArea> skillAreas;
 

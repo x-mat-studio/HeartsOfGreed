@@ -23,6 +23,7 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	framesSinceRequest(0),
 	framesToRquest(FRAMES_PER_PATH_REQUEST),
 	waitingForPath(false),
+	destination{INT_MIN,INT_MIN},
 
 	dir(FACE_DIR::SOUTH_EAST)
 {
@@ -354,19 +355,26 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 	origin = app->map->WorldToMap(round(position.x), round(position.y));
 	goal = app->map->WorldToMap(x, y);
 
-	iMPoint destination = app->pathfinding->GetDestination(this);
+	if (app->pathfinding->IsWalkable(goal) == false)
+	{
+		goal = app->pathfinding->CheckNearbyTiles(origin, goal);
+	}
 
-	if (( destination != goal && destination != iMPoint{ INT_MIN, INT_MIN }) || (this->path.empty() && !waitingForPath)  || (this->path.empty() == false && this->path.back() != goal))
+
+	if (goal != destination)
 	{
 		if (app->pathfinding->GeneratePath(origin, goal, lvl, this) != PATH_TYPE::NO_TYPE)
 		{
 			waitingForPath = true;
+
+			destination = app->pathfinding->GetDestination(this);
 
 			path.clear();
 
 			return true;
 		}
 	}
+
 
 	return false;
 }
