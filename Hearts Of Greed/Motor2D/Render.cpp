@@ -9,9 +9,21 @@
 #include "UIManager.h"
 #include "Input.h"
 #include "TestScene.h"
+#include "CameraShake.h"
 
 
-ModuleRender::ModuleRender() : Module(), background({ 0,0,0,0 }), gameExit(false), renderer(nullptr), viewport{ 0,0,0,0 }, currentCamX(0), currentCamY(0), camera{0,0,0,0}
+ModuleRender::ModuleRender() :
+
+	Module(),
+	background({ 0,0,0,0 }),
+	gameExit(false),
+	renderer(nullptr),
+	viewport{ 0,0,0,0 },
+	camera{ 0,0,0,0 },
+
+	currentCamX(0),
+	currentCamY(0),
+	cameraOffset(0, 0)
 {
 	name.create("renderer");
 }
@@ -92,23 +104,25 @@ bool ModuleRender::Update(float dt)
 bool ModuleRender::PostUpdate(float dt)
 {
 	//BROFILER_CATEGORY("Render PostUpdate", Profiler::Color::LightYellow);
+	cameraOffset = app->cameraShake->GetCameraOffset();
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 
 	SDL_Rect inputRect = { 801,27,18,25 };//default mouse
 
-	if(app->input->GetMouseButtonDown(SDL_BUTTON_LEFT)== KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
 		inputRect = { 849,27,15,21 };
-	else if(app->testScene->IsEnabled() == true)
+
+	else if (app->testScene->IsEnabled() == true)
 	{
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_MIDDLE) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_MIDDLE) == KEY_STATE::KEY_REPEAT)
-			inputRect = {870,24,30,30 };
+			inputRect = { 870,24,30,30 };
 		else if (app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN || app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_REPEAT)
 			inputRect = { 849,53,15,21 };
 	}
 
 	int x, y;
-	SDL_GetMouseState(&x,&y);
+	SDL_GetMouseState(&x, &y);
 	SDL_Rect outputRect = { x,y,inputRect.w,inputRect.h };
 	SDL_RenderCopy(renderer, app->uiManager->GetAtlasTexture(), &inputRect, &outputRect);
 
@@ -138,8 +152,8 @@ bool ModuleRender::CleanUp()
 // Load Game State
 bool ModuleRender::Load(pugi::xml_node& data)
 {
-	camera.x=currentCamX = data.child("camera").attribute("x").as_int(0);
-	camera.y=currentCamY = data.child("camera").attribute("y").as_int(0);
+	camera.x = currentCamX = data.child("camera").attribute("x").as_int(0);
+	camera.y = currentCamY = data.child("camera").attribute("y").as_int(0);
 
 	return true;
 }
@@ -188,8 +202,8 @@ void ModuleRender::ExecuteEvent(EVENT_ENUM eventId)
 bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool fliped, bool cameraUse, Uint8 alpha, Uint8 r, Uint8 g, Uint8 b, float additionalScale,
 	float pivotX, float pivotY, float speedX, float speedY, double angle, int rotpivot_x, int rotpivot_y)
 {
-	camera.x = currentCamX;
-	camera.y = currentCamY;
+	camera.x = currentCamX + cameraOffset.x;
+	camera.y = currentCamY + cameraOffset.y;
 	bool ret = true;
 	float scale = 2.0f; //TODO THIS IS AN ARBITRARY NUMBER
 
@@ -319,8 +333,8 @@ bool ModuleRender::MinimapBlit(SDL_Texture* texture, int x, int y, const SDL_Rec
 
 bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera)
 {
-	camera.x = currentCamX;
-	camera.y = currentCamY;
+	camera.x = currentCamX + cameraOffset.x;
+	camera.y = currentCamY + cameraOffset.y;
 	bool ret = true;
 	float scale = app->win->GetScale();
 
@@ -355,8 +369,8 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 
 bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
-	camera.x = currentCamX;
-	camera.y = currentCamY;
+	camera.x = currentCamX + cameraOffset.x;
+	camera.y = currentCamY + cameraOffset.y;
 	bool ret = true;
 	float scale = app->win->GetScale();
 
@@ -385,8 +399,8 @@ bool ModuleRender::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Ui
 
 bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
-	camera.x = currentCamX;
-	camera.y = currentCamY;
+	camera.x = currentCamX + cameraOffset.x;
+	camera.y = currentCamY + cameraOffset.y;
 	bool ret = true;
 	float scale = app->win->GetScale();
 

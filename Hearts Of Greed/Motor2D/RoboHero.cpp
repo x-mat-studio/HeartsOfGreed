@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Textures.h"
 #include "ParticleSystem.h"
+#include "CameraShake.h"
 
 RoboHero::RoboHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -113,6 +114,7 @@ bool RoboHero::ExecuteSkill1()
 		skillExecutionDelay = true;
 
 		ExecuteSFX(app->entityManager->suitman1Skill2); // Provisional SFX
+		
 
 		return skillExecutionDelay;
 	}
@@ -122,6 +124,7 @@ bool RoboHero::ExecuteSkill1()
 		int ret = 0;
 
 		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
+		app->cameraShake->StartCameraShake(1, 10);
 
 		currAoE.clear();
 		suplAoE.clear();
