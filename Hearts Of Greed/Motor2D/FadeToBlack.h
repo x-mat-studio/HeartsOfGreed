@@ -1,6 +1,8 @@
 #ifndef __FADE_TO_BLACK_H__
 #define __FADE_TO_BLACK_H__
 
+#define CURTAIN_DELAY 0.4
+
 #include "Module.h"
 #include "EasingFunctions.h"
 #include "SDL\include\SDL_rect.h"
@@ -45,6 +47,8 @@ private:
 
 	float timeSpent;
 	float totalTime;
+	bool animStarted;
+
 	SDL_Rect screen;
 	Module* toEnable;
 	Module* toDisable;

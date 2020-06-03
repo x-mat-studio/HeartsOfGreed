@@ -62,10 +62,12 @@ public:
 
 	void GetTimer(int& min, int& sec);
 
+	int GetNightRectAlpha() const;
+
 private:
 	void CalculateTimers(float dt);
 	void ExecuteEvent(EVENT_ENUM eventId);
-	void DrawNightRect();
+	void DrawNightRect(int alpha);
 
 public:
 	bool startFromLoad;
@@ -110,6 +112,7 @@ private:
 
 	Easing camEasingX;
 	Easing camEasingY;
+	Easing nightRectAlpha;
 
 };
 

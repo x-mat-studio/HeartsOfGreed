@@ -27,6 +27,7 @@
 #include "QuestManager.h"
 #include "DialogManager.h"
 #include "Video.h"
+#include "CameraShake.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
@@ -63,6 +64,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	minimap = new Minimap();
 	video = new Video();
 	dialogManager = new ModuleDialogManager();
+	cameraShake = new ModuleCameraShake();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -91,6 +93,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	AddModule(video);
 
 	//Fade to black before render
+	AddModule(cameraShake);
 	AddModule(fadeToBlack);
 	// render last to swap buffer
 	AddModule(render);

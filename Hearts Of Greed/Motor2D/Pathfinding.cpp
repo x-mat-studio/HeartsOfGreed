@@ -100,7 +100,7 @@ bool ModulePathfinding::CleanUp()
 	return true;
 }
 
-bool ModulePathfinding::PreUpdate(float dt)
+bool ModulePathfinding::Update(float dt)
 {
 	int timeSpend = 0;
 	int startedAt = SDL_GetTicks();
@@ -729,7 +729,7 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 
 bool ModulePathfinding::CheckBoundaries(const iMPoint& pos) const
 {
-	return (pos.x >= 0 && pos.x <= (int)width &&
+	return (pos.x + 1 >= 0 && pos.x + 1 <= (int)width &&
 		pos.y >= 0 && pos.y <= (int)height);
 }
 
@@ -865,13 +865,25 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	if (IsWalkable(destination) == false)
 	{
+		iMPoint newDest = CheckNearbyTiles(origin, destination);
+
+		if (newDest == destination || newDest == origin)
 			return ret;
+		else
+			destination = newDest;
+
 	}
 
 	if (IsWalkable(origin) == false)
 	{
+		iMPoint newDest = CheckNearbyTiles(destination, origin);
+
+		if (newDest == origin || newDest == destination)
 			return ret;
+		else
+			origin = newDest;
 	}
+
 
 	if (LineRayCast(origin, destination))
 	{

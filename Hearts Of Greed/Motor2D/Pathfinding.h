@@ -6,7 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
-#define NEARBY_TILES_CHECK 8
+#define NEARBY_TILES_CHECK 10
 
 #include <list>
 #include <vector>
@@ -187,7 +187,7 @@ public:
 
 	bool CleanUp();
 
-	bool PreUpdate(float dt);
+	bool Update(float dt);
 
 	void SetMap(uint width, uint height, uchar* data);
 

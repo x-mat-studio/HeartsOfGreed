@@ -90,6 +90,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	visionInPx(0.f),
 	movingTo{ -1,-1 },
 	lvlUpSfxTimer(0),
+	skillSfxTimer(0),
 
 	gettingAttacked(false),
 	skill1Charged(true),
@@ -105,7 +106,8 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	skill1(skill1),
 	currAreaInfo(nullptr),
 	objective(nullptr),
-	myParticleSystem(nullptr)
+	myParticleSystem(nullptr),
+	activeSkillsParticleSystem(nullptr)
 
 {
 	currentAnimation = &walkLeft;
@@ -187,8 +189,10 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	currAreaInfo(nullptr),
 	comeFromAttack(false),
 	lvlUpSfxTimer(-1.f),
+	skillSfxTimer(-1.f),
 
 	myParticleSystem(nullptr),
+	activeSkillsParticleSystem(nullptr),
 
 	state(HERO_STATES::IDLE),
 
@@ -221,6 +225,7 @@ Hero::~Hero()
 	currAreaInfo = nullptr;
 	currentAnimation = nullptr;
 	myParticleSystem = nullptr;
+	activeSkillsParticleSystem = nullptr;
 
 	inputs.clear();
 
@@ -1497,6 +1502,18 @@ void Hero::HandleMyParticleSystem(float dt)
 			TimeMyParticleSystem(dt);
 		}
 	}
+	if (activeSkillsParticleSystem != nullptr) {
+
+		if (activeSkillsParticleSystem->IsActive()) {
+
+			TimeSkillParticleSystem(dt);
+		}
+	}
+}
+
+void Hero::UnleashParticlesSkill1(float posx, float posy)
+{
+	//HerencyOnly
 }
 
 void Hero::ResetAttackAnimation()
@@ -1523,6 +1540,19 @@ void Hero::TimeMyParticleSystem(float dt)
 	}
 }
 
+void Hero::TimeSkillParticleSystem(float dt)
+{
+	//implied that your system is not nullptr
+	if (activeSkillsParticleSystem->IsActive())
+	{
+		skillSfxTimer += dt;
+
+		if (skillSfxTimer > 0.7) {
+			skillSfxTimer = 0;
+			activeSkillsParticleSystem->Desactivate();
+		}
+	}
+}
 bool Hero::PreProcessSkill1()
 {
 	return false;

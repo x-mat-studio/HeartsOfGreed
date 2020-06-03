@@ -16,6 +16,7 @@
 #include "Base.h"
 #include "ParticleSystem.h"
 #include "Pathfinding.h"
+#include "TestScene.h"
 
 ModulePlayer::ModulePlayer() :
 
@@ -305,6 +306,14 @@ bool ModulePlayer::HandleInput()
 			entityInteraction = false;
 			doingAction = false;
 			BuildClick();
+		}
+
+		else if (entityComand)
+		{
+			entityComand = false;
+			doingAction = false;
+
+			DesactivateBuildMode();
 		}
 	}
 
@@ -726,7 +735,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			{
 				focusedHero = 0;
 			}
-
+			app->testScene->MoveCamTo(heroesVector[focusedHero]->position, 1.0, EASING_TYPE::EASE_IN_OUT_SINE);
 		}
 	}
 	break;

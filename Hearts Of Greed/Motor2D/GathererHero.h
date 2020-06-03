@@ -12,7 +12,7 @@ public:
 		Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 		Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& tileOnWalk, 
 		Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
-		HeroStats& stats, Skill& skill1, Skill& passiveSkill, Animation& vfxExplosion);
+		HeroStats& stats, Skill& skill1, Skill& passiveSkill);
 
 	GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEMENT alignement);
 	~GathererHero();
@@ -41,8 +41,7 @@ public:
 
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
-	bool DrawVfx(float dt);
-
+	void UnleashParticlesSkill1(float posx, float posy);
 	void UpdatePasiveSkill(float dt);
 	void Attack();
 
@@ -51,11 +50,6 @@ private:
 	fMPoint granadePosLaunch;
 	skillArea* granadeArea;
 
-	Animation vfxExplosion;
-
-	//This is a placeholder for particles
-	SDL_Rect explosionRect;
-	Animation* currentVfx;
 
 	Skill passiveSkill;
 	Collider* passiveSkillCollider;

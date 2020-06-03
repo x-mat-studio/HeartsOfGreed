@@ -211,6 +211,9 @@
     <ClCompile Include="TimerClock.cpp">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClCompile>
+    <ClCompile Include="CameraShake.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -440,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="TimerClock.h">
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraShake.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -116,58 +116,7 @@ bool ModuleTestScene::Start()
 		//Test Hero
 		if (startFromLoad == false)
 		{
-
 			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
-			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 700, pos.y);
-			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, pos.x - 800, pos.y);
-			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_ROBO, pos.x - 900, pos.y);
-
-			/*
-			//mid
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 150, 760);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 180, 800);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 210, 830);
-
-			//Left
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1270, 750);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1271, 750);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -1272, 750);
-
-			//Right down
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 407, 1300);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 420, 1301);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 415, 1302);
-
-
-			//Right
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 707, 745);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 720, 739);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 715, 722);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 700, 753);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 705, 734);
-
-			//Base
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -50, 165);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -64, 190);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, -45, 175);
-
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 100, 125);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 110, 110);
-			app->entityManager->AddEntity(ENTITY_TYPE::ENEMY, 105, 135);
-				*/
-
-				//Spawners------------------
-			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 680, pos.y-10);
-			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 670, pos.y-15);
-			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 660, pos.y-20);
-			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, pos.x - 650, pos.y-25);
-
-			//Debug
-			//app->entityManager->AddEntity(ENTITY_TYPE::SPAWNER, 170, 750);
-
-
-
-			//Quests-------------
 		}
 
 	}
@@ -204,6 +153,8 @@ bool ModuleTestScene::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_DAY, this);
 	app->eventManager->EventRegister(EVENT_ENUM::DEBUG_NIGHT, this);
 	app->eventManager->EventRegister(EVENT_ENUM::CAMERA_FOCUS_HERO, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::START_DAY_NIGHT_TRANSITION, this);
 
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
@@ -268,6 +219,11 @@ bool  ModuleTestScene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_STATE::KEY_DOWN) //Debug key to lock camera movement
 	{
 		ToggleCamMovement();
+	}
+
+	if (nightRectAlpha.IsActive() == true)
+	{
+		nightRectAlpha.UpdateEasingAddingTime(dt);
 	}
 
 	////Cam Easing Testing code
@@ -384,14 +340,17 @@ bool  ModuleTestScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
+	//Debug timer key to make the timer be 35 sec
+	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_STATE::KEY_DOWN)
+		timer = 264;
+
 	BROFILER_CATEGORY("Game Scene PostUpdate", Profiler::Color::LightYellow);
 
 	app->map->Draw();
 
-	if (isNightTime)
-	{
-		DrawNightRect();
-	}
+	int alpha = nightRectAlpha.GetLastRequestedPos();
+		DrawNightRect(alpha);
+	
 
 	//if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
@@ -537,6 +496,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::DEBUG_DAY:
 		app->eventManager->GenerateEvent(EVENT_ENUM::DAY_START, EVENT_ENUM::NULL_EVENT);
 		isNightTime = false;
+		nightRectAlpha.NewEasing(EASING_TYPE::EASE, nightRectAlpha.GetLastRequestedPos(), 0, 1);
 		timer = 0;
 		dayNumber++;
 		break;
@@ -544,8 +504,17 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::DEBUG_NIGHT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
 		isNightTime = true;
+		nightRectAlpha.NewEasing(EASING_TYPE::EASE, nightRectAlpha.GetLastRequestedPos(), 100, 1);
 		//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
 		timer = 0;
+		break;
+
+	case EVENT_ENUM::START_DAY_NIGHT_TRANSITION:
+		if (isNightTime == true)
+		nightRectAlpha.NewEasing(EASING_TYPE::EASE, 100, 0, 30);
+		else
+			nightRectAlpha.NewEasing(EASING_TYPE::EASE, 0, 100, 30);
+
 		break;
 
 	case EVENT_ENUM::CAMERA_FOCUS_HERO:
@@ -676,27 +645,35 @@ void ModuleTestScene::CalculateTimers(float dt)
 }
 
 
-void ModuleTestScene::DrawNightRect()
+void ModuleTestScene::DrawNightRect(int alpha)
 {
-	float scale = app->win->GetScale();
+	int newAlpha = MAX(alpha, 0);
+	newAlpha = MIN(alpha, 255);
 
-	SDL_Rect rect;
-
-	rect.x = 0;
-	rect.y = 0;
-
-	if (scale > 1)
+	//only draw the rect when its not invisible
+	if (newAlpha != 0)
 	{
-		rect.w = app->win->width * scale;
-		rect.h = app->win->height * scale;
-	}
-	else
-	{
-		rect.w = app->win->width / scale;
-		rect.h = app->win->height / scale;
-	}
 
-	app->render->DrawQuad(rect, 60, 26, 81, 100, true, false);
+		float scale = app->win->GetScale();
+
+		SDL_Rect rect;
+
+		rect.x = 0;
+		rect.y = 0;
+
+		if (scale > 1)
+		{
+			rect.w = app->win->width * scale;
+			rect.h = app->win->height * scale;
+		}
+		else
+		{
+			rect.w = app->win->width / scale;
+			rect.h = app->win->height / scale;
+		}
+
+		app->render->DrawQuad(rect, 60, 26, 81, newAlpha, true, false);
+	}
 }
 
 
@@ -848,6 +825,16 @@ void ModuleTestScene::GetTimer(int& min, int& sec)
 
 	int aux = totalTime - timer;
 
+	//TODO change this division for a multiplication
 	min = aux / 60;
 	sec = aux - min * 60;
+}
+
+int ModuleTestScene::GetNightRectAlpha() const
+{
+	int alpha= nightRectAlpha.GetLastRequestedPos();
+	alpha = MIN(alpha, 255);
+	alpha = MAX(alpha, 0);
+
+	return alpha;
 }

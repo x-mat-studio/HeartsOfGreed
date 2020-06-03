@@ -595,7 +595,6 @@ void ModuleInput::HandleDebugKeys()
 	}
 
 
-
 	if (GetKey(SDL_SCANCODE_KP_1) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_BASE, EVENT_ENUM::NULL_EVENT);
