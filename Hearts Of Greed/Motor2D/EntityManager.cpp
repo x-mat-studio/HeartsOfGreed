@@ -289,7 +289,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	pugi::xml_node building = buildings.child("building");
 	pugi::xml_node streetLight = buildings.child("streetLight");
 	pugi::xml_node base = buildings.child("base");
-	
+
 	LoadSampleBuilding(building);
 	LoadSampleStreetLight(streetLight);
 	LoadSampleBase(base);
@@ -717,13 +717,21 @@ bool ModuleEntityManager::Update(float dt)
 bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Post Update", Profiler::Color::Blue);
-
-	if (app->testScene->IsNight() == true)
+	float t = app->testScene->GetNightRectAlpha();
+	if (t != 0)
 	{
-		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
-		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
-	}
+		t *= 0.01;
 
+		float r = ((1 - t) * 255) + (t * 86);
+		float g = ((1 - t) * 255) + (t * 53);
+		float b = ((1 - t) * 255) + (t * 138);
+
+
+
+		SDL_SetTextureColorMod(buildingTexture, r, g, b);
+		SDL_SetTextureColorMod(base1Texture, r, g, b);
+
+	}
 	int numEntities = entityVector.size();
 	for (int i = 0; i < numEntities; i++)
 	{
