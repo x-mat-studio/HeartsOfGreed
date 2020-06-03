@@ -1108,8 +1108,10 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				currentAnimation->ResetAnimation();
 
 				if (skillFromAttacking == true)
+				{
+					comeFromAttack = false;
 					state = HERO_STATES::ATTACK;
-
+				}
 				else
 					state = HERO_STATES::IDLE;
 
@@ -1182,7 +1184,10 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				currAreaInfo = nullptr;
 
 				if (skillFromAttacking == true)
+				{
+					comeFromAttack = false;
 					state = HERO_STATES::ATTACK;
+				}
 
 				else
 					state = HERO_STATES::IDLE;
