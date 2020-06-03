@@ -191,6 +191,7 @@ bool GathererHero::ExecuteSkill1()
 			int ret = 0;
 
 			ret = app->entityManager->ExecuteSkill(skill1, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, (Entity*)this);
+			UnleashParticlesSkill1((int)granadePosLaunch.x, (int)granadePosLaunch.y);
 
 			currAoE.clear();
 			suplAoE.clear();
@@ -254,8 +255,6 @@ void GathererHero::Attack()
 	}
 }
 
-
-
 void GathererHero::LevelUp()
 {
 	//lvl up effect
@@ -281,6 +280,19 @@ void GathererHero::LevelUp()
 	heroSkillPoints++;
 }
 
+void GathererHero::UnleashParticlesSkill1(float posx, float posy)
+{
+	//fire spreading
+
+	if (activeSkillsParticleSystem != nullptr) {
+		activeSkillsParticleSystem->Activate();
+		activeSkillsParticleSystem->Move(posx, posy);
+	}
+	else
+	{
+		activeSkillsParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::SKILL_GATHERER, posx, posy);
+	}
+}
 
 void GathererHero::OnCollision(Collider* collider)
 {

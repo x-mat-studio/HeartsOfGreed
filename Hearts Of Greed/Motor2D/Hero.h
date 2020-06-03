@@ -208,6 +208,7 @@ public:
 	bool drawingVfx;
 
 	void SkillCanceled();
+	void UnleashParticlesSkill1(float posx, float posy);
 
 	virtual void PlayGenericNoise(int random);
 
@@ -303,6 +304,7 @@ protected:
 	void SetAnimation(HERO_STATES currState);
 	void HandleMyParticleSystem(float dt);
 	void TimeMyParticleSystem(float dt);
+	void TimeSkillParticleSystem(float dt);
 	void ResetAttackAnimation();
 
 	void Die();
@@ -333,7 +335,7 @@ private:
 
 	virtual void PlayOnHitSound();
 
-
+	
 
 public:
 	bool skill1Charged;
@@ -438,7 +440,9 @@ protected:
 	int heroSkillPoints;
 
 	ParticleSystem* myParticleSystem;
+	ParticleSystem* activeSkillsParticleSystem;
 	float lvlUpSfxTimer;
+	float skillSfxTimer;
 
 	bool comeFromAttack;
 };
