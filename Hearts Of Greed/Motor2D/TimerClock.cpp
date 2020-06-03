@@ -27,6 +27,7 @@ void TimerClock::HandleInput()
 {
 	int min = 0;
 	int sec = 0;
+
 	app->testScene->GetTimer(min, sec);
 	
 	if (minutes != min || seconds != sec)
