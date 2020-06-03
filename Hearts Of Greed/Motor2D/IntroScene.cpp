@@ -68,9 +68,15 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
+	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) || app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
+	{
+		app->video->isVideoFinished = true;
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 0.0f);
+	}
+
 	if (app->video->isVideoFinished)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 1.0f);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
 	}
 	return ret;
 }
