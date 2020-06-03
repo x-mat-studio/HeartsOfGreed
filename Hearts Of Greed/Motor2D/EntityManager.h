@@ -262,6 +262,8 @@ public:
 	int lvlup;
 	int selectHero;
 	int moveHero;
+	int placingTurret;
+	int placingCenter;
 
 
 	//public textures
