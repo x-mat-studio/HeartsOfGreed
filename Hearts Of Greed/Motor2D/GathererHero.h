@@ -42,7 +42,7 @@ public:
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	bool DrawVfx(float dt);
-
+	void UnleashParticlesSkill1(float posx, float posy);
 	void UpdatePasiveSkill(float dt);
 	void Attack();
 
