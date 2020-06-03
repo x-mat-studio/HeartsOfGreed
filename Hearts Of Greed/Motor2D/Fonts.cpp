@@ -1,4 +1,5 @@
 #include "App.h"
+#include "AssetManager.h"
 #include "Textures.h"
 #include "Fonts.h"
 #include "Window.h"
@@ -66,7 +67,8 @@ bool ModuleFonts::CleanUp()
 // Load new texture from file path
 TTF_Font* const ModuleFonts::Load(const char* path, int size)
 {
-	TTF_Font* font = TTF_OpenFont(path, size);
+	TTF_Font* font = TTF_OpenFontRW(app->assetManager->Load(path), 1, 1);
+
 
 	if (font == NULL)
 	{

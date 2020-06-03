@@ -36,6 +36,7 @@ class ModuleWinScene;
 class ModuleLoseScene;
 class Minimap;
 class Video;
+class ModuleAssetManager;
 class ModuleDialogManager;
 
 
@@ -124,6 +125,7 @@ public:
 	ModuleLoseScene*		loseScene;
 	Minimap*				minimap;
 	Video*					video;
+	ModuleAssetManager*		assetManager;
 	ModuleQuestManager*		questManager;
 	ModuleDialogManager*	dialogManager;
 

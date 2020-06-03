@@ -1,6 +1,8 @@
 #include "p2Defs.h"
 #include "p2Log.h"
+#include "App.h"
 #include "Audio.h"
+#include "AssetManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 #include "SDL/include/SDL.h"
 #include "SDL_mixer\include\SDL_mixer.h"
@@ -118,7 +120,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time, int volume, int l
 	}
 
 
-	music = Mix_LoadMUS(path);
+	music = Mix_LoadMUS_RW(app->assetManager->Load(path), 1);
 
 
 	if (music == NULL)
@@ -150,7 +152,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 	if (!enabled)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV(path);
+	Mix_Chunk* chunk = Mix_LoadWAV_RW(app->assetManager->Load(path), 1);
 
 	if (chunk == NULL)
 	{
