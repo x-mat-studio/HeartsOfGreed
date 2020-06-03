@@ -898,6 +898,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->dialogManager->PushInput(DIALOG_INPUT::NEXT_DIALOG);
 		break;
 
+	case BUTTON_TAG::SKIP_DIALOG:
+		app->dialogManager->PushInput(DIALOG_INPUT::SKIP_DIALOG);
+		break;
+
 	default:
 		assert("you forgot to add the case of the button tag :D");
 		break;

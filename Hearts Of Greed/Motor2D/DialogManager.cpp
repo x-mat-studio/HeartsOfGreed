@@ -368,9 +368,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::TUTORIAL_ST_A2;
 
+				state = DIALOG_STATE::TUTORIAL_ST_A2;
 				currentDialog2 = &dialogTutorial1_ST_B1;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 
 				break;
 			}
@@ -384,10 +394,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+
 				state = DIALOG_STATE::TUTORIAL_ST_B2;
-
 				currentDialog1 = &dialogTutorial1_ST_A2;
+				break;
 
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -400,10 +418,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+
 				state = DIALOG_STATE::TUTORIAL_ST_LAST;
-
 				currentDialog2 = &dialogTutorial1_ST_B2;
+				break;
 
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -416,10 +442,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::TUTORIAL_END_B1;
-
 				currentDialog1 = &dialogTutorial1_END_A1;
+				break;
 
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -432,10 +466,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::TUTORIAL_END_LAST;
-
 				currentDialog2 = &dialogTutorial1_END_B1;
+				break;
 
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -448,8 +491,17 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
 
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -466,10 +518,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+
 				state = DIALOG_STATE::TUTORIAL2_ST_LAST;
-
 				currentDialog2 = &dialogTutorial2_ST_B1;
+				break;
 
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -482,14 +542,22 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
 				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
 
 
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -502,10 +570,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::TUTORIAL2_END_LAST;
-
 				currentDialog2 = &dialogTutorial2_END_B1;
+				break;
 
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				app->eventManager->GenerateEvent(EVENT_ENUM::TUTORIAL3_START, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -518,15 +595,24 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
 				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
-
 				app->eventManager->GenerateEvent(EVENT_ENUM::TUTORIAL3_START, EVENT_ENUM::NULL_EVENT);
+				break;
 
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				app->eventManager->GenerateEvent(EVENT_ENUM::TUTORIAL3_START, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -539,10 +625,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::TUTORIAL3_ST_A2;
-
 				currentDialog2 = &dialogTutorial3_ST_B1;
+				break;
 
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -555,10 +650,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::TUTORIAL3_ST_LAST;
-
 				currentDialog1 = &dialogTutorial3_ST_A2;
+				break;
 
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -571,8 +675,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -589,10 +703,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::TUTORIAL3_END_LAST;
-
 				currentDialog2 = &dialogTutorial3_END_B1;
+				break;
 
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -605,8 +728,17 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+			
 				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
 
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -623,9 +755,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::MISSION1_ST_A1;
-
 				currentDialog1 = &dialogMission1_ST_A1;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -638,9 +780,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::MISSION1_ST_B2;
-
 				currentDialog2 = &dialogMission1_ST_B2;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -653,8 +805,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -671,9 +833,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::MISSION1_END_B3;
-
 				currentDialog2 = &dialogMission1_END_B3;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -686,8 +858,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -704,9 +886,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
+				
 				state = DIALOG_STATE::MISSION2_ST_A1;
-
 				currentDialog1 = &dialogMission2_ST_A1;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -719,8 +911,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -737,9 +939,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::MISSION2_END_B2;
 
+				state = DIALOG_STATE::MISSION2_END_B2;
 				currentDialog1 = &dialogMission2_END_B2;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -752,8 +964,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -770,8 +992,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -788,9 +1020,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::MISSION3_END_A2;
 
+				state = DIALOG_STATE::MISSION3_END_A2;
 				currentDialog1 = &dialogMission3_END_A2;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -803,9 +1045,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::MISSION3_END_B2;
 
+				state = DIALOG_STATE::MISSION3_END_B2;
 				currentDialog2 = &dialogMission3_END_B2;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -818,8 +1070,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -836,9 +1098,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::MISSION4_ST_A2;
 
+				state = DIALOG_STATE::MISSION4_ST_A2;
 				currentDialog1 = &dialogMission4_ST_A2;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -851,8 +1123,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
@@ -869,9 +1151,19 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::MISSION4_END_A3;
 
+				state = DIALOG_STATE::MISSION4_END_A3;
 				currentDialog1 = &dialogMission4_END_A3;
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
 				break;
 			}
 
@@ -882,8 +1174,18 @@ void ModuleDialogManager::ProcessFsm()
 			switch (input)
 			{
 			case DIALOG_INPUT::NEXT_DIALOG:
-				state = DIALOG_STATE::IDLE_DIALOG;
 
+				state = DIALOG_STATE::IDLE_DIALOG;
+				currentDialog1 = nullptr;
+				currentDialog2 = nullptr;
+
+				app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_DIALOG_WINDOW, EVENT_ENUM::NULL_EVENT);
+				break;
+
+
+			case DIALOG_INPUT::SKIP_DIALOG:
+
+				state = DIALOG_STATE::IDLE_DIALOG;
 				currentDialog1 = nullptr;
 				currentDialog2 = nullptr;
 
