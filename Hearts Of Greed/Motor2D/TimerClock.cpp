@@ -2,6 +2,7 @@
 #include "Textures.h"
 #include "Fonts.h"
 #include "TestScene.h"
+#include "EventManager.h"
 
 TimerClock::TimerClock(float x, float y, UI* parent) :
 
@@ -28,13 +29,20 @@ void TimerClock::HandleInput()
 	int sec = 0;
 
 	app->testScene->GetTimer(min, sec);
-
+	
 	if (minutes != min || seconds != sec)
 	{
 		minutes = min;
 		seconds = sec;
 		ChangeTexture();
 	}
+
+	if (min == 0 && sec == 30)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::START_DAY_NIGHT_TRANSITION, EVENT_ENUM::NULL_EVENT);
+	}
+
+	
 }
 
 

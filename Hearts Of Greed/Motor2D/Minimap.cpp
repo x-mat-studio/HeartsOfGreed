@@ -182,10 +182,20 @@ bool Minimap::PostUpdate(float dt)
 
 
 		//Chenges the texture tint if is nighttime
-		if (app->testScene->IsNight() == true)
+
+		float t = app->testScene->GetNightRectAlpha();
+		if (t != 0)
 		{
-			SDL_SetTextureColorMod(minimapTexture, 96, 63, 148);
+			t *= 0.01;
+
+			float r = ((1 - t) * 255) + (t * 96);
+			float g = ((1 - t) * 255) + (t * 63);
+			float b = ((1 - t) * 255) + (t * 148);
+
+			SDL_SetTextureColorMod(minimapTexture,r, g, b);
+
 		}
+
 
 		app->render->MinimapBlit(minimapTexture, position.x, position.y, NULL, 1.0);
 

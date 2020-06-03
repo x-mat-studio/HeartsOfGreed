@@ -627,6 +627,11 @@ void ModuleInput::HandleDebugKeys()
 
 	if (GetKey(SDL_SCANCODE_KP_7) == KEY_STATE::KEY_DOWN)
 	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_ROBO_HERO, EVENT_ENUM::NULL_EVENT);
+	}
+
+	if (GetKey(SDL_SCANCODE_KP_8) == KEY_STATE::KEY_DOWN)
+	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::SPAWN_TURRET, EVENT_ENUM::NULL_EVENT);
 	}
 }

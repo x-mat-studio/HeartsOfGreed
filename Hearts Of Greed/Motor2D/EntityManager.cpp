@@ -64,7 +64,6 @@ ModuleEntityManager::ModuleEntityManager() :
 	upgradeCenterEnemyTexture(nullptr),
 	upgradeCenterEnemySelectedTexture(nullptr),
 	enemyTexture(nullptr),
-	explosionTexture(nullptr),
 	explosionTexture2(nullptr),
 	targetedTexture(nullptr),
 	selectedTexture(nullptr),
@@ -379,7 +378,6 @@ bool ModuleEntityManager::Start()
 	deco3Selected = app->tex->Load("Assets/maps/base03_selected.png");
 	selectedTexture = app->tex->Load("Assets/spritesheets/VFX/selected.png");
 	targetedTexture = app->tex->Load("Assets/spritesheets/VFX/target.png");
-	//explosionTexture = app->tex->Load("Assets/spritesheets/VFX/explosion.png");
 	moveCommandTileRng = app->tex->Load("Assets/spritesheets/VFX/OnMyWayRanged.png");
 	moveCommandTileGath = app->tex->Load("Assets/spritesheets/VFX/OnMyWaySuit.png");
 	moveCommandTileMelee = app->tex->Load("Assets/spritesheets/VFX/OnMyWayMelee.png");
@@ -403,6 +401,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ROBO_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
@@ -738,13 +737,21 @@ bool ModuleEntityManager::Update(float dt)
 bool ModuleEntityManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Post Update", Profiler::Color::Blue);
-
-	if (app->testScene->IsNight() == true)
+	float t = app->testScene->GetNightRectAlpha();
+	if (t != 0)
 	{
-		SDL_SetTextureColorMod(buildingTexture, 86, 53, 138);
-		SDL_SetTextureColorMod(base1Texture, 86, 53, 138);
-	}
+		t *= 0.01;
 
+		float r = ((1 - t) * 255) + (t * 86);
+		float g = ((1 - t) * 255) + (t * 53);
+		float b = ((1 - t) * 255) + (t * 138);
+
+
+
+		SDL_SetTextureColorMod(buildingTexture, r, g, b);
+		SDL_SetTextureColorMod(base1Texture, r, g, b);
+
+	}
 	int numEntities = entityVector.size();
 	for (int i = 0; i < numEntities; i++)
 	{
@@ -831,7 +838,6 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
 	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
-	app->tex->UnLoad(explosionTexture);				explosionTexture = nullptr;
 	app->tex->UnLoad(explosionTexture2);			explosionTexture2 = nullptr;
 	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
 	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
@@ -881,6 +887,7 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ROBO_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
@@ -1724,7 +1731,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 			iMPoint entityPosM = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
 			iMPoint myPosM = app->map->WorldToMap(x, y);
 
-			if (col->CheckCollision(*rect) && app->pathfinding->LineRayCast(entityPosM, myPosM))
+			if (col->CheckCollision(*rect) && (entityVector[i]->GetRadiusSize() > 1 || app->pathfinding->LineRayCast(entityPosM, myPosM)))
 			{
 				if (ret == nullptr)
 				{
@@ -3255,15 +3262,12 @@ bool ModuleEntityManager::LoadSampleHero(ENTITY_TYPE heroType, pugi::xml_node& h
 	case ENTITY_TYPE::HERO_GATHERER:
 
 
-		//Vfx load -----------------------------------
-		Animation vfxExplosion = vfxExplosion.PushAnimation(vfx, "explosion");
-
 		//Sample Creation ----------------------------
 		sampleGatherer = new GathererHero(pos, collider, walkLeft, walkLeftUp,
 			walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightUp, idleRightDown, idleLeft,
 			idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp, punchRightDown, punchRight, skill1Right,
 			skill1RightUp, skill1RightDown, skill1Left, skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, tileOnWalk,
-			sampleStats, heroSkill, passiveSkill, vfxExplosion);
+			sampleStats, heroSkill, passiveSkill);
 
 		ret = true;
 		break;

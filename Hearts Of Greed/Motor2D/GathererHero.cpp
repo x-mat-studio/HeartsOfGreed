@@ -15,7 +15,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
 	Animation& skill1LeftUp, Animation& skill1LeftDown, Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown,
-	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Skill& passiveSkill, Animation& vfxExplosion) :
+	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Skill& passiveSkill) :
 
 	Hero(position, ENTITY_TYPE::HERO_GATHERER, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
@@ -24,13 +24,10 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 		tileOnWalk, stats, skill1),
 
 	granadeArea(nullptr),
-	currentVfx(nullptr),
 	passiveSkillCollider(nullptr),
 
-	vfxExplosion(vfxExplosion),
-	passiveSkill(passiveSkill),
+	passiveSkill(passiveSkill)
 
-	explosionRect{ 0,0,0,0 }
 {}
 
 
@@ -39,23 +36,15 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 	Hero(position, copy, alignement),
 
 	granadeArea(nullptr),
-	currentVfx(nullptr),
 	passiveSkillCollider(nullptr),
 
-	vfxExplosion(copy->vfxExplosion),
-	passiveSkill(copy->passiveSkill),
+	passiveSkill(copy->passiveSkill)
 
-	explosionRect{ 0,0,0,0 }
 {}
 
 GathererHero::~GathererHero()
 {
-	vfxExplosion = Animation();
-
-	currentVfx = nullptr;
-
 	granadeArea = nullptr;
-	currentVfx = nullptr;
 
 	if (passiveSkillCollider != nullptr)
 	{
@@ -183,9 +172,6 @@ bool GathererHero::ExecuteSkill1()
 		}
 		else
 		{
-			currentVfx = &vfxExplosion;
-			currentVfx->ResetAnimation();
-			currentVfx->loop = false;
 
 			ExecuteSFX(app->entityManager->suitman1Skill2);
 
@@ -349,29 +335,6 @@ void GathererHero::PlayGenericNoise(int probability)
 		break;
 	}
 }
-
-
-bool GathererHero::DrawVfx(float dt)
-{
-	if (currentVfx == nullptr)
-		return false;
-	else
-	{
-		Frame currFrame = currentVfx->GetCurrentFrame(dt);
-
-		if (currentVfx->GetCurrentFrameNum() == currentVfx->lastFrame - 1)
-		{
-			currentVfx = nullptr;
-			drawingVfx = false;
-		}
-
-		app->render->Blit(app->entityManager->explosionTexture, granadePosLaunch.x, granadePosLaunch.y, &currFrame.frame, false, true, 0, 255, 255, 255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
-	}
-
-
-	return false;
-}
-
 
 void GathererHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 {

@@ -211,7 +211,6 @@ public:
 	SDL_Texture* moveCommandTileMelee;
 	SDL_Texture* moveCommandTileRobot;
 
-	SDL_Texture* explosionTexture;
 	
 
 
