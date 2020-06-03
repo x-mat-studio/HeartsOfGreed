@@ -66,13 +66,14 @@ public:
 
 protected:
 
-	iMPoint origin, mouse;
+	iMPoint origin, destination;
 	std::vector <iMPoint> path;
 	std::vector<DynamicEntity*> closeEntityVector;
 	std::vector<DynamicEntity*> collidingEntityVector;
 
 private:
 	fMPoint toMove;
+
 
 	bool waitingForPath;
 
