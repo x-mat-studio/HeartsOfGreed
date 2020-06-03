@@ -392,6 +392,7 @@ bool ModuleEntityManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_ROBO_HERO, this);
 	app->eventManager->EventRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
@@ -849,6 +850,7 @@ bool ModuleEntityManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_GATHERER_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_MELEE_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_RANGED_HERO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_ROBO_HERO, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::SPAWN_TURRET, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
