@@ -39,14 +39,8 @@ bool Video::Update(float dt)
 			Mix_PauseMusic();
 	}
 
-
 	if (isVideoFinished && pavi != nullptr) 
-	{
-		frame = 0;
 		CloseAVI();
-	}
-		
-	
 
 	return true;
 }
@@ -59,6 +53,10 @@ bool Video::Awake(pugi::xml_node&)
 bool Video::CleanUp()
 {
 	isVideoFinished = true;
+
+	if (pavi != nullptr)
+		CloseAVI();
+
 	return true;
 }
 

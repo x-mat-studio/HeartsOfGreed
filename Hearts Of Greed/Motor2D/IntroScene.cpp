@@ -64,7 +64,7 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 
 	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) || app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
 	{	
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 1.0f);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 0.2f);
 	}
 
 	if (app->video->isVideoFinished)
@@ -86,6 +86,7 @@ bool  ModuleIntroScene::CleanUp()
 
 
 	app->win->SetScale(2.0f);
+	app->video->CleanUp();
 	app->uiManager->CleanUp();
 
 	return true;
