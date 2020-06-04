@@ -28,6 +28,7 @@
 #include "DialogManager.h"
 #include "Video.h"
 #include "CameraShake.h"
+#include "AssetManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
@@ -39,6 +40,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	wantToSave = wantToLoad = false;
 
 	//modules
+	assetManager = new ModuleAssetManager();
 	input = new ModuleInput();
 	win = new ModuleWindow();
 	audio = new ModuleAudio();
@@ -66,8 +68,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	dialogManager = new ModuleDialogManager();
 	cameraShake = new ModuleCameraShake();
 
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(assetManager);
 	AddModule(eventManager);
 	AddModule(input);
 	AddModule(win);

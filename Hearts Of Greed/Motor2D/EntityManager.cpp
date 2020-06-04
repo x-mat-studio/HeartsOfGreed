@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "UIManager.h"
+#include "AssetManager.h"
 #include "QuestManager.h"
 
 #include "DynamicEntity.h"
@@ -338,10 +339,10 @@ bool ModuleEntityManager::Start()
 
 
 	//HEROES------
-	suitManTexture = app->tex->Load("Assets/spritesheets/characters/suitmale.png");
-	armorMaleTexture = app->tex->Load("Assets/spritesheets/characters/armormale.png");
-	combatFemaleTexture = app->tex->Load("Assets/spritesheets/characters/combatfemale.png");
-	roboTexture = app->tex->Load("Assets/spritesheets/characters/robotto.png");
+	suitManTexture = app->tex->Load("Assets/spritesheets/Characters/suitmale.png");
+	armorMaleTexture = app->tex->Load("Assets/spritesheets/Characters/armormale.png");
+	combatFemaleTexture = app->tex->Load("Assets/spritesheets/Characters/combatfemale.png");
+	roboTexture = app->tex->Load("Assets/spritesheets/Characters/robotto.png");
 
 	//ENEMIES--------
 	enemyTexture = app->tex->Load("Assets/spritesheets/Enemies/WanamingoAlien.png");

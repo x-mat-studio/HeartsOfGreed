@@ -1,6 +1,7 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "App.h"
+#include "AssetManager.h"
 #include "Render.h"
 #include "Textures.h"
 #include "Map.h"
@@ -253,7 +254,14 @@ bool ModuleMap::LoadNew(const char* file_name)
 	bool ret = true;
 	P2SString tmp("%s%s", folder.GetString(), file_name);
 
-	pugi::xml_parse_result result = mapFile.load_file(tmp.GetString());
+
+	char* buffer;
+
+	pugi::xml_document dataFile;
+	int bytesFile = app->assetManager->Load("Assets/maps/finalMap.tmx", &buffer);
+
+	pugi::xml_parse_result result = mapFile.load_buffer(buffer, bytesFile);
+	RELEASE_ARRAY(buffer);
 
 
 	if (result == NULL)

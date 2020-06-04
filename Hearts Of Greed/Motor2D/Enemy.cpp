@@ -172,6 +172,8 @@ bool Enemy::Update(float dt)
 
 void Enemy::StateMachine(float dt)
 {
+	SetAnimation(state);
+
 	switch (state)
 	{
 	case ENEMY_STATES::IDLE:
@@ -241,8 +243,6 @@ void Enemy::StateMachine(float dt)
 	}
 
 
-	SetAnimation(state);
-	GetAnimationCurrentFrame(dt);
 }
 
 void Enemy::Roar()
@@ -271,6 +271,7 @@ void Enemy::DrawOnSelect()
 
 bool Enemy::PostUpdate(float dt)
 {
+	GetAnimationCurrentFrame(dt);
 	return true;
 }
 

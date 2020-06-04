@@ -92,6 +92,8 @@ private:
 	int dayTimer;
 	int nightTimer;
 
+	int nightApproachesSfx;
+
 	float timer;
 
 	bool menuScene;

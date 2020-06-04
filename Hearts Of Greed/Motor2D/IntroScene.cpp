@@ -31,6 +31,7 @@ ModuleIntroScene::~ModuleIntroScene()
 
 bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 {
+
 	app->win->SetScale(1.00f);
 	return true;
 }
@@ -39,7 +40,9 @@ bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleIntroScene::Start()
 {
-	app->video->Initialize("Assets/video/introAVI.avi");
+
+	//app->video->Initialize("Assets/video/introAVI.avi");
+	app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
 
 	return true;
 }
@@ -67,6 +70,7 @@ bool  ModuleIntroScene::Update(float dt)
 bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
+
 
 	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) || app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
 	{
