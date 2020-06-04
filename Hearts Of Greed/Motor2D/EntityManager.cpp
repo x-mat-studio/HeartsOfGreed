@@ -148,6 +148,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	armored1Skill2(-1),
 	ranged1Skill(-1),
 	ranged1Skil2(-1),
+	placingCenter(-1),
+	placingTurret(-1),
 
 	gathererLifeUpgradeValue(1),
 	gathererDamageUpgradeValue(1),

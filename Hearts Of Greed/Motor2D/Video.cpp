@@ -24,8 +24,7 @@ Video::Video() :
 }
 
 Video::~Video()
-{
-}
+{}
 
 bool Video::Update(float dt)
 {
