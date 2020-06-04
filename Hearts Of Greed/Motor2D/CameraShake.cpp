@@ -14,7 +14,9 @@ ModuleCameraShake::ModuleCameraShake() :
 	cameraOffset(0, 0),
 
 	shaking(false)
-{}
+{
+	name.create("cameraShake");
+}
 
 
 ModuleCameraShake::~ModuleCameraShake()

@@ -327,7 +327,7 @@ bool  ModuleTestScene::Update(float dt)
 	//TODO CHANGE THIS FOR THE ACTION THAT CHANGES TO THE MENU SCENE
 	if (menuScene == true)
 	{
-		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2))
+		if (app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2, FADE_ANIMATION::CURTAIN))
 		{
 			menuScene = false;
 		}

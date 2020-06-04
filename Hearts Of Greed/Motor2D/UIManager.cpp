@@ -630,7 +630,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::CONTINUE_GAME:
 		app->testScene->startFromLoad = true;
-		app->fadeToBlack->FadeToBlack(app->mainMenu, app->testScene, 3);
+		app->fadeToBlack->FadeToBlack(app->mainMenu, app->testScene, 3, FADE_ANIMATION::CURTAIN);
 		break;
 
 	case BUTTON_TAG::OPTIONS:
@@ -686,7 +686,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 
 	case BUTTON_TAG::LOAD:
 		app->testScene->startFromLoad = true;
-		app->fadeToBlack->FadeToBlack(app->testScene, app->testScene, 3);
+		app->fadeToBlack->FadeToBlack(app->testScene, app->testScene, 3, FADE_ANIMATION::CURTAIN);
 		break;
 
 	case BUTTON_TAG::REVIVE_GATHERER:
