@@ -227,7 +227,7 @@ pugi::xml_node App::LoadConfig(pugi::xml_document& config_file) const
 {
 	pugi::xml_node ret;
 
-	pugi::xml_parse_result result = config_file.load_file("config.xml");
+	pugi::xml_parse_result result = config_file.load_file("data/config.xml");
 
 
 	if (result != NULL)

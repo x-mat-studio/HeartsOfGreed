@@ -1,0 +1,60 @@
+<buildings>
+
+  <building>
+    <sample>
+      
+      <position x="0" y="0"/>
+
+      <collider>
+        <rect x="-150" y="130" w="430" h="330"/>
+        <type id="4"/>
+      </collider>
+
+      <stats xp="100" buildingCost="100" transparency="100">
+        <hitPoints max="100" current="100" recoveryRate="100"/>
+      </stats>
+      
+    </sample>
+  </building>
+
+
+  <streetLight>
+    <sample>
+
+      <collider>
+        <rect w="20" h="87"/>
+        <type id="4"/>
+      </collider>
+
+      <stats transparency="170"/>
+      
+    </sample>
+  </streetLight>
+
+  
+  <base>
+    <sample>
+      
+      <position x="0" y="0"/>
+
+      <collider>
+        <rect x="-150" y="130" w="480" h="410"/>
+        <type id="4"/>
+      </collider>
+      
+      <baseAlarmCollider>
+        <rect x="0" y="0" w="800" h="650"/>
+        <type id="5"/>
+      </baseAlarmCollider>
+      
+      <stats maxTurrets="2" maxBarricades="2" vision="0" transparency="100">
+        <hitPoints max="300" current="300" recoveryRate="5"/>
+        <resources produced="5" rate="5"/>
+      </stats>
+      
+    </sample>
+  </base>
+
+
+
+</buildings>

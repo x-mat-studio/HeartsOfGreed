@@ -61,7 +61,7 @@ bool Video::CleanUp()
 void Video::Initialize(char* path)
 {
 	OpenAVI(path);                  // Open The AVI File
-	app->audio->PlayMusic("Assets/video/introOGG.ogg");
+	app->audio->PlayMusic("data/video/introOGG.ogg");
 }
 
 void Video::OpenAVI(char* path)
@@ -70,7 +70,6 @@ void Video::OpenAVI(char* path)
 		LOG("Failed To Open The AVI Stream");
 
 	
-
 	AVIStreamInfo(pavi, &psi, sizeof(psi));					// Reads Information About The Stream Into psi
 	width = (psi.rcFrame.right - psi.rcFrame.left);           // Width Is Right Side Of Frame Minus Left
 	height = (psi.rcFrame.bottom - psi.rcFrame.top);          // Height Is Bottom Of Frame Minus Top

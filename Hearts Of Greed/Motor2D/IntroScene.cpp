@@ -18,20 +18,16 @@ bgTransitionConst(0), logoBG(nullptr), bgAlphaCounter(0), logoSound(-1), logoSta
 logoXMat(nullptr), titleSound(-1)
 {
 	name.create("introScene");
-
-
 }
 
 
 ModuleIntroScene::~ModuleIntroScene()
 {
-
 }
 
 
 bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 {
-
 	app->win->SetScale(1.00f);
 	return true;
 }
@@ -40,10 +36,7 @@ bool  ModuleIntroScene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool ModuleIntroScene::Start()
 {
-
-	//app->video->Initialize("Assets/video/introAVI.avi");
-	app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
-
+	app->video->Initialize("data/video/introAVI.avi");
 	return true;
 }
 
@@ -52,7 +45,6 @@ bool ModuleIntroScene::Start()
 bool  ModuleIntroScene::PreUpdate(float dt)
 {
 	CheckListener(this);
-
 	return true;
 }
 
@@ -61,7 +53,6 @@ bool  ModuleIntroScene::PreUpdate(float dt)
 bool  ModuleIntroScene::Update(float dt)
 {
 	CheckListener(this);
-
 	return true;
 }
 
@@ -70,7 +61,6 @@ bool  ModuleIntroScene::Update(float dt)
 bool  ModuleIntroScene::PostUpdate(float dt)
 {
 	bool ret = true;
-
 
 	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) || app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
 	{
@@ -82,6 +72,7 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 	{
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
 	}
+
 	return ret;
 }
 
