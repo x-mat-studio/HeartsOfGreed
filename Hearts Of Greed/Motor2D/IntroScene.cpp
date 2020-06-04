@@ -69,7 +69,7 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 
 	if (app->video->isVideoFinished)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 1.0f);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 0.0f);
 	}
 
 	return ret;
