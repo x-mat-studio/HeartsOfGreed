@@ -301,6 +301,9 @@ bool Hero::Update(float dt)
 
 void Hero::StateMachine(float dt)
 {
+	SetAnimation(state);
+
+
 	switch (state)
 	{
 	case HERO_STATES::IDLE:
@@ -410,7 +413,6 @@ void Hero::StateMachine(float dt)
 
 	}
 
-	SetAnimation(state);
 }
 
 

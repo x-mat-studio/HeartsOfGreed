@@ -1,5 +1,6 @@
 #include "p2Log.h"
 #include "App.h"
+#include "AssetManager.h"
 #include "Window.h"
 #include "Textures.h"
 #include "Render.h"
@@ -68,6 +69,7 @@ void Video::OpenAVI(char* path)
 	if (AVIStreamOpenFromFile(&pavi, path, streamtypeVIDEO, 0, OF_READ, NULL) != 0) // Opens The AVI Stream
 		LOG("Failed To Open The AVI Stream");
 
+	
 
 	AVIStreamInfo(pavi, &psi, sizeof(psi));					// Reads Information About The Stream Into psi
 	width = (psi.rcFrame.right - psi.rcFrame.left);           // Width Is Right Side Of Frame Minus Left

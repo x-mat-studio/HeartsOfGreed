@@ -1,6 +1,7 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "App.h"
+#include "AssetManager.h"
 #include "Render.h"
 #include "Textures.h"
 
@@ -66,7 +67,7 @@ bool ModuleTextures::CleanUp()
 SDL_Texture* const ModuleTextures::Load(const char* path)
 {
 	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
+	SDL_Surface* surface = IMG_Load_RW(app->assetManager->Load(path), 1);
 
 
 	if (surface == NULL)
