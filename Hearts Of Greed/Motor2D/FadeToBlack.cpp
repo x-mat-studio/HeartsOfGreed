@@ -1,7 +1,9 @@
 #include <math.h>
 #include "App.h"
 #include "FadeToBlack.h"
+#include "Window.h"
 #include "Render.h"
+#include "Textures.h"
 #include "EventManager.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
@@ -18,8 +20,13 @@ ModuleFadeToBlack::ModuleFadeToBlack() :
 	toDisable(nullptr),
 
 	currentStep(FADE_STEP::NONE),
-	currentAnim(FADE_ANIMATION::NONE)
+	currentAnim(FADE_ANIMATION::NONE),
+
+	texture(nullptr),
+	rightRect({ 0,0,0,0 }),
+	leftRect({ 0,0,0,0 })
 {
+	name.create("fadeToBlack");
 }
 
 
@@ -43,6 +50,11 @@ bool ModuleFadeToBlack::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_WIN, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_LOSE, this);
+
+	texture = app->tex->Load("Assets/spritesheets/VFX/fadeCurtain.png");
+	int a = screen.w * 0.5;
+	rightRect = { a, 0, a, screen.h };
+	leftRect = { 0, 0, a, 1024 };
 
 	return true;
 }
@@ -97,8 +109,8 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 
 		if (currentAnim == FADE_ANIMATION::CURTAIN && timeSpent >= CURTAIN_DELAY && animStarted == false)
 		{
-			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5, totalTime - timeSpent);
-			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, totalTime - timeSpent);
+			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5 / app->win->GetScale(), totalTime - timeSpent);
+			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5 / app->win->GetScale(), screen.w / app->win->GetScale(), totalTime - timeSpent);
 
 			animStarted = true;
 		}
@@ -133,8 +145,8 @@ bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float
 
 		if (currentAnim == FADE_ANIMATION::CURTAIN)
 		{
-			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0 - screen.w * 0.5, 0, time - CURTAIN_DELAY);
-			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w, screen.w * 0.5, time - CURTAIN_DELAY);
+			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0 - screen.w * 0.5 / app->win->GetScale(), 0, time - CURTAIN_DELAY);
+			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w / app->win->GetScale(), screen.w * 0.5 / app->win->GetScale(), time - CURTAIN_DELAY);
 		}
 
 		timeSpent = 0.0f;
@@ -169,8 +181,8 @@ void ModuleFadeToBlack::ExecuteEvent(EVENT_ENUM eventId)
 
 void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
 {
-	SDL_Rect rightCurtain = { 0, 0, screen.w * 0.5, screen.h };
-	SDL_Rect leftCurtain = { 0, 0, screen.w * 0.5, screen.h };
+	int rightCurtainX = 0;
+	int leftCurtainX = 0;
 
 	switch (currentAnim)
 	{
@@ -190,12 +202,11 @@ void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
 			rightCurtainEasing.UpdateEasingAddingTime(dt);
 		}
 
-		leftCurtain.x = leftCurtainEasing.GetLastRequestedPos();
-		rightCurtain.x = rightCurtainEasing.GetLastRequestedPos();
+		leftCurtainX = leftCurtainEasing.GetLastRequestedPos();
+		rightCurtainX = rightCurtainEasing.GetLastRequestedPos();
 
-		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(255.0f));
-		SDL_RenderFillRect(app->render->renderer, &leftCurtain);
-		SDL_RenderFillRect(app->render->renderer, &rightCurtain);
+		app->render->Blit(texture, leftCurtainX, 0, &leftRect, false, false, 0, 255, 255, 255, 0.5);
+		app->render->Blit(texture, rightCurtainX, 0, &rightRect, false, false, 0, 255, 255, 255, 0.5);
 		break;
 
 	default:
