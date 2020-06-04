@@ -41,7 +41,11 @@ bool Video::Update(float dt)
 
 
 	if (isVideoFinished && pavi != nullptr) 
-		CloseAVI();		
+	{
+		frame = 0;
+		CloseAVI();
+	}
+		
 	
 
 	return true;
@@ -54,6 +58,7 @@ bool Video::Awake(pugi::xml_node&)
 
 bool Video::CleanUp()
 {
+	isVideoFinished = true;
 	return true;
 }
 

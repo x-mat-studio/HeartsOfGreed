@@ -63,14 +63,13 @@ bool  ModuleIntroScene::PostUpdate(float dt)
 	bool ret = true;
 
 	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) || app->input->GetMouseButtonDown(1) == KEY_STATE::KEY_DOWN)
-	{
-		app->video->isVideoFinished = true;
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 0.0f);
+	{	
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 1.0f);
 	}
 
 	if (app->video->isVideoFinished)
 	{
-		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 2.0f);
+		app->fadeToBlack->FadeToBlack(this, app->mainMenu, 1.0f);
 	}
 
 	return ret;
@@ -84,6 +83,7 @@ bool  ModuleIntroScene::CleanUp()
 	app->tex->UnLoad(logoBG);
 	logoXMat = nullptr;
 	logoBG = nullptr;
+
 
 	app->win->SetScale(2.0f);
 	app->uiManager->CleanUp();

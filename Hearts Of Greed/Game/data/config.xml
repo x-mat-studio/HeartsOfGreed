@@ -52,18 +52,18 @@
   </AI>
   <entityManager>
 	<load 
-    docnameSuitman="data/characterStats/suitman.xml" 
-    docnameWanamingo="data/characterStats/wanamingo.xml" 
+    docnameSuitman="data/charactersStats/suitman.xml" 
+    docnameWanamingo="data/charactersStats/wanamingo.xml" 
     docnameTurret="data/buildingStats/turret.xml" 
     docnameBarricade="data/buildingStats/barricade.xml"
     docnameUpgradeCenter="data/buildingStats/upgradeCenter.xml"
-    docnameArmoredman="data/characterStats/armoredman.xml" 
-    docnameRangedman="data/characterStats/rangedman.xml"
-    docnameRobotto="data/characterStats/robotto.xml"
-    docnamevfx="data/characterStats/vfx.xml" 
-    docnameSpawner="data/characterStats/spawner.xml"
+    docnameArmoredman="data/charactersStats/armoredman.xml" 
+    docnameRangedman="data/charactersStats/rangedman.xml"
+    docnameRobotto="data/charactersStats/robotto.xml"
+    docnamevfx="data/charactersStats/vfx.xml" 
+    docnameSpawner="data/charactersStats/spawner.xml"
     docnameBuildings="data/buildingStats/buildings.xml"
-    docnameSkillAreas="data/characterStats/skillAreas.xml"
+    docnameSkillAreas="data/charactersStats/skillAreas.xml"
     />
   </entityManager>
 
