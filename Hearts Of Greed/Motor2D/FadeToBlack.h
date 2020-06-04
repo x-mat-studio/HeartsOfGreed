@@ -1,11 +1,13 @@
 #ifndef __FADE_TO_BLACK_H__
 #define __FADE_TO_BLACK_H__
 
-#define CURTAIN_DELAY 0.4
+#define CURTAIN_DELAY 0.4 //Should not lower this value, ask Jose
 
 #include "Module.h"
 #include "EasingFunctions.h"
 #include "SDL\include\SDL_rect.h"
+
+struct SDL_Texture;
 
 enum class FADE_ANIMATION : int
 {
@@ -55,6 +57,11 @@ private:
 
 	Easing rightCurtainEasing;
 	Easing leftCurtainEasing;
+
+	SDL_Texture* texture;
+	SDL_Rect rightRect;
+	SDL_Rect leftRect;
+
 };
 
 #endif //!__FADE_TO_BLACK_H__

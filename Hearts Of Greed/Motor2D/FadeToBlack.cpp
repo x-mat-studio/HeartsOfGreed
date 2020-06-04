@@ -1,7 +1,9 @@
 #include <math.h>
 #include "App.h"
 #include "FadeToBlack.h"
+#include "Window.h"
 #include "Render.h"
+#include "Textures.h"
 #include "EventManager.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
@@ -18,8 +20,13 @@ ModuleFadeToBlack::ModuleFadeToBlack() :
 	toDisable(nullptr),
 
 	currentStep(FADE_STEP::NONE),
-	currentAnim(FADE_ANIMATION::NONE)
+	currentAnim(FADE_ANIMATION::NONE),
+
+	texture(nullptr),
+	rightRect({ 0,0,0,0 }),
+	leftRect({ 0,0,0,0 })
 {
+	name.create("fadeToBlack");
 }
 
 
@@ -43,6 +50,12 @@ bool ModuleFadeToBlack::Start()
 
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_WIN, this);
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_LOSE, this);
+
+	texture = app->tex->Load("Assets/spritesheets/VFX/fadeCurtain.png");
+
+	int width = screen.w * 0.5;
+	rightRect = { width, 0, width, screen.h };
+	leftRect = { 0, 0, width, screen.h };
 
 	return true;
 }
@@ -172,6 +185,7 @@ void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
 	SDL_Rect rightCurtain = { 0, 0, screen.w * 0.5, screen.h };
 	SDL_Rect leftCurtain = { 0, 0, screen.w * 0.5, screen.h };
 
+
 	switch (currentAnim)
 	{
 	case FADE_ANIMATION::NONE:
@@ -183,7 +197,7 @@ void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
 		break;
 
 	case FADE_ANIMATION::CURTAIN:
-		
+
 		if (leftCurtainEasing.IsActive() == true)
 		{
 			leftCurtainEasing.UpdateEasingAddingTime(dt);
@@ -193,9 +207,9 @@ void ModuleFadeToBlack::DrawAnim(float normalized, float dt)
 		leftCurtain.x = leftCurtainEasing.GetLastRequestedPos();
 		rightCurtain.x = rightCurtainEasing.GetLastRequestedPos();
 
-		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(255.0f));
-		SDL_RenderFillRect(app->render->renderer, &leftCurtain);
-		SDL_RenderFillRect(app->render->renderer, &rightCurtain);
+		SDL_RenderCopy(app->render->renderer, texture, &leftRect, &leftCurtain);
+		SDL_RenderCopy(app->render->renderer, texture, &rightRect, &rightCurtain);
+			
 		break;
 
 	default:
