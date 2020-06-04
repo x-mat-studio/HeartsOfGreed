@@ -110,7 +110,7 @@ bool ModulePathfinding::Update(float dt)
 	{
 		it = pendentPaths.begin();
 
-		while (timeSpend <= 2 && it != pendentPaths.end() && pendentPaths.size() > 0)
+		while (timeSpend <= 2 && pendentPaths.size() > 0)
 		{
 			CreatePath(it->second.origin, it->second.destination, it->second.lvl, it->first);
 
@@ -118,8 +118,8 @@ bool ModulePathfinding::Update(float dt)
 
 			timeSpend = SDL_GetTicks() - startedAt;
 
-			if (it != pendentPaths.end())
-				it++;
+			if (pendentPaths.size() > 0)
+				it = pendentPaths.begin();
 		}
 	}
 

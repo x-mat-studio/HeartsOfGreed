@@ -462,6 +462,8 @@ bool ModuleEntityManager::Start()
 	buildingGetsHit = app->audio->LoadFx("Assets/audio/sfx/Buildings/hit1.wav");
 	buildingGetsHit2 = app->audio->LoadFx("Assets/audio/sfx/Buildings/hit2.wav");
 	turretShooting = app->audio->LoadFx("Assets/audio/sfx/Buildings/shooting1.wav");
+	placingTurret = app->audio->LoadFx("Assets/audio/sfx/Buildings/placeturret.wav");
+	placingCenter = app->audio->LoadFx("Assets/audio/sfx/Buildings/placecenter.wav");
 
 	//Armored sfx--------
 	noise1Suitman = app->audio->LoadFx("Assets/audio/sfx/Heroes/Armoredman/noise1.wav");
@@ -981,10 +983,12 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_TURRET:
 		ret = new Turret({ (float)x,(float)y }, sampleTurret, alignement);
+		app->audio->PlayFx(placingTurret,0,-1);
 		break;
 
 	case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 		ret = new UpgradeCenter({ (float)x,(float)y }, sampleUpgradeCenter, alignement);
+		app->audio->PlayFx(placingCenter, 0, -1);
 		break;
 
 	case ENTITY_TYPE::BLDG_BASE:

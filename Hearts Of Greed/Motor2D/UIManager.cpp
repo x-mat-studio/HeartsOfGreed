@@ -125,6 +125,7 @@ bool ModuleUIManager::Start()
 	clickSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonClick.wav");
 	easyIn = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_in.wav");
 	easyOut = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_out.wav");
+	
 
 	return ret;
 }

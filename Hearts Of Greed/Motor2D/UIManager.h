@@ -137,6 +137,7 @@ private:
 	int clickSound;
 	int easyIn;
 	int easyOut;
+	
 
 	bool isMenuOn;
 
