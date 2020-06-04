@@ -67,7 +67,7 @@ bool ModuleFonts::CleanUp()
 // Load new texture from file path
 TTF_Font* const ModuleFonts::Load(const char* path, int size)
 {
-	TTF_Font* font = TTF_OpenFontRW(app->assetManager->Load(path), 1, 1);
+	TTF_Font* font = TTF_OpenFontRW(app->assetManager->Load(path), 1, DEFAULT_FONT_SIZE);
 
 
 	if (font == NULL)
