@@ -396,7 +396,7 @@ void Entity::SetToDelete(bool toDel)
 }
 
 
-int Entity::RecieveDamage(float damage)
+int Entity::RecieveDamage(float damage, bool ignoreArmor)
 {
 	return -1;
 }

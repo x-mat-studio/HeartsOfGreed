@@ -98,7 +98,7 @@ private:
 	bool ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt);
 	ENEMY_STATES ProcessFsm(std::vector<ENEMY_INPUTS>& inputs);
 
-	int RecieveDamage(float damage);
+	int RecieveDamage(float damage, bool ignoreArmor = false);
 	void SearchForNewObjective();
 
 	void StateMachine(float dt);

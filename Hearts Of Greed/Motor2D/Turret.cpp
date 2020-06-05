@@ -39,7 +39,7 @@ Turret::Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int v
 	hpIncrease(hpIncrease),
 
 	attackCD(0),
-	bonusDamage(0),
+	bonusAttack(0),
 	bonusArmor(0),
 
 	shortTermObjective(nullptr),
@@ -81,7 +81,7 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	hpIncrease(copy->hpIncrease),
 
 	attackCD(0),
-	bonusDamage(0),
+	bonusAttack(0),
 	bonusArmor(0),
 
 	shortTermObjective(nullptr),
@@ -230,9 +230,9 @@ void Turret::DrawSelected()
 		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w * 0.5f, this->collider->rect.y);
 }
 
-int Turret::RecieveDamage(float damage)
+int Turret::RecieveDamage(float damage, bool ignoreArmor)
 {
-	if (bonusArmor > 0)
+	if (bonusArmor > 0 && !ignoreArmor)
 	{
 		damage -= damage * bonusArmor * 0.01f;
 	}
@@ -296,7 +296,7 @@ bool Turret::CheckAttackRange()
 void Turret::Attack()
 {
 	if (shortTermObjective)
-		shortTermObjective->RecieveDamage(attackDmg + bonusDamage);
+		shortTermObjective->RecieveDamage(attackDmg * (bonusAttack * 0.01f + 1));
 }
 
 
@@ -345,6 +345,16 @@ void Turret::InternalInput(std::vector<TURRET_INPUTS>& inputs, float dt)
 		{
 			inputs.push_back(TURRET_INPUTS::IN_ATTACK_CHARGED);
 			attackCD = 0;
+		}
+	}
+
+	if (temporalTimer > 0)
+	{
+		temporalTimer += dt;
+
+		if (temporalTimer >= timeUntilDeath)
+		{
+			Die();
 		}
 	}
 }
@@ -573,8 +583,23 @@ void Turret::SetAnimation(TURRET_STATES state)
 
 void Turret::ResetBonusStats()
 {
-	bonusDamage = 0.f;
+	bonusAttack = 0.f;
 	bonusArmor = 0.f;
+}
+
+void Turret::SetTemporalTimer(float time)
+{
+	if (time > 0.f)
+	{
+		temporalTimer += 0.01;
+		timeUntilDeath = time;
+	}
+	else
+	{
+		temporalTimer = 0.f;
+		timeUntilDeath = 0;
+	}
+
 }
 
 

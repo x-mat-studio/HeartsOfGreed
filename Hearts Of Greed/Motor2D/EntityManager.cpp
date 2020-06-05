@@ -3131,14 +3131,14 @@ int ModuleEntityManager::ExecuteSkill(Skill& skill, iMPoint pivot, Entity* objec
 			{
 				ret += entityVector[i]->RecieveDamage(skill.dmg);
 
-				if (skill.effect == SKILL_EFFECT::SLOWDOWN)
+				if (skill.effect != SKILL_EFFECT::NO_EFFECT)
 				{
 					type = entityVector[i]->GetType();
 
 					if (type == ENTITY_TYPE::ENEMY || type == ENTITY_TYPE::ENEMY_GIGA || type == ENTITY_TYPE::ENEMY_NIGHT || type == ENTITY_TYPE::ENEMY_RANGED)
 					{
 						Enemy* enemy = (Enemy*)entityVector[i];
-						enemy->debuffs.AddNewEffect(SKILL_EFFECT::SLOWDOWN, skill.effectTime, skill.effectSeverity);
+						enemy->debuffs.AddNewEffect(skill.effect, skill.effectTime, skill.effectSeverity);
 					}
 				}
 			}

@@ -58,7 +58,7 @@ void UpgradeCenter::UpgradeBarricades()
 }
 
 
-int UpgradeCenter::RecieveDamage(float damage)
+int UpgradeCenter::RecieveDamage(float damage, bool ignoreArmor)
 {
 	if (hitPointsCurrent > 0)
 	{

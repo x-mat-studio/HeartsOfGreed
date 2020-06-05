@@ -13,6 +13,13 @@ EntityEffects::~EntityEffects()
 
 void EntityEffects::AddNewEffect(SKILL_EFFECT effect, float time, float severity)
 {
+	if (effect == SKILL_EFFECT::BLOOD_LOSS)
+	{
+		if (IsAnyEffectActive() == false)
+			return;
+	}
+
+
 	effects[effect].time = time;
 	effects[effect].severity = severity;
 
@@ -81,12 +88,28 @@ void EntityEffects::StartEffect(SKILL_EFFECT effect)
 
 
 	case SKILL_EFFECT::BLOOD_LOSS:
+	{
 
 		float maxHp = callback->GetMaxHP();
-
 		effects[effect].statTaken = maxHp / effects[effect].severity / effects[effect].time / 60;
 
-		break;
+	}
+	break;
+
+	case SKILL_EFFECT::KNOCKDOWN:
+	{
+		if (callback->dynamic == true)
+		{
+			DynamicEntity* dynamic = (DynamicEntity*)callback;
+
+			int unitSpeed = effects[effect].statTaken = dynamic->GetSpeed();
+
+			int subtractSpeed = unitSpeed;
+
+			dynamic->SetSpeed(unitSpeed - subtractSpeed);
+		}
+	}
+	break;
 	}
 }
 
@@ -98,6 +121,7 @@ void EntityEffects::EndEffect(SKILL_EFFECT effect)
 	switch (effect)
 	{
 	case SKILL_EFFECT::SLOWDOWN:
+	case SKILL_EFFECT::KNOCKDOWN:
 
 		dynamic = (DynamicEntity*)callback;
 		dynamic->SetSpeed(effects[effect].statTaken);
@@ -118,8 +142,8 @@ void EntityEffects::UpdateEffect(SKILL_EFFECT effect)
 	switch (effect)
 	{
 	case SKILL_EFFECT::SLOWDOWN:
-	
-		
+
+
 		break;
 
 
@@ -132,10 +156,36 @@ void EntityEffects::UpdateEffect(SKILL_EFFECT effect)
 	}
 }
 
+bool EntityEffects::IsAnyEffectActive()
+{
+	for (int i = 0; i < SKILL_EFFECT::EFFECT_ALL; i++)
+	{
+		if (effects[i].time > 0.f)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 
 void EntityEffects::SetCallBack(Entity* entity)
 {
 	callback = entity;
+}
+
+bool EntityEffects::IsStuned()
+{
+	for (int i = 0; i < SKILL_EFFECT::EFFECT_ALL; i++)
+	{
+		if (effects[i].time > 0.f && SKILL_EFFECT(i) == SKILL_EFFECT::KNOCKDOWN)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 

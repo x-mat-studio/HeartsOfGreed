@@ -67,9 +67,11 @@ public:
 
 	void DrawSelected();
 
-	int RecieveDamage(float damage);
+	int RecieveDamage(float damage, bool ignoreArmor = false);
 
 	void LevelUp();
+
+	void SetTemporalTimer(float time);
 
 private:
 
@@ -92,8 +94,9 @@ private:
 
 	void ResetBonusStats();
 
+
 public:
-	float bonusDamage;
+	float bonusAttack;
 	float bonusArmor;
 
 
@@ -109,6 +112,9 @@ private:
 	int rangeIncrease;
 	float speedIncrease;
 	float hpIncrease;
+
+	float temporalTimer;
+	float timeUntilDeath;
 
 	Animation idleRight;
 	Animation idleRightUp;

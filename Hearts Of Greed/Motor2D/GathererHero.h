@@ -3,6 +3,8 @@
 
 #include "Hero.h"
 
+class Turret;
+
 class GathererHero : public Hero
 {
 public:
@@ -39,6 +41,9 @@ public:
 	Skill GetPassiveSkill() const;
 	void ReplacePassiveSkill(Skill& skill);
 
+	void CheckObjective(Entity* deleted);
+
+
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 	void UnleashParticlesSkill1(float posx, float posy);
@@ -53,6 +58,8 @@ private:
 
 	Skill passiveSkill;
 	Collider* passiveSkillCollider;
+
+	Turret* myTurret;
 
 	
 };
