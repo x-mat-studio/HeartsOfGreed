@@ -3760,7 +3760,7 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	
 		//SKILL SFX :: RANGED
 
-		SDL_Rect rect{ 0, 0, 300, 300 };
+		SDL_Rect rect{ 0, 0, 200, 200 };
 
 		Animation anim1;
 		anim1.PushBack(SDL_Rect{ 0, 0, 40, 40 }, 1, 0, 0);
@@ -3774,8 +3774,8 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 
 		//Yes, this is a hardcoded offset. No, I don't know why we need this. Too bad!
 
-		float auxPosX = -30;						float auxPos2X = -30;						float auxPos3X = -30;
-		float auxPosY = -30;						float auxPos2Y = -30;						float auxPos3Y = -30;
+		float auxPosX = -110;						float auxPos2X = -110;						float auxPos3X = -110;
+		float auxPosY = -110;						float auxPos2Y = -110;						float auxPos3Y = -110;
 
 		float auxSpeedX = 1;						float auxSpeed2X = 1.2;						float auxSpeed3X = 0;
 		float auxSpeedY = 1.1;						float auxSpeedY2 = 1.2;						float auxSpeedY3 = -1.3;
@@ -3787,7 +3787,7 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0;
 		float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
 		int particleVariableAngularSpeed = 0;		int particleVariableAngularSpeed2 = 0;		int particleVariableAngularSpeed3 = 0;
-		float particlesRate = 8;					float particlesRate2 = 8;					float particlesRate3 = 8;
+		float particlesRate = 12;					float particlesRate2 = 12;					float particlesRate3 = 12;
 		float particlesLifeTime = 0.33;				float particlesLifeTime2 = 0.33;			float particlesLifeTime3 = 0.33;
 
 		//SAMPLES--------------
