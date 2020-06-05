@@ -129,7 +129,7 @@ bool RangedHero::ExecuteSkill1()
 			ExecuteSFX(app->entityManager->ranged1Skill);
 			ret = app->entityManager->ExecuteSkill(skill1, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y });
 			app->cameraShake->StartCameraShake(1, 4);
-
+			UnleashParticlesSkill1((int)skill1PosLaunch.x, (int)skill1PosLaunch.y);
 			currAoE.clear();
 			suplAoE.clear();
 			currAreaInfo = nullptr;
@@ -267,4 +267,18 @@ Skill RangedHero::GetPassiveSkill() const
 void RangedHero::ReplacePassiveSkill(Skill& skill)
 {
 	passiveSkill = skill;
+}
+
+void RangedHero::UnleashParticlesSkill1(float posx, float posy)
+{
+	//spider web spreading
+
+	if (activeSkillsParticleSystem != nullptr) {
+		activeSkillsParticleSystem->Activate();
+		activeSkillsParticleSystem->Move(posx, posy);
+	}
+	else
+	{
+		activeSkillsParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::SKILL_RANGED, posx, posy);
+	}
 }

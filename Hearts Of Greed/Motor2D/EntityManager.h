@@ -361,13 +361,15 @@ private:
 	Emitter* sampleEmitter; Emitter* sampleEmitter2; 	Emitter* sampleEmitter3; 	Emitter* sampleEmitter4;
 	Emitter* sampleEmitterSkillGatherer1; Emitter* sampleEmitterSkillGatherer2; Emitter* sampleEmitterSkillGatherer3; 
 	Emitter* sampleEmitterSkillGatherer4; Emitter* sampleEmitterSkillGatherer5; Emitter* sampleEmitterSkillGatherer6;
-
+	Emitter* sampleEmitterSkillRanged1; Emitter* sampleEmitterSkillRanged2; Emitter* sampleEmitterSkillRanged3;
+	Emitter* sampleEmitterSkillRanged4; Emitter* sampleEmitterSkillRanged5; Emitter* sampleEmitterSkillRanged6;
 
 
 
 
 	SDL_Texture* snowball;
 	SDL_Texture* explosionTexture2;
+	SDL_Texture* spiderweb;
 
 	std::map <int, skillArea> skillAreas;
 
