@@ -29,27 +29,27 @@
   <Animations>
 
     <idle_right_up name="idle_right_up" frames="1">
-      <frame rposX="12" rposY="405" rwidth="24" rheight="64" time="0.26f" pivotX="14" pivotY="45"/>
+      <frame rposX="12" rposY="405" rwidth="24" rheight="64" time="0.26f" pivotX="10" pivotY="58"/>
     </idle_right_up>
 
     <idle_right name="idle_right" frames="1">
-      <frame rposX="7" rposY="475" rwidth="34" rheight="62" time="0.26f" pivotX="7" pivotY="45"/>
+      <frame rposX="7" rposY="475" rwidth="34" rheight="62" time="0.26f" pivotX="9" pivotY="57"/>
     </idle_right>
 
     <idle_right_down name="idle_right_down" frames="1">
-      <frame rposX="10" rposY="541" rwidth="27" rheight="66" time="0.26f" pivotX="10" pivotY="43"/>
+      <frame rposX="10" rposY="541" rwidth="27" rheight="66" time="0.26f" pivotX="14" pivotY="57"/>
     </idle_right_down>
 
     <idle_left_down name="idle_left_down" frames="1">
-      <frame rposX="12" rposY="611" rwidth="24" rheight="65" time="0.26f" pivotX="12" pivotY="42"/>
+      <frame rposX="12" rposY="611" rwidth="24" rheight="65" time="0.26f" pivotX="17" pivotY="55"/>
     </idle_left_down>
 
     <idle_left name="idle_left" frames="1">
-      <frame rposX="7" rposY="683" rwidth="34" rheight="62" time="0.26f" pivotX="28" pivotY="47"/>
+      <frame rposX="7" rposY="683" rwidth="34" rheight="62" time="0.26f" pivotX="24" pivotY="57"/>
     </idle_left>
 
     <idle_left_up name="idle_left_up" frames="1">
-      <frame rposX="10" rposY="752" rwidth="27" rheight="60" time="0.26f" pivotX="16" pivotY="44"/>
+      <frame rposX="10" rposY="752" rwidth="27" rheight="60" time="0.26f" pivotX="16" pivotY="58"/>
     </idle_left_up>
 
     <walk_right_up name="walk_right_up" frames="8">
