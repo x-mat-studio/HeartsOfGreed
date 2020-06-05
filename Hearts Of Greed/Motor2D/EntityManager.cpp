@@ -146,6 +146,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	noise3Suitman(-1),
 	noise4Suitman(-1),
 	moveHero(0),
+	reviveHero(-1),
 	lvlup(-1),
 	selectHero(-1),
 	suitman1Skill(0),
@@ -501,6 +502,7 @@ bool ModuleEntityManager::Start()
 	lvlup = app->audio->LoadFx("Assets/audio/sfx/Heroes/lvlup.wav");
 	selectHero = app->audio->LoadFx("Assets/audio/sfx/Heroes/heroSelect.wav");
 	moveHero = app->audio->LoadFx("Assets/audio/sfx/Heroes/heroMove.wav");
+	reviveHero = app->audio->LoadFx("Assets/audio/sfx/Heroes/Reviving_hero.wav");
 
 
 	//Emitters and particles systems------------
@@ -1024,6 +1026,7 @@ Entity* ModuleEntityManager::AddEntity(ENTITY_TYPE type, int x, int y, ENTITY_AL
 
 	case ENTITY_TYPE::BLDG_BARRICADE:
 		ret = new Barricade({ (float)x,(float)y }, sampleBarricade, alignement);
+		app->audio->PlayFx(placingCenter, 0, -1);
 		break;
 
 	case ENTITY_TYPE::ENEMY:
@@ -2208,24 +2211,29 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 		AddEntity(ENTITY_TYPE::BLDG_TURRET, pos.x, pos.y);
 		break;
 
+		//TODO revive Hero sound
 	case EVENT_ENUM::GATHERER_RESURRECT:
 		ReviveHero(*deadGatherer);
 		DeleteDeadHero(ENTITY_TYPE::HERO_GATHERER);
+		app->audio->PlayFx(reviveHero, 0, -1);
 		break;
 
 	case EVENT_ENUM::MELEE_RESURRECT:
 		ReviveHero(*deadMelee);
 		DeleteDeadHero(ENTITY_TYPE::HERO_MELEE);
+		app->audio->PlayFx(reviveHero, 0, -1);
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:
 		ReviveHero(*deadRanged);
 		DeleteDeadHero(ENTITY_TYPE::HERO_RANGED);
+		app->audio->PlayFx(reviveHero, 0, -1);
 		break;
 
 	case EVENT_ENUM::ROBOTTO_RESURRECT:
 		ReviveHero(*deadRobo);
 		DeleteDeadHero(ENTITY_TYPE::HERO_ROBO);
+		app->audio->PlayFx(reviveHero, 0, -1);
 		break;
 
 	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:

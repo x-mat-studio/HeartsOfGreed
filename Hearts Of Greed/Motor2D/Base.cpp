@@ -125,6 +125,8 @@ void Base::DisableTurrets()
 	for (uint i = 0; i < this->turretsVector.size(); i++) 
 	{
 		//TODO: someone left this for empty
+
+		//too bad!
 		
 	}
 }

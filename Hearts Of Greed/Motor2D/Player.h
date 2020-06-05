@@ -103,6 +103,8 @@ private:
 	bool entityInteraction;
 	
 	int focusedHero;
+	int soundOnClick;
+	int selectBaseSound;
 
 	bool skill1;
 	bool skill2;

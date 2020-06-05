@@ -3,6 +3,7 @@
 #include "Player.h"
 
 #include "Hero.h"
+#include "Audio.h"
 #include "Input.h"
 #include "Render.h"
 #include "Window.h"
@@ -32,6 +33,8 @@ ModulePlayer::ModulePlayer() :
 	entityInteraction(false),
 
 	focusedHero(0),
+	soundOnClick(-1),
+	selectBaseSound(-1),
 
 	buildMode(false),
 	skill1(false),
@@ -113,6 +116,9 @@ bool ModulePlayer::Start()
 	resources = 0;
 	resourcesSkill = 0;
 	resourcesBoost = 0;
+
+	soundOnClick = app->audio->LoadFx("Assets/audio/sfx/Interface/clickSound.wav");
+	selectBaseSound = app->audio->LoadFx("Assets/audio/sfx/Buildings/selectBase.wav");
 
 	return true;
 }
@@ -341,6 +347,8 @@ void ModulePlayer::LeftClick()
 
 	heroesVector.clear();
 
+	app->audio->PlayFx(soundOnClick, 0, -1, LOUDNESS::QUIET);
+
 	focusedEntity = app->entityManager->CheckEntityOnClickbyPriority(clickPosition);
 
 	if (focusedEntity != nullptr)
@@ -350,6 +358,10 @@ void ModulePlayer::LeftClick()
 		{
 			heroesVector.clear();
 			heroesVector.push_back((Hero*)focusedEntity);
+		}
+		if (type == ENTITY_TYPE::BLDG_BASE)
+		{
+			app->audio->PlayFx(selectBaseSound,0,-1,LOUDNESS::NORMAL);
 		}
 	}
 }
