@@ -30,7 +30,7 @@ public:
 	void Draw(float dt);
 	void DrawSelected();
 
-	int RecieveDamage(float damage);
+	int RecieveDamage(float damage, bool ignoreArmor = false);
 
 	void LevelUp();
 

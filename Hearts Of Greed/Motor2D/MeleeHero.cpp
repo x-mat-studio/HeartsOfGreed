@@ -149,6 +149,11 @@ bool MeleeHero::ExecuteSkill1()
 
 		ret =  app->entityManager->ExecuteSkill(skill1, this->origin);
 
+		if (skill1.hurtYourself == true)
+		{
+			this->RecieveDamage(skill1.dmg, true);
+		}
+
 		ExecuteSFX(app->entityManager->armored1Skill2);
 		app->cameraShake->StartCameraShake(0.8, 8);
 

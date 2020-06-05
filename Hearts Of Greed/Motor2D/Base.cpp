@@ -385,7 +385,7 @@ void Base::GainResources(float dt)
 }
 
 
-int Base::RecieveDamage(float damage)
+int Base::RecieveDamage(float damage, bool ignoreArmor)
 {
 
 	if (hitPointsCurrent > 0)

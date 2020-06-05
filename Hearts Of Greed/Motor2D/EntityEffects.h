@@ -26,12 +26,16 @@ public:
 
 	void SetCallBack(Entity*);
 
+	bool IsStuned();
+
 private:
 
 	void StartEffect(SKILL_EFFECT effect);
 	void EndEffect(SKILL_EFFECT effect);
 
 	void UpdateEffect(SKILL_EFFECT effect);
+
+	bool IsAnyEffectActive();
 
 private:
 

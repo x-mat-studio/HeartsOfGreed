@@ -49,7 +49,7 @@ public:
 
 	void ChangeAligment();
 
-	int RecieveDamage(float damage);
+	int RecieveDamage(float damage, bool ignoreArmor = false);
 
 	int GetHP();
 	int GetMaxHP();

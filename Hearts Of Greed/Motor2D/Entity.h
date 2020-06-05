@@ -86,6 +86,7 @@ enum SKILL_EFFECT : int
 
 	SLOWDOWN,
 	BLOOD_LOSS,
+	KNOCKDOWN,
 
 	EFFECT_ALL
 };
@@ -110,7 +111,7 @@ public:
 	void SetColliderRect(SDL_Rect newRect);
 	void ActiveCollider();
 
-	virtual int RecieveDamage(float damage);
+	virtual int RecieveDamage(float damage, bool ignoreArmor = false);
 	virtual void CheckObjective(Entity* deleted);
 
 	fMPoint GetPosition();
