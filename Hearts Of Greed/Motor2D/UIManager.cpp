@@ -46,6 +46,7 @@ ModuleUIManager::ModuleUIManager() :
 	factory(nullptr),
 	clickSound(-1),
 	hoverSound(-1),
+	upgradingTurret(-1),
 	easyIn(-1),
 	easyOut(-1),
 	lastFramePauseEasingActive(false),
@@ -121,10 +122,11 @@ bool ModuleUIManager::Start()
 
 	LoadAtlas();
 
-	hoverSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonSimple.wav");
-	clickSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonClick.wav");
-	easyIn = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_in.wav");
-	easyOut = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_out.wav");
+	hoverSound =		app->audio->LoadFx("Assets/audio/sfx/Interface/BotonSimple.wav");
+	clickSound =		app->audio->LoadFx("Assets/audio/sfx/Interface/BotonClick.wav");
+	easyIn =			app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_in.wav");
+	easyOut =			app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_out.wav");
+	upgradingTurret =	app->audio->LoadFx("Assets/audio/sfx/Buildings/upgradeTurret.wav");
 	
 
 	return ret;
@@ -737,6 +739,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 			app->player->AddResources(-factory->turretUpgradeCost);
 			
 			building->UpgradeTurrets();
+			app->audio->PlayFx(upgradingTurret, 0, -1);
 		}
 		break;
 
@@ -762,7 +765,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		{
 			app->player->AddResources(-factory->barricadeUpgradeCost);
 			
-			
+			app->audio->PlayFx(upgradingTurret, 0, -1);
 
 			building->UpgradeBarricades();
 		}

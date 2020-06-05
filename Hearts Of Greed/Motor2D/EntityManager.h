@@ -264,6 +264,7 @@ public:
 	int moveHero;
 	int placingTurret;
 	int placingCenter;
+	int reviveHero;
 
 
 	//public textures
