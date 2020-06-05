@@ -1554,7 +1554,7 @@ void Hero::TimeSkillParticleSystem(float dt)
 	{
 		skillSfxTimer += dt;
 
-		if (skillSfxTimer > 0.7) {
+		if (skillSfxTimer > 0.7) { //generic hardcoded timer. Too bad!
 			skillSfxTimer = 0;
 			activeSkillsParticleSystem->Desactivate();
 		}

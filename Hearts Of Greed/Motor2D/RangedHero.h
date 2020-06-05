@@ -42,6 +42,9 @@ public:
 	Skill GetPassiveSkill() const;
 	void ReplacePassiveSkill(Skill& skill);
 
+private:
+	void UnleashParticlesSkill1(float posx, float posy);
+
 public:
 
 	fMPoint skill1PosLaunch;
