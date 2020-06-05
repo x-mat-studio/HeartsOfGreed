@@ -185,29 +185,29 @@
     </walk_left_up>
 
     <punch_right_up name="punch_right_up" frames="10">
-      <frame rposX="484" rposY="0" rwidth="45" rheight="73" time="0.10f" pivotX="22" pivotY="53"/>
-      <frame rposX="554" rposY="0" rwidth="38" rheight="73" time="0.10f" pivotX="17" pivotY="53"/>
-      <frame rposX="626" rposY="0" rwidth="28" rheight="73" time="0.10f" pivotX="15" pivotY="53"/>
-      <frame rposX="686" rposY="0" rwidth="43" rheight="73" time="0.10f" pivotX="16" pivotY="53"/>
-      <frame rposX="755" rposY="0" rwidth="38" rheight="73" time="0.10f" pivotX="17" pivotY="53"/>
-      <frame rposX="823" rposY="0" rwidth="36" rheight="73" time="0.10f" pivotX="17" pivotY="53"/>
-      <frame rposX="887" rposY="0" rwidth="42" rheight="73" time="0.10f" pivotX="19" pivotY="53"/>
-      <frame rposX="954" rposY="0" rwidth="42" rheight="73" time="0.10f" pivotX="21" pivotY="53"/>
-      <frame rposX="1022" rposY="0" rwidth="41" rheight="73" time="0.10f" pivotX="26" pivotY="53"/>
-      <frame rposX="1089" rposY="0" rwidth="40" rheight="73" time="0.10f" pivotX="28" pivotY="53"/>
+      <frame rposX="484" rposY="0" rwidth="45" rheight="73" time="0.10f" pivotX="15" pivotY="66"/>
+      <frame rposX="554" rposY="0" rwidth="38" rheight="73" time="0.10f" pivotX="10" pivotY="66"/>
+      <frame rposX="626" rposY="0" rwidth="28" rheight="73" time="0.10f" pivotX="8" pivotY="66"/>
+      <frame rposX="686" rposY="0" rwidth="43" rheight="73" time="0.10f" pivotX="9" pivotY="66"/>
+      <frame rposX="755" rposY="0" rwidth="38" rheight="73" time="0.10f" pivotX="10" pivotY="66"/>
+      <frame rposX="823" rposY="0" rwidth="36" rheight="73" time="0.10f" pivotX="10" pivotY="66"/>
+      <frame rposX="887" rposY="0" rwidth="42" rheight="73" time="0.10f" pivotX="12" pivotY="66"/>
+      <frame rposX="954" rposY="0" rwidth="42" rheight="73" time="0.10f" pivotX="14" pivotY="66"/>
+      <frame rposX="1022" rposY="0" rwidth="41" rheight="73" time="0.10f" pivotX="19" pivotY="66"/>
+      <frame rposX="1089" rposY="0" rwidth="40" rheight="73" time="0.10f" pivotX="21" pivotY="66"/>
     </punch_right_up>
 
     <punch_right name="punch_right" frames="10">
-      <frame rposX="493" rposY="74" rwidth="32" rheight="74" time="0.10f" pivotX="1" pivotY="51"/>
-      <frame rposX="556" rposY="74" rwidth="41" rheight="74" time="0.10f" pivotX="1" pivotY="50"/>
-      <frame rposX="619" rposY="74" rwidth="48" rheight="74" time="0.10f" pivotX="0" pivotY="50"/>
-      <frame rposX="687" rposY="74" rwidth="47" rheight="74" time="0.10f" pivotX="0" pivotY="50"/>
-      <frame rposX="745" rposY="74" rwidth="65" rheight="74" time="0.10f" pivotX="0" pivotY="50"/>
-      <frame rposX="817" rposY="74" rwidth="55" rheight="74" time="0.10f" pivotX="0" pivotY="49"/>
-      <frame rposX="884" rposY="74" rwidth="55" rheight="74" time="0.10f" pivotX="0" pivotY="49"/>
-      <frame rposX="954" rposY="74" rwidth="49" rheight="74" time="0.10f" pivotX="0" pivotY="50"/>
-      <frame rposX="1025" rposY="74" rwidth="40" rheight="74" time="0.10f" pivotX="0" pivotY="50"/>
-      <frame rposX="1095" rposY="74" rwidth="35" rheight="74" time="0.10f" pivotX="5" pivotY="50"/>
+      <frame rposX="493" rposY="74" rwidth="32" rheight="74" time="0.10f" pivotX="14" pivotY="64"/>
+      <frame rposX="556" rposY="74" rwidth="41" rheight="74" time="0.10f" pivotX="14" pivotY="63"/>
+      <frame rposX="619" rposY="74" rwidth="48" rheight="74" time="0.10f" pivotX="13" pivotY="63"/>
+      <frame rposX="687" rposY="74" rwidth="47" rheight="74" time="0.10f" pivotX="13" pivotY="63"/>
+      <frame rposX="745" rposY="74" rwidth="65" rheight="74" time="0.10f" pivotX="13" pivotY="63"/>
+      <frame rposX="817" rposY="74" rwidth="55" rheight="74" time="0.10f" pivotX="13" pivotY="62"/>
+      <frame rposX="884" rposY="74" rwidth="55" rheight="74" time="0.10f" pivotX="13" pivotY="62"/>
+      <frame rposX="954" rposY="74" rwidth="49" rheight="74" time="0.10f" pivotX="13" pivotY="63"/>
+      <frame rposX="1025" rposY="74" rwidth="40" rheight="74" time="0.10f" pivotX="13" pivotY="63"/>
+      <frame rposX="1095" rposY="74" rwidth="35" rheight="74" time="0.10f" pivotX="18" pivotY="63"/>
     </punch_right>
 
     <punch_right_down name="punch_right_down" frames="10">
