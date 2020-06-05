@@ -3760,7 +3760,7 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	
 		//SKILL SFX :: RANGED
 
-		SDL_Rect *rect =  new SDL_Rect { 0, 0, 300, 300 };
+		SDL_Rect rect{ 0, 0, 300, 300 };
 
 		Animation anim1;
 		anim1.PushBack(SDL_Rect{ 0, 0, 40, 40 }, 1, 0, 0);
