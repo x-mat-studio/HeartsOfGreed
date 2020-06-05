@@ -11,11 +11,11 @@
 
   <!-- Armored Active -->
   <skill id="1" type="1"  alignTarget="1">
-    <lvl  dmg="35" cooldown="6.0" rangeRadius="1"  attackRadius="1"  hurtYourself="false"  executionTime="1.0"  effect = "2" effectTime="1.25" effectSeverity="1.0" energyCost="10"/>
-    <lvl  dmg="45" cooldown="6.0" rangeRadius="1"  attackRadius="1"  hurtYourself="false"  executionTime="1.0"  effect = "2" effectTime="1.5" effectSeverity="1.0" energyCost="10"/>
-    <lvl  dmg="60" cooldown="5.5" rangeRadius="1"  attackRadius="1"  hurtYourself="false"  executionTime="1.0"  effect = "2" effectTime="1.75" effectSeverity="1.0" energyCost="15"/>
-    <lvl  dmg="80" cooldown="5.5" rangeRadius="1"  attackRadius="1"  hurtYourself="false"  executionTime="1.0"  effect = "2" effectTime="2.0" effectSeverity="1.0" energyCost="20"/>
-    <lvl  dmg="95" cooldown="4.5f" rangeRadius="1"  attackRadius="1"  hurtYourself="false"  executionTime="1.0"  effect = "2" effectTime="2.35" effectSeverity="1.0" energyCost="20"/>
+    <lvl  dmg="35" cooldown="6.0" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.25" effectSeverity="1.0" energyCost="10"/>
+    <lvl  dmg="45" cooldown="6.0" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.5" effectSeverity="1.0" energyCost="10"/>
+    <lvl  dmg="60" cooldown="5.5" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.75" effectSeverity="1.0" energyCost="15"/>
+    <lvl  dmg="80" cooldown="5.5" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="2.0" effectSeverity="1.0" energyCost="20"/>
+    <lvl  dmg="95" cooldown="4.5f" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="2.35" effectSeverity="1.0" energyCost="20"/>
   </skill>
 
   <!-- Ranged Active -->

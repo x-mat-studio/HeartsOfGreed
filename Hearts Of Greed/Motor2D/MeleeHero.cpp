@@ -230,7 +230,7 @@ void MeleeHero::LevelUp()
 
 void MeleeHero::OnCollision(Collider* collider)
 {
-	if (collider->type == COLLIDER_ENEMY)
+	if (collider->type == COLLIDER_ENEMY)	
 	{
 		if (armorGained < passiveSkill.energyCost) //max accumulable armor
 		{
