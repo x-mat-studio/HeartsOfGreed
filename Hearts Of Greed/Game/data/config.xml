@@ -1,0 +1,118 @@
+<!-- Config file for the game -->
+
+<config>
+  <app framerate_cap="30">
+    <title>Hearts of Greed</title>
+    <organization>UPC</organization>
+    <load fileName="data/save_game.xml"></load>
+  </app>
+
+  <renderer>
+    <vsync value="true"/>
+    <lerp value="0.085"/>
+    <fast_lerp value="0.1"/>
+    <speedcamera value="12"/>
+  </renderer>
+
+  <window>
+    <resolution width="1280" height="720" scale="2.0" minScaleValue="1.0" maxScaleValue="5.0" scaleFactor="0.25"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <audio>
+    <folder>Assets/audio/fx/</folder>
+    <fx 	jump="jump_sound.wav"
+      bomb="bomb.wav"
+          button_1="b1.wav"
+      button_3="b3.wav"
+        coin="coin.wav"
+      option_denied="option_denied.wav"
+          powerup="powerup.wav">
+    </fx>
+  </audio>
+
+  <map>
+    <folder>Assets/maps/</folder>
+  </map>
+
+  <minimap width="450" posX="-35" posY="516"/>
+
+  <dialogManager>
+    <load
+      docnameDialogues="data/questInfo/dialogue.xml"
+	/>
+  </dialogManager>
+  <AI>
+    <load
+      docnameNightSpawners ="data/characterStats/NightSpawners.xml"
+     />
+  </AI>
+  <entityManager>
+	<load 
+    docnameSuitman="data/charactersStats/suitman.xml" 
+    docnameWanamingo="data/charactersStats/wanamingo.xml" 
+    docnameTurret="data/buildingStats/turret.xml" 
+    docnameBarricade="data/buildingStats/barricade.xml"
+    docnameUpgradeCenter="data/buildingStats/upgradeCenter.xml"
+    docnameArmoredman="data/charactersStats/armoredman.xml" 
+    docnameRangedman="data/charactersStats/rangedman.xml"
+    docnameRobotto="data/charactersStats/robotto.xml"
+    docnamevfx="data/charactersStats/vfx.xml" 
+    docnameSpawner="data/charactersStats/spawner.xml"
+    docnameBuildings="data/buildingStats/buildings.xml"
+    docnameSkillAreas="data/charactersStats/skillAreas.xml"
+    />
+  </entityManager>
+
+  <QuestManager>
+    <load
+      docnameQuests="data/questInfo/quests.xml"
+    />
+  </QuestManager>
+  
+  <testScene 
+    fadeTime="1.5"
+    startingScale="2.0"
+    camVel="700" 
+    initialCamPosX="408" 
+    initialCamPosY="7934"
+    dayTimerSec="300"
+    nightTimerSec="100" 
+    freeCamMarginDetectionPixelsX="20"
+    freeCamMarginDetectionPixelsY="15"
+    
+    mapBordersUpperLeftCornerX="-3800"
+    mapBordersUpperLeftCornerY="1400"
+    mapBordersBottomRightCornerX="4200"
+    mapBordersBottomRightCornerY="4200"
+    
+    />
+  
+  <menuScene fadeTime="1.0"/>
+  
+  <introScene
+    backgroundStartingAlphaValue="255"
+    backgroundFinalAlphaValue="130"
+    backgroundTransitionConstant="50"
+    
+    logoStartingAlphaValue="0"
+    logoFinalAlphaValue="255"
+    logoTransitionConstant="75"
+    />
+
+  <winScene
+    fadeTime="1.0"
+    medalPosX="50"
+    medalPosY="0"    
+  />
+
+  <loseScene
+    fadeTime="1.0"
+    medalPosX="30"
+    medalPosY="0"
+  />
+
+</config>
