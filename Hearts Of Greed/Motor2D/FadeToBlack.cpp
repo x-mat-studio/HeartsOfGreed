@@ -1,6 +1,7 @@
 #include <math.h>
 #include "App.h"
 #include "FadeToBlack.h"
+#include "Audio.h"
 #include "Window.h"
 #include "Render.h"
 #include "Textures.h"
@@ -21,6 +22,8 @@ ModuleFadeToBlack::ModuleFadeToBlack() :
 
 	currentStep(FADE_STEP::NONE),
 	currentAnim(FADE_ANIMATION::NONE),
+
+	vaultDoorSound(-1),
 
 	texture(nullptr),
 	rightRect({ 0,0,0,0 }),
@@ -52,6 +55,8 @@ bool ModuleFadeToBlack::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::GAME_LOSE, this);
 
 	texture = app->tex->Load("Assets/spritesheets/VFX/fadeCurtain.png");
+
+	vaultDoorSound = app->audio->LoadFx("Assets/audio/sfx/Interface/VaultDoor.wav");
 
 	int width = screen.w * 0.5;
 	rightRect = { width, 0, width, screen.h };
@@ -138,7 +143,10 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float time, FADE_ANIMATION anim)
 {
 	bool ret = false;
-
+	if (currentAnim == FADE_ANIMATION::CURTAIN)
+	{
+		app->audio->PlayFx(vaultDoorSound,0,-1);
+	}
 	if (currentStep == FADE_STEP::NONE)
 	{
 		currentStep = FADE_STEP::FADE_TO_BLACK;

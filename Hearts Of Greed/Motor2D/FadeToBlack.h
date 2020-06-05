@@ -62,6 +62,8 @@ private:
 	SDL_Rect rightRect;
 	SDL_Rect leftRect;
 
+	int vaultDoorSound;
+
 };
 
 #endif //!__FADE_TO_BLACK_H__
