@@ -56,6 +56,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	buildingTexture(nullptr),
 	base1Texture(nullptr),
 	snowball(nullptr),
+	spiderweb(nullptr),
 	deco3Selected(nullptr),
 	streetLightTexture(nullptr),
 	turretTexture(nullptr),
@@ -102,6 +103,12 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEmitterSkillGatherer4(nullptr),
 	sampleEmitterSkillGatherer5(nullptr),
 	sampleEmitterSkillGatherer6(nullptr),
+	sampleEmitterSkillRanged1(nullptr),
+	sampleEmitterSkillRanged2(nullptr),
+	sampleEmitterSkillRanged3(nullptr),
+	sampleEmitterSkillRanged4(nullptr),
+	sampleEmitterSkillRanged5(nullptr),
+	sampleEmitterSkillRanged6(nullptr),
 	sampleParticleSystem(nullptr),
 	sampleGathererSkill(nullptr),
 	sampleRangedSkill(nullptr),
@@ -500,6 +507,7 @@ bool ModuleEntityManager::Start()
 
 	snowball = app->tex->Load("Assets/spritesheets/Particles/snowball.png");
 	explosionTexture2 = app->tex->Load("Assets/spritesheets/Particles/BigFB.png");
+	spiderweb = app->tex->Load("Assets/spritesheets/Particles/web2.png");
 
 
 	//lvlup
@@ -515,6 +523,14 @@ bool ModuleEntityManager::Start()
 	sampleEmitterSkillGatherer4->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer4);
 	sampleEmitterSkillGatherer5->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer5);
 	sampleEmitterSkillGatherer6->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer6);
+
+	//ranged skill
+	sampleEmitterSkillRanged1->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged1);
+	sampleEmitterSkillRanged2->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged2);
+	sampleEmitterSkillRanged3->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged3);
+	sampleEmitterSkillRanged4->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged4);
+	sampleEmitterSkillRanged5->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged5);
+	sampleEmitterSkillRanged6->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged6);
 
 	return ret;
 }
@@ -851,6 +867,7 @@ bool ModuleEntityManager::CleanUp()
 
 	//Particles---------
 	app->tex->UnLoad(snowball);						snowball = nullptr;
+	app->tex->UnLoad(spiderweb);					spiderweb = nullptr;
 
 	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
 	RELEASE(sampleEmitter2);						sampleEmitter2 = nullptr;
@@ -862,6 +879,12 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleEmitterSkillGatherer4);			sampleEmitterSkillGatherer4 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer5);			sampleEmitterSkillGatherer5 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer6);			sampleEmitterSkillGatherer6 = nullptr;
+	RELEASE(sampleEmitterSkillRanged1);				sampleEmitterSkillRanged1 = nullptr;
+	RELEASE(sampleEmitterSkillRanged2);				sampleEmitterSkillRanged2 = nullptr;
+	RELEASE(sampleEmitterSkillRanged3);				sampleEmitterSkillRanged3 = nullptr;
+	RELEASE(sampleEmitterSkillRanged4);				sampleEmitterSkillRanged4 = nullptr;
+	RELEASE(sampleEmitterSkillRanged5);				sampleEmitterSkillRanged5 = nullptr;
+	RELEASE(sampleEmitterSkillRanged6);				sampleEmitterSkillRanged6 = nullptr;
 	RELEASE(sampleParticleSystem);					sampleParticleSystem = nullptr;
 	RELEASE(sampleGathererSkill);					sampleGathererSkill = nullptr;
 	RELEASE(sampleRangedSkill);						sampleRangedSkill = nullptr;
@@ -3646,10 +3669,12 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	//DATA--------------
 
 
-	if (this != nullptr) {
-		
-				//LVL UP EMITTERS
+	if (this != nullptr) 
+	{
+		//LVL UP EMITTERS
 
+		
+		
 		Animation anim1;
 		anim1.PushBack(SDL_Rect{ 0, 0, 10, 10 }, 1, 0, 0);
 
@@ -3679,16 +3704,18 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 
 		sampleParticleSystem = new ParticleSystem();
 
-		sampleEmitter = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
-		sampleEmitter2 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
+		sampleEmitter = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, SDL_Rect{0, 0, 0, 0}, nullptr, anim1, true);
+		sampleEmitter2 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, SDL_Rect{ 0, 0, 0, 0 }, nullptr, anim1, true);
 
-		sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
-		sampleEmitter4 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+		sampleEmitter3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, SDL_Rect{ 0, 0, 0, 0 }, nullptr, anim3, true);
+		sampleEmitter4 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, SDL_Rect{ 0, 0, 0, 0 }, nullptr, anim3, true);
 
 	}
 
 	if (this != nullptr) {
 		//SKILL SFX :: GATHERER
+
+		SDL_Rect rect{ 0, 0, 100, 100 };
 
 		Animation anim1;
 		anim1.PushBack(SDL_Rect{ 0, 0, 128, 128 }, 1, 0, 0);
@@ -3702,8 +3729,8 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 
 				//Yes, this is a hardcoded offset. No, I don't know why we need this. Too bad!
 
-		float auxPosX = -70;							float auxPos2X = -70;							float auxPos3X = -70;
-		float auxPosY = -70;							float auxPos2Y = -70;							float auxPos3Y = -70;
+		float auxPosX = -100;							float auxPos2X = -100;							float auxPos3X = -100;
+		float auxPosY = -100;							float auxPos2Y = -100;							float auxPos3Y = -100;
 
 
 		float auxSpeedX = 1;						float auxSpeed2X = 1;						float auxSpeed3X = 0;
@@ -3723,15 +3750,60 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 
 		sampleGathererSkill = new ParticleSystem();
 
-		sampleEmitterSkillGatherer1 = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
-		sampleEmitterSkillGatherer2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, nullptr, nullptr, anim2, true);
-		sampleEmitterSkillGatherer3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
-		sampleEmitterSkillGatherer4 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, nullptr, nullptr, anim1, true);
-		sampleEmitterSkillGatherer5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, nullptr, nullptr, anim2, true);
-		sampleEmitterSkillGatherer6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, nullptr, nullptr, anim3, true);
+		sampleEmitterSkillGatherer1 = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
+		sampleEmitterSkillGatherer2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
+		sampleEmitterSkillGatherer3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
+		sampleEmitterSkillGatherer4 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
+		sampleEmitterSkillGatherer5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
+		sampleEmitterSkillGatherer6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
 
 	}
+	if (this != nullptr) {
+	
+		//SKILL SFX :: RANGED
 
+		SDL_Rect rect{ 0, 0, 200, 200 };
+
+		Animation anim1;
+		anim1.PushBack(SDL_Rect{ 0, 0, 40, 40 }, 1, 0, 0);
+
+		Animation anim2;
+		anim2.PushBack(SDL_Rect{ 0, 0, 40, 40 }, 1, 0, 0);
+
+		Animation anim3;
+		anim3.PushBack(SDL_Rect{ 0, 0, 40, 40 }, 1, 0, 0);
+
+
+		//Yes, this is a hardcoded offset. No, I don't know why we need this. Too bad!
+
+		float auxPosX = -110;						float auxPos2X = -110;						float auxPos3X = -110;
+		float auxPosY = -110;						float auxPos2Y = -110;						float auxPos3Y = -110;
+
+		float auxSpeedX = 1;						float auxSpeed2X = 1.2;						float auxSpeed3X = 0;
+		float auxSpeedY = 1.1;						float auxSpeedY2 = 1.2;						float auxSpeedY3 = -1.3;
+		int particleVariationSpeedX = 0.5;			int particleVariationSpeedX2 = 0.7;			int particleVariationSpeedX3 = 0;
+		int particleVariationSpeedY = 0;			int particleVariationSpeedY2 = 0;			int particleVariationSpeedY3 = 0.25;
+		float particleAccelerationX = 0.3;			float particleAccelerationX2 = 0.25;		float particleAccelerationX3 = 0.05;
+		float particleAccelerationY = -0.3;			float particleAccelerationY2 = -0.3;		float particleAccelerationY3 = 0.3;
+		int particleVariationAccelerationX = 0.2;	int particleVariationAccelerationX2 = 0.35;	int particleVariationAccelerationX3 = 0.25;
+		int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0;
+		float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
+		int particleVariableAngularSpeed = 0;		int particleVariableAngularSpeed2 = 0;		int particleVariableAngularSpeed3 = 0;
+		float particlesRate = 12;					float particlesRate2 = 12;					float particlesRate3 = 12;
+		float particlesLifeTime = 0.33;				float particlesLifeTime2 = 0.33;			float particlesLifeTime3 = 0.33;
+
+		//SAMPLES--------------
+
+		sampleRangedSkill = new ParticleSystem();
+
+		sampleEmitterSkillRanged1 = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
+		sampleEmitterSkillRanged2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
+		sampleEmitterSkillRanged3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
+		sampleEmitterSkillRanged4 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
+		sampleEmitterSkillRanged5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
+		sampleEmitterSkillRanged6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
+
+	}
 
 	return ret;
 }

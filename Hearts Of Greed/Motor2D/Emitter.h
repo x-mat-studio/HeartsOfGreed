@@ -14,11 +14,11 @@ class Emitter
 {
 public:
 	Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVariationSpeed, fMPoint& particleAcceleration, iMPoint& particleVariationAcceleration,
-		float particleAngularSpeed, int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade);
+		float particleAngularSpeed, int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect& areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade);
 
 	Emitter(float positionX, float positionY, float particleSpeedX, float particleSpeedY, int particleVariationSpeedX, int particleVariationSpeedY, float particleAccelerationX,
 		float particleAccelerationY, int particleVariationAccelerationX, int particleVariationAccelerationY, float particleAngularSpeed, int particleVariableAngularSpeed,
-		float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade);
+		float particlesRate, float particlesLifeTime, SDL_Rect& areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade);
 
 	~Emitter();
 
@@ -67,7 +67,7 @@ private:
 
 	std::vector<Particle> particleVector;
 
-	SDL_Rect* areaOfSpawn; //Optional
+	SDL_Rect areaOfSpawn; //Optional
 	SDL_Texture* particleTexture;
 	Animation particleAnimation;
 

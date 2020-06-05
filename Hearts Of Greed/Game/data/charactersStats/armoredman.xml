@@ -119,33 +119,33 @@
     </idle_left_up>
 
     <walk_right_up name="walk_right_up" frames="8">
-      <frame rposX="52" rposY="0" rwidth="36" rheight="74" time="0.07f" pivotX="24" pivotY="49"/>
-      <frame rposX="107" rposY="0" rwidth="34" rheight="74" time="0.07f" pivotX="24" pivotY="48"/>
-      <frame rposX="158" rposY="0" rwidth="40" rheight="74" time="0.07f" pivotX="26" pivotY="48"/>
-      <frame rposX="214" rposY="0" rwidth="35" rheight="74" time="0.07f" pivotX="21" pivotY="51"/>
-      <frame rposX="267" rposY="0" rwidth="38" rheight="74" time="0.07f" pivotX="20" pivotY="54"/>
-      <frame rposX="320" rposY="0" rwidth="39" rheight="74" time="0.07f" pivotX="18" pivotY="52"/>
-      <frame rposX="374" rposY="0" rwidth="40" rheight="74" time="0.07f" pivotX="17" pivotY="51"/>
-      <frame rposX="428" rposY="0" rwidth="40" rheight="74" time="0.07f" pivotX="22" pivotY="51"/>
+      <frame rposX="52" rposY="0" rwidth="36" rheight="74" time="0.07f" pivotX="18" pivotY="70"/>
+      <frame rposX="107" rposY="0" rwidth="34" rheight="74" time="0.07f" pivotX="16" pivotY="68"/>
+      <frame rposX="158" rposY="0" rwidth="40" rheight="74" time="0.07f" pivotX="17" pivotY="65"/>
+      <frame rposX="214" rposY="0" rwidth="35" rheight="74" time="0.07f" pivotX="16" pivotY="67"/>
+      <frame rposX="267" rposY="0" rwidth="38" rheight="74" time="0.07f" pivotX="17" pivotY="67"/>
+      <frame rposX="320" rposY="0" rwidth="39" rheight="74" time="0.07f" pivotX="16" pivotY="66"/>
+      <frame rposX="374" rposY="0" rwidth="40" rheight="74" time="0.07f" pivotX="19" pivotY="62"/>
+      <frame rposX="428" rposY="0" rwidth="40" rheight="74" time="0.07f" pivotX="18" pivotY="65"/>
     </walk_right_up>
 
     <walk_right name="walk_right" frames="8">
-      <frame rposX="58" rposY="77" rwidth="26" rheight="70" time="0.07f" pivotX="2" pivotY="53"/>
-      <frame rposX="108" rposY="77" rwidth="33" rheight="70" time="0.07f" pivotX="17" pivotY="48"/>
-      <frame rposX="153" rposY="77" rwidth="52" rheight="70" time="0.07f" pivotX="37" pivotY="51"/>
-      <frame rposX="216" rposY="77" rwidth="34" rheight="70" time="0.07f" pivotX="19" pivotY="50"/>
-      <frame rposX="274" rposY="77" rwidth="25" rheight="70" time="0.07f" pivotX="2" pivotY="52"/>
-      <frame rposX="324" rposY="77" rwidth="33" rheight="70" time="0.07f" pivotX="0" pivotY="48"/>
-      <frame rposX="368" rposY="77" rwidth="53" rheight="70" time="0.07f" pivotX="0" pivotY="48"/>
-      <frame rposX="433" rposY="77" rwidth="31" rheight="70" time="0.07f" pivotX="0" pivotY="48"/>
+      <frame rposX="58" rposY="77" rwidth="26" rheight="70" time="0.07f" pivotX="12" pivotY="65"/>
+      <frame rposX="108" rposY="77" rwidth="33" rheight="70" time="0.07f" pivotX="15" pivotY="64"/>
+      <frame rposX="153" rposY="77" rwidth="52" rheight="70" time="0.07f" pivotX="23" pivotY="65"/>
+      <frame rposX="216" rposY="77" rwidth="34" rheight="70" time="0.07f" pivotX="14" pivotY="65"/>
+      <frame rposX="274" rposY="77" rwidth="25" rheight="70" time="0.07f" pivotX="10" pivotY="60"/>
+      <frame rposX="324" rposY="77" rwidth="33" rheight="70" time="0.07f" pivotX="15" pivotY="62"/>
+      <frame rposX="368" rposY="77" rwidth="53" rheight="70" time="0.07f" pivotX="26" pivotY="63"/>
+      <frame rposX="433" rposY="77" rwidth="31" rheight="70" time="0.07f" pivotX="14" pivotY="63"/>
     </walk_right>
 
     <walk_right_down name="walk_right_down" frames="8">
-      <frame rposX="53" rposY="148" rwidth="34" rheight="71" time="0.07f" pivotX="19" pivotY="47"/>
-      <frame rposX="105" rposY="148" rwidth="37" rheight="71" time="0.07f" pivotX="23" pivotY="43"/>
-      <frame rposX="158" rposY="148" rwidth="39" rheight="71" time="0.07f" pivotX="19" pivotY="42"/>
-      <frame rposX="212" rposY="148" rwidth="39" rheight="71" time="0.07f" pivotX="22" pivotY="45"/>
-      <frame rposX="267" rposY="148" rwidth="37" rheight="71" time="0.07f" pivotX="20" pivotY="49"/>
+      <frame rposX="53" rposY="148" rwidth="34" rheight="71" time="0.07f" pivotX="17" pivotY="62"/>
+      <frame rposX="105" rposY="148" rwidth="37" rheight="71" time="0.07f" pivotX="16" pivotY="57"/>
+      <frame rposX="158" rposY="148" rwidth="39" rheight="71" time="0.07f" pivotX="18" pivotY="56"/>
+      <frame rposX="212" rposY="148" rwidth="39" rheight="71" time="0.07f" pivotX="20" pivotY="59"/>
+      <frame rposX="267" rposY="148" rwidth="37" rheight="71" time="0.07f" pivotX="18" pivotY="61"/>
       <frame rposX="323" rposY="148" rwidth="33" rheight="71" time="0.07f" pivotX="21" pivotY="49"/>
       <frame rposX="374" rposY="148" rwidth="40" rheight="71" time="0.07f" pivotX="25" pivotY="47"/>
       <frame rposX="432" rposY="148" rwidth="32" rheight="71" time="0.07f" pivotX="20" pivotY="47"/>
