@@ -7,7 +7,7 @@
 
 Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVariationSpeed,
 	fMPoint& particleAcceleration, iMPoint& particleVariationAcceleration, float particleAngularSpeed,
-	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
+	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect& areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
 
 	position(0, 0),
 	offSet(position),
@@ -53,7 +53,7 @@ Emitter::Emitter(fMPoint& position, fMPoint& particleSpeed, iMPoint& particleVar
 
 Emitter::Emitter(float positionX, float positionY, float particleSpeedX, float particleSpeedY, int particleVariationSpeedX, int particleVariationSpeedY,
 	float particleAccelerationX, float particleAccelerationY, int particleVariationAccelerationX, int particleVariationAccelerationY, float particleAngularSpeed,
-	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect* areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
+	int particleVariableAngularSpeed, float particlesRate, float particlesLifeTime, SDL_Rect& areaOfSpawn, SDL_Texture* texture, Animation particleAnimation, bool fade) :
 
 	position(0, 0),
 	offSet{ positionX, positionY },
@@ -112,23 +112,10 @@ void Emitter::Start()
 	}
 
 	//Set all the bools to check what variables will be randomized in the Generate() functions
-	if (areaOfSpawn == nullptr)
+	if (areaOfSpawn.w == 0 && areaOfSpawn.h == 0)
 	{
 		randomizePosX = false;
 		randomizePosY = false;
-	}
-
-	else
-	{
-		if (areaOfSpawn->w == 0)
-		{
-			randomizePosX = false;
-		}
-
-		if (areaOfSpawn->h == 0)
-		{
-			randomizePosY = false;
-		}
 	}
 
 
@@ -170,7 +157,6 @@ Emitter::~Emitter()
 {
 	particleVector.clear();
 
-	areaOfSpawn = nullptr;
 	particleTexture = nullptr;
 }
 
@@ -277,7 +263,7 @@ float Emitter::GeneratePosX()
 {
 	if (randomizePosX == true)
 	{
-		float x = (rand() % areaOfSpawn->w) + position.x + offSet.x;
+		float x = (rand() % areaOfSpawn.w) + position.x + offSet.x;
 		return x;
 	}
 
@@ -290,7 +276,7 @@ float Emitter::GeneratePosY()
 {
 	if (randomizePosY == true)
 	{
-		float y = (rand() % areaOfSpawn->h) + position.y + offSet.y;
+		float y = (rand() % areaOfSpawn.h) + position.y + offSet.y;
 		return y;
 	}
 
