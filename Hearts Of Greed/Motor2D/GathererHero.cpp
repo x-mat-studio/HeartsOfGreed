@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Collision.h"
 #include "CameraShake.h"
+#include "Turret.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -25,6 +26,7 @@ GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft,
 
 	granadeArea(nullptr),
 	passiveSkillCollider(nullptr),
+	myTurret(nullptr),
 
 	passiveSkill(passiveSkill)
 
@@ -178,18 +180,26 @@ bool GathererHero::ExecuteSkill1()
 
 			int ret = 0;
 
-			ret = app->entityManager->ExecuteSkill(skill1, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, (Entity*)this);
-			UnleashParticlesSkill1((int)granadePosLaunch.x, (int)granadePosLaunch.y);
-			app->cameraShake->StartCameraShake(1.2, 7);
+			//ret = app->entityManager->ExecuteSkill(skill1, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, (Entity*)this);
+			//UnleashParticlesSkill1((int)granadePosLaunch.x, (int)granadePosLaunch.y);
+			//app->cameraShake->StartCameraShake(1.2, 7);
+
+			if (myTurret != nullptr)
+			{
+				myTurret->SetTemporalTimer(0.01f);
+				myTurret = nullptr;
+			}
+
+			myTurret = (Turret*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, granadePosLaunch.x, granadePosLaunch.y, ENTITY_ALIGNEMENT::PLAYER);
+
+			//Here we can do funny stuff to the turret
+			myTurret->SetLevel(skill1.lvl);
+			myTurret->SetTemporalTimer(skill1.dmg);
 
 			currAoE.clear();
 			suplAoE.clear();
 			currAreaInfo = nullptr;
 
-			if (ret >= 0)
-			{
-				GetExperience(ret);
-			}
 			return true;
 
 		}
@@ -273,7 +283,8 @@ void GathererHero::UnleashParticlesSkill1(float posx, float posy)
 {
 	//fire spreading
 
-	if (activeSkillsParticleSystem != nullptr) {
+	if (activeSkillsParticleSystem != nullptr) 
+	{
 		activeSkillsParticleSystem->Activate();
 		activeSkillsParticleSystem->Move(posx, posy);
 	}
@@ -306,6 +317,9 @@ void GathererHero::OnCollision(Collider* collider)
 			if (collider->thisEntity->GetType() == ENTITY_TYPE::BLDG_TURRET)
 			{
 				Turret* turret = (Turret*)collider->thisEntity;
+
+				turret->bonusArmor = passiveSkill.executionTime;
+				turret->bonusAttack = passiveSkill.executionTime;
 			}
 		}
 	}
@@ -362,6 +376,26 @@ Skill GathererHero::GetPassiveSkill() const
 void GathererHero::ReplacePassiveSkill(Skill& skill)
 {
 	passiveSkill = skill;
+}
+
+void GathererHero::CheckObjective(Entity* deleted)
+{
+	if (objective == deleted)
+	{
+		path.clear();
+		objective = nullptr;
+		SearchForNewObjective();
+
+		inputs.push_back(HERO_INPUTS::IN_MOVE);
+	}
+
+	if (myTurret == deleted)
+	{
+		myTurret = nullptr;
+		cooldownHability1 += TIME_TRIGGER;
+		skill1Charged = false;
+	}
+
 }
 
 

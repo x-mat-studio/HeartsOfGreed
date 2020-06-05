@@ -21,7 +21,7 @@ public:
 
 	void ChangeTextures();
 
-	int RecieveDamage(float damage);
+	int RecieveDamage(float damage, bool ignoreArmor = false);
 
 	int GetTurretLevel() const;
 	int GetBarricadeLevel() const;

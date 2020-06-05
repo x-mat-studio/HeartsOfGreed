@@ -150,9 +150,12 @@ bool Enemy::Update(float dt)
 {
 	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Blue);
 
-	//check inputs to traverse state matrix
+	//Check inputs to traverse state matrix
 
 	debuffs.UpdateEffects(dt);
+
+	if (debuffs.IsStuned() == true)
+		return true;
 
 	ExternalInput(inputs, dt);
 	InternalInput(inputs, dt);
@@ -271,6 +274,9 @@ void Enemy::DrawOnSelect()
 
 bool Enemy::PostUpdate(float dt)
 {
+	if (debuffs.IsStuned() == true)
+		return true;
+
 	GetAnimationCurrentFrame(dt);
 	return true;
 }
@@ -600,7 +606,7 @@ ENEMY_STATES Enemy::ProcessFsm(std::vector<ENEMY_INPUTS>& inputs)
 
 }
 
-int Enemy::RecieveDamage(float damage)
+int Enemy::RecieveDamage(float damage, bool ignoreArmor)
 {
 	int ret = -1;
 

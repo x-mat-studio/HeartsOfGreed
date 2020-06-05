@@ -603,7 +603,7 @@ void Hero::Attack()
 	int ret = -1;
 
 	if (objective)
-		ret = objective->RecieveDamage(stats.damage + bonusAttack);
+		ret = objective->RecieveDamage(stats.damage * (bonusAttack* 0.01f + 1));
 
 	if (ret > 0)
 	{
@@ -819,13 +819,13 @@ void Hero::LevelUp()
 }
 
 
-int Hero::RecieveDamage(float damage)
+int Hero::RecieveDamage(float damage, bool ignoreArmor)
 {
 	int ret = -1;
 	gettingAttacked = true;
 	feelingSecure = 0;
 
-	if (bonusArmor > 0)
+	if (bonusArmor > 0 && !ignoreArmor)
 	{
 		damage -= damage * bonusArmor * 0.01f;
 	}

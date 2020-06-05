@@ -168,7 +168,7 @@ public:
 
 	virtual void LevelUp();
 
-	int RecieveDamage(float damage);
+	int RecieveDamage(float damage, bool ignoreArmor = false);
 
 	bool GetExperience(int xp);
 	bool GetLevel();
@@ -312,6 +312,8 @@ protected:
 
 	void RecoverHealth(float dt);
 
+	void SearchForNewObjective();
+
 private:
 	void ResetBonusStats();
 
@@ -326,7 +328,6 @@ private:
 
 	void StateMachine(float dt);
 
-	void SearchForNewObjective();
 
 	void FeelingSecure(float dt);
 
