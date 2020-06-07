@@ -71,6 +71,9 @@ ModuleEntityManager::ModuleEntityManager() :
 	selectedTexture(nullptr),
 	roboTexture(nullptr),
 	debugPathTexture(nullptr),
+	smoke1(nullptr),
+	smoke2(nullptr),
+	smoke3(nullptr),
 
 	sampleGatherer(nullptr),
 	sampleMelee(nullptr),
@@ -109,6 +112,13 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEmitterSkillRanged4(nullptr),
 	sampleEmitterSkillRanged5(nullptr),
 	sampleEmitterSkillRanged6(nullptr),
+	sampleSmoke1(nullptr),
+	sampleSmoke2(nullptr),
+	sampleSmoke3(nullptr),
+	sampleSmoke4(nullptr),
+	sampleSmoke5(nullptr),
+	sampleSmoke6(nullptr),
+	sampleBuildingSmoke(nullptr),
 	sampleParticleSystem(nullptr),
 	sampleGathererSkill(nullptr),
 	sampleRangedSkill(nullptr),
@@ -510,6 +520,9 @@ bool ModuleEntityManager::Start()
 	snowball = app->tex->Load("Assets/spritesheets/Particles/snowball.png");
 	explosionTexture2 = app->tex->Load("Assets/spritesheets/Particles/BigFB.png");
 	spiderweb = app->tex->Load("Assets/spritesheets/Particles/web2.png");
+	smoke1 = app->tex->Load("Assets/spritesheets/Particles/smoke1.png");
+	smoke2 = app->tex->Load("Assets/spritesheets/Particles/smoke2.png");
+	smoke3 = app->tex->Load("Assets/spritesheets/Particles/smoke3.png");
 
 
 	//lvlup
@@ -517,6 +530,15 @@ bool ModuleEntityManager::Start()
 	sampleEmitter2->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter2);
 	sampleEmitter3->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter3);
 	sampleEmitter4->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter4);
+
+	//Building beign built particles
+	sampleSmoke1->SetTextureNStart(smoke3); 	sampleBuildingSmoke->PushEmiter(*sampleSmoke1);
+	sampleSmoke2->SetTextureNStart(smoke3); 	sampleBuildingSmoke->PushEmiter(*sampleSmoke2);
+	sampleSmoke3->SetTextureNStart(smoke1); 	sampleBuildingSmoke->PushEmiter(*sampleSmoke3);
+	sampleSmoke4->SetTextureNStart(smoke3); 	sampleBuildingSmoke->PushEmiter(*sampleSmoke4);
+	sampleSmoke5->SetTextureNStart(smoke3); 	sampleBuildingSmoke->PushEmiter(*sampleSmoke5);
+	sampleSmoke6->SetTextureNStart(smoke1); 	sampleBuildingSmoke->PushEmiter(*sampleSmoke6);
+
 
 	//gatherer skill		SKYE: now this is robo 
 	sampleEmitterSkillGatherer1->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer1);
@@ -868,34 +890,56 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(moveCommandTileMelee);			moveCommandTileMelee = nullptr;
 
 	//Particles---------
+	
+				//Tex
 	app->tex->UnLoad(snowball);						snowball = nullptr;
 	app->tex->UnLoad(spiderweb);					spiderweb = nullptr;
+	app->tex->UnLoad(smoke1);						smoke1 = nullptr;
+	app->tex->UnLoad(smoke2);						smoke2 = nullptr;
+	app->tex->UnLoad(smoke3);						smoke3 = nullptr;
 
+				//Emitters
 	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
 	RELEASE(sampleEmitter2);						sampleEmitter2 = nullptr;
 	RELEASE(sampleEmitter3);						sampleEmitter3 = nullptr;
 	RELEASE(sampleEmitter4);						sampleEmitter4 = nullptr;
+
 	RELEASE(sampleEmitterSkillGatherer1);			sampleEmitterSkillGatherer1 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer2);			sampleEmitterSkillGatherer2 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer3);			sampleEmitterSkillGatherer3 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer4);			sampleEmitterSkillGatherer4 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer5);			sampleEmitterSkillGatherer5 = nullptr;
 	RELEASE(sampleEmitterSkillGatherer6);			sampleEmitterSkillGatherer6 = nullptr;
+
 	RELEASE(sampleEmitterSkillRanged1);				sampleEmitterSkillRanged1 = nullptr;
 	RELEASE(sampleEmitterSkillRanged2);				sampleEmitterSkillRanged2 = nullptr;
 	RELEASE(sampleEmitterSkillRanged3);				sampleEmitterSkillRanged3 = nullptr;
 	RELEASE(sampleEmitterSkillRanged4);				sampleEmitterSkillRanged4 = nullptr;
 	RELEASE(sampleEmitterSkillRanged5);				sampleEmitterSkillRanged5 = nullptr;
 	RELEASE(sampleEmitterSkillRanged6);				sampleEmitterSkillRanged6 = nullptr;
+
+	RELEASE(sampleSmoke1);							sampleSmoke1 = nullptr;
+	RELEASE(sampleSmoke2);							sampleSmoke2 = nullptr;
+	RELEASE(sampleSmoke3);							sampleSmoke3 = nullptr;
+	RELEASE(sampleSmoke4);							sampleSmoke4 = nullptr;
+	RELEASE(sampleSmoke5);							sampleSmoke5 = nullptr;
+	RELEASE(sampleSmoke6);							sampleSmoke6 = nullptr;
+
+				//particle Systems
+	RELEASE(sampleBuildingSmoke);					sampleBuildingSmoke = nullptr;
 	RELEASE(sampleParticleSystem);					sampleParticleSystem = nullptr;
 	RELEASE(sampleGathererSkill);					sampleGathererSkill = nullptr;
 	RELEASE(sampleRangedSkill);						sampleRangedSkill = nullptr;
 	RELEASE(sampleRobotSkill);						sampleRobotSkill = nullptr;
 	RELEASE(sampleMeleeSkill);						sampleMeleeSkill = nullptr;
+	
 
+	//Enemies / Spawners
 	RELEASE(sampleEnemy);							sampleEnemy = nullptr;
 	RELEASE(sampleSpawner);							sampleSpawner = nullptr;
 
+
+	//Buildings
 	RELEASE(sampleBuilding);						sampleBuilding = nullptr;
 	RELEASE(sampleBase);							sampleBase = nullptr;
 	RELEASE(sampleTurret);							sampleTurret = nullptr;
@@ -3676,13 +3720,10 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 	bool ret = true;
 	//DATA--------------
 
-
-	if (this != nullptr) 
+	//LVL UP EMITTERS
+	if (this != nullptr)  
 	{
-		//LVL UP EMITTERS
 
-		
-		
 		Animation anim1;
 		anim1.PushBack(SDL_Rect{ 0, 0, 10, 10 }, 1, 0, 0);
 
@@ -3720,8 +3761,9 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 
 	}
 
+	//SKILL SFX :: GATHERER			
+	//SYKE! this are robotto's
 	if (this != nullptr) {
-		//SKILL SFX :: GATHERER
 
 		SDL_Rect rect{ 0, 0, 100, 100 };
 
@@ -3766,9 +3808,9 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		sampleEmitterSkillGatherer6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
 
 	}
+
+	//SKILL SFX :: RANGED
 	if (this != nullptr) {
-	
-		//SKILL SFX :: RANGED
 
 		SDL_Rect rect{ 0, 0, 200, 200 };
 
@@ -3813,6 +3855,53 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 
 	}
 
+	//BUILDING SMOKE
+	if (this != nullptr)
+	{
+		SDL_Rect rect = { 0, 0, 20, 20 };
+
+		Animation anim1;
+		anim1.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
+
+		Animation anim2;
+		anim2.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
+
+		Animation anim3;
+		anim3.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
+
+		float auxPosX = 0;							float auxPos2X = 0;							float auxPos3X = 0;
+		float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;
+
+		float auxSpeedX = 0.5;						float auxSpeed2X = 2;						float auxSpeed3X = 0;
+		float auxSpeedY = 1;						float auxSpeedY2 = 1;						float auxSpeedY3 = -1;
+
+
+		int particleVariationSpeedX = 0.3;			int particleVariationSpeedX2 = 1;			int particleVariationSpeedX3 = 0;
+		int particleVariationSpeedY = 0;			int particleVariationSpeedY2 = 0;			int particleVariationSpeedY3 = 0.25;
+
+		float particleAccelerationX = 0.3;			float particleAccelerationX2 = 0.1;			float particleAccelerationX3 = 0.05;
+		float particleAccelerationY = -0.1;			float particleAccelerationY2 = -0.2;		float particleAccelerationY3 = -0.02;
+
+		int particleVariationAccelerationX = 0.2;	int particleVariationAccelerationX2 = 0.35;	int particleVariationAccelerationX3 = 0.25;
+		int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0.2;
+
+		float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
+		int particleVariableAngularSpeed = 0;		int particleVariableAngularSpeed2 = 0;		int particleVariableAngularSpeed3 = 0;
+
+		float particlesRate = 4;					float particlesRate2 = 4;					float particlesRate3 = 2;
+		float particlesLifeTime = 0.55;				float particlesLifeTime2 = 0.55;			float particlesLifeTime3 = 1;
+
+
+		sampleBuildingSmoke =  new ParticleSystem();
+
+		sampleSmoke1 =	new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
+		sampleSmoke2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
+		sampleSmoke3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
+
+		sampleSmoke4 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
+		sampleSmoke5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
+		sampleSmoke6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
+	}
 	return ret;
 }
 
