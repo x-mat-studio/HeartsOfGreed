@@ -877,7 +877,7 @@ bool Hero::GetLevel()
 	{
 		heroXP = heroXP - stats.xpToLvlUp;
 		LevelUp();
-		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::QUIET, DIRECTION::FRONT);
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::NORMAL, DIRECTION::FRONT);
 		return true;
 	}
 
