@@ -63,6 +63,7 @@ private:
 	SDL_Rect leftRect;
 
 	int vaultDoorSound;
+	int vaultDoorSoundOpen;
 
 };
 
