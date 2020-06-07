@@ -117,8 +117,8 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 
 		if (currentAnim == FADE_ANIMATION::CURTAIN && timeSpent >= CURTAIN_DELAY && animStarted == false)
 		{
-			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5, totalTime - timeSpent);
-			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, totalTime - timeSpent);
+			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0, 0 - screen.w * 0.5, double(totalTime) - double(timeSpent));
+			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, double(totalTime) - double(timeSpent));
 
 			animStarted = true;
 
