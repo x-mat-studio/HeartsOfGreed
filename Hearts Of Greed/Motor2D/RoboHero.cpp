@@ -54,7 +54,7 @@ bool RoboHero::ActivateSkill1(fMPoint clickPosition)
 {
 
 	inputs.push_back(IN_SKILL1);
-	
+
 
 	return true;
 }
@@ -111,21 +111,14 @@ bool RoboHero::ExecuteSkill1()
 
 	int ret = 0;
 
-		UnleashParticlesSkill1((int)this->position.x, (int)this->position.y);
-		
+	UnleashParticlesSkill1((int)this->position.x, (int)this->position.y);
 
-		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
-		app->cameraShake->StartCameraShake(1, 10);
+	ret = app->entityManager->ExecuteSkill(skill1, this->origin);
+	app->cameraShake->StartCameraShake(1, 10);
 
 	currAoE.clear();
 	suplAoE.clear();
 	currAreaInfo = nullptr;
-
-
-
-
-
-	
 
 	return true;
 }
@@ -163,7 +156,14 @@ void RoboHero::Attack()
 	int ret = -1;
 
 	if (objective)
+	{
 		ret = objective->RecieveDamage(stats.damage);
+
+		if (objective->GetCurrentHP() <= 0)
+		{
+			CheckObjective(objective);
+		}
+	}
 
 	if (ret > 0)
 	{
@@ -246,7 +246,7 @@ void RoboHero::UnleashParticlesSkill1(float posx, float posy)
 	else
 	{
 		activeSkillsParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::SKILL_GATHERER, posx, posy);
-																								//This is correct. Ask Adri
+		//This is correct. Ask Adri
 	}
 }
 

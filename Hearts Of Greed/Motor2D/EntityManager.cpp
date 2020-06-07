@@ -1752,7 +1752,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 	{
 		alignement = entityVector[i]->GetAlignment();
 
-		if (alignement != alignementToSearch || entityVector[i]->toDelete == true)
+		if (alignement != alignementToSearch || entityVector[i]->toDelete == true || entityVector[i]->GetCurrentHP() <= 0)
 		{
 			continue;
 		}

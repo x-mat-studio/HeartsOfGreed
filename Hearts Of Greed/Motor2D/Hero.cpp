@@ -602,12 +602,22 @@ void Hero::Attack()
 	int ret = -1;
 
 	if (objective)
-		ret = objective->RecieveDamage(stats.damage * (bonusAttack* 0.01f + 1));
+	{
+		ret = objective->RecieveDamage(stats.damage * (bonusAttack * 0.01f + 1));
+
+		if (objective->GetCurrentHP() <= 0)
+		{
+			CheckObjective(objective);
+		}
+	}
 
 	if (ret > 0)
 	{
 		GetExperience(ret);
 	}
+
+
+
 }
 
 
@@ -1631,8 +1641,7 @@ Skill::Skill() :
 	executionTime(-1.f), 
 	lvl(-1), 
 	energyCost(-1)
-{
-}
+{}
 
 Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, 
 			 ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect, float effectTime, float effectSeverity) :
