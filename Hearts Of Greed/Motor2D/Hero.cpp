@@ -405,7 +405,6 @@ void Hero::StateMachine(float dt)
 	case HERO_STATES::DEAD:
 		if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
 		{
-
 			toDelete = true;
 			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 		}
@@ -603,12 +602,22 @@ void Hero::Attack()
 	int ret = -1;
 
 	if (objective)
-		ret = objective->RecieveDamage(stats.damage * (bonusAttack* 0.01f + 1));
+	{
+		ret = objective->RecieveDamage(stats.damage * (bonusAttack * 0.01f + 1));
+
+		if (objective->GetCurrentHP() <= 0)
+		{
+			CheckObjective(objective);
+		}
+	}
 
 	if (ret > 0)
 	{
 		GetExperience(ret);
 	}
+
+
+
 }
 
 
@@ -620,20 +629,20 @@ void Hero::Die()
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
 		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		inputs.push_back(HERO_INPUTS::IN_DEAD);
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
 		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		inputs.push_back(HERO_INPUTS::IN_DEAD);
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
 		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		inputs.push_back(HERO_INPUTS::IN_DEAD);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
 		ExecuteSFX(app->entityManager->roboDying);
 		break;
 	}
-
-	inputs.push_back(HERO_INPUTS::IN_DEAD);
-
 
 
 	if (minimapIcon != nullptr)
@@ -1116,6 +1125,13 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				}
 				else
 					state = HERO_STATES::IDLE;
+
+				if (type == ENTITY_TYPE::HERO_ROBO)
+				{
+					Die();
+					toDelete = true;
+					app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+				}
 
 				skillFromAttacking = false;
 				break;
@@ -1625,8 +1641,7 @@ Skill::Skill() :
 	executionTime(-1.f), 
 	lvl(-1), 
 	energyCost(-1)
-{
-}
+{}
 
 Skill::Skill(SKILL_ID id, int dmg, int cooldown, int rangeRadius, int attackRadius, bool hurtYourself, float executionTime, SKILL_TYPE type, 
 			 ENTITY_ALIGNEMENT target, int lvl, int energyCost, SKILL_EFFECT effect, float effectTime, float effectSeverity) :

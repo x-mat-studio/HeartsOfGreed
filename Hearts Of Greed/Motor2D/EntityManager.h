@@ -358,19 +358,27 @@ private:
 	ParticleSystem* sampleRangedSkill;
 	ParticleSystem* sampleMeleeSkill;
 	ParticleSystem* sampleRobotSkill;
+	ParticleSystem* sampleBuildingSmoke;
 
 	Emitter* sampleEmitter; Emitter* sampleEmitter2; 	Emitter* sampleEmitter3; 	Emitter* sampleEmitter4;
+
 	Emitter* sampleEmitterSkillGatherer1; Emitter* sampleEmitterSkillGatherer2; Emitter* sampleEmitterSkillGatherer3; 
 	Emitter* sampleEmitterSkillGatherer4; Emitter* sampleEmitterSkillGatherer5; Emitter* sampleEmitterSkillGatherer6;
+
 	Emitter* sampleEmitterSkillRanged1; Emitter* sampleEmitterSkillRanged2; Emitter* sampleEmitterSkillRanged3;
 	Emitter* sampleEmitterSkillRanged4; Emitter* sampleEmitterSkillRanged5; Emitter* sampleEmitterSkillRanged6;
 
+	Emitter* sampleSmoke1; Emitter* sampleSmoke2; Emitter* sampleSmoke3;
+	Emitter* sampleSmoke4; Emitter* sampleSmoke5; Emitter* sampleSmoke6;
 
 
 
 	SDL_Texture* snowball;
 	SDL_Texture* explosionTexture2;
 	SDL_Texture* spiderweb;
+	SDL_Texture* smoke1;
+	SDL_Texture* smoke2;
+	SDL_Texture* smoke3;
 
 	std::map <int, skillArea> skillAreas;
 

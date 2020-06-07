@@ -48,6 +48,8 @@ private:
 
 	void BlitCommandVfx(Frame& currframe, int alphaValue);
 
+	void UnleashParticlesSkill1(float posx, float posy);
+
 
 private:
 
