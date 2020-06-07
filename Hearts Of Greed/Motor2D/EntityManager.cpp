@@ -518,7 +518,7 @@ bool ModuleEntityManager::Start()
 	sampleEmitter3->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter3);
 	sampleEmitter4->SetTextureNStart(snowball); sampleParticleSystem->PushEmiter(*sampleEmitter4);
 
-	//gatherer skill
+	//gatherer skill		SKYE: now this is robo 
 	sampleEmitterSkillGatherer1->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer1);
 	sampleEmitterSkillGatherer2->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer2);
 	sampleEmitterSkillGatherer3->SetTextureNStart(explosionTexture2); 	sampleGathererSkill->PushEmiter(*sampleEmitterSkillGatherer3);
