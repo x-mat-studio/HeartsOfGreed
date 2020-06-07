@@ -24,6 +24,7 @@ ModuleFadeToBlack::ModuleFadeToBlack() :
 	currentAnim(FADE_ANIMATION::NONE),
 
 	vaultDoorSound(-1),
+	vaultDoorSoundOpen(-1),
 
 	texture(nullptr),
 	rightRect({ 0,0,0,0 }),
@@ -57,6 +58,7 @@ bool ModuleFadeToBlack::Start()
 	texture = app->tex->Load("Assets/spritesheets/VFX/fadeCurtain.png");
 
 	vaultDoorSound = app->audio->LoadFx("Assets/audio/sfx/Interface/VaultDoor.wav");
+	vaultDoorSoundOpen = app->audio->LoadFx("Assets/audio/sfx/Interface/VaultOpen.wav");
 
 	int width = screen.w * 0.5;
 	rightRect = { width, 0, width, screen.h };
@@ -119,6 +121,8 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w * 0.5, screen.w, totalTime - timeSpent);
 
 			animStarted = true;
+
+			app->audio->PlayFx(vaultDoorSoundOpen, 0, -1);
 		}
 
 		if (timeSpent >= totalTime)
@@ -143,10 +147,10 @@ bool ModuleFadeToBlack::PostUpdate(float dt)
 bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float time, FADE_ANIMATION anim)
 {
 	bool ret = false;
-	if (currentAnim == FADE_ANIMATION::CURTAIN)
-	{
-		app->audio->PlayFx(vaultDoorSound,0,-1);
-	}
+	//if (currentAnim == FADE_ANIMATION::CURTAIN)
+	//{
+		//app->audio->PlayFx(vaultDoorSound,0,-1);
+	//}
 	if (currentStep == FADE_STEP::NONE)
 	{
 		currentStep = FADE_STEP::FADE_TO_BLACK;
@@ -156,6 +160,7 @@ bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float
 		{
 			leftCurtainEasing.NewEasing(EASING_TYPE::EASE, 0 - screen.w * 0.5, 0, time - CURTAIN_DELAY);
 			rightCurtainEasing.NewEasing(EASING_TYPE::EASE, screen.w, screen.w * 0.5, time - CURTAIN_DELAY);
+			app->audio->PlayFx(vaultDoorSound, 0, -1);
 		}
 
 		timeSpent = 0.0f;
