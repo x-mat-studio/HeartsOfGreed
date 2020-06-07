@@ -39,6 +39,7 @@ GathererHero::GathererHero(fMPoint position, GathererHero* copy, ENTITY_ALIGNEME
 
 	granadeArea(nullptr),
 	passiveSkillCollider(nullptr),
+	myTurret(nullptr),
 
 	passiveSkill(copy->passiveSkill)
 
