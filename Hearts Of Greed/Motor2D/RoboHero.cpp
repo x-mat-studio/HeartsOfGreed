@@ -6,19 +6,20 @@
 #include "Textures.h"
 #include "ParticleSystem.h"
 #include "CameraShake.h"
+#include "EventManager.h"
 
 RoboHero::RoboHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
-	Animation& skill1LeftUp, Animation& skill1LeftDown, 
-	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, 
+	Animation& skill1LeftUp, Animation& skill1LeftDown,
+	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown,
 	Animation& tileOnWalk, HeroStats& stats, Skill& skill1, Skill& passiveSkill) :
 
 	Hero(position, ENTITY_TYPE::HERO_ROBO, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
-		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
+		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown,
 		tileOnWalk, stats, skill1),
 
 	passiveSkill(passiveSkill),
@@ -106,34 +107,17 @@ bool RoboHero::PreProcessSkill3()
 
 bool RoboHero::ExecuteSkill1()
 {
-	if (!skillExecutionDelay)
-	{
-		if (!godMode)
-			stats.currEnergy -= skill1.energyCost;
 
-		skillExecutionDelay = true;
+	int ret = 0;
 
-		ExecuteSFX(app->entityManager->suitman1Skill2); // Provisional SFX
-		
+	ret = app->entityManager->ExecuteSkill(skill1, this->origin);
+	app->cameraShake->StartCameraShake(1, 10);
 
-		return skillExecutionDelay;
-	}
+	currAoE.clear();
+	suplAoE.clear();
+	currAreaInfo = nullptr;
 
-	else
-	{
-		int ret = 0;
 
-		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
-		app->cameraShake->StartCameraShake(1, 10);
-
-		currAoE.clear();
-		suplAoE.clear();
-		currAreaInfo = nullptr;
-
-		Die();
-
-		return true;
-	}
 
 	return true;
 }
@@ -183,7 +167,7 @@ void RoboHero::Attack()
 			acumulations++;
 			ApplyBuff();
 		}
-		
+
 		timer = passiveSkill.coolDown;
 	}
 }
@@ -196,8 +180,8 @@ void RoboHero::LevelUp()
 	//lvl up effect
 	if (myParticleSystem != nullptr)
 		myParticleSystem->Activate();
-	
-	else 
+
+	else
 	{
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}

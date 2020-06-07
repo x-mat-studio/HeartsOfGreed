@@ -405,7 +405,6 @@ void Hero::StateMachine(float dt)
 	case HERO_STATES::DEAD:
 		if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame - 1)
 		{
-
 			toDelete = true;
 			app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 		}
@@ -620,20 +619,20 @@ void Hero::Die()
 	{
 	case ENTITY_TYPE::HERO_GATHERER:
 		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		inputs.push_back(HERO_INPUTS::IN_DEAD);
 		break;
 	case ENTITY_TYPE::HERO_MELEE:
 		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		inputs.push_back(HERO_INPUTS::IN_DEAD);
 		break;
 	case ENTITY_TYPE::HERO_RANGED:
 		ExecuteSFX(app->entityManager->suitmanGetsDeath);
+		inputs.push_back(HERO_INPUTS::IN_DEAD);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
 		ExecuteSFX(app->entityManager->roboDying);
 		break;
 	}
-
-	inputs.push_back(HERO_INPUTS::IN_DEAD);
-
 
 
 	if (minimapIcon != nullptr)
@@ -1116,6 +1115,13 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				}
 				else
 					state = HERO_STATES::IDLE;
+
+				if (type == ENTITY_TYPE::HERO_ROBO)
+				{
+					Die();
+					toDelete = true;
+					app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+				}
 
 				skillFromAttacking = false;
 				break;
