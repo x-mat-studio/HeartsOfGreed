@@ -53,6 +53,7 @@ bool RoboHero::ActivateSkill1(fMPoint clickPosition)
 {
 
 	inputs.push_back(IN_SKILL1);
+	
 
 	return true;
 }
@@ -123,6 +124,9 @@ bool RoboHero::ExecuteSkill1()
 	{
 		int ret = 0;
 
+		UnleashParticlesSkill1((int)this->position.x, (int)this->position.y);
+		
+
 		ret = app->entityManager->ExecuteSkill(skill1, this->origin);
 		app->cameraShake->StartCameraShake(1, 10);
 
@@ -134,6 +138,10 @@ bool RoboHero::ExecuteSkill1()
 
 		return true;
 	}
+
+
+
+	
 
 	return true;
 }
@@ -240,6 +248,22 @@ void RoboHero::BlitCommandVfx(Frame& currframe, int alphaValue)
 	}
 
 	app->render->Blit(app->entityManager->moveCommandTileRobot, postoPrint.x, postoPrint.y, &currframe.frame, false, true, alphaValue, 255, 255, 255, 1.0f, currframe.pivotPositionX, currframe.pivotPositionY);
+}
+
+void RoboHero::UnleashParticlesSkill1(float posx, float posy)
+{
+	//fire spreading
+
+	if (activeSkillsParticleSystem != nullptr)
+	{
+		activeSkillsParticleSystem->Activate();
+		activeSkillsParticleSystem->Move(posx, posy);
+	}
+	else
+	{
+		activeSkillsParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::SKILL_GATHERER, posx, posy);
+																								//This is correct. Ask Adri
+	}
 }
 
 
