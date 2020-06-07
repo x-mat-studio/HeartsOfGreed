@@ -22,6 +22,10 @@ DialogText::DialogText(float x, float y, fMPoint& posText1, fMPoint& posText2, U
 DialogText::~DialogText()
 {
 	app->tex->UnLoad(texture);
+	app->tex->UnLoad(texture2);
+
+	texture = nullptr;
+	texture2 = nullptr;
 }
 
 
@@ -41,19 +45,30 @@ void DialogText::HandleInput()
 			texture = ChangeTexture(texture, &text1);
 		}
 	}
+	else if (texture != nullptr)
+	{
+		app->tex->UnLoad(texture);
+		texture = nullptr;
+		text1 = "";
+	}
 	
+
 	string = app->dialogManager->GetCurrentString2();
 
 	if (string != nullptr) 
 	{
-		
-
 		if (text2 != *string)
 		{
 			text2 = *string;
 
 			texture2 = ChangeTexture(texture2, &text2);
 		}
+	}
+	else if(texture2 != nullptr)
+	{
+		app->tex->UnLoad(texture2);
+		texture2 = nullptr;
+		text2 = "";
 	}
 }
 
@@ -70,7 +85,6 @@ SDL_Texture* DialogText::ChangeTexture(SDL_Texture* tex, P2SString* string)
 
 void DialogText::Draw(float dt)
 {
-	
 	if (texture != nullptr)
 	{
 		app->render->Blit(texture, position.x + posText1.x, position.y + posText1.y, nullptr, false, false, '\000', 255, 255, 255);
