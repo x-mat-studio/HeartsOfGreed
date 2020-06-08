@@ -12,14 +12,14 @@
 
     <finish>
       <entry1 text="Your objective remains the same: capture all enemy bases and take the enemy down. But first of all, let's do some recon."/>
-      <entry2 text="Roger that. (Select units with Dragging Left Click and then Right Click to move them)." />
+      <entry2 text="Roger that. (Select units with Left Click press[1 unit] or drag[multiple units] and then Right Click to move them)." />
     </finish>
   </tutorial1>
 
   <tutorial2>
     <start>
       <entry1 text="Looks like you found an enemy base, those bastards spread like wildfire. Secure the position and take down all hostile contacts in the area."/>
-      <entry2 text="As you say. (Right click on enemies to command units to attack them. Press E to execute your skills!)"/>
+      <entry2 text="As you say. (Right click on enemies to command units to attack them. Press E to enter skill mode, left click to confirm and right click to cancel)"/>
     </start>
 
     <finish>

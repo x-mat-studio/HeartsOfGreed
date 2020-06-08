@@ -41,6 +41,8 @@ Turret::Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int v
 	attackCD(0),
 	bonusAttack(0),
 	bonusArmor(0),
+	temporalTimer(0),
+	timeUntilDeath(0),
 
 	shortTermObjective(nullptr),
 
@@ -83,6 +85,8 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 	attackCD(0),
 	bonusAttack(0),
 	bonusArmor(0),
+	temporalTimer(0),
+	timeUntilDeath(0),
 
 	shortTermObjective(nullptr),
 

@@ -13,14 +13,14 @@ RangedHero::RangedHero(fMPoint position, Collider* col, Animation& walkLeft, Ani
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& punchLeft, Animation& punchLeftUp, Animation& punchLeftDown, Animation& punchRightUp,
 	Animation& punchRightDown, Animation& punchRight, Animation& skill1Right, Animation& skill1RightUp, Animation& skill1RightDown, Animation& skill1Left,
-	Animation& skill1LeftUp, Animation& skill1LeftDown, 
+	Animation& skill1LeftUp, Animation& skill1LeftDown,
 	Animation& deathRight, Animation& deathRightUp, Animation& deathRightDown, Animation& deathLeft, Animation& deathLeftUp, Animation& deathLeftDown, Animation& tileOnWalk,
 	HeroStats& stats, Skill& skill1, Skill& passiveSkill) :
 
 	Hero(position, ENTITY_TYPE::HERO_RANGED, col, walkLeft, walkLeftUp, walkLeftDown, walkRightUp, walkRightDown, walkRight, idleRight, idleRightDown,
 		idleRightUp, idleLeft, idleLeftUp, idleLeftDown, punchLeft, punchLeftUp, punchLeftDown, punchRightUp,
 		punchRightDown, punchRight, skill1Right, skill1RightUp, skill1RightDown, skill1Left,
-		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown, 
+		skill1LeftUp, skill1LeftDown, deathRight, deathRightUp, deathRightDown, deathLeft, deathLeftUp, deathLeftDown,
 		tileOnWalk, stats, skill1),
 
 	skill1Area(nullptr),
@@ -117,7 +117,7 @@ bool RangedHero::ExecuteSkill1()
 			skillExecutionDelay = true;
 			ExecuteSFX(app->entityManager->suitman1Skill);
 
-			
+
 
 			return skillExecutionDelay;
 		}
@@ -179,7 +179,8 @@ void RangedHero::Attack()
 		{
 			enemy = (Enemy*)objective;
 
-			enemy->debuffs.AddNewEffect(passiveSkill.effect, passiveSkill.executionTime, passiveSkill.dmg);
+			if (enemy != nullptr)
+				enemy->debuffs.AddNewEffect(passiveSkill.effect, passiveSkill.executionTime, passiveSkill.dmg);
 		}
 	}
 }
@@ -189,7 +190,7 @@ void RangedHero::LevelUp()
 {
 	//lvl up effect
 	if (myParticleSystem != nullptr)
-	myParticleSystem->Activate();
+		myParticleSystem->Activate();
 	else {
 		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::MAX, position.x, position.y);
 	}
