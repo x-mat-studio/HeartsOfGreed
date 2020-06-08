@@ -19,6 +19,8 @@ ModulePopUpManager::~ModulePopUpManager()
 
 bool ModulePopUpManager::Start()
 {
+	app->eventManager->EventRegister(EVENT_ENUM::CLOSE_POP_UP, this);
+
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_LEVELED_UP, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_DEAD, this);
 
@@ -87,6 +89,8 @@ bool ModulePopUpManager::Update(float dt)
 
 bool ModulePopUpManager::CleanUp()
 {
+	app->eventManager->EventUnRegister(EVENT_ENUM::CLOSE_POP_UP, this);
+
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_LEVELED_UP, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_DEAD, this);
 
@@ -146,16 +150,31 @@ bool ModulePopUpManager::Load(pugi::xml_node&)
 	return true;
 }
 
-bool ModulePopUpManager::Save(pugi::xml_node&) const
+bool ModulePopUpManager::Save(pugi::xml_node& node) const
 {
+	node = node.append_child("pop_ups_record");
+	pugi::xml_node iterator;
 
+	for (int i = 0; i < (int)POP_UPS::MAX; i++)
+	{
+		iterator = node.append_child("pop_up");
+		
+		iterator.append_attribute("activated") = popUpArray[i].activated;
+		iterator.append_attribute("displayed") = popUpArray[i].displayed;
+		iterator.append_attribute("finished") = popUpArray[i].finished;
+	}
 	return true;
 }
 
 
 void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 {
-	if (eventId == EVENT_ENUM::HERO_LEVELED_UP)
+	if (eventId == EVENT_ENUM::CLOSE_POP_UP)
+	{
+		ClosePopUp();
+	}
+
+	else if (eventId == EVENT_ENUM::HERO_LEVELED_UP)
 	{
 		popUpArray[(int)POP_UPS::LEVEL_UP].Activate();
 	}
@@ -267,6 +286,19 @@ void ModulePopUpManager::CheckPopUpsToDisplay()
 }
 
 
+void ModulePopUpManager::ClosePopUp()
+{
+	for (int i = 0; i < (int)POP_UPS::MAX; i++)
+	{
+		if (popUpArray[i].displayed)
+		{
+			popUpArray[i].Deactivate();
+			displayingPopUp = false;
+		}
+	}
+}
+
+
 PopUp::PopUp() :
 	string(),
 	activated(false),
@@ -294,5 +326,7 @@ void PopUp::Activate()
 void PopUp::Deactivate()
 {
 	finished = true;
+	displayed = false;
+	activated = false;
 	app->uiManager->DeleteUIGroup(GROUP_TAG::POP_UP);
 }

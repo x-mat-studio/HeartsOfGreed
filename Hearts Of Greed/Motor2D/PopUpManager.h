@@ -56,6 +56,7 @@ private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
 	void CheckPopUpsToDisplay();
+	void ClosePopUp();
 
 private:
 	PopUp popUpArray[(int)POP_UPS::MAX];
