@@ -202,10 +202,10 @@ void Turret::Draw(float dt)
 {
 	if (transparent)
 	{
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue, 255, 255, 255, 1.0f, -offset.x, -offset.y);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, transparencyValue, 255, 255, 255, 1.0f, currentAnimation->GetCurrentFrame(dt).pivotPositionX - offset.x, -offset.y);
 	}
 	else
-		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, 0, 255, 255, 255, 1.0f, -offset.x, -offset.y);
+		app->render->Blit(texture, position.x, position.y, &currentAnimation->GetCurrentFrameBox(dt), false, true, 0, 255, 255, 255, 1.0f, currentAnimation->GetCurrentFrame(dt).pivotPositionX - offset.x, -offset.y);
 }
 
 int Turret::GetLvl()
