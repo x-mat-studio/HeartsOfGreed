@@ -268,6 +268,12 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 }
 
 
+void ModuleUIManager::CreatePopUp(P2SString& string)
+{
+	AddUIGroup(factory->CreatePopUp(string));
+}
+
+
 bool ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
 {
 	int numUiGroups = uiGroupVector.size();

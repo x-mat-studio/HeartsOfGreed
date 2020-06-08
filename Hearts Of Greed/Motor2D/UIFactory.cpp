@@ -122,9 +122,11 @@ UIFactory::UIFactory() :
 	robottoActive1Button{ 348, 707, 93, 91 },
 
 	dialogWindow{ 1096, 41, 859, 615 },
-	skipButton{54 ,21, 35, 18},
+	skipButton{ 54 ,21, 35, 18 },
 
-	dayNightIcon{522, 851, 35, 35},
+	dayNightIcon{ 522, 851, 35, 35 },
+
+	popUpWindow{ 507, 844, 211, 77 },
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -271,7 +273,6 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 	group->AddUiElement(skip);
 
 	CreateText(3, -5, skip, "Skip", group);
-	
 
 	switch (character1)
 	{
@@ -322,6 +323,22 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 
 	return group;
 }
+
+
+UI_Group* UIFactory::CreatePopUp(P2SString& string)
+{
+	UI_Group* group = new UI_Group(GROUP_TAG::POP_UP);
+
+	UI* image = CreateImage(200, 10, nullptr, popUpWindow, group, false, false);
+
+	Button* button = new Button(fMPoint(200, 0), image, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_POP_UP);
+	group->AddUiElement(button);
+
+	CreateText(5, 5, image, string.GetCharArray(), group);
+
+	return group;
+}
+
 
 
 UI_Group* UIFactory::CreateBasicInGameUI()

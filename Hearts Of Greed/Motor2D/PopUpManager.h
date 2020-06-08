@@ -21,9 +21,14 @@ enum class POP_UPS : int
 
 struct PopUp
 {
+public:
 	PopUp();
 	~PopUp();
 
+	void Activate();
+	void Deactivate();
+
+public:
 	P2SString string;
 
 	bool activated;
@@ -32,11 +37,11 @@ struct PopUp
 };
 
 
-class PopUpManager : public Module
+class ModulePopUpManager : public Module
 {
 public:
-	PopUpManager();
-	~PopUpManager();
+	ModulePopUpManager();
+	~ModulePopUpManager();
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
@@ -50,8 +55,12 @@ public:
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
 
+	void CheckPopUpsToDisplay();
+
 private:
 	PopUp popUpArray[(int)POP_UPS::MAX];
+
+	bool displayingPopUp;
 
 };
 

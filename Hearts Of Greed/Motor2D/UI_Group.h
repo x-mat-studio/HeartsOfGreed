@@ -25,6 +25,8 @@ enum class GROUP_TAG : int
 	LOSE_SCENE,
 	WIN_SCENE,
 
+	POP_UP,
+
 	MAX
 };
 

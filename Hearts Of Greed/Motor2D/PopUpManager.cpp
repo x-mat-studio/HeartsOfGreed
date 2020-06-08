@@ -1,21 +1,23 @@
 #include "PopUpManager.h"
 #include "UI.h"
 #include "EventManager.h"
+#include "UI_Group.h"
 
-PopUpManager::PopUpManager() :
+ModulePopUpManager::ModulePopUpManager() :
 	Module(),
-	popUpArray{}
+	popUpArray{},
+	displayingPopUp(false)
 {
 	name.create("PopUpManager");
 }
 
-PopUpManager::~PopUpManager()
+ModulePopUpManager::~ModulePopUpManager()
 {
 
 }
 
 
-bool PopUpManager::Start()
+bool ModulePopUpManager::Start()
 {
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_LEVELED_UP, this);
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_DEAD, this);
@@ -68,20 +70,22 @@ bool PopUpManager::Start()
 }
 
 
-bool PopUpManager::Awake(pugi::xml_node& node)
+bool ModulePopUpManager::Awake(pugi::xml_node& node)
 {
 
 	return true;
 }
 
-bool PopUpManager::Update(float dt)
+bool ModulePopUpManager::Update(float dt)
 {
 	CheckListener(this);
+	CheckPopUpsToDisplay();
+
 	return true;
 }
 
 
-bool PopUpManager::CleanUp()
+bool ModulePopUpManager::CleanUp()
 {
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_LEVELED_UP, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_DEAD, this);
@@ -130,28 +134,30 @@ bool PopUpManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 
+	displayingPopUp = false;
+
 	return true;
 }
 
 
-bool PopUpManager::Load(pugi::xml_node&)
+bool ModulePopUpManager::Load(pugi::xml_node&)
 {
 
 	return true;
 }
 
-bool PopUpManager::Save(pugi::xml_node&) const
+bool ModulePopUpManager::Save(pugi::xml_node&) const
 {
 
 	return true;
 }
 
 
-void PopUpManager::ExecuteEvent(EVENT_ENUM eventId)
+void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 {
 	if (eventId == EVENT_ENUM::HERO_LEVELED_UP)
 	{
-		popUpArray[(int)POP_UPS::LEVEL_UP].activated = true;
+		popUpArray[(int)POP_UPS::LEVEL_UP].Activate();
 	}
 	else if (popUpArray[(int)POP_UPS::LEVEL_UP].displayed == true)
 	{ 
@@ -159,28 +165,30 @@ void PopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 			eventId == EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_ACTIVE1_UPGRADE ||
 			eventId == EVENT_ENUM::RANGED_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE)
 		{
-			//Add logic to remove the pop up, or something, idfk yet, YET
+			popUpArray[(int)POP_UPS::LEVEL_UP].Deactivate();
+			displayingPopUp = false;
 		}
 	}
 
 
 	else if (eventId == EVENT_ENUM::HERO_DEAD)
 	{
-		popUpArray[(int)POP_UPS::HERO_DIED].activated = true;
+		popUpArray[(int)POP_UPS::HERO_DIED].Activate();
 	}
 	else if (popUpArray[(int)POP_UPS::HERO_DIED].displayed == true)
 	{
 		if (eventId == EVENT_ENUM::GATHERER_RESURRECT || eventId == EVENT_ENUM::MELEE_RESURRECT ||
 			eventId == EVENT_ENUM::RANGED_RESURRECT || eventId == EVENT_ENUM::ROBOTTO_RESURRECT)
 		{
-			//Add logic to remove the pop up, or something, idfk yet, YET
+			popUpArray[(int)POP_UPS::HERO_DIED].Deactivate();
+			displayingPopUp = false;
 		}
 	}
 
 
 	else if (eventId == EVENT_ENUM::REACHED_100_RED_RESOUCES)
 	{
-		popUpArray[(int)POP_UPS::RED_RESOURCE_100].activated = true;
+		popUpArray[(int)POP_UPS::RED_RESOURCE_100].Activate();
 	}
 	else if (popUpArray[(int)POP_UPS::RED_RESOURCE_100].displayed == true)
 	{
@@ -191,14 +199,15 @@ void PopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 			eventId == EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE || eventId == EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE || eventId == EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE ||
 			eventId == EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE)
 		{
-			//Add logic to remove the pop up, or something, idfk yet, YET
+			popUpArray[(int)POP_UPS::RED_RESOURCE_100].Deactivate();
+			displayingPopUp = false;
 		}
 	}
 
 
 	else if (eventId == EVENT_ENUM::GOT_PURPLE_RESOURCE)
 	{
-		popUpArray[(int)POP_UPS::PURPLE_ORB].activated = true;
+		popUpArray[(int)POP_UPS::PURPLE_ORB].Activate();
 	}
 	else if (popUpArray[(int)POP_UPS::PURPLE_ORB].displayed == true)
 	{
@@ -206,33 +215,53 @@ void PopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 			eventId == EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_ACTIVE1_UPGRADE ||
 			eventId == EVENT_ENUM::RANGED_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE)
 		{
-			//Add logic to remove the pop up, or something, idfk yet, YET
+			popUpArray[(int)POP_UPS::PURPLE_ORB].Deactivate();
+			displayingPopUp = false;
 		}
 	}
 
 
 	else if (eventId == EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT)
 	{
-		popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].activated = true;
+		popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].Activate();
 	}
 	else if (popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].displayed == true)
 	{
 		if (eventId == EVENT_ENUM::TURRET_CONSTRUCT || eventId == EVENT_ENUM::BARRICADE_CONSTRUCT)
 		{
-			//Add logic to remove the pop up, or something, idfk yet, YET
+			popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].Deactivate();
+			displayingPopUp = false;
 		}
 	}
 
 
-	else if (eventId == EVENT_ENUM::TURRET_CONSTRUCT || eventId == EVENT_ENUM::BARRICADE_CONSTRUCT)
+	if (eventId == EVENT_ENUM::TURRET_CONSTRUCT || eventId == EVENT_ENUM::BARRICADE_CONSTRUCT)
 	{
-		popUpArray[(int)POP_UPS::UPGRADE_TURRETS_AND_BARRICADES].activated = true;
+		popUpArray[(int)POP_UPS::UPGRADE_TURRETS_AND_BARRICADES].Activate();
 	}
 	else if (popUpArray[(int)POP_UPS::UPGRADE_TURRETS_AND_BARRICADES].displayed == true)
 	{
 		if (eventId == EVENT_ENUM::TURRET_UPGRADED || eventId == EVENT_ENUM::BARRICADE_UPGRADED)
 		{
-			//Add logic to remove the pop up, or something, idfk yet, YET
+			popUpArray[(int)POP_UPS::UPGRADE_TURRETS_AND_BARRICADES].Deactivate();
+			displayingPopUp = false;
+		}
+	}
+}
+
+
+void ModulePopUpManager::CheckPopUpsToDisplay()
+{
+	if (displayingPopUp == false)
+	{
+		for (int i = 0; i < (int)POP_UPS::MAX; i++)
+		{
+			if (popUpArray[i].activated == true && popUpArray[i].finished == false)
+			{
+				app->uiManager->CreatePopUp(popUpArray[i].string);
+				popUpArray[i].displayed = true;
+				displayingPopUp = true;
+			}
 		}
 	}
 }
@@ -249,4 +278,21 @@ PopUp::PopUp() :
 PopUp::~PopUp()
 {
 	string.Clear();
+}
+
+void PopUp::Activate()
+{
+	if (finished == true)
+	{
+		activated = false;
+	}
+	else
+		activated = true;
+}
+
+
+void PopUp::Deactivate()
+{
+	finished = true;
+	app->uiManager->DeleteUIGroup(GROUP_TAG::POP_UP);
 }
