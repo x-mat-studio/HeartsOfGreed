@@ -1,0 +1,10 @@
+<!-- Texts that will be displayed by the pop ups -->
+
+<popUpTexts>
+  <redResourceText string="You can use red resources to improve your hero stats!"/>
+  <purpleOrbText string="Use purple orbs to upgrade hero skills!"/>
+  <levelUpText string="You leveled up a hero! Upgrade one of his skills!"/>
+  <heroDiedText string="A hero died, revive him in a base!"/>
+  <buyTandB string="You can now buy turrets and barricades in the upgrade center!"/>
+  <upgradeTandB string="Try upgrading your defenses in the upgrade center!"/>
+</popUpTexts>

@@ -8,7 +8,7 @@ ModulePopUpManager::ModulePopUpManager() :
 	popUpArray{},
 	displayingPopUp(false)
 {
-	name.create("PopUpManager");
+	name.create("popUpManager");
 }
 
 ModulePopUpManager::~ModulePopUpManager()
@@ -74,7 +74,16 @@ bool ModulePopUpManager::Start()
 
 bool ModulePopUpManager::Awake(pugi::xml_node& node)
 {
+	P2SString filename = node.attribute("docnamePopUps").as_string();
+	pugi::xml_document popupsdoc;
+	popupsdoc.load_file(filename.GetString());
+	pugi::xml_node iterator = popupsdoc.first_child().first_child();
 
+	int i = 0;
+	for (iterator; iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		popUpArray[i].string = iterator.attribute("string").as_string();
+	}
 	return true;
 }
 
