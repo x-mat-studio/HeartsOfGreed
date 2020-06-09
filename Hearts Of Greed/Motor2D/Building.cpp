@@ -54,6 +54,7 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 	transparencyValue(copy->transparencyValue),
 	myDecor(copy->myDecor),
 	selectedTexture(copy->selectedTexture),
+	myParticleTimer(0),
 
 	myBase(nullptr),
 	transparent(false),
@@ -134,12 +135,23 @@ void Building::UnleashParticleSmoke()
 
 	if (myParticleSystem != nullptr)
 	{
+		//this should not be called since buildings dont move, but whatevs
+		
 		myParticleSystem->Activate();
 		myParticleSystem->Move(this->position.x, this->position.y);
 	}
-	else
-	{
-		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::BUILDING_SMOKE, this->position.x, this->position.y);
+	else {
+		switch (this->type)
+		{
+
+		case ENTITY_TYPE::BLDG_TURRET:
+			myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::BUILDING_SMOKE, this->position.x - 50, this->position.y - 60);
+			break;
+
+		default:
+			myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::BUILDING_SMOKE, this->position.x, this->position.y);
+			break;
+		}
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "FoWManager.h"
 #include "Base.h"
 #include "EventManager.h"
+#include "ParticleSystem.h"
 #include "Pathfinding.h"
 
 
@@ -137,7 +138,7 @@ bool Turret::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
-
+	HandleMyParticleSystem(dt);
 	StateMachine();
 	ResetBonusStats();
 
@@ -162,6 +163,33 @@ bool Turret::PostUpdate(float dt)
 	}
 
 	
+	return true;
+}
+
+bool Turret::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+	started = true;
+
+	UnleashParticleSmoke();
+
 	return true;
 }
 
@@ -327,6 +355,12 @@ void Turret::Die()
 	if (myBase != nullptr)
 	{
 		myBase->RemoveTurret(this);
+	}
+
+	if (myParticleSystem != nullptr) {
+		
+		myParticleSystem->Die();
+		myParticleSystem = nullptr;
 	}
 
 	//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 60, position.y - 10));
@@ -609,6 +643,30 @@ void Turret::SetTemporalTimer(float time)
 
 }
 
+void Turret::HandleMyParticleSystem(float dt)
+{
+	if (myParticleSystem != nullptr) {
+
+		if (myParticleSystem->IsActive()) {
+
+			TimeMyparticleSystem(dt);
+		}
+	}
+}
+
+void Turret::TimeMyparticleSystem(float dt)
+{
+	//implied that your system is not nullptr
+	if (myParticleSystem->IsActive())
+	{
+		myParticleTimer += dt;
+
+		if (myParticleTimer > 3) {
+			myParticleTimer = 0;
+			myParticleSystem->Desactivate();
+		}
+	}
+}
 
 void Turret::SetLevel(int lvl)
 {
