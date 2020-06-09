@@ -10,7 +10,7 @@
 
 Turret::Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
-	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, int damageIncrease, int rangeIncrease, float speedIncrease, float hpIncrease) :
+	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, float damageIncrease, int rangeIncrease, float speedIncrease, float hpIncrease) :
 
 	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 
@@ -618,7 +618,7 @@ void Turret::SetLevel(int lvl)
 
 void Turret::LevelUp()
 {
-	attackDmg += damageIncrease;
+	attackDmg = damageIncrease + (damageIncrease * log(turretLvl + 1) * (turretLvl + 1));
 	range += rangeIncrease;
 
 	attackSpeed -= speedIncrease;
