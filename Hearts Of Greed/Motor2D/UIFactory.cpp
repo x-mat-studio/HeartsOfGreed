@@ -949,13 +949,15 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Detonation:", group);
+	CreateText(5, 0, background, "Turret spawn:", group);
 
-	sprintf_s(stats, 40, "Causes +%i dmg on", hero->GetSkill1().dmg);
+	sprintf_s(stats, 40, "Creates a turret at level %i", hero->GetSkill1().lvl);
 
 	CreateText(5, 15, background, stats, group);
 
-	CreateText(5, 25, background, "the chosen area.", group);
+	sprintf_s(stats, 40, "that lasts %i seconds.", hero->GetSkill1().dmg);
+
+	CreateText(5, 25, background, stats, group);
 
 	return group;
 }
@@ -1137,7 +1139,7 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade 'detonation':", group);
+	CreateText(5, 0, background, "Upgrade 'turret spawn':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
