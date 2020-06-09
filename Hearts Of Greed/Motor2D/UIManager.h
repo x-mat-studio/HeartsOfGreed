@@ -60,7 +60,7 @@ public:
 	UIFactory* ModuleUIManager::GetFactory() const;
 
 	void AddUIGroup(UI_Group* element);
-	void CreatePopUp(P2SString& string);
+	UI* CreatePopUp(P2SString& string);
 
 	bool DeleteUIGroup(GROUP_TAG tag);
 
@@ -90,6 +90,8 @@ public:
 	void RaiseVolumeOnUnpause();
 
 	bool CheckGroupTag(GROUP_TAG tag);
+	
+	void SetPopUpClosingBool(bool value);
 
 private:
 
@@ -114,6 +116,8 @@ private:
 	bool Save(pugi::xml_node& data) const;
 
 	bool Load(pugi::xml_node& data);
+
+	
 
 public:
 	Base* lastShop;
@@ -145,11 +149,16 @@ private:
 
 	bool lastFramePauseEasingActive;
 	bool goingToPause;
+	bool isPopUpClosing;
+
 	Easing pauseAnimPosX;
 	Easing pauseAnimPosY;
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
 	Easing pauseAnimRectAlpha;
+	Easing popupPosX;
+
+	UI* popupImage;
 };
 
 #endif //__UIMANAGER_H__

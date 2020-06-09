@@ -3,6 +3,9 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
+#define RED_RESOURCES_TO_NOTIFY 100
+#define PURPLE_RESOURCES_TO_NOTIFY 1
+
 #include "SDL/include/SDL.h"
 #include "SDL/include/SDL_rect.h"
 #include "SDL/include/SDL_mouse.h"

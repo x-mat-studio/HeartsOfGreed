@@ -90,7 +90,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 bool ModuleTestScene::Start()
 {
 	mapLoaded = false;
-	
+	app->uiManager->SetPopUpClosingBool(false);
 	app->player->Enable();
 	app->minimap->Enable();
 
@@ -128,7 +128,7 @@ bool ModuleTestScene::Start()
 		app->LoadGame();
 		startFromLoad = false;
 	}
-	else 
+	else
 	{
 		dayNumber = 0;
 	}
@@ -350,8 +350,8 @@ bool  ModuleTestScene::PostUpdate(float dt)
 	app->map->Draw();
 
 	int alpha = nightRectAlpha.GetLastRequestedPos();
-		DrawNightRect(alpha);
-	
+	DrawNightRect(alpha);
+
 
 	//if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
 
@@ -513,7 +513,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::START_DAY_NIGHT_TRANSITION:
 		if (isNightTime == true)
-		nightRectAlpha.NewEasing(EASING_TYPE::EASE, 100, 0, 30);
+			nightRectAlpha.NewEasing(EASING_TYPE::EASE, 100, 0, 30);
 		else
 			nightRectAlpha.NewEasing(EASING_TYPE::EASE, 0, 100, 30);
 
@@ -521,17 +521,20 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::CAMERA_FOCUS_HERO:
 		Entity* hero = app->player->GetFocusedEntity();
-		switch (hero->GetType())
+		if (hero != nullptr)
 		{
-		case ENTITY_TYPE::HERO_GATHERER:
-		case ENTITY_TYPE::HERO_MELEE:
-		case ENTITY_TYPE::HERO_RANGED:
-		case ENTITY_TYPE::HERO_ROBO:
-			MoveCamTo(hero->position, 1, EASING_TYPE::EASE_IN_OUT_SINE);
-		default:
+			switch (hero->GetType())
+			{
+			case ENTITY_TYPE::HERO_GATHERER:
+			case ENTITY_TYPE::HERO_MELEE:
+			case ENTITY_TYPE::HERO_RANGED:
+			case ENTITY_TYPE::HERO_ROBO:
+				MoveCamTo(hero->position, 1, EASING_TYPE::EASE_IN_OUT_SINE);
+			default:
+				break;
+			}
 			break;
 		}
-		break;
 
 	}
 
@@ -627,7 +630,7 @@ void ModuleTestScene::CalculateTimers(float dt)
 		if (timer >= dayTimer)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-			app->audio->PlayFx(nightApproachesSfx,0,-1);
+			app->audio->PlayFx(nightApproachesSfx, 0, -1);
 			isNightTime = true;
 			timer = 0;
 		}
@@ -835,7 +838,7 @@ void ModuleTestScene::GetTimer(int& min, int& sec)
 
 int ModuleTestScene::GetNightRectAlpha() const
 {
-	int alpha= nightRectAlpha.GetLastRequestedPos();
+	int alpha = nightRectAlpha.GetLastRequestedPos();
 	alpha = MIN(alpha, 255);
 	alpha = MAX(alpha, 0);
 
