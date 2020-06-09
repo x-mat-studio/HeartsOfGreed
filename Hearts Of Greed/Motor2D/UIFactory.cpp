@@ -1115,9 +1115,15 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1Menu()
 
 UI_Group* UIFactory::CreateOnHoverGathererPassive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)5, hero->GetPassiveSkill().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1125,7 +1131,18 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
+
+	sprintf_s(stats, 40, "+%i resource gain;", skill->dmg - hero->GetPassiveSkill().dmg);
+
+	CreateText(30, 33, background, stats, group);
+
+	sprintf_s(stats, 40, "+%.0f robotic support.", skill->executionTime - hero->GetPassiveSkill().executionTime);
+
+	CreateText(30, 43, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
 
 	return group;
 }
@@ -1133,9 +1150,15 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1UpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)0, hero->GetSkill1().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1143,7 +1166,18 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
+
+	sprintf_s(stats, 40, "Turret at level %i;", hero->GetSkill1().lvl + 1);
+
+	CreateText(30, 33, background, stats, group);
+
+	sprintf_s(stats, 40, "+%i seconds active.", skill->dmg - hero->GetSkill1().dmg);
+
+	CreateText(30, 43, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
 
 	return group;
 }
@@ -1151,9 +1185,15 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverMeleePassive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)4, hero->GetPassiveSkill().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1161,7 +1201,18 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
+
+	sprintf_s(stats, 40, "+%i passive healing;", skill->coolDown - hero->GetPassiveSkill().coolDown);
+
+	CreateText(30, 33, background, stats, group);
+
+	sprintf_s(stats, 40, "-%i damage taken.", skill->dmg - hero->GetPassiveSkill().dmg);
+
+	CreateText(30, 43, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
 
 	return group;
 }
@@ -1169,9 +1220,15 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1UpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)1, hero->GetSkill1().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1179,7 +1236,14 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
+
+	sprintf_s(stats, 40, "+%i damage.", skill->dmg - hero->GetSkill1().dmg);
+
+	CreateText(30, 33, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
 
 	return group;
 }
@@ -1187,9 +1251,15 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverRangedPassive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)6, hero->GetPassiveSkill().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1197,17 +1267,30 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
 
+	sprintf_s(stats, 40, "Damage: enemy HP/%i;", skill->dmg);
+
+	CreateText(30, 33, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
+	
 	return group;
 }
 
 
 UI_Group* UIFactory::CreateOnHoverRangedActive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)2, hero->GetSkill1().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1215,17 +1298,34 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
 
+	sprintf_s(stats, 40, "Slow: +%.2f;", skill->effectSeverity - hero->GetSkill1().effectSeverity);
+
+	CreateText(30, 33, background, stats, group);
+
+	sprintf_s(stats, 40, "Effect duration: +%.2f.", skill->effectTime - hero->GetSkill1().effectTime);
+
+	CreateText(30, 43, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
+	
 	return group;
 }
 
 
 UI_Group* UIFactory::CreateOnHoverRobottoPassive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)7, hero->GetPassiveSkill().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1233,7 +1333,18 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
+
+	sprintf_s(stats, 40, "+%i extra damage;", skill->dmg - hero->GetPassiveSkill().dmg);
+
+	CreateText(30, 33, background, stats, group);
+
+	sprintf_s(stats, 40, "+%i extra atk speed", skill->rangeRadius - hero->GetPassiveSkill().rangeRadius);
+
+	CreateText(30, 43, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
 
 	return group;
 }
@@ -1241,9 +1352,15 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1UpgradeMenu()
 
 UI_Group* UIFactory::CreateOnHoverRobottoActive1UpgradeMenu()
 {
+	char stats[40];
+
 	iMPoint pos(app->input->GetMousePosScreen() / app->win->GetUIScale());
 
+	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
+
+	Skill* skill = new Skill();
+	app->entityManager->RequestSkill(*skill, (SKILL_ID)3, hero->GetSkill1().lvl + 1);
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
@@ -1251,7 +1368,14 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1UpgradeMenu()
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 
-	CreateText(25, 20, background, "   -1", group);
+	CreateText(25, 20, background, "  1", group);
+
+	sprintf_s(stats, 40, "+%i damage.", skill->dmg - hero->GetSkill1().dmg);
+
+	CreateText(30, 33, background, stats, group);
+
+	delete skill;
+	skill = nullptr;
 
 	return group;
 }
