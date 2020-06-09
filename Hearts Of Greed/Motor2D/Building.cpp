@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "EntityManager.h"
 #include "FoWManager.h"
+#include "ParticleSystem.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 Building::Building() :
@@ -10,11 +11,13 @@ Building::Building() :
 	xpOnDeath(0),
 	buildingCost(0),
 	transparencyValue(0),
+	myParticleTimer(0),
 
 	myBase(nullptr),
 	selectedTexture(nullptr),
 	transparent(false),
 	selected(false),
+	myParticleSystem(nullptr),
 	currentState(BUILDING_STATE::ST_UNKNOWN),
 	myDecor(BUILDING_DECOR::NONE)
 {}
@@ -28,11 +31,13 @@ Building::Building(fMPoint position, int maxHitPoints, int currentHitPoints, int
 	xpOnDeath(xpOnDeath),
 	buildingCost(buildingCost),
 	transparencyValue(transparency),
+	myParticleTimer(0),
 
 	myBase(nullptr),
 	selectedTexture(nullptr),
 	transparent(false),
 	selected(false),
+	myParticleSystem(nullptr),
 	currentState(BUILDING_STATE::ST_UNKNOWN),
 	myDecor(decor)
 {
@@ -53,6 +58,7 @@ Building::Building(fMPoint position, Building* copy, ENTITY_ALIGNEMENT alignemen
 	myBase(nullptr),
 	transparent(false),
 	selected(false),
+	myParticleSystem(nullptr),
 	currentState(BUILDING_STATE::ST_UNKNOWN)
 {
 	if (type == ENTITY_TYPE::BUILDING && visionEntity == nullptr)
@@ -87,6 +93,7 @@ bool Building::PreUpdate(float dt)
 
 bool Building::Update(float dt)
 {
+	HandleMyParticleSystem(dt);
 	return true;
 }
 
@@ -121,13 +128,53 @@ void Building::Contruct()
 {
 }
 
+void Building::UnleashParticleSmoke()
+{
+	//building smoke
+
+	if (myParticleSystem != nullptr)
+	{
+		myParticleSystem->Activate();
+		myParticleSystem->Move(this->position.x, this->position.y);
+	}
+	else
+	{
+		myParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::BUILDING_SMOKE, this->position.x, this->position.y);
+	}
+}
+
+void Building::HandleMyParticleSystem(float dt)
+{
+	if (myParticleSystem != nullptr) {
+
+		if (myParticleSystem->IsActive()) {
+
+			TimeMyparticleSystem(dt);
+		}
+	}
+}
+
+void Building::TimeMyparticleSystem(float dt)
+{
+	//implied that your system is not nullptr
+	if (myParticleSystem->IsActive())
+	{
+		myParticleTimer += dt;
+
+		if (myParticleTimer > 4) {
+			myParticleTimer = 0;
+			myParticleSystem->Desactivate();
+		}
+	}
+}
+
 
 void Building::Draw(float dt)
 {
 	BROFILER_CATEGORY("DRAW Static Buildings", Profiler::Color::DarkGoldenRod);
 
 	fMPoint newPos = position + offset;
-
+	
 	if (selectedByPlayer)
 	{
 		if (transparent)
@@ -150,6 +197,7 @@ void Building::Draw(float dt)
 			app->render->Blit(texture, newPos.x, newPos.y, nullptr, false, true);
 		}
 	}
+	
 }
 
 void Building::MinimapDraw(float scale, float halfWidth)

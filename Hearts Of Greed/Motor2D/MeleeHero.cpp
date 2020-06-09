@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "ParticleSystem.h"
 #include "CameraShake.h"
+#include "EventManager.h"
 
 MeleeHero::MeleeHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -225,6 +226,7 @@ void MeleeHero::LevelUp()
 	stats.atkSpeed *= (app->entityManager->meleeAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_LEVELED_UP, EVENT_ENUM::NULL_EVENT);
 }
 
 

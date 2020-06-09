@@ -1165,6 +1165,9 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 	case TYPE_PARTICLE_SYSTEM::SKILL_ROBOT:
 		ret = new ParticleSystem(x, y, sampleRobotSkill, true);
 		break;
+	
+	case TYPE_PARTICLE_SYSTEM::BUILDING_SMOKE:
+		ret = new ParticleSystem(x, y, sampleBuildingSmoke, true);
 
 	case TYPE_PARTICLE_SYSTEM::NONE:
 		break;

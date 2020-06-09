@@ -29,9 +29,10 @@ public:
 	void SetTurretLevel(int level);
 	void SetBarricadeLevel(int level);
 
+	bool Start(SDL_Texture* texture);
+
 private:
 	void Die();
-
 private:
 
 	int turretLvl;

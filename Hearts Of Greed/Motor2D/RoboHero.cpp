@@ -209,6 +209,7 @@ void RoboHero::LevelUp()
 	heroSkillPoints++;
 
 	ApplyBuff();
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_LEVELED_UP, EVENT_ENUM::NULL_EVENT);
 }
 
 
