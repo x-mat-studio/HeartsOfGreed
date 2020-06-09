@@ -6,6 +6,7 @@
 #include "ParticleSystem.h"
 #include "Player.h"
 #include "CameraShake.h"
+#include "EventManager.h"
 
 #include "Enemy.h"
 
@@ -208,6 +209,7 @@ void RangedHero::LevelUp()
 	stats.atkSpeed *= (app->entityManager->rangedAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_LEVELED_UP, EVENT_ENUM::NULL_EVENT);
 }
 
 

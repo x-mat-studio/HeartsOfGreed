@@ -10,6 +10,7 @@
 #include "Collision.h"
 #include "CameraShake.h"
 #include "Turret.h"
+#include "EventManager.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -278,6 +279,7 @@ void GathererHero::LevelUp()
 	stats.atkSpeed *= (app->entityManager->gathererAtkSpeedUpgradeValue);
 
 	heroSkillPoints++;
+	app->eventManager->GenerateEvent(EVENT_ENUM::HERO_LEVELED_UP, EVENT_ENUM::NULL_EVENT);
 }
 
 void GathererHero::UnleashParticlesSkill1(float posx, float posy)
