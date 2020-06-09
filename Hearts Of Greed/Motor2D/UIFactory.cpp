@@ -329,7 +329,7 @@ UI_Group* UIFactory::CreatePopUp(P2SString& string,UI *&retimage)
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::POP_UP);
 
-	UI* image = CreateImage(200, 10, nullptr, popUpWindow, group, false, false);
+	UI* image = CreateImage(200, 30, nullptr, popUpWindow, group, false, false);
 
 	Button* button = new Button(fMPoint(200, 0), image, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_POP_UP);
 	group->AddUiElement(button);
@@ -1025,13 +1025,12 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 
 	CreateText(5, 0, background, "Bloodhsed:", group);
 
-	sprintf_s(stats, 40, "Gives health / %i points of", hero->GetPassiveSkill().dmg);
+	CreateText(5, 15, background, "Enemies lose a total of", group);
 
-	CreateText(5, 15, background, stats, group);
+	sprintf_s(stats, 40, "health / %i in a span of 1", hero->GetPassiveSkill().dmg);
+	CreateText(5, 25, background, stats, group);
 
-	CreateText(5, 25, background, "bleeding to enemies that", group);
-
-	CreateText(5, 35, background, "have been attacked by her.", group);
+	CreateText(5, 35, background, "second after being attack.", group);
 
 	return group;
 }
