@@ -7,7 +7,7 @@ class UI_Text : public UI
 {
 public:
 
-	UI_Text(float x, float y, UI* parent, char* text, bool interactable);
+	UI_Text(float x, float y, UI* parent, char* text, bool interactable, Uint32 lenght = 0);
 	~UI_Text();
 
 

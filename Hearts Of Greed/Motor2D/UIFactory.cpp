@@ -149,8 +149,8 @@ UIFactory::UIFactory() :
 	robottoAtkSpeedUpgradeCost(100),
 
 	reviveCost(500),
-	turretUpgradeCost(200),
-	barricadeUpgradeCost(150)
+	turretUpgradeCost(350),
+	barricadeUpgradeCost(175)
 
 {}
 
@@ -309,7 +309,7 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 		CreateImage(338, 153, button, gathererPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HERO_ROBO:
-		CreateImage(338, 153, button, robottoHeroPortrait, group, false, false);
+		CreateImage(338, 153, button, robottoPicture, group, false, false);
 		break;
 	case ENTITY_TYPE::HQ_COMANDER:
 		CreateImage(338, 153, button, hqCommanderPortrait, group, false, false);
@@ -334,9 +334,8 @@ UI_Group* UIFactory::CreatePopUp(P2SString& string,UI *&retimage)
 	Button* button = new Button(fMPoint(200, 0), image, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_POP_UP);
 	group->AddUiElement(button);
 
-	CreateText(5, 5, image, string.GetCharArray(), group);
+	CreateText(15, 12, image, string.GetCharArray(), group, false, popUpWindow.w - 25);
 	retimage = image;
-
 	return group;
 }
 
@@ -350,15 +349,8 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	UI* background;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_GAME);
 
-	//rect = RectConstructor(556, 35, 15, 14);
-	//father = AddButton(fMPoint(w / app->win->GetUIScale() - 87, 35), nullptr, UI_TYPE::UI_BUTTON, rect, (P2SString)"PortraitHideButton", EVENT_ENUM::NULL_EVENT, false, false, true, false);
-	//AddUIElement(fMPoint(w / app->win->GetUIScale() - 72, 35), nullptr, UI_TYPE::UI_PORTRAIT, rect, P2SString("portraitVector"), nullptr, DRAGGABLE::DRAG_OFF);
-	//AddButton(fMPoint(162, h / app->win->GetUIScale() - 85), nullptr, UI_TYPE::UI_BUTTON, rect, P2SString("minimapHideButton"), EVENT_ENUM::NULL_EVENT, false, false, true, false);
-
-	//CreateImage(0, app->minimap->position.y, nullptr, minimapBackground, group);
 	CreatePortraitManager(640, 0, nullptr, group);
 
-	//CreateImage(-12, app->minimap->position.y - 273, nullptr, miniFrame, group);
 	UI* img = CreateImage(10, 5, nullptr, { 40, 291, 45, 20 }, group);
 	CreateImage(40, 5, nullptr, { 40, 291, 45, 20 }, group);
 
@@ -1422,9 +1414,9 @@ UI* UIFactory::CreateNonGroupImage(float x, float y, UI* parent, std::vector<UI*
 }
 
 
-UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable)
+UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable, Uint32 lenght)
 {
-	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
+	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable, lenght);
 
 	group->AddUiElement(uiText);
 
@@ -1926,6 +1918,8 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 	CreateGathererPassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateGathererActive1Button(85, 0, dataPage, dataPagesVector);
 
+	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Proc Illidarus");
+
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_DAMAGE_UPGRADE);
 	CreateEnergyUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_ENERGY_UPGRADE);
@@ -1941,6 +1935,8 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	CreateMeleePassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateMeleeActive1Button(85, 0, dataPage, dataPagesVector);
+
+	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Ridosi Pullarc");
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::MELEE_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::MELEE_DAMAGE_UPGRADE);
@@ -1958,6 +1954,8 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	CreateRangedPassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateRangedActive1Button(85, 0, dataPage, dataPagesVector);
 
+	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Sora Ipucdrill");
+
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::RANGED_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::RANGED_DAMAGE_UPGRADE);
 	CreateEnergyUpgradeButton(-15, 34, dataPage, dataPagesVector, BUTTON_TAG::RANGED_ENERGY_UPGRADE);
@@ -1973,6 +1971,8 @@ void UIFactory::CreateRobottoPage(std::vector<UI*>* dataPagesVector, UI* dataPag
 
 	CreateRobottoPassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateRobottoActive1Button(85, 0, dataPage, dataPagesVector);
+
+	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Ricard 'Goliat' Pillosu");
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::ROBOTTO_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE);
@@ -2000,8 +2000,11 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 	sprintf_s(stats, 40, "AD: %.0f", focus->GetAttackDamage());
 	CreateNonGroupText(133, 10, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Exp: %i/%i", focus->GetHeroXP(), focus->GetExpToLevelUp());
+	float exp = focus->GetHeroXP() * 100 / focus->GetExpToLevelUp();
+	sprintf_s(stats, 40, "Exp: %.0f", exp);
 	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
+
+	CreateNonGroupText(113, 22, dataPage, dataPagesVector, "%");
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
 	CreateNonGroupText(133, 22, dataPage, dataPagesVector, stats);

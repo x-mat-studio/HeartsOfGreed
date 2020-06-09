@@ -107,7 +107,7 @@ private:
 
 	void AddPendingPortraits();
 
-	void AugmentValueByTenPercent(float* value);
+	void AugmentValueByFifteenPercent(float* value);
 
 	void BasicResourceManagement(EVENT_ENUM eventN, float* cost);
 	void StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost);
@@ -123,6 +123,8 @@ public:
 	Base* lastShop;
 	bool mouseOverUI;
 	UIFactory* factory;
+
+	Easing popupPosX;
 
 private:
 	std::vector<UI_Group*> uiGroupVector;
@@ -156,7 +158,6 @@ private:
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
 	Easing pauseAnimRectAlpha;
-	Easing popupPosX;
 
 	UI* popupImage;
 };

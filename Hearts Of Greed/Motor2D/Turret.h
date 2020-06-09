@@ -44,7 +44,7 @@ public:
 
 	Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 		Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
-		Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, int damageIncrease, int rangeIncrease, 
+		Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, float damageIncrease, int rangeIncrease, 
 		float speedIncrease, float hpIncrease);
 
 	Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement);
@@ -113,7 +113,7 @@ private:
 	int range;
 	int vision;
 
-	int damageIncrease;
+	float damageIncrease;
 	int rangeIncrease;
 	float speedIncrease;
 	float hpIncrease;

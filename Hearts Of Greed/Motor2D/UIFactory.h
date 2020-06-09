@@ -46,7 +46,7 @@ public:
 
 	// Text creation functions
 
-	UI* CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false);
+	UI* CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable = false, Uint32 lenght = 0);
 	UI* CreateNonGroupText(float x, float y, UI* parent, std::vector<UI*>* dataPagesVector, char* text, bool interactable = false);
 
 	// Button creation functions

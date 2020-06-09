@@ -8,7 +8,7 @@ ModulePopUpManager::ModulePopUpManager() :
 	popUpArray{},
 	displayingPopUp(false)
 {
-	name.create("PopUpManager");
+	name.create("popUpManager");
 }
 
 ModulePopUpManager::~ModulePopUpManager()
@@ -74,7 +74,16 @@ bool ModulePopUpManager::Start()
 
 bool ModulePopUpManager::Awake(pugi::xml_node& node)
 {
+	P2SString filename = node.attribute("docnamePopUps").as_string();
+	pugi::xml_document popupsdoc;
+	popupsdoc.load_file(filename.GetString());
+	pugi::xml_node iterator = popupsdoc.first_child().first_child();
 
+	int i = 0;
+	for (iterator; iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		popUpArray[i].string = iterator.attribute("string").as_string();
+	}
 	return true;
 }
 
@@ -189,8 +198,8 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 			eventId == EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_ACTIVE1_UPGRADE ||
 			eventId == EVENT_ENUM::RANGED_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE)
 		{
-			popUpArray[(int)POP_UPS::LEVEL_UP].Deactivate();
-			displayingPopUp = false;
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
 		}
 	}
 
@@ -204,8 +213,8 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 		if (eventId == EVENT_ENUM::GATHERER_RESURRECT || eventId == EVENT_ENUM::MELEE_RESURRECT ||
 			eventId == EVENT_ENUM::RANGED_RESURRECT || eventId == EVENT_ENUM::ROBOTTO_RESURRECT)
 		{
-			popUpArray[(int)POP_UPS::HERO_DIED].Deactivate();
-			displayingPopUp = false;
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
 		}
 	}
 
@@ -223,8 +232,8 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 			eventId == EVENT_ENUM::GATHERER_ATTACK_SPEED_UPGRADE || eventId == EVENT_ENUM::MELEE_ATTACK_SPEED_UPGRADE || eventId == EVENT_ENUM::RANGED_ATTACK_SPEED_UPGRADE ||
 			eventId == EVENT_ENUM::ROBOTTO_ATTACK_SPEED_UPGRADE)
 		{
-			popUpArray[(int)POP_UPS::RED_RESOURCE_100].Deactivate();
-			displayingPopUp = false;
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
 		}
 	}
 
@@ -239,8 +248,8 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 			eventId == EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_ACTIVE1_UPGRADE ||
 			eventId == EVENT_ENUM::RANGED_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::ROBOTTO_ACTIVE1_UPGRADE)
 		{
-			popUpArray[(int)POP_UPS::PURPLE_ORB].Deactivate();
-			displayingPopUp = false;
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
 		}
 	}
 
@@ -253,8 +262,8 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	{
 		if (eventId == EVENT_ENUM::TURRET_CONSTRUCT || eventId == EVENT_ENUM::BARRICADE_CONSTRUCT)
 		{
-			popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].Deactivate();
-			displayingPopUp = false;
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
 		}
 	}
 
@@ -267,8 +276,8 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	{
 		if (eventId == EVENT_ENUM::TURRET_UPGRADED || eventId == EVENT_ENUM::BARRICADE_UPGRADED)
 		{
-			popUpArray[(int)POP_UPS::UPGRADE_TURRETS_AND_BARRICADES].Deactivate();
-			displayingPopUp = false;
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
 		}
 	}
 }

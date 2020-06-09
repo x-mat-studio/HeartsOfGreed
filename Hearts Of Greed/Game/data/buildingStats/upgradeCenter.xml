@@ -17,7 +17,7 @@
       <horizontalRect x="885" y="24" w="121" h="179"></horizontalRect>
     </rect>
 
-    <costs upgradeTurret="250" upgradeBarricade="150"></costs>
+    <costs upgradeTurret="350" upgradeBarricade="175"></costs>
 
   </sample>
   
