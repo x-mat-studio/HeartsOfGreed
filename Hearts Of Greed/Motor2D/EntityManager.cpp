@@ -3872,7 +3872,7 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		Animation anim3;
 		anim3.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
 
-		float auxPosX = 0;							float auxPos2X = 0;							float auxPos3X = 0;
+		float auxPosX = -70;							float auxPos2X = -70;							float auxPos3X = -70;
 		float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;
 
 		float auxSpeedX = 0.5;						float auxSpeed2X = 2;						float auxSpeed3X = 0;
