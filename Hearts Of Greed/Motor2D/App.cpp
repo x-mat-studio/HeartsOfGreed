@@ -29,6 +29,7 @@
 #include "Video.h"
 #include "CameraShake.h"
 #include "AssetManager.h"
+#include "PopUpManager.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 // Constructor
@@ -67,6 +68,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	video = new Video();
 	dialogManager = new ModuleDialogManager();
 	cameraShake = new ModuleCameraShake();
+	popUpManager = new ModulePopUpManager();
 
 
 	// Ordered for awake / Start / Update
@@ -88,6 +90,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	AddModule(entityManager);
 	AddModule(fowManager);
 	AddModule(dialogManager);
+	AddModule(popUpManager);
 	AddModule(uiManager);
 	AddModule(pathfinding);
 	AddModule(player);
@@ -95,6 +98,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args), necessaryDt(0), gameP
 	AddModule(questManager);
 	AddModule(minimap);
 	AddModule(video);
+	
 
 	//Fade to black before render
 	AddModule(cameraShake);

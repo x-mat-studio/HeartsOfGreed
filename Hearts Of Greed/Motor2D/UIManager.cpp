@@ -268,6 +268,12 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 }
 
 
+void ModuleUIManager::CreatePopUp(P2SString& string)
+{
+	AddUIGroup(factory->CreatePopUp(string));
+}
+
+
 bool ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
 {
 	int numUiGroups = uiGroupVector.size();
@@ -737,6 +743,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		if (app->player->GetResources() >= factory->turretUpgradeCost && building->GetTurretLevel() < MAX_TURRET_LEVEL)
 		{
 			app->player->AddResources(-factory->turretUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
 			
 			building->UpgradeTurrets();
 			app->audio->PlayFx(upgradingTurret, 0, -1);
@@ -764,10 +771,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		if (app->player->GetResources() >= factory->barricadeUpgradeCost && building->GetBarricadeLevel() < MAX_BARRICADE_LEVEL)
 		{
 			app->player->AddResources(-factory->barricadeUpgradeCost);
+			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
 			
-			app->audio->PlayFx(upgradingTurret, 0, -1);
-
 			building->UpgradeBarricades();
+			app->audio->PlayFx(upgradingTurret, 0, -1);
 		}
 		break;
 
@@ -906,6 +913,9 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		app->dialogManager->PushInput(DIALOG_INPUT::SKIP_DIALOG);
 		break;
 
+	case BUTTON_TAG::CLOSE_POP_UP:
+		app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_POP_UP, EVENT_ENUM::NULL_EVENT);
+		break;
 	default:
 		assert("you forgot to add the case of the button tag :D");
 		break;

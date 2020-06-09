@@ -122,9 +122,11 @@ UIFactory::UIFactory() :
 	robottoActive1Button{ 348, 707, 93, 91 },
 
 	dialogWindow{ 1096, 41, 859, 615 },
-	skipButton{54 ,21, 35, 18},
+	skipButton{ 54 ,21, 35, 18 },
 
-	dayNightIcon{522, 851, 35, 35},
+	dayNightIcon{ 460, 841, 35, 35 },
+
+	popUpWindow{ 507, 844, 211, 77 },
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -271,7 +273,6 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 	group->AddUiElement(skip);
 
 	CreateText(3, -5, skip, "Skip", group);
-	
 
 	switch (character1)
 	{
@@ -322,6 +323,22 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 
 	return group;
 }
+
+
+UI_Group* UIFactory::CreatePopUp(P2SString& string)
+{
+	UI_Group* group = new UI_Group(GROUP_TAG::POP_UP);
+
+	UI* image = CreateImage(200, 10, nullptr, popUpWindow, group, false, false);
+
+	Button* button = new Button(fMPoint(200, 0), image, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_POP_UP);
+	group->AddUiElement(button);
+
+	CreateText(5, 5, image, string.GetCharArray(), group);
+
+	return group;
+}
+
 
 
 UI_Group* UIFactory::CreateBasicInGameUI()
@@ -932,13 +949,15 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Detonation:", group);
+	CreateText(5, 0, background, "Turret spawn:", group);
 
-	sprintf_s(stats, 40, "Causes +%i dmg on", hero->GetSkill1().dmg);
+	sprintf_s(stats, 40, "Creates a turret at level %i", hero->GetSkill1().lvl);
 
 	CreateText(5, 15, background, stats, group);
 
-	CreateText(5, 25, background, "the chosen area.", group);
+	sprintf_s(stats, 40, "that lasts %i seconds.", hero->GetSkill1().dmg);
+
+	CreateText(5, 25, background, stats, group);
 
 	return group;
 }
@@ -1120,7 +1139,7 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 
 	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Upgrade 'detonation':", group);
+	CreateText(5, 0, background, "Upgrade 'turret spawn':", group);
 
 	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
 

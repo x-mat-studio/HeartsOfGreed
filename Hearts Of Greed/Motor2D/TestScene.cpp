@@ -504,7 +504,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::DEBUG_NIGHT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-		app->audio->PlayFx(nightApproachesSfx, 0, -1);
+		//app->audio->PlayFx(nightApproachesSfx, 0, -1);
 		isNightTime = true;
 		nightRectAlpha.NewEasing(EASING_TYPE::EASE, nightRectAlpha.GetLastRequestedPos(), 100, 1);
 		//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");

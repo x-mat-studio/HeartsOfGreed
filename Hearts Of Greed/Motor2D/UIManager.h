@@ -60,6 +60,7 @@ public:
 	UIFactory* ModuleUIManager::GetFactory() const;
 
 	void AddUIGroup(UI_Group* element);
+	void CreatePopUp(P2SString& string);
 
 	bool DeleteUIGroup(GROUP_TAG tag);
 
