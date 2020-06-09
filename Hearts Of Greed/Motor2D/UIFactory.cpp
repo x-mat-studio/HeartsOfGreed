@@ -334,9 +334,8 @@ UI_Group* UIFactory::CreatePopUp(P2SString& string,UI *&retimage)
 	Button* button = new Button(fMPoint(200, 0), image, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_POP_UP);
 	group->AddUiElement(button);
 
-	CreateText(5, 5, image, string.GetCharArray(), group);
+	CreateText(15, 12, image, string.GetCharArray(), group, false, popUpWindow.w - 25);
 	retimage = image;
-
 	return group;
 }
 
@@ -1422,9 +1421,9 @@ UI* UIFactory::CreateNonGroupImage(float x, float y, UI* parent, std::vector<UI*
 }
 
 
-UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable)
+UI* UIFactory::CreateText(float x, float y, UI* parent, char* text, UI_Group* group, bool interactable, Uint32 lenght)
 {
-	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable);
+	UI_Text* uiText = new UI_Text(x, y, parent, text, interactable, lenght);
 
 	group->AddUiElement(uiText);
 
