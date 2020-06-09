@@ -96,12 +96,15 @@ protected:
 
 	bool		transparent;
 	int			transparencyValue;
+
+	float		myParticleTimer;
 	ParticleSystem* myParticleSystem;
+	
 private:
 	
 	int			xpOnDeath;
 	int			buildingCost;
-	float		myParticleTimer;
+	
 
 	bool		selected;
 

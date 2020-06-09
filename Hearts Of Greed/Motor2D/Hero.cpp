@@ -665,6 +665,7 @@ void Hero::Die()
 	if (myParticleSystem != nullptr)
 	{
 		myParticleSystem->Die();
+		myParticleSystem = nullptr;
 	}
 
 	app->player->RemoveHeroFromVector(this);

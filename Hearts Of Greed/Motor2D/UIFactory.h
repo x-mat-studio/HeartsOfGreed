@@ -37,7 +37,7 @@ public:
 	UI_Group* CreateCreditsMenu();
 
 	UI_Group* CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE character2);
-	UI_Group* CreatePopUp(P2SString& string);
+	UI_Group* CreatePopUp(P2SString& string, UI*& image);
 	
 	// Image creation functions
 

@@ -56,6 +56,8 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
+	bool Start(SDL_Texture* texture);
+
 	void Draw(float dt);
 
 	int GetLvl();
@@ -73,6 +75,9 @@ public:
 
 	void SetTemporalTimer(float time);
 
+	void HandleMyParticleSystem(float dt);
+
+	void TimeMyparticleSystem(float dt);
 private:
 
 	void CheckObjective(Entity* entity);
