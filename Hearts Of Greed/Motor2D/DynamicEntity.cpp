@@ -23,7 +23,7 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	framesSinceRequest(0),
 	framesToRquest(FRAMES_PER_PATH_REQUEST),
 	waitingForPath(false),
-	destination{INT_MIN,INT_MIN},
+	destination{ INT_MIN,INT_MIN },
 
 	dir(FACE_DIR::SOUTH_EAST)
 {
@@ -51,6 +51,7 @@ bool DynamicEntity::Move(float dt)
 
 	//Speed is resetted to 0 each iteration
 	toMove = { 0, 0 };
+	isMoving = false;
 
 	// ----------------------------------------------------------------
 
@@ -103,7 +104,8 @@ bool DynamicEntity::Move(float dt)
 
 	if (!pathSpeed.IsZero() || waitingForPath)
 	{
-		return true;
+		isMoving = true;
+		return isMoving;
 	}
 
 
@@ -151,10 +153,20 @@ FACE_DIR DynamicEntity::DetermineDirection(fMPoint faceDir)
 	return newDir;
 }
 
+bool DynamicEntity::IsMoving()const
+{
+	if (toMove.IsZero() == false || isMoving == true)
+		return true;
+
+	return false;
+}
+
 void DynamicEntity::GroupMovement(float dt)
 {
 	BROFILER_CATEGORY("Group Mov.", Profiler::Color::BlanchedAlmond);
 
+	if (toMove.x == 0 && toMove.y == 0)
+		return;
 
 	toMove = { 0,0 };
 
@@ -301,6 +313,7 @@ fMPoint DynamicEntity::GetCohesionSpeed(std::vector<DynamicEntity*>close_entity_
 	{
 		cohesionSpeed.x = cohesionSpeed.x / norm;
 	}
+
 	if (cohesionSpeed.y < diameter && cohesionSpeed.y > -diameter)
 	{
 		cohesionSpeed.y = 0;

@@ -16,6 +16,8 @@ enum class TYPE_PARTICLE_SYSTEM : int
 	SKILL_MELEE,
 	SKILL_ROBOT,
 
+	BUILDING_SMOKE,
+
 	MAX
 };
 

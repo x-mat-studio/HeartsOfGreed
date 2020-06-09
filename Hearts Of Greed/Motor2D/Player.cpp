@@ -954,11 +954,21 @@ void ModulePlayer::AddResources(int gain)
 void ModulePlayer::AddResourcesSkill(int gain)
 {
 	resourcesSkill += gain;
+
+	if (resourcesSkill >= PURPLE_RESOURCES_TO_NOTIFY)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::GOT_PURPLE_RESOURCE, EVENT_ENUM::NULL_EVENT);
+	}
 }
 
 void ModulePlayer::AddResourcesBoost(int gain)
 {
 	resourcesBoost += gain;
+
+	if (resourcesBoost >= RED_RESOURCES_TO_NOTIFY)
+	{
+		app->eventManager->GenerateEvent(EVENT_ENUM::REACHED_100_RED_RESOUCES, EVENT_ENUM::NULL_EVENT);
+	}
 }
 
 
