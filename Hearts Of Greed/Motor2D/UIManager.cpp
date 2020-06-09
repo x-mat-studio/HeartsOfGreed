@@ -50,7 +50,8 @@ ModuleUIManager::ModuleUIManager() :
 	easyIn(-1),
 	easyOut(-1),
 	lastFramePauseEasingActive(false),
-	goingToPause(false)
+	goingToPause(false),
+	popupImage(nullptr)
 {
 	name.create("UIManager");
 }
@@ -122,12 +123,12 @@ bool ModuleUIManager::Start()
 
 	LoadAtlas();
 
-	hoverSound =		app->audio->LoadFx("Assets/audio/sfx/Interface/BotonSimple.wav");
-	clickSound =		app->audio->LoadFx("Assets/audio/sfx/Interface/BotonClick.wav");
-	easyIn =			app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_in.wav");
-	easyOut =			app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_out.wav");
-	upgradingTurret =	app->audio->LoadFx("Assets/audio/sfx/Buildings/upgradeTurret.wav");
-	
+	hoverSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonSimple.wav");
+	clickSound = app->audio->LoadFx("Assets/audio/sfx/Interface/BotonClick.wav");
+	easyIn = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_in.wav");
+	easyOut = app->audio->LoadFx("Assets/audio/sfx/Interface/Easy_out.wav");
+	upgradingTurret = app->audio->LoadFx("Assets/audio/sfx/Buildings/upgradeTurret.wav");
+
 
 	return ret;
 }
@@ -180,6 +181,13 @@ bool ModuleUIManager::Update(float dt)
 
 	DragElement();
 
+	if (popupImage!=nullptr && popupPosX.IsActive())
+	{
+		fMPoint newPos = popupImage->GetPosition();
+		newPos.y = popupPosX.UpdateEasingAddingTime(dt);
+		popupImage->SetLocalPosition(newPos);
+	}
+
 
 	if (pauseAnimPosX.IsActive())
 	{
@@ -209,7 +217,7 @@ bool ModuleUIManager::PostUpdate(float dt)
 	//generates pause menu open event
 
 
-	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive==true)
+	if (pauseAnimPosX.IsActive() == true || lastFramePauseEasingActive == true)
 	{
 		SDL_Rect r = { 1107, 392, 388,462 };
 		app->render->DrawQuad(SDL_Rect{ 0, 0, (int)app->win->width, (int)app->win->height }, 0, 0, 0, pauseAnimRectAlpha.GetLastRequestedPos(), true, false);
@@ -249,6 +257,7 @@ bool ModuleUIManager::CleanUp()
 	lastShop = nullptr;
 	dragElement = nullptr;
 	hoverElement = nullptr;
+	popupImage = nullptr;
 
 	return true;
 }
@@ -268,9 +277,18 @@ void ModuleUIManager::AddUIGroup(UI_Group* element)
 }
 
 
-void ModuleUIManager::CreatePopUp(P2SString& string)
+UI* ModuleUIManager::CreatePopUp(P2SString& string)
 {
-	AddUIGroup(factory->CreatePopUp(string));
+	UI* ret = nullptr;
+	AddUIGroup(factory->CreatePopUp(string, ret));
+
+	if (ret != nullptr)
+	{
+		popupImage = ret;
+		popupPosX.NewEasing(EASING_TYPE::EASE_IN_OUT_SINE, -100, 10, 1.0);
+	}
+
+	return ret;
 }
 
 
@@ -289,6 +307,11 @@ bool ModuleUIManager::DeleteUIGroup(GROUP_TAG tag)
 
 			return true;
 		}
+	}
+
+	if (tag == GROUP_TAG::POP_UP)
+	{
+		popupImage = nullptr;
 	}
 
 
@@ -356,14 +379,14 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 
 		else if (CheckGroupTag(GROUP_TAG::PAUSE_MENU) == true)
 		{
-			
+
 			app->eventManager->GenerateEvent(EVENT_ENUM::DELETE_PAUSE_MENU, EVENT_ENUM::NULL_EVENT);
 			break;
 		}
 
 		else if (app->testScene->IsEnabled() == true)
 		{
-			
+
 			app->eventManager->GenerateEvent(EVENT_ENUM::START_PAUSE_ANIM, EVENT_ENUM::NULL_EVENT);
 		}
 		break;
@@ -410,8 +433,8 @@ void ModuleUIManager::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::START_PAUSE_ANIM:
-		
-		if (app->gamePause == false&&pauseAnimPosX.IsActive()==false)
+
+		if (app->gamePause == false && pauseAnimPosX.IsActive() == false)
 		{
 			app->audio->PlayFx(easyIn, 0, -1);
 			pauseAnimPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, 610, 223, 0.7);
@@ -744,7 +767,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		{
 			app->player->AddResources(-factory->turretUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::TURRET_UPGRADED, EVENT_ENUM::NULL_EVENT);
-			
+
 			building->UpgradeTurrets();
 			app->audio->PlayFx(upgradingTurret, 0, -1);
 		}
@@ -772,7 +795,7 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		{
 			app->player->AddResources(-factory->barricadeUpgradeCost);
 			app->eventManager->GenerateEvent(EVENT_ENUM::BARRICADE_UPGRADED, EVENT_ENUM::NULL_EVENT);
-			
+
 			building->UpgradeBarricades();
 			app->audio->PlayFx(upgradingTurret, 0, -1);
 		}
