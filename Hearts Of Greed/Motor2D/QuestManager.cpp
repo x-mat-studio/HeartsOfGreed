@@ -223,7 +223,7 @@ void ModuleQuestManager::QuestStarted(int questId)
 		app->dialogManager->PushInput(DIALOG_INPUT::MISSION_4_START);
 		questInfoVector[questId].SetDialogInput((int)DIALOG_INPUT::MISSION_4_END);
 		character1 = app->entityManager->GetFirstHeroType();
-		character2 = ENTITY_TYPE::UNKNOWN;
+		character2 = ENTITY_TYPE::HERO_ROBO;
 		break;
 
 	case 5:
