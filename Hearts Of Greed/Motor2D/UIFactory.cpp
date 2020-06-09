@@ -325,7 +325,7 @@ UI_Group* UIFactory::CreateDialogMenu(ENTITY_TYPE character1, ENTITY_TYPE charac
 }
 
 
-UI_Group* UIFactory::CreatePopUp(P2SString& string)
+UI_Group* UIFactory::CreatePopUp(P2SString& string,UI *&retimage)
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::POP_UP);
 
@@ -335,6 +335,7 @@ UI_Group* UIFactory::CreatePopUp(P2SString& string)
 	group->AddUiElement(button);
 
 	CreateText(5, 5, image, string.GetCharArray(), group);
+	retimage = image;
 
 	return group;
 }

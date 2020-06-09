@@ -60,7 +60,7 @@ public:
 	UIFactory* ModuleUIManager::GetFactory() const;
 
 	void AddUIGroup(UI_Group* element);
-	void CreatePopUp(P2SString& string);
+	UI* CreatePopUp(P2SString& string);
 
 	bool DeleteUIGroup(GROUP_TAG tag);
 
@@ -150,6 +150,9 @@ private:
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
 	Easing pauseAnimRectAlpha;
+	Easing popupPosX;
+
+	UI* popupImage;
 };
 
 #endif //__UIMANAGER_H__
