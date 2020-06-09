@@ -124,6 +124,8 @@ public:
 	bool mouseOverUI;
 	UIFactory* factory;
 
+	Easing popupPosX;
+
 private:
 	std::vector<UI_Group*> uiGroupVector;
 	std::vector<HeroPortrait*> portraitsToAdd;
@@ -156,7 +158,6 @@ private:
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
 	Easing pauseAnimRectAlpha;
-	Easing popupPosX;
 
 	UI* popupImage;
 };
