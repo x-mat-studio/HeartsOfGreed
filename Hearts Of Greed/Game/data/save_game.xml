@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <game_state>
+	<assetManager />
 	<EventyManager />
 	<input />
 	<window />
@@ -9,7 +10,7 @@
 	<map name="finalMap.tmx" />
 	<menuScene />
 	<testScene>
-		<time_info days_passed="0" is_night="false" timer="37.747879" />
+		<time_info days_passed="0" is_night="false" timer="3.66399765" />
 	</testScene>
 	<winScene />
 	<loseScene />
@@ -19809,6 +19810,16 @@
 		<fow_tile visited="0" />
 	</FOWManager>
 	<dialogManager />
+	<PopUpManager>
+		<pop_ups_record>
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+		</pop_ups_record>
+	</PopUpManager>
 	<UIManager>
 		<UIManager gathererLifeShop="100" gathererDamageShop="100" gathererEnergyShop="100" gathererAtkSpeedShop="100" meleeLifeShop="100" meleeDamageShop="100" meleeEnergyShop="100" meleeAtkSpeedShop="100" rangedLifeShop="100" rangedDamageShop="100" rangedEnergyShop="100" rangedAtkSpeedShop="100" robottoLifeShop="100" robottoDamageShop="100" robottoEnergyShop="100" robottoAtkSpeedShop="100" />
 	</UIManager>
@@ -19835,30 +19846,30 @@
 		<quest questX="-1792" questY="2208" questID="2" active="false" noCombat="false" id="2" dialogInput="-1" reward="300">
 			<questEntitys />
 			<spawnedQuestEntities>
-				<spawnEntity entityType="0" posX="172" posY="3300" />
-				<spawnEntity entityType="4" posX="172" posY="3500" />
-				<spawnEntity entityType="4" posX="172" posY="3500" />
-				<spawnEntity entityType="4" posX="172" posY="3500" />
+				<spawnEntity entityType="0" posX="-2000" posY="2640" />
+				<spawnEntity entityType="4" posX="-2000" posY="2640" />
+				<spawnEntity entityType="4" posX="-2000" posY="2640" />
+				<spawnEntity entityType="4" posX="-2000" posY="2640" />
 			</spawnedQuestEntities>
 		</quest>
 		<quest questX="1376" questY="3760" questID="3" active="false" noCombat="false" id="3" dialogInput="-1" reward="400">
 			<questEntitys />
 			<spawnedQuestEntities>
-				<spawnEntity entityType="1" posX="172" posY="3300" />
-				<spawnEntity entityType="4" posX="172" posY="3500" />
-				<spawnEntity entityType="4" posX="172" posY="3500" />
-				<spawnEntity entityType="5" posX="172" posY="3500" />
+				<spawnEntity entityType="1" posX="1520" posY="3740" />
+				<spawnEntity entityType="4" posX="1520" posY="3740" />
+				<spawnEntity entityType="4" posX="1520" posY="3740" />
+				<spawnEntity entityType="5" posX="1520" posY="3740" />
 			</spawnedQuestEntities>
 		</quest>
 		<quest questX="1248" questY="2064" questID="4" active="false" noCombat="false" id="4" dialogInput="-1" reward="500">
 			<questEntitys />
 			<spawnedQuestEntities>
-				<spawnEntity entityType="3" posX="172" posY="3300" />
-				<spawnEntity entityType="6" posX="172" posY="3500" />
-				<spawnEntity entityType="6" posX="172" posY="3500" />
+				<spawnEntity entityType="3" posX="1070" posY="2090" />
+				<spawnEntity entityType="6" posX="1070" posY="2090" />
+				<spawnEntity entityType="6" posX="1070" posY="2090" />
 			</spawnedQuestEntities>
 		</quest>
-		<quest questX="-256" questY="3872" questID="5" active="true" noCombat="true" id="5" dialogInput="5" reward="100">
+		<quest questX="-256" questY="3872" questID="5" active="false" noCombat="true" id="5" dialogInput="-1" reward="100">
 			<questEntitys />
 			<spawnedQuestEntities>
 				<spawnEntity entityType="4" posX="180" posY="4000" />
@@ -19876,8 +19887,9 @@
 	</QuestManager>
 	<minimap />
 	<video />
-	<:anonymous />
+	<cameraShake />
+	<fadeToBlack />
 	<renderer>
-		<camera x="-209" y="-7817" />
+		<camera x="111" y="-3775" />
 	</renderer>
 </game_state>

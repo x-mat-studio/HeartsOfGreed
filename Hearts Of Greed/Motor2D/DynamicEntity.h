@@ -42,6 +42,8 @@ public:
 
 	FACE_DIR DetermineDirection(fMPoint dir);
 
+	bool IsMoving() const;
+
 private:
 	fMPoint GetDirectionSpeed(std::vector<DynamicEntity*>closeEntityList);
 	fMPoint GetCohesionSpeed(std::vector<DynamicEntity*>closeEntityList, fMPoint position);
