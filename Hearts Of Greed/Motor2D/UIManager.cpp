@@ -51,6 +51,7 @@ ModuleUIManager::ModuleUIManager() :
 	easyOut(-1),
 	lastFramePauseEasingActive(false),
 	goingToPause(false),
+	isPopUpClosing(false),
 	popupImage(nullptr)
 {
 	name.create("UIManager");
@@ -184,8 +185,17 @@ bool ModuleUIManager::Update(float dt)
 	if (popupImage!=nullptr && popupPosX.IsActive())
 	{
 		fMPoint newPos = popupImage->GetPosition();
-		newPos.y = popupPosX.UpdateEasingAddingTime(dt);
+		newPos.x = popupPosX.UpdateEasingAddingTime(dt);
 		popupImage->SetLocalPosition(newPos);
+	}
+
+	if (isPopUpClosing == true)
+	{
+		if (popupPosX.IsActive() == false)
+		{
+			app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_POP_UP, EVENT_ENUM::NULL_EVENT);
+			isPopUpClosing = false;
+		}
 	}
 
 
@@ -285,7 +295,7 @@ UI* ModuleUIManager::CreatePopUp(P2SString& string)
 	if (ret != nullptr)
 	{
 		popupImage = ret;
-		popupPosX.NewEasing(EASING_TYPE::EASE_IN_OUT_SINE, -100, 10, 1.0);
+		popupPosX.NewEasing(EASING_TYPE::EASE_OUT_EXPO, -1000, 10, 1.0);
 	}
 
 	return ret;
@@ -937,7 +947,10 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		break;
 
 	case BUTTON_TAG::CLOSE_POP_UP:
-		app->eventManager->GenerateEvent(EVENT_ENUM::CLOSE_POP_UP, EVENT_ENUM::NULL_EVENT);
+		//popupEaseOut
+		isPopUpClosing = true;
+		popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
+
 		break;
 	default:
 		assert("you forgot to add the case of the button tag :D");
@@ -1204,9 +1217,9 @@ void ModuleUIManager::RaiseVolumeOnUnpause()
 }
 
 
-void ModuleUIManager::AugmentValueByTenPercent(float* value)
+void ModuleUIManager::AugmentValueByFifteenPercent(float* value)
 {
-	*value *= 1.1;
+	*value *= 1.15;
 }
 
 
@@ -1262,7 +1275,15 @@ bool ModuleUIManager::Load(pugi::xml_node& data)
 	factory->robottoEnergyUpgradeCost = iterator.child("UIManager").attribute("robottoEnergyShop").as_float();
 	factory->robottoAtkSpeedUpgradeCost = iterator.child("UIManager").attribute("robottoAtkSpeedShop").as_float();
 
+
+	isPopUpClosing = false;
+
 	return true;
+}
+
+void ModuleUIManager::SetPopUpClosingBool(bool value)
+{
+	isPopUpClosing = value;
 }
 
 
@@ -1281,7 +1302,7 @@ void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* c
 	if (app->player->GetResourcesBoost() >= *cost)
 	{
 		app->player->AddResourcesBoost(-(*cost));
-		AugmentValueByTenPercent(cost);
+		AugmentValueByFifteenPercent(cost);
 		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
 	}
 }

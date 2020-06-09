@@ -5,12 +5,13 @@
 #include "FoWManager.h"
 #include "Base.h"
 #include "EventManager.h"
+#include "ParticleSystem.h"
 #include "Pathfinding.h"
 
 
 Turret::Turret(int turretLvl, int attackDmg, float attackSpeed, int range, int vision, fMPoint position, Collider* collider, Animation& idleRight, Animation& idleRightUp, Animation& idleRightDown, Animation& idleLeft,
 	Animation& idleLeftUp, Animation& idleLeftDown, Animation& shootingRight, Animation& shootingRightUp, Animation& shootingRightDown, Animation& shootingLeft, Animation& shootingLeftUp,
-	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, int damageIncrease, int rangeIncrease, float speedIncrease, float hpIncrease) :
+	Animation& shootingLeftDown, int maxHitPoints, int currentHitPoints, int recoveryHitPointsRate, int xpOnDeath, int buildingCost, int transparency, float damageIncrease, int rangeIncrease, float speedIncrease, float hpIncrease) :
 
 	Building(position, maxHitPoints, currentHitPoints, recoveryHitPointsRate, xpOnDeath, buildingCost, transparency, collider, ENTITY_TYPE::BLDG_TURRET),
 
@@ -137,7 +138,7 @@ bool Turret::Update(float dt)
 	InternalInput(inputs, dt);
 	state = ProcessFsm(inputs);
 
-
+	HandleMyParticleSystem(dt);
 	StateMachine();
 	ResetBonusStats();
 
@@ -162,6 +163,33 @@ bool Turret::PostUpdate(float dt)
 	}
 
 	
+	return true;
+}
+
+bool Turret::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+	started = true;
+
+	UnleashParticleSmoke();
+
 	return true;
 }
 
@@ -327,6 +355,12 @@ void Turret::Die()
 	if (myBase != nullptr)
 	{
 		myBase->RemoveTurret(this);
+	}
+
+	if (myParticleSystem != nullptr) {
+		
+		myParticleSystem->Die();
+		myParticleSystem = nullptr;
 	}
 
 	//app->pathfinding->SetWalkabilityMap(true, app->map->WorldToMap(position.x - 60, position.y - 10));
@@ -609,6 +643,30 @@ void Turret::SetTemporalTimer(float time)
 
 }
 
+void Turret::HandleMyParticleSystem(float dt)
+{
+	if (myParticleSystem != nullptr) {
+
+		if (myParticleSystem->IsActive()) {
+
+			TimeMyparticleSystem(dt);
+		}
+	}
+}
+
+void Turret::TimeMyparticleSystem(float dt)
+{
+	//implied that your system is not nullptr
+	if (myParticleSystem->IsActive())
+	{
+		myParticleTimer += dt;
+
+		if (myParticleTimer > 3) {
+			myParticleTimer = 0;
+			myParticleSystem->Desactivate();
+		}
+	}
+}
 
 void Turret::SetLevel(int lvl)
 {
@@ -621,7 +679,7 @@ void Turret::SetLevel(int lvl)
 
 void Turret::LevelUp()
 {
-	attackDmg += damageIncrease;
+	attackDmg = damageIncrease + (damageIncrease * log(turretLvl + 1) * (turretLvl + 1));
 	range += rangeIncrease;
 
 	attackSpeed -= speedIncrease;

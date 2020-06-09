@@ -115,4 +115,8 @@
     medalPosY="0"
   />
 
+  <popUpManager
+    docnamePopUps="data/popUpsText/popUpsText.xml">
+  </popUpManager>
+
 </config>

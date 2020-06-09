@@ -2,6 +2,7 @@
 
 #include "EventManager.h"
 #include "EntityManager.h"
+#include "ParticleSystem.h"
 #include "Pathfinding.h"
 #include "Map.h"
 
@@ -95,6 +96,13 @@ void UpgradeCenter::Die()
 
 	if (myBase != nullptr)
 		myBase->RemoveUpgradeCenter();
+	
+	if (myParticleSystem != nullptr) {
+
+		myParticleSystem->Die();
+		myParticleSystem = nullptr;
+
+	}
 
 	myBase = nullptr;
 }

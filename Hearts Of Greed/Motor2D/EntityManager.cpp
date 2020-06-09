@@ -3495,7 +3495,7 @@ bool ModuleEntityManager::LoadSampleTurret(pugi::xml_node& turretNode)
 	float atkSpd = turretNode.child("sample").child("stats").child("attack").attribute("speed").as_float(0);
 	int atkRange = turretNode.child("sample").child("stats").child("attack").attribute("range").as_int(0);
 
-	int damageIncrease = turretNode.child("sample").child("levelUp").attribute("damageIncrease").as_int(0);
+	float damageIncrease = turretNode.child("sample").child("levelUp").attribute("damageIncrease").as_float(0.f);
 	int rangeIncrease = turretNode.child("sample").child("levelUp").attribute("rangeIncrease").as_int(0);
 	float speedIncrease = turretNode.child("sample").child("levelUp").attribute("speedIncrease").as_float(0);
 	float hpIncrease = turretNode.child("sample").child("levelUp").attribute("hpIncrease").as_float(0);

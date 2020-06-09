@@ -90,7 +90,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 bool ModuleTestScene::Start()
 {
 	mapLoaded = false;
-
+	app->uiManager->SetPopUpClosingBool(false);
 	app->player->Enable();
 	app->minimap->Enable();
 

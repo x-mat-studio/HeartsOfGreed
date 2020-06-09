@@ -90,6 +90,8 @@ public:
 	void RaiseVolumeOnUnpause();
 
 	bool CheckGroupTag(GROUP_TAG tag);
+	
+	void SetPopUpClosingBool(bool value);
 
 private:
 
@@ -105,7 +107,7 @@ private:
 
 	void AddPendingPortraits();
 
-	void AugmentValueByTenPercent(float* value);
+	void AugmentValueByFifteenPercent(float* value);
 
 	void BasicResourceManagement(EVENT_ENUM eventN, float* cost);
 	void StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost);
@@ -115,10 +117,14 @@ private:
 
 	bool Load(pugi::xml_node& data);
 
+	
+
 public:
 	Base* lastShop;
 	bool mouseOverUI;
 	UIFactory* factory;
+
+	Easing popupPosX;
 
 private:
 	std::vector<UI_Group*> uiGroupVector;
@@ -145,12 +151,13 @@ private:
 
 	bool lastFramePauseEasingActive;
 	bool goingToPause;
+	bool isPopUpClosing;
+
 	Easing pauseAnimPosX;
 	Easing pauseAnimPosY;
 	Easing pauseAnimScale;
 	Easing pauseAnimAlpha;
 	Easing pauseAnimRectAlpha;
-	Easing popupPosX;
 
 	UI* popupImage;
 };
