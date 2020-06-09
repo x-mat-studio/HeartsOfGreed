@@ -1217,9 +1217,9 @@ void ModuleUIManager::RaiseVolumeOnUnpause()
 }
 
 
-void ModuleUIManager::AugmentValueByTenPercent(float* value)
+void ModuleUIManager::AugmentValueByFifteenPercent(float* value)
 {
-	*value *= 1.1;
+	*value *= 1.15;
 }
 
 
@@ -1302,7 +1302,7 @@ void ModuleUIManager::StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* c
 	if (app->player->GetResourcesBoost() >= *cost)
 	{
 		app->player->AddResourcesBoost(-(*cost));
-		AugmentValueByTenPercent(cost);
+		AugmentValueByFifteenPercent(cost);
 		app->eventManager->GenerateEvent(eventN, EVENT_ENUM::NULL_EVENT);
 	}
 }

@@ -149,8 +149,8 @@ UIFactory::UIFactory() :
 	robottoAtkSpeedUpgradeCost(100),
 
 	reviveCost(500),
-	turretUpgradeCost(200),
-	barricadeUpgradeCost(150)
+	turretUpgradeCost(350),
+	barricadeUpgradeCost(175)
 
 {}
 
