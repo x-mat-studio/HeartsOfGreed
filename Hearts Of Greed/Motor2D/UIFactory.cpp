@@ -329,7 +329,7 @@ UI_Group* UIFactory::CreatePopUp(P2SString& string,UI *&retimage)
 {
 	UI_Group* group = new UI_Group(GROUP_TAG::POP_UP);
 
-	UI* image = CreateImage(200, 10, nullptr, popUpWindow, group, false, false);
+	UI* image = CreateImage(200, 30, nullptr, popUpWindow, group, false, false);
 
 	Button* button = new Button(fMPoint(200, 0), image, closeButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::CLOSE_POP_UP);
 	group->AddUiElement(button);

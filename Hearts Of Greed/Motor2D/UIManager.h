@@ -90,6 +90,8 @@ public:
 	void RaiseVolumeOnUnpause();
 
 	bool CheckGroupTag(GROUP_TAG tag);
+	
+	void SetPopUpClosingBool(bool value);
 
 private:
 
@@ -114,6 +116,8 @@ private:
 	bool Save(pugi::xml_node& data) const;
 
 	bool Load(pugi::xml_node& data);
+
+	
 
 public:
 	Base* lastShop;
@@ -145,6 +149,8 @@ private:
 
 	bool lastFramePauseEasingActive;
 	bool goingToPause;
+	bool isPopUpClosing;
+
 	Easing pauseAnimPosX;
 	Easing pauseAnimPosY;
 	Easing pauseAnimScale;
