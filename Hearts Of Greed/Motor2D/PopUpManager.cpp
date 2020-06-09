@@ -144,8 +144,14 @@ bool ModulePopUpManager::CleanUp()
 }
 
 
-bool ModulePopUpManager::Load(pugi::xml_node&)
+bool ModulePopUpManager::Load(pugi::xml_node& node)
 {
+	int i = 0;
+	for (pugi::xml_node iterator = node.first_child().first_child(); iterator != NULL; iterator = iterator.next_sibling(), i++)
+	{
+		popUpArray[i].activated = iterator.attribute("activated").as_bool();
+		popUpArray[i].finished = iterator.attribute("finished").as_bool();
+	}
 
 	return true;
 }
@@ -160,7 +166,6 @@ bool ModulePopUpManager::Save(pugi::xml_node& node) const
 		iterator = node.append_child("pop_up");
 		
 		iterator.append_attribute("activated") = popUpArray[i].activated;
-		iterator.append_attribute("displayed") = popUpArray[i].displayed;
 		iterator.append_attribute("finished") = popUpArray[i].finished;
 	}
 	return true;
