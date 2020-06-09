@@ -162,7 +162,9 @@ bool Enemy::Update(float dt)
 	state = ProcessFsm(inputs);
 
 	StateMachine(dt);
-	GroupMovement(dt);
+
+	if (IsMoving() == true || this->shortTermObjective != nullptr)
+		GroupMovement(dt);
 
 	Roar();
 	DrawOnSelect();
