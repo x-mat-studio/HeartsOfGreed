@@ -195,7 +195,7 @@ bool GathererHero::ExecuteSkill1()
 			myTurret = (Turret*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, granadePosLaunch.x, granadePosLaunch.y, ENTITY_ALIGNEMENT::PLAYER);
 
 			//Here we can do funny stuff to the turret
-			myTurret->SetLevel(skill1.lvl);
+			myTurret->SetLevel(skill1.lvl + 1);
 			myTurret->SetTemporalTimer(skill1.dmg);
 
 			currAoE.clear();
