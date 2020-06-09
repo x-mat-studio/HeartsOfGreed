@@ -2,6 +2,7 @@
 
 #include "EventManager.h"
 #include "EntityManager.h"
+#include "ParticleSystem.h"
 #include "Pathfinding.h"
 #include "Map.h"
 
@@ -95,6 +96,13 @@ void UpgradeCenter::Die()
 
 	if (myBase != nullptr)
 		myBase->RemoveUpgradeCenter();
+	
+	if (myParticleSystem != nullptr) {
+
+		myParticleSystem->Die();
+		myParticleSystem = nullptr;
+
+	}
 
 	myBase = nullptr;
 }
@@ -143,4 +151,31 @@ void UpgradeCenter::SetTurretLevel(int level)
 void UpgradeCenter::SetBarricadeLevel(int level)
 {
 	barricadeLvl = level;
+}
+
+bool UpgradeCenter::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.66f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+	started = true;
+
+	UnleashParticleSmoke();
+
+	return true;
 }

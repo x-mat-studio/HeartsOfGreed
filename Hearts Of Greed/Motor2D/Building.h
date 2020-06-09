@@ -11,6 +11,7 @@ class UpgradeCenter;
 class Turret;
 class Barricade;
 class Base;
+class ParticleSystem;
 
 enum class BUILDING_STATE : int
 {
@@ -68,12 +69,20 @@ public:
 	void ActivateTransparency();
 	BUILDING_DECOR GetDecor();
 
+	void UnleashParticleSmoke();
+
+	void HandleMyParticleSystem(float dt);
+
+	void TimeMyparticleSystem(float dt);
+
 private:
 	void ChangeBuildingState(BUILDING_STATE state);
 
 	void BeingRepaired();
 
 	void Contruct();
+
+	
 
 public:
 
@@ -88,12 +97,17 @@ protected:
 	bool		transparent;
 	int			transparencyValue;
 
+	float		myParticleTimer;
+	ParticleSystem* myParticleSystem;
+	
 private:
 	
 	int			xpOnDeath;
 	int			buildingCost;
+	
 
 	bool		selected;
+
 };
 
 

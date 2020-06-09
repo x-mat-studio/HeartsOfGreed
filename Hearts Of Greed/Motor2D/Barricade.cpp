@@ -52,8 +52,6 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 		currentRect = &horizontalRect;
 	}
 	
-
-	
 }
 
 
