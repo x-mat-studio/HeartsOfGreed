@@ -125,6 +125,7 @@
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PopUpManager.cpp" />
     <ClCompile Include="Quest.cpp" />
     <ClCompile Include="QuestManager.cpp" />
     <ClCompile Include="RangedEnemy.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PopUpManager.h" />
     <ClInclude Include="Quest.h" />
     <ClInclude Include="QuestManager.h" />
     <ClInclude Include="RangedEnemy.h" />

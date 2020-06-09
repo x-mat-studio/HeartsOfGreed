@@ -214,6 +214,9 @@
     <ClCompile Include="CameraShake.cpp">
       <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
     </ClCompile>
+    <ClCompile Include="PopUpManager.cpp">
+      <Filter>Desenvolupament  ========\Modules\cpp files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Defs.h">
@@ -445,6 +448,9 @@
       <Filter>Desenvolupament  ========\UI\UIElements</Filter>
     </ClInclude>
     <ClInclude Include="CameraShake.h">
+      <Filter>Desenvolupament  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="PopUpManager.h">
       <Filter>Desenvolupament  ========\Modules\header files</Filter>
     </ClInclude>
   </ItemGroup>

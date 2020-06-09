@@ -80,7 +80,9 @@ enum class BUTTON_TAG : int
 	ROBO_PORTRAIT,
 
 	NEXT_DIALOG,
-	SKIP_DIALOG
+	SKIP_DIALOG,
+
+	CLOSE_POP_UP
 
 };
 

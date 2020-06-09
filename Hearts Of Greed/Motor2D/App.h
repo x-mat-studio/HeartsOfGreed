@@ -39,7 +39,7 @@ class Video;
 class ModuleAssetManager;
 class ModuleDialogManager;
 class ModuleCameraShake;
-
+class ModulePopUpManager;
 
 class App
 {
@@ -129,6 +129,7 @@ public:
 	ModuleQuestManager*		questManager;
 	ModuleDialogManager*	dialogManager;
 	ModuleCameraShake*		cameraShake;
+	ModulePopUpManager*		popUpManager;
 
 	uint32_t			frames;
 	
