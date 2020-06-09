@@ -124,7 +124,7 @@ UIFactory::UIFactory() :
 	dialogWindow{ 1096, 41, 859, 615 },
 	skipButton{ 54 ,21, 35, 18 },
 
-	dayNightIcon{ 522, 851, 35, 35 },
+	dayNightIcon{ 460, 841, 35, 35 },
 
 	popUpWindow{ 507, 844, 211, 77 },
 
