@@ -141,6 +141,7 @@ bool Turret::Update(float dt)
 	StateMachine();
 	ResetBonusStats();
 
+	
 	return true;
 }
 
@@ -159,6 +160,8 @@ bool Turret::PostUpdate(float dt)
 		app->render->DrawQuad({ (int)origin.x, (int)origin.y, 10,10 }, 255, 255, 255, 125);
 
 	}
+
+	
 	return true;
 }
 
