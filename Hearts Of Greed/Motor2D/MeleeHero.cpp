@@ -157,6 +157,7 @@ bool MeleeHero::ExecuteSkill1()
 
 		ExecuteSFX(app->entityManager->armored1Skill2);
 		app->cameraShake->StartCameraShake(0.8, 8);
+		UnleashParticlesSkill1(position.x, position.y);
 
 		currAoE.clear();
 		suplAoE.clear();
@@ -294,4 +295,18 @@ Skill MeleeHero::GetPassiveSkill() const
 void MeleeHero::ReplacePassiveSkill(Skill& skill)
 {
 	passiveSkill = skill;
+}
+
+void MeleeHero::UnleashParticlesSkill1(float posx, float posy)
+{
+	if (activeSkillsParticleSystem != nullptr)
+	{
+		activeSkillsParticleSystem->Activate();
+		activeSkillsParticleSystem->Move(posx, posy);
+	}
+	else
+	{
+		activeSkillsParticleSystem = (ParticleSystem*)app->entityManager->AddParticleSystem(TYPE_PARTICLE_SYSTEM::SKILL_MELEE, this->position.x, this->position.y);
+		//This is correct. Ask Adri
+	}
 }

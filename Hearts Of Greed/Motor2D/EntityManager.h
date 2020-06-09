@@ -371,7 +371,8 @@ private:
 	Emitter* sampleSmoke1; Emitter* sampleSmoke2; Emitter* sampleSmoke3;
 	Emitter* sampleSmoke4; Emitter* sampleSmoke5; Emitter* sampleSmoke6;
 
-
+	Emitter* sampleMeleeSkill1; Emitter* sampleMeleeSkill2; Emitter* sampleMeleeSkill3;
+	Emitter* sampleMeleeSkill4; Emitter* sampleMeleeSkill5; Emitter* sampleMeleeSkill6;
 
 	SDL_Texture* snowball;
 	SDL_Texture* explosionTexture2;
@@ -379,6 +380,9 @@ private:
 	SDL_Texture* smoke1;
 	SDL_Texture* smoke2;
 	SDL_Texture* smoke3;
+	SDL_Texture* hit1;
+	SDL_Texture* hit2;
+	SDL_Texture* hit3;
 
 	std::map <int, skillArea> skillAreas;
 

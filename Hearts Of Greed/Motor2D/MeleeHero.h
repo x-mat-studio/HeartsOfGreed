@@ -40,6 +40,8 @@ public:
 	Skill GetPassiveSkill() const;
 	void ReplacePassiveSkill(Skill& skill);
 
+	void UnleashParticlesSkill1(float posx, float posy);
+
 	void OnCollision(Collider* collider);
 private:
 	void BlitCommandVfx(Frame& currframe, int alphaValue);

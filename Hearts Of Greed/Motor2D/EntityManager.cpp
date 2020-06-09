@@ -74,6 +74,9 @@ ModuleEntityManager::ModuleEntityManager() :
 	smoke1(nullptr),
 	smoke2(nullptr),
 	smoke3(nullptr),
+	hit1(nullptr),
+	hit2(nullptr),
+	hit3(nullptr),
 
 	sampleGatherer(nullptr),
 	sampleMelee(nullptr),
@@ -112,6 +115,12 @@ ModuleEntityManager::ModuleEntityManager() :
 	sampleEmitterSkillRanged4(nullptr),
 	sampleEmitterSkillRanged5(nullptr),
 	sampleEmitterSkillRanged6(nullptr),
+	sampleMeleeSkill1(nullptr),
+	sampleMeleeSkill2(nullptr),
+	sampleMeleeSkill3(nullptr),
+	sampleMeleeSkill4(nullptr),
+	sampleMeleeSkill5(nullptr),
+	sampleMeleeSkill6(nullptr),
 	sampleSmoke1(nullptr),
 	sampleSmoke2(nullptr),
 	sampleSmoke3(nullptr),
@@ -523,6 +532,9 @@ bool ModuleEntityManager::Start()
 	smoke1 = app->tex->Load("Assets/spritesheets/Particles/smoke1.png");
 	smoke2 = app->tex->Load("Assets/spritesheets/Particles/smoke2.png");
 	smoke3 = app->tex->Load("Assets/spritesheets/Particles/smoke3.png");
+	hit1 = app->tex->Load("Assets/spritesheets/Particles/hit1.png");
+	hit2 = app->tex->Load("Assets/spritesheets/Particles/hit2.png");
+	hit3 = app->tex->Load("Assets/spritesheets/Particles/hit3.png");
 
 
 	//lvlup
@@ -556,6 +568,13 @@ bool ModuleEntityManager::Start()
 	sampleEmitterSkillRanged5->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged5);
 	sampleEmitterSkillRanged6->SetTextureNStart(spiderweb); 	sampleRangedSkill->PushEmiter(*sampleEmitterSkillRanged6);
 
+	//Melee skill
+	sampleMeleeSkill1->SetTextureNStart(hit3); 	sampleMeleeSkill->PushEmiter(*sampleMeleeSkill1);
+	sampleMeleeSkill2->SetTextureNStart(hit3); 	sampleMeleeSkill->PushEmiter(*sampleMeleeSkill2);
+	sampleMeleeSkill3->SetTextureNStart(hit2); 	sampleMeleeSkill->PushEmiter(*sampleMeleeSkill3);
+	sampleMeleeSkill4->SetTextureNStart(hit3); 	sampleMeleeSkill->PushEmiter(*sampleMeleeSkill4);
+	sampleMeleeSkill5->SetTextureNStart(hit3); 	sampleMeleeSkill->PushEmiter(*sampleMeleeSkill5);
+	sampleMeleeSkill6->SetTextureNStart(hit2); 	sampleMeleeSkill->PushEmiter(*sampleMeleeSkill6);
 	return ret;
 }
 
@@ -897,6 +916,9 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(smoke1);						smoke1 = nullptr;
 	app->tex->UnLoad(smoke2);						smoke2 = nullptr;
 	app->tex->UnLoad(smoke3);						smoke3 = nullptr;
+	app->tex->UnLoad(hit1);							hit1 = nullptr;
+	app->tex->UnLoad(hit2);							hit2 = nullptr;
+	app->tex->UnLoad(hit3);							hit3 = nullptr;
 
 				//Emitters
 	RELEASE(sampleEmitter);							sampleEmitter = nullptr;
@@ -918,6 +940,13 @@ bool ModuleEntityManager::CleanUp()
 	RELEASE(sampleEmitterSkillRanged5);				sampleEmitterSkillRanged5 = nullptr;
 	RELEASE(sampleEmitterSkillRanged6);				sampleEmitterSkillRanged6 = nullptr;
 
+	RELEASE(sampleMeleeSkill1);						sampleMeleeSkill1 = nullptr;
+	RELEASE(sampleMeleeSkill2);						sampleMeleeSkill2 = nullptr;
+	RELEASE(sampleMeleeSkill3);						sampleMeleeSkill3 = nullptr;
+	RELEASE(sampleMeleeSkill4);						sampleMeleeSkill4 = nullptr;
+	RELEASE(sampleMeleeSkill5);						sampleMeleeSkill5 = nullptr;
+	RELEASE(sampleMeleeSkill6);						sampleMeleeSkill6 = nullptr;
+	
 	RELEASE(sampleSmoke1);							sampleSmoke1 = nullptr;
 	RELEASE(sampleSmoke2);							sampleSmoke2 = nullptr;
 	RELEASE(sampleSmoke3);							sampleSmoke3 = nullptr;
@@ -1168,12 +1197,12 @@ Entity* ModuleEntityManager::AddParticleSystem(TYPE_PARTICLE_SYSTEM type, int x,
 	
 	case TYPE_PARTICLE_SYSTEM::BUILDING_SMOKE:
 		ret = new ParticleSystem(x, y, sampleBuildingSmoke, true);
+		break;
 
 	case TYPE_PARTICLE_SYSTEM::NONE:
 		break;
 
 	default:
-
 		break;
 	}
 
@@ -3857,7 +3886,57 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		sampleEmitterSkillRanged6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
 
 	}
+	////SKILL SFX :: MELEE
+	if (this != nullptr)
+	{
+		SDL_Rect rect = { 0, 0, 20, 20 };
 
+		Animation anim1;
+		anim1.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
+
+		Animation anim2;
+		anim2.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
+
+		Animation anim3;
+		anim3.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
+
+
+		//Yes, this is a hardcoded offset. No, I don't know why we need this. Too bad!
+
+		float auxPosX = -100;						float auxPos2X = -100;						float auxPos3X = -100;
+		float auxPosY = -100;						float auxPos2Y = -100;						float auxPos3Y = -100;
+
+		float auxSpeedX = 0.5;						float auxSpeed2X = 2;						float auxSpeed3X = 0;
+		float auxSpeedY = 1;						float auxSpeedY2 = 1;						float auxSpeedY3 = -1;
+
+
+		int particleVariationSpeedX = 0.3;			int particleVariationSpeedX2 = 1;			int particleVariationSpeedX3 = 0;
+		int particleVariationSpeedY = 0;			int particleVariationSpeedY2 = 0;			int particleVariationSpeedY3 = 0.25;
+
+		float particleAccelerationX = 0.3;			float particleAccelerationX2 = 0.1;			float particleAccelerationX3 = 0.025;
+		float particleAccelerationY = +0.1;			float particleAccelerationY2 = -0.2;		float particleAccelerationY3 = -0.01;
+
+		int particleVariationAccelerationX = 0.2;	int particleVariationAccelerationX2 = 0.35;	int particleVariationAccelerationX3 = 0.25;
+		int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0.2;
+
+		float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
+		int particleVariableAngularSpeed = 0;		int particleVariableAngularSpeed2 = 0;		int particleVariableAngularSpeed3 = 0;
+
+		float particlesRate = 2;					float particlesRate2 = 2;					float particlesRate3 = 2;
+		float particlesLifeTime = 0.25;				float particlesLifeTime2 = 0.25;			float particlesLifeTime3 = 0.5;
+
+
+
+		sampleMeleeSkill = new ParticleSystem();
+
+		sampleMeleeSkill1 = new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim3, true);
+		sampleMeleeSkill2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim3, true);
+		sampleMeleeSkill3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim2, true);
+
+		sampleMeleeSkill4 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim3, true);
+		sampleMeleeSkill5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim3, true);
+		sampleMeleeSkill6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim2, true);
+	}
 	//BUILDING SMOKE
 	if (this != nullptr)
 	{
@@ -3905,6 +3984,8 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		sampleSmoke5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
 		sampleSmoke6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
 	}
+
+	
 	return ret;
 }
 
