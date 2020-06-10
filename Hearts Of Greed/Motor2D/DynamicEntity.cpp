@@ -102,7 +102,7 @@ bool DynamicEntity::Move(float dt)
 		path.erase(path.begin());
 	}
 
-	if (!pathSpeed.IsZero() || waitingForPath)
+	if (!pathSpeed.IsZero() || waitingForPath == true)
 	{
 		isMoving = true;
 		return isMoving;
@@ -385,7 +385,11 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 			return true;
 		}
+		else
+			destination = { 0,0 };
 	}
+	else if (waitingForPath == true)
+		return true;
 
 
 	return false;
