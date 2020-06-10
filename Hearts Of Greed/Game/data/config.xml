@@ -47,7 +47,7 @@
   </dialogManager>
   <AI>
     <load
-      docnameNightSpawners ="data/characterStats/NightSpawners.xml"
+      docnameNightSpawners ="data/charactersStats/NightSpawners.xml"
      />
   </AI>
   <entityManager>

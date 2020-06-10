@@ -44,6 +44,9 @@ public:
 	void PushSpawner(Spawner* spawner);
 
 	void ResetAI();
+
+	bool CommandNightEnemies(Base*);
+
 private:
 	void CreateSelectionCollider(Collider*);
 	void ExecuteEvent(EVENT_ENUM eventId);
@@ -52,6 +55,7 @@ private:
 
 	void CommandSpawners();
 	void FindNearestSpawners(std::multimap<int, Spawner*>* spawners);
+	fMPoint FindNearestPlayerBase(fMPoint& point);
 
 	int CalculateWanamingoToSpawn();
 	int CalculateGigamingoToSpawn();

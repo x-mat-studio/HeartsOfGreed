@@ -44,6 +44,7 @@ public:
 	void LevelUpTurrets(int lvl);
 	void LevelUpBarricades(int lvl);
 
+	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 
@@ -61,7 +62,6 @@ public:
 	std::vector<Barricade*>* GetBarricadeVector();
 
 	UpgradeCenter* GetUpgradeCenter();
-
 
 private:
 	
@@ -88,7 +88,7 @@ private:
 	float resourcesRate;
 	float resourcesCooldown;
 
-	
+	bool spawnRecluitCollider;
 
 };
 
