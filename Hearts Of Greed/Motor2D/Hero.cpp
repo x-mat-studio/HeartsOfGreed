@@ -353,12 +353,12 @@ void Hero::StateMachine(float dt)
 		{
 			if (CheckAttackRange() == true)
 			{
+				if (objective != nullptr)
+					dir = DetermineDirection(objective->position - position);
+
 				if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame * 0.5f)
 				{
 					Attack();
-					if (objective != nullptr)
-						dir = DetermineDirection(objective->position - position);
-
 					attackCooldown += TIME_TRIGGER;
 				}
 
@@ -376,6 +376,9 @@ void Hero::StateMachine(float dt)
 	case HERO_STATES::CHARGING_ATTACK:
 		if (attackCooldown == 0.f)
 			inputs.push_back(HERO_INPUTS::IN_ATTACK_CHARGED);
+
+		if (objective != nullptr)
+			dir = DetermineDirection(objective->position - position);
 
 		break;
 

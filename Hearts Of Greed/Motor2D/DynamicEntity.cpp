@@ -165,8 +165,7 @@ void DynamicEntity::GroupMovement(float dt)
 {
 	BROFILER_CATEGORY("Group Mov.", Profiler::Color::BlanchedAlmond);
 
-	if (toMove.x == 0 && toMove.y == 0)
-		return;
+
 
 	toMove = { 0,0 };
 

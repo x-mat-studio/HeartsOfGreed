@@ -57,6 +57,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	base1Texture(nullptr),
 	snowball(nullptr),
 	spiderweb(nullptr),
+	deco1Selected(nullptr),
 	deco3Selected(nullptr),
 	streetLightTexture(nullptr),
 	turretTexture(nullptr),
@@ -405,6 +406,7 @@ bool ModuleEntityManager::Start()
 
 
 	//SELECTIONS & FEEDBACK---------
+	deco1Selected = app->tex->Load("Assets/maps/base01_selected.png");
 	deco3Selected = app->tex->Load("Assets/maps/base03_selected.png");
 	selectedTexture = app->tex->Load("Assets/spritesheets/VFX/selected.png");
 	targetedTexture = app->tex->Load("Assets/spritesheets/VFX/target.png");
@@ -676,6 +678,7 @@ void ModuleEntityManager::CheckIfStarted() {
 				{
 				case BUILDING_DECOR::ST_01:
 					DecorTex = base1Texture;
+					bld->selectedTexture = deco1Selected;
 					break;
 
 				case BUILDING_DECOR::ST_02:
@@ -899,6 +902,7 @@ bool ModuleEntityManager::CleanUp()
 
 
 	//Feedback------------
+	app->tex->UnLoad(deco1Selected);				deco1Selected = nullptr;
 	app->tex->UnLoad(deco3Selected);				deco3Selected = nullptr;
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
 	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
