@@ -631,7 +631,6 @@ void ModuleTestScene::CalculateTimers(float dt)
 		if (timer >= dayTimer)
 		{
 			app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-			app->audio->PlayFx(nightApproachesSfx, 0, -1);
 			isNightTime = true;
 			timer = 0;
 		}

@@ -3,6 +3,7 @@
 #include "Fonts.h"
 #include "TestScene.h"
 #include "EventManager.h"
+#include "Audio.h"
 
 TimerClock::TimerClock(float x, float y, UI* parent) :
 
@@ -38,6 +39,13 @@ void TimerClock::HandleInput()
 
 		if (app->testScene->IsNight() == false)
 		{
+		
+
+			if (min == 0 && sec == 30)
+			{
+				app->audio->PlayFx(app->testScene->nightApproachesSfx, 0, -1,LOUDNESS::LOUD);
+			}
+			
 			if (min == 0 && sec <= 30)
 			{
 				if ((sec % 2) == 1)

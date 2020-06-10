@@ -72,7 +72,7 @@ private:
 public:
 	bool startFromLoad;
 	bool haveJustBeenLoaded;
-
+	int nightApproachesSfx;
 private:
 	int prevMousePosX;
 	int prevmousePosY;
@@ -92,7 +92,7 @@ private:
 	int dayTimer;
 	int nightTimer;
 
-	int nightApproachesSfx;
+	
 
 	float timer;
 
