@@ -1121,7 +1121,14 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'handy mastery':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1156,7 +1163,14 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'turret spawn':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1191,7 +1205,14 @@ UI_Group* UIFactory::CreateOnHoverMeleePassive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'born to fight':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1226,7 +1247,14 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'hammer slam':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1257,7 +1285,14 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'bloodhsed':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1288,7 +1323,14 @@ UI_Group* UIFactory::CreateOnHoverRangedActive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade :", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1323,7 +1365,14 @@ UI_Group* UIFactory::CreateOnHoverRobottoPassive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'kill strike':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
@@ -1358,7 +1407,14 @@ UI_Group* UIFactory::CreateOnHoverRobottoActive1UpgradeMenu()
 
 	CreateText(5, 0, background, "Upgrade 'immolation':", group);
 
-	CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	if (hero->GetHeroSkillPoints() <= 0)
+	{
+		CreateImage(5, 25, background, resourceIconSkill, group, false, false);
+	}
+	else
+	{
+		CreateImage(12, 30, background, upgradeArrowIcon, group, false, false);
+	}
 
 	CreateText(25, 20, background, "  1", group);
 
