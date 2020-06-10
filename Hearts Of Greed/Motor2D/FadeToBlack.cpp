@@ -174,6 +174,16 @@ bool ModuleFadeToBlack::FadeToBlack(Module* module_off, Module* module_on, float
 }
 
 
+bool ModuleFadeToBlack::NotFadingToBlack()
+{
+	if (currentStep == FADE_STEP::NONE)
+		return true;
+
+	else
+		return false;
+}
+
+
 void ModuleFadeToBlack::ExecuteEvent(EVENT_ENUM eventId)
 {
 	switch (eventId)

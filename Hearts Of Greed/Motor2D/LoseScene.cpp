@@ -90,7 +90,7 @@ bool  ModuleLoseScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && backToMain == false) {
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && backToMain == false && app->fadeToBlack->NotFadingToBlack() == true) {
 
 		backToMain = true;
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
@@ -117,19 +117,3 @@ bool  ModuleLoseScene::CleanUp()
 	backToMain = false;
 	return true;
 }
-
-
-bool  ModuleLoseScene::Load(pugi::xml_node&)
-{
-	return true;
-}
-
-
-bool  ModuleLoseScene::Save(pugi::xml_node&) const
-{
-	return true;
-}
-
-
-void ModuleLoseScene::ExecuteEvent(EVENT_ENUM eventId) const
-{}

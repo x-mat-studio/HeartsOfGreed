@@ -28,6 +28,8 @@ public:
 	bool CleanUp();
 
 	bool FadeToBlack(Module* moduleOff, Module* moduleOn, float time = 2.0f, FADE_ANIMATION anim = FADE_ANIMATION::FADE);
+	
+	bool NotFadingToBlack();
 
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);

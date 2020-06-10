@@ -94,15 +94,15 @@ bool  ModuleWinScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && backToMain == false) {
-
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && backToMain == false && app->fadeToBlack->NotFadingToBlack() == true)
+	{
 		backToMain = true;
 		app->fadeToBlack->FadeToBlack(this, app->mainMenu, fadeTime * 2);
 		iconPosY.NewEasing(EASING_TYPE::EASE_IN_SINE, medalPos.y, medalPos.y + 1000.0, 2.0);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) {
-
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_STATE::KEY_DOWN) 
+	{
 		ret = false;
 	}
 	return ret;
@@ -121,19 +121,3 @@ bool  ModuleWinScene::CleanUp()
 	backToMain = false;
 	return true;
 }
-
-
-bool  ModuleWinScene::Load(pugi::xml_node&)
-{
-	return true;
-}
-
-
-bool  ModuleWinScene::Save(pugi::xml_node&) const
-{
-	return true;
-}
-
-
-void ModuleWinScene::ExecuteEvent(EVENT_ENUM eventId) const
-{}
