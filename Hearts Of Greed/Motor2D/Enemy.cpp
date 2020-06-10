@@ -163,7 +163,7 @@ bool Enemy::Update(float dt)
 
 	StateMachine(dt);
 
-	if (IsMoving() == true || this->shortTermObjective != nullptr)
+	if (IsMoving() == true || state != ENEMY_STATES::IDLE)
 		GroupMovement(dt);
 
 	Roar();
@@ -211,12 +211,12 @@ void Enemy::StateMachine(float dt)
 		{
 			if (CheckAttackRange() == true)
 			{
+				if (shortTermObjective != nullptr)
+					dir = DetermineDirection(shortTermObjective->position - position);
+
 				if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame * 0.5f)
 					if (Attack() == true)
 					{
-						if (shortTermObjective != nullptr)
-							dir = DetermineDirection(shortTermObjective->position - position);
-
 						attackCooldown += 0.01f;
 					}
 
@@ -234,6 +234,8 @@ void Enemy::StateMachine(float dt)
 		break;
 
 	case ENEMY_STATES::CHARGING_ATTACK:
+		if (shortTermObjective != nullptr)
+			dir = DetermineDirection(shortTermObjective->position - position);
 		break;
 
 	case ENEMY_STATES::DEAD:
