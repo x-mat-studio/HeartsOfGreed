@@ -8,13 +8,13 @@
       <type id="1"/>
     </collider>
 
-    <stats level="1" movementSpeed="130" vision="9" attackRange="5">
+    <stats level="1" movementSpeed="110" vision="9" attackRange="5">
 
-      <lvl xpToLvlUp="100" hp="160" damage="17" energy="15" atkSpeed="1.35" liferecoveryRate="2" energyrecoveryRate="1.1"/>
-      <lvl xpToLvlUp="175" hp="185" damage="20" energy="23" atkSpeed="1.4" liferecoveryRate="3" energyrecoveryRate="1.2"/>
-      <lvl xpToLvlUp="300" hp="200" damage="23" energy="35" atkSpeed="1.5" liferecoveryRate="4" energyrecoveryRate="1.35"/>
-      <lvl xpToLvlUp="450" hp="215" damage="26" energy="45" atkSpeed="1.65" liferecoveryRate="5" energyrecoveryRate="1.5"/>
-      <lvl xpToLvlUp="600" hp="230" damage="30" energy="50" atkSpeed="1.8" liferecoveryRate="6" energyrecoveryRate="1.75"/>
+      <lvl xpToLvlUp="100" hp="80" damage="15" energy="15" atkSpeed="1.35" liferecoveryRate="2" energyrecoveryRate="1.1"/>
+      <lvl xpToLvlUp="175" hp="85" damage="18" energy="23" atkSpeed="1.4" liferecoveryRate="3" energyrecoveryRate="1.2"/>
+      <lvl xpToLvlUp="300" hp="90" damage="20" energy="35" atkSpeed="1.5" liferecoveryRate="4" energyrecoveryRate="1.35"/>
+      <lvl xpToLvlUp="450" hp="100" damage="24" energy="45" atkSpeed="1.65" liferecoveryRate="5" energyrecoveryRate="1.5"/>
+      <lvl xpToLvlUp="600" hp="120" damage="28" energy="50" atkSpeed="1.8" liferecoveryRate="6" energyrecoveryRate="1.75"/>
       
     </stats>
 
