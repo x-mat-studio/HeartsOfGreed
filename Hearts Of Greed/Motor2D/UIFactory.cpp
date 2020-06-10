@@ -2060,24 +2060,24 @@ void UIFactory::CreateSpeedomingoPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupImage(13, 10, dataPage, dataPagesVector, speedomingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Speedomingo");
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
@@ -2088,24 +2088,24 @@ void UIFactory::CreateSnipermingoPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupImage(13, 10, dataPage, dataPagesVector, snipermingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Rangedmingo");
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
@@ -2116,24 +2116,24 @@ void UIFactory::CreateGigamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	CreateNonGroupImage(18, 3, dataPage, dataPagesVector, gigamingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Gigamingo");
 	
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
@@ -2283,7 +2283,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, gathererHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, gathererHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2293,7 +2293,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, meleHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, meleHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2303,7 +2303,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, rangedHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, rangedHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2312,7 +2312,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, robottoHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, robottoHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2324,16 +2324,16 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	}
 
 
-	healthBar = new UI_Image(6, 38, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
+	healthBar = new UI_Image(-2, 38, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(5, 37, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	healthBarCont = new UI_Image(-3, 37, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(6, 46, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
+	manaBar = new UI_Image(-2, 46, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(5, 45, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	manaBarCont = new UI_Image(-3, 45, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
 	return portrait;

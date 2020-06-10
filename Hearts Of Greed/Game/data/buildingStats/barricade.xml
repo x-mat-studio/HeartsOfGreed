@@ -10,7 +10,7 @@
     </collider>
 
     <stats level="1" xp="35" buildingCost="85" transparency="160">
-      <hitPoints max="275" current="600" recoveryRate="0"/>
+      <hitPoints max="600" current="600" recoveryRate="0"/>
     </stats>
 
     <levelUp hpIncrease="150"></levelUp>
