@@ -944,7 +944,7 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1Menu()
 
 	CreateText(5, 0, background, "Turret spawn:", group);
 
-	sprintf_s(stats, 40, "Creates a turret at level %i", hero->GetSkill1().lvl);
+	sprintf_s(stats, 40, "Creates a turret at level %i", hero->GetSkill1().lvl +1);
 
 	CreateText(5, 15, background, stats, group);
 
@@ -1160,7 +1160,7 @@ UI_Group* UIFactory::CreateOnHoverGathererActive1UpgradeMenu()
 
 	CreateText(25, 20, background, "  1", group);
 
-	sprintf_s(stats, 40, "Turret at level %i;", hero->GetSkill1().lvl + 1);
+	sprintf_s(stats, 40, "Turret at level %i;", hero->GetSkill1().lvl + 2);
 
 	CreateText(30, 33, background, stats, group);
 
