@@ -117,19 +117,3 @@ bool  ModuleLoseScene::CleanUp()
 	backToMain = false;
 	return true;
 }
-
-
-bool  ModuleLoseScene::Load(pugi::xml_node&)
-{
-	return true;
-}
-
-
-bool  ModuleLoseScene::Save(pugi::xml_node&) const
-{
-	return true;
-}
-
-
-void ModuleLoseScene::ExecuteEvent(EVENT_ENUM eventId) const
-{}

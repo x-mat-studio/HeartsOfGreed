@@ -288,7 +288,6 @@ bool Enemy::PostUpdate(float dt)
 
 bool Enemy::MoveTo(float x, float y)
 {
-
 	if (GeneratePath(x, y, 1))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
@@ -305,10 +304,10 @@ void Enemy::OnCollision(Collider* collider)
 	{
 		fMPoint* point = app->ai->GetObjective(position);
 		if (point != nullptr)
-			{
-				longTermObjective = *point;
-				haveOrders = true;
-			}
+		{
+			longTermObjective = *point;
+			haveOrders = true;
+		}
 	}
 }
 
@@ -369,7 +368,6 @@ bool Enemy::Attack()
 
 void Enemy::Die()
 {
-
 	collider->thisEntity = nullptr;
 
 	int randomCounter = rand() % 2;

@@ -121,19 +121,3 @@ bool  ModuleWinScene::CleanUp()
 	backToMain = false;
 	return true;
 }
-
-
-bool  ModuleWinScene::Load(pugi::xml_node&)
-{
-	return true;
-}
-
-
-bool  ModuleWinScene::Save(pugi::xml_node&) const
-{
-	return true;
-}
-
-
-void ModuleWinScene::ExecuteEvent(EVENT_ENUM eventId) const
-{}
