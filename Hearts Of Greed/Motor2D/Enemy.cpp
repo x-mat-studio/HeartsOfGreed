@@ -303,8 +303,12 @@ void Enemy::OnCollision(Collider* collider)
 {
 	if (collider->type == COLLIDER_RECLUIT_IA)
 	{
-		longTermObjective = *app->ai->GetObjective(position);
-		haveOrders = true;
+		fMPoint* point = app->ai->GetObjective(position);
+		if (point != nullptr)
+			{
+				longTermObjective = *point;
+				haveOrders = true;
+			}
 	}
 }
 

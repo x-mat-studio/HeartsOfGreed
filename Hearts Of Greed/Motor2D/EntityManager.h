@@ -317,6 +317,7 @@ private:
 
 	SDL_Texture* base1Texture;
 
+	SDL_Texture* deco1Selected;
 	SDL_Texture* deco3Selected;
 	SDL_Texture* streetLightTexture;
 

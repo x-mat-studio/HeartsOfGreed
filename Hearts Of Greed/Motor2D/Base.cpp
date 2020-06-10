@@ -10,7 +10,7 @@
 #include "FoWManager.h"
 #include "EventManager.h"
 #include "App.h"
-
+#include "AI.h"
 
 Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricades, UpgradeCenter* baseUpgradeCenter, std::vector <Turret*> baseTurrets,  
 	       std::vector <Barricade*> baseBarricades,Collider* baseArea, int resourcesProduced, float resourcesRate, int maxHitPoints, int currentHitPoints,
@@ -29,7 +29,8 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 	turretsVector(baseTurrets),
 	barricadesVector(baseBarricades),
 
-	baseAreaAlarm(baseArea)
+	baseAreaAlarm(baseArea),
+	spawnRecluitCollider(false)
 	
 {}
 
@@ -48,7 +49,8 @@ Base::Base(fMPoint position, Collider* collider, int maxTurrets, int maxBarricad
 
 	baseUpgradeCenter(baseUpgradeCenter),
 
-	baseAreaAlarm(baseArea)
+	baseAreaAlarm(baseArea),
+	spawnRecluitCollider(false)
 
 {}
 
@@ -66,7 +68,9 @@ Base::Base(fMPoint position, Base* copy, ENTITY_ALIGNEMENT alignement) :
 
 	baseUpgradeCenter(copy->baseUpgradeCenter),
 	turretsVector(copy->turretsVector),
-	barricadesVector(copy->barricadesVector)
+	barricadesVector(copy->barricadesVector),
+
+	spawnRecluitCollider(false)
 {
 	baseAreaAlarm = app->coll->AddCollider(copy->baseAreaAlarm->rect, copy->baseAreaAlarm->type, copy->baseAreaAlarm->callback, this);
 
@@ -100,13 +104,26 @@ Base::~Base()
 }
 
 
+bool Base::PreUpdate(float dt)
+{
+	if (spawnRecluitCollider == true)
+	{
+		Collider* col = app->coll->AddCollider(baseAreaAlarm->rect, COLLIDER_RECLUIT_IA, app->ai);
+		col->to_delete = true;
+		spawnRecluitCollider = false;
+	}
+
+	return true;
+}
+
+
 bool Base::Update(float dt)
 {
 	if (align == ENTITY_ALIGNEMENT::ENEMY)
 	{
 		baseAreaAlarm->active = true;
 	}
-	
+
 	GainResources(dt);
 
 	return true;
@@ -206,10 +223,8 @@ bool Base::AddUpgradeCenter(UpgradeCenter* upgradeCenter)
 		return true;
 	}
 
-
 	else
 		return false;
-	
 }
 
 
@@ -224,7 +239,6 @@ void Base::RemoveTurret(Turret* turret)
 			turretsVector.erase(turretsVector.begin() + i);
 		}
 	}
-
 }
 
 
@@ -257,11 +271,6 @@ void Base::LevelUpTurrets(int lvl)
 		if (turretsVector[i]->GetLvl() < lvl)
 		{
 			turretsVector[i]->LevelUp();
-		}
-
-		if (baseUpgradeCenter != nullptr)
-		{
-
 		}
 	}
 }
@@ -306,6 +315,8 @@ void Base::ChangeAligment()
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
+
+		spawnRecluitCollider = app->ai->CommandNightEnemies(this);
 		app->eventManager->GenerateEvent(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)

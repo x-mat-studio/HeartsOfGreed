@@ -149,17 +149,14 @@ bool ModuleCollision::Update(float dt)
 		if (c1 == nullptr || c1->active == false)
 			continue;
 		
-
 		// avoid checking collisions already checked
 		for (uint k = i + 1; k < MAX_COLLIDERS; ++k)
 		{
-
 			c2 = colliders[k];
 
 			if (c2 == nullptr || c2->active == false || c1->active == false)
 				continue;
 			
-
 			if (c1->CheckCollision(c2->rect) == true)
 			{
 				if (matrix[c1->type][c2->type] && c1->callback)
