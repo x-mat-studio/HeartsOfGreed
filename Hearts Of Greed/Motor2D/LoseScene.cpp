@@ -24,7 +24,6 @@ ModuleLoseScene::~ModuleLoseScene()
 
 bool  ModuleLoseScene::Awake(pugi::xml_node& config)
 {
-
 	medalPos.x = config.attribute("medalPosX").as_int(0);
 	medalPos.y = config.attribute("medalPosY").as_int(0);
 	fadeTime = config.attribute("fadeTime").as_float(0);
@@ -91,7 +90,6 @@ bool  ModuleLoseScene::PostUpdate(float dt)
 {
 	bool ret = true;
 
-	
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && backToMain == false) {
 
 		backToMain = true;

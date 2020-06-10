@@ -314,6 +314,31 @@ void ModuleAI::FindNearestSpawners(std::multimap<int, Spawner*>* spawners)
 	}
 }
 
+
+fMPoint ModuleAI::FindNearestPlayerBase(fMPoint& point)
+{
+	int baseNumber = baseVector.size();
+	
+	fMPoint ret(0, 0);
+	fMPoint aux(0, 0);
+
+	for (int i = 0; i < baseNumber; i++)
+	{
+		if (baseVector[i]->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
+		{
+			aux = baseVector[i]->GetPosition();
+
+			if (ret != fMPoint{0, 0} || ret.DistanceNoSqrt(point) > aux.DistanceNoSqrt(point))
+			{
+				ret = aux;
+			}
+		}
+	}
+
+	return ret;
+}
+
+
 int ModuleAI::CalculateWanamingoToSpawn()
 {
 	int ret = 0;
@@ -570,6 +595,18 @@ void ModuleAI::ResetAI()
 {
 	baseVector.clear();
 	spawnerVector.clear();
+}
+
+
+bool ModuleAI::CommandNightEnemies(Base* base)
+{
+	fMPoint pos = FindNearestPlayerBase(base->GetPosition());
+
+	if (pos == fMPoint(0, 0) || app->testScene->IsNight() == false)
+		return false;
+	
+	objectivePos = pos;
+	return true;
 }
 
 
