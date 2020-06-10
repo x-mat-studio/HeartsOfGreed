@@ -192,7 +192,7 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 		ClosePopUp();
 	}
 
-	else if (eventId == EVENT_ENUM::HERO_LEVELED_UP)
+	if (eventId == EVENT_ENUM::HERO_LEVELED_UP)
 	{
 		popUpArray[(int)POP_UPS::LEVEL_UP].Activate();
 		app->audio->PlayFx(popUp, 0, -1);
@@ -209,7 +209,7 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	}
 
 
-	else if (eventId == EVENT_ENUM::HERO_DEAD)
+	if (eventId == EVENT_ENUM::HERO_DEAD)
 	{
 		popUpArray[(int)POP_UPS::HERO_DIED].Activate();
 		app->audio->PlayFx(popUp, 0, -1);
@@ -225,7 +225,7 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	}
 
 
-	else if (eventId == EVENT_ENUM::REACHED_100_RED_RESOUCES)
+	if (eventId == EVENT_ENUM::REACHED_100_RED_RESOUCES)
 	{
 		popUpArray[(int)POP_UPS::RED_RESOURCE_100].Activate();
 		app->audio->PlayFx(popUp, 0, -1);
@@ -245,7 +245,7 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	}
 
 
-	else if (eventId == EVENT_ENUM::GOT_PURPLE_RESOURCE)
+	if (eventId == EVENT_ENUM::GOT_PURPLE_RESOURCE)
 	{
 		popUpArray[(int)POP_UPS::PURPLE_ORB].Activate();
 		app->audio->PlayFx(popUp, 0, -1);
@@ -262,7 +262,7 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	}
 
 
-	else if (eventId == EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT)
+	if (eventId == EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT)
 	{
 		popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].Activate();
 		app->audio->PlayFx(popUp, 0, -1);
