@@ -1918,7 +1918,7 @@ void UIFactory::CreateGathererPage(std::vector<UI*>* dataPagesVector, UI* dataPa
 	CreateGathererPassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateGathererActive1Button(85, 0, dataPage, dataPagesVector);
 
-	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Proc Illidarus");
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Proc Illidarus");
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::GATHERER_DAMAGE_UPGRADE);
@@ -1936,7 +1936,7 @@ void UIFactory::CreateMeleePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 	CreateMeleePassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateMeleeActive1Button(85, 0, dataPage, dataPagesVector);
 
-	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Ridosi Pullarc");
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Ridosi Pullarc");
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::MELEE_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::MELEE_DAMAGE_UPGRADE);
@@ -1954,7 +1954,7 @@ void UIFactory::CreateRangedPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	CreateRangedPassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateRangedActive1Button(85, 0, dataPage, dataPagesVector);
 
-	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Sora Ipucdrill");
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Sora Ipucdrill");
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::RANGED_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::RANGED_DAMAGE_UPGRADE);
@@ -1972,7 +1972,7 @@ void UIFactory::CreateRobottoPage(std::vector<UI*>* dataPagesVector, UI* dataPag
 	CreateRobottoPassive1Button(68, 0, dataPage, dataPagesVector);
 	CreateRobottoActive1Button(85, 0, dataPage, dataPagesVector);
 
-	CreateNonGroupText(10, 45, dataPage, dataPagesVector, "Ricard 'Goliat' Pillosu");
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Ricard 'Goliat' Pillosu");
 
 	CreateLifeUpgradeButton(-15, 0, dataPage, dataPagesVector, BUTTON_TAG::ROBOTTO_LIFE_UPGRADE);
 	CreateDamageUpgradeButton(-15, 17, dataPage, dataPagesVector, BUTTON_TAG::ROBOTTO_DAMAGE_UPGRADE);
@@ -1988,16 +1988,19 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 	char stats[40];
 	Hero* focus = (Hero*)app->player->GetFocusedEntity();
 
-	CreateNonGroupImage(68, 15, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(108, 0, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 17, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(109, 2, dataPage, dataPagesVector, healthbarGreenImage);
 
-	CreateNonGroupImage(68, 23, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(108, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 25, dataPage, dataPagesVector, healthbarBlueImage);
+	CreateNonGroupImage(109, 10, dataPage, dataPagesVector, healthbarBlueImage);
 
 	//stats
 	sprintf_s(stats, 40, "AD: %.0f", focus->GetAttackDamage());
+	CreateNonGroupText(68, 10, dataPage, dataPagesVector, stats);
+
+	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
 	CreateNonGroupText(133, 10, dataPage, dataPagesVector, stats);
 
 	float exp = focus->GetHeroXP() * 100 / focus->GetExpToLevelUp();
@@ -2006,14 +2009,11 @@ void UIFactory::CreateGenericHeroPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupText(113, 22, dataPage, dataPagesVector, "%");
 
-	sprintf_s(stats, 40, "AS: %.2f", focus->GetAttackSpeed());
+	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
 	CreateNonGroupText(133, 22, dataPage, dataPagesVector, stats);
 
-	sprintf_s(stats, 40, "Rng: %i", focus->GetAttackRange());
-	CreateNonGroupText(68, 35, dataPage, dataPagesVector, stats);
-
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecoveryHitPointsRate());
-	CreateNonGroupText(133, 35, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(100, 35, dataPage, dataPagesVector, stats);
 
 	if (focus->GetHeroSkillPoints() > 0)
 	{
@@ -2032,22 +2032,24 @@ void UIFactory::CreateWanamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, wanamingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Wanamingo");
+	
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
@@ -2061,6 +2063,8 @@ void UIFactory::CreateSpeedomingoPage(std::vector<UI*>* dataPagesVector, UI* dat
 	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
 
 	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Speedomingo");
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
@@ -2088,6 +2092,8 @@ void UIFactory::CreateSnipermingoPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
 
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Rangedmingo");
+
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
 	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
@@ -2114,6 +2120,8 @@ void UIFactory::CreateGigamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
 
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Gigamingo");
+	
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
 	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
@@ -2136,9 +2144,11 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, baseDataPagePicture);
 
-	CreateNonGroupImage(68, 3, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 5, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
+
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Base");
 
 	CreateGathererReviveButton(158, 5, dataPage, dataPagesVector);
 
@@ -2152,7 +2162,7 @@ void UIFactory::CreateBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage)
 
 	//stats
 	sprintf_s(stats, 40, "Resources: %i", focus->GetRsrc());
-	CreateNonGroupText(68, 5, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 10, dataPage, dataPagesVector, stats);
 
 }
 
@@ -2164,6 +2174,8 @@ void UIFactory::CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* d
 	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
 	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
+
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Enemy base");
 }
 
 
@@ -2177,6 +2189,8 @@ void UIFactory::CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage
 	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
 	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
+
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Turret");
 
 	//stats
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLvl());
@@ -2197,25 +2211,27 @@ void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* d
 {
 	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, upgradeCenterDataPagePicture);
 
-	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, healthbarGreenImage);
 
-	CreateBuyTurretButton(68, 23, dataPage, dataPagesVector);
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Upgrade center");
 
-	CreateNonGroupImage(68, 23, dataPage, dataPagesVector, plusIcon, false, false);
+	CreateBuyTurretButton(68, 15, dataPage, dataPagesVector);
 
-	CreateUpgradeTurretButton(98, 23, dataPage, dataPagesVector);
+	CreateNonGroupImage(68, 15, dataPage, dataPagesVector, plusIcon, false, false);
 
-	CreateNonGroupImage(98, 23, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
+	CreateUpgradeTurretButton(98, 15, dataPage, dataPagesVector);
 
-	CreateBuyBarricadeButton(128, 23, dataPage, dataPagesVector);
+	CreateNonGroupImage(98, 15, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
 
-	CreateNonGroupImage(128, 23, dataPage, dataPagesVector, plusIcon, false, false);
+	CreateBuyBarricadeButton(128, 15, dataPage, dataPagesVector);
 
-	CreateUpgradeBarricadeButton(158, 23, dataPage, dataPagesVector);
+	CreateNonGroupImage(128, 15, dataPage, dataPagesVector, plusIcon, false, false);
 
-	CreateNonGroupImage(158, 23, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
+	CreateUpgradeBarricadeButton(158, 15, dataPage, dataPagesVector);
+
+	CreateNonGroupImage(158, 15, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
 }
 
 
@@ -2229,6 +2245,8 @@ void UIFactory::CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataP
 	CreateNonGroupImage(68, 8, dataPage, dataPagesVector, healthBarContainer);
 
 	CreateNonGroupImage(69, 10, dataPage, dataPagesVector, healthbarGreenImage);
+
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Barricade");
 
 	sprintf_s(stats, 40, "LVL: %i", focus->GetLevel());
 	CreateNonGroupText(69, 13, dataPage, dataPagesVector, stats);
