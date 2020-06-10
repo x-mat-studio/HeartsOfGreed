@@ -6,7 +6,7 @@
 
 TimerClock::TimerClock(float x, float y, UI* parent) :
 
-	UI({ x, y }, parent, UI_TYPE::TIMER_CLOCK, {0, 0, 0, 0}, false, false, nullptr),
+	UI({ x, y }, parent, UI_TYPE::TIMER_CLOCK, { 0, 0, 0, 0 }, false, false, nullptr),
 	minutes(0),
 	seconds(0)
 {
@@ -29,12 +29,23 @@ void TimerClock::HandleInput()
 	int sec = 0;
 
 	app->testScene->GetTimer(min, sec);
-	
+
 	if (minutes != min || seconds != sec)
 	{
 		minutes = min;
 		seconds = sec;
 		ChangeTexture();
+
+		if (app->testScene->IsNight() == false)
+		{
+			if (min == 0 && sec <= 30)
+			{
+				if ((sec % 2) == 1)
+				{
+					SetNumbersColor(255, 128, 128, 255);
+				}
+			}
+		}
 	}
 
 	if (min == 0 && sec == 30)
@@ -42,7 +53,24 @@ void TimerClock::HandleInput()
 		app->eventManager->GenerateEvent(EVENT_ENUM::START_DAY_NIGHT_TRANSITION, EVENT_ENUM::NULL_EVENT);
 	}
 
-	
+
+
+
+}
+
+void TimerClock::SetNumbersColor(uint r, uint g, uint b, uint a)
+{
+	uint newR = MIN(r, 255);
+	newR = MAX(r, 0);
+	uint newG = MIN(g, 255);
+	newG = MAX(g, 0);
+	uint newB = MIN(b, 255);
+	newB = MAX(b, 0);
+	uint newA = MIN(a, 255);
+	newA = MAX(a, 0);
+
+	SDL_SetTextureColorMod(texture, newR, newG, newB);
+	SDL_SetTextureAlphaMod(texture, newA);
 }
 
 

@@ -10,6 +10,7 @@ public:
 	~TimerClock();
 
 	void HandleInput();
+	void SetNumbersColor(uint r, uint g, uint b, uint a);
 
 private:
 	void ChangeTexture();
