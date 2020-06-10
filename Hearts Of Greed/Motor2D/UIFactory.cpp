@@ -2283,7 +2283,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GATHERER_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, gathererHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, gathererHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2293,7 +2293,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::MELEE_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, meleHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, meleHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2303,7 +2303,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::RANGED_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, rangedHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, rangedHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2312,7 +2312,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		BackGround = new Button(fMPoint{ (float)(-portraitRoundBackground.w * 0.5), 0 }, portrait, portraitRoundBackground, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::ROBO_PORTRAIT);
 		portrait->AddElement(BackGround);
 
-		icon = new UI_Image(11, 6, BackGround, robottoHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
+		icon = new UI_Image(6, 6, BackGround, robottoHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
 		break;
@@ -2324,16 +2324,16 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 	}
 
 
-	healthBar = new UI_Image(6, 38, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
+	healthBar = new UI_Image(-2, 38, BackGround, healthbarGreenImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddHealthBar(healthBar);
 
-	healthBarCont = new UI_Image(5, 37, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	healthBarCont = new UI_Image(-3, 37, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(healthBarCont);
 
-	manaBar = new UI_Image(6, 46, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
+	manaBar = new UI_Image(-2, 46, BackGround, healthbarBlueImage, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddManaBar(manaBar);
 
-	manaBarCont = new UI_Image(5, 45, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
+	manaBarCont = new UI_Image(-3, 45, BackGround, healthBarContainer, app->uiManager->GetAtlasTexture(), false, false);
 	portrait->AddElement(manaBarCont);
 
 	return portrait;
