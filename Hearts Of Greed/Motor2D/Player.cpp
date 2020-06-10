@@ -184,7 +184,7 @@ bool ModulePlayer::PreUpdate(float dt)
 	}
 
 	// FOCUS HEROES WITH KEYS
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN) 
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN)
 	{
 		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_GATHERER, EVENT_ENUM::NULL_EVENT);
 	}
@@ -198,7 +198,7 @@ bool ModulePlayer::PreUpdate(float dt)
 	}
 	else if (app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN)
 	{
-		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO , EVENT_ENUM::NULL_EVENT);
+		app->eventManager->GenerateEvent(EVENT_ENUM::FOCUS_HERO_ROBO, EVENT_ENUM::NULL_EVENT);
 	}
 
 
@@ -361,7 +361,7 @@ void ModulePlayer::LeftClick()
 		}
 		if (type == ENTITY_TYPE::BLDG_BASE)
 		{
-			app->audio->PlayFx(selectBaseSound,0,-1,LOUDNESS::NORMAL);
+			app->audio->PlayFx(selectBaseSound, 0, -1, LOUDNESS::NORMAL);
 		}
 	}
 }
@@ -746,8 +746,10 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			else
 			{
 				focusedHero = 0;
+
 			}
-			app->testScene->MoveCamTo(heroesVector[focusedHero]->position, 1.0, EASING_TYPE::EASE_IN_OUT_SINE);
+			if (numHeroes > 0)
+				app->testScene->MoveCamTo(heroesVector[focusedHero]->position, 1.0, EASING_TYPE::EASE_IN_OUT_SINE);
 		}
 	}
 	break;
@@ -901,15 +903,15 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		heroesVector.clear();
 		hero = (Hero*)app->entityManager->SearchEntity(ENTITY_TYPE::HERO_ROBO);
 
-		if (hero != nullptr) 
-		{	
+		if (hero != nullptr)
+		{
 			hero->selectedByPlayer = true;
 
 			heroesVector.push_back(hero);
 			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
 
 		}
-		
+
 		break;
 
 
