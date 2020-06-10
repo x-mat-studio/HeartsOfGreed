@@ -63,6 +63,9 @@ private:
 
 	bool displayingPopUp;
 
+	//pop up sound
+	int popUp;
+
 };
 
 #endif//__POP_UP_MANAGER_H__

@@ -9,7 +9,7 @@
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 
-ModuleAudio::ModuleAudio() : Module(), music(NULL), volumeAdjustment(-27), musicVolume(90)
+ModuleAudio::ModuleAudio() : Module(), music(NULL), volumeAdjustment(-27), musicVolume(45)
 {
 	name.create("audio");
 }

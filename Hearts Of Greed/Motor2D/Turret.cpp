@@ -338,6 +338,9 @@ void Turret::Attack()
 void Turret::Die()
 {
 	app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
+
+	app->audio->PlayFx(app->entityManager->turretDeath, 0, -1, GetMyLoudness(), GetMyDirection());
+
 	toDelete = true;
 
 	if (minimapIcon != nullptr)
@@ -513,7 +516,7 @@ void Turret::StateMachine()
 
 	case TURRET_STATES::CHARGING_ATTACK:
 
-		app->audio->PlayFx(app->entityManager->turretShooting, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->turretShooting, 0, 4, this->GetMyLoudness(), this->GetMyDirection(),false);
 
 		break;
 

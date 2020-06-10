@@ -178,6 +178,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	ranged1Skil2(-1),
 	placingCenter(-1),
 	placingTurret(-1),
+	turretDeath(-1),
 
 	gathererLifeUpgradeValue(1),
 	gathererDamageUpgradeValue(1),
@@ -496,6 +497,7 @@ bool ModuleEntityManager::Start()
 	turretShooting = app->audio->LoadFx("Assets/audio/sfx/Buildings/shooting1.wav");
 	placingTurret = app->audio->LoadFx("Assets/audio/sfx/Buildings/placeturret.wav");
 	placingCenter = app->audio->LoadFx("Assets/audio/sfx/Buildings/placecenter.wav");
+	turretDeath = app->audio->LoadFx("Assets/audio/sfx/Buildings/turretDeath.wav");
 
 	//Armored sfx--------
 	noise1Suitman = app->audio->LoadFx("Assets/audio/sfx/Heroes/Armoredman/noise1.wav");

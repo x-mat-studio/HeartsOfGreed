@@ -266,6 +266,8 @@ public:
 	int placingCenter;
 	int reviveHero;
 
+	int turretDeath;
+
 
 	//public textures
 	SDL_Texture* base2Texture;
