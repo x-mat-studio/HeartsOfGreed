@@ -494,11 +494,13 @@ void Turret::StateMachine()
 
 	case TURRET_STATES::ATTACK:
 
+		if (shortTermObjective != nullptr)
+			dir = DetermineDirection(shortTermObjective->position - position);
+
 		if (attackCD == 0)
 		{
 			Attack();
-			if (shortTermObjective != nullptr)
-				dir = DetermineDirection(shortTermObjective->position - position);
+
 
 			attackCD += 0.01f;
 		}

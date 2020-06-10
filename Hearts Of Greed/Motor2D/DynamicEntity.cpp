@@ -102,7 +102,7 @@ bool DynamicEntity::Move(float dt)
 		path.erase(path.begin());
 	}
 
-	if (!pathSpeed.IsZero() || waitingForPath)
+	if (!pathSpeed.IsZero() || waitingForPath == true)
 	{
 		isMoving = true;
 		return isMoving;
@@ -165,8 +165,7 @@ void DynamicEntity::GroupMovement(float dt)
 {
 	BROFILER_CATEGORY("Group Mov.", Profiler::Color::BlanchedAlmond);
 
-	if (toMove.x == 0 && toMove.y == 0)
-		return;
+
 
 	toMove = { 0,0 };
 
@@ -386,7 +385,11 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 			return true;
 		}
+		else
+			destination = { 0,0 };
 	}
+	else if (waitingForPath == true)
+		return true;
 
 
 	return false;
