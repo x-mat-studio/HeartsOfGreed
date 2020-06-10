@@ -2060,24 +2060,24 @@ void UIFactory::CreateSpeedomingoPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupImage(13, 10, dataPage, dataPagesVector, speedomingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Speedomingo");
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
@@ -2088,24 +2088,24 @@ void UIFactory::CreateSnipermingoPage(std::vector<UI*>* dataPagesVector, UI* dat
 
 	CreateNonGroupImage(13, 10, dataPage, dataPagesVector, snipermingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Rangedmingo");
 
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
@@ -2116,24 +2116,24 @@ void UIFactory::CreateGigamingoPage(std::vector<UI*>* dataPagesVector, UI* dataP
 
 	CreateNonGroupImage(18, 3, dataPage, dataPagesVector, gigamingoDataPagePicture);
 
-	CreateNonGroupImage(68, 19, dataPage, dataPagesVector, healthBarContainer);
+	CreateNonGroupImage(68, 9, dataPage, dataPagesVector, healthBarContainer);
 
-	CreateNonGroupImage(69, 21, dataPage, dataPagesVector, healthbarGreenImage);
+	CreateNonGroupImage(69, 11, dataPage, dataPagesVector, healthbarGreenImage);
 
 	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Gigamingo");
 	
 	//stats
 	sprintf_s(stats, 40, "AD: %i", focus->GetAD());
-	CreateNonGroupText(133, 7, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, -3, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rng: %i", focus->GetVision());
-	CreateNonGroupText(68, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "AS: %.2f", focus->GetAS());
-	CreateNonGroupText(133, 19, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(133, 9, dataPage, dataPagesVector, stats);
 
 	sprintf_s(stats, 40, "Rec: %i", focus->GetRecov());
-	CreateNonGroupText(68, 32, dataPage, dataPagesVector, stats);
+	CreateNonGroupText(68, 22, dataPage, dataPagesVector, stats);
 }
 
 
