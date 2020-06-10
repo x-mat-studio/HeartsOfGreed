@@ -18,10 +18,10 @@ Sample sample sample sample sample sample sample sample sample.</p>
 
 <br><br>
 
-<h2  align="center" id="heartsofgreed_trailer">Random Sample from X-Mat Studio Trailer</h2>
+<h2  align="center" id="heartsofgreed_trailer">Hearts of Greed - Gameplay Trailer</h2>
 
 <iframe width="510" height="412"
-src="https://www.youtube.com/embed/P8MXNEiODTw" frameborder="0" allowfullscreen>
+src="https://www.youtube.com/embed/yI1U32Tnni8" frameborder="0" allowfullscreen>
 </iframe>
 <p>You can also enjoy the trailer by  <a href="https://drive.google.com/file/d/1mFSbRy9OxuS2HH5P3BAMak9hAOLAuKGy/view?usp=sharing">clicking here.</a></p>
 
