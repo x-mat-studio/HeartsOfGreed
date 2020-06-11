@@ -66,7 +66,6 @@ public:
 private:
 	
 	void DisableTurrets();
-	bool RessurectHero(ENTITY_TYPE heroType);
 	void GainResources(float dt);
 
 	void Die();

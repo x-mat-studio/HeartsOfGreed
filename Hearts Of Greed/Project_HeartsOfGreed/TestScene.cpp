@@ -122,6 +122,7 @@ bool ModuleTestScene::Start()
 			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
 		}
 
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_STARTED, EVENT_ENUM::NULL_EVENT);
 	}
 
 	if (startFromLoad == true)

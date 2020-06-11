@@ -356,34 +356,9 @@ void Base::ChangeAligment()
 }
 
 
-bool Base::RessurectHero(ENTITY_TYPE heroType)
-{
-	if (heroType == ENTITY_TYPE::HERO_GATHERER)
-	{
-		app->entityManager->AddEntity(heroType, position.x, position.y);
-		return true;
-	}
-
-	else if (heroType == ENTITY_TYPE::HERO_MELEE)
-	{
-		app->entityManager->AddEntity(heroType, position.x, position.y);
-		return true;
-	}
-
-	else if (heroType == ENTITY_TYPE::HERO_RANGED)
-	{
-		app->entityManager->AddEntity(heroType, position.x, position.y);
-		return true;
-	}
-
-
-	return false;
-}
-
 
 void Base::GainResources(float dt)
 {
-
 	if (align == ENTITY_ALIGNEMENT::PLAYER)
 	{
 		resourcesCooldown += dt;
@@ -393,14 +368,12 @@ void Base::GainResources(float dt)
 			app->player->AddResources(resourcesProduced);
 			resourcesCooldown -= resourcesRate;
 		}
-		
 	}
 }
 
 
 int Base::RecieveDamage(float damage, bool ignoreArmor)
 {
-
 	if (hitPointsCurrent > 0)
 	{
 		hitPointsCurrent -= damage;
