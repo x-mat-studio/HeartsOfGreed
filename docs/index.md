@@ -9,7 +9,7 @@
 <p align="justify">We are a development team with great enthusiasm for the sector. We define passion and teamwork, we do not leave anyone behind or leave the burden of their work on their peers. We intend to exceed expectations and feel fulfilled by our own work. We invite you to take a look at this project, in this case, to all the research we have done behind this fabulous game: Hearts of Greed.</p>
 
 
-<p align="justify"> <a href="https://github.com/x-mat-studio/HeartsOfGreed/releases/tag/v0.8">Hearts of Greed</a> is an Epic RTS experience like you never experienced before. Welcome to the wasteland of Ceres, where an evil force of aliens called Wanamingos
+<p align="justify"> <a href="{{site.github.zip_url}}">Hearts of Greed</a> is an Epic RTS experience like you never experienced before. Welcome to the wasteland of Ceres, where an evil force of aliens called Wanamingos
 has spread & it is your mission to eradicate them. Fight alongside 4 full-customizable heroes that will help you through are your journey. Fight, build, Conquer, Defend &, most importantly, Triunph. Good luck, Commander. </p>
 
 
