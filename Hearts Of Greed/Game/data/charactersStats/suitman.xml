@@ -4,7 +4,7 @@
     <position x="100" y="600"/>
 
     <collider>
-      <rect x="0" y="0" w="30" h="65"/>
+      <rect x="0" y="0" w="34" h="60"/>
       <type id="1"/>
     </collider>
 

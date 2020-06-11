@@ -18,6 +18,8 @@ public:
 
 	RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT alignement);
 
+	bool Start(SDL_Texture* texture);
+
 	bool ActivateSkill1(fMPoint clickPosition);
 	bool ActivateSkill2();
 	bool ActivateSkill3();

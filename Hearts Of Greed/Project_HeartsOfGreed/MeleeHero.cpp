@@ -64,7 +64,7 @@ bool MeleeHero::Start(SDL_Texture* texture)
 
 		offset.x = -((float)collider->rect.w * 0.5f);
 
-		offset.y = -((float)collider->rect.h * 0.66f);
+		offset.y = -((float)collider->rect.h * 0.82f);
 
 		center.x = (float)collider->rect.w * 0.5f;
 		center.y = (float)collider->rect.h * 0.5f;

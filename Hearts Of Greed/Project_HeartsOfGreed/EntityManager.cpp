@@ -68,6 +68,7 @@ ModuleEntityManager::ModuleEntityManager() :
 	upgradeCenterEnemySelectedTexture(nullptr),
 	enemyTexture(nullptr),
 	explosionTexture2(nullptr),
+	rangedW_VFX(nullptr),
 	targetedTexture(nullptr),
 	selectedTexture(nullptr),
 	roboTexture(nullptr),
@@ -532,6 +533,7 @@ bool ModuleEntityManager::Start()
 
 	snowball = app->tex->Load("Assets/spritesheets/Particles/snowball.png");
 	explosionTexture2 = app->tex->Load("Assets/spritesheets/Particles/BigFB.png");
+	rangedW_VFX = app->tex->Load("Assets/spritesheets/Particles/basicAttack_rangedWanamingo.png");
 	spiderweb = app->tex->Load("Assets/spritesheets/Particles/web2.png");
 	smoke1 = app->tex->Load("Assets/spritesheets/Particles/smoke1.png");
 	smoke2 = app->tex->Load("Assets/spritesheets/Particles/smoke2.png");
@@ -909,6 +911,7 @@ bool ModuleEntityManager::CleanUp()
 	app->tex->UnLoad(debugPathTexture);				debugPathTexture = nullptr;
 	app->tex->UnLoad(selectedTexture);				selectedTexture = nullptr;
 	app->tex->UnLoad(explosionTexture2);			explosionTexture2 = nullptr;
+	app->tex->UnLoad(rangedW_VFX);					rangedW_VFX = nullptr;
 	app->tex->UnLoad(targetedTexture);				targetedTexture = nullptr;
 	app->tex->UnLoad(moveCommandTileRng);			moveCommandTileRng = nullptr;
 	app->tex->UnLoad(moveCommandTileGath);			moveCommandTileGath = nullptr;
