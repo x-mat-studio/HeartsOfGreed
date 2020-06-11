@@ -18,6 +18,8 @@ enum class POP_UPS : int
 
 		TRY_FOCUS_KEYS,
 
+		CAPTURE_ALL_BASES,
+
 		MAX
 };
 

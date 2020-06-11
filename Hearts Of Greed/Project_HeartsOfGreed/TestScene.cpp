@@ -82,6 +82,8 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	fadeTime = config.attribute("fadeTime").as_float(0);
 	startingScale = config.attribute("startingScale").as_float(.0f);
 
+	nightApproachesSfx = app->audio->LoadFx("Assets/audio/sfx/Interface/NightApproaches.wav");
+
 	return true;
 }
 
@@ -122,6 +124,7 @@ bool ModuleTestScene::Start()
 			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
 		}
 
+		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_STARTED, EVENT_ENUM::NULL_EVENT);
 	}
 
 	if (startFromLoad == true)
@@ -162,8 +165,6 @@ bool ModuleTestScene::Start()
 	app->eventManager->GenerateEvent(EVENT_ENUM::GAME_SCENE_ENTERED, EVENT_ENUM::NULL_EVENT);
 
 	app->gamePause = false;
-
-	nightApproachesSfx = app->audio->LoadFx("Assets/audio/sfx/Interface/NightApproaches.wav");
 
 	return true;
 }

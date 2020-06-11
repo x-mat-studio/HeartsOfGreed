@@ -8,4 +8,5 @@
   <buyTandB string="You can now buy turrets and barricades in the upgrade center!"/>
   <upgradeTandB string="Try upgrading your defenses in the upgrade center!"/>
   <focusKeys string="Change focus between heroes with, 1, 2, 3, 4 and TAB!"/>
+  <captureBases string="Controll all enemy bases to win!"/>
 </popUpTexts>

@@ -72,6 +72,8 @@ bool ModuleFadeToBlack::CleanUp()
 {
 	app->eventManager->EventUnRegister(EVENT_ENUM::GAME_WIN, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::GAME_LOSE, this);
+	app->tex->UnLoad(texture);
+	texture = nullptr;
 
 	return true;
 }

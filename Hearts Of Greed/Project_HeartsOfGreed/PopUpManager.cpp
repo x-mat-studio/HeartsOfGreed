@@ -77,6 +77,9 @@ bool ModulePopUpManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
 	app->eventManager->EventRegister(EVENT_ENUM::HERO_RESQUED, this);
+	app->eventManager->EventRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
+
+	app->eventManager->EventRegister(EVENT_ENUM::GAME_STARTED, this);
 
 	popUp = app->audio->LoadFx("Assets/audio/sfx/Interface/PopUp.wav");
 
@@ -161,6 +164,9 @@ bool ModulePopUpManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RESQUED, this);
+
+	app->eventManager->EventUnRegister(EVENT_ENUM::GAME_STARTED, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::PLAYER_CONQUERED_A_BASE, this);
 
 	displayingPopUp = false;
 
@@ -324,6 +330,21 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 		else if (popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].activated == true)
 			popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].finished = true;
+	}
+
+	if (eventId == EVENT_ENUM::GAME_STARTED)
+	{
+		popUpArray[(int)POP_UPS::CAPTURE_ALL_BASES].Activate();
+	}
+	else if (eventId == EVENT_ENUM::PLAYER_CONQUERED_A_BASE)
+	{
+		if (popUpArray[(int)POP_UPS::CAPTURE_ALL_BASES].displayed == true)
+		{
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
+		}
+		else if (popUpArray[(int)POP_UPS::CAPTURE_ALL_BASES].activated == true)
+			popUpArray[(int)POP_UPS::CAPTURE_ALL_BASES].finished = true;
 	}
 }
 
