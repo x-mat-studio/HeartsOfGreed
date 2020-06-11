@@ -46,6 +46,33 @@ RangedHero::RangedHero(fMPoint position, RangedHero* copy, ENTITY_ALIGNEMENT ali
 {}
 
 
+bool RangedHero::Start(SDL_Texture* texture)
+{
+	this->texture = texture;
+	if (collider != nullptr)
+	{
+		collider = new Collider(collider->rect, collider->type, collider->callback, this);
+		collider->thisEntity = this;
+		app->coll->AddColliderEntity(collider);
+
+		collider->SetPos(position.x, position.y);
+
+		offset.x = -((float)collider->rect.w * 0.5f);
+
+		offset.y = -((float)collider->rect.h * 0.82f);
+
+		center.x = (float)collider->rect.w * 0.5f;
+		center.y = (float)collider->rect.h * 0.5f;
+
+		CollisionPosUpdate();
+	}
+
+	started = true;
+
+	return true;
+}
+
+
 bool RangedHero::ActivateSkill1(fMPoint clickPosition)
 {
 

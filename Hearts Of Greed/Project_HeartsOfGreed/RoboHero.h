@@ -18,6 +18,7 @@ public:
 
 	~RoboHero();
 
+	bool Start(SDL_Texture* texture);
 
 	bool ActivateSkill1(fMPoint clickPosition);
 	bool ActivateSkill2();
