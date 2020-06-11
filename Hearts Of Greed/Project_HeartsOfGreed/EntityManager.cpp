@@ -3957,27 +3957,27 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		Animation anim3;
 		anim3.PushBack(SDL_Rect{ 0, 0, 150, 150 }, 1, 0, 0);
 
-		float auxPosX = -70;							float auxPos2X = -70;							float auxPos3X = -70;
-		float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;
+		float auxPosX = -40;							float auxPos2X = -40;							float auxPos3X = 0;//-70;
+		float auxPosY = 0;							float auxPos2Y = 0;							float auxPos3Y = 0;//0;
 
-		float auxSpeedX = 0.5;						float auxSpeed2X = 2;						float auxSpeed3X = 0;
-		float auxSpeedY = 1;						float auxSpeedY2 = 1;						float auxSpeedY3 = -1;
+		float auxSpeedX = 0.5;						float auxSpeed2X = 2;						float auxSpeed3X = 0;//0;
+		float auxSpeedY = 1;						float auxSpeedY2 = 1;						float auxSpeedY3 = 0;//-1;
 
 
-		int particleVariationSpeedX = 0.3;			int particleVariationSpeedX2 = 1;			int particleVariationSpeedX3 = 0;
-		int particleVariationSpeedY = 0;			int particleVariationSpeedY2 = 0;			int particleVariationSpeedY3 = 0.25;
+		int particleVariationSpeedX = 0.3;			int particleVariationSpeedX2 = 0.5;			int particleVariationSpeedX3 = 0;//0;
+		int particleVariationSpeedY = 0;			int particleVariationSpeedY2 = 0;			int particleVariationSpeedY3 = 0;//0.25;
 
-		float particleAccelerationX = 0.3;			float particleAccelerationX2 = 0.1;			float particleAccelerationX3 = 0.05;
-		float particleAccelerationY = -0.1;			float particleAccelerationY2 = -0.2;		float particleAccelerationY3 = -0.02;
+		float particleAccelerationX = 0.2;			float particleAccelerationX2 = 0.1;			float particleAccelerationX3 = 0; //0.05;
+		float particleAccelerationY = -0.1;			float particleAccelerationY2 = -0.2;		float particleAccelerationY3 = 0;//-0.02;
 
-		int particleVariationAccelerationX = 0.2;	int particleVariationAccelerationX2 = 0.35;	int particleVariationAccelerationX3 = 0.25;
-		int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0.2;
+		int particleVariationAccelerationX = 0.2;	int particleVariationAccelerationX2 = 0.18;	int particleVariationAccelerationX3 = 0;//0.25;
+		int particleVariationAccelerationY = 0;		int particleVariationAccelerationY2 = 0;	int particleVariationAccelerationY3 = 0;// 0.2;
 
-		float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;
-		int particleVariableAngularSpeed = 0;		int particleVariableAngularSpeed2 = 0;		int particleVariableAngularSpeed3 = 0;
+		float particleAngularSpeed = 0;				float particleAngularSpeed2 = 0;			float particleAngularSpeed3 = 0;//0;
+		int particleVariableAngularSpeed = 0;		int particleVariableAngularSpeed2 = 0;		int particleVariableAngularSpeed3 = 0;//0;
 
-		float particlesRate = 4;					float particlesRate2 = 4;					float particlesRate3 = 2;
-		float particlesLifeTime = 0.55;				float particlesLifeTime2 = 0.55;			float particlesLifeTime3 = 1;
+		float particlesRate = 6;					float particlesRate2 = 5;					float particlesRate3 = 0;//2;
+		float particlesLifeTime = 0.7;				float particlesLifeTime2 = 0.7;				float particlesLifeTime3 = 0;//0.7;
 
 
 		sampleBuildingSmoke =  new ParticleSystem();
@@ -3985,10 +3985,11 @@ bool ModuleEntityManager::LoadSampleParticleSystemsAndEmitters(pugi::xml_node& p
 		sampleSmoke1 =	new Emitter(auxPosX, auxPosY, auxSpeedX, auxSpeedY, particleVariationSpeedX, particleVariationSpeedY, particleAccelerationX, particleAccelerationY, particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
 		sampleSmoke2 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
 		sampleSmoke3 = new Emitter(auxPos3X, auxPos3Y, auxSpeed3X, auxSpeedY3, particleVariationSpeedX3, particleVariationSpeedY3, particleAccelerationX3, particleAccelerationY3, particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
-
+		//sampleSmoke3 = new Emitter(auxPos2X, auxPos2Y, auxSpeed2X, auxSpeedY2, particleVariationSpeedX2, particleVariationSpeedY2, particleAccelerationX2, particleAccelerationY2, particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
 		sampleSmoke4 = new Emitter(auxPosX, auxPosY, -auxSpeedX, auxSpeedY, -particleVariationSpeedX, particleVariationSpeedY, -particleAccelerationX, particleAccelerationY, -particleVariationAccelerationX, particleVariationAccelerationY, particleAngularSpeed, particleVariableAngularSpeed, particlesRate, particlesLifeTime, rect, nullptr, anim1, true);
 		sampleSmoke5 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
 		sampleSmoke6 = new Emitter(auxPos3X, auxPos3Y, -auxSpeed3X, auxSpeedY3, -particleVariationSpeedX3, particleVariationSpeedY3, -particleAccelerationX3, particleAccelerationY3, -particleVariationAccelerationX3, particleVariationAccelerationY3, particleAngularSpeed3, particleVariableAngularSpeed3, particlesRate3, particlesLifeTime3, rect, nullptr, anim3, true);
+		//sampleSmoke6 = new Emitter(auxPos2X, auxPos2Y, -auxSpeed2X, auxSpeedY2, -particleVariationSpeedX2, particleVariationSpeedY2, -particleAccelerationX2, particleAccelerationY2, -particleVariationAccelerationX2, particleVariationAccelerationY2, particleAngularSpeed2, particleVariableAngularSpeed2, particlesRate2, particlesLifeTime2, rect, nullptr, anim2, true);
 	}
 
 	
