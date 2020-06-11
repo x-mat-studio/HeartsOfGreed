@@ -29,6 +29,9 @@ Twitter:	https://twitter.com/ii_rts
 * WASD
 	- Control camera
 
+* Shift
+	- Accelerate camera when pressing WASD
+
 * Cursor next to screen margin: 
 	- Control camera
 
@@ -63,6 +66,8 @@ Twitter:	https://twitter.com/ii_rts
 
 * 4: Focus Robot Hero
 
+* Esc: open or close the pause menu (in-game) / close the game (on main menu)
+
 ### Debug Options (only in-game):
 
 * F1: Debug texture for Fog of war (only visible when on Fog of War mode).
@@ -86,11 +91,12 @@ Twitter:	https://twitter.com/ii_rts
 * KP 3: Spawn enemy.
 * KP 4: Spawn gatherer hero (Suit Man).
 * KP 5: Spawn melee hero (Armored Man).
-* KP 7: Spawn turret.
+* KP 6: Spawn ranged hero (Female Sniper).
+* KP 7: Spawn robotic hero (Mecha).
+* KP 8: Spawn turret.
 * L: Level up all heroes.
 * N: Win if in-game.
 * M: Lose if in-game.
-
 
 ## Team Members:
 
@@ -130,18 +136,18 @@ Twitter:	https://twitter.com/ii_rts
 * Multiple debug keys (listed above).
 * Save / Load functionallity.
 * InGame Support for windowed mode and fullscreen.
-* Automatic Continuous Integration and Deployment .
+* Automatic Continuous Integration and Deployment.
 * Logo Scene video, with custom art and disctintive audio.
 * Title Scene, with custom title spatial sound and options and easy in.
 * Implementation of the final map.
 * Progression system for hero units: lvl, stat boosters, skill upgrades...
 * Quest system implemented to unlock different heroes.
-* Paused game on ingame menu .
-* Particle system used in lvl up scenario.
+* Paused game on in-game menu.
+* Various particles added on different relevant actions of the gameplay.
 * Three resources implemented:
 	- **Blue resource**: Used for building turrets, barricades, upgrade center, and revive dead heroes.
 	- **Red resource**: Used to upgrade hero related stats.
-	- **Purple resource**: Used to level up hero skills (active and passive, from 1 to 4).
+	- **Purple resource**: Used to level up hero skills (active and passive, from 1 to 5).
 * Four different hero units, each one with two disctintive skills:
 	- **Armored Man**: A melee attack with an AoE effect, hight health regeneration and receioves less damage the more enemies surround him.
 	- **Suit Man**: Throws a ranged grenade which explodes on contact. This hero gets extra resources for killing enemies and overcharges near robotic allies.
@@ -149,16 +155,16 @@ Twitter:	https://twitter.com/ii_rts
 	- **Robot**: Can´t regenerate health, however, gains speed and attack when killing enemies in succession, his skill is self destruction (massive AoE).
 * Group selection and movement for ally units, group movement for enemy units.
 * Multiple buildings implemented:
-	- **Ally base**: Center of operations, you can build and revive heroes here.
-	- **Enemy base**: Your opponents stronghold wich they will defend if your heroes get near, deplete it's health to make it your own.
+	- **Ally base**: Center of operations, you can build the upgrade center and revive heroes here.
+	- **Enemy base**: Your opponents stronghold wich they will defend if your heroes get near; deplete it's health to make it your own.
 	- **Turrets**: Building which attacks entities of it's contrary alligment.
-	- **Decorative Buildings**: Flesh out our map and create chokepoints in the map.
 	- **Barricades**: Defensive structures with high hp.
 	- **Upgrade center**: Lets you buy and level up turrets and barricades. 
+	- **Decorative Buildings**: Flesh out our map and create chokepoints in the map.
 * Win condition: Conquer all bases.
-* Win scene: custom made "you win message" and track  .
+* Win scene: custom made "you win message" and track.
 * Lose condition: triggered by losing all units or losing all bases.
-* Lose scene: custom made "you lose message" and track  .
+* Lose scene: custom made "you lose message" and track.
 * HUD implementation showing resources, heroes, cycle state...
 * Full fade-in / fade-out audio
 * **Real Time minimap** implemented: 
@@ -173,7 +179,8 @@ Twitter:	https://twitter.com/ii_rts
 * Spawner system which generates increasingly more dangerous enemies.
 * Dialogue system, with crafted portraits and UI; all tied up ingame via quests.
 * Different easings implemented in numerous points: audio, night cycle, win/lose animations...
-
+* Tutorial and pop-ups to guide the player through the various mechanics of the game.
+* Visual and auditive feedback for high to mid relevant action and interactions.
 _________________________________________________________________________________________________________________________________
 
 ## Changelog
@@ -323,7 +330,7 @@ ________________________________________________________________________________
 
 . . .
 
-### Release 0.5.56.
+### Release 0.5.53.
 
 #### General Updates
 - Pathfinding is improved
@@ -339,6 +346,100 @@ ________________________________________________________________________________
 - Multiple animation bugs
 . . .
 
+### Release 0.6.78.
+
+#### General Updates
+- Night AI completed
+- Melee hero added
+- Skills added
+- Options menu added
+- Credit menu added
+- Added an icon on selected heroes
+- Heroes speak while moving
+- Hierarchical pathfinding added
+- Hero behavior improved
+- Building mode added
+- Energy and health recovery added
+- Buildings drawn under the fog of war
+- Various sounds added
+- Enemy spawners added
+- Fullscreen through a button added
+
+#### Bug Fixes
+- Various selection bug
+- Minimap bugs
+- Armored animation fixes
+- Memory leaks solved
+. . .
+
+### Release 0.7.56.
+
+#### General Updates
+- UI code reworked and greatly improved
+- Pathfinding adjustments
+- Ranged hero implemented
+
+#### Bug Fixes
+. . .
+
+### Release 0.7.82.
+
+#### General Updates
+- Robot hero implemented
+- Minimap fog of war implemented
+- Player feedback expanded
+- Group movement expanded
+- Load and save logic implemented
+
+#### Bug Fixes
+. . .
+
+### Release 0.8.0.
+
+#### General Updates
+- Hover text implemented
+- UI visual rework
+- Quests added
+- Miniupgrades added
+- Skill buttons added
+- All different wanamingo types added
+- Particle systems added
+- Easings added
+- Dialog system added
+- Tutorial added
+- 2nd and 3rd resource added
+- Hero reviving added
+- Barricades added
+- All skills implemented
+- Day / night cycle improved
+- Pathfinding upgraded
+- Balancing
+
+#### Bug Fixes
+- Final Alpha refinements
+. . .
+
+### Release 1.0.0.
+
+#### General Updates
+- Different cursor texture added
+- Animations corrected
+- Sounds added
+- Camara shake when skills are triggered
+- Particles added
+- Easings added
+- Texture for scene transition added
+- Skill fixes and improvements
+- Pop-ups added
+- UI visual and functional upgrades
+- Final map iteration
+- Walkability maps adjusted
+- Character balancing
+
+#### Bug Fixes
+- 
+. . .
+
 
 ## Credits
 
@@ -352,7 +453,7 @@ https://www.sounds-resource.com/pc_computer/fallout3/
 https://www.sounds-resource.com/pc_computer/fallout2/
 https://www.sounds-resource.com/pc_computer/fallout/
 
-Thanks to Juan Hernández and David Carrasquet for dorming part of the team during the first sprint of the project and contributing in the wiki creation.
+Thanks to Juan Hernández and David Carrasquet for forming part of the team during the first sprint of the project and contributing in the wiki creation.
 	
 
 ## License:

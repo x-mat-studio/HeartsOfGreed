@@ -286,6 +286,7 @@ bool ModuleQuestManager::Load(pugi::xml_node& data)
 {
 	questInfoVector.clear(); //Just in case :D
 	questColliderVector.clear();
+	app->minimap->DeleteMinimapIcons();
 
 	Entity* entity = nullptr;
 	int i = 0;
