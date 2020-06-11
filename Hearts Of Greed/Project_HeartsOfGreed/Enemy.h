@@ -77,6 +77,7 @@ public:
 	int GetRecov();
 
 	void DrawOnSelect();
+	void DrawRangedVFX(float dt);
 
 	int GetLongTermObjectiveX();
 	int GetLongTermObjectiveY();
@@ -125,6 +126,8 @@ private:
 	float attackCooldown;
 	float attackRangeInPX;
 
+	bool rangedWattack;
+
 	bool haveOrders;
 	Entity* shortTermObjective;
 	fMPoint longTermObjective;
@@ -153,6 +156,8 @@ private:
 	Animation deathLeft;
 	Animation deathLeftUp;
 	Animation deathLeftDown;
+
+	Animation particleRanged;
 
 	Animation* currentAnimation;
 

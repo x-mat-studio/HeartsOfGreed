@@ -270,6 +270,8 @@ public:
 
 
 	//public textures
+	SDL_Texture* rangedW_VFX;
+
 	SDL_Texture* base2Texture;
 	SDL_Texture* base2TextureEnemy;
 	SDL_Texture* base2TextureSelected;
@@ -378,6 +380,7 @@ private:
 	Emitter* sampleMeleeSkill4; Emitter* sampleMeleeSkill5; Emitter* sampleMeleeSkill6;
 
 	SDL_Texture* snowball;
+
 	SDL_Texture* explosionTexture2;
 	SDL_Texture* spiderweb;
 	SDL_Texture* smoke1;
