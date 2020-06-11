@@ -383,6 +383,7 @@ protected:
 	float cooldownHability3;
 
 	float visionInPx;
+	float attackRangeInPX;
 
 	Entity* objective;
 

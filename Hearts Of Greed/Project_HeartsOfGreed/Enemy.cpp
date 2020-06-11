@@ -56,6 +56,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
 	damageTakenTimer(0.f),
+	attackRangeInPX(0.f),
 	haveOrders(false),
 	scale(scale),
 	currentAnimation(nullptr),
@@ -103,6 +104,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	longTermObjective{ NULL, NULL },
 	shortTermObjective(nullptr),
 	damageTakenTimer(0.f),
+	attackRangeInPX(0.f),
 
 	scale(copy->scale),
 	haveOrders(false),
@@ -113,6 +115,9 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	visionEntity = app->fowManager->CreateFoWEntity(position, false); //TODO this is going to be the enemy vision distance
 	currentAnimation = &idleRightDown;
 
+	float halfH = app->map->data.tileHeight * 0.5;
+	float halfW = app->map->data.tileWidth * 0.5;
+	attackRangeInPX = (sqrt(halfW * halfW + halfH * halfH) * attackRange + 0.5f * attackRange + halfH * 0.3f);
 
 	debuffs.SetCallBack(this);
 }
@@ -472,6 +477,12 @@ bool Enemy::CheckAttackRange()
 		return true;
 
 	}
+	else if (app->pathfinding->GetLastLine()->size() - 1 <= attackRange + shortTermObjective->GetRadiusSize()
+		&& position.DiagonalDistance(shortTermObjective->GetPosition()) <= attackRangeInPX)
+	{
+		return true;
+	}
+
 	else
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_OUT_OF_RANGE);
