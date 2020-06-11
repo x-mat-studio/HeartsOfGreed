@@ -132,13 +132,14 @@ bool GathererHero::PreProcessSkill1()
 	}
 
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
-	granadePosLaunch = app->input->GetMousePosWorld();
+	fMPoint mousePosition = app->input->GetMousePosWorld();
 
-	if (center.InsideCircle(app->map->WorldToMap(granadePosLaunch.x, granadePosLaunch.y), skill1.rangeRadius))
+	if (center.InsideCircle(app->map->WorldToMap(mousePosition.x, mousePosition.y), skill1.rangeRadius))
 	{
 		granadeArea = app->entityManager->RequestAreaInfo(skill1.attackRadius);
+		skillPosLaunch = mousePosition;
 
-		app->entityManager->CreateDynamicArea(&this->suplAoE, skill1.attackRadius, { (int)granadePosLaunch.x, (int)granadePosLaunch.y }, granadeArea);
+		app->entityManager->CreateDynamicArea(&this->suplAoE, skill1.attackRadius, { (int)skillPosLaunch.x, (int)skillPosLaunch.y }, granadeArea);
 	}
 
 	return true;
@@ -192,7 +193,7 @@ bool GathererHero::ExecuteSkill1()
 				myTurret = nullptr;
 			}
 
-			myTurret = (Turret*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, granadePosLaunch.x, granadePosLaunch.y, ENTITY_ALIGNEMENT::PLAYER);
+			myTurret = (Turret*)app->entityManager->AddEntity(ENTITY_TYPE::BLDG_TURRET, skillPosLaunch.x, skillPosLaunch.y, ENTITY_ALIGNEMENT::PLAYER);
 
 			//Here we can do funny stuff to the turret
 			myTurret->SetLevel(skill1.lvl + 1);
