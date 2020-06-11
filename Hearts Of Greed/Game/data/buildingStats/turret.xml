@@ -11,7 +11,7 @@
 
     <stats level="1" vision="5" xp="35" buildingCost="105" transparency="160">
       <hitPoints max="50" current="50" recoveryRate="0"/>
-      <attack damage="5" speed="2.0f" range="125"/>
+      <attack damage="5" speed="2.0f" range="180"/>
     </stats>
 
     <levelUp damageIncrease="1.425f" rangeIncrease="0" speedIncrease ="0.125f" hpIncrease="37"></levelUp>
