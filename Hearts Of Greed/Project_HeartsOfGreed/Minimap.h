@@ -69,6 +69,7 @@ public:
 	void LoadMinimap();
 	void UpdateMinimapFoW();
 	void MinimapFoWNeedsUpdate();
+	void DeleteMinimapIcons();
 
 
 	bool ClickingOnMinimap(int x, int y);
@@ -81,7 +82,6 @@ public:
 
 private:
 	void ExecuteEvent(EVENT_ENUM eventId);
-
 
 public:
 	float minimapScaleRelation;

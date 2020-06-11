@@ -76,7 +76,6 @@ Minimap::Minimap() :
 Minimap::~Minimap()
 {
 	minimapIcons.clear();
-
 }
 
 
@@ -315,15 +314,7 @@ bool Minimap::PostUpdate(float dt)
 // Called before quitting
 bool Minimap::CleanUp()
 {
-	int numElements = minimapIcons.size();
-
-	for (int i = 0; i < numElements; i++)
-	{
-		RELEASE(minimapIcons[i]);
-		minimapIcons[i] = nullptr;
-	}
-
-	minimapIcons.clear();
+	DeleteMinimapIcons();
 
 	app->eventManager->EventUnRegister(EVENT_ENUM::FULLSCREEN_REGAIN_FOCUS, this);
 
@@ -415,6 +406,19 @@ void Minimap::MinimapFoWNeedsUpdate()
 {
 	if (minimapFoWNeedsUpdate == false)
 		minimapFoWNeedsUpdate = true;
+}
+
+void Minimap::DeleteMinimapIcons()
+{
+	int numElements = minimapIcons.size();
+
+	for (int i = 0; i < numElements; i++)
+	{
+		RELEASE(minimapIcons[i]);
+		minimapIcons[i] = nullptr;
+	}
+
+	minimapIcons.clear();
 }
 
 
