@@ -1846,7 +1846,7 @@ Entity* ModuleEntityManager::SearchEntityRect(SDL_Rect* rect, ENTITY_ALIGNEMENT 
 			iMPoint entityPosM = app->map->WorldToMap(entityVector[i]->GetPosition().x, entityVector[i]->GetPosition().y);
 			iMPoint myPosM = app->map->WorldToMap(x, y);
 
-			if (col->CheckCollision(*rect) && (entityVector[i]->GetRadiusSize() > 1 || app->pathfinding->LineRayCast(entityPosM, myPosM)))
+			if (col->CheckCollision(*rect))
 			{
 				if (ret == nullptr)
 				{
