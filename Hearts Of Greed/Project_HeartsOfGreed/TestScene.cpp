@@ -418,6 +418,23 @@ bool  ModuleTestScene::Load(pugi::xml_node& data)
 
 	timer = iterator.attribute("timer").as_float();
 
+	//loads day/night transition
+	int minutes;
+	int seconds;
+	GetTimer(minutes, seconds);
+	double secToEnd = (double)30 - (double)seconds;
+
+	if (minutes == 0 && seconds <= 30)
+	{
+		if (isNightTime == true)
+		{
+			nightRectAlpha.NewEasing(EASING_TYPE::EASE, 100, 0, 30, secToEnd);
+		}
+		else
+		{
+			nightRectAlpha.NewEasing(EASING_TYPE::EASE, 0, 100, 30, secToEnd);
+		}
+	}
 
 	haveJustBeenLoaded = true;
 	return true;
