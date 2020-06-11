@@ -239,14 +239,7 @@ void Easing::NewEasing(EASING_TYPE ntype, double ninitialPos, double nfinalPos, 
 	currentTime = MAX(ncurrentTime, 0.0f);
 	currentTime = MIN(currentTime, duration);
 
-	if (currentTime != 0.0)
-	{
-		lastRequestedPos = UpdateEasingFromNewTime(ncurrentTime);
-	}
-	else
-	{
-		lastRequestedPos = initialPos;
-	}
+	lastRequestedPos = initialPos;
 
 	active = true;
 }

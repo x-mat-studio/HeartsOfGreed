@@ -392,12 +392,12 @@ void GathererHero::CheckObjective(Entity* deleted)
 		inputs.push_back(HERO_INPUTS::IN_MOVE);
 	}
 
-	//if (myTurret == deleted)
-	//{
-	//	myTurret = nullptr;
-	//	cooldownHability1 += TIME_TRIGGER;
-	//	skill1Charged = false;
-	//}
+	if (myTurret == deleted)
+	{
+		myTurret = nullptr;
+		cooldownHability1 += TIME_TRIGGER;
+		skill1Charged = false;
+	}
 
 }
 
