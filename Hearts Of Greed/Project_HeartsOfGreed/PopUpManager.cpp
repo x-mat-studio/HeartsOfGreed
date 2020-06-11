@@ -1,8 +1,10 @@
 #include "PopUpManager.h"
+
 #include "UI.h"
 #include "EventManager.h"
 #include "UI_Group.h"
 #include "Audio.h"
+#include "Input.h"
 
 ModulePopUpManager::ModulePopUpManager() :
 	Module(),
@@ -74,7 +76,7 @@ bool ModulePopUpManager::Start()
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
 	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
 
-	app->eventManager->EventRegister(EVENT_ENUM::FINISH_QUEST, this);
+	app->eventManager->EventRegister(EVENT_ENUM::HERO_RESQUED, this);
 
 	popUp = app->audio->LoadFx("Assets/audio/sfx/Interface/PopUp.wav");
 
@@ -158,12 +160,7 @@ bool ModulePopUpManager::CleanUp()
 	app->eventManager->EventUnRegister(EVENT_ENUM::RANGED_RESURRECT, this);
 	app->eventManager->EventUnRegister(EVENT_ENUM::ROBOTTO_RESURRECT, this);
 
-	app->eventManager->EventUnRegister(EVENT_ENUM::FINISH_QUEST, this);
-
-	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_GATHERER, this);
-	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_MELEE, this);
-	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_RANGED, this);
-	app->eventManager->EventRegister(EVENT_ENUM::FOCUS_HERO_ROBO, this);
+	app->eventManager->EventUnRegister(EVENT_ENUM::HERO_RESQUED, this);
 
 	displayingPopUp = false;
 
@@ -209,7 +206,6 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	if (eventId == EVENT_ENUM::HERO_LEVELED_UP)
 	{
 		popUpArray[(int)POP_UPS::LEVEL_UP].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
 	else if (eventId == EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::RANGED_PASSIVE1_UPGRADE ||
 		eventId == EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_ACTIVE1_UPGRADE ||
@@ -228,7 +224,6 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	if (eventId == EVENT_ENUM::HERO_DEAD)
 	{
 		popUpArray[(int)POP_UPS::HERO_DIED].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
 	else if (eventId == EVENT_ENUM::GATHERER_RESURRECT || eventId == EVENT_ENUM::MELEE_RESURRECT ||
 		eventId == EVENT_ENUM::RANGED_RESURRECT || eventId == EVENT_ENUM::ROBOTTO_RESURRECT)
@@ -246,7 +241,6 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	if (eventId == EVENT_ENUM::REACHED_100_RED_RESOUCES)
 	{
 		popUpArray[(int)POP_UPS::RED_RESOURCE_100].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
 	else if (eventId == EVENT_ENUM::GATHERER_LIFE_UPGRADE || eventId == EVENT_ENUM::MELEE_LIFE_UPGRADE || eventId == EVENT_ENUM::RANGED_LIFE_UPGRADE ||
 		eventId == EVENT_ENUM::ROBOTTO_LIFE_UPGRADE || eventId == EVENT_ENUM::GATHERER_DAMAGE_UPGRADE || eventId == EVENT_ENUM::MELEE_DAMAGE_UPGRADE ||
@@ -268,7 +262,6 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	if (eventId == EVENT_ENUM::GOT_PURPLE_RESOURCE)
 	{
 		popUpArray[(int)POP_UPS::PURPLE_ORB].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
 	else if (eventId == EVENT_ENUM::GATHERER_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::RANGED_PASSIVE1_UPGRADE ||
 		eventId == EVENT_ENUM::ROBOTTO_PASSIVE1_UPGRADE || eventId == EVENT_ENUM::GATHERER_ACTIVE1_UPGRADE || eventId == EVENT_ENUM::MELEE_ACTIVE1_UPGRADE ||
@@ -287,7 +280,6 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	if (eventId == EVENT_ENUM::UPGRADE_CENTER_CONSTRUCT)
 	{
 		popUpArray[(int)POP_UPS::BUY_TURRETS_AND_BARRICADES].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
 	else if (eventId == EVENT_ENUM::TURRET_CONSTRUCT || eventId == EVENT_ENUM::BARRICADE_CONSTRUCT)
 	{
@@ -305,7 +297,6 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	if (eventId == EVENT_ENUM::TURRET_CONSTRUCT || eventId == EVENT_ENUM::BARRICADE_CONSTRUCT)
 	{
 		popUpArray[(int)POP_UPS::UPGRADE_TURRETS_AND_BARRICADES].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
 	else if (eventId == EVENT_ENUM::TURRET_UPGRADED || eventId == EVENT_ENUM::BARRICADE_UPGRADED)
 	{
@@ -319,16 +310,21 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	}
 
 
-	/*if (eventId == EVENT_ENUM::FINISH_QUEST)
+	if (eventId == EVENT_ENUM::HERO_RESQUED)
 	{
 		popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].Activate();
-		app->audio->PlayFx(popUp, 0, -1);
 	}
-	else if (popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].displayed == true)
+	else if (app->input->GetKey(SDL_SCANCODE_1) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_2) == KEY_STATE::KEY_DOWN ||
+		app->input->GetKey(SDL_SCANCODE_3) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_4) == KEY_STATE::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_TAB) == KEY_STATE::KEY_DOWN)
 	{
-		app->uiManager->SetPopUpClosingBool(true);
-		app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
-	}*/
+		if (popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].displayed == true)
+		{
+			app->uiManager->SetPopUpClosingBool(true);
+			app->uiManager->popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
+		}
+		else if (popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].activated == true)
+			popUpArray[(int)POP_UPS::TRY_FOCUS_KEYS].finished = true;
+	}
 }
 
 
@@ -341,6 +337,7 @@ void ModulePopUpManager::CheckPopUpsToDisplay()
 			if (popUpArray[i].activated == true && popUpArray[i].finished == false)
 			{
 				app->uiManager->CreatePopUp(popUpArray[i].string);
+				app->audio->PlayFx(popUp, 0, -1);
 				popUpArray[i].displayed = true;
 				displayingPopUp = true;
 			}

@@ -261,6 +261,11 @@ void ModuleQuestManager::CheckEntityDead(Entity* entity)
 				if(i != 0 &&  i != 5)
 				app->eventManager->GenerateEvent(EVENT_ENUM::FINISH_QUEST, EVENT_ENUM::NULL_EVENT);
 
+				if (i != 0 && i != 5 && i != 6)
+				{
+					app->eventManager->GenerateEvent(EVENT_ENUM::HERO_RESQUED, EVENT_ENUM::NULL_EVENT);
+				}
+
 				if (i == 5)	// Tutorial 2 ID
 				{
 					app->eventManager->GenerateEvent(EVENT_ENUM::DEBUG_NIGHT, EVENT_ENUM::NULL_EVENT);
