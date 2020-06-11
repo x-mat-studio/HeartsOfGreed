@@ -206,6 +206,7 @@
     <ClInclude Include="RangedEnemy.h" />
     <ClInclude Include="RangedHero.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ResourcesPortrait.h" />
     <ClInclude Include="RoboHero.h" />
     <ClInclude Include="Spawner.h" />
@@ -233,6 +234,12 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="SimpleTimer.h" />
     <ClInclude Include="WinScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project_HeartsOfGreed.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Game\data\_icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

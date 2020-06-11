@@ -453,6 +453,7 @@
     <ClInclude Include="PopUpManager.h">
       <Filter>Project Hierarchy  ========\Modules\header files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -536,5 +537,11 @@
     <Filter Include="Project Hierarchy  ========\UI\UIElements">
       <UniqueIdentifier>{408d7c25-afc7-48f2-ac77-451e0deb6d48}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project_HeartsOfGreed.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Game\data\_icon.ico" />
   </ItemGroup>
 </Project>
