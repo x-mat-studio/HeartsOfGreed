@@ -114,6 +114,7 @@ bool ModuleTestScene::Start()
 		pos.create(950, 4100);
 
 		isNightTime = false;
+		nightRectAlpha.NewEasing(EASING_TYPE::EASE, 0, 0, 0);
 		//Test Hero
 		if (startFromLoad == false)
 		{
