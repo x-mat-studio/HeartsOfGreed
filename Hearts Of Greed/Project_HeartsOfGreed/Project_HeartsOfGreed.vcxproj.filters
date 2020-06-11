@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="p2Log.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="PugiXml\src\pugixml.cpp">
+      <Filter>Project Hierarchy  ========\Tools\PuguiXML</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleTimer.cpp">
+      <Filter>Project Hierarchy  ========\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfectTimer.cpp">
+      <Filter>Project Hierarchy  ========\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Project Hierarchy  ========\Core\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Project Hierarchy  ========\Core\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Project Hierarchy  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Barricade.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Base.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Turret.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="UpgradeCenter.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Module.cpp">
+      <Filter>Project Hierarchy  ========\Core\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinding.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeHero.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="GathererHero.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedHero.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Project Hierarchy  ========\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="FoWManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="FoWEntity.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Fog of War\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicEntity.cpp">
+      <Filter>Project Hierarchy  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Project Hierarchy  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>Project Hierarchy  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeToBlack.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>Project Hierarchy  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScene.cpp">
+      <Filter>Project Hierarchy  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoseScene.cpp">
+      <Filter>Project Hierarchy  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Project Hierarchy  ========\Scenes\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minimap.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Group.cpp">
+      <Filter>Project Hierarchy  ========\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFactory.cpp">
+      <Filter>Project Hierarchy  ========\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Text.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Scrollbar.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesPortrait.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="DataPages.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroesPortraitManager.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroPortrait.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="RoboHero.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="Quest.cpp">
+      <Filter>Project Hierarchy  ========\Entities\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedEnemy.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="NightEnemy.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="GigaEnemy.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>Project Hierarchy  ========\Entities\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Project Hierarchy  ========\Entities\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Project Hierarchy  ========\Entities\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="EasingFunctions.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogText.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityEffects.cpp">
+      <Filter>Project Hierarchy  ========\Entities\Entity Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerClock.cpp">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraShake.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+    <ClCompile Include="PopUpManager.cpp">
+      <Filter>Project Hierarchy  ========\Modules\cpp files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="p2Defs.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Log.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="p2SString.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
+      <Filter>Project Hierarchy  ========\Tools\PuguiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugixml.hpp">
+      <Filter>Project Hierarchy  ========\Tools\PuguiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleTimer.h">
+      <Filter>Project Hierarchy  ========\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfectTimer.h">
+      <Filter>Project Hierarchy  ========\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="Brofiler\Brofiler\Brofiler.h">
+      <Filter>Project Hierarchy  ========\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Project Hierarchy  ========\Core\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Project Hierarchy  ========\Core\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Project Hierarchy  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Barricade.h">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Turret.h">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeCenter.h">
+      <Filter>Project Hierarchy  ========\Entities\Buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinding.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeHero.h">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="GathererHero.h">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedHero.h">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Project Hierarchy  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWEntity.h">
+      <Filter>Project Hierarchy  ========\Entities\Fog of War\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FoWBitDefs.h">
+      <Filter>Project Hierarchy  ========\Entities\Fog of War\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicEntity.h">
+      <Filter>Project Hierarchy  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Project Hierarchy  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Project Hierarchy  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeToBlack.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Project Hierarchy  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinScene.h">
+      <Filter>Project Hierarchy  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoseScene.h">
+      <Filter>Project Hierarchy  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Project Hierarchy  ========\Scenes\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minimap.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Group.h">
+      <Filter>Project Hierarchy  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFactory.h">
+      <Filter>Project Hierarchy  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Scrollbar.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcesPortrait.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="DataPages.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="RoboHero.h">
+      <Filter>Project Hierarchy  ========\Entities\Heroes</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroesPortraitManager.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroPortrait.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quest.h">
+      <Filter>Project Hierarchy  ========\Entities\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedEnemy.h">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="NightEnemy.h">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GigaEnemy.h">
+      <Filter>Project Hierarchy  ========\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>Project Hierarchy  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Project Hierarchy  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Project Hierarchy  ========\Entities\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EasingFunctions.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogText.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityEffects.h">
+      <Filter>Project Hierarchy  ========\Entities\Entity Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerClock.h">
+      <Filter>Project Hierarchy  ========\UI\UIElements</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraShake.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="PopUpManager.h">
+      <Filter>Project Hierarchy  ========\Modules\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{a8bfab6a-5472-4969-943e-861a8b493f08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========">
+      <UniqueIdentifier>{cb944693-b9d0-484c-bad2-02d5a7cdbec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Tools">
+      <UniqueIdentifier>{42c748be-4a37-49de-970f-5be811d06b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Tools\PuguiXML">
+      <UniqueIdentifier>{7cb78d67-17cc-45eb-af97-e2106becce7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Scenes">
+      <UniqueIdentifier>{e07660eb-d36f-4cc9-af59-324d31c2f2f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Scenes\cpp files">
+      <UniqueIdentifier>{aae35377-7bf7-4106-82fa-8db85430e0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Scenes\header files">
+      <UniqueIdentifier>{9a20f83b-de96-49a3-b451-b810bca4246d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Modules">
+      <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Modules\header files">
+      <UniqueIdentifier>{c667b984-02e3-4fdb-b108-c185daf0789e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Modules\cpp files">
+      <UniqueIdentifier>{281d0c49-b739-4ed0-afef-5f866efafd13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Timers">
+      <UniqueIdentifier>{d8360410-638f-413b-af30-fd905b8a728e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Core">
+      <UniqueIdentifier>{c83f55de-0d19-4d2a-95b3-cec3fa3de691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Core\header files">
+      <UniqueIdentifier>{efd0532f-157c-4cd6-bf67-2b555321a1d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Core\cpp files">
+      <UniqueIdentifier>{b0d88eee-a52a-4609-9bc0-8e5e8912dd6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities">
+      <UniqueIdentifier>{eefc1b5b-94de-4759-826b-4e3adc8fadbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Buildings">
+      <UniqueIdentifier>{39ba80c6-ebc3-4f9e-b929-7276afc06973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Heroes">
+      <UniqueIdentifier>{ab66f34b-6781-46cc-baa8-40e288426340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\cpp files">
+      <UniqueIdentifier>{264e1060-39b9-4e8c-a535-b5ab03f0e522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\header files">
+      <UniqueIdentifier>{cbdc8652-8c70-4841-bde0-e62fe4536b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Enemies">
+      <UniqueIdentifier>{ef24dc2f-2b30-4a4e-bb05-bac8e5afb625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\ParticleSystem">
+      <UniqueIdentifier>{2a56a668-c908-482b-9d25-0822290fd17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Fog of War">
+      <UniqueIdentifier>{53cbac33-f01a-48a1-a742-aee1c7a5dc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Fog of War\cpp files">
+      <UniqueIdentifier>{e0bc134e-7392-44b8-bd7a-d828e0ba854f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Fog of War\header files">
+      <UniqueIdentifier>{949c0ae5-db7b-4aaf-a9bb-c8d20138eea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\Entities\Entity Effects">
+      <UniqueIdentifier>{3cef0484-55bd-400a-8dc3-60f8e9114d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\UI">
+      <UniqueIdentifier>{ec289a4a-9544-4bd6-85ae-8b0b5e343719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Hierarchy  ========\UI\UIElements">
+      <UniqueIdentifier>{408d7c25-afc7-48f2-ac77-451e0deb6d48}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project_HeartsOfGreed.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Game\data\_icon.ico" />
+  </ItemGroup>
+</Project>
