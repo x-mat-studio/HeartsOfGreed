@@ -1954,6 +1954,11 @@ UI* UIFactory::CreateResourcesPortrait(float x, float y, UI* parent, UI_Group* g
 
 	group->AddUiElement(resourcesPortrait);
 
+	//border
+	SDL_Rect auxrect{ 816,921,99,70 };
+	CreateImage(0, -10, background, auxrect, group);
+
+
 	return resourcesPortrait;
 }
 
