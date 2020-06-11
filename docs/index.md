@@ -28,7 +28,7 @@ src="https://www.youtube.com/embed/yI1U32Tnni8" frameborder="0" allowfullscreen>
 
 <center>
 
-<font size="6"><a href="https://github.com/x-mat-studio/HeartsOfGreed/releases/tag/v0.8">Download our game Build</a></font>
+<font size="6"><a href="{{site.github.zip_url}}">Download our game Build</a></font>
 
 </center>
 
