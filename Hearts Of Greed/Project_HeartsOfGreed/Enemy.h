@@ -123,7 +123,7 @@ private:
 	int xpOnDeath;
 
 	float attackCooldown;
-
+	float attackRangeInPX;
 
 	bool haveOrders;
 	Entity* shortTermObjective;

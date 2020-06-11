@@ -81,6 +81,7 @@ Hero::Hero(fMPoint position, ENTITY_TYPE type, Collider* col,
 	heroXP(0),
 	recoveringHealth(0),
 	recoveringEnergy(0),
+	attackRangeInPX(0.f),
 
 	bonusArmor(0),
 	bonusAttack(0),
@@ -175,6 +176,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	heroXP(0),
 	recoveringHealth(0),
 	recoveringEnergy(0),
+	attackRangeInPX(0.f),
 
 	bonusArmor(0),
 	bonusAttack(0),
@@ -214,6 +216,7 @@ Hero::Hero(fMPoint position, Hero* copy, ENTITY_ALIGNEMENT alignement) :
 	float halfH = app->map->data.tileHeight * 0.5;
 	float halfW = app->map->data.tileWidth * 0.5;
 	visionInPx = sqrt(halfW * halfW + halfH * halfH) * stats.visionDistance + 0.5f * stats.visionDistance;
+	attackRangeInPX = (sqrt(halfW * halfW + halfH * halfH) * stats.attackRange + 0.5f * stats.attackRange + halfH *0.3f);
 }
 
 
@@ -590,6 +593,11 @@ bool Hero::CheckAttackRange()
 	{
 		return true;
 
+	}
+	else if (app->pathfinding->GetLastLine()->size() - 1 <= stats.attackRange + objective->GetRadiusSize()
+		&& position.DiagonalDistance(objective->GetPosition()) <= attackRangeInPX)
+	{
+		return true;
 	}
 
 	else
