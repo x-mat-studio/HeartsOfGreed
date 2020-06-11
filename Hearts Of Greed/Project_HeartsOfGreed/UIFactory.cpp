@@ -125,7 +125,7 @@ UIFactory::UIFactory() :
 	skipButton{ 54 ,21, 35, 18 },
 
 	dayNightIcon{ 460, 841, 35, 35 },
-
+	//dayNightIcon{460,883,35,35}, //This is the rectangle for the night icon
 	popUpWindow{ 507, 844, 211, 77 },
 
 	gathererLifeUpgradeCost(100),
