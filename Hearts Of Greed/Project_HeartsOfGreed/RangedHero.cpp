@@ -81,11 +81,13 @@ bool RangedHero::PreProcessSkill1()
 	}
 
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
-	skill1PosLaunch = app->input->GetMousePosWorld();
+	fMPoint mousePos = app->input->GetMousePosWorld();
 
-	if (center.InsideCircle(app->map->WorldToMap(skill1PosLaunch.x, skill1PosLaunch.y), skill1.rangeRadius))
+	if (center.InsideCircle(app->map->WorldToMap(mousePos.x, mousePos.y), skill1.rangeRadius))
 	{
 		skill1Area = app->entityManager->RequestAreaInfo(skill1.attackRadius);
+
+		skill1PosLaunch = mousePos;
 
 		app->entityManager->CreateDynamicArea(&this->suplAoE, skill1.attackRadius, { (int)skill1PosLaunch.x, (int)skill1PosLaunch.y }, skill1Area);
 	}

@@ -52,7 +52,7 @@ private:
 
 private:
 
-	fMPoint granadePosLaunch;
+	fMPoint skillPosLaunch;
 	skillArea* granadeArea;
 
 
