@@ -2,47 +2,47 @@
 
   <!-- Gatherer Active IMPORTANT: The damage is the time that the Turret will last-->
   <skill id="0" type="1"  alignTarget="1">
-    <lvl  dmg="45" cooldown="22.5" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="10"/>
-    <lvl  dmg="52" cooldown="25.0" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="15"/>
-    <lvl  dmg="65" cooldown="32.0" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="20"/>
-    <lvl  dmg="73" cooldown="36.5" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="25"/>
-    <lvl  dmg="85" cooldown="42.5" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="30"/>
+    <lvl  dmg="45" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="10"/>
+    <lvl  dmg="52" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="15"/>
+    <lvl  dmg="59" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="20"/>
+    <lvl  dmg="65" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="25"/>
+    <lvl  dmg="72" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="30"/>
   </skill>
 
   <!-- Armored Active -->
   <skill id="1" type="1"  alignTarget="1">
-    <lvl  dmg="10" cooldown="6.0" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.25" effectSeverity="1.0" energyCost="10"/>
-    <lvl  dmg="15" cooldown="6.0" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.5" effectSeverity="1.0" energyCost="10"/>
-    <lvl  dmg="18" cooldown="5.5" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.75" effectSeverity="1.0" energyCost="15"/>
-    <lvl  dmg="24" cooldown="5.5" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="2.0" effectSeverity="1.0" energyCost="20"/>
-    <lvl  dmg="32" cooldown="4.5f" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="2.35" effectSeverity="1.0" energyCost="20"/>
+    <lvl  dmg="10" cooldown="0.1" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.25" effectSeverity="1.0" energyCost="10"/>
+    <lvl  dmg="15" cooldown="0.1" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.5" effectSeverity="1.0" energyCost="14"/>
+    <lvl  dmg="18" cooldown="0.1" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="1.75" effectSeverity="1.0" energyCost="16"/>
+    <lvl  dmg="24" cooldown="0.1" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="2.0" effectSeverity="1.0" energyCost="20"/>
+    <lvl  dmg="32" cooldown="0.1" rangeRadius="1"  attackRadius="1"  hurtYourself="true"  executionTime="1.0"  effect = "2" effectTime="2.35" effectSeverity="1.0" energyCost="22"/>
   </skill>
 
   <!-- Ranged Active -->
   <skill id="2" type="1"  alignTarget="1">
-    <lvl  dmg="3" cooldown="3.5" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="4.0" effectSeverity="0.5" energyCost="6" />
-    <lvl  dmg="4" cooldown="3.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="4.5" effectSeverity="0.5" energyCost="9" />
-    <lvl  dmg="4" cooldown="3.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="5.0" effectSeverity="0.6" energyCost="17" />
-    <lvl  dmg="5" cooldown="2.5" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="5.5" effectSeverity="0.6" energyCost="21" />
-    <lvl  dmg="5" cooldown="2.0" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="6.0" effectSeverity="0.7" energyCost="26" />
+    <lvl  dmg="3" cooldown="0.1" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="4.0" effectSeverity="0.5" energyCost="5" />
+    <lvl  dmg="4" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="4.5" effectSeverity="0.5" energyCost="9" />
+    <lvl  dmg="4" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="5.0" effectSeverity="0.6" energyCost="13" />
+    <lvl  dmg="5" cooldown="0.1" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="5.5" effectSeverity="0.6" energyCost="15" />
+    <lvl  dmg="5" cooldown="0.1" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="6.0" effectSeverity="0.7" energyCost="17" />
   </skill>
 
   <!-- Robot Active -->
   <skill id="3" type="1"  alignTarget="1">
-    <lvl  dmg="100" cooldown="5.0" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="2.0"  effect ="-1" energyCost="10"/>
-    <lvl  dmg="150" cooldown="5.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="1.75"  effect ="-1" energyCost="15"/>
-    <lvl  dmg="200" cooldown="4.0" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="1.75"  effect = "-1" energyCost="20"/>
-    <lvl  dmg="250" cooldown="4.0" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="1.5"  effect ="-1" energyCost="25"/>
-    <lvl  dmg="300" cooldown="3.0" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="1.5"  effect = "-1" energyCost="30"/>
+    <lvl  dmg="100" cooldown="0.1" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="2.0"  effect ="-1" energyCost="1"/>
+    <lvl  dmg="150" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="1.75"  effect ="-1" energyCost="1"/>
+    <lvl  dmg="200" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="1.75"  effect = "-1" energyCost="1"/>
+    <lvl  dmg="250" cooldown="0.1" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="1.5"  effect ="-1" energyCost="1"/>
+    <lvl  dmg="300" cooldown="0.1" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="1.5"  effect = "-1" energyCost="1"/>
   </skill>
 
   <!-- Passive skills melee -->
   <skill id="4" type="1"  alignTarget="1">
-    <lvl  dmg="1" cooldown="4.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="20"/>
-    <lvl  dmg="1" cooldown="5.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="25"/>
-    <lvl  dmg="2" cooldown="5.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="30"/>
-    <lvl  dmg="2" cooldown="6.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="35"/>
-    <lvl  dmg="3" cooldown="7.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="40"/>
+    <lvl  dmg="1" cooldown="4.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="15"/>
+    <lvl  dmg="1" cooldown="5.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="20"/>
+    <lvl  dmg="2" cooldown="5.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="25"/>
+    <lvl  dmg="2" cooldown="6.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="30"/>
+    <lvl  dmg="3" cooldown="7.0" rangeRadius="80"  attackRadius="0"  hurtYourself="false"  executionTime="0.0"  effect ="-1" energyCost="35"/>
   </skill>
 
   <!-- Passive skills gatherer -->
