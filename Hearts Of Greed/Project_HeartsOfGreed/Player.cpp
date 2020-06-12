@@ -385,7 +385,7 @@ void ModulePlayer::RightClick()
 		enemyFound = heroesVector[i]->LockOn(obj);
 
 		if (heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound))
-			app->audio->PlayFx(app->entityManager->moveHero, 0, -1,LOUDNESS::NORMAL);;
+			app->audio->PlayFx(app->entityManager->moveHero, 0, -1,LOUDNESS::NORMAL );;
 
 	}
 
