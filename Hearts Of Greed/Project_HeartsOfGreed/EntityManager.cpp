@@ -649,11 +649,17 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::ENEMY:
 				entityVector[i]->Start(enemyTexture);
 
+				entityVector[i]->offset.x = -((float)entityVector[i]->GetCollider()->rect.w * 0.5f);
+				entityVector[i]->offset.y = -((float)entityVector[i]->GetCollider()->rect.h * 0.76f);
+
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_NIGHT:
 				entityVector[i]->Start(enemyNightTexture);
+
+				entityVector[i]->offset.x = -((float)entityVector[i]->GetCollider()->rect.w * 0.5f);
+				entityVector[i]->offset.y = -((float)entityVector[i]->GetCollider()->rect.h * 0.76f);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
@@ -661,11 +667,17 @@ void ModuleEntityManager::CheckIfStarted() {
 			case ENTITY_TYPE::ENEMY_RANGED:
 				entityVector[i]->Start(enemyRangedTexture);
 
+				entityVector[i]->offset.x = -((float)entityVector[i]->GetCollider()->rect.w * 0.5f);
+				entityVector[i]->offset.y = -((float)entityVector[i]->GetCollider()->rect.h * 0.76f);
+
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
 
 			case ENTITY_TYPE::ENEMY_GIGA:
 				entityVector[i]->Start(enemyGigaTexture);
+
+				entityVector[i]->offset.x = -((float)entityVector[i]->GetCollider()->rect.w * 0.5f);
+				entityVector[i]->offset.y = -((float)entityVector[i]->GetCollider()->rect.h * 0.82f);
 
 				entityVector[i]->minimapIcon = app->minimap->CreateIcon(&entityVector[i]->position, MINIMAP_ICONS::ENEMY, entityVector[i]->GetCenter(), entityVector[i]);
 				break;
@@ -817,11 +829,8 @@ bool ModuleEntityManager::PostUpdate(float dt)
 		float g = ((1 - t) * 255) + (t * 53);
 		float b = ((1 - t) * 255) + (t * 138);
 
-
-
 		SDL_SetTextureColorMod(buildingTexture, r, g, b);
 		SDL_SetTextureColorMod(base1Texture, r, g, b);
-
 	}
 	int numEntities = entityVector.size();
 	for (int i = 0; i < numEntities; i++)
@@ -1380,9 +1389,6 @@ Entity* ModuleEntityManager::CheckEntityOnClickbyPriority(iMPoint mousePos)
 	{
 		for (int i = 0; i < numEntities; i++)
 		{
-
-
-
 			type = entityVector[i]->GetType();
 			col = entityVector[i]->GetCollider();
 			align = entityVector[i]->GetAlignment();

@@ -129,7 +129,6 @@ public:
 	void SetTexture(SDL_Texture* texture);
 	SDL_Texture* GetTexture();
 
-	SDL_Rect GetAnimationRect(float dt);
 	ENTITY_TYPE GetType();
 	ENTITY_ALIGNEMENT GetAlignment();
 	bool IsOpositeAlignement(ENTITY_ALIGNEMENT check);
@@ -160,12 +159,13 @@ public:
 	MinimapIcon* minimapIcon;
 	fMPoint position;
 
+	fMPoint offset;
+
 	float hitPointsMax;
 	float hitPointsCurrent;
 
 protected:
 	
-	fMPoint offset;
 	fMPoint center;
 
 	int radiusSize;

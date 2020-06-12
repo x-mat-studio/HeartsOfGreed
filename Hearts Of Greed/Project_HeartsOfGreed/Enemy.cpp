@@ -225,15 +225,12 @@ void Enemy::StateMachine(float dt)
 				{
 					if (Attack() == true)
 					{
-
 						if (this->type == ENTITY_TYPE::ENEMY_RANGED)
 							drawingVFX = true;
 
 						attackCooldown += 0.01f;
 					}
 				}
-
-
 
 			}
 			else
