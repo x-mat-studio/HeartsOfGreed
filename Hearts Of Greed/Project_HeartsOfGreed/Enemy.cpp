@@ -272,7 +272,7 @@ void Enemy::StateMachine(float dt)
 void Enemy::Roar()
 {
 	//DEBUGSOUND
-	int randomCounter = rand() % 1000;
+	int randomCounter = rand() % 2000;
 
 	if (randomCounter == 997) {
 

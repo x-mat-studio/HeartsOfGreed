@@ -754,6 +754,10 @@ void ModuleEntityManager::CheckIfStarted() {
 					entityVector[i]->Start(upgradeCenterEnemyTexture);
 					upCenter->selectedTexture = upgradeCenterEnemySelectedTexture;
 				}
+
+				entityVector[i]->offset.x = -((float)entityVector[i]->GetCollider()->rect.w * 0.5f);
+				entityVector[i]->offset.y = -((float)entityVector[i]->GetCollider()->rect.h * 0.7f);
+
 				break;
 
 
@@ -2306,25 +2310,25 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::GATHERER_RESURRECT:
 		ReviveHero(*deadGatherer);
 		DeleteDeadHero(ENTITY_TYPE::HERO_GATHERER);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 1);
 		break;
 
 	case EVENT_ENUM::MELEE_RESURRECT:
 		ReviveHero(*deadMelee);
 		DeleteDeadHero(ENTITY_TYPE::HERO_MELEE);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 2);
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:
 		ReviveHero(*deadRanged);
 		DeleteDeadHero(ENTITY_TYPE::HERO_RANGED);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 3);
 		break;
 
 	case EVENT_ENUM::ROBOTTO_RESURRECT:
 		ReviveHero(*deadRobo);
 		DeleteDeadHero(ENTITY_TYPE::HERO_ROBO);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 4);
 		break;
 
 	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:

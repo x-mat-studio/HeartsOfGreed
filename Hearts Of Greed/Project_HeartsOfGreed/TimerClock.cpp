@@ -45,7 +45,7 @@ void TimerClock::HandleInput()
 
 			if (min == 0 && sec == 30)
 			{
-				app->audio->PlayFx(app->testScene->nightApproachesSfx, 0, -1, LOUDNESS::LOUD);
+				app->audio->PlayFx(app->testScene->nightApproachesSfx, 0, 4, LOUDNESS::LOUD, DIRECTION::FRONT,true);
 			}
 
 			if (min == 0 && sec <= 30)
