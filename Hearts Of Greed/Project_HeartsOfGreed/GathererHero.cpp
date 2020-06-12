@@ -248,10 +248,9 @@ void GathererHero::Attack()
 	{
 		GetExperience(ret);
 
-		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) {
-
-			app->player->AddResources(ret * 0.5f);
-			app->player->AddResources(passiveSkill.dmg); //dmg codifies the extra resources gained when killing an alien
+		if (this->type == ENTITY_TYPE::HERO_GATHERER && app->player != nullptr) 
+		{
+			app->player->AddResourcesBoost(passiveSkill.dmg); //dmg codifies the extra resources gained when killing an alien
 		}
 		true;
 	}

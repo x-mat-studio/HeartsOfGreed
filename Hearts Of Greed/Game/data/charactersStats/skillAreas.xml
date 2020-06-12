@@ -47,9 +47,9 @@
 
   <!-- Passive skills gatherer -->
   <skill id="5" type="1"  alignTarget="1">
-    <lvl  dmg="25" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="20.0"  effect ="-1" energyCost="0"/>
-    <lvl  dmg="25" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="23.0"  effect ="-1" energyCost="0"/>
-    <lvl  dmg="30" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="25.0"  effect ="-1" energyCost="0"/>
+    <lvl  dmg="20" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="20.0"  effect ="-1" energyCost="0"/>
+    <lvl  dmg="20" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="23.0"  effect ="-1" energyCost="0"/>
+    <lvl  dmg="25" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="25.0"  effect ="-1" energyCost="0"/>
     <lvl  dmg="30" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="27.0"  effect ="-1" energyCost="0"/>
     <lvl  dmg="35" cooldown="0" rangeRadius="250"  attackRadius="0"  hurtYourself="false"  executionTime="30.0"  effect ="-1" energyCost="0"/>
   </skill>
