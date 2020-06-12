@@ -115,6 +115,11 @@ public:
 		return currentFrame;
 	}
 
+	Frame* GetFirstFrame()
+	{
+		return &frames[0];
+	}
+
 
 	SDL_Rect& GetCurrentFrameBox(float dt)
 	{

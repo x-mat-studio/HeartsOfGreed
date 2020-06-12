@@ -4,6 +4,7 @@
 #include "TestScene.h"
 #include "EventManager.h"
 #include "Audio.h"
+#include "Render.h"
 
 TimerClock::TimerClock(float x, float y, UI* parent) :
 
@@ -11,6 +12,7 @@ TimerClock::TimerClock(float x, float y, UI* parent) :
 	minutes(0),
 	seconds(0)
 {
+
 	app->testScene->GetTimer(minutes, seconds);
 	ChangeTexture();
 }
@@ -39,13 +41,13 @@ void TimerClock::HandleInput()
 
 		if (app->testScene->IsNight() == false)
 		{
-		
+
 
 			if (min == 0 && sec == 30)
 			{
-				app->audio->PlayFx(app->testScene->nightApproachesSfx, 0, -1,LOUDNESS::LOUD);
+				app->audio->PlayFx(app->testScene->nightApproachesSfx, 0, -1, LOUDNESS::LOUD);
 			}
-			
+
 			if (min == 0 && sec <= 30)
 			{
 				if ((sec % 2) == 1)
@@ -79,6 +81,35 @@ void TimerClock::SetNumbersColor(uint r, uint g, uint b, uint a)
 
 	SDL_SetTextureColorMod(texture, newR, newG, newB);
 	SDL_SetTextureAlphaMod(texture, newA);
+}
+
+void TimerClock::Draw(float dt)
+{
+	if (texture != nullptr)
+	{
+		if (rect.h == 0 || rect.w == 0)
+		{
+			app->render->Blit(texture, position.x, position.y, nullptr, false, false, '\000', 255, 255, 255);
+		}
+
+		else
+		{
+			app->render->Blit(texture, position.x, position.y, &rect, false, false, '\000', 255, 255, 255);
+		}
+
+		SDL_Rect dayIcon = { 468, 846, 21, 21 };
+		SDL_Rect nightIcon = { 468, 867, 21,21 };
+
+
+		if (app->testScene->IsNight() == true)
+		{
+			app->render->Blit(app->uiManager->GetAtlasTexture(), position.x + 45, position.y + 5, &nightIcon, false, false, '\000', 255, 255, 255);
+		}
+		else
+		{
+			app->render->Blit(app->uiManager->GetAtlasTexture(), position.x + 45, position.y + 5, &dayIcon, false, false, '\000', 255, 255, 255);
+		}
+	}
 }
 
 

@@ -248,6 +248,11 @@ void Enemy::StateMachine(float dt)
 	case ENEMY_STATES::CHARGING_ATTACK:
 		if (shortTermObjective != nullptr)
 			dir = DetermineDirection(shortTermObjective->position - position);
+
+		if (attackCooldown == 0)
+		{
+			inputs.push_back(ENEMY_INPUTS::IN_ATTACK);
+		}
 		break;
 
 	case ENEMY_STATES::DEAD:
@@ -271,12 +276,12 @@ void Enemy::Roar()
 
 	if (randomCounter == 997) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoRoar, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
 	if (randomCounter == 998) {
 
-		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, 2, this->GetMyLoudness(), this->GetMyDirection());
+		app->audio->PlayFx(app->entityManager->wanamingoRoar2, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
 
 	}
 }
@@ -653,7 +658,7 @@ int Enemy::RecieveDamage(float damage, bool ignoreArmor)
 			ret = xpOnDeath;
 		}
 		else
-			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, 2, this->GetMyLoudness(), this->GetMyDirection(), true);
+			app->audio->PlayFx(app->entityManager->wanamingoGetsHit, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
 	}
 
 	return ret;
