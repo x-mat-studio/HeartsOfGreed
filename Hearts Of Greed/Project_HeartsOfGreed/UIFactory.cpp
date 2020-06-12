@@ -103,7 +103,8 @@ UIFactory::UIFactory() :
 
 
 	reviveHoverBackground{ 222, 508, 150, 50 },
-	upgradeHoverBackground{ 222, 508, 180, 70 },
+	upgradeShortHoverBackground{ 222, 508, 180, 50 },
+	upgradeHoverBackground{ 222, 508, 182, 70 },
 	lifeUpgradeButton{ 430, 581, 88, 87 },
 	damageUpgradeButton{ 34, 581, 88, 87 },
 	energyUpgradeButton{ 532, 581, 88, 87 },
@@ -483,7 +484,7 @@ UI_Group* UIFactory::CreateOnHoverBuyUpgradeCenterMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
 
 	CreateText(5, 0, background, "Buy upgrade center:", group);
 
@@ -491,6 +492,10 @@ UI_Group* UIFactory::CreateOnHoverBuyUpgradeCenterMenu()
 
 	sprintf_s(stats, 40, "- %i", app->player->GetUpgradeCenterCost());
 	CreateText(25, 20, background, stats, group);
+
+	CreateText(25, 30, background, "          Buy and upgrade", group);
+
+	CreateText(25, 40, background, "turrets and barricades.", group);
 
 	return group;
 }
@@ -567,7 +572,7 @@ UI_Group* UIFactory::CreateOnHoverGathererDamageUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade damage: +%.2f", app->entityManager->gathererDamageUpgradeValue);
 	strcat_s(stats, " %");
@@ -613,7 +618,7 @@ UI_Group* UIFactory::CreateOnHoverGathererAttackSpeedUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->gathererAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
@@ -705,7 +710,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeAttackSpeedUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->meleeAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
@@ -751,7 +756,7 @@ UI_Group* UIFactory::CreateOnHoverRangedDamageUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade damage: +%.2f", app->entityManager->rangedDamageUpgradeValue);
 	strcat_s(stats, " %");
@@ -797,7 +802,7 @@ UI_Group* UIFactory::CreateOnHoverRangedAttackSpeedUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->rangedAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
@@ -843,7 +848,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoDamageUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade damage: +%.2f", app->entityManager->robottoDamageUpgradeValue);
 	strcat_s(stats, " %");
@@ -889,7 +894,7 @@ UI_Group* UIFactory::CreateOnHoverRobottoAttackSpeedUpgradeMenu()
 
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	sprintf_s(stats, 40, "Upgrade atk. speed: +%.2f", app->entityManager->robottoAtkSpeedUpgradeValue);
 	strcat_s(stats, " %");
@@ -992,7 +997,7 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 	Hero* hero = (Hero*)app->player->focusedEntity;
 	UI_Group* group = new UI_Group(GROUP_TAG::IN_HOVER_MENU);
 
-	UI* background = CreateImage(pos.x - upgradeHoverBackground.w, pos.y - upgradeHoverBackground.h, nullptr, upgradeHoverBackground, group, false, false);
+	UI* background = CreateImage(pos.x - upgradeShortHoverBackground.w, pos.y - upgradeShortHoverBackground.h, nullptr, upgradeShortHoverBackground, group, false, false);
 
 	CreateText(5, 0, background, "Hammer slam:", group);
 
@@ -1022,7 +1027,7 @@ UI_Group* UIFactory::CreateOnHoverRangedPassive1Menu()
 	sprintf_s(stats, 40, "health / %i in a span of 1", hero->GetPassiveSkill().dmg);
 	CreateText(5, 25, background, stats, group);
 
-	CreateText(5, 35, background, "second after being attack.", group);
+	CreateText(5, 35, background, "second after being attacked.", group);
 
 	return group;
 }

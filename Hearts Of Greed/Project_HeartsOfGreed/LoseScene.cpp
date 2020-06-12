@@ -73,12 +73,12 @@ bool  ModuleLoseScene::Update(float dt)
 	app->render->Blit(medalLose, medalPos.x, iconPosY.GetLastRequestedPos(), NULL, false, false);
 
 	if (iconPosY.GetLastRequestedPos() < bufferPos) {
-		app->audio->PlayFx(medalBounce,0,-1,LOUDNESS::NORMAL);
+		app->audio->PlayFx(medalBounce,0,-1,LOUDNESS::LOUD);
 	}
 	else if (iconPosY.GetLastRequestedPos() == bufferPos && medalRest == false) {
 	
 		medalRest = true;
-		app->audio->PlayFx(medalBounce, 0, -1, LOUDNESS::NORMAL);
+		app->audio->PlayFx(medalBounce, 0, -1, LOUDNESS::LOUD);
 	}
 
 	return true;

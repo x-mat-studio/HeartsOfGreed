@@ -11,6 +11,7 @@ public:
 
 	void HandleInput();
 	void SetNumbersColor(uint r, uint g, uint b, uint a);
+	void Draw(float dt);
 
 private:
 	void ChangeTexture();
@@ -18,6 +19,7 @@ private:
 private:
 	int minutes;
 	int seconds;
+
 
 };
 
