@@ -251,6 +251,11 @@ void Enemy::StateMachine(float dt)
 	case ENEMY_STATES::CHARGING_ATTACK:
 		if (shortTermObjective != nullptr)
 			dir = DetermineDirection(shortTermObjective->position - position);
+
+		if (attackCooldown == 0)
+		{
+			inputs.push_back(ENEMY_INPUTS::IN_ATTACK);
+		}
 		break;
 
 	case ENEMY_STATES::DEAD:
