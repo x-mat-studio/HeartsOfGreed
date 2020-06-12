@@ -7,7 +7,7 @@ Good Luck!
 
 Disclaimer: play using headphones.
 
-This project is made as a 2nd year assigment in Bachelor’s Degree in Video Games by UPC at CITM, Terrassa, under the supervision of lecturer Marc Garrigó (www.linkedin.com/in/mgarrigo/).
+This project is made as a 2nd year assigment in Bachelor’s Degree in Video Games by UPC at CITM, Terrassa, under the supervision of lecturer [Marc Garrigó](www.linkedin.com/in/mgarrigo/).
 
 
 ## What to do
@@ -493,3 +493,5 @@ Thanks to Juan Hernández and David Carrasquet for forming part of the team duri
 ## License:
 MIT License
 Check the full license in our Github project
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dab77e736d8a4dcea73e56d0cc04baa5)](https://app.codacy.com/gh/x-mat-studio/HeartsOfGreed?utm_source=github.com&utm_medium=referral&utm_content=x-mat-studio/HeartsOfGreed&utm_campaign=Badge_Grade_Dashboard)
