@@ -18,7 +18,10 @@ If all your heroes die, you will lose the game.
 
 
 ## Check our project!
+Web Page:       https://x-mat-studio.github.io/HeartsOfGreed/
+
 Github:		https://github.com/x-mat-studio/HeartsOfGreed
+
 Twitter:	https://twitter.com/ii_rts 
 
 
