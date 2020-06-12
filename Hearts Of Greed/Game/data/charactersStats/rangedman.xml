@@ -10,11 +10,11 @@
 
     <stats level="1" movementSpeed="110" vision="9" attackRange="5">
 
-      <lvl xpToLvlUp="100" hp="80" damage="15" energy="15" atkSpeed="1.35" liferecoveryRate="2" energyrecoveryRate="1.1"/>
-      <lvl xpToLvlUp="175" hp="85" damage="18" energy="23" atkSpeed="1.4" liferecoveryRate="3" energyrecoveryRate="1.2"/>
-      <lvl xpToLvlUp="300" hp="90" damage="20" energy="35" atkSpeed="1.5" liferecoveryRate="4" energyrecoveryRate="1.35"/>
-      <lvl xpToLvlUp="450" hp="100" damage="24" energy="45" atkSpeed="1.65" liferecoveryRate="5" energyrecoveryRate="1.5"/>
-      <lvl xpToLvlUp="600" hp="120" damage="28" energy="50" atkSpeed="1.8" liferecoveryRate="6" energyrecoveryRate="1.75"/>
+      <lvl xpToLvlUp="100" hp="90" damage="15" energy="8" atkSpeed="1.35" liferecoveryRate="2" energyrecoveryRate="1.0"/>
+      <lvl xpToLvlUp="175" hp="95" damage="18" energy="14" atkSpeed="1.4" liferecoveryRate="3" energyrecoveryRate="1.1"/>
+      <lvl xpToLvlUp="300" hp="100" damage="20" energy="19" atkSpeed="1.5" liferecoveryRate="4" energyrecoveryRate="1.25"/>
+      <lvl xpToLvlUp="450" hp="110" damage="24" energy="25" atkSpeed="1.65" liferecoveryRate="5" energyrecoveryRate="1.35"/>
+      <lvl xpToLvlUp="600" hp="130" damage="28" energy="25" atkSpeed="1.8" liferecoveryRate="6" energyrecoveryRate="1.45"/>
       
     </stats>
 
