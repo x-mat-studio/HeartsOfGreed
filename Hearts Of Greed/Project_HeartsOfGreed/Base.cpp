@@ -380,9 +380,9 @@ int Base::RecieveDamage(float damage, bool ignoreArmor)
 
 		int randomCounter = rand() % 10;
 
-		if (randomCounter < 2)
+		if (randomCounter < 3)
 			app->audio->PlayFx(app->entityManager->buildingGetsHit, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
-		else if (randomCounter >8 )
+		else if (randomCounter >7 )
 			app->audio->PlayFx(app->entityManager->buildingGetsHit2, 0, -1, this->GetMyLoudness(), this->GetMyDirection(), true);
 
 		if (hitPointsCurrent <= 0)
