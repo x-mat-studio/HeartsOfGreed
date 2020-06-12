@@ -911,7 +911,7 @@ void Hero::PlayOnHitSound()
 bool Hero::GetExperience(int xp)
 {
 	heroXP += xp;
-	app->player->AddResourcesBoost(20);
+	app->player->AddResourcesBoost(xp * 0.5f);
 	return GetLevel();
 }
 

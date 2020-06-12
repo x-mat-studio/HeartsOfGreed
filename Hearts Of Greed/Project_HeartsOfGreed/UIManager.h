@@ -107,7 +107,7 @@ private:
 
 	void AddPendingPortraits();
 
-	void AugmentValueByFifteenPercent(float* value);
+	void AugmentValueByTwentyPercent(float* value);
 
 	void BasicResourceManagement(EVENT_ENUM eventN, float* cost);
 	void StatsUpgradeResourceManagement(EVENT_ENUM eventN, float* cost);
