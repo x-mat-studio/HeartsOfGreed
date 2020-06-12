@@ -347,7 +347,7 @@ void ModulePlayer::LeftClick()
 
 	heroesVector.clear();
 
-	app->audio->PlayFx(soundOnClick, 0, -1, LOUDNESS::NORMAL);
+	app->audio->PlayFx(soundOnClick, 0, -1, LOUDNESS::QUIET);
 
 	focusedEntity = app->entityManager->CheckEntityOnClickbyPriority(clickPosition);
 
@@ -385,7 +385,7 @@ void ModulePlayer::RightClick()
 		enemyFound = heroesVector[i]->LockOn(obj);
 
 		if (heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound))
-			app->audio->PlayFx(app->entityManager->moveHero, 0, -1);;
+			app->audio->PlayFx(app->entityManager->moveHero, 0, -1,LOUDNESS::NORMAL);;
 
 	}
 
@@ -741,7 +741,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			if (numHeroes - 1 > focusedHero)
 			{
 				focusedHero++;
-				//heroesVector[focusedHero]->PlayGenericNoise(5);
+				heroesVector[focusedHero]->PlayGenericNoise(100);
 			}
 			else
 			{
@@ -838,7 +838,8 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
 			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
-
+			
+			hero->PlayGenericNoise(100);
 		}
 
 		break;
@@ -862,6 +863,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
 			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
+			hero->PlayGenericNoise(100);
 		}
 
 		break;
@@ -885,7 +887,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
 			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
-
+			hero->PlayGenericNoise(100);
 		}
 
 		break;

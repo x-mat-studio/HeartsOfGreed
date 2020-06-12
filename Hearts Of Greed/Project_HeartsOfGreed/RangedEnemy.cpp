@@ -61,14 +61,14 @@ void RangedEnemy::DrawVFX(float dt)
 void RangedEnemy::LaunchProjectile()
 {
 	projectile = rangedAttack.GetFirstFrame();
-	projectilePos = { this->position.x, this->position.y };
+	projectilePos = { this->position.x, this->position.y + offset.y * 0.5f };
 
 	if (shortTermObjective != nullptr)
 	{
-		projectileDestination = { shortTermObjective->GetPosition().x,shortTermObjective ->GetPosition().y};
+		projectileDestination = { shortTermObjective->GetPosition().x,shortTermObjective->GetPosition().y + shortTermObjective->GetOffset().y * 0.5f };
 
-		projectileEasingX.NewEasing(EASING_TYPE::EASE, projectilePos.x, projectileDestination.x, 0.45f);
-		projectileEasingY.NewEasing(EASING_TYPE::EASE, projectilePos.y, projectileDestination.y, 0.45f);
+		projectileEasingX.NewEasing(EASING_TYPE::EASE, projectilePos.x, projectileDestination.x, 0.35f);
+		projectileEasingY.NewEasing(EASING_TYPE::EASE, projectilePos.y, projectileDestination.y, 0.35f);
 
 		projectileStartedAt = SDL_GetTicks();
 	}
@@ -83,10 +83,10 @@ void RangedEnemy::UpdateProjectile(float dt)
 	//Move IT
 	if (shortTermObjective != nullptr && (abs(projectileDestination.x - shortTermObjective->GetPosition().x) > 30 || abs(projectileDestination.y - shortTermObjective->GetPosition().y) > 30))
 	{
-		projectileDestination = { shortTermObjective->GetPosition().x,shortTermObjective->GetPosition().y };
-		
-		projectileEasingX.NewEasing(EASING_TYPE::EASE, projectilePos.x, projectileDestination.x, 0.45f - ((SDL_GetTicks()-  projectileStartedAt) * 0.001f) );
-		projectileEasingY.NewEasing(EASING_TYPE::EASE, projectilePos.y, projectileDestination.y, 0.45f - ((SDL_GetTicks() - projectileStartedAt) * 0.001f));
+		projectileDestination = { shortTermObjective->GetPosition().x,shortTermObjective->GetPosition().y + shortTermObjective->GetOffset().y * 0.5f };
+
+		projectileEasingX.NewEasing(EASING_TYPE::EASE, projectilePos.x, projectileDestination.x, 0.35f - ((SDL_GetTicks() - projectileStartedAt) * 0.001f));
+		projectileEasingY.NewEasing(EASING_TYPE::EASE, projectilePos.y, projectileDestination.y, 0.35f - ((SDL_GetTicks() - projectileStartedAt) * 0.001f));
 	}
 
 	if (projectileEasingX.IsActive() == true)
