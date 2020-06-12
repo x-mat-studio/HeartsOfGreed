@@ -284,6 +284,7 @@ private:
 
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;
+	SDL_Rect upgradeShortHoverBackground;
 	SDL_Rect upgradeHoverBackground;
 
 	// Minimap Frame
