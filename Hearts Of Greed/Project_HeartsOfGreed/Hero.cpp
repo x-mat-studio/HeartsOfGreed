@@ -685,7 +685,27 @@ void Hero::Die()
 
 void Hero::ExecuteSFX(int sfx)
 {
-	app->audio->PlayFx(sfx, 0, -1, this->GetMyLoudness(), this->GetMyDirection());
+	int auxCanal;
+	switch (this->type)
+	{
+	case ENTITY_TYPE::HERO_GATHERER:
+		auxCanal = 1;
+			break;
+	case ENTITY_TYPE::HERO_MELEE:
+		auxCanal = 2;
+			break;
+	case ENTITY_TYPE::HERO_RANGED:
+		auxCanal = 3;
+			break;
+	case ENTITY_TYPE::HERO_ROBO:
+		auxCanal = 4;
+			break;
+	default:
+		auxCanal = -1;
+		break;
+	}
+	
+	app->audio->PlayFx(sfx, 0, auxCanal, this->GetMyLoudness(), this->GetMyDirection(),false);
 }
 
 
