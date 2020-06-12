@@ -18,7 +18,10 @@ RangedEnemy::RangedEnemy(fMPoint position, ENTITY_TYPE type, Collider* collider,
 	rangedAttack(particleRanged),
 	projectile(nullptr),
 	projectileStartedAt(0),
-	projectilePos{ INT_MIN, INT_MIN }
+	projectilePos{ INT_MIN, INT_MIN },
+	projectileDestination { 0, 0 },
+	projectileEasingX (),
+	projectileEasingY ()
 {}
 
 
@@ -27,7 +30,10 @@ RangedEnemy::RangedEnemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align)
 	Enemy(position, copy, align),
 	projectile(nullptr),
 	projectilePos{ INT_MIN, INT_MIN },
-	projectileStartedAt(0)
+	projectileDestination{ 0, 0 },
+	projectileStartedAt(0),
+	projectileEasingX(),
+	projectileEasingY()
 {
 	RangedEnemy* sampleRanged = (RangedEnemy*)copy;
 	if (sampleRanged != nullptr)
