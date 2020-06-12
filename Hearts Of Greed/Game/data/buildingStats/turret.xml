@@ -5,93 +5,93 @@
     <position x="0" y="0"/>
 
     <collider>
-      <rect x="150" y="130" w="70" h="80"/>
+      <rect x ="150" y="130" w="70" h="80"/>
       <type id="4"/>
     </collider>
 
-    <stats level="1" vision="5" xp="35" buildingCost="70" transparency="160">
-      <hitPoints max="110" current="110" recoveryRate="0"/>
-      <attack damage="5" speed="2.25" range="125"/>
+    <stats level="1" vision="5" xp="35" buildingCost="105" transparency="160">
+      <hitPoints max="50" current="50" recoveryRate="0"/>
+      <attack damage="5" speed="2.0f" range="180"/>
     </stats>
 
-    <levelUp damageIncrease="5" rangeIncrease="10" speedIncrease="0.10" hpIncrease="50"></levelUp>
+    <levelUp damageIncrease="1.425f" rangeIncrease="0" speedIncrease ="0.125f" hpIncrease="37"></levelUp>
 
   </sample>
   
 	<Animations>
 
       <turretIdleRight name="turretIdleRight" frames="1">
-        <frame rposX="1" rposY="179" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+       <frame rposX="78" rposY="180" rwidth="57" rheight="78"  time="0.5f" pivotX="-11" pivotY="0"/>
       </turretIdleRight>
 
       <turretIdleRightUp name="turretIdleRightUp" frames="1">
-       <frame rposX="78" rposY="180" rwidth="57" rheight="78"  time="0.15f" pivotX="0" pivotY="0"/>
+        <frame rposX="1" rposY="179" rwidth="67" rheight="79"  time="0.5f" pivotX="-2" pivotY="0"/>
       </turretIdleRightUp>
 
       <turretIdleRightDown name="turretIdleRightDown" frames="1">
-        <frame rposX="143" rposY="179" rwidth="71" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+        <frame rposX="143" rposY="179" rwidth="71" rheight="79"  time="0.5f" pivotX="-1" pivotY="0"/>
       </turretIdleRightDown>
 
       <turretIdleLeft name="turretIdleLeft" frames="1">
-        <frame rposX="217" rposY="179" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+        <frame rposX="294" rposY="180" rwidth="59" rheight="78"  time="0.5f" pivotX="0" pivotY="0"/>
       </turretIdleLeft>
 
       <turretIdleLeftUp name="turretIdleLeftUp" frames="1">
-        <frame rposX="294" rposY="180" rwidth="59" rheight="78"  time="0.15f" pivotX="0" pivotY="0"/>
+        <frame rposX="361" rposY="179" rwidth="67" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
       </turretIdleLeftUp>
 
       <turretIdleLeftDown name="turretIdleLeftDown" frames="1">
-        <frame rposX="361" rposY="179" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
+        <frame rposX="217" rposY="179" rwidth="67" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
       </turretIdleLeftDown>
 
 
-    <turretIdleRight name="turretShootingRight" frames="5">
-      <frame rposX="939" rposY="353" rwidth="57" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1014" rposY="353" rwidth="57" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1089" rposY="353" rwidth="57" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1162" rposY="353" rwidth="60" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1239" rposY="353" rwidth="57" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-    </turretIdleRight>
+    <turretShootingRight name="turretShootingRight" frames="5">
+      <frame rposX="939" rposY="353" rwidth="57" rheight="79"  time="0.5f" pivotX="-12" pivotY="0"/>
+      <frame rposX="1014" rposY="353" rwidth="57" rheight="79"  time="0.5f" pivotX="-12" pivotY="0"/>
+      <frame rposX="1089" rposY="353" rwidth="57" rheight="79"  time="0.5f" pivotX="-12" pivotY="0"/>
+      <frame rposX="1162" rposY="353" rwidth="60" rheight="79"  time="0.5f" pivotX="-6" pivotY="0"/>
+      <frame rposX="1239" rposY="353" rwidth="57" rheight="79"  time="0.5f" pivotX="-12" pivotY="0"/>
+    </turretShootingRight>
 
-    <turretIdleRightUp name="turretShootingRightUp" frames="5">
-      <frame rposX="934" rposY="271" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1009" rposY="271" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1084" rposY="271" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1157" rposY="271" rwidth="69" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1234" rposY="271" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-    </turretIdleRightUp>
+    <turretShootingRightUp name="turretShootingRightUp" frames="5">
+      <frame rposX="934" rposY="271" rwidth="67" rheight="80"  time="0.5f" pivotX="-2" pivotY="0"/>
+      <frame rposX="1009" rposY="271" rwidth="67" rheight="80"  time="0.5f" pivotX="-2" pivotY="0"/>
+      <frame rposX="1084" rposY="271" rwidth="67" rheight="80"  time="0.5f" pivotX="-2" pivotY="0"/>
+      <frame rposX="1157" rposY="271" rwidth="69" rheight="80"  time="0.5f" pivotX="1" pivotY="0"/>
+      <frame rposX="1234" rposY="271" rwidth="67" rheight="80"  time="0.5f" pivotX="-2" pivotY="0"/>
+    </turretShootingRightUp>
 
-    <turretIdleRightDown name="turretShootingRightDown" frames="5">
-      <frame rposX="932" rposY="433" rwidth="71" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1007" rposY="433" rwidth="71" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1082" rposY="433" rwidth="71" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1155" rposY="433" rwidth="74" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1232" rposY="433" rwidth="71" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-    </turretIdleRightDown>
+    <turretShootingRightDown name="turretShootingRightDown" frames="5">
+      <frame rposX="932" rposY="433" rwidth="71" rheight="80"  time="0.5f" pivotX="-1" pivotY="0"/>
+      <frame rposX="1007" rposY="433" rwidth="71" rheight="80"  time="0.5f" pivotX="-1" pivotY="0"/>
+      <frame rposX="1082" rposY="433" rwidth="71" rheight="80"  time="0.5f" pivotX="-1" pivotY="0"/>
+      <frame rposX="1155" rposY="433" rwidth="74" rheight="80"  time="0.5f" pivotX="3" pivotY="0"/>
+      <frame rposX="1232" rposY="433" rwidth="71" rheight="80"  time="0.5f" pivotX="-1" pivotY="0"/>
+    </turretShootingRightDown>
 
-    <turretIdleLeft name="turretShootingLeft" frames="5">
-      <frame rposX="938" rposY="596" rwidth="58" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1013" rposY="596" rwidth="58" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1088" rposY="596" rwidth="58" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1162" rposY="596" rwidth="60" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1238" rposY="596" rwidth="58" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-    </turretIdleLeft>
+    <turretShootingLeft name="turretShootingLeft" frames="5">
+      <frame rposX="938" rposY="596" rwidth="58" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1013" rposY="596" rwidth="58" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1088" rposY="596" rwidth="58" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1162" rposY="596" rwidth="60" rheight="79"  time="0.5f" pivotX="-4" pivotY="0"/>
+      <frame rposX="1238" rposY="596" rwidth="58" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+    </turretShootingLeft>
 
-    <turretIdleLeftUp name="turretShootingLeftUp" frames="5">
-      <frame rposX="934" rposY="676" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1009" rposY="676" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1084" rposY="676" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1157" rposY="676" rwidth="70" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1234" rposY="676" rwidth="67" rheight="79"  time="0.15f" pivotX="0" pivotY="0"/>
-    </turretIdleLeftUp>
+    <turretShootingLeftUp name="turretShootingLeftUp" frames="5">
+      <frame rposX="934" rposY="676" rwidth="67" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1009" rposY="676" rwidth="67" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1084" rposY="676" rwidth="67" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1157" rposY="676" rwidth="70" rheight="79"  time="0.5f" pivotX="-1" pivotY="0"/>
+      <frame rposX="1234" rposY="676" rwidth="67" rheight="79"  time="0.5f" pivotX="0" pivotY="0"/>
+    </turretShootingLeftUp>
 
-    <turretIdleLeftDown name="turretShootingLeftDown" frames="5">
-      <frame rposX="934" rposY="514" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1009" rposY="514" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1084" rposY="514" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1157" rposY="514" rwidth="70" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-      <frame rposX="1234" rposY="514" rwidth="67" rheight="80"  time="0.15f" pivotX="0" pivotY="0"/>
-    </turretIdleLeftDown>
+    <turretShootingLeftDown name="turretShootingLeftDown" frames="5">
+      <frame rposX="934" rposY="514" rwidth="67" rheight="80"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1009" rposY="514" rwidth="67" rheight="80"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1084" rposY="514" rwidth="67" rheight="80"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1157" rposY="514" rwidth="70" rheight="80"  time="0.5f" pivotX="0" pivotY="0"/>
+      <frame rposX="1234" rposY="514" rwidth="67" rheight="80"  time="0.5f" pivotX="0" pivotY="0"/>
+    </turretShootingLeftDown>
            
 </Animations>
 </turret>

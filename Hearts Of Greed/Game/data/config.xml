@@ -47,7 +47,7 @@
   </dialogManager>
   <AI>
     <load
-      docnameNightSpawners ="data/characterStats/NightSpawners.xml"
+      docnameNightSpawners ="data/charactersStats/NightSpawners.xml"
      />
   </AI>
   <entityManager>
@@ -79,8 +79,8 @@
     camVel="700" 
     initialCamPosX="408" 
     initialCamPosY="7934"
-    dayTimerSec="300"
-    nightTimerSec="100" 
+    dayTimerSec="180"
+    nightTimerSec="90" 
     freeCamMarginDetectionPixelsX="20"
     freeCamMarginDetectionPixelsY="15"
     
@@ -114,5 +114,9 @@
     medalPosX="30"
     medalPosY="0"
   />
+
+  <popUpManager
+    docnamePopUps="data/popUpsText/popUpsText.xml">
+  </popUpManager>
 
 </config>

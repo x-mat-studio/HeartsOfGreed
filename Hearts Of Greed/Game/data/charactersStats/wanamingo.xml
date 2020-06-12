@@ -5,13 +5,13 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="50" h="50"/>
+      <rect x="0" y="0" w="50" h="60"/>
       <type id="2"/>
     </collider>
 
     <stats movementSpeed="90" vision="240" xp="15"  scale =" 1" >
-      <hitPoints max="20" current="20" recoveryRate="1"/>
-      <attack damage="2" speed="1.75" range="1"/>
+      <hitPoints max="25" current="25" recoveryRate="1"/>
+      <attack damage="2" speed="1.95f" range="1"/>
     </stats>
     
   </sample>
@@ -20,7 +20,7 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="50" h="50"/>
+      <rect x="0" y="0" w="60" h="62"/>
       <type id="2"/>
     </collider>
 
@@ -35,13 +35,13 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="35" h="35"/>
+      <rect x="0" y="0" w="40" h="40"/>
       <type id="2"/>
     </collider>
 
     <stats movementSpeed="150" vision="200" xp="7" scale =" 0.65">
       <hitPoints max="17" current="17" recoveryRate="5"/>
-      <attack damage="1" speed="3.5" range="1"/>
+      <attack damage="1" speed="3.15" range="1"/>
     </stats>
 
   </sampleSpeed>
@@ -50,13 +50,13 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="75" h="75"/>
+      <rect x="0" y="0" w="80" h="95"/>
       <type id="2"/>
     </collider>
 
     <stats movementSpeed="35" vision="240" xp="100" scale =" 1.75" >
-      <hitPoints max="500" current="500" recoveryRate="15"/>
-      <attack damage="20" speed="0.75" range="2"/>
+      <hitPoints max="666" current="666" recoveryRate="15"/>
+      <attack damage="20" speed="0.80" range="1"/>
     </stats>
 
   </sampleGiga>
@@ -459,6 +459,16 @@
 			<frame rposX="1839" rposY="1476" rwidth="72" rheight="57"  time="0.1f" pivotX="51" pivotY="51"/>
 		</wanamingoUpLeftDeath>
 
+    <rangedWanamingoAttackVfx frames="4" name="rangedWanamingoAttackVfx">
+      <frame rposX="0" rposY="9" rwidth="13" rheight="15"  time="0.1f" pivotX="0" pivotY="0"/>
+ <!-- <frame rposX="25" rposY="0" rwidth="31" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="70" rposY="0" rwidth="36" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="117" rposY="0" rwidth="36" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="167" rposY="0" rwidth="34" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/> -->
+      <frame rposX="211" rposY="0" rwidth="38" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="258" rposY="0" rwidth="37" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="305" rposY="0" rwidth="31" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      </rangedWanamingoAttackVfx>
 
 	</Animations>
 
