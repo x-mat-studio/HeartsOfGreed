@@ -675,7 +675,9 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::STOP_SELECTING_UNITS:
 		selectUnits = false;
 		doingAction = false;
-		focusedHero = 0;
+		if (app->uiManager->mouseOverUI == false) {
+			focusedHero = 0;
+		}
 
 		if (heroesVector.size() > 0 && app->uiManager->mouseOverUI == false)
 		{
