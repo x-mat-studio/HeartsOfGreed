@@ -2310,25 +2310,25 @@ void ModuleEntityManager::ExecuteEvent(EVENT_ENUM eventId)
 	case EVENT_ENUM::GATHERER_RESURRECT:
 		ReviveHero(*deadGatherer);
 		DeleteDeadHero(ENTITY_TYPE::HERO_GATHERER);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 1);
 		break;
 
 	case EVENT_ENUM::MELEE_RESURRECT:
 		ReviveHero(*deadMelee);
 		DeleteDeadHero(ENTITY_TYPE::HERO_MELEE);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 2);
 		break;
 
 	case EVENT_ENUM::RANGED_RESURRECT:
 		ReviveHero(*deadRanged);
 		DeleteDeadHero(ENTITY_TYPE::HERO_RANGED);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 3);
 		break;
 
 	case EVENT_ENUM::ROBOTTO_RESURRECT:
 		ReviveHero(*deadRobo);
 		DeleteDeadHero(ENTITY_TYPE::HERO_ROBO);
-		app->audio->PlayFx(reviveHero, 0, -1);
+		app->audio->PlayFx(reviveHero, 0, 4);
 		break;
 
 	case EVENT_ENUM::GATHERER_LIFE_UPGRADE:
