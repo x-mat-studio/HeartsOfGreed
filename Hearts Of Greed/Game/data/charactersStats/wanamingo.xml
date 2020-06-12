@@ -5,7 +5,7 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="50" h="50"/>
+      <rect x="0" y="0" w="50" h="60"/>
       <type id="2"/>
     </collider>
 
@@ -20,7 +20,7 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="50" h="50"/>
+      <rect x="0" y="0" w="60" h="62"/>
       <type id="2"/>
     </collider>
 
@@ -35,7 +35,7 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="35" h="35"/>
+      <rect x="0" y="0" w="40" h="40"/>
       <type id="2"/>
     </collider>
 
@@ -50,7 +50,7 @@
     <position x="150" y="250"/>
 
     <collider>
-      <rect x="0" y="0" w="75" h="75"/>
+      <rect x="0" y="0" w="80" h="95"/>
       <type id="2"/>
     </collider>
 
