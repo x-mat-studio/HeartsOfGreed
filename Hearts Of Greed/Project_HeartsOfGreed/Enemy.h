@@ -115,6 +115,9 @@ public:
 protected:
 	bool drawingVFX;
 
+	Entity* shortTermObjective;
+	fMPoint longTermObjective;
+
 private:
 
 	int recoveryHitPointsRate;
@@ -131,8 +134,7 @@ private:
 
 
 	bool haveOrders;
-	Entity* shortTermObjective;
-	fMPoint longTermObjective;
+
 
 	Animation walkLeft;
 	Animation walkLeftUp;
