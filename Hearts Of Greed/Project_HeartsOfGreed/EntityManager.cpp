@@ -754,6 +754,10 @@ void ModuleEntityManager::CheckIfStarted() {
 					entityVector[i]->Start(upgradeCenterEnemyTexture);
 					upCenter->selectedTexture = upgradeCenterEnemySelectedTexture;
 				}
+
+				entityVector[i]->offset.x = -((float)entityVector[i]->GetCollider()->rect.w * 0.5f);
+				entityVector[i]->offset.y = -((float)entityVector[i]->GetCollider()->rect.h * 0.7f);
+
 				break;
 
 
