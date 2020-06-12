@@ -56,7 +56,7 @@
 
     <stats movementSpeed="35" vision="240" xp="100" scale =" 1.75" >
       <hitPoints max="500" current="500" recoveryRate="15"/>
-      <attack damage="20" speed="0.75" range="2"/>
+      <attack damage="20" speed="0.75" range="1"/>
     </stats>
 
   </sampleGiga>
