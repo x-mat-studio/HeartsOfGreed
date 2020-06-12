@@ -20,11 +20,11 @@
 
   <!-- Ranged Active -->
   <skill id="2" type="1"  alignTarget="1">
-    <lvl  dmg="3" cooldown="0.1" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="4.0" effectSeverity="0.5" energyCost="5" />
-    <lvl  dmg="4" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="4.5" effectSeverity="0.5" energyCost="9" />
-    <lvl  dmg="4" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="5.0" effectSeverity="0.6" energyCost="13" />
-    <lvl  dmg="5" cooldown="0.1" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="5.5" effectSeverity="0.6" energyCost="15" />
-    <lvl  dmg="5" cooldown="0.1" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="2.0"  effect ="0" effectTime="6.0" effectSeverity="0.7" energyCost="17" />
+    <lvl  dmg="3" cooldown="0.1" rangeRadius="8"  attackRadius="3"  hurtYourself="false"  executionTime="1.5"  effect ="0" effectTime="4.0" effectSeverity="0.5" energyCost="5" />
+    <lvl  dmg="4" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="1.45"  effect ="0" effectTime="4.5" effectSeverity="0.5" energyCost="9" />
+    <lvl  dmg="4" cooldown="0.1" rangeRadius="8"  attackRadius="4"  hurtYourself="false"  executionTime="1.40"  effect ="0" effectTime="5.0" effectSeverity="0.6" energyCost="13" />
+    <lvl  dmg="5" cooldown="0.1" rangeRadius="8"  attackRadius="5"  hurtYourself="false"  executionTime="1.35"  effect ="0" effectTime="5.5" effectSeverity="0.6" energyCost="15" />
+    <lvl  dmg="5" cooldown="0.1" rangeRadius="8"  attackRadius="6"  hurtYourself="false"  executionTime="1.30"  effect ="0" effectTime="6.0" effectSeverity="0.7" energyCost="17" />
   </skill>
 
   <!-- Robot Active -->

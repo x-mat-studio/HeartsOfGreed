@@ -7,7 +7,7 @@ Good Luck!
 
 Disclaimer: play using headphones.
 
-This project is made as a 2nd year assigment in Bachelor’s Degree in Video Games by UPC at CITM, Terrassa, under the supervision of lecturer Marc Garrigó (www.linkedin.com/in/mgarrigo/).
+This project is made as a 2nd year assigment in Bachelor’s Degree in Video Games by UPC at CITM, Terrassa, under the supervision of lecturer [Marc Garrigó](www.linkedin.com/in/mgarrigo/).
 
 
 ## What to do
@@ -320,7 +320,7 @@ ________________________________________________________________________________
 - Pathfinding now finds a way to get out of a walkable tile
 . . .
 
-### Release 0.5.0.
+### Release 0.5.0.- Vertical Slice
 
 #### General Updates
 - App Veyor is now more accurate at generating automatic builds
@@ -397,7 +397,7 @@ ________________________________________________________________________________
 #### Bug Fixes
 . . .
 
-### Release 0.8.0.
+### Release 0.8.0. - Alpha
 
 #### General Updates
 - Hover text implemented
@@ -422,25 +422,56 @@ ________________________________________________________________________________
 - Final Alpha refinements
 . . .
 
-### Release 1.0.0.
+### Release 0.8.9
 
 #### General Updates
-- Different cursor texture added
-- Animations corrected
-- Sounds added
-- Camara shake when skills are triggered
-- Particles added
-- Easings added
-- Texture for scene transition added
-- Skill fixes and improvements
-- Pop-ups added
-- UI visual and functional upgrades
-- Final map iteration
-- Walkability maps adjusted
-- Character balancing
+- Created Trailer & WebPage
+- Added Asset Management with PhysFS.
+- Added Camera Shake for Heroes' Skills
+- Improved all Animations Timing
+- Improved Animations Pivots
+- Added more sounds to improve the Game's feedback & feel.
+- Suitman skill now summons a Turret instead of throwing a Graneade. 
+- Added a Button to skip dialogues & now they only show the last said dialogue.
+- Various gameplay improvements based on Alpha feedback.
+
 
 #### Bug Fixes
-- 
+- Robot's Active skill does not longer kill itself 2 times.
+- Balanced all Heroes' stats & skills.
+- Various UI bug fixes
+- Various Gameplay bug fixes
+
+. . .
+
+### Release 1.0.0 - Gold
+
+#### General Updates
+- Added a new cursor & new animations for it.
+- Improved Animations based on users' feedback.
+- Multiple sound Added to improve gameplay feedback.
+- Now all entities have some kind of particle feedback.
+- Added Easings to UI, camera movement & some entitties' interactions.
+- Added animated texture & sounds for the loading screens.
+- Changes to Armored & Ranged Skills:
+	- Armored now deals less damage, hurts itself ignoring armor & slightly stuns enemies.
+	- Ranged now only applies the Blood Loss effect if the target has an another debuff.
+- Added Pop-Ups to better guide the player through the experience & improvements to the tutorial.
+- UI visual and functional upgrades
+- Final iteration to the map: changed walkability in some areas & re-distributed enemies.
+- Added an icon to the application.
+- Entities stats balancing.
+
+#### Bug Fixes
+- Fixed some gameplay related bugs.
+- Improved entities' interaction: attack, search & vision.
+- Adjusted Day & Night time cycle.
+- Balanced Wanamingos for the overall map & the night spawners.
+- Fixed memory leaks & crashes.
+- Attack range & objective detection changes.
+- Improved Pathfinding handling.
+-  Folder Naming Improvements.
+
 . . .
 
 
@@ -462,3 +493,5 @@ Thanks to Juan Hernández and David Carrasquet for forming part of the team duri
 ## License:
 MIT License
 Check the full license in our Github project
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dab77e736d8a4dcea73e56d0cc04baa5)](https://app.codacy.com/gh/x-mat-studio/HeartsOfGreed?utm_source=github.com&utm_medium=referral&utm_content=x-mat-studio/HeartsOfGreed&utm_campaign=Badge_Grade_Dashboard)
