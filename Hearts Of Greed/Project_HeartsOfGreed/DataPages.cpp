@@ -131,7 +131,14 @@ bool DataPages::PreUpdate(float dt)
 
 			case ENTITY_TYPE::BLDG_UPGRADE_CENTER:
 
-				factory->CreateUpgradeCenterPage(&dataPageVector, this);
+				if (focus->GetAlignment() == ENTITY_ALIGNEMENT::PLAYER)
+				{
+					factory->CreateUpgradeCenterPage(&dataPageVector, this);
+				}
+				else
+				{
+					factory->CreateEnemyUpgradeCenterPage(&dataPageVector, this);
+				}
 				GetUpgradeCenterValue();
 				state = DATA_PAGE_ENUM::FOCUSED_UPGRADE_CENTER;
 				break;

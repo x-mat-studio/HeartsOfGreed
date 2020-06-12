@@ -104,7 +104,7 @@ UIFactory::UIFactory() :
 
 	reviveHoverBackground{ 222, 508, 150, 50 },
 	upgradeShortHoverBackground{ 222, 508, 180, 50 },
-	upgradeHoverBackground{ 222, 508, 182, 70 },
+	upgradeHoverBackground{ 222, 508, 185, 70 },
 	lifeUpgradeButton{ 430, 581, 88, 87 },
 	damageUpgradeButton{ 34, 581, 88, 87 },
 	energyUpgradeButton{ 532, 581, 88, 87 },
@@ -920,15 +920,14 @@ UI_Group* UIFactory::CreateOnHoverGathererPassive1Menu()
 
 	CreateText(5, 0, background, "Handy mastery:", group);
 
-	sprintf_s(stats, 40, "Grants +%i gems by killing", hero->GetPassiveSkill().dmg);
+	CreateText(5, 15, background, "Grants red gems by killing", group);
 
-	CreateText(5, 15, background, stats, group);
+	CreateText(5, 25, background, "enemies based on their", group);
 
-	CreateText(5, 25, background, "enemies, boosts robotic", group);
+	CreateText(5, 35, background, "strength; boosts robotic", group);
 
 	sprintf_s(stats, 40, "allies' damage by %.0f.", hero->GetPassiveSkill().executionTime);
-
-	CreateText(5, 35, background, stats, group);
+	CreateText(5, 45, background, stats, group);
 
 	return group;
 }
@@ -2296,6 +2295,18 @@ void UIFactory::CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* d
 	CreateUpgradeBarricadeButton(158, 15, dataPage, dataPagesVector);
 
 	CreateNonGroupImage(158, 15, dataPage, dataPagesVector, upgradeArrowIcon, false, false);
+}
+
+
+void UIFactory::CreateEnemyUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage)
+{
+	CreateNonGroupImage(3, 3, dataPage, dataPagesVector, upgradeCenterDataPagePicture);
+
+	CreateNonGroupImage(68, 4, dataPage, dataPagesVector, healthBarContainer);
+
+	CreateNonGroupImage(69, 6, dataPage, dataPagesVector, healthbarGreenImage);
+
+	CreateNonGroupText(1, 44, dataPage, dataPagesVector, "Upgrade center");
 }
 
 

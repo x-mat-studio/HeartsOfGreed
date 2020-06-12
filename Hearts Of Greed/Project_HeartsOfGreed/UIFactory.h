@@ -165,6 +165,7 @@ public:
 	void CreateNonPlayerBasePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateTurretPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
+	void CreateEnemyUpgradeCenterPage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 	void CreateBarricadePage(std::vector<UI*>* dataPagesVector, UI* dataPage);
 
 	UI* CreatePortraitManager(float x, float y, UI* parent, UI_Group* group);
