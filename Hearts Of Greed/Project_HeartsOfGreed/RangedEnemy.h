@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "DynamicEntity.h"
 #include "Animation.h"
+#include "EasingFunctions.h"
 
 class RangedEnemy : public Enemy
 {
@@ -19,13 +20,23 @@ public:
 
 	~RangedEnemy();
 
+	void LaunchProjectile();
+	void UpdateProjectile(float dt);
+	void DestroyProjectile();
+
 private:
 
 	void DrawVFX(float dt);
 
-public:
+private:
 	Animation rangedAttack;
+	Frame* projectile;
+	fMPoint projectilePos;
+	fMPoint projectileDestination;
+	Easing projectileEasingX;
+	Easing projectileEasingY;
 
+	double projectileStartedAt;
 
 };
 
