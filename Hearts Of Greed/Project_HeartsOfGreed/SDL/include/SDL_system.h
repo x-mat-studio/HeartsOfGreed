@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -25,8 +25,8 @@
  *  Include file for platform specific SDL API functions
  */
 
-#ifndef SDL_system_h_
-#define SDL_system_h_
+#ifndef _SDL_system_h
+#define _SDL_system_h
 
 #include "SDL_stdinc.h"
 #include "SDL_keyboard.h"
@@ -76,20 +76,8 @@ extern DECLSPEC SDL_bool SDLCALL SDL_DXGIGetOutputInfo( int displayIndex, int *a
 #endif /* __WIN32__ */
 
 
-/* Platform specific functions for Linux */
-#ifdef __LINUX__
-
-/**
-   \brief Sets the UNIX nice value for a thread, using setpriority() if possible, and RealtimeKit if available.
-
-   \return 0 on success, or -1 on error.
- */
-extern DECLSPEC int SDLCALL SDL_LinuxSetThreadPriority(Sint64 threadID, int priority);
- 
-#endif /* __LINUX__ */
-	
 /* Platform specific functions for iOS */
-#ifdef __IPHONEOS__
+#if defined(__IPHONEOS__) && __IPHONEOS__
 
 #define SDL_iOSSetAnimationCallback(window, interval, callback, callbackParam) SDL_iPhoneSetAnimationCallback(window, interval, callback, callbackParam)
 extern DECLSPEC int SDLCALL SDL_iPhoneSetAnimationCallback(SDL_Window * window, int interval, void (*callback)(void*), void *callbackParam);
@@ -101,14 +89,14 @@ extern DECLSPEC void SDLCALL SDL_iPhoneSetEventPump(SDL_bool enabled);
 
 
 /* Platform specific functions for Android */
-#ifdef __ANDROID__
+#if defined(__ANDROID__) && __ANDROID__
 
 /**
    \brief Get the JNI environment for the current thread
 
    This returns JNIEnv*, but the prototype is void* so we don't need jni.h
  */
-extern DECLSPEC void * SDLCALL SDL_AndroidGetJNIEnv(void);
+extern DECLSPEC void * SDLCALL SDL_AndroidGetJNIEnv();
 
 /**
    \brief Get the SDL Activity object for the application
@@ -118,53 +106,7 @@ extern DECLSPEC void * SDLCALL SDL_AndroidGetJNIEnv(void);
    It is the caller's responsibility to properly release it
    (using env->Push/PopLocalFrame or manually with env->DeleteLocalRef)
  */
-extern DECLSPEC void * SDLCALL SDL_AndroidGetActivity(void);
-
-/**
-   \brief Return API level of the current device
-
-    API level 29: Android 10
-    API level 28: Android 9
-    API level 27: Android 8.1
-    API level 26: Android 8.0
-    API level 25: Android 7.1
-    API level 24: Android 7.0
-    API level 23: Android 6.0
-    API level 22: Android 5.1
-    API level 21: Android 5.0
-    API level 20: Android 4.4W
-    API level 19: Android 4.4
-    API level 18: Android 4.3
-    API level 17: Android 4.2
-    API level 16: Android 4.1
-    API level 15: Android 4.0.3
-    API level 14: Android 4.0
-    API level 13: Android 3.2
-    API level 12: Android 3.1
-    API level 11: Android 3.0
-    API level 10: Android 2.3.3
- */
-extern DECLSPEC int SDLCALL SDL_GetAndroidSDKVersion(void);
-
-/**
-   \brief Return true if the application is running on Android TV
- */
-extern DECLSPEC SDL_bool SDLCALL SDL_IsAndroidTV(void);
-
-/**
-   \brief Return true if the application is running on a Chromebook
- */
-extern DECLSPEC SDL_bool SDLCALL SDL_IsChromebook(void);
-
-/**
-  \brief Return true is the application is running on a Samsung DeX docking station
- */
-extern DECLSPEC SDL_bool SDLCALL SDL_IsDeXMode(void);
-
-/**
- \brief Trigger the Android system back button behavior.
- */
-extern DECLSPEC void SDLCALL SDL_AndroidBackButton(void);
+extern DECLSPEC void * SDLCALL SDL_AndroidGetActivity();
 
 /**
    See the official Android developer guide for more information:
@@ -179,7 +121,7 @@ extern DECLSPEC void SDLCALL SDL_AndroidBackButton(void);
    This path is unique to your application and cannot be written to
    by other applications.
  */
-extern DECLSPEC const char * SDLCALL SDL_AndroidGetInternalStoragePath(void);
+extern DECLSPEC const char * SDLCALL SDL_AndroidGetInternalStoragePath();
 
 /**
    \brief Get the current state of external storage, a bitmask of these values:
@@ -188,7 +130,7 @@ extern DECLSPEC const char * SDLCALL SDL_AndroidGetInternalStoragePath(void);
 
    If external storage is currently unavailable, this will return 0.
 */
-extern DECLSPEC int SDLCALL SDL_AndroidGetExternalStorageState(void);
+extern DECLSPEC int SDLCALL SDL_AndroidGetExternalStorageState();
 
 /**
    \brief Get the path used for external storage for this application.
@@ -196,12 +138,12 @@ extern DECLSPEC int SDLCALL SDL_AndroidGetExternalStorageState(void);
    This path is unique to your application, but is public and can be
    written to by other applications.
  */
-extern DECLSPEC const char * SDLCALL SDL_AndroidGetExternalStoragePath(void);
+extern DECLSPEC const char * SDLCALL SDL_AndroidGetExternalStoragePath();
 
 #endif /* __ANDROID__ */
 
 /* Platform specific functions for WinRT */
-#ifdef __WINRT__
+#if defined(__WINRT__) && __WINRT__
 
 /**
  *  \brief WinRT / Windows Phone path types
@@ -225,25 +167,6 @@ typedef enum
         Files written here may be deleted at any time. */
     SDL_WINRT_PATH_TEMP_FOLDER
 } SDL_WinRT_Path;
-
-
-/**
- *  \brief WinRT Device Family
- */
-typedef enum
-{
-    /** \brief Unknown family  */
-    SDL_WINRT_DEVICEFAMILY_UNKNOWN,
-
-    /** \brief Desktop family*/
-    SDL_WINRT_DEVICEFAMILY_DESKTOP,
-
-    /** \brief Mobile family (for example smartphone) */
-    SDL_WINRT_DEVICEFAMILY_MOBILE,
-
-    /** \brief XBox family */
-    SDL_WINRT_DEVICEFAMILY_XBOX,
-} SDL_WinRT_DeviceFamily;
 
 
 /**
@@ -280,30 +203,7 @@ extern DECLSPEC const wchar_t * SDLCALL SDL_WinRTGetFSPathUNICODE(SDL_WinRT_Path
  */
 extern DECLSPEC const char * SDLCALL SDL_WinRTGetFSPathUTF8(SDL_WinRT_Path pathType);
 
-/**
- *  \brief Detects the device family of WinRT plattform on runtime
- *
- *  \return Device family
- */
-extern DECLSPEC SDL_WinRT_DeviceFamily SDLCALL SDL_WinRTGetDeviceFamily();
-
 #endif /* __WINRT__ */
-
-/**
- \brief Return true if the current device is a tablet.
- */
-extern DECLSPEC SDL_bool SDLCALL SDL_IsTablet(void);
-
-/* Functions used by iOS application delegates to notify SDL about state changes */
-extern DECLSPEC void SDLCALL SDL_OnApplicationWillTerminate(void);
-extern DECLSPEC void SDLCALL SDL_OnApplicationDidReceiveMemoryWarning(void);
-extern DECLSPEC void SDLCALL SDL_OnApplicationWillResignActive(void);
-extern DECLSPEC void SDLCALL SDL_OnApplicationDidEnterBackground(void);
-extern DECLSPEC void SDLCALL SDL_OnApplicationWillEnterForeground(void);
-extern DECLSPEC void SDLCALL SDL_OnApplicationDidBecomeActive(void);
-#ifdef __IPHONEOS__
-extern DECLSPEC void SDLCALL SDL_OnApplicationDidChangeStatusBarOrientation(void);
-#endif
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
@@ -311,6 +211,6 @@ extern DECLSPEC void SDLCALL SDL_OnApplicationDidChangeStatusBarOrientation(void
 #endif
 #include "close_code.h"
 
-#endif /* SDL_system_h_ */
+#endif /* _SDL_system_h */
 
 /* vi: set ts=4 sw=4 expandtab: */
