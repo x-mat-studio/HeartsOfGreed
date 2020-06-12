@@ -459,6 +459,16 @@
 			<frame rposX="1839" rposY="1476" rwidth="72" rheight="57"  time="0.1f" pivotX="51" pivotY="51"/>
 		</wanamingoUpLeftDeath>
 
+    <rangedWanamingoAttackVfx frames="4" name="rangedWanamingoAttackVfx">
+      <frame rposX="0" rposY="9" rwidth="13" rheight="15"  time="0.1f" pivotX="0" pivotY="0"/>
+ <!-- <frame rposX="25" rposY="0" rwidth="31" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="70" rposY="0" rwidth="36" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="117" rposY="0" rwidth="36" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="167" rposY="0" rwidth="34" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/> -->
+      <frame rposX="211" rposY="0" rwidth="38" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="258" rposY="0" rwidth="37" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      <frame rposX="305" rposY="0" rwidth="31" rheight="36"  time="0.1f" pivotX="0" pivotY="0"/>
+      </rangedWanamingoAttackVfx>
 
 	</Animations>
 

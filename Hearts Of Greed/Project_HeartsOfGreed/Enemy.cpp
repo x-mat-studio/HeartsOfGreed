@@ -58,6 +58,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	damageTakenTimer(0.f),
 	attackRangeInPX(0.f),
 	haveOrders(false),
+	drawingVFX(false),
 	scale(scale),
 	currentAnimation(nullptr),
 
@@ -108,7 +109,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 
 	scale(copy->scale),
 	haveOrders(false),
-	rangedWattack(false),
+	drawingVFX(false),
 
 	state(ENEMY_STATES::IDLE)
 {
@@ -121,15 +122,6 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	attackRangeInPX = (sqrt(halfW * halfW + halfH * halfH) * attackRange + 0.5f * attackRange + halfH * 0.3f);
 
 	debuffs.SetCallBack(this);
-
-	particleRanged.PushBack(SDL_Rect{ 0, 9, 13, 15 }, 0.1, 0, 0);
-	//particleRanged.PushBack(SDL_Rect{ 25, 0, 31, 36 }, 0.1, 0, 0);
-	//particleRanged.PushBack(SDL_Rect{ 70, 0, 36, 36 }, 0.1, 0, 0);
-	//particleRanged.PushBack(SDL_Rect{ 117, 0, 36, 36 }, 0.1, 0, 0);
-	//particleRanged.PushBack(SDL_Rect{ 167, 0, 34, 36 }, 0.1, 0, 0);
-	particleRanged.PushBack(SDL_Rect{ 211, 0, 38, 36 }, 0.1, 0, 0);
-	particleRanged.PushBack(SDL_Rect{ 258, 0, 37, 36 }, 0.1, 0, 0);
-	particleRanged.PushBack(SDL_Rect{ 305, 0, 31, 36 }, 0.1, 0, 0);
 }
 
 
@@ -229,19 +221,19 @@ void Enemy::StateMachine(float dt)
 				if (shortTermObjective != nullptr)
 					dir = DetermineDirection(shortTermObjective->position - position);
 
-				if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame * 0.5f) 
+				if (currentAnimation->GetCurrentFrameNum() >= currentAnimation->lastFrame * 0.5f)
 				{
 					if (Attack() == true)
 					{
 
 						if (this->type == ENTITY_TYPE::ENEMY_RANGED)
-							rangedWattack = true;
+							drawingVFX = true;
 
 						attackCooldown += 0.01f;
 					}
 				}
-					
-				
+
+
 
 			}
 			else
@@ -298,18 +290,9 @@ void Enemy::DrawOnSelect()
 		app->render->Blit(app->entityManager->targetedTexture, this->collider->rect.x + this->collider->rect.w / 2, this->collider->rect.y);
 }
 
-void Enemy::DrawRangedVFX(float dt)
+void Enemy::DrawVFX(float dt)
 {
-	Frame currFrame = particleRanged.GetCurrentFrame(dt);
-
-	if (particleRanged.GetCurrentFrameNum() == particleRanged.lastFrame - 1)
-	{
-		particleRanged.ResetAnimation();
-		rangedWattack = false;
-	}
-
-	app->render->Blit(app->entityManager->rangedW_VFX, this->position.x, this->position.y, &currFrame.frame, false, true, 0, 255, 255, 255, 1.0f, currFrame.pivotPositionX, currFrame.pivotPositionY);
-
+	return;
 }
 
 
@@ -359,8 +342,8 @@ void Enemy::Draw(float dt)
 	else
 		app->render->Blit(texture, position.x, position.y, &currFrame.frame, false, true, 0, 255, 255, 255, scale, currFrame.pivotPositionX, currFrame.pivotPositionY/*, -currFrame.pivotPositionX, -currFrame.pivotPositionY*/);
 
-	if (rangedWattack)
-		DrawRangedVFX(dt);
+	if (drawingVFX)
+		DrawVFX(dt);
 
 	DebugDraw();
 }

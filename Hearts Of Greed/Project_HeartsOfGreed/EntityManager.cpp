@@ -262,7 +262,7 @@ bool ModuleEntityManager::Awake(pugi::xml_node& config)
 	robottoDoc.reset();
 
 
-	// Sample Enemy---------------------
+	// Sample Enemies---------------------
 	P2SString filename = config.child("load").attribute("docnameWanamingo").as_string();
 	pugi::xml_document wanamingodoc;
 	wanamingodoc.load_file(filename.GetString());
@@ -3474,10 +3474,14 @@ bool ModuleEntityManager::LoadSampleEnemy(pugi::xml_node& enemyNode, ENTITY_TYPE
 			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
 		break;
 	case ENTITY_TYPE::ENEMY_RANGED:
+	{
+		Animation rangedParticle = enemyIdleRight.PushAnimation(enemyNode, "rangedWanamingoAttackVfx"); //goes up then bumps right;
+
 		sampleEnemyRanged = new RangedEnemy(pos, ENTITY_TYPE::ENEMY_RANGED, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,
 			enemyWalkLeftDown, enemyWalkRightUp, enemyWalkRightDown, enemyWalkRight, enemyIdleRight, enemyIdleRightUp, enemyIdleRightDown, enemyIdleLeft,
 			enemyIdleLeftUp, enemyIdleLeftDown, enemyPunchLeft, enemyPunchLeftUp, enemyPunchLeftDown, enemyPunchRightUp, enemyPunchRightDown, enemyPunchRight,
-			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
+			enemyDeathRight, enemyDeathRightUp, enemyDeathRightDown, enemyDeathLeft, enemyDeathLeftUp, enemyDeathLeftDown, rangedParticle, maxHP, currentHP, recoveryHP, vision, atkDmg, atkSpd, atkRange, movSpd, xp, scale);
+	}
 		break;
 	case ENTITY_TYPE::ENEMY_NIGHT:
 		sampleEnemyNight = new NightEnemy(pos, ENTITY_TYPE::ENEMY_NIGHT, enemyCollider, enemyWalkLeft, enemyWalkLeftUp,

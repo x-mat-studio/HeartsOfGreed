@@ -77,7 +77,7 @@ public:
 	int GetRecov();
 
 	void DrawOnSelect();
-	void DrawRangedVFX(float dt);
+	virtual void DrawVFX(float dt);
 
 	int GetLongTermObjectiveX();
 	int GetLongTermObjectiveY();
@@ -112,6 +112,9 @@ public:
 
 	EntityEffects debuffs;
 
+protected:
+	bool drawingVFX;
+
 private:
 
 	int recoveryHitPointsRate;
@@ -126,7 +129,6 @@ private:
 	float attackCooldown;
 	float attackRangeInPX;
 
-	bool rangedWattack;
 
 	bool haveOrders;
 	Entity* shortTermObjective;
@@ -157,7 +159,6 @@ private:
 	Animation deathLeftUp;
 	Animation deathLeftDown;
 
-	Animation particleRanged;
 
 	Animation* currentAnimation;
 
