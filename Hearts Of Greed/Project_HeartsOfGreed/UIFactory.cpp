@@ -125,7 +125,6 @@ UIFactory::UIFactory() :
 	dialogWindow{ 1096, 41, 859, 615 },
 	skipButton{ 54 ,21, 35, 18 },
 
-	dayNightIcon{ 460, 841, 35, 35 },
 	//dayNightIcon{460,883,35,35}, //This is the rectangle for the night icon
 	popUpWindow{ 507, 844, 211, 77 },
 
@@ -358,7 +357,6 @@ UI_Group* UIFactory::CreateBasicInGameUI()
 	TimerClock* clock = new TimerClock(5, -5, img);
 	group->AddUiElement(clock);
 
-	CreateImage(55, -1, nullptr, dayNightIcon, group);
 
 
 	CreatePauseGameButton(x - (1.25f) * pauseButton.w, ((1.25f) * pauseButton.w) - pauseButton.w, nullptr, group);
