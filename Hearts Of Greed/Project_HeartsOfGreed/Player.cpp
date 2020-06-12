@@ -347,7 +347,7 @@ void ModulePlayer::LeftClick()
 
 	heroesVector.clear();
 
-	app->audio->PlayFx(soundOnClick, 0, -1, LOUDNESS::QUIET);
+	app->audio->PlayFx(soundOnClick, 0, -1, LOUDNESS::NORMAL);
 
 	focusedEntity = app->entityManager->CheckEntityOnClickbyPriority(clickPosition);
 
@@ -385,7 +385,7 @@ void ModulePlayer::RightClick()
 		enemyFound = heroesVector[i]->LockOn(obj);
 
 		if (heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound))
-			app->audio->PlayFx(app->entityManager->moveHero, 0, 1);;
+			app->audio->PlayFx(app->entityManager->moveHero, 0, -1);;
 
 	}
 
