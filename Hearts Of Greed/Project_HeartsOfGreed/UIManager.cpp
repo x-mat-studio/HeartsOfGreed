@@ -950,8 +950,12 @@ void ModuleUIManager::ExecuteButton(BUTTON_TAG tag, Button* button)
 		//popupEaseOut
 		isPopUpClosing = true;
 		popupPosX.NewEasing(EASING_TYPE::EASE_IN_EXPO, 10, -1000, 1.0);
-
 		break;
+
+	case BUTTON_TAG::GO_TO_WEBPAGE:
+		ShellExecuteA(NULL, "open", "https://x-mat-studio.github.io/HeartsOfGreed/", NULL, NULL, SW_SHOWNORMAL);
+		break;
+
 	default:
 		assert("you forgot to add the case of the button tag :D");
 		break;

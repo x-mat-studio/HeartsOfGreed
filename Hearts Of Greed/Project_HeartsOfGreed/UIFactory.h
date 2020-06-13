@@ -282,7 +282,7 @@ private:
 	SDL_Rect rangedActive1Button;
 	SDL_Rect robottoActive1Button;
 
-
+	SDL_Rect xMatButton;
 	// Hover menus SDL_Rect
 	SDL_Rect reviveHoverBackground;
 	SDL_Rect upgradeShortHoverBackground;

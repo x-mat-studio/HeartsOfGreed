@@ -125,8 +125,9 @@ UIFactory::UIFactory() :
 	dialogWindow{ 1096, 41, 859, 615 },
 	skipButton{ 54 ,21, 35, 18 },
 
-	//dayNightIcon{460,883,35,35}, //This is the rectangle for the night icon
 	popUpWindow{ 507, 844, 211, 77 },
+
+	xMatButton{561, 237, 119, 123},
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -177,6 +178,10 @@ UI_Group* UIFactory::CreateMainMenu()
 	CreateCreditsButton(x, y + 120, nullptr, group);
 
 	CreateExitGameButton(x, y + 160, nullptr, group);
+
+	Button* button = new Button(fMPoint{ x - 415, y + 140 }, nullptr, xMatButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GO_TO_WEBPAGE);
+
+	group->AddUiElement(button); 
 
 	return group;
 }

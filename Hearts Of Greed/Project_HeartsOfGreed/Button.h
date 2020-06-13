@@ -82,7 +82,8 @@ enum class BUTTON_TAG : int
 	NEXT_DIALOG,
 	SKIP_DIALOG,
 
-	CLOSE_POP_UP
+	CLOSE_POP_UP,
+	GO_TO_WEBPAGE
 
 };
 
