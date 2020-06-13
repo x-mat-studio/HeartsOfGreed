@@ -49,7 +49,7 @@
       
       <stats maxTurrets="2" maxBarricades="2" vision="0" transparency="100">
         <hitPoints max="300" current="300" recoveryRate="5"/>
-        <resources produced="5" rate="15"/>
+        <resources produced="5" rate="11"/>
       </stats>
       
     </sample>
