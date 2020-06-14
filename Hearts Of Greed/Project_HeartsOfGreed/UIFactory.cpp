@@ -122,7 +122,7 @@ UIFactory::UIFactory() :
 	rangedActive1Button{ 140, 707, 93, 91 },
 	robottoActive1Button{ 348, 707, 93, 91 },
 
-	dialogWindow{ 1096, 41, 859, 615 },
+	dialogWindow{ 1096, 41, 600, 345 },
 	skipButton{ 54 ,21, 35, 18 },
 
 	popUpWindow{ 507, 844, 211, 77 },
