@@ -6,7 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
-#define NEARBY_TILES_CHECK 10
+#define NEARBY_TILES_CHECK 7
 
 #include <list>
 #include <vector>
@@ -17,7 +17,7 @@
 #include "SDL/include/SDL.h"
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 4
+#define NODE_MIN_DISTANCE 3
 #define CLUSTER_SIZE_LVL 9
 #define MAX_LEVELS 1
 
