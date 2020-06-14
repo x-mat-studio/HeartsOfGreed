@@ -72,6 +72,7 @@ private:
 
 	void Select();
 	bool Click();
+	bool ClickFromMinimap();
 	void LeftClick();
 	void RightClick();
 

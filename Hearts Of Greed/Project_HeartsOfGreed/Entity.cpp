@@ -280,6 +280,7 @@ int Entity::GetMaxHP() const
 void Entity::SetMaxHP(int newMaxHp)
 {
 	hitPointsMax = newMaxHp;
+	
 }
 
 int Entity::GetCurrentHP() const

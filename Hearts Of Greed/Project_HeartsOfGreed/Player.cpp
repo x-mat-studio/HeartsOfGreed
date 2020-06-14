@@ -340,6 +340,16 @@ bool ModulePlayer::Click()
 }
 
 
+bool ModulePlayer::ClickFromMinimap()
+{
+	hasClicked = true;
+
+	clickPosition = app->input->GetMousePosScreen();
+	clickPosition = app->minimap->ScreenToMinimapToWorld(clickPosition.x, clickPosition.y);
+
+	return false;
+}
+
 void ModulePlayer::LeftClick()
 {
 	ENTITY_TYPE type;
@@ -374,7 +384,16 @@ void ModulePlayer::RightClick()
 
 	bool enemyFound;
 
-	Click();
+	iMPoint mousePos = app->input->GetMousePosScreen();
+
+	if (app->minimap->ClickingOnMinimap(mousePos.x, mousePos.y) == true)
+	{
+		ClickFromMinimap();
+	}
+	else
+	{
+		Click();
+	}
 
 	Entity* obj = app->entityManager->CheckEntityOnClickbyPriorityandAlignment(clickPosition, false, ENTITY_ALIGNEMENT::ENEMY);
 
@@ -385,7 +404,7 @@ void ModulePlayer::RightClick()
 		enemyFound = heroesVector[i]->LockOn(obj);
 
 		if (heroesVector[i]->MoveTo(clickPosition.x, clickPosition.y, enemyFound))
-			app->audio->PlayFx(app->entityManager->moveHero, 0, -1,LOUDNESS::NORMAL );
+			app->audio->PlayFx(app->entityManager->moveHero, 0, -1, LOUDNESS::NORMAL);
 
 	}
 
@@ -690,7 +709,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 		break;
 
 	case EVENT_ENUM::ENTITY_COMMAND:
-		if (app->minimap->ClickingOnMinimap(mouse.x, mouse.y) == false && app->uiManager->mouseOverUI == false)
+		if (app->uiManager->mouseOverUI == false)
 		{
 			entityComand = true;
 			doingAction = true;
@@ -840,7 +859,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 			hero->selectedByPlayer = true;
 			heroesVector.push_back(hero);
 			app->eventManager->GenerateEvent(EVENT_ENUM::CAMERA_FOCUS_HERO, EVENT_ENUM::NULL_EVENT);
-			
+
 			hero->PlayGenericNoise(100);
 		}
 
@@ -921,7 +940,7 @@ void ModulePlayer::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::LVL_UP_ALL:
 
-		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::QUIET,DIRECTION::FRONT,true);
+		app->audio->PlayFx(app->entityManager->lvlup, 0, -1, LOUDNESS::QUIET, DIRECTION::FRONT, true);
 
 		for (int aux = 0; aux < heroesVector.size(); aux++) {
 
