@@ -194,7 +194,8 @@ public:
 	PATH_TYPE GeneratePath(iMPoint origin, iMPoint destination, int maxLvl, Entity* pathRequest);
 
 
-	iMPoint CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination);
+	iMPoint CheckNearbyTilesDest(const iMPoint& origin, const iMPoint& destination);
+	iMPoint CheckNearbyTilesOrigin(const iMPoint& origin, const iMPoint& destination);
 
 	bool CheckBoundaries(const iMPoint& pos) const;
 
