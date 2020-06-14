@@ -13,6 +13,7 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 
 	healthRect(nullptr),
 	manaRect(nullptr),
+	keyboardNumber(nullptr),
 
 	focused(false),
 	heroType(ENTITY_TYPE::UNKNOWN),
@@ -133,6 +134,13 @@ void HeroPortrait::AddHealthBar(UI* element)
 void HeroPortrait::AddManaBar(UI* element)
 {
 	manaRect = &element->rect;
+	uiElementsVector.push_back(element);
+}
+
+
+void HeroPortrait::AddKeySelectNumber(UI* element)
+{
+	keyboardNumber = &element->rect;
 	uiElementsVector.push_back(element);
 }
 
