@@ -1152,15 +1152,6 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 				currAoE.clear();
 				suplAoE.clear();
 				currAreaInfo = nullptr;
-				currentAnimation->ResetAnimation();
-
-				if (skillFromAttacking == true)
-				{
-					comeFromAttack = false;
-					state = HERO_STATES::ATTACK;
-				}
-				else
-					state = HERO_STATES::IDLE;
 
 				if (type == ENTITY_TYPE::HERO_ROBO)
 				{
@@ -1168,6 +1159,20 @@ HERO_STATES Hero::ProcessFsm(std::vector<HERO_INPUTS>& inputs)
 					toDelete = true;
 					app->eventManager->GenerateEvent(EVENT_ENUM::ENTITY_DEAD, EVENT_ENUM::NULL_EVENT);
 				}
+				else
+				{
+					currentAnimation->ResetAnimation();
+
+					if (skillFromAttacking == true)
+					{
+						comeFromAttack = false;
+						state = HERO_STATES::ATTACK;
+					}
+					else
+						state = HERO_STATES::IDLE;
+				}
+
+
 
 				skillFromAttacking = false;
 				break;
