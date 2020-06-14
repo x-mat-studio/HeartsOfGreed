@@ -7,7 +7,7 @@
 
 Quest::Quest(int x, int y) :
 
-	Entity(fMPoint{(float)x,(float)y}, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
+	Entity(fMPoint{ (float)x,(float)y }, ENTITY_TYPE::QUEST, ENTITY_ALIGNEMENT::NEUTRAL, nullptr, 1, 1),
 	myState(QUEST_STATE::INACTIVE),
 
 	id(-1)
@@ -41,7 +41,7 @@ Quest::~Quest()
 void Quest::Draw(float dt)
 {
 
-	if (this->myState == QUEST_STATE::INACTIVE) 
+	if (this->myState == QUEST_STATE::INACTIVE)
 	{
 		app->render->Blit(texture, position.x, position.y, 0, false, true, 0, 255, 255, 255, 1.0f);
 	}
@@ -53,7 +53,8 @@ void Quest::OnCollision(Collider* collider)
 {
 	this->myState = QUEST_STATE::ACTIVE;
 
-	app->questManager->QuestStarted(id);
+	if (toDelete == false)
+		app->questManager->QuestStarted(id);
 
 	Die();
 }
