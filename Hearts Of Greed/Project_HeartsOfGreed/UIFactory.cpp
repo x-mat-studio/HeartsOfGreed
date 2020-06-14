@@ -234,7 +234,7 @@ UI_Group* UIFactory::CreateCreditsMenu()
 
 	CreateCloseCreditsButton(pauseMenuBackground.w - (3 * closeButton.w / 4), (1 * closeButton.h / 4), background, group);
 
-	CreateImage(40, 50, background, creditsBackgroundImage, group);
+	//CreateImage(40, 50, background, creditsBackgroundImage, group);
 
 	CreateText(5, 0, background, "Aaron Guerrero Cruz", group);
 
