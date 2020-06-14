@@ -11,6 +11,7 @@
 #include "CameraShake.h"
 #include "Turret.h"
 #include "EventManager.h"
+#include "Pathfinding.h"
 
 GathererHero::GathererHero(fMPoint position, Collider* col, Animation& walkLeft, Animation& walkLeftUp, Animation& walkLeftDown, Animation& walkRightUp,
 	Animation& walkRightDown, Animation& walkRight, Animation& idleRight, Animation& idleRightDown, Animation& idleRightUp, Animation& idleLeft,
@@ -134,7 +135,7 @@ bool GathererHero::PreProcessSkill1()
 	iMPoint center = app->map->WorldToMap(position.x, position.y);
 	fMPoint mousePosition = app->input->GetMousePosWorld();
 
-	if (center.InsideCircle(app->map->WorldToMap(mousePosition.x, mousePosition.y), skill1.rangeRadius))
+	if (center.InsideCircle(app->map->WorldToMap(mousePosition.x, mousePosition.y), skill1.rangeRadius) && app->pathfinding->IsWalkable(app->map->WorldToMap(mousePosition.x, mousePosition.y)))
 	{
 		granadeArea = app->entityManager->RequestAreaInfo(skill1.attackRadius);
 		skillPosLaunch = mousePosition;
