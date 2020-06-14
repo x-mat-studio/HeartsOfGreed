@@ -142,8 +142,6 @@ void ModuleAI::OnCollision(Collider* c1, Collider* c2)
 		fMPoint c1Pos = c1->thisEntity->position;
 		fMPoint c2Pos = c2->thisEntity->position;
 
-		bool isVisible = app->pathfinding->LineRayCast(app->map->WorldToMap(c1Pos.x, c1Pos.y), app->map->WorldToMap(c2Pos.x, c2Pos.y));
-
 		if (c2->thisEntity)
 		{
 			alarmObjectivePos.push_back(c2->thisEntity->GetPosition());

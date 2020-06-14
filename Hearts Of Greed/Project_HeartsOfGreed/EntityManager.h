@@ -348,6 +348,7 @@ private:
 	Spawner* sampleSpawner;
 
 	Building* sampleBuilding;
+	SDL_Rect colliderBuilding1;
 	Building* sampleStreetLight;
 	Base* sampleBase;
 

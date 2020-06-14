@@ -79,7 +79,7 @@
     camVel="700" 
     initialCamPosX="408" 
     initialCamPosY="7934"
-    dayTimerSec="180"
+    dayTimerSec="240"
     nightTimerSec="90" 
     freeCamMarginDetectionPixelsX="20"
     freeCamMarginDetectionPixelsY="15"

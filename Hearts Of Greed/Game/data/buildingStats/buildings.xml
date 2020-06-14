@@ -6,7 +6,8 @@
       <position x="0" y="0"/>
 
       <collider>
-        <rect x="-150" y="130" w="430" h="330"/>
+        <rect x="-150" y="130" w="430" h="350"/>
+        <rect2 x="0" y="0" w="440" h="400"/>
         <type id="4"/>
       </collider>
 
@@ -49,7 +50,7 @@
       
       <stats maxTurrets="2" maxBarricades="2" vision="0" transparency="100">
         <hitPoints max="300" current="300" recoveryRate="5"/>
-        <resources produced="5" rate="15"/>
+        <resources produced="5" rate="11"/>
       </stats>
       
     </sample>

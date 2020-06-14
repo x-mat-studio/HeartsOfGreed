@@ -148,7 +148,7 @@ PATH_TYPE ModulePathfinding::GeneratePath(iMPoint origin, iMPoint destination, i
 
 	if (IsWalkable(destination) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(origin, { destination.x + 1, destination.y });
+		iMPoint newDest = CheckNearbyTilesDest(origin, { destination.x + 1, destination.y });
 
 		if (newDest == destination || newDest == origin)
 			return ret;
@@ -159,7 +159,7 @@ PATH_TYPE ModulePathfinding::GeneratePath(iMPoint origin, iMPoint destination, i
 
 	if (IsWalkable(origin) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(destination, origin);
+		iMPoint newDest = CheckNearbyTilesOrigin(origin, destination);
 
 		if (newDest == origin || newDest == destination)
 			return ret;
@@ -651,25 +651,25 @@ generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int l
 
 //---------------------------------------------------
 
-iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint& destination)
+iMPoint ModulePathfinding::CheckNearbyTilesDest(const iMPoint& origin, const iMPoint& destination)
 {
-	/*
-	//std::vector <iMPoint> line = CreateLine(origin, destination, NEARBY_TILES_CHECK);
 
-	//for (int i = 0; i < line.size(); i++)
-	//{
-	//	if (IsWalkable(line[i]))
-	//		return line[i];
-	//}
+	//First Quick RayCast check
+	std::vector <iMPoint> line = CreateLine(origin, destination);
 
-	//return origin;
-	*/
+	for (int i = line.size(); i > 0; i--)
+	{
+		if (IsWalkable(line[i]))
+			return line[i];
+	}
+
 
 
 	iMPoint retNeg = destination;
 	iMPoint retPos = destination;
 
 	iMPoint ret = destination;
+
 	float currDistance = FLT_MAX;
 
 	for (int i = 0; i < NEARBY_TILES_CHECK; i++)
@@ -680,49 +680,140 @@ iMPoint ModulePathfinding::CheckNearbyTiles(const iMPoint& origin, const iMPoint
 		retPos.y++;
 		retNeg.y--;
 
-
 		//Diagonals
-		if (IsWalkable(retNeg) && retNeg.OctileDistance(ret) < currDistance)
+		if (IsWalkable(retPos) && retPos.DiagonalDistance(origin) < currDistance)
 		{
-			currDistance = retNeg.OctileDistance(ret);
-			ret = retNeg;
-		}
-
-		if (IsWalkable(retPos) && retPos.OctileDistance(ret) < currDistance)
-		{
-			currDistance = retPos.OctileDistance(ret);
+			currDistance = retPos.DiagonalDistance(origin);
 			ret = retPos;
 		}
 
-		// Y
-		if (IsWalkable({ destination.x,retPos.y }) && retPos.OctileDistance({ destination.x,retPos.y }) < currDistance)
+		if (IsWalkable(retNeg) && retNeg.DiagonalDistance(origin) <= currDistance)
 		{
-			currDistance = retPos.OctileDistance(ret);
+			currDistance = retNeg.DiagonalDistance(origin);
+			ret = retNeg;
+		}
+
+		if (IsWalkable({ retNeg.x,retPos.y }) && iMPoint({ retNeg.x, retPos.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ retNeg.x,retPos.y }).DiagonalDistance(origin);
+			ret = { retNeg.x,retPos.y };
+		}
+
+		if (IsWalkable({ retPos.x,retNeg.y }) && iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(origin);
+			ret = { retPos.x,retNeg.y };
+		}
+
+
+		// Y
+		if (IsWalkable({ destination.x,retPos.y }) && iMPoint({ destination.x, retPos.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ destination.x, retPos.y }).DiagonalDistance(origin);
 			ret = { destination.x,retPos.y };
 		}
 
-		if (IsWalkable({ destination.x,retNeg.y }) && retPos.OctileDistance({ destination.x,retNeg.y }) < currDistance)
+		if (IsWalkable({ destination.x,retNeg.y }) && iMPoint({ destination.x,retNeg.y }).DiagonalDistance(origin) < currDistance)
 		{
-			currDistance = retPos.OctileDistance(ret);
+			currDistance = iMPoint({ destination.x,retNeg.y }).DiagonalDistance(origin);
 			ret = { destination.x,retNeg.y };
 		}
 
 
 		// X
-		if (IsWalkable({ retPos.x,destination.y }) && retPos.OctileDistance({ retPos.x,destination.y }) < currDistance)
+		if (IsWalkable({ retPos.x,destination.y }) && iMPoint({ retPos.x,destination.y }).DiagonalDistance(origin) < currDistance)
 		{
-			currDistance = retPos.OctileDistance(ret);
+			currDistance = iMPoint({ retPos.x,destination.y }).DiagonalDistance(origin);
 			ret = { retPos.x,destination.y };
 		}
 
-		if (IsWalkable({ retNeg.x,destination.y }) && retPos.OctileDistance({ retNeg.x,destination.y }) < currDistance)
+		if (IsWalkable({ retNeg.x,destination.y }) && iMPoint({ retNeg.x,destination.y }).DiagonalDistance(origin) < currDistance)
 		{
-			currDistance = retPos.OctileDistance(ret);
+			currDistance = iMPoint({ retNeg.x,destination.y }).DiagonalDistance(origin);
 			ret = { retNeg.x,destination.y };
 		}
 
 
 	}
+
+	return ret;
+
+}
+
+iMPoint ModulePathfinding::CheckNearbyTilesOrigin(const iMPoint& origin, const iMPoint& destination)
+{
+
+	iMPoint retNeg = origin;
+	iMPoint retPos = origin;
+
+	iMPoint ret = origin;
+
+	float currDistance = FLT_MAX;
+
+	for (int i = 0; i < NEARBY_TILES_CHECK; i++)
+	{
+		retPos.x++;
+		retNeg.x--;
+
+		retPos.y++;
+		retNeg.y--;
+
+		//Diagonals
+		if (IsWalkable(retPos) && retPos.DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = retPos.DiagonalDistance(origin);
+			ret = retPos;
+		}
+
+		if (IsWalkable(retNeg) && retNeg.DiagonalDistance(origin) <= currDistance)
+		{
+			currDistance = retNeg.DiagonalDistance(origin);
+			ret = retNeg;
+		}
+
+		if (IsWalkable({ retNeg.x,retPos.y }) && iMPoint({ retNeg.x, retPos.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ retNeg.x,retPos.y }).DiagonalDistance(origin);
+			ret = { retNeg.x,retPos.y };
+		}
+
+		if (IsWalkable({ retPos.x,retNeg.y }) && iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(origin);
+			ret = { retPos.x,retNeg.y };
+		}
+
+
+		// Y
+		if (IsWalkable({ origin.x,retPos.y }) && iMPoint({ origin.x, retPos.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ origin.x, retPos.y }).DiagonalDistance(origin);
+			ret = { origin.x,retPos.y };
+		}
+
+		if (IsWalkable({ origin.x,retNeg.y }) && iMPoint({ origin.x,retNeg.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ origin.x,retNeg.y }).DiagonalDistance(origin);
+			ret = { origin.x,retNeg.y };
+		}
+
+
+		// X
+		if (IsWalkable({ retPos.x,origin.y }) && iMPoint({ retPos.x,origin.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ retPos.x,origin.y }).DiagonalDistance(origin);
+			ret = { retPos.x,origin.y };
+		}
+
+		if (IsWalkable({ retNeg.x,origin.y }) && iMPoint({ retNeg.x,origin.y }).DiagonalDistance(origin) < currDistance)
+		{
+			currDistance = iMPoint({ retNeg.x,origin.y }).DiagonalDistance(origin);
+			ret = { retNeg.x,origin.y };
+		}
+
+
+	}
+
 	return ret;
 
 }
@@ -865,7 +956,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	if (IsWalkable(destination) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(origin, destination);
+		iMPoint newDest = CheckNearbyTilesDest(origin, destination);
 
 		if (newDest == destination || newDest == origin)
 			return ret;
@@ -876,7 +967,7 @@ PATH_TYPE ModulePathfinding::CreatePath(iMPoint& origin, iMPoint& destination, i
 
 	if (IsWalkable(origin) == false)
 	{
-		iMPoint newDest = CheckNearbyTiles(destination, origin);
+		iMPoint newDest = CheckNearbyTilesOrigin(origin, destination);
 
 		if (newDest == origin || newDest == destination)
 			return ret;

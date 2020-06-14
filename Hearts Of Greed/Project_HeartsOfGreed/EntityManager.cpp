@@ -198,6 +198,8 @@ ModuleEntityManager::ModuleEntityManager() :
 	robottoEnergyUpgradeValue(1),
 	robottoAtkSpeedUpgradeValue(1),
 
+	colliderBuilding1{0, 0, 0, 0},
+
 	upgradeValue(1.1f),
 	skillFileName()
 
@@ -716,6 +718,12 @@ void ModuleEntityManager::CheckIfStarted() {
 				}
 
 				entityVector[i]->Start(DecorTex);
+
+				if (DecorTex == base1Texture)
+				{
+					bld->SetColliderRect(colliderBuilding1);
+					bld->CollisionPosUpdate();
+				}
 
 				break;
 
@@ -3686,6 +3694,12 @@ bool ModuleEntityManager::LoadSampleBuilding(pugi::xml_node& buildingNode)
 	r.h = buildingNode.child("sample").child("collider").child("rect").attribute("h").as_int(0);
 	COLLIDER_TYPE cType = (COLLIDER_TYPE)buildingNode.child("sample").child("collider").child("type").attribute("id").as_int(0);
 	Collider* buildingCollider = new Collider(r, cType, this);
+
+
+	colliderBuilding1.x = buildingNode.child("sample").child("collider").child("rect2").attribute("x").as_int(0);
+	colliderBuilding1.y = buildingNode.child("sample").child("collider").child("rect2").attribute("y").as_int(0);
+	colliderBuilding1.w = buildingNode.child("sample").child("collider").child("rect2").attribute("w").as_int(0);
+	colliderBuilding1.h = buildingNode.child("sample").child("collider").child("rect2").attribute("h").as_int(0);
 
 	//stats
 	fMPoint pos;

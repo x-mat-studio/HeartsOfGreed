@@ -112,15 +112,13 @@ bool ModuleTestScene::Start()
 		}
 		app->fowManager->CreateFoWMap(app->map->data.width, app->map->data.height);
 
-		fMPoint pos;
-		pos.create(950, 4100);
 
 		isNightTime = false;
 		nightRectAlpha.NewEasing(EASING_TYPE::EASE, 0, 0, 0);
 		//Test Hero
 		if (startFromLoad == false)
 		{
-			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, pos.x - 680, pos.y);
+			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, 400, 4150);
 			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
 		}
 
