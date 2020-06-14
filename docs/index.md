@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/General%20Analysis/heartsOfGreed_titleWiki.png" alt="Official X-Mat Title" class="center"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/General%20Analysis/heartsOfGreed_titleWiki.png" alt="Official X-Mat Title" class="center" align="left"></p>
 
 
 <p>Welcome to the webpage of <a href="https://github.com/x-mat-studio/HeartsOfGreed">Hearts of Greed from X-Mat Studio</a></p>
