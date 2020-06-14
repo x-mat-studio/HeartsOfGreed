@@ -3,7 +3,7 @@
 <nightSpawn>
 
 	<night1> 
-		<wana     number="4"/>
+    <wana     number="4"/>
     <giga     number="0"/>
     <sniper   number="0"/>
     <speed    number="4"/>
@@ -12,37 +12,37 @@
   <night2>
     <wana     number="0" />
     <giga     number="0"/>
-    <sniper   number="3"/>
-    <speed    number="7"/>
-    <spawners number="1"/>
+    <sniper   number="4"/>
+    <speed    number="4"/>
+    <spawners number="2"/>
   </night2>
   <night3>
-    <wana     number="0" />
+    <wana     number="3" />
     <giga     number="0"/>
-    <sniper   number="5"/>
-    <speed    number="14"/>
-    <spawners number="2"/>
+    <sniper   number="3"/>
+    <speed    number="9"/>
+    <spawners number="3"/>
   </night3>
   <night4>
     <wana     number="0"/>
     <giga     number="1"/>
-    <sniper   number="5"/>
-    <speed    number="13"/>
-    <spawners number="2"/>
+    <sniper   number="4"/>
+    <speed    number="12"/>
+    <spawners number="4"/>
   </night4>
   <night5>
     <wana     number="10"/>
-    <giga     number="3"/>
+    <giga     number="5"/>
     <sniper   number="0"/>
-    <speed    number="10"/>
-    <spawners number="3"/>
+    <speed    number="0"/>
+    <spawners number="5"/>
   </night5>
   <night6>
     <wana     number="0"/>
     <giga     number="5"/>
     <sniper   number="0"/>
-    <speed    number="24"/>
-    <spawners number="4"/>
+    <speed    number="20"/>
+    <spawners number="5"/>
   </night6>
 
 

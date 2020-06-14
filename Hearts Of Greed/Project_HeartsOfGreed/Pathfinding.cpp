@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "App.h"
 #include "PathFinding.h"
+#include "DynamicEntity.h"
 #include "Brofiler/Brofiler/Brofiler.h"
 
 ModulePathfinding::ModulePathfinding() : Module(), walkabilityMap(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
@@ -112,9 +113,19 @@ bool ModulePathfinding::Update(float dt)
 
 		while (timeSpend <= 2 && pendentPaths.size() > 0)
 		{
-			CreatePath(it->second.origin, it->second.destination, it->second.lvl, it->first);
+			if (CreatePath(it->second.origin, it->second.destination, it->second.lvl, it->first) != PATH_TYPE::NO_TYPE)
+			{
+				pendentPaths.erase(it->first);
+			}
+			else
+			{
+				DynamicEntity* ent = (DynamicEntity*)it->first;
+				if (ent != nullptr)
+					ent->waitingForPath = false;
 
-			pendentPaths.erase(it->first);
+				pendentPaths.erase(it->first);
+			}
+
 
 			timeSpend = SDL_GetTicks() - startedAt;
 

@@ -51,6 +51,7 @@ private:
 
 public:
 	bool isMoving;
+	bool waitingForPath;
 
 	//used for moving close entities to have an smooth group movement
 	int moveRange1;
@@ -77,7 +78,6 @@ private:
 	fMPoint toMove;
 
 
-	bool waitingForPath;
 
 };
 

@@ -73,6 +73,7 @@ public:
 	bool startFromLoad;
 	bool haveJustBeenLoaded;
 	int nightApproachesSfx;
+	int nightIsHere;
 private:
 	int prevMousePosX;
 	int prevmousePosY;
