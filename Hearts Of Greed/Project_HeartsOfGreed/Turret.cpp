@@ -96,8 +96,14 @@ Turret::Turret(fMPoint position, Turret* copy, ENTITY_ALIGNEMENT alignement) :
 {
 	currentAnimation = &idleRightDown;
 
-	this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
-
+	if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, false, vision);
+	}
+	else if (alignement == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		this->visionEntity = app->fowManager->CreateFoWEntity(this->position, true, vision);
+	}
 	//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 60, position.y - 10));
 }
 
