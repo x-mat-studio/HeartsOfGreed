@@ -369,7 +369,7 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 	if (app->pathfinding->IsWalkable(goal) == false)
 	{
-		goal = app->pathfinding->CheckNearbyTiles(origin, {goal.x +1, goal.y});
+		goal = app->pathfinding->CheckNearbyTilesDest(origin, {goal.x +1, goal.y});
 	}
 
 
