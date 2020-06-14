@@ -128,6 +128,7 @@ bool ModuleTestScene::Start()
 	if (startFromLoad == true)
 	{
 		app->entityManager->DeleteAllEntities();
+		app->ai->ResetAI();
 		app->LoadGame();
 		startFromLoad = false;
 	}
