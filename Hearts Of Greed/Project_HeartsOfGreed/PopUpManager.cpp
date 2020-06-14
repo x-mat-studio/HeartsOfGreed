@@ -349,6 +349,7 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 	}
 
 
+
 	if (eventId == EVENT_ENUM::NIGHT_START)
 	{
 		if (app->testScene->GetDayNumber() == 1)

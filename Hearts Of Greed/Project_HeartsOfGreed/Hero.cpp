@@ -2007,6 +2007,7 @@ int Hero::GetMaxHP() const
 void Hero::SetMaxHP(int newMaxHp)
 {
 	stats.maxHP = newMaxHp;
+	hitPointsMax = newMaxHp;
 }
 
 int Hero::GetCurrentHP() const
@@ -2017,6 +2018,7 @@ int Hero::GetCurrentHP() const
 void Hero::SetCurrentHP(int newcurrHp)
 {
 	stats.currHP = newcurrHp;
+	hitPointsCurrent = newcurrHp;
 }
 
 
