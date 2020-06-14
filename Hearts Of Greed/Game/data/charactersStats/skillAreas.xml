@@ -2,11 +2,11 @@
 
   <!-- Gatherer Active IMPORTANT: The damage is the time that the Turret will last-->
   <skill id="0" type="1"  alignTarget="1">
-    <lvl  dmg="45" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="15"/>
-    <lvl  dmg="52" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="20"/>
-    <lvl  dmg="59" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="25"/>
-    <lvl  dmg="65" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="30"/>
-    <lvl  dmg="72" cooldown="0.1" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="35"/>
+    <lvl  dmg="45" cooldown="20" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="15"/>
+    <lvl  dmg="52" cooldown="20" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="20"/>
+    <lvl  dmg="59" cooldown="25" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="25"/>
+    <lvl  dmg="65" cooldown="32" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="30"/>
+    <lvl  dmg="72" cooldown="36" rangeRadius="7"  attackRadius="1"  hurtYourself="false"  executionTime="0.75"  effect = "-1" energyCost="35"/>
   </skill>
 
   <!-- Armored Active -->

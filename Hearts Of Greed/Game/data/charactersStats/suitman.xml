@@ -10,7 +10,7 @@
 
     <stats level="1" movementSpeed="95" vision="9" attackRange="1">
 
-      <lvl xpToLvlUp="100" hp="120" damage="11" energy="60" atkSpeed="0.9" liferecoveryRate="3" energyrecoveryRate="1"/>
+      <lvl xpToLvlUp="100" hp="120" damage="11" energy="35" atkSpeed="0.9" liferecoveryRate="3" energyrecoveryRate="1"/>
       <lvl xpToLvlUp="175" hp="135" damage="12" energy="67" atkSpeed="0.9" liferecoveryRate="3" energyrecoveryRate="1.05"/>
       <lvl xpToLvlUp="300" hp="140" damage="14" energy="72" atkSpeed="1.0" liferecoveryRate="4" energyrecoveryRate="1.1"/>
       <lvl xpToLvlUp="450" hp="160" damage="15" energy="78" atkSpeed="1.1" liferecoveryRate="5" energyrecoveryRate="1.15"/>
