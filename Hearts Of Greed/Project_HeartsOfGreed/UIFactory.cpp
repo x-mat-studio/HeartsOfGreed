@@ -127,7 +127,7 @@ UIFactory::UIFactory() :
 
 	popUpWindow{ 507, 844, 211, 77 },
 
-	xMatButton{561, 237, 119, 123},
+	xMatButton{563, 260, 91, 87},
 
 	gathererLifeUpgradeCost(100),
 	gathererDamageUpgradeCost(100),
@@ -179,7 +179,7 @@ UI_Group* UIFactory::CreateMainMenu()
 
 	CreateExitGameButton(x, y + 160, nullptr, group);
 
-	Button* button = new Button(fMPoint{ x - 415, y + 140 }, nullptr, xMatButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GO_TO_WEBPAGE);
+	Button* button = new Button(fMPoint{ x - 415, y + 180 }, nullptr, xMatButton, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::GO_TO_WEBPAGE);
 
 	group->AddUiElement(button); 
 
