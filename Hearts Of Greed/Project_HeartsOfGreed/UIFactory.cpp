@@ -1007,6 +1007,10 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1Menu()
 
 	CreateText(5, 15, background, stats, group);
 
+	sprintf_s(stats, 40, "& stuns enemies for +%.2fs.", hero->GetSkill1().effectTime);
+
+	CreateText(5, 25, background, stats, group);
+
 	return group;
 }
 
@@ -1268,6 +1272,10 @@ UI_Group* UIFactory::CreateOnHoverMeleeActive1UpgradeMenu()
 	sprintf_s(stats, 40, "+%i damage.", skill->dmg - hero->GetSkill1().dmg);
 
 	CreateText(30, 33, background, stats, group);
+
+	sprintf_s(stats, 40, "+%.2f stun time.", skill->effectTime - hero->GetSkill1().effectTime);
+
+	CreateText(30, 43, background, stats, group);
 
 	delete skill;
 	skill = nullptr;
