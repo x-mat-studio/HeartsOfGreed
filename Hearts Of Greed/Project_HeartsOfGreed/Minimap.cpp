@@ -191,7 +191,7 @@ bool Minimap::PostUpdate(float dt)
 			float g = ((1 - t) * 255) + (t * 63);
 			float b = ((1 - t) * 255) + (t * 148);
 
-			SDL_SetTextureColorMod(minimapTexture,r, g, b);
+			SDL_SetTextureColorMod(minimapTexture, r, g, b);
 
 		}
 
@@ -211,11 +211,16 @@ bool Minimap::PostUpdate(float dt)
 			if (minimapIcons[i]->IsActive() == true)
 			{
 				bool visible = true; //todo kind of redundant visible code, take a look at that for the gold
-				if (minimapIcons[i]->parent != nullptr && minimapIcons[i]->parent->visionEntity != nullptr)
+
+				if (minimapIcons[i]->parent != nullptr)
 				{
-					if (minimapIcons[i]->parent->visionEntity->isVisible == false)
+					if (minimapIcons[i]->parent->visionEntity != nullptr)
 					{
-						visible = false;
+
+						if (minimapIcons[i]->parent->visionEntity->isVisible == false)
+						{
+							visible = false;
+						}
 					}
 				}
 
