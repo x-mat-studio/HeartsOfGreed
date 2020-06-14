@@ -3,7 +3,7 @@
 #ifndef __SPAWNER_H__
 #define __SPAWNER_H_
 
-#define MAX_Nº_SPAWNERS 15
+#define MAX_Nº_SPAWNERS 5
 
 #include "Entity.h"
 
