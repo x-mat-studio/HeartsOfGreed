@@ -189,14 +189,13 @@ void Enemy::StateMachine(float dt)
 	switch (state)
 	{
 	case ENEMY_STATES::IDLE:
-
 		break;
 
 	case ENEMY_STATES::MOVE:
 
 		if (Move(dt) == true)
 		{
-			if (shortTermObjective == nullptr && !haveOrders)
+			if (shortTermObjective == nullptr && !haveOrders && this->path.empty())
 			{
 				inputs.push_back(ENEMY_INPUTS::IN_IDLE);
 			}
