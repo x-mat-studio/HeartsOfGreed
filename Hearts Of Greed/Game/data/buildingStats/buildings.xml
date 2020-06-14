@@ -6,7 +6,8 @@
       <position x="0" y="0"/>
 
       <collider>
-        <rect x="-150" y="130" w="430" h="330"/>
+        <rect x="-150" y="130" w="430" h="350"/>
+        <rect2 x="0" y="0" w="440" h="400"/>
         <type id="4"/>
       </collider>
 
