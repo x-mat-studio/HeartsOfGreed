@@ -5,6 +5,7 @@
 #include "UI_Group.h"
 #include "Audio.h"
 #include "Input.h"
+#include "TestScene.h"
 
 ModulePopUpManager::ModulePopUpManager() :
 	Module(),
@@ -345,6 +346,22 @@ void ModulePopUpManager::ExecuteEvent(EVENT_ENUM eventId)
 		}
 		else if (popUpArray[(int)POP_UPS::CAPTURE_ALL_BASES].activated == true)
 			popUpArray[(int)POP_UPS::CAPTURE_ALL_BASES].finished = true;
+	}
+
+
+	if (eventId == EVENT_ENUM::NIGHT_START)
+	{
+		if (app->testScene->GetDayNumber() == 1)
+		{
+			popUpArray[(int)POP_UPS::NIGHT_ATTACK].Activate();
+		}
+	}
+	else if (eventId == EVENT_ENUM::DAY_START)
+	{
+		if (popUpArray[(int)POP_UPS::NIGHT_ATTACK].displayed == true)
+		{
+			popUpArray[(int)POP_UPS::NIGHT_ATTACK].finished = true;
+		}
 	}
 }
 
