@@ -1,9 +1,11 @@
-<h1  align="center" id="hearts-greed-title">Hearts of Greed</h1>
+<p align="center"><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/General%20Analysis/heartsOfGreed_titleWiki.png" alt="Official X-Mat Title" class="center"></p>
+
 
 <p>Welcome to the webpage of <a href="https://github.com/x-mat-studio/HeartsOfGreed">Hearts of Greed from X-Mat Studio</a></p>
 
 
 <p align="center"><img src="https://raw.githubusercontent.com/x-mat-studio/Project-2/Wiki/Welcome%20Page/logoXMat.png" alt="Official X-Mat Logo" class="center"></p>
+
 
 
 <p align="justify">We are a development team with great enthusiasm for the sector. We define passion and teamwork, we do not leave anyone behind or leave the burden of their work on their peers. We intend to exceed expectations and feel fulfilled by our own work. We invite you to take a look at this project, in this case, to all the research we have done behind this fabulous game: Hearts of Greed.</p>
