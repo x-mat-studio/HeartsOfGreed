@@ -262,7 +262,7 @@ int Turret::GetRng()
 void Turret::DrawSelected()
 {
 	if (selectedByPlayer == true)
-		app->render->Blit(app->entityManager->selectedTexture, this->collider->rect.x + this->collider->rect.w * 0.5f, this->collider->rect.y);
+		app->render->Blit(app->entityManager->selectedTexture, this->position.x - 5, this->position.y - this->collider->rect.h+15);
 }
 
 int Turret::RecieveDamage(float damage, bool ignoreArmor)
