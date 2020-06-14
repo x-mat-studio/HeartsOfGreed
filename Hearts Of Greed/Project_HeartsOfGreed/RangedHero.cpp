@@ -195,9 +195,13 @@ void RangedHero::Attack()
 	ENTITY_TYPE type = objective->GetType();
 	Enemy* enemy = nullptr;;
 
-	if (objective)
+	if (objective) {
 		ret = objective->RecieveDamage(stats.damage);
 
+		int random = rand() % 10;
+		if (random > 6)
+		app->audio->PlayFx(app->entityManager->turretShooting,0,-1,GetMyLoudness(),GetMyDirection());
+	}
 	if (ret > 0)
 	{
 		GetExperience(ret);

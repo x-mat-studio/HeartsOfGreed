@@ -382,6 +382,41 @@ void Entity::SetAlignment(ENTITY_ALIGNEMENT newAlign)
 	else
 	{
 		align = newAlign;
+
+		if (newAlign == ENTITY_ALIGNEMENT::ENEMY)
+		{
+			if (visionEntity != nullptr)
+			{
+				visionEntity->SetEntityProvideVision(false);
+			}
+
+			if (this->type == ENTITY_TYPE::BLDG_TURRET)
+			{
+				
+					if (this->minimapIcon != nullptr)
+					{
+						this->minimapIcon->type = MINIMAP_ICONS::ENEMY_TURRET;
+					}
+				
+			}
+		}
+		else if (newAlign == ENTITY_ALIGNEMENT::PLAYER)
+		{
+			if (visionEntity != nullptr)
+			{
+				visionEntity->SetEntityProvideVision(true);
+			}
+
+			if (this->type == ENTITY_TYPE::BLDG_TURRET)
+			{
+
+				if (this->minimapIcon != nullptr)
+				{
+					this->minimapIcon->type = MINIMAP_ICONS::TURRET;
+				}
+
+			}
+		}
 	}
 
 }
