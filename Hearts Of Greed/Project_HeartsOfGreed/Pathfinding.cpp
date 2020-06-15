@@ -662,18 +662,21 @@ generatedPath::generatedPath(std::vector <iMPoint> vector, PATH_TYPE type, int l
 
 //---------------------------------------------------
 
-iMPoint ModulePathfinding::CheckNearbyTilesDest(const iMPoint& origin, const iMPoint& destination)
+iMPoint ModulePathfinding::CheckNearbyTilesDest(const iMPoint& origin, const iMPoint& destination, bool rayCast)
 {
 
 	//First Quick RayCast check
-	std::vector <iMPoint> line = CreateLine(origin, destination);
-
-	for (int i = line.size(); i > 0; i--)
+	if (rayCast == true)
 	{
-		if (IsWalkable(line[i]))
-			return line[i];
-	}
+		std::vector <iMPoint> line = CreateLine(origin, destination);
 
+		for (int i = line.size(); i > 0; i--)
+		{
+			if (IsWalkable(line[i]))
+				return line[i];
+		}
+
+	}
 
 
 	iMPoint retNeg = destination;
@@ -692,55 +695,55 @@ iMPoint ModulePathfinding::CheckNearbyTilesDest(const iMPoint& origin, const iMP
 		retNeg.y--;
 
 		//Diagonals
-		if (IsWalkable(retPos) && retPos.DiagonalDistance(origin) < currDistance)
+		if (IsWalkable(retPos) && retPos.DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = retPos.DiagonalDistance(origin);
+			currDistance = retPos.DiagonalDistance(destination);
 			ret = retPos;
 		}
 
-		if (IsWalkable(retNeg) && retNeg.DiagonalDistance(origin) <= currDistance)
+		if (IsWalkable(retNeg) && retNeg.DiagonalDistance(destination) <= currDistance)
 		{
-			currDistance = retNeg.DiagonalDistance(origin);
+			currDistance = retNeg.DiagonalDistance(destination);
 			ret = retNeg;
 		}
 
-		if (IsWalkable({ retNeg.x,retPos.y }) && iMPoint({ retNeg.x, retPos.y }).DiagonalDistance(origin) < currDistance)
+		if (IsWalkable({ retNeg.x,retPos.y }) && iMPoint({ retNeg.x, retPos.y }).DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = iMPoint({ retNeg.x,retPos.y }).DiagonalDistance(origin);
+			currDistance = iMPoint({ retNeg.x,retPos.y }).DiagonalDistance(destination);
 			ret = { retNeg.x,retPos.y };
 		}
 
-		if (IsWalkable({ retPos.x,retNeg.y }) && iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(origin) < currDistance)
+		if (IsWalkable({ retPos.x,retNeg.y }) && iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(origin);
+			currDistance = iMPoint({ retPos.x,retNeg.y }).DiagonalDistance(destination);
 			ret = { retPos.x,retNeg.y };
 		}
 
 
 		// Y
-		if (IsWalkable({ destination.x,retPos.y }) && iMPoint({ destination.x, retPos.y }).DiagonalDistance(origin) < currDistance)
+		if (IsWalkable({ destination.x,retPos.y }) && iMPoint({ destination.x, retPos.y }).DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = iMPoint({ destination.x, retPos.y }).DiagonalDistance(origin);
+			currDistance = iMPoint({ destination.x, retPos.y }).DiagonalDistance(destination);
 			ret = { destination.x,retPos.y };
 		}
 
-		if (IsWalkable({ destination.x,retNeg.y }) && iMPoint({ destination.x,retNeg.y }).DiagonalDistance(origin) < currDistance)
+		if (IsWalkable({ destination.x,retNeg.y }) && iMPoint({ destination.x,retNeg.y }).DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = iMPoint({ destination.x,retNeg.y }).DiagonalDistance(origin);
+			currDistance = iMPoint({ destination.x,retNeg.y }).DiagonalDistance(destination);
 			ret = { destination.x,retNeg.y };
 		}
 
 
 		// X
-		if (IsWalkable({ retPos.x,destination.y }) && iMPoint({ retPos.x,destination.y }).DiagonalDistance(origin) < currDistance)
+		if (IsWalkable({ retPos.x,destination.y }) && iMPoint({ retPos.x,destination.y }).DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = iMPoint({ retPos.x,destination.y }).DiagonalDistance(origin);
+			currDistance = iMPoint({ retPos.x,destination.y }).DiagonalDistance(destination);
 			ret = { retPos.x,destination.y };
 		}
 
-		if (IsWalkable({ retNeg.x,destination.y }) && iMPoint({ retNeg.x,destination.y }).DiagonalDistance(origin) < currDistance)
+		if (IsWalkable({ retNeg.x,destination.y }) && iMPoint({ retNeg.x,destination.y }).DiagonalDistance(destination) < currDistance)
 		{
-			currDistance = iMPoint({ retNeg.x,destination.y }).DiagonalDistance(origin);
+			currDistance = iMPoint({ retNeg.x,destination.y }).DiagonalDistance(destination);
 			ret = { retNeg.x,destination.y };
 		}
 

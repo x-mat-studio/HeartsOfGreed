@@ -51,6 +51,8 @@ Barricade::Barricade(fMPoint position, Barricade* copy, ENTITY_ALIGNEMENT align)
 		//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 10, position.y), 1, 3);	
 		currentRect = &horizontalRect;
 	}
+
+	this->radiusSize = 2;
 	
 }
 

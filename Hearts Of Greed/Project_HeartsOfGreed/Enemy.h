@@ -134,7 +134,7 @@ private:
 
 
 	bool haveOrders;
-
+	bool isObjectiveStatic;
 
 	Animation walkLeft;
 	Animation walkLeftUp;

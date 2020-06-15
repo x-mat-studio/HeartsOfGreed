@@ -6,7 +6,7 @@
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
-#define NEARBY_TILES_CHECK 7
+#define NEARBY_TILES_CHECK 10
 
 #include <list>
 #include <vector>
@@ -17,7 +17,7 @@
 #include "SDL/include/SDL.h"
 
 //HPA*-------------------------------------------
-#define NODE_MIN_DISTANCE 3
+#define NODE_MIN_DISTANCE 4
 #define CLUSTER_SIZE_LVL 9
 #define MAX_LEVELS 1
 
@@ -194,7 +194,7 @@ public:
 	PATH_TYPE GeneratePath(iMPoint origin, iMPoint destination, int maxLvl, Entity* pathRequest);
 
 
-	iMPoint CheckNearbyTilesDest(const iMPoint& origin, const iMPoint& destination);
+	iMPoint CheckNearbyTilesDest(const iMPoint& origin, const iMPoint& destination, bool rayCast = false);
 	iMPoint CheckNearbyTilesOrigin(const iMPoint& origin, const iMPoint& destination);
 
 	bool CheckBoundaries(const iMPoint& pos) const;
@@ -221,7 +221,7 @@ private:
 
 	PATH_TYPE CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
 
-	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration = 750);
+	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration = 400);
 
 	std::multimap<float, PathNode>::iterator Find(iMPoint point, std::multimap<float, PathNode>* map);
 	std::multimap<float, HierNode>::iterator Find(iMPoint point, std::multimap<float, HierNode>* map);

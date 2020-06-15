@@ -32,6 +32,7 @@ UpgradeCenter::UpgradeCenter(fMPoint position, UpgradeCenter * copy, ENTITY_ALIG
 	upgradeBarricadeCost(copy->upgradeBarricadeCost)
 {
 	//app->pathfinding->SetWalkabilityMap(false, app->map->WorldToMap(position.x - 45, position.y + 20), 3, 3);
+	this->radiusSize = 2;
 }
 
 

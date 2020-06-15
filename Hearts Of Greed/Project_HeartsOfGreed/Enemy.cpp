@@ -61,6 +61,7 @@ Enemy::Enemy(fMPoint position, ENTITY_TYPE type, Collider* collider, Animation& 
 	drawingVFX(false),
 	scale(scale),
 	currentAnimation(nullptr),
+	isObjectiveStatic(false),
 
 	state(ENEMY_STATES::IDLE)
 {}
@@ -110,6 +111,7 @@ Enemy::Enemy(fMPoint position, Enemy* copy, ENTITY_ALIGNEMENT align) :
 	scale(copy->scale),
 	haveOrders(false),
 	drawingVFX(false),
+	isObjectiveStatic(false),
 
 	state(ENEMY_STATES::IDLE)
 {
@@ -309,7 +311,7 @@ bool Enemy::PostUpdate(float dt)
 
 bool Enemy::MoveTo(float x, float y)
 {
-	if (GeneratePath(x, y, 1))
+	if (GeneratePath(x, y, 1, !canLinePath))
 	{
 		inputs.push_back(ENEMY_INPUTS::IN_MOVE);
 		return true;
@@ -326,6 +328,9 @@ void Enemy::OnCollision(Collider* collider)
 		fMPoint* point = app->ai->GetObjective(position);
 		if (point != nullptr)
 		{
+			if(*point != longTermObjective)
+				canLinePath = true;
+
 			longTermObjective = *point;
 			haveOrders = true;
 		}
@@ -465,6 +470,9 @@ bool Enemy::SearchObjective()
 		ret = true;
 	}
 
+	if (shortTermObjective != objective)
+		canLinePath = true;
+
 	shortTermObjective = objective;
 
 	return ret;
@@ -552,6 +560,18 @@ bool Enemy::ExternalInput(std::vector<ENEMY_INPUTS>& inputs, float dt)
 		else if (haveOrders)
 		{
 			MoveTo(longTermObjective.x, longTermObjective.y);
+		}
+
+		if (this->IsMoving() == true && shortTermObjective != nullptr)
+		{
+			if (shortTermObjective->GetType() == ENTITY_TYPE::BLDG_BASE)
+			{
+				if (app->pathfinding->LineRayCast(app->map->WorldToMap(shortTermObjective->GetPosition().x, shortTermObjective->GetPosition().y), app->map->WorldToMap(round(position.x), round(position.y))) && canLinePath == true)
+				{
+					destination = { INT_MIN, INT_MIN };
+					canLinePath = false;
+				}
+			}
 		}
 
 	}
@@ -824,6 +844,10 @@ void Enemy::SetLongTermObjective(fMPoint point)
 	if (point.x != 0 && point.y != 0)
 	{
 		haveOrders = true;
+
+		if(longTermObjective != point)
+			canLinePath = true;
+
 		longTermObjective = point;
 	}
 }

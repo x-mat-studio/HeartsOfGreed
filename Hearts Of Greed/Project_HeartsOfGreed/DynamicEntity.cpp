@@ -18,6 +18,7 @@ DynamicEntity::DynamicEntity(fMPoint position, int speed, ENTITY_TYPE type, ENTI
 	unitSpeed(speed),
 
 	isMoving(false),
+	canLinePath(false),
 
 	toMove{ 0,0 },
 	framesSinceRequest(0),
@@ -358,7 +359,7 @@ fMPoint DynamicEntity::GetDirectionSpeed(std::vector<DynamicEntity*>close_entity
 	return alignmentSpeed;
 }
 
-bool DynamicEntity::GeneratePath(float x, float y, int lvl)
+bool DynamicEntity::GeneratePath(float x, float y, int lvl, bool useRayCast)
 {
 	BROFILER_CATEGORY("Generate Path", Profiler::Color::Aquamarine);
 
@@ -369,9 +370,8 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 
 	if (app->pathfinding->IsWalkable(goal) == false)
 	{
-		goal = app->pathfinding->CheckNearbyTilesDest(origin, {goal.x +1, goal.y});
+		goal = app->pathfinding->CheckNearbyTilesDest(origin, { goal.x + 1, goal.y }, useRayCast);
 	}
-
 
 	if (goal != destination)
 	{
@@ -386,7 +386,8 @@ bool DynamicEntity::GeneratePath(float x, float y, int lvl)
 			return true;
 		}
 		else
-			destination = { 0,0 };
+			destination = { INT_MIN,INT_MIN };
+
 	}
 	else if (waitingForPath == true)
 		return true;
@@ -425,6 +426,8 @@ void DynamicEntity::DebugDraw()
 void DynamicEntity::DestroyPath()
 {
 	app->pathfinding->DeletePath(this);
+	destination = { INT_MIN, INT_MIN };
+	waitingForPath = false;
 }
 
 void DynamicEntity::Draw(float dt)

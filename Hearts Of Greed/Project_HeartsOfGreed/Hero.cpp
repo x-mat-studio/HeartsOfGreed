@@ -463,7 +463,7 @@ bool Hero::MoveTo(int x, int y, bool haveObjective)
 		objective = nullptr;
 	}
 
-	if (GeneratePath(x, y, 1))
+	if (GeneratePath(x, y, 1, true))
 	{
 
 		movingTo = app->pathfinding->GetDestination(this);

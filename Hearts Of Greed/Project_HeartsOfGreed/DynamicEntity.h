@@ -34,7 +34,7 @@ public:
 	bool Move(float dt);
 	void GroupMovement(float dt);
 
-	bool GeneratePath(float x, float y, int lvl);
+	bool GeneratePath(float x, float y, int lvl, bool useRayCast = false);
 	void DebugDraw();
 	virtual void OnCollision(Collider* collider) {};
 	void Draw(float dt);
@@ -52,6 +52,7 @@ private:
 public:
 	bool isMoving;
 	bool waitingForPath;
+	bool canLinePath;
 
 	//used for moving close entities to have an smooth group movement
 	int moveRange1;
