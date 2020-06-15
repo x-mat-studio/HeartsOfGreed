@@ -326,7 +326,7 @@ fMPoint ModuleAI::FindNearestPlayerBase(fMPoint& point)
 		{
 			aux = baseVector[i]->GetPosition();
 
-			if (ret != fMPoint{0, 0} || ret.DistanceNoSqrt(point) > aux.DistanceNoSqrt(point))
+			if (ret == fMPoint{0, 0} || ret.DistanceNoSqrt(point) > aux.DistanceNoSqrt(point))
 			{
 				ret = aux;
 			}

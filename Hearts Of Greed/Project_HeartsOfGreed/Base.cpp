@@ -316,7 +316,6 @@ void Base::ChangeAligment()
 	{
 		aligment = ENTITY_ALIGNEMENT::ENEMY;
 
-		spawnRecluitCollider = app->ai->CommandNightEnemies(this);
 		app->eventManager->GenerateEvent(EVENT_ENUM::ENEMY_CONQUERED_A_BASE, EVENT_ENUM::NULL_EVENT);
 
 		if (visionEntity != nullptr)
@@ -367,6 +366,11 @@ void Base::ChangeAligment()
 	}
 
 	align = aligment;
+
+	if (align == ENTITY_ALIGNEMENT::ENEMY)
+	{
+		spawnRecluitCollider = app->ai->CommandNightEnemies(this);
+	}
 }
 
 
