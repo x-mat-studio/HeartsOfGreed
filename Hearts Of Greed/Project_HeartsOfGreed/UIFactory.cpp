@@ -454,7 +454,7 @@ UI_Group* UIFactory::CreateOnHoverBuyTurretMenu()
 
 	UI* background = CreateImage(pos.x - reviveHoverBackground.w, pos.y - reviveHoverBackground.h, nullptr, reviveHoverBackground, group, false, false);
 
-	CreateText(5, 0, background, "Buy turret:", group);
+	CreateText(5, 0, background, "Buy turret (2 x base):", group);
 
 	CreateImage(5, 25, background, resourceIcon, group, false, false);
 
