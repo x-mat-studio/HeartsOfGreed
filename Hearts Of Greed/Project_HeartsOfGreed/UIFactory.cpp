@@ -122,6 +122,11 @@ UIFactory::UIFactory() :
 	rangedActive1Button{ 140, 707, 93, 91 },
 	robottoActive1Button{ 348, 707, 93, 91 },
 
+	buttonKey1{ 47, 934, 38, 38 },
+	buttonKey2{ 92, 934, 38, 38 },
+	buttonKey3{ 137, 934, 38, 38 },
+	buttonKey4{ 182, 934, 38, 38 },
+
 	dialogWindow{ 1096, 41, 600, 345 },
 	skipButton{ 54 ,21, 35, 18 },
 
@@ -2360,6 +2365,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 	Button* BackGround = nullptr;
 	UI* icon = nullptr;
+	UI* keyNumber = nullptr;
 	UI* healthBar = nullptr;
 	UI* manaBar = nullptr;
 	UI* healthBarCont = nullptr;
@@ -2374,6 +2380,9 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		icon = new UI_Image(6, 6, BackGround, gathererHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
+		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey1);
+		portrait->AddKeySelectNumber(keyNumber);
+
 		break;
 
 
@@ -2383,6 +2392,9 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		icon = new UI_Image(6, 6, BackGround, meleHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
+
+		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey3);
+		portrait->AddKeySelectNumber(keyNumber);
 
 		break;
 
@@ -2394,6 +2406,9 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 		icon = new UI_Image(6, 6, BackGround, rangedHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
 
+		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey2);
+		portrait->AddKeySelectNumber(keyNumber);
+
 		break;
 
 	case ENTITY_TYPE::HERO_ROBO:
@@ -2402,6 +2417,9 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		icon = new UI_Image(6, 6, BackGround, robottoHeroPortrait, app->uiManager->GetAtlasTexture(), false, false);
 		portrait->AddElement(icon);
+
+		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey4);
+		portrait->AddKeySelectNumber(keyNumber);
 
 		break;
 

@@ -9,4 +9,5 @@
   <upgradeTandB string="Try upgrading your defenses in the upgrade center!"/>
   <focusKeys string="Change focus between heroes with, 1, 2, 3, 4 and TAB!"/>
   <captureBases string="Controll all enemy bases to win!"/>
+  <defendAtNight string="Hordes of enemies will attack you at night, defend your base!"/>
 </popUpTexts>

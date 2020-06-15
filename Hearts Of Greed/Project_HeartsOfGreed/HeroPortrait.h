@@ -21,6 +21,7 @@ public:
 	void AddElement(UI* element);
 	void AddHealthBar(UI* element);
 	void AddManaBar(UI* element);
+	void AddKeySelectNumber(UI* element);
 
 	Hero* GetHero();
 
@@ -38,6 +39,7 @@ private:
 	int originalBarsWidth;
 	SDL_Rect* healthRect;
 	SDL_Rect* manaRect;
+	SDL_Rect* keyboardNumber;
 
 	float life;
 	float mana;

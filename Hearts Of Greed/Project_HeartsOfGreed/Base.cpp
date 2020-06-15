@@ -342,6 +342,20 @@ void Base::ChangeAligment()
 	for (int i = 0; i < numTurrets; i++)
 	{
 		turretsVector[i]->SetAlignment(aligment);
+		if (aligment == ENTITY_ALIGNEMENT::PLAYER)
+		{
+			if (turretsVector[i]->minimapIcon != nullptr)
+			{
+				turretsVector[i]->minimapIcon->type = MINIMAP_ICONS::TURRET;
+			}
+		}
+		else if (aligment == ENTITY_ALIGNEMENT::ENEMY)
+		{
+			if (turretsVector[i]->minimapIcon != nullptr)
+			{
+				turretsVector[i]->minimapIcon->type = MINIMAP_ICONS::ENEMY_TURRET;
+			}
+		}
 	}
 
 

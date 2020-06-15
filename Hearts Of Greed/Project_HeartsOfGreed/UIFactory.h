@@ -233,6 +233,11 @@ private:
 	SDL_Rect upgradeArrowIcon;
 	SDL_Rect plusIcon;
 
+	SDL_Rect buttonKey1;
+	SDL_Rect buttonKey2;
+	SDL_Rect buttonKey3;
+	SDL_Rect buttonKey4;
+
 	// Button SDL_Rect
 
 	SDL_Rect menuButton;

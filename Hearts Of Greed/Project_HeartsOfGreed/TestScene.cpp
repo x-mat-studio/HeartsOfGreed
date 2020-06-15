@@ -36,6 +36,7 @@ ModuleTestScene::ModuleTestScene() :
 	fadeTime(0),
 	startingScale(1.0f),
 	nightApproachesSfx(-1),
+	nightIsHere(-1),
 
 	camToReset(false),
 	camUp(false),
@@ -83,6 +84,7 @@ bool  ModuleTestScene::Awake(pugi::xml_node& config)
 	startingScale = config.attribute("startingScale").as_float(.0f);
 
 	nightApproachesSfx = app->audio->LoadFx("Assets/audio/sfx/Interface/NightApproaches.wav");
+	nightIsHere = app->audio->LoadFx("Assets/audio/sfx/Interface/horde_start.wav");
 
 	return true;
 }
@@ -118,8 +120,10 @@ bool ModuleTestScene::Start()
 		//Test Hero
 		if (startFromLoad == false)
 		{
+
 			app->entityManager->AddEntity(ENTITY_TYPE::HERO_GATHERER, 400, 4150);
-			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_MELEE, pos.x - 680, pos.y);
+			
+			//app->entityManager->AddEntity(ENTITY_TYPE::HERO_RANGED, 400, 4150);
 		}
 
 		app->eventManager->GenerateEvent(EVENT_ENUM::GAME_STARTED, EVENT_ENUM::NULL_EVENT);
@@ -128,6 +132,7 @@ bool ModuleTestScene::Start()
 	if (startFromLoad == true)
 	{
 		app->entityManager->DeleteAllEntities();
+		app->ai->ResetAI();
 		app->LoadGame();
 		startFromLoad = false;
 	}
@@ -505,7 +510,7 @@ void ModuleTestScene::ExecuteEvent(EVENT_ENUM eventId)
 
 	case EVENT_ENUM::DEBUG_NIGHT:
 		app->eventManager->GenerateEvent(EVENT_ENUM::NIGHT_START, EVENT_ENUM::NULL_EVENT);
-		//app->audio->PlayFx(nightApproachesSfx, 0, -1);
+		app->audio->PlayFx(nightIsHere, 0, -1);
 		isNightTime = true;
 		nightRectAlpha.NewEasing(EASING_TYPE::EASE, nightRectAlpha.GetLastRequestedPos(), 100, 1);
 		//app->uiManager->AddUIElement(fMPoint(20, 0), nullptr, UI_TYPE::UI_TEXT, { 0,0,0,0 }, (P2SString)"TestScene", nullptr, DRAGGABLE::DRAG_OFF, "The night is closing on you... Go back to your previous base before it's too late...");
