@@ -10,7 +10,7 @@
 	<map name="finalMap.tmx" />
 	<menuScene />
 	<testScene>
-		<time_info days_passed="0" is_night="false" timer="108.295624" />
+		<time_info days_passed="0" is_night="false" timer="1.92999935" />
 	</testScene>
 	<winScene />
 	<loseScene />
@@ -286,14 +286,7 @@
 		<entity type="enemy" x="-2304" y="2880" objective_x="0" objective_y="0" hit_points="25" />
 		<entity type="enemy_ranged" x="-1376" y="3344" objective_x="0" objective_y="0" hit_points="35" />
 		<entity type="hero_gatherer" x="400" y="4150" level="1" exp_to_level_up="100" hero_exp="0" hit_points="120" max_hit_points="120" recovery_hit_points_rate="3" energy_points="35" max_energy_points="35" recovery_energy_rate="1" recovering_health="0" recovering_energy="0" feeling_secure="0" attack_damage="11" attack_range="1" attack_speed="0.899999976" vision_distance="9" vision_in_px="326.493805" skill1_cost="15" heroSkillPoints="0" skill1Id="0" skill1Lvl="1" passiveSkillId="5" passiveSkillLvl="1" hp="1" damage="1" energy="1" atkSpeed="1" />
-		<deadEntities>
-			<deadGatherer>
-				<stats level="1" type="2" skillId="0" skillLvl="1" passiveSkillId="5" passiveSkillLvl="1" />
-			</deadGatherer>
-			<deadRobo>
-				<stats level="1" type="3" skillId="3" skillLvl="1" passiveSkillId="7" passiveSkillLvl="1" />
-			</deadRobo>
-		</deadEntities>
+		<deadEntities />
 	</entityManager>
 	<FOWManager>
 		<fow_tile visited="511" />
@@ -19804,10 +19797,10 @@
 			<pop_up activated="false" finished="false" />
 			<pop_up activated="false" finished="false" />
 			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
+			<pop_up activated="false" finished="false" />
 			<pop_up activated="true" finished="false" />
-			<pop_up activated="false" finished="false" />
-			<pop_up activated="false" finished="false" />
-			<pop_up activated="false" finished="true" />
 			<pop_up activated="false" finished="false" />
 		</pop_ups_record>
 	</popUpManager>
