@@ -221,7 +221,7 @@ private:
 
 	PATH_TYPE CreatePath(iMPoint& origin, iMPoint& destination, int maxLvl, Entity* pathRequest);
 
-	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration = 400);
+	int HPAPathfinding(const HierNode& origin, const iMPoint& destination, int lvl, int maxIteration = 500);
 
 	std::multimap<float, PathNode>::iterator Find(iMPoint point, std::multimap<float, PathNode>* map);
 	std::multimap<float, HierNode>::iterator Find(iMPoint point, std::multimap<float, HierNode>* map);
