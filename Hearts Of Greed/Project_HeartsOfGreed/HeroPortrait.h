@@ -29,6 +29,9 @@ public:
 	UI* SearchFocus();
 	void UnFocus();
 
+public:
+	int position;
+
 private:
 	Hero* hero;
 

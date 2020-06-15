@@ -71,7 +71,17 @@ bool HeroesPortraitManager::PostUpdate(float dt)
 void HeroesPortraitManager::AddPortrait(HeroPortrait* portrait)
 {
 	portrait->SetFather(this);
-	heroPortraitsVector.push_back(portrait);
+
+	if (portrait->position != -1)
+	{
+		if (portrait->position >= heroPortraitsVector.size())
+		{
+			heroPortraitsVector.push_back(portrait);
+		}
+
+		else
+			heroPortraitsVector.insert(heroPortraitsVector.begin() + portrait->position, portrait);
+	}
 }
 
 

@@ -17,7 +17,9 @@ HeroPortrait::HeroPortrait(Hero* hero) :
 
 	focused(false),
 	heroType(ENTITY_TYPE::UNKNOWN),
-	originalBarsWidth(0)
+	
+	originalBarsWidth(0),
+	position(-1)
 {}
 
 
@@ -26,6 +28,8 @@ HeroPortrait::~HeroPortrait()
 	hero = nullptr;
 	healthRect = nullptr;
 	manaRect = nullptr;
+
+	position = -1;
 
 	int numberElements = uiElementsVector.size();
 

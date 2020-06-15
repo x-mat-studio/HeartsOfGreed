@@ -2382,7 +2382,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey1);
 		portrait->AddKeySelectNumber(keyNumber);
-
+		portrait->position = 0;
 		break;
 
 
@@ -2395,7 +2395,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey3);
 		portrait->AddKeySelectNumber(keyNumber);
-
+		portrait->position = 2;
 		break;
 
 
@@ -2408,7 +2408,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey2);
 		portrait->AddKeySelectNumber(keyNumber);
-
+		portrait->position = 1;
 		break;
 
 	case ENTITY_TYPE::HERO_ROBO:
@@ -2420,7 +2420,7 @@ HeroPortrait* UIFactory::CreatePortrait(Hero* hero)
 
 		keyNumber = new Button({ 0, 20 }, BackGround, { 0, 0, 0, 30 }, false, app->uiManager->GetAtlasTexture(), BUTTON_TAG::NULL_TAG, buttonKey4);
 		portrait->AddKeySelectNumber(keyNumber);
-
+		portrait->position = 3;
 		break;
 
 
