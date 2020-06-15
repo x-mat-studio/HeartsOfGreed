@@ -108,11 +108,11 @@ bool RoboHero::PreProcessSkill1()
 	{
 		origin = app->map->WorldToMap(round(position.x), round(position.y));
 		origin = app->map->MapToWorld(origin.x, origin.y);
-		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.rangeRadius);
+		currAreaInfo = app->entityManager->RequestAreaInfo(skill1.attackRadius);
 
 
 		if (currAreaInfo != nullptr)
-			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.rangeRadius, origin, currAreaInfo);
+			app->entityManager->CreateDynamicArea(&this->currAoE, skill1.attackRadius, origin, currAreaInfo);
 	}
 
 	return true;
