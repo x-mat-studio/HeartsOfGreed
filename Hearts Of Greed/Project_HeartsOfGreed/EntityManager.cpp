@@ -4389,7 +4389,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 				if (name == "barricade")
 				{
-					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+					barricade = (Barricade*)AddEntity(ENTITY_TYPE::BLDG_BARRICADE, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 					barricade->SetLevel(iterator2.attribute("level").as_int());
 					barricade->SetCurrentHP(iterator.attribute("hit_points").as_int());
@@ -4399,7 +4399,7 @@ bool ModuleEntityManager::Load(pugi::xml_node& data)
 
 				if (name == "upgrade_center")
 				{
-					upgradeCenter = (UpgradeCenter*)AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("alignement").as_int());
+					upgradeCenter = (UpgradeCenter*)AddEntity(ENTITY_TYPE::BLDG_UPGRADE_CENTER, iterator2.attribute("x").as_int(), iterator2.attribute("y").as_int(), (ENTITY_ALIGNEMENT)iterator.attribute("aligment").as_int());
 
 					upgradeCenter->SetTurretLevel(iterator2.attribute("turretLvl").as_int());
 					upgradeCenter->SetBarricadeLevel(iterator2.attribute("barricadeLvl").as_int());
