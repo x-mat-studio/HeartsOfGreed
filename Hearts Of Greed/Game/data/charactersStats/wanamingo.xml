@@ -9,7 +9,7 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="90" vision="240" xp="15"  scale =" 1" >
+    <stats movementSpeed="90" vision="270" xp="15"  scale =" 1" >
       <hitPoints max="25" current="25" recoveryRate="1"/>
       <attack damage="2" speed="1.95f" range="1"/>
     </stats>
@@ -24,7 +24,7 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="115" vision="240" xp="20"  scale =" 1" >
+    <stats movementSpeed="115" vision="270" xp="20"  scale =" 1" >
       <hitPoints max="35" current="35" recoveryRate="3"/>
       <attack damage="2" speed="1.25" range="4" scale =" 1.f"/>
     </stats>
@@ -39,7 +39,7 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="150" vision="200" xp="7" scale =" 0.65">
+    <stats movementSpeed="150" vision="270" xp="7" scale =" 0.65">
       <hitPoints max="17" current="17" recoveryRate="5"/>
       <attack damage="1" speed="3.05" range="1"/>
     </stats>
@@ -54,7 +54,7 @@
       <type id="2"/>
     </collider>
 
-    <stats movementSpeed="35" vision="240" xp="100" scale =" 1.75" >
+    <stats movementSpeed="35" vision="270" xp="100" scale =" 1.75" >
       <hitPoints max="666" current="666" recoveryRate="15"/>
       <attack damage="20" speed="0.80" range="1"/>
     </stats>
