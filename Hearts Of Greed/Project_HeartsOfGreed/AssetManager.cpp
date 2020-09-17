@@ -45,20 +45,41 @@ bool ModuleAssetManager::Awake(pugi::xml_node& config)
 
 bool ModuleAssetManager::CleanUp()
 {
+	pathVector.clear();
+	bufferVector.clear();
+	bytesVector.clear();
+
 	return false;
 }
 
-SDL_RWops* ModuleAssetManager::Load(const char* path) const
+SDL_RWops* ModuleAssetManager::Load(const char* path) // you know what to do Jose, just put this bad boy on a vector and compare it
+													  // there can't be 2 elements with different paths.
+													  //Right? i don't know anymore please wake me up from this nightmare
+													  //So it seems differents paths reutilize the same pointer, I almost cryed but I found a workaround
+													  //I fucking hope it works this is a nightmare nightmare nightmare nighmare nightmare nightmare nightmare nightmare nighmare nightmare nightmare nightmare nightmare nighmare nightmare nightmare nightmare nightmare nighmare nightmare nightmare nightmare nightmare nighmare nightmare
+													  //HELL YEA IT WORKS
 {
 	char* buffer;
-	uint bytes = Load(path, &buffer);
+	SDL_RWops* ret;
+	uint bytes;
+	int check;
 
+	check = CheckPath(path);
+	if (check == -1)
+	{
+		bytes = Load(path, &buffer);
+		ret = SDL_RWFromConstMem(buffer, bytes);
 
-	// Read-only memory buffer for use with RWops, retruns a pointer to a new SDL_RWops structure
-	SDL_RWops* ret = SDL_RWFromConstMem(buffer, bytes);
-
+		bufferVector.push_back(buffer);
+		bytesVector.push_back(bytes);
+	}
+	
+	else
+	{
+		ret = SDL_RWFromConstMem(bufferVector[check], bytesVector[check]);
+	}
+	
 	return ret;
-
 }
 
 
@@ -97,4 +118,28 @@ uint ModuleAssetManager::Load(const char* path, char** buffer) const
 	PHYSFS_close(file);
 
 	return ret;
+}
+
+
+int ModuleAssetManager::CheckPath(const char* path)
+{
+	P2SString string(path);
+
+	if (pathVector.empty() == true)
+	{
+		pathVector.push_back(string);
+		return -1;
+	}
+
+	int numBuffers = pathVector.size();
+	for (int i = 0; i < numBuffers; i++)
+	{
+		if (strcmp(pathVector[i].GetCharArray(), path) == 0)
+		{
+			return i;
+		}
+	}
+
+	pathVector.push_back(string);
+	return -1;
 }

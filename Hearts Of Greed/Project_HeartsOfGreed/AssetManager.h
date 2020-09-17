@@ -8,6 +8,8 @@
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
 
+#include <vector>
+
 class ModuleAssetManager : public Module
 {
 public:
@@ -25,8 +27,15 @@ public:
 	uint Load(const char* path, char** buffer) const;
 
 	// Allows you to use pointers to memory instead of files or things such as images or samples
-	SDL_RWops* Load(const char* path) const;
+	SDL_RWops* Load(const char* path);
 
+private:
+	int CheckPath(const char*);
+
+private:
+	std::vector<P2SString> pathVector;
+	std::vector<char*> bufferVector;
+	std::vector<uint> bytesVector;
 };
 
 #endif // __ASSETMANAGER_H__
