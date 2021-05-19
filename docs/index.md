@@ -58,7 +58,7 @@ src="https://www.youtube.com/embed/yI1U32Tnni8" frameborder="0" allowfullscreen>
   </tr>
     <tr>
     <td><a href="https://github.com/oscarpm5">Oscar Pérez</a></td>
-    <td>QA</td> 
+    <td>QA lead & Code</td> 
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/oscarPortrait.png" alt="Oscar" class="inline"></td>
   </tr>
     <tr>
