@@ -115,7 +115,7 @@ Twitter:	https://twitter.com/ii_rts
 
 ### Ferran-Roger Basart i Bosch
 * Management + UI
-* [ferba93](https://github.com/ferba93)
+* [HoduRe](https://github.com/hodure)
 
 
 ### Àlex Melenchón Maza
