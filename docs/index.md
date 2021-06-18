@@ -72,7 +72,7 @@ src="https://www.youtube.com/embed/yI1U32Tnni8" frameborder="0" allowfullscreen>
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/adriaPortrait.png" alt="Adrià" class="inline"></td>
   </tr>
     <tr>
-    <td><a href="https://github.com/ferba93">Ferran-Roger Basart</a></td>
+    <td><a href="https://github.com/hodure">Ferran-Roger Basart</a></td>
     <td>Management & UI</td> 
     <td><img src="https://raw.githubusercontent.com/x-mat-studio/HeartsOfGreed/Wiki/Welcome%20Page/Team%20Portraits/ferranPortrait.png" alt="Ferran" class="inline"></td>
   </tr>
